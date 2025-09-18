@@ -1,0 +1,6 @@
+=== 2025-09-01T03:38:06+00:00 ===
+CMD: /usr/bin/mysqldump --user='u211327498_jaysan_user' --password='Admin@123' --host='srv841.hstgr.io' --single-transaction --quick --lock-tables=false 'u211327498_jaysan' > '/home/u211327498/domains/jaysanagriindustrial.co.in/public_html/soft/php/backups/backup_2025-09-01_03-38-05.sql' 2>&1
+RC: 0
+OUTPUT:
+
+

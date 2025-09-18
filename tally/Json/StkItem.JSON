@@ -1,0 +1,521 @@
+{
+    "StockItem": [
+        {
+            "Name": "Abhyangam + Steambath", 
+            "Parent": "Treatment Types", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0.000 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Jul-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "1-Nov-22", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "Consultation Fee(S)", 
+            "Parent": "Consultation", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0.000 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Jul-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "1-Nov-22", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "Karpooradi Thailam 100 Ml", 
+            "Part No": "F1THB2712", 
+            "Parent": "Karpooradi Thailam", 
+            "CATEGORY": "CRD", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "Ml", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "100", 
+            "CLOSINGBALANCE": "5.000 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Jul-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "12"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "14-Oct-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "1-Oct-18", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "Karpooradi Thailam 5 Ltr", 
+            "Part No": "F1THB2921", 
+            "Parent": "Karpooradi Thailam", 
+            "CATEGORY": "CRD", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "Ml", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "5000", 
+            "CLOSINGBALANCE": "2.945 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Jul-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "12"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "14-Oct-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "1-Oct-18", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "Karpooradi Thailam Loose-25 Ml", 
+            "Parent": "Karpooradi Thailam", 
+            "CATEGORY": "CRD", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "Ml", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "25", 
+            "CLOSINGBALANCE": "0.000 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Jul-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "6"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "12"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "14-Oct-17", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }, 
+                {
+                    "APPLICABLEFROM": "1-Oct-18", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

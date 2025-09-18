@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart PHP Tester</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { margin: 20px; }
+    #suggestions {
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      background: #fff;
+      position: absolute;
+      z-index: 10;
+      width: calc(100% - 45px);
+      border-radius: 0.375rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      top: 100%;
+      left: 0;
+    }
+    #suggestions div {
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #suggestions div:hover { background: #f1f1f1; }
+    pre.json {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .key { color: #9cdcfe; }
+    .string { color: #ce9178; }
+    .number { color: #b5cea8; }
+    .boolean { color: #569cd6; }
+    .null { color: #808080; font-style: italic; }
+    .dark-mode {
+      background-color: #1e1e1e !important;
+      color: #e4e4e4 !important;
+    }
+    .dark-mode textarea,
+    .dark-mode input,
+    .dark-mode .form-control {
+      background-color: #2d2d2d;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    .dark-mode .card {
+      background-color: #2d2d2d;
+      color: #fff;
+    }
+    .dark-mode .card-header {
+      background-color: #3a3a3a;
+    }
+    .dark-mode #suggestions {
+      background: #2d2d2d;
+      color: #fff;
+      border: 1px solid #555;
+    }
+    .dark-mode #suggestions div:hover { background: #3a3a3a; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="text-primary">🔧 Smart PHP Tester</h2>
+      <button class="btn btn-outline-dark btn-sm" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+    </div>
+
+    <!-- PHP File Selection -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">PHP File:</label>
+      <div class="input-group position-relative">
+        <input type="text" id="phpFile" class="form-control" placeholder="Start typing PHP file name...">
+        <button class="btn btn-outline-secondary" type="button" onclick="loadFileList()">🔄</button>
+        <div id="suggestions"></div>
+      </div>
+    </div>
+
+    <!-- Code Area -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">PHP Code:</label>
+      <textarea id="phpCode" class="form-control" rows="7" placeholder="Select a file above to auto-load code"></textarea>
+    </div>
+
+    <button class="btn btn-primary mb-4" onclick="parseParams()">⚙️ Generate Form</button>
+
+    <!-- Generated Form -->
+    <form id="phpTester" class="card p-3 shadow-sm mb-4" style="display:none;">
+      <div id="params" class="mb-3"></div>
+      <button type="submit" class="btn btn-success w-100">🚀 Send Request</button>
+    </form>
+
+    <!-- Response Area -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <span>Response</span>
+        <button class="btn btn-sm btn-light" onclick="clearResponse()">🧹 Clear</button>
+      </div>
+      <div class="card-body" id="response" style="white-space: pre-wrap; word-wrap: break-word;">
+        Waiting for request...
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let phpFiles = [];
+
+    async function loadFileList() {
+      try {
+        const response = await fetch("list_php_files.php");
+        phpFiles = await response.json();
+      } catch (err) {
+        console.error("Cannot load file list", err);
+      }
+    }
+
+    async function loadFileContent(file) {
+      try {
+        const response = await fetch("list_php_files.php?file=" + encodeURIComponent(file));
+        if (!response.ok) throw new Error("File not found");
+        const text = await response.text();
+        document.getElementById("phpCode").value = text;
+      } catch (err) {
+        document.getElementById("phpCode").value = "❌ Could not load file: " + err;
+      }
+    }
+
+    document.getElementById("phpFile").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      const suggestionsDiv = document.getElementById("suggestions");
+      suggestionsDiv.innerHTML = "";
+
+      if (query.length > 0) {
+        const filtered = phpFiles.filter(f => f.toLowerCase().includes(query));
+        if (filtered.length > 0) {
+          filtered.forEach(file => {
+            const div = document.createElement("div");
+            div.textContent = file;
+            div.onclick = function () {
+              document.getElementById("phpFile").value = file;
+              suggestionsDiv.style.display = "none";
+              loadFileContent(file);
+            };
+            suggestionsDiv.appendChild(div);
+          });
+          suggestionsDiv.style.display = "block";
+        } else {
+          suggestionsDiv.style.display = "none";
+        }
+      } else {
+        suggestionsDiv.style.display = "none";
+      }
+    });
+
+    function parseParams() {
+      const code = document.getElementById("phpCode").value;
+      const paramSet = new Set();
+      const getRegex = /\$_GET\[['"]([^'"]+)['"]\]/g;
+      const postRegex = /\$_POST\[['"]([^'"]+)['"]\]/g;
+      let match;
+      let foundGet = false, foundPost = false;
+
+      while ((match = getRegex.exec(code)) !== null) {
+        paramSet.add(match[1]);
+        foundGet = true;
+      }
+      while ((match = postRegex.exec(code)) !== null) {
+        paramSet.add(match[1]);
+        foundPost = true;
+      }
+
+      const paramsDiv = document.getElementById("params");
+      paramsDiv.innerHTML = "";
+      if (paramSet.size === 0) {
+        paramsDiv.innerHTML = "<p class='text-muted'><b>No parameters found in code.</b></p>";
+      } else {
+        paramSet.forEach(param => {
+          paramsDiv.innerHTML += `<div class="mb-2">
+            <label class="form-label">${param}</label>
+            <input type="text" class="form-control" name="${param}">
+          </div>`;
+        });
+      }
+
+      document.getElementById("phpTester").dataset.method = foundPost ? "POST" : "GET";
+      document.getElementById("phpTester").style.display = "block";
+    }
+
+    document.getElementById("phpTester").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const file = document.getElementById("phpFile").value;
+      const method = document.getElementById("phpTester").dataset.method;
+      const inputs = document.querySelectorAll("#params input");
+
+      let params = new URLSearchParams();
+      inputs.forEach(input => params.append(input.name, input.value));
+
+      let finalUrl = file;
+      let options = { method };
+
+      if (method === "GET") {
+        finalUrl += "?" + params.toString();
+      } else {
+        options.body = params;
+        options.headers = { "Content-Type": "application/x-www-form-urlencoded" };
+      }
+
+      try {
+        const response = await fetch(finalUrl, options);
+        const text = await response.text();
+        document.getElementById("response").innerHTML = formatResponse(text);
+      } catch (err) {
+        document.getElementById("response").textContent = "❌ Error: " + err;
+      }
+    });
+
+    function formatResponse(text) {
+      try {
+        const json = JSON.parse(text);
+        return "<pre class='json'>" + syntaxHighlight(JSON.stringify(json, null, 2)) + "</pre>";
+      } catch (e) {
+        return `<div>${text}</div>`;
+      }
+    }
+
+    function syntaxHighlight(json) {
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        let cls = 'number';
+        if (/^"/.test(match)) {
+          cls = /:$/.test(match) ? 'key' : 'string';
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        } else if (/null/.test(match)) {
+          cls = 'null';
+        }
+        return `<span class="${cls}">${match}</span>`;
+      });
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function clearResponse() {
+      document.getElementById("response").textContent = "Waiting for request...";
+    }
+
+    loadFileList();
+  </script>
+</body>
+</html>

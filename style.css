@@ -1,0 +1,328 @@
+
+
+@media print
+{
+  
+  table { page-break-inside:auto }
+  tr    { page-break-inside:avoid; page-break-after:auto }
+
+}
+.rateit-font .rateit-range > div, .rateit-font .rateit-range > span {
+  display:flex !important;
+}
+
+@media (min-width: 992px){
+	.dropdown-menu .dropdown-toggle:after{
+		border-top: .35em solid transparent;
+	    border-right: 0;
+	    border-bottom: .35em solid transparent;
+	    border-left: .35em solid;
+      position: absolute;
+      left: 90%;
+      top: 30%;
+	}
+
+/* btn-animate button animation styles */
+.btn-animate {
+  transition: transform 0.18s cubic-bezier(.4,2,.6,1), box-shadow 0.18s cubic-bezier(.4,2,.6,1);
+  will-change: transform, box-shadow;
+}
+.btn-animate:hover,
+.btn-animate:focus {
+  transform: scale(1.13) rotate(-4deg);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  background: #f8f9fa;
+  color: #212529 !important;
+  z-index: 2;
+}
+.btn-animate:active {
+  transform: scale(0.97) rotate(-2deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+
+
+  .upload-overlay {
+   
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-container {
+    width: 50%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+  .breadcrumb {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "<";
+    color: #6c757d;
+}
+.breadcrumb-item.active {
+    font-weight: bold;
+    color: #007bff;
+}
+.breadcrumb-item a {
+    text-decoration: none;
+    color: #6c757d;
+}
+.breadcrumb-item a:hover {
+    color: #007bff;
+}
+
+  
+  .toast-header {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+  
+  .toast-body {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .toast {
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f8f9fa; /* Light background for contrast */
+  }
+
+  .selected {
+    border-color: #007bff; /* Change border color */
+    background-color: #e9f5ff; /* Change background color */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Add shadow effect */
+    transform: scale(1.02); /* Slightly increase size */
+}
+  .card.selected {
+    border-color: #007bff; /* Change border color */
+    background-color: #e9f5ff; /* Change background color */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Add shadow effect */
+    transform: scale(1.02); /* Slightly increase size */
+}
+
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+  #sortable li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; height: 1.5em; }
+  html>body #sortable li { height: 1.5em; line-height: 1.2em; }
+  .ui-state-highlight { height: 1.5em; line-height: 1.2em; }
+  /* Base style for the card */
+
+  /* Style for the selected card */
+
+  /* Customize the appearance of the autocomplete menu */
+.ui-autocomplete {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 20px;
+  background-color: #fff;
+  border: none !important ;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the items in the autocomplete menu */
+.ui-menu-item {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+ 
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Highlight the selected item in the autocomplete menu */
+.ui-menu-item.ui-state-active, /* This targets the active item */
+.ui-menu-item:hover { /* This targets the item on hover */
+    background-color: #f0f0f0; /* Light gray background on hover/active */
+    color: #333; /* Ensure text color remains dark for readability */
+}
+
+/* Ensure the active item has a consistent background and text color */
+.ui-menu-item.ui-state-active {
+    background-color: #007bff; /* Blue background for active item */
+    color: #fff; /* White text for active item */
+}
+
+
+/* Remove the last border-bottom */
+.ui-menu-item:last-child {
+  border-bottom: none;
+}
+
+.selected-card {
+  background-color: #d3d3d3; /* Light grey background to indicate selection */
+  border: 2px solid #007bff; /* Blue border to highlight the selected card */
+  cursor: not-allowed; /* Change cursor to indicate that the card is no longer clickable */
+  opacity: 0.7; /* Slightly faded to show it's disabled */
+}
+
+.av_nxt {
+  cursor: pointer; /* Change the cursor to indicate it's clickable */
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+  border: 1px solid #ddd; /* Light border to define the card */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 5px; /* Slightly rounded corners */
+}
+
+/* Hover effect */
+.av_nxt:hover {
+  background-color: #f8f9fa; /* Light gray background on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+  transform: translateY(-2px); /* Slightly lift the card on hover */
+}
+
+/* Active/click effect */
+.av_nxt:active {
+  background-color: #e2e6ea; /* Slightly darker background when clicked */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slightly reduce the shadow */
+  transform: translateY(0); /* Bring the card back to its original position */
+}
+
+	.dropdown-menu .dropdown-menu{
+		margin-left:0; margin-right: 0;
+	}
+	.dropdown-menu li{
+		position: relative;
+	}
+	.nav-item .submenu{ 
+		display: none;
+		position: absolute;
+		left:100%; top:-7px;
+	}
+	.nav-item .submenu-left{ 
+		right:100%; left:auto;
+	}
+	.dropdown-menu > li:hover{ background-color: #f1f1f1 }
+	.dropdown-menu > li:hover > .submenu{
+		display: block;
+	}
+}
+
+.selected {
+  border-color: #007bff; /* Change border color */
+  background-color: #e9f5ff; /* Change background color */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Add shadow effect */
+  transform: scale(1.02); /* Slightly increase size */
+}
+.selected_list1{
+  background-color: #adceef;
+  border: 1px solid #007bff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.03);
+}
+
+.print_font{
+  font-size: 11px;
+}
+
+.active_select{
+   background-color: #666;
+   
+ }
+ .table_report{
+  max-height: 75vh;
+  overflow-y: scroll;
+  
+}
+
+.phone_dash{
+  max-height: 50vh;
+  overflow-y: scroll;
+  
+}
+
+ .work_class{
+   max-height:45vh;
+  overflow-y: scroll;
+ }
+
+ .hr_class{
+  max-height:20vh;
+ overflow-y: scroll;
+}
+ .work_type_class{
+  max-height:75vh;
+ overflow-y: scroll;
+}
+.login_style{
+    background-color: rgba(135, 207, 235, 0.4);
+}
+
+.regisiter_style{
+    background-color: rgba(255, 228, 196, 0.76);
+}
+.mrequired:after {
+  content: "  *";
+    color: red;
+    font-weight: bolder;
+    margin-left: 5px;
+}
+
+ #top_bar .bga{
+    background-color:rgba(0, 128, 0, 0.7);
+    color:white;
+ }
+
+
+ #top_bar .bgu{
+    background-color:rgba(137, 43, 226, 0.8);
+    color:white;
+ }
+
+
+ #menu_bar nav{
+    background-color: rgba(128, 128, 128, 0);    
+ }
+
+
+ #menu_bar .nav-item .nav-link{
+    color: black;  
+  
+ }
+
+
+ #menu_bar .nav-item .active{
+    color: blue;  
+   
+ }
+
+ #his_table{
+   max-height: 58vh;
+  
+ }
+
+
+ .blink {
+   animation: blinker 1s linear infinite;
+ }
+ 
+ @keyframes blinker {
+   50% {
+     opacity: 0;
+   }
+ }
+
+
+ .dot {
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+}
+

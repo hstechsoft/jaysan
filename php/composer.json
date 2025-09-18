@@ -1,0 +1,6 @@
+{
+    "name": "harish/php",
+    "require": {
+        "cboden/ratchet": "^0.4.4"
+    }
+}
