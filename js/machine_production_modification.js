@@ -28,7 +28,11 @@ $(document).ready(function () {
 
 
 
-     check_login();
+    check_login();
+
+    assign_product_get_product_list();
+
+    assign_product_get_sub_type_list();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -40,7 +44,7 @@ $(document).ready(function () {
 
                 source: function (request, response) {
                     $.ajax({
-                        url: "assign_product_customer_autocomplete.php",
+                        url: "php/assign_product_customer_autocomplete.php",
                         type: "get", //send it through get method
                         data: {
 
@@ -54,9 +58,10 @@ $(document).ready(function () {
                             console.log(data);
                             response($.map(data, function (item) {
                                 return {
-                                    // label: item.part_name + "-" + item.part_no,
-                                    // value: item.part_no,
-                                    // id: item.part_id,
+                                    label: item.cus_name,
+                                    value: item.cus_name,
+                                    cus_id: item.cus_id,
+                                    phone: item.cus_phone,
                                     // part_name: item.part_name
                                 };
                             }));
@@ -69,34 +74,322 @@ $(document).ready(function () {
                 cacheLength: 0,
                 select: function (event, ui) {
 
-                    //   $(this).data("selected-part_id", ui.item.id);
+                    $(this).data("selected-cus_id", ui.item.cus_id);
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
+                    console.log($("#customer").data("selected-cus_id"));
 
 
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
-                    .append("<div><strong>" + item.part_name + "</strong> - " + item.value + "</div>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.phone + "</div>")
                     .appendTo(ul);
             };
         }
 
     });
 
+    $("#product").on("change", function (event) {
+        event.preventDefault();
+
+        assign_product_get_model_list($(this).val());
+
+    });
+
+
+    $("#model").on("change", function (event) {
+        event.preventDefault();
+
+        assign_product_get_type_list($(this).val());
+
+    });
+
+
+    $("#search_btn").on("click", function (event) {
+        event.preventDefault();
+
+        get_assign_report();
+
+    });
+
 });
 
 
+// get data from database
+function assign_product_get_product_list() {
+
+
+    $.ajax({
+        url: "php/assign_product_get_product_list.php",
+        type: "get", //send it through get method
+        data: {
+            // key : value
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        // append logic here
+
+                        $("#product").append("<option value=\"" + obj.product_id + "\">" + obj.pname + "</option>")
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
 
 
 
 
 
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
 
 
 
+
+}
+
+// get data from database
+function assign_product_get_model_list(product_id) {
+
+
+    $.ajax({
+        url: "php/assign_product_get_model_list.php",
+        type: "get", //send it through get method
+        data: {
+            product_id: product_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        // append logic here
+
+                        $("#model").append("<option value=\"" + obj.model_id + "\">" + obj.model_name + "</option>")
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function assign_product_get_type_list(product_id) {
+
+
+    $.ajax({
+        url: "php/assign_product_get_type_list.php",
+        type: "get", //send it through get method
+        data: {
+            pid: product_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        // append logic here
+
+                        $("#type_drop").append("<option value=\"" + obj.type_id + "\">" + obj.type_name + "</option>")
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+
+function assign_product_get_sub_type_list() {
+
+
+    $.ajax({
+        url: "php/assign_product_get_sub_type_list.php",
+        type: "get", //send it through get method
+        data: {
+
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        // append logic here
+
+                        $("#sub_type").append("<option value=\"" + obj.sub_type + "\">" + obj.sub_type + "</option>")
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_assign_report(date, customer, sub_type, model, type) {
+
+
+    $.ajax({
+        url: "php/get_assign_report.php",
+        type: "get", //send it through get method
+        data: {
+
+            date_query: date,
+            cus_query: customer,
+            sub_type_query: sub_type,
+            model_query: model,
+            type_query: type,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        // append logic here
+
+                        $("#report_tbl").append("<tr>< td >"++"</td ><td>"++"</td><td>"++"</td><td>"++"</td></tr>");
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 

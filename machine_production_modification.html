@@ -45,174 +45,177 @@
 
 
         <section id="menu_bar">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card machine_production" id="machine_production">
 
-                        <h4 class="text-center">Machine Production Modification</h4>
-
-                        <div class="card-body ">
-
-                            <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation"
-                                id="machine_production_form" novalidate onsubmit="return false">
-                                <div class="row">
-
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-floating mb-2">
-                                            <input type="text" class="form-control rounded-3" id="customer"
-                                                placeholder="Enter the customer" required>
-                                            <label for="customer">customer
-                                                <span class="text-danger">*</span> </label>
-
-                                            <div class="invalid-feedback">
-                                                Kindly Enter Vaild Data
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="product" required>
-                                                <option selected disabled value="">select Product...</option>
-                                            </select>
-                                            <label for="product">Product</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="model" required>
-                                                <option selected disabled value="">select Model...</option>
-                                            </select>
-                                            <label for="model">Model</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="type_drop" required>
-                                                <option selected disabled value="">select Type...</option>
-                                            </select>
-                                            <label for="type_drop">Type</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-12">
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="sub_type" required>
-                                                <option selected disabled value="">select Sub Type...</option>
-                                            </select>
-                                            <label for="sub_type">Sub Type</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card date" id="date">
-                                        <strong class="text-center">Date</strong>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-floating mb-2">
-                                                        <input type="date" class="form-control rounded-3" id="form_date"
-                                                            placeholder="Select the starting date" required>
-                                                        <label for="form_date">Start Date
-                                                            <span class="text-danger">*</span> </label>
-
-                                                        <div class="invalid-feedback">
-                                                            Kindly Select Vaild Data
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-floating mb-2">
-                                                        <input type="date" class="form-control rounded-3" id="to_date"
-                                                            placeholder="Select the end date" required>
-                                                        <label for="to_date">To date
-                                                            <span class="text-danger">*</span> </label>
-
-                                                        <div class="invalid-feedback">
-                                                            Kindly Select Vaild Data
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="text-center">
-                                                    <button type="submit" class="btn btn-secondary " id="clear_btn"><i class="bi bi-trash"></i> Clear</button>
-
-                                                    <button type="submit" class="btn btn-secondary " id="search_btn"><i
-                                                            class="bi bi-search"></i>Search</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </form>
-
-                        </div>
-                    </div>
-
-                    <div class="card machine_production_card mt-5" id="machine_production_report_card">
-                        <h4 class="text-center">Machine Production Report</h4>
-                        <div class="card-body ">
-                            <div class="table-responsive">
-                                <table class="table caption-top table-bordered table-striped " id="production_table">
-                                    <caption></caption>
-                                    <thead>
-
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Customer</th>
-                                            <th scope="col">Product</th>
-                                            <th scope="col">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="report_tbl">
-                                        <tr>
-
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-
-                                        </tr>
-
-
-                                    </tbody>
-
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card calender" id="calender_card">
-                        <h4 class="text-center">Calender Report</h4>
-                        <div class="card-body" id="calender"></div>
-                    </div>
-                </div>
-            </div>
 
         </section>
 
         <!-- content -->
+        <div class="row py-5">
+            <div class="col-md-8">
+                <div class="card machine_production" id="machine_production">
 
+                    <h4 class="text-center">Machine Production Modification</h4>
+
+                    <div class="card-body ">
+
+                        <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation"
+                            id="machine_production_form" novalidate onsubmit="return false">
+                            <div class="row">
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="customer"
+                                            placeholder="Enter the customer" required>
+                                        <label for="customer">customer
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="product" required>
+                                            <option selected disabled value="">select Product...</option>
+                                        </select>
+                                        <label for="product">Product</label>
+                                        <div class="invalid-feedback">
+                                            Kindly Select Vaild
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="model" required>
+                                            <option selected disabled value="">select Model...</option>
+                                        </select>
+                                        <label for="model">Model</label>
+                                        <div class="invalid-feedback">
+                                            Kindly Select Vaild
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="type_drop" required>
+                                            <option selected disabled value="">select Type...</option>
+                                        </select>
+                                        <label for="type_drop">Type</label>
+                                        <div class="invalid-feedback">
+                                            Kindly Select Vaild
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="sub_type" required>
+                                            <option selected disabled value="">select Sub Type...</option>
+                                        </select>
+                                        <label for="sub_type">Sub Type</label>
+                                        <div class="invalid-feedback">
+                                            Kindly Select Vaild
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card date" id="date">
+                                    <strong class="text-center">Date</strong>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-floating mb-2">
+                                                    <input type="date" class="form-control rounded-3" id="form_date"
+                                                        placeholder="Select the starting date" required>
+                                                    <label for="form_date">Start Date
+                                                        <span class="text-danger">*</span> </label>
+
+                                                    <div class="invalid-feedback">
+                                                        Kindly Select Vaild Data
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-md-6">
+                                                <div class="form-floating mb-2">
+                                                    <input type="date" class="form-control rounded-3" id="to_date"
+                                                        placeholder="Select the end date" required>
+                                                    <label for="to_date">To date
+                                                        <span class="text-danger">*</span> </label>
+
+                                                    <div class="invalid-feedback">
+                                                        Kindly Select Vaild Data
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-secondary " id="clear_btn"><i
+                                                        class="bi bi-trash"></i> Clear</button>
+
+                                                <button type="submit" class="btn btn-secondary " id="search_btn"><i
+                                                        class="bi bi-search"></i>Search</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="card machine_production_card mt-5" id="machine_production_report_card">
+                    <h4 class="text-center">Machine Production Report</h4>
+                    <div class="card-body ">
+                        <div class="table-responsive">
+                            <table class="table caption-top table-bordered table-striped " id="production_table">
+                                <caption></caption>
+                                <thead>
+
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Customer</th>
+                                        <th scope="col">Product</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="report_tbl">
+                                    <tr>
+
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card calender" id="calender_card">
+                    <h4 class="text-center">Calender Report</h4>
+                    <div class="card-body" id="calender"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
 
 
     <!-- jQuery -->
@@ -240,7 +243,7 @@
 
     <!-- external js -->
     <script src="js/machine_production_modification.js" type="module"></script>
-    <!-- <script src="js/menu.js" type="module"></script> -->
+    <script src="js/menu.js" type="module"></script>
     <script src="js/get_all_id.js" type="module"></script>
 
 </body>
