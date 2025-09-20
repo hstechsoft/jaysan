@@ -46,7 +46,7 @@ function insert_material_request_form() {
 
 
     $.ajax({
-        url: "php/insert_material_request_form.php",
+        url: "php/insert",
         type: "get", //send it through get method
         data: {
             emp_id: emp_id,
