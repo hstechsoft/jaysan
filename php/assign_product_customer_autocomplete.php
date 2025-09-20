@@ -54,7 +54,7 @@ $term  = "%" .  $term ."%";
 
     customer.cus_name,
     customer.cus_phone,
-    customer_id
+    customer_id as cus_id
 FROM
     (
     SELECT
