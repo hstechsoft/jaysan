@@ -176,7 +176,10 @@ ORDER BY
     unassi ASC
 )
 SELECT
-    *
+    assign_info.dated,
+    assign_info.product_html,
+     assign_info.cus_info,
+(concat(modify_date)) as modify_order
 FROM
     assign_info
 LEFT JOIN(
@@ -195,7 +198,7 @@ LEFT JOIN(
         actual_date
 ) AS pma
 ON
-        assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
+        assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and $cus_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
 SQL;
 
 
