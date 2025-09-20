@@ -4,6 +4,8 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+console.log(current_user_id);
+
 $(document).ready(function () {
 
 
@@ -26,68 +28,68 @@ $(document).ready(function () {
 
 
 
-    check_login();
+     check_login();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
+    $('#customer').on('input', function () {
+        //check the value not empty
+        if ($('#customer').val() != "") {
+            $('#customer').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "assign_product_customer_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            term: request.term
 
 
+                        },
+                        dataType: "json",
+                        success: function (data) {
 
-    insert_material_request_form();
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    // label: item.part_name + "-" + item.part_no,
+                                    // value: item.part_no,
+                                    // id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    //   $(this).data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.part_name + "</strong> - " + item.value + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
 });
 
 
 
-
-
-
-function insert_material_request_form() {
-
-
-    $.ajax({
-        url: "php/insert_material_request_form.php",
-        type: "get", //send it through get method
-        data: {
-            emp_id: emp_id,
-            part_id: part_id,
-            bom_production: $('#bom_production :selected').val(),
-            order_type: $('#order_type :selected').val(),
-            shortfall_qty: $('#shortfall_qty').val(),
-            stock_for_sufficent_days: $('#stock_for_sufficent_days').val(),
-            req_qty: $('#req_qty').val(),
-            req_date: $('#req_date').val(),
-            last_purchase_date: $('#last_purchase_date').val(),
-            last_purchase_qty: $('#last_purchase_qty').val(),
-            material_receipt_status: $('#material_receipt_status :selected').val(),
-            prepared_by: emp_id,
-            physical_stock_array: physical_stock_array
-
-        },
-        success: function (response) {
-            console.log(response);
-
-
-            if (response.trim() == "ok") {
-
-
-
-            }
-
-
-
-
-
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
-
-
-
-
-}
 
 
 
