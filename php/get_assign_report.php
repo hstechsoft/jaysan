@@ -145,6 +145,7 @@ soiv.sub_type,
 soiv.order_no,
  soiv.type_id,
     soiv.model_id,
+    soiv.customer_id,
 (
     soiv.required_qty - SUM(ap.qty) OVER(
 PARTITION BY opid
