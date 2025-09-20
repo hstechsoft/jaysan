@@ -146,6 +146,23 @@ soiv.order_no,
  soiv.type_id,
     soiv.model_id,
     soiv.customer_id,
+    concat(soiv.cus_name,' - ', soiv.cus_phone) as cus_info,
+     CONCAT(
+             '<div class=\"d-flex justify-content-center gap-2 p-1 \">
+ <p class=\"small  m-0 p-0\">',
+            soiv.product,
+         '</p>  <p class=\"small m-0 p-0\">',
+        soiv.model_name,
+         '</p> <p class=\"small  m-0 p-0\">',
+         soiv.type_name,
+         '</p>',
+         '<p class=\" m-0 p-0 small \"> Qty :',
+         soiv.required_qty,
+         '</p></div><p class=\" m-0 p-0 small text-muted\">',
+         soiv.sub_type,
+         '</p>'
+         ) AS product_html,
+
 (
     soiv.required_qty - SUM(ap.qty) OVER(
 PARTITION BY opid
