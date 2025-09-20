@@ -143,6 +143,8 @@ soiv.model_name,
 soiv.type_name,
 soiv.sub_type,
 soiv.order_no,
+ soiv.type_id,
+    soiv.model_id,
 (
     soiv.required_qty - SUM(ap.qty) OVER(
 PARTITION BY opid
@@ -175,7 +177,7 @@ LEFT JOIN(
         actual_date
 ) AS pma
 ON
-    assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;  
+        assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
 SQL;
 
 
