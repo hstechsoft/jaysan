@@ -108,46 +108,174 @@ $sql = "SET time_zone = '+05:30';";
 
 
 
+// $sql .= <<<SQL
+// WITH
+//     assign_info AS(
+//     SELECT
+//         ap.ass_id,
+//         ap.opid,
+//         ap.qty,
+//         ap.dated,
+//         ap.emergency_order,
+//         ap.assign_type,
+//         ap.finished_details,
+//         ap.line_no,
+//         ap.godown,
+//         ap.chasis_no,
+//         ap.dcf_id,
+//         SUM(ap.qty) OVER(
+//     PARTITION BY opid
+//     ) AS total_assigned_no,
+//     SUM(ap.qty) OVER(
+//     PARTITION BY opid,
+//     ap.assign_type
+// ) AS total_assign_type,
+// SUM(ap.qty) OVER(
+//     PARTITION BY opid,
+//     ap.assign_type,
+//     ap.dated
+// ) AS total_assign_dated,
+// soiv.cus_name,
+// soiv.oid,
+// soiv.required_qty,
+// soiv.product,
+// soiv.model_name,
+// soiv.type_name,
+// soiv.sub_type,
+// soiv.order_no,
+//  soiv.type_id,
+//     soiv.model_id,
+//     soiv.customer_id,
+//     concat(soiv.cus_name,' - ', soiv.cus_phone) as cus_info,
+//      CONCAT(
+//              '<div class=\"d-flex justify-content-center gap-2 p-1 \">
+//  <p class=\"small  m-0 p-0\">',
+//             soiv.product,
+//          '</p>  <p class=\"small m-0 p-0\">',
+//         soiv.model_name,
+//          '</p> <p class=\"small  m-0 p-0\">',
+//          soiv.type_name,
+//          '</p>',
+//          '<p class=\" m-0 p-0 small \"> Qty :',
+//          soiv.required_qty,
+//          '</p></div><p class=\" m-0 p-0 small text-muted\">',
+//          soiv.sub_type,
+//          '</p>'
+//          ) AS product_html,
+
+// (
+//     soiv.required_qty - SUM(ap.qty) OVER(
+// PARTITION BY opid
+// )
+// ) AS unassi
+// FROM
+//     assign_product ap
+// INNER JOIN sales_order_info_view soiv ON
+//     ap.opid = soiv.opid
+// ORDER BY
+//     unassi ASC
+// )
+// SELECT
+//     assign_info.dated,
+//     assign_info.product_html,
+//      assign_info.cus_info,
+// (concat(modify_date)) as modify_order
+// FROM
+//     assign_info
+// LEFT JOIN(
+//     SELECT
+//         pma.opid,
+//         SUM(pma.qty) AS total_modify_qty,
+//         date_only(pma.modify_date) AS modify_date,
+//         date_only(pma.actual_date) AS actual_date_f,
+//         pma.actual_date
+//     FROM
+//         `production_modify_approval` pma
+//     WHERE
+//         pma.sts = "un_approve"
+//     GROUP BY
+//         opid,
+//         actual_date
+// ) AS pma
+// ON
+//         assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and $cus_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
+// SQL;
+
+
 $sql .= <<<SQL
-WITH
-    assign_info AS(
+ WITH
+assign_product_cte AS(
     SELECT
-        ap.ass_id,
-        ap.opid,
-        ap.qty,
-        ap.dated,
-        ap.emergency_order,
-        ap.assign_type,
-        ap.finished_details,
-        ap.line_no,
-        ap.godown,
-        ap.chasis_no,
-        ap.dcf_id,
-        SUM(ap.qty) OVER(
-    PARTITION BY opid
-    ) AS total_assigned_no,
-    SUM(ap.qty) OVER(
+        assign_product.*,
+        SUM(qty) OVER(
     PARTITION BY opid,
-    ap.assign_type
-) AS total_assign_type,
-SUM(ap.qty) OVER(
-    PARTITION BY opid,
-    ap.assign_type,
-    ap.dated
-) AS total_assign_dated,
-soiv.cus_name,
-soiv.oid,
-soiv.required_qty,
-soiv.product,
-soiv.model_name,
-soiv.type_name,
-soiv.sub_type,
-soiv.order_no,
- soiv.type_id,
-    soiv.model_id,
-    soiv.customer_id,
+    dated
+    ) AS total_ass_pro_qty
+FROM
+    `assign_product`
+WHERE
+    assign_type = "Production"
+),
+assign_product_cte_result AS(
+    SELECT
+        *
+    FROM
+        assign_product_cte
+    GROUP BY
+        opid,
+        dated
+),
+pma AS(
+    SELECT
+        pma.actual_date,
+        pma.modify_date,
+        pma.opid,
+        SUM(qty) AS mq
+    FROM
+        `production_modify_approval` pma
+    WHERE
+        sts = "un_approve"
+    GROUP BY
+        modify_date
+),
+pma_result AS(
+    SELECT
+        pma.actual_date,
+        pma.opid,
+        ul(
+            "",
+            GROUP_CONCAT(
+                li(
+                    CONCAT(date_only(modify_date),
+                    '-',
+                    mq)
+                ) SEPARATOR ''
+            )
+        ) AS modify_html
+    FROM
+        pma
+    GROUP BY
+        opid,
+        actual_date
+),
+assign_product_full AS(
+    SELECT
+        assign_product_cte_result.opid,
+        assign_product_cte_result.dcf_id,
+        assign_product_cte_result.total_ass_pro_qty,
+        assign_product_cte_result.dated AS assgin_date,
+        pma_result.modify_html
+    FROM
+        assign_product_cte_result
+    LEFT JOIN pma_result ON assign_product_cte_result.opid = pma_result.opid AND assign_product_cte_result.dated = pma_result.actual_date
+)
+SELECT
+    assign_product_full.opid,
+    assign_product_full.total_ass_pro_qty,
+    assign_product_full.assgin_date,
+    assign_product_full.modify_html,
     concat(soiv.cus_name,' - ', soiv.cus_phone) as cus_info,
-     CONCAT(
+    CONCAT(
              '<div class=\"d-flex justify-content-center gap-2 p-1 \">
  <p class=\"small  m-0 p-0\">',
             soiv.product,
@@ -161,45 +289,14 @@ soiv.order_no,
          '</p></div><p class=\" m-0 p-0 small text-muted\">',
          soiv.sub_type,
          '</p>'
-         ) AS product_html,
-
-(
-    soiv.required_qty - SUM(ap.qty) OVER(
-PARTITION BY opid
-)
-) AS unassi
+         ) AS product_html
 FROM
-    assign_product ap
-INNER JOIN sales_order_info_view soiv ON
-    ap.opid = soiv.opid
-ORDER BY
-    unassi ASC
-)
-SELECT
-    assign_info.dated,
-    assign_info.product_html,
-     assign_info.cus_info,
-(concat(modify_date)) as modify_order
-FROM
-    assign_info
-LEFT JOIN(
-    SELECT
-        pma.opid,
-        SUM(pma.qty) AS total_modify_qty,
-        date_only(pma.modify_date) AS modify_date,
-        date_only(pma.actual_date) AS actual_date_f,
-        pma.actual_date
-    FROM
-        `production_modify_approval` pma
-    WHERE
-        pma.sts = "un_approve"
-    GROUP BY
-        opid,
-        actual_date
-) AS pma
-ON
-        assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and $cus_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
+    assign_product_full
+LEFT JOIN sales_order_info_view soiv ON
+    assign_product_full.opid = soiv.opid WHERE $date_query and $cus_query and  $type_query and  $model_query and $sub_type_query and $product_query
 SQL;
+
+
 
 
 // Execute the multi_query
