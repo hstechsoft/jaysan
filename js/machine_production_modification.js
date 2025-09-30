@@ -115,6 +115,10 @@ $(document).ready(function () {
 
     });
 
+    // $("#clear_btn").on("click", function (event){
+    //     $("#machine_production_form").empty()
+    // })
+
 });
 
 
@@ -333,24 +337,57 @@ function assign_product_get_sub_type_list() {
 
 }
 
-function get_assign_report(date, customer, sub_type, model, type) {
+function get_assign_report() {
 
+    var date_query = '1';
+    var cus_query = '1';
+    var sub_type_query = '1';
+    var model_query = '1';
+    var type_query = '1';
+    var product_query = '1';
+
+    if ($("#form_date").val() && $("#to_date").val()) {
+
+        date_query = "assign_info.dated between '" + $("#form_date").val() + "' and '" + $('#to_date').val() + "'"
+    }
+    if ($("#customer").val()) {
+
+        cus_query = "assign_info.customer_id = '" + $("#customer").data("selected-cus_id") + "'"
+    }
+    if ($("#product").val()) {
+
+        product_query = "assign_info.product = '" + $("#product").find("option:selected").text() + "'"
+    }
+    if ($("#model").val()) {
+
+        model_query = "assign_info.model_id = '" + $("#model").val() + "'"
+    }
+    if ($("#type_drop").val()) {
+
+        type_query = "assign_info.type_id = '" + $("#type_drop").val() + "'"
+    }
+    if ($("#sub_type").val()) {
+
+        sub_type_query = "assign_info.sub_type = '" + $("#sub_type").val() + "'"
+    }
+// console.log($("#product").find("option:selected").text());
 
     $.ajax({
         url: "php/get_assign_report.php",
         type: "get", //send it through get method
         data: {
 
-            date_query: date,
-            cus_query: customer,
-            sub_type_query: sub_type,
-            model_query: model,
-            type_query: type,
+            date_query: date_query,
+            cus_query: cus_query,
+            sub_type_query: sub_type_query,
+            model_query: model_query,
+            type_query: type_query,
+            product_query: product_query,
 
         },
         success: function (response) {
             console.log(response);
-
+            $("#report_tbl").empty();
 
             if (response.trim() != "error") {
 
@@ -364,14 +401,14 @@ function get_assign_report(date, customer, sub_type, model, type) {
                         count = count + 1;
                         // append logic here
 
-                        $("#report_tbl").append("<tr>< td >"++"</td ><td>"++"</td><td>"++"</td><td>"++"</td></tr>");
+                        $("#report_tbl").append("<tr><td>" + count + "</td ><td>" + obj.cus_info + "</td><td>" + obj.product_html + "</td><td>" + obj.dated + "</td></tr>");
                     });
 
 
 
                 }
                 else {
-                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+                    $("#report_tbl") .append("<tr><td colspan='4' scope='col' class=\"text-center\">No Data</td></tr>");
 
                 }
             }
