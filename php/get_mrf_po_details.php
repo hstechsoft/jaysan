@@ -31,7 +31,8 @@ $sql .= "SELECT
    mrf.form_history,
    date_only(mrf.req_date) as req_date_format,
  mrf_purchase.approx_delivery_days,
- 
+   concat(mrf_batch.batch_qty,' ',   mrf_purchase.uom ) as batch_qty_with_uom,
+     MRF_purchase.uom,
     (
     SELECT
         creditors.creditor_name

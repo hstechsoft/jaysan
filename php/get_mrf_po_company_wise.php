@@ -20,8 +20,12 @@ $sql .= "SELECT
     mrf_purchase.mrf_purchase_id,
     mrf_purchase.raw_material_part_id,
     mrf_batch.batch_date,
-    mrf_batch.batch_qty,
+    
+   concat(mrf_batch.batch_qty,' ',   mrf_purchase.uom ) as batch_qty_with_uom,
+     MRF_purchase.uom,
     mrf_purchase.po_order_to,
+    mrf_purchase.raw_material_rate,
+
     mrf_purchase.po_delivery_to,
       date_only((SELECT DATE_ADD(mb.po_date, INTERVAL ifnull(mrf_purchase.approx_delivery_days,0) DAY) from mrf_batch mb WHERE mb.mrf_id = mrf_purchase.mrf_id and mb.po_date > '0000-00-00' order by mb.batch_id DESC LIMIT  1)) as approx_del_date,
          ( SELECT DATE_ADD(current_date, INTERVAL  mrf_purchase.approx_delivery_days DAY)) as approx_due_date
