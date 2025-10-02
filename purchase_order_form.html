@@ -69,11 +69,11 @@
 
                                 <tr>
                                     <th scope="col">S/No</th>
-                                     <th scope="col">MRF Details</th>
+                                    <th scope="col" style="width: 100%;">MRF Details</th>
                                     <th scope="col">Order To</th>
                                     <th scope="col">RM</th>
                                     <th scope="col">Batch Date</th>
-                                   
+
                                     <th scope="col">Quantity</th>
                                 </tr>
                             </thead>
@@ -118,6 +118,8 @@
                                                     <th scope="col">Batch Date</th>
                                                     <th scope="col">Due Date</th>
                                                     <th scope="col">Quantity</th>
+                                                    <th scope="col">Rate</th>
+                                                    <th scope="col">Amount</th>
 
                                                 </tr>
                                             </thead>
@@ -251,16 +253,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" class="form-control rounded-3" id="terms_of_delivery_input" placeholder="Terms of Delivery">
-                            <div class="form-floating mb-2">
-                          <input type="date" class="form-control rounded-3" id="due_date" placeholder="" required>
-                          <label for="purchase_order_details">Due date
-                          <span class="text-danger">*</span> </label>
-                        
-                          <div class="invalid-feedback">
-                            Kindly Enter  Vaild Data
-                          </div>
-                        </div>
+                        <input type="text" class="form-control rounded-3" id="terms_of_delivery_input"
+                            placeholder="Terms of Delivery">
                         <button type="submit" class="btn btn-primary mt-4 " id="terms_btn">Submit</button>
                     </div>
                 </div>
@@ -298,7 +292,7 @@
     <script src="js/purchase_order_form.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <script src="js/get_all_id.js" type="module"></script>
-     <script src="js/mrf_popover.js" type="module"></script>
+    <script src="js/mrf_popover.js" type="module"></script>
 
 </body>
 

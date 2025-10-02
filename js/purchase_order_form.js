@@ -65,37 +65,46 @@ $(document).ready(function () {
     $("#po_report").on("click", " tr ", function (e) {
         e.preventDefault();
 
-        $("#company_name").text("Company Name: " + $("#order_to").text());
+        $("#company_name").text("Company Name: " + $(this).closest("tr").find("td").eq(2).text());
         get_mrf_po_company_wise($(this).data("po_order_to"));
     })
 
     $("#po_dashboard").on("input", "tr td", function () {
         var order_qnty = parseInt($(this).text());
 
-        var original_qnty = parseInt($(this).closest("tr").find("td").eq(2).text());
+        var original_qnty = parseInt($(this).closest("tr").find("td").eq(3).data("batch_qty"));
+
 
         if (order_qnty > original_qnty) {
-            $(this).text($(this).closest("tr").find("td").eq(2).text())
+            $(this).text($(this).closest("tr").find("td").eq(3).data("batch_qty"))
         }
     })
 
     $("#po_dashboard").on("change", ".material-check", function () {
-        console.log("changed");
+
 
         let row = $(this).closest("tr");
         let isChecked = $(this).is(":checked");
         let batch_id = row.data("batch_id");
+        let batch_qty = row.find("td:eq(3)").text();
+        let uom = row.data("uom");
+        let raw_material_rate = row.data("raw_material_rate");
+        let gst_rate = row.data("gst_rate");
+console.log(gst_rate);
 
         if (isChecked) {
             row.find("td:eq(3)").attr("contenteditable", "false");
-            row.find("td:eq(5) input.date-input").prop("disabled", true);
+            // row.find("td:eq(5) input.date-input").prop("disabled", true);
+
 
             if ($("#selected_materials tr[data-batch_id='" + batch_id + "']").length === 0) {
-                let newRow = "<tr data-batch_id='" + batch_id + "'>" +
+                let newRow = "<tr data-batch_id='" + batch_id + "' data-batch_qty='" + batch_qty + "' data-gst_rate='" + gst_rate + "'>" +
                     "<td>" + row.find("td:eq(1)").text() + "</td>" +
                     "<td>" + row.find("td:eq(4)").text() + "</td>" +
-                    "<td>" + row.find("td:eq(5)").text().trim() + "</td>" +
-                    "<td>" + row.find("td:eq(3)").text() + "</td>" +
+                    "<td>" + row.find("td:eq(5)").find('input').val() + "</td>" +
+                    "<td>" + row.find("td:eq(3)").text() + " " + uom + "</td>" +
+                    "<td>" + raw_material_rate + "</td>" +
+                    "<td>" + raw_material_rate * row.find("td:eq(3)").text() + "</td>" +
                     "</tr>";
 
                 if ($("#selected_materials tr#totalRow").length > 0) {
@@ -106,22 +115,111 @@ $(document).ready(function () {
             }
         } else {
             row.find("td:eq(3)").attr("contenteditable", "true");
-            row.find("td:eq(5) input.date-input").prop("disabled", false);
+            // row.find("td:eq(5) input.date-input").prop("disabled", false);
             $("#selected_materials tr[data-batch_id='" + batch_id + "']").remove();
         }
 
-        let total = 0;
+        var total = 0;
+        var raw_material_total_amount = 0;
+        var gst_0 = [];
+        var gst_5 = [];
+        var gst_12 = [];
+        var gst_18 = [];
+        var gst_28 = [];
+        var gst_40 = [];
         $("#selected_materials tr[data-batch_id]").each(function () {
-            let qty = parseFloat($(this).find("td:eq(2)").text()) || 0;
+            let qty = parseFloat($(this).find("td:eq(3)").text()) || 0;
             total += qty;
-        });
+            let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
+            raw_material_total_amount += amount;
+           
 
+            switch ($(this).data("gst_rate")) {
+                case 0:
+                    gst_0.push(amount);
+                    break;
+                case 5:
+                    gst_5.push(amount);
+                    break;
+                case 12:
+                    gst_12.push(amount);
+                    break;
+                case 18:
+                    gst_18.push(amount);
+                    break;
+                case 28:
+                    gst_28.push(amount);
+                    break;
+                case 40:
+                    gst_40.push(amount);
+                    break;
+
+                default:
+                    break;
+            }
+
+
+        });
+      
+
+        var gst_details = '';
+        var gst_amount_details = '';
+
+        
+        // if (gst_0.length > 0) {
+        // var total = 0
+        //     $.each(gst_0, function (key, val) {
+        //         var gst_text = "input cgst @0%"+'<br>'+"input sgst @0%";
+        //         gst_details += gst_text + '<br>';
+        //         total += val
+        //     });
+        //    total = total *0.6;
+        //    gst_amount_details +=  total.toFixed(2) +   '<br>' + total.toFixed(2) + '<br>' 
+        // }
+        if(gst_12.length > 0) {
+            var total = 0
+            $.each(gst_12, function (key, val) {
+                var gst_text = "input cgst @6%"+'<br>'+"input sgst @6%";
+                gst_details += gst_text + '<br>';
+                total += val
+            });
+           total = total *0.6;
+           gst_amount_details +=  total.toFixed(2) +   '<br>' + total.toFixed(2) + '<br>' 
+        }
+        if(gst_18.length > 0) {
+          var total = 0
+            $.each(gst_18, function (key, val) {
+                var gst_text = "input cgst @9%"+'<br>'+"input sgst @9%";
+                gst_details += gst_text + '<br>';
+                total += val
+            });
+           total = total *0.9;
+           gst_amount_details +=  total.toFixed(2) +   '<br>' + total.toFixed(2) + '<br>' 
+        }
+        // if(gst_28.length > 0) {
+        //     $.each(gst_28, function (key, val) {
+        //         gst_details += 'GST 0%: ' + val.toFixed(2) + '<br>';
+        //     });
+            
+        // }
+        // if(gst_40.length > 0) {
+        //     $.each(gst_40, function (key, val) {
+        //         gst_details += 'GST 0%: ' + val.toFixed(2) + '<br>';
+        //     });
+            
+        // }
+
+        
         if ($("#selected_materials tr#totalRow").length === 0) {
+          
+
             $("#selected_materials").append(
-                "<tr id='totalRow'><th scope='col' colspan='2'>Total</th><td colspan='2'>" + total + "</td></tr>"
+                "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total + "</td><td></td><td id='raw_material_total_amount_id'>" + raw_material_total_amount + "</td></tr>"
             );
         } else {
-            $("#selected_materials tr#totalRow td").text(total);
+           
+            $("#total").text(total);
+            $("#raw_material_total_amount_id").text(raw_material_total_amount);
         }
     });
 
@@ -183,32 +281,28 @@ function get_mrf_po_details() {
 
                     var order_type_badge = "";
 
-if(obj.order_type == "Regular")
-{
-order_type_badge =   "<span class='ms-1 badge bg-success'>R</span>"
-}
-else if(obj.order_type == "Emergency")
-{
-  order_type_badge =   "<span class='ms-1 blink badge bg-danger'>E</span>"
-}
+                    if (obj.order_type == "Regular") {
+                        order_type_badge = "<span class='ms-1 badge bg-success'>R</span>"
+                    }
+                    else if (obj.order_type == "Emergency") {
+                        order_type_badge = "<span class='ms-1 blink badge bg-danger'>E</span>"
+                    }
 
 
-var commitment_sts = "";
-if(obj.approx_del_date != null && obj.approx_del_date != "" && obj.approx_del_date != "0" && obj.approx_del_date != "undefined")
-{
-  commitment_sts = obj.approx_del_date 
-}
-else
-{
-  commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
-  // commitment_sts = obj.commitment_date
-} 
+                    var commitment_sts = "";
+                    if (obj.approx_del_date != null && obj.approx_del_date != "" && obj.approx_del_date != "0" && obj.approx_del_date != "undefined") {
+                        commitment_sts = obj.approx_del_date
+                    }
+                    else {
+                        commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
+                        // commitment_sts = obj.commitment_date
+                    }
 
                     count = count + 1;
-                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-po_order_to='" + obj.approx_del_date + "'><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  "+obj.mrf_id + ". </span>"+ obj.part_name+order_type_badge+"<span class='ms-1 small  badge bg-primary'>"+obj.total_part_count+"</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
-"data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
-"data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-"<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>"+obj.req_date_format+" </div> <div class='small'>"+commitment_sts+"  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty + "</td></tr>");
+                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "'><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+                        "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
+                        "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
+                        "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "</td></tr>");
                 });
 
                 //    get_sales_order()
@@ -236,7 +330,11 @@ function get_mrf_po_company_wise(order_to) {
             order_to_id: order_to,
         },
         success: function (response) {
-            console.log(response);
+         
+
+            $("#po_dashboard").empty();
+
+            $("#selected_materials").empty();
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
@@ -245,13 +343,13 @@ function get_mrf_po_company_wise(order_to) {
 
                 obj.forEach(function (obj) {
                     $("#po_dashboard").append(
-                        "<tr data-batch_id='" + obj.batch_id + "'>" +
+                        "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gst_rate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.mrf_purchase_id + "'></td>" +
                         "<td>" + obj.raw_material_part_id + "</td>" +
-                        "<td>" + obj.batch_qty + "</td>" +
-                        "<td contenteditable='true'>" + obj.batch_qty + "</td>" +
+                        "<td>" + obj.batch_qty_with_uom + "</td>" +
+                        "<td data-batch_qty='" + obj.batch_qty + "' contenteditable='true'>" + obj.batch_qty + "</td>" +
                         "<td>" + obj.batch_date + "</td>" +
-                        "<td><input type='date' class='form-control date-input' value='2025-10-04'></td>" +
+                        "<td><input type='date'disabled class='form-control date-input' value='" + obj.approx_due_date + "'></td>" +
                         "</tr>"
                     );
                 });
@@ -315,7 +413,7 @@ function get_current_userid_byphoneid() {
                 var obj = JSON.parse(response);
 
 
-                console.log(response);
+               
 
 
                 obj.forEach(function (obj) {
@@ -373,7 +471,7 @@ function get_today_date() {
     var hour = date.getHours();
     var mins = date.getMinutes();
 
-    console.log(mins)
+
 
     if (month < 10) month = "0" + month;
     if (day < 10) day = "0" + day;
