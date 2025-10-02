@@ -20,7 +20,7 @@ $sql .= "SELECT
     mrf_purchase.mrf_purchase_id,
     mrf_purchase.raw_material_part_id,
     mrf_batch.batch_date,
-    
+    mrf_batch.batch_qty,
    concat(mrf_batch.batch_qty,' ',   mrf_purchase.uom ) as batch_qty_with_uom,
      mrf_purchase.uom,
     mrf_purchase.po_order_to,
