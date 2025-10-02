@@ -22,7 +22,9 @@ $sql .= "SELECT
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
     mrf_purchase.po_order_to,
-    mrf_purchase.po_delivery_to
+    mrf_purchase.po_delivery_to,
+      date_only((SELECT DATE_ADD(mb.po_date, INTERVAL ifnull(mrf_purchase.approx_delivery_days,0) DAY) from mrf_batch mb WHERE mb.mrf_id = mrf.mrf_id and mb.po_date > '0000-00-00' order by mb.batch_id DESC LIMIT  1)) as approx_del_date,
+         ( SELECT DATE_ADD(current_date, INTERVAL  mrf_purchase.approx_delivery_days DAY)) as approx_due_date
    
 FROM
     `mrf_purchase`
