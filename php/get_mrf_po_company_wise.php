@@ -19,7 +19,7 @@ $sql .= "SELECT
      mrf_batch.batch_id,
     mrf_purchase.mrf_purchase_id,
     mrf_purchase.raw_material_part_id,
-
+parts_tbl.gstrate,
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
    concat(mrf_batch.batch_qty,' ',   mrf_purchase.uom ) as batch_qty_with_uom,
@@ -34,7 +34,7 @@ $sql .= "SELECT
 FROM
     `mrf_purchase`
 INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
-
+left join parts_tbl on mrf_purchase.raw_material_part_id = parts_tbl.part_name
  WHERE mrf_batch.sts = 'create' and mrf_batch.batch_date<= CURRENT_DATE() and mrf_purchase.po_order_to =  $order_to_id";
 
 if ($conn->multi_query($sql)) {
