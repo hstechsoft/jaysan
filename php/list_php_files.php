@@ -1,4 +1,5 @@
 <?php
+
 if (isset($_GET['file'])) {
     $file = basename($_GET['file']); // prevent directory traversal
     if (file_exists($file)) {

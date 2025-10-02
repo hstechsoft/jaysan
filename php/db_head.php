@@ -1,4 +1,5 @@
 <?php
+
 $servername = "srv841.hstgr.io";
 $username = "u211327498_jaysan_user";
 $password = "Admin@123";
