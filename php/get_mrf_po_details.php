@@ -22,11 +22,38 @@ $sql .= "SELECT
     mrf_batch.batch_qty,
     mrf_purchase.po_order_to,
     mrf_purchase.po_delivery_to,
-    (SELECT creditors.creditor_name from creditors WHERE creditors.creditor_id =  mrf_purchase.po_order_to) as order_to,
-       (SELECT creditors.creditor_name from creditors WHERE creditors.creditor_id =  mrf_purchase.po_delivery_to) as delivery_to
+    (SELECT parts_tbl.part_name from parts_tbl WHERE parts_tbl.part_id = mrf.part_id) as part_name,
+     (select count(material_request_form.mrf_id) from material_request_form where material_request_form.part_id = mrf.part_id) as total_part_count,
+     (SELECT mb.po_date from mrf_batch mb WHERE mb.mrf_id = mrf.mrf_id and mb.po_date > '0000-00-00' order by mb.batch_id DESC LIMIT  1) as latest_po_date,
+      (SELECT mb.batch_date from mrf_batch mb WHERE mb.mrf_id = mrf.mrf_id and mb.po_date > '0000-00-00' order by mb.batch_id DESC LIMIT  1) as latest_po_batch_date,
+          date_only((SELECT DATE_ADD(mb.po_date, INTERVAL ifnull(mrf_purchase.approx_delivery_days,0) DAY) from mrf_batch mb WHERE mb.mrf_id = mrf.mrf_id and mb.po_date > '0000-00-00' order by mb.batch_id DESC LIMIT  1)) as approx_del_date,
+         ( SELECT DATE_ADD(current_date, INTERVAL  mrf_purchase.approx_delivery_days DAY)) as approx_due_date,
+   mrf.form_history,
+   date_only(mrf.req_date) as req_date_format,
+ mrf_purchase.approx_delivery_days,
+ 
+    (
+    SELECT
+        creditors.creditor_name
+    FROM
+        creditors
+    WHERE
+        creditors.creditor_id = mrf_purchase.po_order_to
+) AS order_to,
+(
+    SELECT
+        creditors.creditor_name
+    FROM
+        creditors
+    WHERE
+        creditors.creditor_id = mrf_purchase.po_delivery_to
+) AS delivery_to
 FROM
     `mrf_purchase`
-INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id WHERE mrf_batch.sts = 'create' and mrf_batch.batch_date<= CURRENT_DATE();";
+INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
+inner join material_request_form mrf on mrf_purchase.mrf_id = mrf.mrf_id
+WHERE
+    mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE();";
 
 if ($conn->multi_query($sql)) {
     do {

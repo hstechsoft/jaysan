@@ -180,8 +180,35 @@ function get_mrf_po_details() {
 
 
                 obj.forEach(function (obj) {
+
+                    var order_type_badge = "";
+
+if(obj.order_type == "Regular")
+{
+order_type_badge =   "<span class='ms-1 badge bg-success'>R</span>"
+}
+else if(obj.order_type == "Emergency")
+{
+  order_type_badge =   "<span class='ms-1 blink badge bg-danger'>E</span>"
+}
+
+
+var commitment_sts = "";
+if(obj.approx_del_date != null && obj.approx_del_date != "" && obj.approx_del_date != "0" && obj.approx_del_date != "undefined")
+{
+  commitment_sts = obj.approx_del_date 
+}
+else
+{
+  commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
+  // commitment_sts = obj.commitment_date
+} 
+
                     count = count + 1;
-                    $("#po_report").append("<tr data-po_order_to=" + obj.po_order_to + "><td>" + count + "</td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>2025-10-04</td><td>" + obj.batch_qty + "</td></tr>");
+                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-po_order_to='" + obj.approx_del_date + "'><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  "+obj.mrf_id + ". </span>"+ obj.part_name+order_type_badge+"<span class='ms-1 small  badge bg-primary'>"+obj.total_part_count+"</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+"data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
+"data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
+"<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>"+obj.req_date_format+" </div> <div class='small'>"+commitment_sts+"  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty + "</td></tr>");
                 });
 
                 //    get_sales_order()
