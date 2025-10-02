@@ -19,7 +19,7 @@ $sql .= "SELECT
      mrf_batch.batch_id,
     mrf_purchase.mrf_purchase_id,
     mrf_purchase.raw_material_part_id,
-    (select parts_tbl.gst_rate from parts_tbl where parts_tbl.part_id = mrf_purchase.raw_material_part_id) as gst_rate,
+    (select parts_tbl.gstrate from parts_tbl where parts_tbl.part_id = mrf_purchase.raw_material_part_id) as gst_rate,
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
    concat(mrf_batch.batch_qty,' ',   mrf_purchase.uom ) as batch_qty_with_uom,
