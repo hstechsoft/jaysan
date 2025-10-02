@@ -3,7 +3,7 @@
 
  
 
-  $order_to_id = test_input($_POST['order_to_id']);
+  $order_to_id = test_input($_GET['order_to_id']);
  
 function test_input($data) {
 $data = trim($data);
