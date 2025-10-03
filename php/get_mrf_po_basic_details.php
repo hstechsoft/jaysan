@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- 
+   $mrf_id = test_input($_GET['mrf_id']);
 
  
  
@@ -36,7 +36,7 @@ $sql .= "SELECT
 FROM
     `mrf_purchase`
     LEFT JOIN creditors sup on mrf_purchase.po_order_to = sup.creditor_id
-    LEFT JOIN creditors con on mrf_purchase.po_order_to = con.creditor_id";
+    LEFT JOIN creditors con on mrf_purchase.po_order_to = con.creditor_id WHERE mrf_purchase.mrf_id =  $mrf_id";
 
 if ($conn->multi_query($sql)) {
     do {
