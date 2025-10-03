@@ -24,12 +24,12 @@ $sql .= "SELECT
     sup.contact as sub_contact,
     sup.creditors_email as sub_email,
      con.creditor_name as con_name,
-   con.creditors_addr ascon_addr,
-   con.creditor_gst ascon_gst,
-   con.state_name ascon_state_name,
-   con.contact_person ascon_contact_person,
-   con.contact ascon_contact,
-   con.creditors_email ascon_email,
+   con.creditors_addr as con_addr,
+   con.creditor_gst as con_gst,
+   con.state_name as con_state_name,
+   con.contact_person as con_contact_person,
+   con.contact as con_contact,
+   con.creditors_email as con_email,
    (SELECT company.company_address from company LIMIT 1) as company_address,
      REPLACE((SELECT company.company_address from company LIMIT 1) , '\n', '<br>') as company_address
     
