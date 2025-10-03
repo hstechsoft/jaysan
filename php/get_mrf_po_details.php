@@ -17,7 +17,9 @@ $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT
     mrf_purchase.mrf_id,
     mrf_purchase.mrf_purchase_id,
-    mrf_purchase.raw_material_part_id,
+   
+    parts_tbl.gstrate,
+    parts_tbl.part_name as raw_material_part_id,
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
     mrf_purchase.po_order_to,
@@ -53,6 +55,7 @@ FROM
     `mrf_purchase`
 INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
 inner join material_request_form mrf on mrf_purchase.mrf_id = mrf.mrf_id
+left join parts_tbl on mrf_purchase.raw_material_part_id = parts_tbl.part_id
 WHERE
     mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE();";
 
