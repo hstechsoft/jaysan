@@ -38,10 +38,17 @@ if ($conn->multi_query($sql)) {
       $material_rate = $po_materials['material_rate'];
       $po_material_id = $po_materials['po_material_id'];
       $qty = $po_materials['qty']; 
-      $batch_id = $po_materials['batch_id']; 
+      $batch_id = $po_materials['batch_id'];
+      $is_approved = $po_materials['is_approved']; 
+      $disc = $po_materials['disc'];
+       $due_on = $po_materials['due_on'];
+      
+      
+      
+      
       
   
-      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id) VALUES ('$material_rate','$po_id','$po_material_id','$qty','$batch_id');";
+      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty','$batch_id','$is_approved','$disc','$due_on');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
