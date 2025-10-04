@@ -5,16 +5,9 @@
 $po_delivery_to = ($_POST['po_delivery_to']);
 $po_terms = ($_POST['po_terms']);
 
-
-
-
 $po_materials = ($_POST['po_materials']);
 
  
-
-echo "terms" .$po_terms;
-
-
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -46,6 +39,7 @@ if ($conn->multi_query($sql)) {
       $po_material_id = $po_materials['po_material_id'];
       $qty = $po_materials['qty']; 
       $batch_id = $po_materials['batch_id']; 
+      
   
       $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id) VALUES ('$material_rate','$po_id','$po_material_id','$qty','$batch_id');";
 
