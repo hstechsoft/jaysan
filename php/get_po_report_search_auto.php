@@ -4,7 +4,7 @@
 
  $part = ($_GET['part']);
  $term = ($_GET['term']);
- 
+
 
 function test_input($data) {
 $data = trim($data);
@@ -20,11 +20,11 @@ $part  = "%" .  $part ."%";
 
 if($term == 'part')
 
-$sql = "SELECT mrf_purchase.raw_material_part_id,parts_tbl.part_name
- FROM  mrf_purchase INNER join parts_tbl on mrf_purchase.raw_material_part_id = parts_tbl.part_id WHERE parts_tbl.part_name like '$part'";
+$sql = "SELECT jaysan_po_material.po_material_id,parts_tbl.part_name
+ FROM  jaysan_po_material INNER join parts_tbl on jaysan_po_material.po_material_id = parts_tbl.part_id WHERE parts_tbl.part_name like '$part'";
 else 
- $sql = "SELECT mrf_purchase.po_order_to,creditors.creditor_name
- FROM  mrf_purchase INNER join creditors on mrf_purchase.po_order_to = creditors.creditor_id WHERE creditors.creditor_name like  '$part'";
+ $sql = "SELECT jaysan_po.po_order_to,creditors.creditor_name
+ FROM  jaysan_po INNER join creditors on jaysan_po.po_order_to = creditors.creditor_id WHERE creditors.creditor_name like  '$part'";
 
 $result = $conn->query($sql);
 
