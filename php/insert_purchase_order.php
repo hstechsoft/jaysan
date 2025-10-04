@@ -12,7 +12,7 @@ $po_materials = ($_POST['po_materials']);
 
  
 
-print_r($po_terms);
+echo "terms" .$po_terms;
 
 
 function test_input($data) {
