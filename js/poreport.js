@@ -64,11 +64,12 @@ $(document).ready(function () {
             type: "get", //send it through get method
             data: {
                 part: part,
-                term: term
+                term: "part"
 
 
             },
             success: function (response) {
+console.log(response);
 
 
                 if (response.trim() != "error") {

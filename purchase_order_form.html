@@ -87,13 +87,14 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="table-responsive">
+
+                    <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption>PO Dashboard</caption>
                             <thead>
 
                                 <tr>
-                                    <th class="text-center" id="company_name" colspan="5">Company Name:</th>
+                                    <th class="text-center" id="company_name" colspan="7">Company Name:</th>
                                 </tr>
                                 <tr>
                                     <th scope="col"></th>
@@ -108,38 +109,127 @@
                             </thead>
                             <tbody id="po_dashboard">
 
-                                <tr>
-                                    <div class="table-responsive">
-                                        <table class="table caption-top table-bordered table-striped ">
-                                            <caption>Selected Materials</caption>
-                                            <thead>
 
-                                                <tr>
-                                                    <th scope="col">Materials</th>
-                                                    <th scope="col">Batch Date</th>
-                                                    <th scope="col">Due Date</th>
-                                                    <th scope="col">Quantity</th>
-                                                    <th scope="col">Rate</th>
-                                                    <th scope="col">Discount Amount</th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody id="selected_materials">
-
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-
-                                <tr>
-                                    <button type="submit" class="btn btn-primary " id="po_submit">Preview</button>
-                                </tr>
-                                </tr>
 
                             </tbody>
 
 
                         </table>
+                    </div>
+
+                    <div>
+                        <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="extra_po_order_form"
+                            novalidate onsubmit="return false">
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="material" placeholder=""
+                                            required>
+                                        <label for="material">Material
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="quantity" placeholder=""
+                                            required>
+                                        <label for="quantity">Quantity
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="uom" placeholder=""
+                                            required>
+                                        <label for="uom">UOM
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="tel" class="form-control rounded-3" id="rate" placeholder=""
+                                            required>
+                                        <label for="rate">Rate
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="tel" class="form-control rounded-3" id="discount" min="0" max="100"
+                                            placeholder="" required>
+                                        <label for="discount">Discount
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="date" class="form-control rounded-3" id="due_date" placeholder=""
+                                            required>
+                                        <label for="due_date">Due Date
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary " id="extra_po_add">Add PO</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive mt-2">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead>
+
+                                <tr>
+                                <tr>
+                                    <th scope="col">Materials</th>
+                                    <th scope="col">Batch Date</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col">Discount Amount</th>
+                                    <th scope="col">Delete</th>
+
+                                </tr>
+
+                                </tr>
+                            </thead>
+                            <tbody id="selected_materials">
+
+
+
+                            </tbody>
+
+
+                        </table>
+
+                        <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
                     </div>
                 </div>
             </div>
@@ -242,8 +332,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="textarea" class="form-control rounded-3" id="terms_of_delivery_input"
-                            placeholder="Terms of Delivery">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control rounded-3" placeholder="" id="terms_of_delivery_input"
+                                required style="height: 120px"></textarea>
+                            <label for="terms_of_delivery_input">Terms of Delivery</label>
+
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-primary mt-4 " id="terms_btn">Submit</button>
                     </div>
                 </div>

@@ -8,6 +8,8 @@ var company = '';
 var consignee = '';
 var supplier = '';
 var terms = '';
+var po_delivery_to = '';
+var po_order_to = '';
 var gst_details = '';
 var gst_amount_details = '';
 var gst_0 = [];
@@ -48,17 +50,19 @@ $(document).ready(function () {
     $("#mail_print").on("click", function (e) {
         e.preventDefault();
         var po_materials = [];
-        $("#selected_materials").find("tr").each(function () {
+        $("#selected_materials").find("tr:not(:last-child)").each(function () {
             let batch_id = $(this).data("batch_id");
-            let raw_material_part_id = $(this).data("raw_material_part_id");
+            let raw_material_part_id = $(this).find("td").eq(0).text();
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text();
             po_materials.push({ batch_id: batch_id, po_material_id: raw_material_part_id, qty: quantity, material_rate: rate });
         });
-        var po_order_to = $("#selected_materials").data("po_order_to");
-        var po_delivery_to = $("#selected_materials").data("po_delivery_to");
-        var po_terms = terms;
-        insert_purchase_order(po_materials, po_order_to, po_delivery_to, po_terms)
+        var po_terms = $("#terms_of_delivery_input").val();
+        console.log("pot " + po_terms);
+
+        console.log("pom " + po_materials);
+
+        insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials)
 
     });
 
@@ -97,85 +101,16 @@ $(document).ready(function () {
         let uom = row.data("uom");
         let raw_material_rate = row.data("raw_material_rate");
         let gst_rate = row.data("gst_rate");
-        let po_order_to = row.data("po_order_to");
-        let po_delivery_to = row.data("po_delivery_to");
+        var this_row = $(this);
 
-        if (isChecked) {
-            row.find("td:eq(3)").attr("contenteditable", "false");
-            row.find("td:eq(4)").attr("contenteditable", "false");
-            $("#purchase_order_details").empty();
-            $("#preview_Purchase").addClass("d-none");
-            $("#purchase_order_details").empty();
-            clear_gst_arrays();
-
-            // row.find("td:eq(5) input.date-input").prop("disabled", true);
-
-
-            if ($("#selected_materials tr[data-batch_id='" + batch_id + "']").length === 0) {
-                let discount = row.find("td:eq(4)").text();
-                let amnt = (raw_material_rate * batch_qty);
-                amnt = amnt - (amnt * (discount / 100));
-                let newRow = "<tr data-batch_id='" + batch_id + "' data-batch_qty='" + batch_qty + "' data-gst_rate='" + gst_rate + "'data-uom='" + uom + "' data-discount='" + discount + "' data-po_order_to='" + po_order_to + "' data-po_delivery_to='" + po_delivery_to + "'>" +
-                    "<td>" + row.find("td:eq(1)").text() + "</td>" +
-                    "<td>" + row.find("td:eq(5)").text() + "</td>" +
-                    "<td>" + row.find("td:eq(6)").find('input').val() + "</td>" +
-                    "<td>" + row.find("td:eq(3)").text() + " " + uom + "</td>" +
-                    "<td>" + raw_material_rate + "</td>" +
-                    "<td>" + amnt + "</td>" +
-                    "</tr>";
-
-                if ($("#selected_materials tr#totalRow").length > 0) {
-                    $("#selected_materials tr#totalRow").before(newRow);
-                } else {
-                    $("#selected_materials").append(newRow);
-                }
-            }
-        } else {
-            row.find("td:eq(3)").attr("contenteditable", "true");
-            row.find("td:eq(4)").attr("contenteditable", "true");
-            // row.find("td:eq(5) input.date-input").prop("disabled", false);
-            $("#selected_materials tr[data-batch_id='" + batch_id + "']").remove();
-        }
 
         var total = 0;
         var raw_material_total_amount = 0;
 
-        $("#selected_materials tr[data-batch_id]").each(function () {
-            let qty = parseFloat($(this).find("td:eq(3)").text()) || 0;
-            total += qty;
-            let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
-            raw_material_total_amount += amount;
-
-
-            switch ($(this).data("gst_rate")) {
-                case 0:
-                    gst_0.push(amount);
-                    break;
-                case 5:
-                    gst_5.push(amount);
-                    break;
-                case 12:
-                    gst_12.push(amount);
-                    break;
-                case 18:
-                    gst_18.push(amount);
-                    break;
-                case 28:
-                    gst_28.push(amount);
-                    break;
-                case 40:
-                    gst_40.push(amount);
-                    break;
-
-                default:
-                    break;
-            }
-
-
-        });
 
 
 
+        get_po_order_total(this_row)
 
         // if (gst_0.length > 0) {
         // var total = 0
@@ -190,17 +125,6 @@ $(document).ready(function () {
 
 
 
-        if ($("#selected_materials tr#totalRow").length === 0) {
-
-
-            $("#selected_materials").append(
-                "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total + "</td><td></td><td id='raw_material_total_amount_id'>" + raw_material_total_amount + "</td></tr>"
-            );
-        } else {
-
-            $("#total").text(total);
-            $("#raw_material_total_amount_id").text(raw_material_total_amount);
-        }
     });
 
 
@@ -298,6 +222,7 @@ $(document).ready(function () {
 
 
 
+
         $("#selected_materials").find("tr").each(function () {
 
             count = count + 1;
@@ -307,10 +232,8 @@ $(document).ready(function () {
             let rate = $(this).find("td").eq(4).text();
             let amount = $(this).find("td").eq(5).text();
             let discount = $(this).data("discount");
-            let po_order_to = $(this).data("po_order_to");
-            let po_delivery_to = $(this).data("po_delivery_to");
             if (materials !== "" && Due !== "" && quantity !== "" && rate !== "" && amount !== "") {
-                $("#purchase_order_details").append("<tr data-po_order_to ='" + po_order_to + "' data-po_delivery_to ='" + po_delivery_to + "' data-po_terms ='" + terms + "' data-po_materials ='" + po_materials + "'><td>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
+                $("#purchase_order_details").append("<tr><td>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
             }
             // if (count == $("#selected_materials tr").length - 1) {
 
@@ -337,13 +260,200 @@ $(document).ready(function () {
         $("#terms").modal("hide");
         salert("Success", "Terms of delivery set successfully.", "success");
 
-        console.log($("#preview_Purchase").html());
 
+    });
+
+    $("#extra_po_add").on("click", function (e) {
+        e.preventDefault();
+
+
+        let materials = $("#material").val().trim();
+        let Due = $("#due_date").val().trim();
+        let quantity = $("#quantity").val().trim();
+        let uom = $("#uom").val().trim();
+        let rate = $("#rate").val().trim();
+        let discount = $("#discount").val().trim();
+
+        if (materials == "" || Due == "" || quantity == "" || uom == "" || rate == "" || discount == "") {
+            salert("Error", "Please fill all the fields.", "error");
+            return;
+        }
+        // let amnt = (rate * quantity);
+        // amnt = amnt - (amnt * (discount / 100));
+        // console.log("amount " + amnt);
+
+        // let count = $("#selected_materials tr").length;
+        // let extra_po_data = "<tr data-batch_id='0' data-approved='0' data-batch_qty='" + quantity + "' data-uom='" + uom + "' data-discount='" + discount + "'>" +
+        //     "<td>" + materials + "</td><td>-</td>" +
+        //     "<td>" + Due + "</td>" +
+        //     "<td>" + quantity + " " + uom + "</td>" +
+        //     "<td>" + rate + "</td>" +
+        //     "<td>" + amnt + "</td>" +
+        //     "</tr>";
+        // if ($("#selected_materials tr#totalRow").length > 0) {
+        //     $("#selected_materials tr#totalRow").before(extra_po_data);
+        // } else {
+        //     $("#selected_materials").append(extra_po_data);
+        // }
+
+        get_po_order_total();
+        $("#extra_po_order_form")[0].reset();
+    });
+
+    $("#selected_materials").on("click", ".fa-trash", function () {
+        const row = $(this).closest("tr");
+        const materialId = row.data("batch_id");
+
+        $("#po_dashboard tr[data-batch_id='" + materialId + "']")
+            .find("input[type='checkbox']")
+            .prop("checked", false);
+        row.remove();
+
+        $("#selected_materials tr#totalRow").remove();
+        get_po_order_total();
     });
 
 
 });
 
+
+function get_po_order_total(row_ref) {
+
+    let total_qty = 0;
+    let total_amount = 0;
+
+
+    clear_gst_arrays();
+
+    let batch_id = '';
+    let batch_qty = '';
+    let uom = '';
+    let raw_material_rate = '';
+    let gst_rate = '';
+    let row = '';
+    let discount = 0;
+    let due_date = '';
+    let batch_date = '-';
+    let materials = '';
+    let isChecked = false;
+
+
+
+    if (row_ref === undefined) {
+
+        batch_id = $("#material").val();
+        batch_qty = $("#quantity").val();
+        isChecked = true;
+        uom = $("#uom").val();
+        raw_material_rate = $("#rate").val();
+        discount = $("#discount").val();
+        due_date = $("#due_date").val();
+        materials = $("#material").val();
+        gst_rate = $("#gst_rate").val();
+
+    }
+    else {
+
+        row = row_ref.closest("tr");
+        isChecked = row_ref.is(":checked");
+        batch_id = row.data("batch_id");
+        batch_qty = row.find("td:eq(3)").text();
+        uom = row.data("uom");
+        raw_material_rate = row.data("raw_material_rate");
+        discount = row.find("td:eq(4)").text();
+        gst_rate = row.data("gst_rate");
+        due_date = row.find("td:eq(6)").find('input').val();
+        batch_date = row.find("td:eq(5)").text();
+        materials = row.find("td:eq(1)").text();
+
+
+    }
+
+    $("#selected_materials tr#totalRow").remove();
+
+    if (!isChecked) {
+        $("#selected_materials tr[data-batch_id='" + batch_id + "']").remove();
+        $("#selected_materials tr#totalRow").remove();
+
+        $("#preview_Purchase").addClass("d-none");
+        $("#purchase_order_details").empty();
+        clear_gst_arrays();
+
+    }
+    else {
+        let amnt = (raw_material_rate * batch_qty);
+        amnt = amnt - (amnt * (discount / 100));
+        let newRow = "<tr data-batch_id='" + batch_id + "' data-batch_qty='" + batch_qty + "' data-gst_rate='" + gst_rate + "'data-uom='" + uom + "' data-discount='" + discount + "'>" +
+            "<td>" + materials + "</td>" +
+            "<td>" + batch_date + "</td>" +
+            "<td>" + due_date + "</td>" +
+            "<td>" + batch_qty + " " + uom + "</td>" +
+            "<td>" + raw_material_rate + "</td>" +
+            "<td>" + amnt + "</td>" +
+            "<td><i class='fa fa-trash'></i></td>" +
+            "</tr>";
+
+        if ($("#selected_materials tr#totalRow").length > 0) {
+            $("#selected_materials tr#totalRow").before(newRow);
+        } else {
+            $("#selected_materials").append(newRow);
+        }
+        clear_gst_arrays();
+        $("#preview_Purchase").addClass("d-none");
+        $("#purchase_order_details").empty();
+
+    }
+
+
+    $("#selected_materials tr[data-batch_id]").each(function () {
+        let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
+
+
+        switch ($(this).data("gst_rate")) {
+            case 0:
+                gst_0.push(amount);
+                break;
+            case 5:
+                gst_5.push(amount);
+                break;
+            case 12:
+                gst_12.push(amount);
+                break;
+            case 18:
+                gst_18.push(amount);
+                break;
+            case 28:
+                gst_28.push(amount);
+                break;
+            case 40:
+                gst_40.push(amount);
+                break;
+
+            default:
+                break;
+        }
+
+
+
+    });
+
+    $("#selected_materials tr").each(function () {
+        total_qty += parseFloat($(this).data("batch_qty"));
+        total_amount += parseFloat($(this).find("td").eq(5).text());
+    });
+
+    if (($("#selected_materials tr#totalRow").length === 0) && $("#selected_materials tr").length > 0) {
+
+
+        $("#selected_materials").append(
+            "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id'>" + total_amount + "</td></tr>"
+        );
+    } else {
+
+        $("#total").text(total_qty);
+        $("#raw_material_total_amount_id").text(total_amount);
+    }
+}
 
 function numberToWords(num) {
     const a = [
@@ -376,6 +486,7 @@ function clear_gst_arrays() {
     gst_40 = [];
     gst_details = '';
     gst_amount_details = '';
+
 }
 
 
@@ -389,6 +500,7 @@ function get_mrf_po_details() {
         },
         success: function (response) {
 
+            console.log(response);
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
@@ -462,6 +574,8 @@ function get_mrf_po_company_wise(order_to) {
 
                 obj.forEach(function (obj) {
 
+                    po_order_to = obj.po_order_to;
+                    po_delivery_to = obj.po_delivery_to;
                     $("#po_dashboard").append(
                         "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.mrf_purchase_id + "'></td>" +
@@ -533,27 +647,28 @@ function get_mrf_po_basic_details(mrf_id) {
 }
 
 function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials) {
+    console.log(po_terms);
+    console.log(po_delivery_to);
+    console.log(po_order_to);
+    console.log(po_materials);
+
+
     $.ajax({
         url: "php/insert_purchase_order.php",
-        type: "get", //send it through get method
+        type: "post", //send it through get method
         data: {
             po_order_to: po_order_to,
             po_delivery_to: po_delivery_to,
             po_terms: po_terms,
-            po_materials: JSON.stringify(po_materials),
+            po_materials: po_materials,
 
         },
         success: function (response) {
 
+
             console.log(response);
-
-            if (response.trim() != "error") {
-                var obj = JSON.parse(response);
-
-
-                obj.forEach(function (obj) {
-
-                });
+            if (response.trim() == "ok") {
+                location.reload();
 
                 //    get_sales_order()
             }
