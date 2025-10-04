@@ -1,9 +1,9 @@
 <?php
  include 'db_head.php';
 
- $po_order_to = test_input($_POST['po_order_to']);
-$po_delivery_to = test_input($_POST['po_delivery_to']);
-$po_terms = test_input($_POST['po_terms']);
+ $po_order_to = ($_POST['po_order_to']);
+$po_delivery_to = ($_POST['po_delivery_to']);
+$po_terms = ($_POST['po_terms']);
 
 
 
@@ -20,7 +20,7 @@ return $data;
 }
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO jaysan_po ( po_order_to,po_delivery_to,po_terms) VALUES ($po_order_to,$po_delivery_to,$po_terms)";
+$sql .= "INSERT INTO jaysan_po ( po_order_to,po_delivery_to,po_terms) VALUES ('$po_order_to','$po_delivery_to','$po_terms')";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)
