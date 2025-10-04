@@ -11,11 +11,7 @@ $po_terms = ($_POST['po_terms']);
 $po_materials = ($_POST['po_materials']);
 
  
-echo "<pre>";
-print_r($po_materials);
-print_r($po_order_to);
 
-print_r($po_delivery_to);
 print_r($po_terms);
 
 
