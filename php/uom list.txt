@@ -1,0 +1,77 @@
+  <select class="form-select" id="uom" required>
+          <option selected disabled value="">Choose...</option>
+          <option value="Nos">Nos</option>
+      <option value="No">No</option>
+      <option value="NUM">NUM</option>
+      <option value="Pcs">Pcs</option>
+      <option value="Sets">Sets</option>
+      <option value="Sheet">Sheet</option>
+      <option value="kgs">kgs</option>
+      <option value="Ltr">Ltr</option>
+      <option value="mls">mls</option>
+      <option value="Mts">Mts</option>
+      <option value="mtrs">mtrs</option>
+      <option value="mm">mm</option>
+      <option value="CUM">CUM</option>
+        </select>
+
+
+
+
+        $('#part_no').on('input',function(){
+   //check the value not empty
+       if($('#part_no').val() !="")
+       {
+         $('#part_no').autocomplete({
+           //get data from databse return as array of object which contain label,value
+
+           source: function(request, response) {
+             $.ajax({
+               url: "php/mrf_partname_autocomplete.php",
+               type: "get", //send it through get method
+               data: {
+               part_name : $("#part_no").val()
+
+
+             },
+             dataType: "json", 
+               success: function (data) {
+
+
+            
+             response($.map(data, function(item) {
+               return {
+
+                   label: item.part_name + "-" + item.part_no + "(" + item.total_count + ")",
+                   value: item.part_name,
+                   id: item.part_id,
+                   part_name: item.part_name,
+                   reorder_qty: item.reorder_qty,
+                   min_order_qty : item.min_order_qty
+               };
+           }));
+
+               }
+
+             });
+           },
+           minLength: 2,
+           cacheLength: 0,
+           select: function(event, ui) {
+
+             $(this).data("selected-part_id", ui.item.id);
+            $("#minimum_order_qty").val(ui.item.min_order_qty);
+            $("#reorder_quantity").val(ui.item.reorder_qty);
+// get part details
+var sts_array = [];
+get_material_request_form_parts_search(ui.item.id,'all',"created");
+           } ,
+
+         }).autocomplete("instance")._renderItem = function(ul, item) {
+           return $("<li>")
+               .append("<div>" + item.label + "</div>")
+               .appendTo(ul);
+       };
+       }
+
+      });
