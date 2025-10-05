@@ -31,7 +31,7 @@ left join jaysan_inward on jp.po_id = jaysan_inward.ref_id and jaysan_inward.inw
    
 WHERE
   $material_query and $date_query";
-    // jmat.po_material_id = '' AND jp.po_order_to = 1";
+    // jmat.po_material_id = '' AND jp.po_order_to = 1 And jp.date between 2025-06-01 and 2025-06-02";
 
 if ($conn->multi_query($sql)) {
     do {
