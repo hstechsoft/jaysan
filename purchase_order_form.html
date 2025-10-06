@@ -85,6 +85,29 @@
 
                         </table>
                     </div>
+
+
+                    <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped">
+                            <caption>Po List</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">S/No</th>
+                                    <th scope="col">Po no</th>
+                                    <th scope="col">Order To</th>
+                                    <th scope="col">Po Date</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="get_po_list">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
                 </div>
                 <div class="col-md-6">
 
@@ -147,14 +170,26 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="uom" placeholder=""
-                                            required>
-                                        <label for="uom">UOM
-                                            <span class="text-danger">*</span> </label>
-
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="uom" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            <option value="Nos">Nos</option>
+                                            <option value="No">No</option>
+                                            <option value="NUM">NUM</option>
+                                            <option value="Pcs">Pcs</option>
+                                            <option value="Sets">Sets</option>
+                                            <option value="Sheet">Sheet</option>
+                                            <option value="kgs">kgs</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="mls">mls</option>
+                                            <option value="Mts">Mts</option>
+                                            <option value="mtrs">mtrs</option>
+                                            <option value="mm">mm</option>
+                                            <option value="CUM">CUM</option>
+                                        </select>
+                                        <label for="uom">uom</label>
                                         <div class="invalid-feedback">
-                                            Kindly Enter Vaild Data
+                                            Kindly Select Vaild
                                         </div>
                                     </div>
                                 </div>
@@ -261,7 +296,8 @@
                         </tr>
                         <tr>
                             <th scope="col" colspan="3" id="consignee">Consignee</th>
-                            <th scope="col" rowspan="2" colspan="5" id="terms_of_delivery" class="text-start align-middle">Terms of Delivery</th>
+                            <th scope="col" rowspan="2" colspan="5" id="terms_of_delivery"
+                                class="text-start align-middle">Terms of Delivery</th>
                         </tr>
                         <tr>
                             <th scope="col" colspan="3" id="supplier">Supplier</th>

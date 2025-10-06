@@ -27,7 +27,7 @@
       "type": "pwa-chrome",
       "request": "launch",
       "url": "http://localhost/jaysan/purchase_order_form.html",
-      "webRoot": "E:/web/htdocs/jaysan",
+      "webRoot": "C:/xampp/htdocs/jaysan",
       "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
       "runtimeArgs": ["--disable-extensions"],

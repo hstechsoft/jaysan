@@ -49,24 +49,46 @@ $(document).ready(function () {
     // mail function
     $("#mail_print").on("click", function (e) {
         e.preventDefault();
+
         var po_materials = [];
+        var allApproved = true;
+
         $("#selected_materials").find("tr:not(:last-child)").each(function () {
+            let apprv = $(this).data("approve");
+            if (apprv == '0') {
+                alert("some po is not approved. please approve");
+                allApproved = false;
+                return false;
+            }
+
             let batch_id = $(this).data("batch_id");
-            let raw_material_part_id = $(this).find("td").eq(0).text();
+            let raw_material_part_id = $(this).find("td").eq(0).text().trim();
             let quantity = $(this).data("batch_qty");
-            let rate = $(this).find("td").eq(4).text();
-            po_materials.push({ batch_id: batch_id, po_material_id: raw_material_part_id, qty: quantity, material_rate: rate });
+            let rate = $(this).find("td").eq(4).text().trim();
+            let due_date = $(this).find("td").eq(2).text().trim();
+            let disc = $(this).data("discount");
+
+
+            po_materials.push({
+                batch_id: batch_id,
+                po_material_id: raw_material_part_id,
+                qty: quantity,
+                material_rate: rate,
+                is_approved: apprv,
+                due_on: due_date,
+                disc: disc,
+            });
         });
-        var po_terms = $("#terms_of_delivery_input").val();
-        console.log("pot " + po_terms);
 
-        console.log("pom " + po_materials);
-
-        insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials)
-
+        if (allApproved) {
+            let po_terms = $("#terms_of_delivery_input").val();
+            insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials);
+        }
     });
 
+
     get_mrf_po_details();
+    get_po_list();
 
 
     $("#po_report").on("click", " tr ", function (e) {
@@ -157,7 +179,7 @@ $(document).ready(function () {
         $("#supplier").html(supplier);
 
         // let tr_data =  $("#selected_materials").closest("tr");
-        let uom = $("#selected_materials").find("tr").data("uom");
+
         var count = 0;
 
         if (gst_5.length > 0) {
@@ -232,8 +254,12 @@ $(document).ready(function () {
             let rate = $(this).find("td").eq(4).text();
             let amount = $(this).find("td").eq(5).text();
             let discount = $(this).data("discount");
+            let uom = $(this).data("uom");
+            let approve = $(this).data("approve");
+            console.log(uom);
+
             if (materials !== "" && Due !== "" && quantity !== "" && rate !== "" && amount !== "") {
-                $("#purchase_order_details").append("<tr><td>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
+                $("#purchase_order_details").append("<tr data-approve=" + approve + "><td>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
             }
             // if (count == $("#selected_materials tr").length - 1) {
 
@@ -273,8 +299,11 @@ $(document).ready(function () {
         let uom = $("#uom").val().trim();
         let rate = $("#rate").val().trim();
         let discount = $("#discount").val().trim();
+        let gst_rate = $("#material").data("gst_rate");
+        console.log(gst_rate);
 
-        if (materials == "" || Due == "" || quantity == "" || uom == "" || rate == "" || discount == "") {
+
+        if (materials == "" || Due == "" || quantity == "" || uom == "" || rate == "" || discount == "" || gst_rate == "") {
             salert("Error", "Please fill all the fields.", "error");
             return;
         }
@@ -310,58 +339,120 @@ $(document).ready(function () {
         row.remove();
 
         $("#selected_materials tr#totalRow").remove();
-     clear_gst_arrays();
-         $("#selected_materials tr[data-batch_id]").each(function () {
-        let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
+        clear_gst_arrays();
+        $("#selected_materials tr[data-batch_id]").each(function () {
+            let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
 
 
-        switch ($(this).data("gst_rate")) {
-            case 0:
-                gst_0.push(amount);
-                break;
-            case 5:
-                gst_5.push(amount);
-                break;
-            case 12:
-                gst_12.push(amount);
-                break;
-            case 18:
-                gst_18.push(amount);
-                break;
-            case 28:
-                gst_28.push(amount);
-                break;
-            case 40:
-                gst_40.push(amount);
-                break;
+            switch ($(this).data("gst_rate")) {
+                case 0:
+                    gst_0.push(amount);
+                    break;
+                case 5:
+                    gst_5.push(amount);
+                    break;
+                case 12:
+                    gst_12.push(amount);
+                    break;
+                case 18:
+                    gst_18.push(amount);
+                    break;
+                case 28:
+                    gst_28.push(amount);
+                    break;
+                case 40:
+                    gst_40.push(amount);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
+
+
+
+        });
+
+        let total_qty = 0;
+        let total_amount = 0;
+        $("#selected_materials tr").each(function () {
+            total_qty += parseFloat($(this).data("batch_qty"));
+            total_amount += parseFloat($(this).find("td").eq(5).text());
+        });
+
+        if (($("#selected_materials tr#totalRow").length === 0) && $("#selected_materials tr").length > 0) {
+
+            console.log("hiiiii");
+
+            $("#selected_materials").append(
+                "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id' colspan='2'>" + total_amount + "</td></tr>"
+            );
+        }
+        else {
+
+            $("#total").text(total_qty);
+            $("#raw_material_total_amount_id").text(total_amount);
+        }
+        $("#purchase_order_details").empty();
+
+        $("#preview_Purchase").addClass("d-none");
+
+    });
+
+
+    $('#material').on('input', function () {
+        //check the value not empty
+        if ($('#material').val() != "") {
+            $('#material').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/mrf_partname_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+                            part_name: $("#material").val(),
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    part_name: item.part_name,
+                                    gst: item.gstrate
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("selected-part_id", ui.item.id);
+                    // $(this).data("gst_rate", ui.item.gst);
+                    $('#material').data("gst_rate", ui.item.gst);
+                    // $('#part_name_out').val(ui.item.part_name)
+                    // get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.part_name + "</strong></div>")
+                    .appendTo(ul);
+            };
         }
 
-
-
     });
-
-        $("#selected_materials tr").each(function () {
-        total_qty += parseFloat($(this).data("batch_qty"));
-        total_amount += parseFloat($(this).find("td").eq(5).text());
-    });
-console.log("");
-
-    if (($("#selected_materials tr#totalRow").length === 0) && $("#selected_materials tr").length > 0) {
-
-
-        $("#selected_materials").append(
-            "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id' colspan='2'>" + total_amount + "</td></tr>"
-        );
-    } else {
-
-        $("#total").text(total_qty);
-        $("#raw_material_total_amount_id").text(total_amount);
-    }
-    });
-
 
 });
 
@@ -384,6 +475,7 @@ function get_po_order_total(row_ref) {
     let due_date = '';
     let batch_date = '-';
     let materials = '';
+    let approve = '';
     let isChecked = false;
 
 
@@ -398,7 +490,8 @@ function get_po_order_total(row_ref) {
         discount = $("#discount").val();
         due_date = $("#due_date").val();
         materials = $("#material").val();
-        gst_rate = $("#gst_rate").val();
+        gst_rate = $("#material").data("gst_rate");
+        approve = '0';
 
     }
     else {
@@ -414,7 +507,7 @@ function get_po_order_total(row_ref) {
         due_date = row.find("td:eq(6)").find('input').val();
         batch_date = row.find("td:eq(5)").text();
         materials = row.find("td:eq(1)").text();
-
+        approve = '1';
 
     }
 
@@ -432,7 +525,7 @@ function get_po_order_total(row_ref) {
     else {
         let amnt = (raw_material_rate * batch_qty);
         amnt = amnt - (amnt * (discount / 100));
-        let newRow = "<tr data-batch_id='" + batch_id + "' data-batch_qty='" + batch_qty + "' data-gst_rate='" + gst_rate + "'data-uom='" + uom + "' data-discount='" + discount + "'>" +
+        let newRow = "<tr data-batch_id='" + batch_id + "' data-batch_qty='" + batch_qty + "' data-gst_rate='" + gst_rate + "'data-uom='" + uom + "' data-discount='" + discount + "' data-approve='" + approve + "'>" +
             "<td>" + materials + "</td>" +
             "<td>" + batch_date + "</td>" +
             "<td>" + due_date + "</td>" +
@@ -709,7 +802,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
             po_order_to: po_order_to,
             po_delivery_to: po_delivery_to,
             po_terms: po_terms,
-            po_materials: po_materials,
+            po_materials: po_materials
 
         },
         success: function (response) {
@@ -718,6 +811,50 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
             console.log(response);
             if (response.trim() == "ok") {
                 location.reload();
+
+            }
+
+            else {
+                salert("Error", "User ", "error");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
+function get_po_list() {
+    $.ajax({
+        url: "php/get_po_list.php",
+        type: "get", //send it through get method
+        data: {
+
+
+        },
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.trim() != "error") {
+                var obj = JSON.parse(response);
+                var count = 0;
+
+
+                obj.forEach(function (obj) {
+                    count += 1;
+
+                    if (obj.approve_sts == '0') {
+                        $("#get_po_list").append("<tr><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'><i class='fa fa-check-circle text-success'></i></td></tr>")
+                    }
+                    else {
+                        $("#get_po_list").append("<tr><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'><i class='fa fa-times-circle' style='color:red'></i></td></tr>")
+                    }
+
+                });
 
                 //    get_sales_order()
             }
@@ -734,8 +871,6 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
         }
     });
 }
-
-
 
 
 
