@@ -3,9 +3,9 @@
 
 //  demo text 12345
 
-  $material_query = ($_GET['material_query']);
-  $date_query = ($_GET['date_query']);
-  $order_to_query = ($_GET['order_to_query']);
+  $material_query = test_input($_GET['material_query']);
+  $date_query = test_input($_GET['date_query']);
+  $order_to_query = test_input($_GET['order_to_query']);
  
  
 function test_input($data) {
@@ -30,8 +30,8 @@ INNER JOIN jaysan_po_material jmat ON  jmat.jaysan_po_id = jp.po_id
 left join jaysan_inward on jp.po_id = jaysan_inward.ref_id and jaysan_inward.inward_cat = 'po'
    
 WHERE
-  $material_query and $date_query AND $date_query";
-    // jmat.po_material_id = '' AND jp.po_order_to = 1 And jp.date between 2025-06-01 and 2025-06-02";
+  $material_query and $date_query";
+    // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
 if ($conn->multi_query($sql)) {
     do {
