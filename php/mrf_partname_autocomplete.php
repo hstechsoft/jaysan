@@ -17,7 +17,7 @@ return $data;
 
 //  $sql = "SELECT part_name,part_no,reorder_qty,min_order_qty,part_id FROM parts_tbl WHERE part_name like '$part_name'";
 
- $sql = "SELECT count(mrf_id)as total_count,part_name,part_no,reorder_qty,min_order_qty,parts_tbl.part_id FROM parts_tbl LEFT join material_request_form mrf on parts_tbl.part_id = mrf.part_id  WHERE part_name like'$part_name' GROUP by parts_tbl.part_id";
+ $sql = "SELECT count(mrf_id)as total_count,part_name,part_no,reorder_qty,min_order_qty,parts_tbl.part_id,parts_tbl.baseunits,parts_tbl.gstrate FROM parts_tbl LEFT join material_request_form mrf on parts_tbl.part_id = mrf.part_id  WHERE part_name like'$part_name' GROUP by parts_tbl.part_id";
 
 $result = $conn->query($sql);
 
