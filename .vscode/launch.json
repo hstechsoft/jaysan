@@ -27,12 +27,8 @@
       "type": "pwa-chrome",
       "request": "launch",
       "url": "http://localhost/jaysan/purchase_order_form.html",
-      "webRoot": "C:/xampp/htdocs/jaysan",
-      "sourceMapPathOverrides": {
-        "webpack:///./*": "${webRoot}/*",
-        "/*": "${webRoot}/*",
-        "/js/*": "${webRoot}/js/*"
-      },
+      "webRoot": "E:/web/htdocs/jaysan",
+      "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
       "runtimeArgs": ["--disable-extensions"],
       "trace": true
