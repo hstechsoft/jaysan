@@ -44,13 +44,13 @@ $(document).ready(function () {
                         url: "php/get_po_report_search_auto.php",
                         type: "get", //send it through get method
                         data: {
-
+                            part :  $('#company').val() ,
                             term: ""
                         },
                         dataType: "json",
                         success: function (data) {
 
-                            console.log(data);
+                            console.log("data : "+data);
                             response($.map(data, function (item) {
                                 return {
                                     label: item.creditor_name,
@@ -134,13 +134,13 @@ $(document).ready(function () {
 
     $("#poreport_search").on("click", function () {
 
-        var part = '';
-        var company = '';
-        var date = '';
+        var part = '1';
+        var company = '1';
+        var date = '1';
 
         if ($("#from_date").val() && $("#to_date").val()) {
 
-            date = "date between '" + $("#from_date").val() + "' and '" + $('#to_date').val() + "'"
+            date = "po.date between '" + $("#from_date").val() + "' and '" + $('#to_date').val() + "'"
         }
         if ($("#part").val()) {
             part = $("#part").val();
@@ -180,12 +180,12 @@ function get_po_report(part, company, date) {
         },
         success: function (response) {
 
+                console.log(response);
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
                 var count = 0;
 
-                console.log(response);
 
 
                 obj.forEach(function (obj) {

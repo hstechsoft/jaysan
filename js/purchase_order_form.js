@@ -310,7 +310,56 @@ $(document).ready(function () {
         row.remove();
 
         $("#selected_materials tr#totalRow").remove();
-        get_po_order_total();
+     clear_gst_arrays();
+         $("#selected_materials tr[data-batch_id]").each(function () {
+        let amount = parseFloat($(this).find("td:eq(5)").text()) || 0;
+
+
+        switch ($(this).data("gst_rate")) {
+            case 0:
+                gst_0.push(amount);
+                break;
+            case 5:
+                gst_5.push(amount);
+                break;
+            case 12:
+                gst_12.push(amount);
+                break;
+            case 18:
+                gst_18.push(amount);
+                break;
+            case 28:
+                gst_28.push(amount);
+                break;
+            case 40:
+                gst_40.push(amount);
+                break;
+
+            default:
+                break;
+        }
+
+
+
+    });
+
+        $("#selected_materials tr").each(function () {
+        total_qty += parseFloat($(this).data("batch_qty"));
+        total_amount += parseFloat($(this).find("td").eq(5).text());
+    });
+console.log("");
+
+    if (($("#selected_materials tr#totalRow").length === 0) && $("#selected_materials tr").length > 0) {
+
+
+        $("#selected_materials").append(
+            "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id' colspan='2'>" + total_amount + "</td></tr>"
+        );
+    } else {
+
+        $("#total").text(total_qty);
+        $("#raw_material_total_amount_id").text(total_amount);
+    }
     });
 
 
@@ -446,7 +495,7 @@ function get_po_order_total(row_ref) {
 
 
         $("#selected_materials").append(
-            "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id'>" + total_amount + "</td></tr>"
+            "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id' colspan='2'>" + total_amount + "</td></tr>"
         );
     } else {
 
