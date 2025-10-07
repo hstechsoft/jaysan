@@ -3,7 +3,7 @@
 
 
 
-$jaysan_jaysan_po_material_id = ($_POST['jaysan_jaysan_po_material_id']);
+$jaysan_po_material_id = ($_POST['jaysan_po_material_id']);
 
 
  
@@ -15,7 +15,7 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
- foreach ($jaysan_jaysan_po_material_id as $jaysan_jaysan_po_material_id)
+ foreach ($jaysan_po_material_id as $jaysan_po_material_id)
     {
       
 
