@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- $po_material_id = test_input($_GET['po_material_id']);
+$jaysan_po_material_id = test_input($_GET['jaysan_po_material_id']);
 $is_approved = test_input($_GET['is_approved']);
 
 
