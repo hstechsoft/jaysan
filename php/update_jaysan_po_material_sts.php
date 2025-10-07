@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
-$jaysan_po_material_id = test_input($_GET['jaysan_po_material_id']);
+$jaysan_jaysan_po_material_id = test_input($_GET['jaysan_po_material_id']);
 $is_approved = test_input($_GET['is_approved']);
 
 
@@ -16,7 +16,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  jaysan_po_material SET is_approved =  $is_approved WHERE po_material_id =  $po_material_id";
+ $sql =  "UPDATE  jaysan_po_material SET is_approved =  $is_approved WHERE jaysan_po_material_id =  $jaysan_po_material_id";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
