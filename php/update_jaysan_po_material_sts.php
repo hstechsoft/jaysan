@@ -1,8 +1,9 @@
 <?php
  include 'db_head.php';
 
-$jaysan_jaysan_po_material_id = test_input($_GET['jaysan_po_material_id']);
-$is_approved = test_input($_GET['is_approved']);
+
+
+$jaysan_jaysan_po_material_id = ($_POST['jaysan_jaysan_po_material_id']);
 
 
  
@@ -14,15 +15,19 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+ foreach ($jaysan_jaysan_po_material_id as $jaysan_jaysan_po_material_id)
+    {
+      
 
-
- $sql =  "UPDATE  jaysan_po_material SET is_approved =  $is_approved WHERE jaysan_po_material_id =  $jaysan_po_material_id";
+ $sql =  "UPDATE  jaysan_po_material SET is_approved =  '1' WHERE jaysan_po_material_id =  $jaysan_po_material_id";
 
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+ 
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
+}
+  echo "ok";
 $conn->close();
 
  ?>
