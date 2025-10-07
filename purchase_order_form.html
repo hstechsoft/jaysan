@@ -98,6 +98,7 @@
                                     <th scope="col">Order To</th>
                                     <th scope="col">Po Date</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="get_po_list">
@@ -296,8 +297,9 @@
                         </tr>
                         <tr>
                             <th scope="col" colspan="3" id="consignee">Consignee</th>
-                            <th scope="col" rowspan="2" colspan="5" id="terms_of_delivery"
-                                class="text-start align-middle">Terms of Delivery</th>
+                            <th scope="col" rowspan="2" colspan="5" id="terms_of_delivery" class="text-start align-top">
+                            </th>
+                            Terms of Delivery</th>
                         </tr>
                         <tr>
                             <th scope="col" colspan="3" id="supplier">Supplier</th>
@@ -351,11 +353,19 @@
 
 
                 </table>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary " id="mail_print"><i class="fa fa-envelope"></i>
-                        / <i class="fa fa-print"></i> </button>
-                </div>
             </div>
+
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary " id="mail_print"><i class="fa fa-envelope"></i>
+                / <i class="fa fa-print"></i> </button>
+            <!--Loading Overlay -->
+            <div id="overlay" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6);z-index: 9999; color: white; font-size: 1.5rem; text-align: center; padding-top: 20%; ">
+                <i class="fa-solid fa-spinner fa-spin"></i> Please wait, the mail is sending...
+            </div>
+
         </div>
 
         <div class="modal fade" id="terms" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
