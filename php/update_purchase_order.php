@@ -50,10 +50,9 @@ $sql_delete =  "DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  $po_id";
       $disc = $po_materials['disc'];
        $due_on = $po_materials['due_on'];
       
-              
-  echo   $batch_id."\n";
+
             $batch_id = sql_nullable( $batch_id );
-       echo "batch".   $batch_id."\n"; 
+       
 
       $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
 
