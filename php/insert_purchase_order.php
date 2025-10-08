@@ -49,9 +49,9 @@ if ($conn->multi_query($sql)) {
       $disc = $po_materials['disc'];
        $due_on = $po_materials['due_on'];
  
-      
+      echo  $po_material_id;
       $batch_id = sql_nullable( $batch_id );
-      $po_material_id = sql_nullable( $po_material_id );
+ 
 
 echo  $batch_id;
   
