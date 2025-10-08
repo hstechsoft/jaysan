@@ -509,9 +509,9 @@ $(document).ready(function () {
 
     $("#get_po_list").on("click", "tr td i.fa-pen-to-square", function () {
         let po_id = $(this).data("po_id");
-        console.log(po_id);
+        let btn_type = 1;
 
-        get_jaysan_po_material(po_id);
+        get_jaysan_po_material(po_id, btn_type);
     })
 
     $("#get_po_list").on("click", "tr td i.fa-print", function () {
@@ -520,6 +520,7 @@ $(document).ready(function () {
 
         window.location.href = `http://localhost/jaysan/${path}`;
     })
+
 });
 
 
@@ -617,7 +618,7 @@ function get_po_order_total(row_ref) {
 
     if (row_ref === undefined) {
 
-        batch_id = null;
+        batch_id = "";
         batch_qty = $("#quantity").val();
         isChecked = true;
         uom = $("#uom").val();
@@ -962,13 +963,13 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
             console.log(response);
             if (response.trim() == "ok") {
-                location.reload();
+                // location.reload();
 
             }
 
             else {
                 salert("Error", "User ", "error");
-                location.reload();
+                // location.reload();
             }
 
 
