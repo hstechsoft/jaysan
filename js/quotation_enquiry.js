@@ -470,6 +470,16 @@ $(document).ready(function () {
 
     }
 
+    $('.fixed-row').on("click", "td i.fa-rocket", function(){
+      let url = $(this).data("spec_pdf");
+      
+      window.open(url, '_blank');
+    })
+    $('.fixed-row').on("click", "td i.fa-quora", function(){
+      let url = $(this).data("quat_pdf");
+      window.open(url, '_blank');
+    })
+
     get_part_spec()
     get_sts()
     get_rate_quotation_part(part_id);
@@ -497,29 +507,35 @@ function get_rate_quotation_part(rqpid) {
 
           var obj = JSON.parse(response);
           var count = 0;
-          var spec ='';
-          var quot ='';
+          var spec = '';
+          var quot = '';
 
 
           obj.forEach(function (obj) {
             count = count + 1;
 
-            $("#head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>"+obj.creditor_name+"</p></div><div><div class='input-group'><select class='form-select border-0'><option value='0' selected>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star'></i></button></div></div></th>")
+            $(".head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><div><div class='input-group'><select class='form-select border-0'><option value=" + obj.rating + " selected>" + obj.rating + "</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star'></i></button></div></div></th>")
 
-            spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf="+obj.spec_addr+"></i>";
-            quot = "<i class='fa-brands fa-quora' data-quat_pdf="+obj.quotation_addr+"></i>";
+            spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf=" + obj.spec_addr + "></i>";
+            quot = "<i class='fa-brands fa-quora' data-quat_pdf=" + obj.quotation_addr + "></i>";
             if (spec && quot) {
-              $('.fixed-row').append("<td>"+spec+quot+"</td>");
+              $('.fixed-row').append("<td>" + spec + quot + "</td>");
             }
             if (spec && !quot) {
-              $('.fixed-row').append("<td>"+spec+"</td>");
+              $('.fixed-row').append("<td>" + spec + "</td>");
             }
             if (!spec && quot) {
-              $('.fixed-row').append("<td>"+quot+"</td>");
-            }if (!spec && !quot) {
+              $('.fixed-row').append("<td>" + quot + "</td>");
+            } if (!spec && !quot) {
               $('.fixed-row').append("<td>No PDF available</td>");
             }
+            // company_quotation_details
 
+
+            var dd = JSON.parse(obj.d);
+            dd.forEach(function (dd) {
+              $("#company_quotation_details").append("<tr><td></td></tr>")
+            })
 
           });
 
