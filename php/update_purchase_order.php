@@ -32,9 +32,13 @@ if ($conn->multi_query($sql)) {
         }
     } while ($conn->next_result());
 
-    // Now insert the payment data
-    $po_id = $conn->insert_id;  // Get the ID of the inserted sales order
+$sql_delete =  "DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  $po_id";
 
+  if ($conn->query($sql_delete) === TRUE) {
+ 
+  } else {
+    echo "Error: " . $sql_delete . "<br>" . $conn->error;
+  }
 
     foreach ($po_materials as $po_materials)
     {
@@ -46,7 +50,7 @@ if ($conn->multi_query($sql)) {
       $disc = $po_materials['disc'];
        $due_on = $po_materials['due_on'];
       
-      
+        
       
       
       
@@ -61,7 +65,7 @@ if ($conn->multi_query($sql)) {
     }
 
   echo "ok";
-} else {
+}  else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
