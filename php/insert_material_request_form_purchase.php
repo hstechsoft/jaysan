@@ -70,3 +70,37 @@ $conn->close();
  ?>
 
 
+
+<!-- 
+$sql = "UPDATE mrf_purchase SET 
+
+  order_to = $order_to_id,
+  delivery_to = $delivery_to,
+
+  raw_material_part_id = $raw_material_part_id,
+  raw_material_stock = $raw_material_stock,
+  order_qty = $order_qty,
+
+  raw_material_rate = $raw_material_rate,
+
+  raw_material_budget = $raw_material_budget,
+  purchase_requested_by = $purchase_requested_by,
+  approx_delivery_days = $approx_delivery_days
+WHERE mrf_purchase_id = $mrf_purchase_id";
+
+  if ($conn->query($sql) === TRUE) {
+   echo "ok";
+   $sql_update_history = "SET time_zone = '+05:30';"; // First query to set the time zone
+   $sql_update_history .= "UPDATE material_request_form SET status='purchase_requested',form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'> Purchase Requeste modified by ', (SELECT emp_name FROM employee WHERE emp_id = $purchase_requested_by), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i') ,' </li>')  where mrf_id = $mrf_id";
+   
+   if ($conn->multi_query($sql_update_history) === TRUE) {
+    
+   } else {
+       echo "Error: " . $sql_update_history . "<br>" . $conn->error;
+   }
+   
+   
+
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  } -->

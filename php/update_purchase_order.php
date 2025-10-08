@@ -51,7 +51,7 @@ $sql_delete =  "DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  $po_id";
        $due_on = $po_materials['due_on'];
       
         
-      
+            $batch_id = sql_nullable( $batch_id );
       
       
   

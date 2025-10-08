@@ -33,7 +33,7 @@ return $data;
         )
     AS result_json
 FROM mrf_batch
-WHERE mrf_id = 209
+WHERE mrf_id =  $mrf_id
 GROUP BY mrf_id) AS batch_materials
     
 FROM
