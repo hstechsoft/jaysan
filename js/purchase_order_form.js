@@ -63,7 +63,7 @@ $(document).ready(function () {
 
             }
 
-            let batch_id = $(this).data("batch_id");
+            var batch_id = $(this).data("batch_id");
             let raw_material_part_id = $(this).find("td").eq(0).text().trim();
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
@@ -105,7 +105,7 @@ $(document).ready(function () {
                     orientation: "portrait",
                     paper_size: "A4",
                     stream: "no",
-                    email_to: "jaysanagriindustrial@gmail.com",
+                    email_to: "sanjay040611@gmail.com",
                     email_subject: "Invoice #1001",
                     email_body: "Hello, please find attached your invoice.",
                     pdf_password: "",        // optional
@@ -119,11 +119,10 @@ $(document).ready(function () {
                 error: function (xhr) {
                     alert("Error: " + xhr.responseText);
                 },
-                complete: function () {
-                    // 🟢 Hide overlay and re-enable button
-                    $("#overlay").fadeOut();
-                    $("#mail_print").prop("disabled", false);
-                }
+                // complete: function () {
+                //     $("#overlay").fadeOut();
+                //     $("#mail_print").prop("disabled", false);
+                // }
             });
         }
         else {
@@ -205,6 +204,7 @@ $(document).ready(function () {
         $("#terms_of_delivery_input").val(terms);
 
         $("#preview_Purchase").removeClass("d-none");
+        $(this).addClass("d-none");
 
         if ($("#selected_materials tr").length == 0) {
             salert("Error", "Please select at least one material.", "error");
@@ -220,6 +220,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         let terms = $("#terms_of_delivery_input").val().trim();
+        $("#mail_print").removeClass("d-none")
 
         $("#invoice_to").html(company);
         $("#consignee").html(consignee);
@@ -616,7 +617,7 @@ function get_po_order_total(row_ref) {
 
     if (row_ref === undefined) {
 
-        batch_id = $("#material").val();
+        batch_id = null;
         batch_qty = $("#quantity").val();
         isChecked = true;
         uom = $("#uom").val();
@@ -967,6 +968,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
             else {
                 salert("Error", "User ", "error");
+                location.reload();
             }
 
 
@@ -974,6 +976,11 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
         },
         error: function (xhr) {
             //Do Something to handle error
+        },
+        complete: function () {
+            //  Hide overlay and re-enable button
+            $("#overlay").fadeOut();
+            $("#mail_print").prop("disabled", false);
         }
     });
 }
