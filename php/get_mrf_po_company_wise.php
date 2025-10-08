@@ -21,6 +21,7 @@ $sql .= "SELECT
     
     parts_tbl.gstrate,
     parts_tbl.part_name as raw_material_part_id,
+     parts_tbl.part_id as material_part_id,
 parts_tbl.gstrate,
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
