@@ -1,60 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-     <!-- Bootstrap CSS -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-     <!-- bootsttrap icons -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <title>Document</title>
-  
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <!-- bootsttrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
   <!-- external css -->
   <link rel="stylesheet" type="text/css" href="style.css">
-  
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-   
+
   <style>
-     .custom-fixed-table {
-        height: 400px; 
-        overflow-y: auto;
-        position: relative;
+    .custom-fixed-table {
+      height: 400px;
+      overflow-y: auto;
+      position: relative;
     }
+
     .custom-fixed-table table {
-        width: 100%;
-        table-layout: fixed;
+      width: 100%;
+      table-layout: fixed;
     }
-    .custom-fixed-table th, 
+
+    .custom-fixed-table th,
     .custom-fixed-table td {
-        width: 10vw; /* Fixed width for all cells */
-        word-wrap: break-word;
+      width: 10vw;
+      /* Fixed width for all cells */
+      word-wrap: break-word;
     }
+
     .custom-fixed-table thead th {
-        position: sticky;
-        top: 0;
-        background-color: #f8f9fa;
-        z-index: 10;
+      position: sticky;
+      top: 0;
+      background-color: #f8f9fa;
+      z-index: 10;
     }
+
     .custom-fixed-table tbody tr.fixed-row td {
-        position: sticky;
-        top: 38px;
-        background-color: #ffffff;
-        z-index: 5;
+      position: sticky;
+      top: 38px;
+      background-color: #ffffff;
+      z-index: 5;
     }
-</style>
+  </style>
 
 
 
 </head>
+
 <body>
-    <section>
-   
-      </section>
-<div class="container-fluid ">
+  <section>
+
+  </section>
+  <div class="container-fluid ">
     <!-- top bar -->
-  
+
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
       <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header ">
@@ -68,375 +76,382 @@
       </div>
     </div>
 
-<!-- navbar -->
-    
-<section id="menu_bar">
-   
-</section>
-<!-- Add New Process Modal -->
+    <!-- navbar -->
 
-<div class="row">
-  <div class="col-9 me-0 pe-0">
+    <section id="menu_bar">
 
-    <div class="card">
-  
-        <div class="card-header  d-flex justify-content-between m-0 p-0 text-bg-secondary bg-opacity-75">
-         
-        <button class="btn btn-outline-light border-0 " id="add_part_btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-        <div class="my-auto">
-          <p class="my-auto">Parts</p>
-        </div>
-        <button class="btn btn-outline-light border-0 "><i class=" fa fa-pencil" aria-hidden="true"></i></button>
+    </section>
+    <!-- Add New Process Modal -->
+
+    <div class="row">
+      <div class="col-9 me-0 pe-0">
+
+        <div class="card">
+
+          <div class="card-header  d-flex justify-content-between m-0 p-0 text-bg-secondary bg-opacity-75">
+
+            <button class="btn btn-outline-light border-0 " id="add_part_btn"><i class="fa fa-plus"
+                aria-hidden="true"></i></button>
+            <div class="my-auto">
+              <p class="my-auto">Parts</p>
+            </div>
+            <button class="btn btn-outline-light border-0 "><i class=" fa fa-pencil" aria-hidden="true"></i></button>
           </div>
-        <div class="card-body small">
-          <div class="row">
-<div class="col-sm-9">
-  <div class='input-group  input-group-sm'> 
-    <label class='input-group-text' for='part_name'><span>
-    Part Name 
-    </span>
-    </label>
-    <input id='part_name' type='text' class='form-control'  >
-    </div>
-<p class="p-0 m-0 small"> (or)</p>
-    <div class='input-group  input-group-sm'> 
-      <label class='input-group-text' for='part_no'><span>
-      Part No 
-      </span>
-      </label>
-      <input id='part_no' type='text' class='form-control'  >
-      </div>
-
-      <!-- Status Labels using Bootstrap -->
-<!-- Status Labels with Text -->
-<div>
-  <p class=" m-0 p-0 mt-2 ">Status : <span id="sts_txt" class="ms-2 text-primary h6 text-decoration-underline">No Entry</span></p>
-</div>
-
-<div class="d-flex justify-content-center mt-1">
-<button class="btn btn-primary btn-sm" id="add_part_submit">Add Part</button>
-</div>
-
-</div>
-<div class="col-sm-3 d-flex justify-content-end ">
-  <div class="input-group visually-hidden">
-    <input type="file" accept="image/*" capture="environment"  class="form-control" id="part_photo_up">
-    <label class="input-group-text" for="part_photo_up">Delivery</label>
-  </div>
-  <img id="part_photo_preview"  class="img-thumbnail" style="width: 120px; height: 120px;" src="img/insert-image-icon.png" alt>
-</div>
-          </div>
-          
-     
-            
-        </div>
-        <div class="card-footer d-flex justify-content-center gap-3">
-<button class="btn btn-primary btn-sm" id="inprocess_btn">In Process</button>
-<button class="btn btn-secondary btn-sm" id="pending_btn">Pending</button>
-        
-        </div>
-    </div>
-
-    <div class="accordion border border-1 border-dark" id="spec_itemacc">
-   
-      <div class="accordion-item">
-        <h6 class="accordion-header" id="headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#spec_item" aria-expanded="false" aria-controls="spec_item">
-            Create Specification
-          </button>
-        </h6>
-        <div id="spec_item" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#spec">
-          <div class="accordion-body">
-            <div class="card">
-              <div class="card-header">
-                <h6>
-                Create Specification
-                </h6>
-              </div>
-              <div class="card-body">
-                <div class='input-group mb-2'>
-                  <div class='input-group-prepend '>
-                  <span class='input-group-text ' id='basic-addon1'>
-                  Field Type </span>
-                  
-                  </div> 
-                  <select class='custom-select form-control' id='field_type'>
-                 <option value='0' selected>Choose Options...</option>
-                 <option value='text'>Text</option>
-                 <option value='dropdown'>Dropdown</option>
-                
-                 
-                  
-                  </select>
-                  </div>
-            
-                  <div class='input-group mb-2'> 
-                    <label class='input-group-text' for='flabel'><span>
-                    label 
+          <div class="card-body small">
+            <div class="row">
+              <div class="col-sm-9">
+                <div class='input-group  input-group-sm'>
+                  <label class='input-group-text' for='part_name'><span>
+                      Part Name
                     </span>
-                    </label>
-                    <input id='flabel' type='text' class='form-control'  >
-                    </div>
-            
-                    <div class='input-group mb-2 ' >
-                      <textarea class='form-control' id='fvalue' placeholder='value' rows='2' ></textarea>
-                      </div>
-            
-                      <div class="d-flex  justify-content-between mb-2">
-                        <button class='btn btn-warning btn-sm' id='clear' type='button'>Clear</button>
-            
-                        <button class='btn btn-primary btn-sm' id='preview' type='button'>Preview</button>
-            
-                      </div>
-            <div class="card-footer">
-              <div class="card">
-                <div class="card-header d-flex justify-content-center">
-                  <h6>Preview</h6>
+                  </label>
+                  <input id='part_name' type='text' class='form-control'>
                 </div>
-                <div class="card-body" id="preview_body">
-            
+                <p class="p-0 m-0 small"> (or)</p>
+                <div class='input-group  input-group-sm'>
+                  <label class='input-group-text' for='part_no'><span>
+                      Part No
+                    </span>
+                  </label>
+                  <input id='part_no' type='text' class='form-control'>
                 </div>
-                <div class="card-footer d-flex justify-content-center">
-                  <button class='btn btn-primary' id='add_field' type=''>Add Field</button>
+
+                <!-- Status Labels using Bootstrap -->
+                <!-- Status Labels with Text -->
+                <div>
+                  <p class=" m-0 p-0 mt-2 ">Status : <span id="sts_txt"
+                      class="ms-2 text-primary h6 text-decoration-underline">No Entry</span></p>
                 </div>
-            
+
+                <div class="d-flex justify-content-center mt-1">
+                  <button class="btn btn-primary btn-sm" id="add_part_submit">Add Part</button>
+                </div>
+
+              </div>
+              <div class="col-sm-3 d-flex justify-content-end ">
+                <div class="input-group visually-hidden">
+                  <input type="file" accept="image/*" capture="environment" class="form-control" id="part_photo_up">
+                  <label class="input-group-text" for="part_photo_up">Delivery</label>
+                </div>
+                <img id="part_photo_preview" class="img-thumbnail" style="width: 120px; height: 120px;"
+                  src="img/insert-image-icon.png" alt>
               </div>
             </div>
-                     
-              </div>
-            
-            
-            </div>
+
+
+
+          </div>
+          <div class="card-footer d-flex justify-content-center gap-3">
+            <button class="btn btn-primary btn-sm" id="inprocess_btn">In Process</button>
+            <button class="btn btn-secondary btn-sm" id="pending_btn">Pending</button>
+
           </div>
         </div>
+
+        <div class="accordion border border-1 border-dark" id="spec_itemacc">
+
+          <div class="accordion-item">
+            <h6 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#spec_item" aria-expanded="false" aria-controls="spec_item">
+                Create Specification
+              </button>
+            </h6>
+            <div id="spec_item" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#spec">
+              <div class="accordion-body">
+                <div class="card">
+                  <div class="card-header">
+                    <h6>
+                      Create Specification
+                    </h6>
+                  </div>
+                  <div class="card-body">
+                    <div class='input-group mb-2'>
+                      <div class='input-group-prepend '>
+                        <span class='input-group-text ' id='basic-addon1'>
+                          Field Type </span>
+
+                      </div>
+                      <select class='custom-select form-control' id='field_type'>
+                        <option value='0' selected>Choose Options...</option>
+                        <option value='text'>Text</option>
+                        <option value='dropdown'>Dropdown</option>
+
+
+
+                      </select>
+                    </div>
+
+                    <div class='input-group mb-2'>
+                      <label class='input-group-text' for='flabel'><span>
+                          label
+                        </span>
+                      </label>
+                      <input id='flabel' type='text' class='form-control'>
+                    </div>
+
+                    <div class='input-group mb-2 '>
+                      <textarea class='form-control' id='fvalue' placeholder='value' rows='2'></textarea>
+                    </div>
+
+                    <div class="d-flex  justify-content-between mb-2">
+                      <button class='btn btn-warning btn-sm' id='clear' type='button'>Clear</button>
+
+                      <button class='btn btn-primary btn-sm' id='preview' type='button'>Preview</button>
+
+                    </div>
+                    <div class="card-footer">
+                      <div class="card">
+                        <div class="card-header d-flex justify-content-center">
+                          <h6>Preview</h6>
+                        </div>
+                        <div class="card-body" id="preview_body">
+
+                        </div>
+                        <div class="card-footer d-flex justify-content-center">
+                          <button class='btn btn-primary' id='add_field' type=''>Add Field</button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card">
+          <div class="card-header  d-flex justify-content-between  text-bg-secondary bg-opacity-75">
+            <div class="my-auto">
+              <p class="my-auto">Vendor</p>
+            </div>
+            <button class="btn btn-outline-light border-0 " id="add_vendor_btn"><i class="fa fa-plus"
+                aria-hidden="true"></i></button>
+
+          </div>
+          <div class="card-body">
+            <form id="vendor_form" onsubmit="return false">
+              <div class="row row-cols-2">
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2'>
+                    <label class='input-group-text mrequired' for='vendor_name'><span>
+                        Vendor Name
+                      </span>
+                    </label>
+                    <input id='vendor_name' required type='text' class='form-control'>
+                  </div>
+                </div>
+
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2'>
+                    <label class='input-group-text mrequired' for='vendor_phone'><span>
+                        Vendor Phone
+                      </span>
+                    </label>
+                    <input id='vendor_phone' required type='text' class='form-control'>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2'>
+                    <label class='input-group-text' for='vendor_gst'><span>
+                        Vendor Gst
+                      </span>
+                    </label>
+                    <input id='vendor_gst' type='text' class='form-control'>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2'>
+                    <label class='input-group-text' for='vendor_email'><span>
+                        Vendor email
+                      </span>
+                    </label>
+                    <input id='vendor_email' type='text' class='form-control'>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2'>
+                    <label class='input-group-text' for='vendor_website'><span>
+                        Vendor website
+                      </span>
+                    </label>
+                    <input id='vendor_website' type='text' class='form-control'>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class='input-group input-group-sm mb-2 '>
+                    <textarea class='form-control' id='vendor_addr' placeholder='Vendor Addr' rows='2'></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-center mt-1">
+                <button class="btn btn-primary btn-sm" id="add_vendor_submit">Add Vendor</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="spec_acc">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                Specification
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="spec_acc"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <form id="spec_form" onsubmit="return false">
+
+
+                  <div class="card">
+                    <div class="card-header d-flex justify-content-center">
+                      <h6>Master Specification</h6>
+                    </div>
+                    <div class="card-body">
+
+                      <div class="row row-cols-2" id="std_spec">
+
+                      </div>
+
+                      <div class=" d-flex justify-content-center mt-2">
+                        <h6>Custom Specification </h6>
+                      </div>
+
+                      <div class="row row-cols-2" id="parts_spec">
+
+                      </div>
+
+
+                    </div>
+                    <div class="card-footer d-flex justify-content-center">
+
+                      <button class="btn btn-primary  btn-sm" type="button" id="submit_btn">Add </button>
+                    </div>
+                  </div>
+                </form>
+
+                <div class="card">
+                  <div class="card-header ">
+                    <p class="small card-title m-0 p-0">Upload</p>
+
+                  </div>
+
+                  <div class="card-body">
+
+                    <div class='input-group input-group-sm mb-2'>
+
+                      <input class="form-control" type="file" id="quotation_upload" accept="application/pdf">
+
+                      <label class='input-group-text' for='quotation_upload'><span>
+                          Quotation Upload
+                        </span>
+                      </label>
+                    </div>
+
+                    <div class='input-group input-group-sm mb-2'>
+
+                      <input class='form-control' type='file' accept="application/pdf" id='specification_upload'>
+                      <label class='input-group-text' for='specification_upload'><span>
+                          specification
+                        </span>
+                      </label>
+                    </div>
+
+
+                  </div>
+
+                  <div class="card-footer d-flex justify-content-center">
+
+                    <button class="btn btn-primary  btn-sm" type="button" id="upload_submit_btn">submit </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+
+
+
+
+
+
+
       </div>
-    
+
+      <div class="col-3 ms-0 ps-0">
+
+        <div class="card m-0 p-0">
+          <div class="card-header">
+            <div class="d-flex justify-content-between mb-2">
+              <div class="my-auto">
+                <h6 class="small text-center  my-auto">Quotation Count (<span id="tp_no"></span>)</h6>
+
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary">
+                <span id="tqno" class="badge badge-light">4</span>
+              </button>
+            </div>
+
+            <div class="  m-0 p-0">
+              <div class='input-group mb-2'>
+                <select class="form-select" id='search_quotation'>
+                  <option value="0" selected>All</option>
+                  <option value="In Process">In Process</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Re Quotation">Re Quotation</option>
+                  <option value="Approved">Approved</option>
+                </select>
+              </div>
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                </div>
+                <input id="search_txt" type="text" class="form-control" placeholder="Search">
+              </div>
+
+
+
+            </div>
+
+          </div>
+          <div class="card-body" style="max-height: 65vh; overflow-y: auto;">
+
+            <table id='' class='table table-striped table-bordered  small    text-center '>
+
+              <tbody class='align-middle ' id='quotation_list_table'>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <div class="card">
-      <div class="card-header  d-flex justify-content-between  text-bg-secondary bg-opacity-75">
-        <div class="my-auto">
-          <p class="my-auto">Vendor</p>
-        </div>
-        <button class="btn btn-outline-light border-0 " id="add_vendor_btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-       
-          </div>
-      <div class="card-body">
-        <form id="vendor_form" onsubmit="return false">
-      <div class="row row-cols-2">
-        <div class="col">
-          <div class='input-group input-group-sm mb-2'> 
-            <label class='input-group-text mrequired' for='vendor_name'><span>
-            Vendor Name 
-            </span>
-            </label>
-            <input id='vendor_name' required type='text' class='form-control'  >
-            </div>
-        </div>
-      
-        <div class="col">
-          <div class='input-group input-group-sm mb-2'> 
-            <label class='input-group-text mrequired' for='vendor_phone'><span>
-            Vendor Phone 
-            </span>
-            </label>
-            <input id='vendor_phone' required type='text' class='form-control'  >
-            </div>
-          </div>
-            <div class="col">
-            <div class='input-group input-group-sm mb-2'> 
-              <label class='input-group-text' for='vendor_gst'><span>
-              Vendor Gst 
-              </span>
-              </label>
-              <input id='vendor_gst' type='text' class='form-control'  >
-              </div>
-            </div>
-              <div class="col">
-              <div class='input-group input-group-sm mb-2'> 
-                <label class='input-group-text' for='vendor_email'><span>
-                Vendor email 
-                </span>
-                </label>
-                <input id='vendor_email' type='text' class='form-control'  >
-                </div>
-              </div>
-                <div class="col">
-                <div class='input-group input-group-sm mb-2'> 
-                  <label class='input-group-text' for='vendor_website'><span>
-                  Vendor website 
-                  </span>
-                  </label>
-                  <input id='vendor_website' type='text' class='form-control'  >
-                  </div>
-                </div>
-                  <div class="col">
-              <div class='input-group input-group-sm mb-2 ' >
-                <textarea class='form-control' id='vendor_addr' placeholder='Vendor Addr' rows='2' ></textarea>
-                </div>
-              </div>
-      </div>  
-
-      <div class="d-flex justify-content-center mt-1">
-        <button class="btn btn-primary btn-sm" id="add_vendor_submit">Add Vendor</button>
-        </div>
-      </form>
+      <div class="card-header d-flex justify-content-center h6">
+        Quotation Report
       </div>
-
-    </div>
-
-
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="spec_acc">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-       Specification
-          </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="spec_acc" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
-            <form id="spec_form" onsubmit="return false">
-
-  
-              <div class="card">
-                <div class="card-header d-flex justify-content-center">
-                <h6>Master Specification</h6>
-                </div>
-                <div class="card-body">
-              
-              <div class="row row-cols-2" id="std_spec">
-          
-              </div>
-           
-            <div class=" d-flex justify-content-center mt-2">
-              <h6>Custom Specification </h6>      
-            </div>  
-              
-              <div class="row row-cols-2" id="parts_spec">
-          
-              </div>
-          
-                      
-                </div>
-                <div class="card-footer d-flex justify-content-center">
-           
-                  <button class="btn btn-primary  btn-sm" type="button" id="submit_btn">Add </button>
-                </div>
-                </div>
-              </form>
-
-              <div class="card" >
-                <div class="card-header ">
-                     <p class="small card-title m-0 p-0">Upload</p>
-                     
-                   </div>
-         
-                   <div class="card-body">
-                 
-                       <div class='input-group input-group-sm mb-2'> 
-                      
-                         <input class="form-control" type="file" id="quotation_upload" accept="application/pdf">
-         
-                         <label class='input-group-text' for='quotation_upload'><span>
-                          Quotation Upload
-                           </span>
-                           </label>
-                         </div>
-         
-                         <div class='input-group input-group-sm mb-2'> 
-                      
-                           <input class='form-control' type='file'  accept="application/pdf" id='specification_upload' >
-                           <label class='input-group-text' for='specification_upload'><span>
-                            specification 
-                             </span>
-                             </label>
-                           </div>
-                   
-                  
-                 </div>
-           
-                 <div class="card-footer d-flex justify-content-center">
-          
-                   <button class="btn btn-primary  btn-sm" type="button" id="upload_submit_btn">submit </button>
-                 </div>
-             
-              </div>
-          </div>
-        </div>
-      </div>
- 
- 
-    </div>
-
-
- 
-    
-      
-       
-        
-      
-  </div>
-  
-  <div class="col-3 ms-0 ps-0">
- 
-    <div class="card m-0 p-0">
-      <div class="card-header">
-          <div class="d-flex justify-content-between mb-2">
-             <div class="my-auto">
-              <h6 class="small text-center  my-auto">Quotation Count (<span id="tp_no"></span>)</h6>
-
-             </div>
-             <button type="button" class="btn btn-sm btn-secondary">
-              <span id="tqno" class="badge badge-light">4</span>
-            </button>
-          </div>
-
-          <div class="  m-0 p-0">
-            <div class='input-group mb-2'>
-              <select class="form-select" id='search_quotation'>
-                       <option value="0" selected>All</option>
-                       <option value="In Process" >In Process</option>
-                       <option value="Pending" >Pending</option>
-                       <option value="Re Quotation" >Re Quotation</option>
-                       <option value="Approved" >Approved</option>
-                     </select>
-                   </div>
-              <div class="input-group mb-2">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="bi bi-search"></i></span>
-                  </div>
-                  <input id="search_txt" type="text" class="form-control" placeholder="Search">
-              </div>
-              
-
-               
-          </div>
-  
-      </div>
-    <div class="card-body" style="max-height: 65vh; overflow-y: auto;">
-   
-      <table id='' class='table table-striped table-bordered  small    text-center ' >
-   
-          <tbody class='align-middle ' id='quotation_list_table'>
-    
-          </tbody>
-          </table>
-    </div>
-  </div>
- 
-    </div>
- 
-  </div>
-
-  <div class="card">
-<div class="card-header d-flex justify-content-center h6">
-Quotation Report
-</div>
-<div class="card-body m-0 p-0">
-  <div class="custom-fixed-table">
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
+      <div class="card-body m-0 p-0">
+        <div class="custom-fixed-table">
+          <table class="table table-bordered table-striped">
+            <thead id="head_company_quotation_details">
+              <tr class="head_fixed-row">
                 <th>Vendor</th>
                 <th>
                   <div class="d-flex justify-content-between gap-2">
@@ -445,262 +460,269 @@ Quotation Report
 
                     </div>
 
-<div>
-  <div class='input-group'>
-    <select class="form-select border-0">
-             <option value="0" selected>0</option>
-             <option value="1" >1</option>
-             <option value="2" >2</option>
-             <option value="3" >3</option>
-             <option value="4" >4</option>
-             <option value="5" >5</option>
-           </select>
-         </div>
-</div>
+                    <div>
+                      <div class='input-group'>
+                        <select class="form-select border-0">
+                          <option value="0" selected>0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    </div>
 
-<div>
-  <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i> </button>
-       
-</div>
-              </div>
-              </th>
-                <th> 
+                    <div>
+                      <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </th>
+                <th>
                   <div class="d-flex justify-content-between gap-2">
                     <div class="my-auto">
                       <p class="text-truncate my-auto small">Jaysan Agri Industrial</p>
 
                     </div>
 
-<div>
-  <div class='input-group'>
-    <select class="form-select border-0">
-             <option value="0" selected>0</option>
-             <option value="1" >1</option>
-             <option value="2" >2</option>
-             <option value="3" >3</option>
-             <option value="4" >4</option>
-             <option value="5" >5</option>
-           </select>
-         </div>
-</div>
+                    <div>
+                      <div class='input-group'>
+                        <select class="form-select border-0">
+                          <option value="0" selected>0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    </div>
 
-<div>
-  <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i> </button>
-       
-</div>
-              </div>
-                                </th>
-                                <th> 
-                                  <div class="d-flex justify-content-between gap-2">
-                                    <div class="my-auto">
-                                      <p class="text-truncate my-auto small">Jaysan Agri Industrial</p>
-                
-                                    </div>
-                
-                <div>
-                  <div class='input-group'>
-                    <select class="form-select border-0">
-                             <option value="0" selected>0</option>
-                             <option value="1" >1</option>
-                             <option value="2" >2</option>
-                             <option value="3" >3</option>
-                             <option value="4" >4</option>
-                             <option value="5" >5</option>
-                           </select>
-                         </div>
-                </div>
-                
-                <div>
-                  <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i> </button>
-                       
-                </div>
-                              </div>
-                                                </th>
-                                                <th> 
-                                                  <div class="d-flex justify-content-between gap-2">
-                                                    <div class="my-auto">
-                                                      <p class="text-truncate my-auto small">Jaysan Agri Industrial</p>
-                                
-                                                    </div>
-                                
-                                <div>
-                                  <div class='input-group'>
-                                    <select class="form-select border-0">
-                                             <option value="0" selected>0</option>
-                                             <option value="1" >1</option>
-                                             <option value="2" >2</option>
-                                             <option value="3" >3</option>
-                                             <option value="4" >4</option>
-                                             <option value="5" >5</option>
-                                           </select>
-                                         </div>
-                                </div>
-                                
-                                <div>
-                                  <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i> </button>
-                                       
-                                </div>
-                                              </div>
-                                                                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="fixed-row">
+                    <div>
+                      <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div class="d-flex justify-content-between gap-2">
+                    <div class="my-auto">
+                      <p class="text-truncate my-auto small">Jaysan Agri Industrial</p>
+
+                    </div>
+
+                    <div>
+                      <div class='input-group'>
+                        <select class="form-select border-0">
+                          <option value="0" selected>0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </th>
+                <th>
+                  <div class="d-flex justify-content-between gap-2">
+                    <div class="my-auto">
+                      <p class="text-truncate my-auto small">Jaysan Agri Industrial</p>
+
+                    </div>
+
+                    <div>
+                      <div class='input-group'>
+                        <select class="form-select border-0">
+                          <option value="0" selected>0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button class="btn btn-outline-success border-0 btn-sm"> <i class="fa-regular fa-star"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="company_quotation_details">
+              
+              <tr class="fixed-row">
                 <td>Specification</td>
-                <td><i class="fa-solid fa-vial-circle-check "></i></td>
-                <td>Data 2</td>
-                <td>Data 3</td>
-                <td>Data 4</td>
-            </tr>
-            <!-- Sample Scrolling Data -->
-            <tr>
+              </tr>
+              <!-- Sample Scrolling Data -->
+              <tr>
                 <td>Row 3</td>
                 <td>Data A</td>
-                <td>Data Bfgfgfgfgfgfgfgfgfgf Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem aliquid placeat ducimus tenetur, vel corrupti at assumenda consectetur voluptatibus repellendus ipsum rem, officia architecto maiores voluptatum. Quisquam dolorem atque quidem.</td>
+                <td>Data Bfgfgfgfgfgfgfgfgfgf Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem
+                  aliquid placeat ducimus tenetur, vel corrupti at assumenda consectetur voluptatibus repellendus ipsum
+                  rem, officia architecto maiores voluptatum. Quisquam dolorem atque quidem.</td>
                 <td>Data C</td>
                 <td>Data D</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <td>Row 4</td>
                 <td>Data A</td>
                 <td>Data B</td>
                 <td>Data C</td>
                 <td>Data D</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <td>Row 5</td>
                 <td>Data A</td>
                 <td>Data B</td>
                 <td>Data C</td>
                 <td>Data D</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <td>Row 6</td>
                 <td>Data A</td>
                 <td>Data B</td>
                 <td>Data C</td>
                 <td>Data D</td>
-            </tr>
-            <tr>
+              </tr>
+              <tr>
                 <td>Row 7</td>
                 <td>Data A</td>
                 <td>Data B</td>
                 <td>Data C</td>
                 <td>Data D</td>
-            </tr>
-            <tr>
-              <td>Row 7</td>
-              <td>Data A</td>
-              <td>Data B</td>
-              <td>Data C</td>
-              <td>Data D</td>
-          </tr>
-          <tr>
-            <td>Row 7</td>
-            <td>Data A</td>
-            <td>Data B</td>
-            <td>Data C</td>
-            <td>Data D</td>
-        </tr>
-        <tr>
-          <td>Row 7</td>
-          <td>Data A</td>
-          <td>Data B</td>
-          <td>Data C</td>
-          <td>Data D</td>
-      </tr>
-      <tr>
-        <td>Row 7</td>
-        <td>Data A</td>
-        <td>Data B</td>
-        <td>Data C</td>
-        <td>Data D</td>
-    </tr>
-    <tr>
-      <td>Row 7</td>
-      <td>Data A</td>
-      <td>Data B</td>
-      <td>Data C</td>
-      <td>Data D</td>
-  </tr>
-  <tr>
-    <td>Row 7</td>
-    <td>Data A</td>
-    <td>Data B</td>
-    <td>Data C</td>
-    <td>Data D</td>
-</tr>
-<tr>
-  <td>Row 7</td>
-  <td>Data A</td>
-  <td>Data B</td>
-  <td>Data C</td>
-  <td>Data D</td>
-</tr>
-<tr>
-<td>Row 7</td>
-<td>Data A</td>
-<td>Data B</td>
-<td>Data C</td>
-<td>Data D</td>
-</tr>
-<tr>
-<td>Row 7</td>
-<td>Data A</td>
-<td>Data B</td>
-<td>Data C</td>
-<td>Data D</td>
-</tr>
-<tr>
-<td>Row 7</td>
-<td>Data A</td>
-<td>Data B</td>
-<td>Data C</td>
-<td>Data D</td>
-</tr>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
+              <tr>
+                <td>Row 7</td>
+                <td>Data A</td>
+                <td>Data B</td>
+                <td>Data C</td>
+                <td>Data D</td>
+              </tr>
 
-        </tbody>
-    </table>
-</div>
-</div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <h2 class="mb-4">Table with Fixed Top Rows</h2>
+
   </div>
-  <h2 class="mb-4">Table with Fixed Top Rows</h2>
- 
-</div>
-
-
-       
-    
-
-
-<!-- content -->
 
 
 
-   
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- jQuery UI -->
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-<!-- jQuery UI CSS -->
-<l
-    <!-- bootstrap include -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-
-<!-- font awesome -->
-<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
-
-<!-- Sweet alert -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-<!-- external js -->
-<script src="js/quotation_enquiry.js" type="module"></script>
-<script src="js/menu.js" type="module"></script>
-<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+  <!-- content -->
+
+
+
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- jQuery UI -->
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+  <!-- jQuery UI CSS -->
+  <l <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <!-- external js -->
+    <script src="js/quotation_enquiry.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
+
 </html>
