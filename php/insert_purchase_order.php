@@ -50,7 +50,7 @@ if ($conn->multi_query($sql)) {
       
       
   
-      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
+      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',null,'$is_approved','$disc','$due_on');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
