@@ -503,6 +503,9 @@ function get_rate_quotation_part(rqpid) {
 
           obj.forEach(function (obj) {
             count = count + 1;
+
+            $("#head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>"+obj.creditor_name+"</p></div><div><div class='input-group'><select class='form-select border-0'><option value='0' selected>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star'></i></button></div></div></th>")
+
             spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf="+obj.spec_addr+"></i>";
             quot = "<i class='fa-brands fa-quora' data-quat_pdf="+obj.quotation_addr+"></i>";
             if (spec && quot) {

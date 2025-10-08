@@ -67,6 +67,8 @@ $(document).ready(function () {
 
             var batch_id = $(this).data("batch_id");
             let material_part_id = $(this).data("material_part_id");
+            console.log(material_part_id);
+            
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
             let due_date = $(this).find("td").eq(2).text().trim();
@@ -652,7 +654,7 @@ function get_jaysan_po_material(po_id) {
                     var mat = JSON.parse(materials_list);
 
                     mat.forEach(function (mat) {
-                        console.log(mat.uom);
+                        console.log(mat.material_id);
 
                         $("#po_dashboard").append(
                             "<tr data-batch_id='" + mat.batch_id + "' data-uom='" + mat.uom + "' data-raw_material_rate='" + mat.material_rate + "' data-gst_rate='" + mat.gst + "' data-approve='" + mat.is_approved + "' data-material_part_id='" + mat.material_id + "'>" +
@@ -743,7 +745,7 @@ function get_po_order_total(row_ref) {
         batch_date = row.find("td:eq(5)").text();
         materials = row.find("td:eq(1)").text();
         material_part_id = row.data("material_part_id");
-        console.log(row.data("uom"));
+        console.log(material_part_id);
 
         console.log(row.is(["data-approve"]));
 
@@ -969,11 +971,12 @@ function get_mrf_po_company_wise(order_to) {
 
 
                 obj.forEach(function (obj) {
+console.log(obj.material_part_id);
 
                     po_order_to = obj.po_order_to;
                     po_delivery_to = obj.po_delivery_to;
                     $("#po_dashboard").append(
-                        "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
+                        "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
                         "<td>" + obj.raw_material_part_id + "</td>" +
                         "<td>" + obj.batch_qty_with_uom + "</td>" +
@@ -1118,7 +1121,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
             console.log(response);
             if (response.trim() == "ok") {
-                // location.reload();
+                location.reload();
 
             }
 
