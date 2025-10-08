@@ -15,7 +15,7 @@ return $data;
 }
 
 
-$sql =  "SELECT * FROM  vendor  WHERE vid =  $vid";
+$sql =  "SELECT * FROM   creditors  WHERE creditor_id =  $vid";
 
 $result = $conn->query($sql);
 

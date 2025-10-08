@@ -19,10 +19,10 @@ $vendor  = "%" .  $vendor ."%";
 
 if($term == 'no')
 
-$sql = "SELECT vid,vendor_phone,vendor_name FROM  vendor  WHERE vendor_phone LIKE  '$vendor'";
+$sql = "SELECT creditor_id,creditor_mobile,creditor_name FROM   creditors  WHERE creditor_mobile LIKE  '$vendor'";
 else 
 
- $sql = "SELECT vid,vendor_phone,vendor_name FROM  vendor  WHERE vendor_name LIKE  '$vendor'";
+ $sql = "SELECT creditor_id,creditor_mobile,creditor_name FROM   creditors  WHERE creditor_name LIKE  '$vendor'";
 
 $result = $conn->query($sql);
 

@@ -21,7 +21,7 @@ return $data;
 }
 
 
- $sql = "INSERT INTO vendor (vendor_name,vendor_phone,vendor_gst,vendor_addr,vendor_remark,vendor_email,vendor_website) VALUES ($vendor_name,$vendor_phone,$vendor_gst,$vendor_addr,$vendor_remark,$vendor_email,$vendor_website)";
+ $sql = "INSERT INTO creditors (	creditor_name,	creditor_mobile,	creditor_gst,	creditors_addr,	creditor_remark,	creditors_email,	creditor_website) VALUES ($vendor_name,$vendor_phone,$vendor_gst,$vendor_addr,$vendor_remark,$vendor_email,$vendor_website)";
 
   if ($conn->query($sql) === TRUE) {
    echo    $last_id = $conn->insert_id;;
