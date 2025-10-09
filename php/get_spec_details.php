@@ -24,7 +24,7 @@ SELECT JSON_OBJECT(
                     'fid',part_custom_spec.fid,
                     'flabel',custom_field_master.flabel,
                     'fvalue',custom_field_master.fvalue,
-                    ftype, custom_field_master.ftype
+                    'ftype', custom_field_master.ftype
                 )
             )
         FROM
@@ -40,7 +40,7 @@ SELECT JSON_OBJECT(
                     'fid',part_custom_spec.fid,
                     'flabel',custom_field_master.flabel,
                     'fvalue',custom_field_master.fvalue,
-                    ftype, custom_field_master.ftype
+                    'ftype', custom_field_master.ftype
                 )
             )
     FROM
