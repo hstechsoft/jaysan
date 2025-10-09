@@ -8,7 +8,8 @@ $vendor_id = $_POST['vendor_id'];
 
 $last_id = 0;
 
-
+$part_spec_data_json = $conn->real_escape_string($part_spec_data);
+$part_spec_data_json = json_encode($part_spec_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 $time_zone_sql = "SET time_zone = '+05:30';";
 $conn->query($time_zone_sql);
 
@@ -33,21 +34,33 @@ if ($conn->query($insert_part) === TRUE) {
     echo "Error: " . $insert_part . "<br>" . $conn->error;
 }
 
-foreach ($part_spec_data as $part)
-{ 
-    $spec_label =  $part['label']; 
-   $qvalue=  $part['value']; 
-    
-$insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_label,qvalue)
-VALUES ($last_id, '$spec_label','$qvalue')";
+
+
+$insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_details)
+VALUES ($last_id,'$part_spec_data')";
  
  if ($conn->query($insert_part_spec) === TRUE) {
-  
+
    
  } else {
    echo "Error: " . $insert_part_spec . "<br>" . $conn->error;
  }
-}
+
+// foreach ($part_spec_data as $part)
+// { 
+//     $spec_label =  $part['label']; 
+//    $qvalue=  $part['value']; 
+    
+// $insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_label,qvalue)
+// VALUES ($last_id, '$spec_label','$qvalue')";
+ 
+//  if ($conn->query($insert_part_spec) === TRUE) {
+  
+   
+//  } else {
+//    echo "Error: " . $insert_part_spec . "<br>" . $conn->error;
+//  }
+// }
 // foreach ($part_spec as $process) {
 //     $process_id = $process['process_id']; 
 //     if ($process === end($processData))

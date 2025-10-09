@@ -35,3 +35,67 @@ $conn->close();
  ?>
 
 
+SELECT JSON_OBJECT(
+    'part_spec', (
+        SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'fid',part_custom_spec.fid,
+                    'flabel',custom_field_master.flabel,
+                    'fvalue',custom_field_master.fvalue,
+                    ftype, custom_field_master.ftype
+                )
+            )
+        FROM
+            part_custom_spec
+        INNER JOIN custom_field_master ON part_custom_spec.fid = custom_field_master.fid
+        WHERE
+            part_custom_spec.part_id = 5815 AND custom_field_master.std = 0
+      
+),
+     'custom_spec', (
+    SELECT JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'fid',part_custom_spec.fid,
+                    'flabel',custom_field_master.flabel,
+                    'fvalue',custom_field_master.fvalue,
+                    ftype, custom_field_master.ftype
+                )
+            )
+    FROM
+        part_custom_spec
+    INNER JOIN custom_field_master ON part_custom_spec.fid = custom_field_master.fid
+    WHERE
+        part_custom_spec.part_id != 5815 AND custom_field_master.std = 0
+    )
+    ) AS result;
+
+
+
+    SELECT JSON_OBJECT(
+    'part_spec', (
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'part_id', pcs.part_id,
+                'fid', pcs.fid,
+                'field_name', cfm.field_name,
+                'value', pcs.value
+            )
+        )
+        FROM part_custom_spec pcs
+        INNER JOIN custom_field_master cfm ON pcs.fid = cfm.fid
+        WHERE pcs.part_id = 5815
+    ),
+    'custom_spec', (
+        SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+                'part_id', pcs.part_id,
+                'fid', pcs.fid,
+                'field_name', cfm.field_name,
+                'value', pcs.value
+            )
+        )
+        FROM part_custom_spec pcs
+        INNER JOIN custom_field_master cfm ON pcs.fid = cfm.fid
+        WHERE pcs.part_id != 5815
+    )
+) AS result;
