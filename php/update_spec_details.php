@@ -24,7 +24,7 @@ return $data;
 $sql = "UPDATE custom_field_master SET flabel=$flabel,fvalue= $fvalue,ftype= $ftype  WHERE  fid=$fid";
   
   if ($conn->query($sql) === TRUE) {
-    
+    echo "ok";
     
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
