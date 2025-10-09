@@ -522,7 +522,21 @@ $(document).ready(function () {
     get_qcount($('#search_quotation').val())
     get_quotation_list($('#search_quotation').val())
   });
+    $('.fixed-row').on("click", "td i.fa-rocket", function () {
+      let url = $(this).data("spec_pdf");
 
+      window.open(url, '_blank');
+    })
+    $('.fixed-row').on("click", "td i.fa-quora", function () {
+      let url = $(this).data("quat_pdf");
+      window.open(url, '_blank');
+    })
+
+    $("#rating").on("change", function () {
+      const rating = praseInt($(this).val());
+      const fillPercent = (rating / 5) * 100;
+      $("#star-fill").css('width', fillPercent + '%');
+    })
 
   $("#quotation_list_table").on("dblclick", "tr", function (event) {
     console.log($(this).find("td").data('part-id'));
@@ -554,46 +568,10 @@ $(document).ready(function () {
     get_sts()
 
 
+    get_rate_quotation_part($(this).find("td").data('part-id'),$(this).find("td").data('process-id'));
   });
-  $("#quotation_list_table").on("dblclick", "tr", function () {
-    console.log($(this).find("td").data('part-id'));
-    part_id = $(this).find("td").data('part-id');
-    $('#partId').val(part_id);
-    $('#part_name').val($(this).find("td").data('part_name'));
-    $('#part_no').val($(this).find("td").data('part-no'));
-    $('#part_name').prop("disabled", true)
-    $('#part_no').prop("disabled", true)
+  
 
-
-    $('#spec_itemacc').show();
-    part_image_addr = $(this).find("td").data('img_addr')
-    if (part_image_addr != "") {
-      console.log(part_image_addr);
-
-      var timestamp = new Date().getTime(); // Get current timestamp
-      $('#part_photo_preview').attr("src", "attachment/parts/" + part_id + "/" + part_image_addr + "?" + timestamp);
-
-    }
-
-    $('.fixed-row').on("click", "td i.fa-rocket", function () {
-      let url = $(this).data("spec_pdf");
-
-      window.open(url, '_blank');
-    })
-    $('.fixed-row').on("click", "td i.fa-quora", function () {
-      let url = $(this).data("quat_pdf");
-      window.open(url, '_blank');
-    })
-
-    $("#rating").on("change", function () {
-      const rating = praseInt($(this).val());
-      const fillPercent = (rating / 5) * 100;
-      $("#star-fill").css('width', fillPercent + '%');
-    })
-    get_part_spec()
-    get_sts()
-    get_rate_quotation_part(part_id);
-  });
 
 });
 
@@ -608,27 +586,38 @@ function switch_process(stype) {
   if (stype == "process") {
 
     $("#type_text").text("Process")
-    $("#process_div").toggleClass("d-none")
-    $("#part_div").toggleClass("d-none")
+  if($("#process_div").hasClass("d-none"))
+ $("#process_div").removeClass("d-none")
+
+     if($("#part_div").hasClass("d-none") == false)
+    $("#part_div").addClass("d-none")
   }
   if (stype == "part") {
-    $("#process_div").toggleClass("d-none")
-    $("#part_div").toggleClass("d-none")
+    if($("#part_div").hasClass("d-none"))
+ $("#part_div").removeClass("d-none")
+
+     if($("#process_div").hasClass("d-none") == false)
+    $("#process_div").addClass("d-none")
+   
     $("#type_text").text("Parts")
   }
 
 }
-function get_rate_quotation_part(rqpid) {
-
+function get_rate_quotation_part(part_id,process_id) {
+  var stype = "process"
+if(part_id == null)
+  stype = "part"
   $.ajax({
     url: "php/get_rate_quotation_part.php",
     type: "get", //send it through get method
     data: {
-      rqpid: rqpid
+     part_id : part_id,
+     process_id : process_id,
+     stype: stype
 
     },
     success: function (response) {
-      $('#quotation_list_table').empty()
+      
       console.log(response);
 
       if (response.trim() != "error") {
@@ -744,7 +733,7 @@ function get_quotation_list(sts) {
               qtype = "<i class=\"fa-solid fa-industry\"></i>"
             }
             count = count + 1;
-            $('#quotation_list_table').append("<tr><td data-part-id='" + obj.part_id + "' data-process-id='" + obj.process_id + "' data-part-no='" + obj.part_no + "'data-img_addr='" + obj.img_addr + "'data-part_name='" + obj.part_name + "'>" + obj.part_name + "<span class= 'text-danger'> (" + obj.qno + ") </span><span class= 'text-success'>" + qtype + " </span></td></tr>")
+            $('#quotation_list_table').append("<tr><td data-part-id='" + obj.part_id + "' data-rqid='" + obj.rqid + "' data-process-id='" + obj.process_id + "' data-part-no='" + obj.part_no + "'data-img_addr='" + obj.img_addr + "'data-part_name='" + obj.part_name + "'>" + obj.part_name + "<span class= 'text-danger'> (" + obj.qno + ") </span><span class= 'text-success'>" + qtype + " </span></td></tr>")
 
 
           });
