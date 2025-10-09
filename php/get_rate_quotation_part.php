@@ -2,8 +2,9 @@
  include 'db_head.php';
 
  
-$rqpid = test_input($_GET['rqpid']);
- 
+$part_id = test_input($_GET['part_id']);
+ $process_id = test_input($_GET['process_id']);
+ $stype = test_input($_GET['stype']);
  
 function test_input($data) {
 $data = trim($data);
@@ -13,7 +14,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+if($stype == "'part'")
  $sql = "SELECT
 *,
     JSON_ARRAYAGG(JSON_OBJECT('spec_label',spec_label,'spec_value',qvalue))  as d
@@ -22,7 +23,18 @@ FROM
 INNER JOIN creditors ON rate_quotation.vendor_id = creditors.creditor_id
 INNER JOIN rate_quotation_spec ON rate_quotation.rqid = rate_quotation_spec.rqid
 WHERE
-    rqpid = $rqpid GROUP by rate_quotation_spec.rqid";
+    rqpid = $part_id GROUP by rate_quotation_spec.rqid";
+    else
+         $sql = "SELECT
+*,
+    JSON_ARRAYAGG(JSON_OBJECT('spec_label',spec_label,'spec_value',qvalue))  as d
+FROM
+    `rate_quotation`
+INNER JOIN creditors ON rate_quotation.vendor_id = creditors.creditor_id
+INNER JOIN rate_quotation_spec ON rate_quotation.rqid = rate_quotation_spec.rqid
+WHERE
+    process_id = $process_id GROUP by rate_quotation_spec.rqid";
+        
 
 $result = $conn->query($sql);
 

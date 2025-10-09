@@ -604,9 +604,11 @@ function switch_process(stype) {
 
 }
 function get_rate_quotation_part(part_id,process_id) {
-  var stype = "process"
+  var stype = "part"
 if(part_id == null)
-  stype = "part"
+  stype = "process"
+
+
   $.ajax({
     url: "php/get_rate_quotation_part.php",
     type: "get", //send it through get method
