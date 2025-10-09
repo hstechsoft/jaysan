@@ -5,10 +5,11 @@
 $fvalue = test_input($_GET['fvalue']);
 $ftype = test_input($_GET['ftype']);
 $std = test_input($_GET['std']);
-$part_id = test_input($_GET['part_id']);
+$part_id = ($_GET['part_id']);
+$process_id = ($_GET['process_id']);
+ $part_id  = sql_nullable($part_id );
+  $process_id  = sql_nullable($process_id );
 
- 
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -22,7 +23,7 @@ return $data;
 
   if ($conn->query($sql) === TRUE) {
     $last_id = $conn->insert_id;
-    $sql_part = "INSERT INTO  part_custom_spec (part_id,fid) VALUES ($part_id,$last_id)";
+    $sql_part = "INSERT INTO  part_custom_spec (part_id,fid,process_id) VALUES ($part_id,$last_id,$process_id)";
 
   if ($conn->query($sql_part) === TRUE) {
   echo "ok";
@@ -33,5 +34,4 @@ return $data;
 $conn->close();
 
  ?>
-
 

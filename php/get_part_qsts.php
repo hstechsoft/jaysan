@@ -1,7 +1,8 @@
 <?php
  include 'db_head.php';
 $part_id = test_input($_GET['part_id']);
-
+$process_id = test_input($_GET['process_id']);
+$qtype = test_input($_GET['qtype']);
 
  
  
@@ -13,8 +14,10 @@ $data = "'".$data."'";
 return $data;
 }
 
-
- $sql = "SELECT sts,(select count(rqpid) as qno from rate_quotation where rqpid = $part_id) as qno,(select DATE_FORMAT(max(dated), '%d-%m-%Y %r')  as dated from rate_quotation where rqpid = $part_id order by dated desc limit 1) as last_date from  rate_quotation_part WHERE part_id = $part_id";
+if($qtype == "'part'")
+ $sql = "SELECT sts,(select count(rqid) as qno from rate_quotation where rqpid = $part_id) as qno,(select DATE_FORMAT(max(dated), '%d-%m-%Y %r')  as dated from rate_quotation where rqpid = $part_id order by dated desc limit 1) as last_date from  rate_quotation_part WHERE part_id = $part_id";
+else
+   $sql = "SELECT sts,(select count(rqid) as qno from rate_quotation where process_id = $process_id) as qno,(select DATE_FORMAT(max(dated), '%d-%m-%Y %r')  as dated from rate_quotation where process_id = $process_id order by dated desc limit 1) as last_date from  rate_quotation_part WHERE process_id = $process_id";
 
 $result = $conn->query($sql);
 

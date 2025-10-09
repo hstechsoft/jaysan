@@ -5,15 +5,19 @@ $part_spec_data = $_POST['part_spec']; // This should be an array of data for pr
 $part_id = $_POST['part_id']; // This should be an array of data for input_parts
 $previous_process_id = 0;
 $vendor_id = $_POST['vendor_id'];
-
+$quotation_type = $_POST['quotation_type'];
+$process_id = $_POST['process_id'];
+$process_id = sql_nullable($process_id);
+$part_id = sql_nullable($part_id);
 $last_id = 0;
 
-
+$part_spec_data_json = $conn->real_escape_string($part_spec_data);
+$part_spec_data_json = json_encode($part_spec_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 $time_zone_sql = "SET time_zone = '+05:30';";
 $conn->query($time_zone_sql);
 
 // Insert into emp_work
-$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id) VALUES ( '$part_id',  '', '', '$vendor_id ');";
+$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id,process_id) VALUES ( $part_id,  '', '', '$vendor_id',$process_id );";
 
 if ($conn->query($insert_quotaion) === TRUE) {
     // Retrieve the last inserted ID
@@ -24,7 +28,7 @@ if ($conn->query($insert_quotaion) === TRUE) {
 }
 
 
-$insert_part = "INSERT IGNORE  INTO rate_quotation_part (part_id ,sts) VALUES ('$part_id',  'In Process');";
+$insert_part = "INSERT IGNORE  INTO rate_quotation_part (part_id,sts,process_id) VALUES ($part_id,'In Process',$process_id );";
 
 if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID
@@ -33,21 +37,33 @@ if ($conn->query($insert_part) === TRUE) {
     echo "Error: " . $insert_part . "<br>" . $conn->error;
 }
 
-foreach ($part_spec_data as $part)
-{ 
-    $spec_label =  $part['label']; 
-   $qvalue=  $part['value']; 
-    
-$insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_label,qvalue)
-VALUES ($last_id, '$spec_label','$qvalue')";
+
+
+$insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_details)
+VALUES ($last_id,'$part_spec_data')";
  
  if ($conn->query($insert_part_spec) === TRUE) {
-  
+
    
  } else {
    echo "Error: " . $insert_part_spec . "<br>" . $conn->error;
  }
-}
+
+// foreach ($part_spec_data as $part)
+// { 
+//     $spec_label =  $part['label']; 
+//    $qvalue=  $part['value']; 
+    
+// $insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_label,qvalue)
+// VALUES ($last_id, '$spec_label','$qvalue')";
+ 
+//  if ($conn->query($insert_part_spec) === TRUE) {
+  
+   
+//  } else {
+//    echo "Error: " . $insert_part_spec . "<br>" . $conn->error;
+//  }
+// }
 // foreach ($part_spec as $process) {
 //     $process_id = $process['process_id']; 
 //     if ($process === end($processData))
