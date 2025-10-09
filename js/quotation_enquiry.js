@@ -470,16 +470,21 @@ $(document).ready(function () {
 
     }
 
-    $('.fixed-row').on("click", "td i.fa-rocket", function(){
+    $('.fixed-row').on("click", "td i.fa-rocket", function () {
       let url = $(this).data("spec_pdf");
-      
+
       window.open(url, '_blank');
     })
-    $('.fixed-row').on("click", "td i.fa-quora", function(){
+    $('.fixed-row').on("click", "td i.fa-quora", function () {
       let url = $(this).data("quat_pdf");
       window.open(url, '_blank');
     })
 
+    $("#rating").on("change", function () {
+      const rating = praseInt($(this).val());
+      const fillPercent = (rating / 5) * 100;
+      $("#star-fill").css('width', fillPercent + '%');
+    })
     get_part_spec()
     get_sts()
     get_rate_quotation_part(part_id);
@@ -514,27 +519,50 @@ function get_rate_quotation_part(rqpid) {
           obj.forEach(function (obj) {
             count = count + 1;
 
-            $(".head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><div><div class='input-group'><select class='form-select border-0'><option value=" + obj.rating + " selected>" + obj.rating + "</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star'></i></button></div></div></th>")
+            $(".head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><div><div class='input-group'><select class='form-select border-0' id='rating'><option value=" + obj.rating + " selected>" + obj.rating + "</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star' id='star-fill'></i></button></div></div></th>")
+            var spec = ""
+            if (obj.spec_addr != "")
+              spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf='" + obj.spec_addr + "'></i>"
+            if (obj.quotation_addr != "")
+              spec = spec + "<i class='fa-brands fa-quora' data-quat_pdf=" + obj.quotation_addr + "></i>"
 
-            spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf=" + obj.spec_addr + "></i>";
-            quot = "<i class='fa-brands fa-quora' data-quat_pdf=" + obj.quotation_addr + "></i>";
-            if (spec && quot) {
-              $('.fixed-row').append("<td>" + spec + quot + "</td>");
-            }
-            if (spec && !quot) {
-              $('.fixed-row').append("<td>" + spec + "</td>");
-            }
-            if (!spec && quot) {
-              $('.fixed-row').append("<td>" + quot + "</td>");
-            } if (!spec && !quot) {
-              $('.fixed-row').append("<td>No PDF available</td>");
-            }
-            // company_quotation_details
+            $('.fixed-row').append("<td>" + spec + "</td>");
 
 
-            var dd = JSON.parse(obj.d);
-            dd.forEach(function (dd) {
-              $("#company_quotation_details").append("<tr><td></td></tr>")
+            var dd = JSON.parse(obj.spec_details);
+            var table = $("#company_quotation_details");
+
+            var trow;
+
+
+            dd.forEach(function (item) {
+              trow = table.find("tr");
+              var existingRow = null;
+              var labelExists = false;
+              trow.each(function () {
+
+                if ($(this).find("td").eq(0).text() === item.label) {
+                  labelExists = true;
+                  existingRow = $(this);
+                  return false;
+                }
+              });
+
+              if (!labelExists) {
+                let emptyCells = "";
+                for (let i = 1; i < count; i++) {
+                  emptyCells += "<td></td>";
+                }
+                table.append("<tr><td>" + item.label + "</td>" + emptyCells + "<td>" + item.value + "</td></tr>");
+              }
+              // if (!labelExists) {
+              //   table.append("<tr><td>" + item.label + "</td><td>" + item.value + "</td></tr>");
+              // }
+              else {
+                existingRow.append("<td>" + item.value + "</td>");
+              }
+
+
             })
 
           });
