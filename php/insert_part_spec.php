@@ -5,7 +5,10 @@ $part_spec_data = $_POST['part_spec']; // This should be an array of data for pr
 $part_id = $_POST['part_id']; // This should be an array of data for input_parts
 $previous_process_id = 0;
 $vendor_id = $_POST['vendor_id'];
-
+$quotation_type = $_POST['quotation_type'];
+$process_id = $_POST['process_id'];
+$process_id = sql_nullable($process_id);
+$part_id = sql_nullable($part_id);
 $last_id = 0;
 
 $part_spec_data_json = $conn->real_escape_string($part_spec_data);
@@ -14,7 +17,7 @@ $time_zone_sql = "SET time_zone = '+05:30';";
 $conn->query($time_zone_sql);
 
 // Insert into emp_work
-$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id) VALUES ( '$part_id',  '', '', '$vendor_id ');";
+$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id,process_id) VALUES ( $part_id,  '', '', '$vendor_id',$process_id );";
 
 if ($conn->query($insert_quotaion) === TRUE) {
     // Retrieve the last inserted ID
@@ -25,7 +28,7 @@ if ($conn->query($insert_quotaion) === TRUE) {
 }
 
 
-$insert_part = "INSERT IGNORE  INTO rate_quotation_part (part_id ,sts) VALUES ('$part_id',  'In Process');";
+$insert_part = "INSERT IGNORE  INTO rate_quotation_part (part_id,sts,process_id) VALUES ($part_id,'In Process',$process_id );";
 
 if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID

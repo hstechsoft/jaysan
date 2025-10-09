@@ -14,10 +14,84 @@ $data = "'".$data."'";
 return $data;
 }
 
+// if( $sts == "'0'")
+// $sql =  "SELECT(SELECT count(rate_quotation.rqpid)as qno from  rate_quotation WHERE rate_quotation.rqpid = rate_quotation_part.part_id) as qno, rate_quotation_part.*,parts_tbl.part_name ,parts_tbl.part_no,parts_tbl.part_image from rate_quotation_part INNER join parts_tbl on rate_quotation_part.part_id = parts_tbl.part_id ";
+// else
+// $sql =  "SELECT(SELECT count(rate_quotation.rqpid)as qno from  rate_quotation WHERE rate_quotation.rqpid = rate_quotation_part.part_id) as qno, rate_quotation_part.*,parts_tbl.part_name ,parts_tbl.part_no,parts_tbl.part_image from rate_quotation_part INNER join parts_tbl on rate_quotation_part.part_id = parts_tbl.part_id WHERE sts = $sts";
+
+
 if( $sts == "'0'")
-$sql =  "SELECT(SELECT count(rate_quotation.rqpid)as qno from  rate_quotation WHERE rate_quotation.rqpid = rate_quotation_part.part_id) as qno, rate_quotation_part.*,parts_tbl.part_name ,parts_tbl.part_no,parts_tbl.part_image from rate_quotation_part INNER join parts_tbl on rate_quotation_part.part_id = parts_tbl.part_id ";
+$sql =  "SELECT
+    (
+    SELECT
+        COUNT(rate_quotation.rqid) AS qno
+    FROM
+        rate_quotation
+    WHERE
+        rate_quotation.rqpid = rate_quotation_part.part_id
+) AS qno,
+rate_quotation_part.*,
+parts_tbl.part_name,
+parts_tbl.part_no,
+parts_tbl.part_image
+FROM
+    rate_quotation_part
+INNER JOIN parts_tbl ON rate_quotation_part.part_id = parts_tbl.part_id
+
+UNION ALL
+
+SELECT
+    (
+    SELECT
+        COUNT(rate_quotation.rqid) AS qno
+    FROM
+        rate_quotation
+    WHERE
+        rate_quotation.process_id = rate_quotation_part.process_id
+) AS qno,
+rate_quotation_part.*,
+jaysan_process.process_name as part_name,
+jaysan_process.process_id as part_no,
+null as part_image
+FROM
+    rate_quotation_part
+INNER JOIN jaysan_process ON rate_quotation_part.process_id = jaysan_process.process_id";
 else
-$sql =  "SELECT(SELECT count(rate_quotation.rqpid)as qno from  rate_quotation WHERE rate_quotation.rqpid = rate_quotation_part.part_id) as qno, rate_quotation_part.*,parts_tbl.part_name ,parts_tbl.part_no,parts_tbl.part_image from rate_quotation_part INNER join parts_tbl on rate_quotation_part.part_id = parts_tbl.part_id WHERE sts = $sts";
+$sql =  "SELECT
+    (
+    SELECT
+        COUNT(rate_quotation.rqid) AS qno
+    FROM
+        rate_quotation
+    WHERE
+        rate_quotation.rqpid = rate_quotation_part.part_id
+) AS qno,
+rate_quotation_part.*,
+parts_tbl.part_name,
+parts_tbl.part_no,
+parts_tbl.part_image
+FROM
+    rate_quotation_part
+INNER JOIN parts_tbl ON rate_quotation_part.part_id = parts_tbl.part_id where sts = $sts
+
+UNION ALL
+
+SELECT
+    (
+    SELECT
+        COUNT(rate_quotation.rqid) AS qno
+    FROM
+        rate_quotation
+    WHERE
+        rate_quotation.process_id = rate_quotation_part.process_id
+) AS qno,
+rate_quotation_part.*,
+jaysan_process.process_name as part_name,
+jaysan_process.process_id as part_no,
+null as part_image
+FROM
+    rate_quotation_part
+INNER JOIN jaysan_process ON rate_quotation_part.process_id = jaysan_process.process_id where sts = $sts";
 
 $result = $conn->query($sql);
 
