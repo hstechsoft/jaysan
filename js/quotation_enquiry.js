@@ -10,6 +10,7 @@ var vendor_id = 0
 var new_part = "no"
 var part_spec = [];
 var qid = 0;
+var stype ='';
 $(document).ready(function () {
 
 
@@ -106,6 +107,7 @@ $(document).ready(function () {
   });
 
 
+  get_quotation_report();
   get_quotation_list("0")
   get_qcount("0")
   get_std_spec()
@@ -248,6 +250,7 @@ $(document).ready(function () {
           }
           get_part_spec()
           get_sts()
+          get_spec_details(ui.item.id)
 
         },
 
@@ -522,31 +525,40 @@ $(document).ready(function () {
     get_qcount($('#search_quotation').val())
     get_quotation_list($('#search_quotation').val())
   });
-    $('.fixed-row').on("click", "td i.fa-rocket", function () {
-      let url = $(this).data("spec_pdf");
+  $('.fixed-row').on("click", "td i.fa-rocket", function () {
+    let url = $(this).data("spec_pdf");
 
-      window.open(url, '_blank');
-    })
-    $('.fixed-row').on("click", "td i.fa-quora", function () {
-      let url = $(this).data("quat_pdf");
-      window.open(url, '_blank');
-    })
+    window.open(url, '_blank');
+  })
+  $('.fixed-row').on("click", "td i.fa-quora", function () {
+    let url = $(this).data("quat_pdf");
+    window.open(url, '_blank');
+  })
 
-    $("#rating").on("change", function () {
-      const rating = praseInt($(this).val());
-      const fillPercent = (rating / 5) * 100;
-      $("#star-fill").css('width', fillPercent + '%');
-    })
+  $("#head_fixed-row").on("change", "select", function () {
+
+    part_id = $(this).data("rqpid");
+    stype = 'part';
+    const rating = parseInt($(this).val());
+    const rqid = $(this).data("rqid");
+    update_quotation_rating("rating", rating, rqid);
+  });
+  $("#head_fixed-row").on("click", ".star-fill", function () {
+    part_id = $(this).data("rqpid");
+    const rqid = $(this).data("rqid");
+    const important = $(this).data("val");
+    update_quotation_rating('', important, rqid);
+  });
 
   $("#quotation_list_table").on("dblclick", "tr", function (event) {
-    console.log($(this).find("td").data('part-id'));
 
     if ($(this).find("td").data('part-id') == null)
       switch_process("process")
     else
       switch_process("part")
 
-
+    // $("#head_fixed-row").empty();
+    // $("#company_quotation_details").empty();
     $('#partId').val(part_id);
     $("#process_name").val($(this).find("td").data('part_name'))
     $('#part_name').val($(this).find("td").data('part_name'));
@@ -568,12 +580,280 @@ $(document).ready(function () {
     get_sts()
 
 
-    get_rate_quotation_part($(this).find("td").data('part-id'),$(this).find("td").data('process-id'));
+    get_rate_quotation_part($(this).find("td").data('part-id'), $(this).find("td").data('process-id'));
   });
-  
+
+  $("#part_spec_tbody").on("click", "tr i.fa-edit", function () {
+    let fid = $(this).data("fid");
+    console.log(fid);
+    $("#add_field").addClass("d-none");
+    $("#update_field").removeClass("d-none");
+    get_custom_spec(fid);
+    $("#update_field").data("fid", fid);
+  })
+
+  $("#update_field").on("click", function () {
+    var flabel = $("#flabel").val();
+    var ftype = $("#field_type").val();
+    var fvalue = $("#fvalue").val();
+    var fid = $(this).data("fid");
+    update_spec_details(flabel, ftype, fvalue, fid);
+  })
+
+  $('#flabel').on('input', function () {
+    //check the value not empty
+    if ($('#flabel').val() != "") {
+      $('#flabel').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_spec_auto.php",
+            type: "get", //send it through get method
+            data: {
+              spec: request.term,
+              part_id: part_id
 
 
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.flabel,
+                  value: item.flabel,
+                  id: item.fid,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          //   $(this).data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          //  get_bom(ui.item.id)
+          get_custom_spec(ui.item.id)
+          $("#update_field").data("fid", ui.item.id);
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong></div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
+  $("#company_quotation_details").on("input", "td[contenteditable='true']", function () {
+    $("i.fa-edit").removeClass("d-none");
+
+    let $cell = $(this);
+    let $row = $cell.closest("tr");
+    let label = $row.find("td:first").text().trim();
+    let value = $cell.text().trim();
+
+    part_spec = part_spec.filter(item => item.label !== label);
+
+    part_spec.push({ label: label, value: value });
+
+    console.log("Updated part_spec:", part_spec);
+  });
+
+
+  $("#head_fixed-row").on("click", "i.fa-edit", function () {
+    alert();
+    part_id = $(this).data("rqpid");
+    vendor_id = $(this).data("vendor_id");
+    console.log("Updating part:", part_id, "for vendor:", vendor_id);
+    console.log("Collected part_spec:", part_spec);
+    get_vendor();
+    get_rate_quotation_details($(this).data("rqid"));
+  })
 });
+
+
+function update_spec_details(flabel, ftype, fvalue, fid) {
+
+
+  $.ajax({
+    url: "php/update_spec_details.php",
+    type: "get", //send it through get method
+    data: {
+      flabel: flabel,
+      fvalue: fvalue,
+      ftype: ftype,
+      fid: fid
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == 'ok') {
+        shw_toast("Success", "Updated Successfully")
+        $('#field_type').val("")
+        $('#flabel').val("")
+        $('#fvalue').val("")
+        get_spec_details(part_id)
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      alert()
+    }
+  });
+
+
+
+
+}
+
+function get_custom_spec(fid) {
+  if (fid != null)
+
+
+    $.ajax({
+      url: "php/get_custom_spec.php",
+      type: "get", //send it through get method
+      data: {
+        fid: fid,
+
+      },
+      success: function (response) {
+
+        console.log(response);
+
+        if (response.trim() != "error") {
+
+          if (response.trim() != "0 result") {
+
+            var obj = JSON.parse(response);
+
+            obj.forEach(function (obj) {
+
+              $("#field_type").val(obj.ftype);
+              $("#flabel").val(obj.flabel);
+              $("#fvalue").val(obj.fvalue);
+            })
+
+
+
+          }
+          else {
+            // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+          }
+        }
+
+
+
+
+
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+      }
+    });
+
+
+
+
+}
+
+function get_spec_details(part_id) {
+  if (part_id != null)
+
+
+    $.ajax({
+      url: "php/get_spec_details.php",
+      type: "get", //send it through get method
+      data: {
+        part_id: part_id,
+
+      },
+      success: function (response) {
+
+        console.log(response);
+
+        if (response.trim() != "error") {
+          $("#part_spec_tbody").empty();
+          if (response.trim() != "0 result") {
+
+            var obj = JSON.parse(response);
+
+            var object = JSON.parse(obj[0].result);
+
+            if (object.part_spec != null) {
+              var count = 0;
+              var data = object.part_spec;
+              data.forEach(function (item) {
+                count++;
+
+
+                // Append row
+                $("#part_spec_tbody").append(`<tr data-fid=${item.fid}><td>${count}</td><td>${item.flabel}</td><td>${item.ftype}</td><td>${item.fvalue || ""}</td><td><i class='fa fa-edit' data-fid='${item.fid}'></i></td></tr>`);
+              });
+            }
+            else {
+              $("#part_spec_tbody").append("<tr><td colspan='5'>No Data Available</td></tr>")
+            }
+
+            if (object.custom_spec != null) {
+              var count = 0;
+              var data = object.custom_spec;
+              data.forEach(function (item) {
+                count++;
+
+
+                // Append row
+                $("#custom_spec_tbody").append(`<tr data-fid=${item.fid}'><td>${count}</td><td>${item.flabel}</td><td>${item.ftype}</td><td>${item.fvalue || ""}</td></tr>`);
+              });
+            }
+
+            else {
+              $("#custom_spec_tbody").append("<tr><td colspan='4'>No Data Available</td></tr>")
+            }
+
+
+
+
+          }
+          else {
+            // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+          }
+        }
+
+
+
+
+
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+      }
+    });
+
+
+
+
+}
 
 
 function switch_process(stype) {
@@ -586,44 +866,87 @@ function switch_process(stype) {
   if (stype == "process") {
 
     $("#type_text").text("Process")
-  if($("#process_div").hasClass("d-none"))
- $("#process_div").removeClass("d-none")
+    if ($("#process_div").hasClass("d-none"))
+      $("#process_div").removeClass("d-none")
 
-     if($("#part_div").hasClass("d-none") == false)
-    $("#part_div").addClass("d-none")
+    if ($("#part_div").hasClass("d-none") == false)
+      $("#part_div").addClass("d-none")
   }
   if (stype == "part") {
-    if($("#part_div").hasClass("d-none"))
- $("#part_div").removeClass("d-none")
+    if ($("#part_div").hasClass("d-none"))
+      $("#part_div").removeClass("d-none")
 
-     if($("#process_div").hasClass("d-none") == false)
-    $("#process_div").addClass("d-none")
-   
+    if ($("#process_div").hasClass("d-none") == false)
+      $("#process_div").addClass("d-none")
+
     $("#type_text").text("Parts")
   }
 
 }
-function get_rate_quotation_part(part_id,process_id) {
+
+function update_quotation_rating(q_type, q_value, rqid) {
+  console.log(q_type);
+  console.log(q_value);
+  console.log(rqid);
+
+  if (rqid != null)
+
+
+    $.ajax({
+      url: "php/update_quotation_rating.php",
+      type: "GET", //send it through get method
+      data: {
+        q_type: q_type,
+        q_value: q_value,
+        rqid: rqid
+
+      },
+      success: function (response) {
+
+        console.log(response);
+
+        if (response.trim() == "ok") {
+          get_rate_quotation_part(part_id, process_id);
+        }
+
+
+
+
+
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+      }
+    });
+
+
+
+
+}
+function get_rate_quotation_part(part_id, process_id) {
   var stype = "part"
-if(part_id == null)
-  stype = "process"
+  if (part_id == null)
+    stype = "process"
 
 
   $.ajax({
     url: "php/get_rate_quotation_part.php",
     type: "get", //send it through get method
     data: {
-     part_id : part_id,
-     process_id : process_id,
-     stype: stype
+      part_id: part_id,
+      process_id: process_id,
+      stype: stype
 
     },
     success: function (response) {
-      
+
       console.log(response);
 
       if (response.trim() != "error") {
-
+        $("#head_fixed-row").empty()
+        $("#head_fixed-row").append("<td>Vendor</td>")
+        $("#company_quotation_details").empty()
+        $("#company_quotation_details").append("<tr class='fixed-row'><td>Specification</td></tr>")
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
@@ -633,9 +956,17 @@ if(part_id == null)
 
 
           obj.forEach(function (obj) {
+            var dclass = "<i class=\"fa-regular fa-star star-fill text-danger\" data-rqid='" + obj.rqid + "' data-val='1'  data-rqpid='" + obj.rqpid + "'></i>"
+
+            if (obj.important == 1) {
+              dclass = "<i class=\"fa-solid fa-star star-fill text-success\" data-rqid='" + obj.rqid + "'  data-val='0'  data-rqpid='" + obj.rqpid + "'></i>"
+            }
+
+
             count = count + 1;
 
-            $("#head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><div><div class='input-group'><select class='form-select border-0' id='rating'><option value=" + obj.rating + " selected>" + obj.rating + "</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div><button class='btn btn-outline-success border-0 btn-sm'> <i class='fa-regular fa-star' id='star-fill'></i></button></div></div></th>")
+            $("#head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit pt-2' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select border-0 rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='" + obj.rating + " 'selected>" + obj.rating + "</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div>" + dclass + "</div></div></th>")
+
             var spec = ""
             if (obj.spec_addr != "")
               spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf='" + obj.spec_addr + "'></i>"
@@ -707,6 +1038,59 @@ if(part_id == null)
 
 }
 
+
+function get_quotation_report() {
+
+  $.ajax({
+    url: "php/get_quotation_report.php",
+    type: "get", //send it through get method
+    data: {
+
+    },
+    success: function (response) {
+      console.log(response);
+
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+          obj.forEach(function (obj) {
+            count++;
+            $("#quotation_report").append("<tr><td>" + count + "</td><td>" + obj.part_name + "</td><td><ul class='list-group'></ul></td></tr>");
+            var detls = JSON.parse(obj.details);
+            detls.forEach(function (item) {
+              $("#quotation_report tr").find("td:last-child").find("ul").append("<li class='list-group-item'>" + item.vendor_name + " - " + item.vendor_phone + "<br></li>");
+            })
+
+
+          });
+
+
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function get_quotation_list(sts) {
 
@@ -1043,6 +1427,46 @@ function insert_vendor() {
 
 
 
+function  update_rate_quotation() {
+  var quotation_type = "process"
+  if ($("#type_text").val() == "Parts")
+    quotation_type = "parts"
+  $.ajax({
+    url: "php/update_rate_quotation.php",
+    method: 'POST',
+    data: {
+      part_spec: JSON.stringify(part_spec),
+      part_id: part_id,
+      process_id: process_id,
+      vendor_id: vendor_id,
+      quotation_type: quotation_type,
+      rqid:rqid
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() > 0) {
+        qid = response.trim()
+        $(".fa-edit").addClass("d-none");
+        shw_toast("Success", "Specification Sucessfully updated")
+        // $("#spec_form :input").prop("disabled", true);
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 
 function insert_part_spec() {
