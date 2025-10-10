@@ -36,7 +36,7 @@ return $data;
 }
 
 
- $sql = "INSERT INTO mrf_purchase ( mrf_id,raw_material_part_id,raw_material_stock,order_qty,raw_material_rate,raw_material_budget,purchase_requested_by,po_order_to,po_email,po_delivery_to,uom,approx_delivery_days) VALUES ($mrf_id,$raw_material_part_id,$raw_material_stock,$order_qty,$raw_material_rate,$raw_material_budget,$purchase_requested_by,$order_to_id,$purchase_email,$delivery_to_id,$uom,$approx_delivery_days)";
+ $sql = "INSERT INTO mrf_purchase ( mrf_id,raw_material_part_id,raw_material_stock,order_qty,raw_material_rate,purchase_requested_by,po_order_to,po_email,po_delivery_to,uom,approx_delivery_days) VALUES ($mrf_id,$raw_material_part_id,$raw_material_stock,$order_qty,$raw_material_rate,$purchase_requested_by,$order_to_id,$purchase_email,$delivery_to_id,$uom,$approx_delivery_days)";
 
   if ($conn->query($sql) === TRUE) {
 
