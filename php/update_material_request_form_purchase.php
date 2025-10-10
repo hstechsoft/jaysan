@@ -44,10 +44,10 @@ $sql = "UPDATE mrf_purchase SET order_to = $order_to_id,
   raw_material_rate = $raw_material_rate,
   
  
-  raw_material_budget = $raw_material_budget,
+  -- raw_material_budget = $raw_material_budget,
   purchase_requested_by = $purchase_requested_by,
   approx_delivery_days = $approx_delivery_days
-WHERE mrf_purchase_id = $mrf_id";
+WHERE mrf_id = $mrf_id";
 
   if ($conn->query($sql) === TRUE) {
 
