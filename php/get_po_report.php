@@ -3,9 +3,9 @@
 
 //  demo text 12345
 
-  $material_query = test_input($_GET['material_query']);
-  $date_query = test_input($_GET['date_query']);
-  $order_to_query = test_input($_GET['order_to_query']);
+  $material_query = ($_GET['material_query']);
+  $date_query = ($_GET['date_query']);
+  $order_to_query = ($_GET['order_to_query']);
  
  
 function test_input($data) {
