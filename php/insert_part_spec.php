@@ -9,6 +9,7 @@ $quotation_type = $_POST['quotation_type'];
 $process_id = $_POST['process_id'];
 $process_id = sql_nullable($process_id);
 $part_id = sql_nullable($part_id);
+$rate = isset($_POST['process_id']) && $_POST['process_id'] !== null ? $_POST['process_id'] : 0;
 $last_id = 0;
 
 $part_spec_data_json = $conn->real_escape_string($part_spec_data);
@@ -17,7 +18,7 @@ $time_zone_sql = "SET time_zone = '+05:30';";
 $conn->query($time_zone_sql);
 
 // Insert into emp_work
-$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id,process_id) VALUES ( $part_id,  '', '', '$vendor_id',$process_id );";
+$insert_quotaion = "INSERT INTO rate_quotation (rqpid,sample_chk,remarks,vendor_id,process_id,rate) VALUES ( $part_id,  '', '', '$vendor_id',$process_id,'$rate' );";
 
 if ($conn->query($insert_quotaion) === TRUE) {
     // Retrieve the last inserted ID
