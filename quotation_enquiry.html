@@ -56,6 +56,8 @@
       overflow: hidden;
       transition: width 0.3s ease;
     }
+
+
   </style>
 
 
@@ -237,7 +239,7 @@
                             </div>
                             <div class="card-footer d-flex justify-content-center">
                               <button class='btn btn-primary' id='add_field' type=''>Add Field</button>
-                              <button class='btn btn-primary d-none' id='update_field' type='' >Update Field</button>
+                              <button class='btn btn-primary d-none' id='update_field' type=''>Update Field</button>
                             </div>
 
                           </div>
@@ -250,7 +252,7 @@
                   </div>
                   <div class="col-6">
                     <div class="col-12">
-                      <div class="table-responsive"  style="height: 180px; overflow-y: scroll;">
+                      <div class="table-responsive" style="height: 180px; overflow-y: scroll;">
                         <table class="table caption-top table-bordered table-striped ">
                           <caption>part specification</caption>
                           <thead>
@@ -392,7 +394,15 @@
               data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <form id="spec_form" onsubmit="return false">
+                  <div class="form-floating mb-2">
+                    <input type="number" class="form-control rounded-3" id="spec_rate" placeholder="" required>
+                    <label for="spec_rate">Rate
+                      <span class="text-danger">*</span> </label>
 
+                    <div class="invalid-feedback">
+                      Kindly Enter Vaild Data
+                    </div>
+                  </div>
 
                   <div class="card">
                     <div class="card-header d-flex justify-content-center">
@@ -416,12 +426,13 @@
                     </div>
                     <div class="card-footer d-flex justify-content-center">
 
-                      <button class="btn btn-primary  btn-sm" type="button" id="submit_btn">Add </button>
+                      <button class="btn btn-primary  btn-sm spec_add_btn" type="button" id="submit_btn">Add </button>
+                      <button class="btn btn-primary  btn-sm d-none" type="button" id="spec_update_btn">Update </button>
                     </div>
                   </div>
                 </form>
 
-                <div class="card">
+                <div class="card d-none" id="upload_card">
                   <div class="card-header ">
                     <p class="small card-title m-0 p-0">Upload</p>
 
@@ -550,15 +561,15 @@
         Quotation Report
       </div>
       <div class="card-body m-0 p-0">
-        <div class="custom-fixed-table">
+        <div class="table-responsive" style="max-width: 100%; height: 800px; overflow-x: scroll;  overflow-y: scroll;">
           <table class="table table-bordered table-striped">
             <thead>
               <tr id="head_fixed-row">
-                
+
               </tr>
             </thead>
-            <tbody id="company_quotation_details" style="width: 100%; overflow-x: scroll;">
-           
+            <tbody id="company_quotation_details">
+
               <!-- Sample Scrolling Data -->
               <!-- <tr>
                 <td>Row 3</td>

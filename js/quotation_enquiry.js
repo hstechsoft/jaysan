@@ -10,7 +10,7 @@ var vendor_id = 0
 var new_part = "no"
 var part_spec = [];
 var qid = 0;
-var stype ='';
+var stype = '';
 $(document).ready(function () {
 
 
@@ -446,7 +446,9 @@ $(document).ready(function () {
 
   $("#submit_btn").on("click", function () {
     getFieldData();
-    if (vendor_id != 0 && (part_id != null || process_id != null))
+    var spec_rate = $("#spec_rate").val();
+
+    if (vendor_id != 0 && (part_id != null || process_id != null) && spec_rate != '')
       insert_part_spec()
     else
       shw_toast("Warning", "Enter vendor or part first")
@@ -501,7 +503,9 @@ $(document).ready(function () {
   })
 
   $("#upload_submit_btn").on("click", function () {
-
+    $(this).addClass("d-none");
+    $("#upload_card").addClass("d-none");
+    $("#submit_btn").removeClass("d-none");
     $('#vendor_form')[0].reset();
     vendor_id = 0;
     $("#vendor_form :input").prop("disabled", false);
@@ -518,6 +522,8 @@ $(document).ready(function () {
     $('#vendor_name').focus()
     shw_toast("success", "Quotation Added")
     get_sts()
+    get_rate_quotation_part(part_id, process_id);
+
   });
 
 
@@ -576,11 +582,16 @@ $(document).ready(function () {
       $('#part_photo_preview').attr("src", "attachment/parts/" + part_id + "/" + part_image_addr + "?" + timestamp);
 
     }
+
+    part_id = $(this).find("td").data('part-id')
+    process_id = $(this).find("td").data('process-id')
     get_part_spec()
     get_sts()
-
-
+    get_std_spec()
+    get_spec_details($(this).find("td").data('part-id'))
     get_rate_quotation_part($(this).find("td").data('part-id'), $(this).find("td").data('process-id'));
+
+
   });
 
   $("#part_spec_tbody").on("click", "tr i.fa-edit", function () {
@@ -656,34 +667,152 @@ $(document).ready(function () {
 
   });
 
-  $("#company_quotation_details").on("input", "td[contenteditable='true']", function () {
-    $("i.fa-edit").removeClass("d-none");
+  // $("#company_quotation_details").on("input", "td[contenteditable='true']", function () {
+  //   $("i.fa-edit").removeClass("d-none");
 
-    let $cell = $(this);
-    let $row = $cell.closest("tr");
-    let label = $row.find("td:first").text().trim();
-    let value = $cell.text().trim();
+  //   let $cell = $(this);
+  //   let $row = $cell.closest("tr");
+  //   let label = $row.find("td:first").text().trim();
+  //   let value = $cell.text().trim();
 
-    part_spec = part_spec.filter(item => item.label !== label);
+  //   part_spec = part_spec.filter(item => item.label !== label);
 
-    part_spec.push({ label: label, value: value });
+  //   part_spec.push({ label: label, value: value });
 
-    console.log("Updated part_spec:", part_spec);
-  });
+  //   console.log("Updated part_spec:", part_spec);
+  // });
 
 
   $("#head_fixed-row").on("click", "i.fa-edit", function () {
-    alert();
+    $(".spec_add_btn").addClass("d-none");
+    $("#spec_update_btn").removeClass('d-none');
+    $("#spec_update_btn").data("rqid", $(this).data("rqid"))
+    // let $cell = $("#company_quotation_details").find("tr:last-child");
+    // let $row = $cell.closest("tr");
+    // let label = $row.find("td:first").text().trim();
+    // let value = $cell.text().trim();
+
+    // part_spec = part_spec.filter(item => item.label !== label);
+
+    // part_spec.push({ label: label, value: value });
     part_id = $(this).data("rqpid");
     vendor_id = $(this).data("vendor_id");
     console.log("Updating part:", part_id, "for vendor:", vendor_id);
-    console.log("Collected part_spec:", part_spec);
+    // console.log("Collected part_spec:", part_spec);
     get_vendor();
     get_rate_quotation_details($(this).data("rqid"));
   })
+
+  $("#spec_update_btn").on("click", function () {
+    $("#spec_update_btn").prop("disabled", true);
+
+    console.log($(this).data("rqid"));
+    var spec_rate = $("#spec_rate").val();
+    if (spec_rate != null) {
+      $("#std_spec .input-group").each(function () {
+
+        getFieldData();
+      });
+      $("#parts_spec .input-group").each(function () {
+
+        getFieldData();
+      });
+      update_rate_quotation($(this).data("rqid"));
+    }
+    else {
+      shw_toast("Warning", "Enter rate first");
+    }
+
+
+  })
 });
 
+function get_rate_quotation_details(rqid) {
+  if (rqid != null)
 
+
+    $.ajax({
+      url: "php/get_rate_quotation_details.php",
+      type: "get", //send it through get method
+      data: {
+        rqid: rqid,
+
+      },
+      success: function (response) {
+
+        console.log(response);
+
+        if (response.trim() != "error") {
+          if (response.trim() != "0 result") {
+
+            var obj = JSON.parse(response);
+
+            obj.forEach(function (obj) {
+              var details = JSON.parse(obj.spec_details);
+              console.log(details);
+
+              $("#spec_rate").val(obj.rate);
+              details.forEach(function (item) {
+                $("#std_spec").find('.input-group').each(function () {
+                  const labelText = $(this).find(".input-group-text").text().trim();
+                  console.log($(this).find("input"));
+                  console.log($(this).find("select"));
+                  if (labelText === item.label) {
+                    const inputEl = $(this).find("input");
+                    const selectEl = $(this).find("select");
+
+
+                    if (inputEl.length) {
+                      inputEl.val(item.value);
+                    }
+                    if (selectEl.length) {
+                      selectEl.val(item.value);
+                    }
+                  }
+
+                });
+
+                $("#parts_spec").find('.input-group').each(function () {
+                  const labelText = $(this).find(".input-group-text").text().trim();
+
+                  if (labelText === item.label) {
+                    const inputEl = $(this).find("input");
+                    const selectEl = $(this).find("select");
+
+                    if (inputEl.length) {
+                      inputEl.val(item.value);
+                    }
+                    if (selectEl.length) {
+                      selectEl.val(item.value);
+                    }
+                  }
+                });
+              });
+            })
+
+
+
+          }
+          else {
+            // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+          }
+        }
+
+
+
+
+
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+      }
+    });
+
+
+
+
+}
 function update_spec_details(flabel, ftype, fvalue, fid) {
 
 
@@ -793,6 +922,7 @@ function get_spec_details(part_id) {
 
         if (response.trim() != "error") {
           $("#part_spec_tbody").empty();
+          $("#custom_spec_tbody").empty();
           if (response.trim() != "0 result") {
 
             var obj = JSON.parse(response);
@@ -813,8 +943,11 @@ function get_spec_details(part_id) {
             else {
               $("#part_spec_tbody").append("<tr><td colspan='5'>No Data Available</td></tr>")
             }
+            console.log(object.custom_spec);
 
             if (object.custom_spec != null) {
+              console.log(object.custom_spec);
+
               var count = 0;
               var data = object.custom_spec;
               data.forEach(function (item) {
@@ -965,7 +1098,8 @@ function get_rate_quotation_part(part_id, process_id) {
 
             count = count + 1;
 
-            $("#head_fixed-row").append("<th><div class='d-flex justify-content-between gap-2'><div class='my-auto'><p class='text-truncate my-auto small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit pt-2' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select border-0 rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='" + obj.rating + " 'selected>" + obj.rating + "</option><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div>" + dclass + "</div></div></th>")
+            $("#head_fixed-row").append("<th style='min-width:25vw'><div class='d-flex justify-content-between align-item-center gap-2'><div class=''><p class='text-truncate  small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit my-auto' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select  rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div class='my-auto'>" + dclass + "</div></div></th>")
+            $("#head_fixed-row th:last-child").find(".rating").val(obj.rating);
 
             var spec = ""
             if (obj.spec_addr != "")
@@ -1427,7 +1561,7 @@ function insert_vendor() {
 
 
 
-function  update_rate_quotation() {
+function update_rate_quotation(rqid) {
   var quotation_type = "process"
   if ($("#type_text").val() == "Parts")
     quotation_type = "parts"
@@ -1435,20 +1569,22 @@ function  update_rate_quotation() {
     url: "php/update_rate_quotation.php",
     method: 'POST',
     data: {
-      part_spec: JSON.stringify(part_spec),
+      part_spec_data: JSON.stringify(part_spec),
       part_id: part_id,
       process_id: process_id,
       vendor_id: vendor_id,
       quotation_type: quotation_type,
-      rqid:rqid
+      rqid: rqid,
+      rate: $("#spec_rate").val(),
     },
     success: function (response) {
       console.log(response);
 
 
-      if (response.trim() > 0) {
-        qid = response.trim()
-        $(".fa-edit").addClass("d-none");
+      if (response.trim() == 'ok') {
+        $("#spec_update_btn").prop("disabled", true);
+        $("#upload_card").removeClass("d-none");
+        get_rate_quotation_part(part_id, process_id)
         shw_toast("Success", "Specification Sucessfully updated")
         // $("#spec_form :input").prop("disabled", true);
       }
@@ -1481,7 +1617,8 @@ function insert_part_spec() {
       part_id: part_id,
       process_id: process_id,
       vendor_id: vendor_id,
-      quotation_type: quotation_type
+      quotation_type: quotation_type,
+      rate: $("#spec_rate").val(),
     },
     success: function (response) {
       console.log(response);
@@ -1490,6 +1627,7 @@ function insert_part_spec() {
       if (response.trim() > 0) {
         qid = response.trim()
         $("#submit_btn").prop("disabled", true);
+        $("#upload_card").removeClass("d-none");
         shw_toast("Success", "Specification Sucessfully Added")
         $("#spec_form :input").prop("disabled", true);
       }

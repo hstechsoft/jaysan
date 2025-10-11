@@ -44,13 +44,13 @@ $(document).ready(function () {
                         url: "php/get_po_report_search_auto.php",
                         type: "get", //send it through get method
                         data: {
-                            part :  $('#company').val() ,
+                            part: $('#company').val(),
                             term: ""
                         },
                         dataType: "json",
                         success: function (data) {
 
-                            console.log("data : "+data);
+                            console.log("data : " + data);
                             response($.map(data, function (item) {
                                 return {
                                     label: item.creditor_name,
@@ -158,12 +158,66 @@ $(document).ready(function () {
     $("#po_report_reset").on("click", function () {
         $("#poreport_table").empty();
     })
+
+    $("#poreport_table").on("click", "tr", function () {
+        get_po_receive_sts($(this).data("po_id"));
+    })
 });
 
 
 
 
 
+function get_po_receive_sts(po_id) {
+    $.ajax({
+        url: "php/get_po_receive_sts.php",
+        type: "get", //send it through get method
+        data: {
+            po_id: po_id,
+
+
+        },
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.trim() != "error") {
+                $("#poreport_item_table").empty();
+                var obj = JSON.parse(response);
+                var count = 0;
+
+
+
+                obj.forEach(function (obj) {
+                    count += 1;
+                    var rjd = "";
+                    if (obj.receive_json_sts == 'nothing received') {
+                        rjd = "<li class='list-group-item text-center text-danger'>Nothing Received</li>"
+                    }
+                    else {
+                        var received_data = JSON.parse(obj.receive_json_sts);
+                        received_data.forEach(function (item) {
+                            rjd += "<li class='list-group-item'>Emp Name: " + item.received_by + '<br>Dc No: ' + item.dc_no + '<br>Dc Date: ' + item.dc_date + '<br>Dc Quantity: ' + item.qty + "</li>"
+                        })
+                    }
+
+                    $("#poreport_item_table").append("<tr data-op_id='po_id'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  >" +rjd + "</ul></td><td>" +  obj.total_received + "</td></tr>")
+                });
+
+            }
+
+            else {
+                salert("Error", "User ", "error");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
 
 
 
@@ -180,9 +234,10 @@ function get_po_report(part, company, date) {
         },
         success: function (response) {
 
-                console.log(response);
+            console.log(response);
 
             if (response.trim() != "error") {
+                $("#poreport_table").empty();
                 var obj = JSON.parse(response);
                 var count = 0;
 
@@ -190,10 +245,23 @@ function get_po_report(part, company, date) {
 
                 obj.forEach(function (obj) {
                     count += 1;
-                    $("#poreport_table").append("<tr><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td></td></tr>")
+                    var percentage = 0;
+                    var status = '';
+                    if (obj.inward_qty == null || obj.total_po_qty == 0) {
+                        percentage = 0;
+                    } else {
+                        percentage = (parseFloat(obj.inward_qty) / parseFloat(obj.total_po_qty)) * 100;
+                    }
+                    percentage = Math.round(percentage);
+                    if (percentage != 0) {
+                        status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "</div></div>" + percentage + "% Received";
+                    }
+                    else {
+                        status = 'Not Received';
+                    }
+                    $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td></tr>")
                 });
 
-                //    get_sales_order()
             }
 
             else {

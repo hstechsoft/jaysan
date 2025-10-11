@@ -26,7 +26,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysan/quotation_enquiry.html",
+      "url": "http://localhost/jaysan/po_report.html",
       "webRoot": "C:/xampp/htdocs/jaysan",
       "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
