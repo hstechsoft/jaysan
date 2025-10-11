@@ -41,9 +41,7 @@ FROM
     jaysan_po jp
 INNER JOIN jaysan_po_material jmat ON  jmat.jaysan_po_id = jp.po_id
     LEFT join grn  on jmat.jaysan_po_material_id = grn.jaysan_po_material_id    
-WHERE
-  $material_query and $date_query and  $order_to_query GROUP by jp.po_id
-";
+WHERE $material_query and $date_query and  $order_to_query GROUP by jp.po_id";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
 if ($conn->multi_query($sql)) {
