@@ -2,8 +2,9 @@
 include 'db_head.php';
 
 $rqid =($_POST['rqid']);
-$part_spec_data_json = $conn->real_escape_string("part_spec_data");
-$part_spec_data_json = json_encode("part_spec_data", JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+$part_spec_data =($_POST['part_spec_data']);
+// $part_spec_data_json = $conn->real_escape_string("part_spec_data");
+// $part_spec_data_json = json_encode("part_spec_data", JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 $rate = isset($_POST['rate']) && $_POST['rate'] !== null ? $_POST['rate'] : 0;
 
 $sql_delete = "DELETE from rate_quotation_spec WHERE rqid = '$rqid '" ;
