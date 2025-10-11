@@ -13,7 +13,7 @@ $sql_delete = "DELETE from rate_quotation_spec WHERE rqid = '$rqid '" ;
 
 if ($conn->query($sql_delete) === TRUE) {
  $insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_details)
-VALUES ($rqid,'$part_spec_data')";
+VALUES ($rqid,'$part_spec_data_json')";
  
  if ($conn->query($insert_part_spec) === TRUE) {
 echo "ok";
