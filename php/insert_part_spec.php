@@ -9,7 +9,7 @@ $quotation_type = $_POST['quotation_type'];
 $process_id = $_POST['process_id'];
 $process_id = sql_nullable($process_id);
 $part_id = sql_nullable($part_id);
-$rate = isset($_POST['process_id']) && $_POST['process_id'] !== null ? $_POST['process_id'] : 0;
+$rate = isset($_POST['rate']) && $_POST['rate'] !== null ? $_POST['rate'] : 0;
 $last_id = 0;
 
 $part_spec_data_json = $conn->real_escape_string($part_spec_data);
