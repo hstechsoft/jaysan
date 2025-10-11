@@ -26,7 +26,7 @@ if($rate > 0)
 
 if ($conn->query($sql_delete) === TRUE) {
  $insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_details)
-VALUES ($rqid,'$part_spec_data_json')";
+VALUES ($rqid,'$part_spec_data')";
  
  if ($conn->query($insert_part_spec) === TRUE) {
 echo "ok";
