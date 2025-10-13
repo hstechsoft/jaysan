@@ -65,7 +65,7 @@ FROM
 LEFT JOIN employee create_emp ON mrf.emp_id = create_emp.emp_id
 LEFT JOIN mrf_purchase ON mrf.mrf_id = mrf_purchase.mrf_id
 LEFT JOIN mrf_batch ON mrf.mrf_id = mrf_batch.mrf_id
-WHERE 1 order by mrf_id DESC
+WHERE mrf.mrf_id = 209 order by mrf_id DESC
    -- mrf.mrf_id = 209
    --   create_emp.emp_id = 5
    --      mrf.part_id = 2
