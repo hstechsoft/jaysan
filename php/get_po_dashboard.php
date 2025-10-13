@@ -38,6 +38,7 @@ $sql .= "WITH
         mrf.emp_id,
         mrf.req_qty,
         mrf.req_date,
+        mrf_batch.batch_date,
         mrf.status,
         mrf.uom AS mrf_uom,
         mrf_batch.batch_id,
@@ -49,6 +50,7 @@ $sql .= "WITH
         mrf_purchase.approx_delivery_days,
         mrf_purchase.uom,
         mrf_purchase.raw_material_part_id,
+        (select emp_name from employee where emp_id = mrf_purchase.purchase_requested_by) as purchase_req_by,
         (
         SELECT
             parts_tbl.part_name
@@ -60,8 +62,7 @@ $sql .= "WITH
     create_emp.emp_name
 FROM
     material_request_form mrf
-LEFT JOIN employee create_emp ON
-    mrf.emp_id = create_emp.emp_id
+LEFT JOIN employee create_emp ON mrf.emp_id = create_emp.emp_id
 LEFT JOIN mrf_purchase ON mrf.mrf_id = mrf_purchase.mrf_id
 LEFT JOIN mrf_batch ON mrf.mrf_id = mrf_batch.mrf_id
 WHERE 1 order by mrf_id DESC
@@ -75,6 +76,7 @@ po_cte AS(
     SELECT
         mrf_cte.*,
         jpm.jaysan_po_id,
+        (select po_date from jaysan_po where po_id =   jpm.jaysan_po_id) as po_date,
         jpm.qty AS po_batch_qty,
         jpm.due_on,
         jpm.jaysan_po_material_id
@@ -127,7 +129,7 @@ GROUP BY
 SELECT
     final_cte.*,
     if(mrf_purchase_id is null ,'no purchase entry',JSON_ARRAYAGG(
-            JSON_OBJECT('batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
+            JSON_OBJECT('po_date',po_date,'batch_date',batch_date,'batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
     
     
 FROM
