@@ -10,6 +10,7 @@ $po_delivery_to = ($_POST['po_delivery_to']);
 $po_terms = ($_POST['po_terms']);
 $po_email = ($_POST['po_email']);
 $po_path = ($_POST['po_path']);
+$po_no = isset($_POST['po_no'])?'0':$_POST['po_no'];
 
 $po_materials = ($_POST['po_materials']);
 
@@ -53,7 +54,7 @@ if ($conn->multi_query($sql)) {
  
 
 
-      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
+      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on,po_no) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on','$po_on');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
