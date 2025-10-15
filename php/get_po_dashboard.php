@@ -139,7 +139,7 @@ SELECT
 FROM
     final_cte
 GROUP BY
-    mrf_id order by mrf_id desc";
+    mrf_id order by mrf_id desc limit 30";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
 if ($conn->multi_query($sql)) {
