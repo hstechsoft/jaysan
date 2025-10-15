@@ -445,14 +445,14 @@ $(document).ready(function () {
     });
 
     $("#search").on("click", function () {
-        var material = $("#material_query").data("part_id");
+        var part = $("#material_query").data("part_id");
         var company = $("#company").data("po_order_to");
-        var raw = $("#material_query").data("po_material_id");
+        var raw_material = $("#material_query").data("po_material_id");
         var emp_id = $("#emp_name").data("emp_id");
         var fdate =  $("#from_date").val();
         var tdate = $('#to_date').val();
 
-        get_po_dashboard(material, emp_id, raw, fdate, tdate,  company)
+        get_po_dashboard(part, emp_id, raw_material, fdate, tdate,  company)
     })
 
 
@@ -503,17 +503,17 @@ $(document).ready(function () {
 // });
 
 
-function get_po_dashboard(m, e, rm, fd, td, c) {
+function get_po_dashboard(part, emp_id, raw_material, fdate, tdate,  company) {
     $.ajax({
         url: "php/get_po_dashboard.php",
         type: "get",
         data: {
-            material_query: m,
-            emp_query: e,
-            part_query: rm,
-            from_date: fd,
-            to_date: td,
-            order_to_query: c,
+            material_query: raw_material,
+            emp_query: emp_id,
+            part_query: part,
+            from_date: fdate,
+            to_date: tdate,
+            order_to_query: company,
 
 
         },
