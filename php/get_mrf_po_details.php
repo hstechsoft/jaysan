@@ -62,7 +62,7 @@ WHERE
     mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE() and mrf_batch.batch_id not in (select batch_id from jaysan_po_material where batch_id not in(SELECT
     IF(
         IFNULL(SUM(qty),
-        0) = mrf_batch.batch_qty,
+        0) >= mrf_batch.batch_qty,
         mrf_batch.batch_id,
         null
     )
