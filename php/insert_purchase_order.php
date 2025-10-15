@@ -24,7 +24,7 @@ return $data;
 }
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO jaysan_po ( po_order_to,po_delivery_to,po_terms,email_sent,po_path) VALUES ('$po_order_to','$po_delivery_to','$po_terms','$po_email','$po_path')";
+$sql .= "INSERT INTO jaysan_po ( po_order_to,po_delivery_to,po_terms,email_sent,po_path,po_no) VALUES ('$po_order_to','$po_delivery_to','$po_terms','$po_email','$po_path','$po_no')";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)
@@ -54,7 +54,7 @@ if ($conn->multi_query($sql)) {
  
 
 
-      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on,po_no) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on','$po_no');";
+      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
