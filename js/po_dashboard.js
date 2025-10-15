@@ -322,7 +322,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.part_name,
                                     value: item.part_name,
-                                    id: item.po_material_id
+                                    id: item.part_id
                                 };
                             }));
                         },
@@ -333,8 +333,8 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     // When a user selects a suggestion
-                    $(this).data("po_material_id", ui.item.id);
-                    console.log("po_material_id :", ui.item);
+                    $(this).data("part_id", ui.item.id);
+                    console.log("part_id :", ui.item);
                 }
             })
                 // ✅ Custom rendering of autocomplete dropdown
@@ -445,15 +445,13 @@ $(document).ready(function () {
     });
 
     $("#search").on("click", function () {
-        console.log($("#material_query").val());
-        console.log($("#from_date").val());
-        console.log($("#to_date").val());
-        var material = $("#material_query").data("po_material_id");
+        var material = $("#material_query").data("part_id");
         var company = $("#company").data("po_order_to");
-        var material = $("#material_query").data("po_material_id");
+        var raw = $("#material_query").data("po_material_id");
+        var emp_id = $("#emp_name").data("emp_id");
         var date_query = "mrf.dated between '" + $("#form_date").val() + "' and '" + $('#to_date').val() + "'"
 
-        get_po_dashboard(material, $("#emp_name").val(), $("#raw_material").val(), date_query,  company)
+        get_po_dashboard(material, emp_id, raw, date_query,  company)
     })
 
 
