@@ -21,10 +21,10 @@ $part  = "%" .  $part ."%";
 if($term == 'part')
 
 $sql = "SELECT jaysan_po_material.po_material_id,parts_tbl.part_name
- FROM  jaysan_po_material INNER join parts_tbl on jaysan_po_material.po_material_id = parts_tbl.part_id WHERE parts_tbl.part_name like '$part'";
+ FROM  jaysan_po_material INNER join parts_tbl on jaysan_po_material.po_material_id = parts_tbl.part_id WHERE parts_tbl.part_name like '$part' group by parts_tbl.part_id";
 else 
  $sql = "SELECT jaysan_po.po_order_to,creditors.creditor_name
- FROM  jaysan_po INNER join creditors on jaysan_po.po_order_to = creditors.creditor_id WHERE creditors.creditor_name like  '$part'";
+ FROM  jaysan_po INNER join creditors on jaysan_po.po_order_to = creditors.creditor_id WHERE creditors.creditor_name like  '$part' group by creditors.creditor_id";
 
 $result = $conn->query($sql);
 
