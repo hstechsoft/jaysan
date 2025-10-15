@@ -153,7 +153,7 @@ GROUP BY
 SELECT
     final_cte.*,
     if(mrf_purchase_id is null ,'no purchase entry',JSON_ARRAYAGG(
-            JSON_OBJECT('po_date',po_date,'batch_date',batch_date,'batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
+            JSON_OBJECT('po_date',po_date,'batch_date',batch_date,'batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total_received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
     
     
 FROM
