@@ -64,7 +64,7 @@ WHERE
         IFNULL(SUM(qty),
         0) >= mrf_batch.batch_qty,
         mrf_batch.batch_id,
-        null
+        0
     )
 FROM
     jaysan_po_material inner join mrf_batch on jaysan_po_material.batch_id = mrf_batch.batch_id
