@@ -63,8 +63,8 @@ WHERE
     IF(
         IFNULL(SUM(qty),
         0) >= mb.batch_qty,
-        mb.batch_id,
-        0
+        0,
+        mb.batch_id
     )
 FROM
     jaysan_po_material inner join mrf_batch mb on jaysan_po_material.batch_id = mb.batch_id
