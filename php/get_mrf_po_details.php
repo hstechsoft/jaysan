@@ -51,7 +51,8 @@ SELECT
         creditors
     WHERE
         creditors.creditor_id = mrf_purchase.po_delivery_to
-) AS delivery_to
+) AS delivery_to,
+(SELECT ifnull(sum(qty),0) from jaysan_po_material WHERE batch_id = mrf_batch.batch_id GROUP by batch_id) as pre_po_qty
 FROM
     `mrf_purchase`
 INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
