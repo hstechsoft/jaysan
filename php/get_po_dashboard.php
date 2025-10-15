@@ -64,6 +64,14 @@ $sql .= "WITH
         mrf_purchase.approx_delivery_days,
         mrf_purchase.uom,
         mrf_purchase.raw_material_part_id,
+          (
+        SELECT
+            parts_tbl.part_name
+        FROM
+            parts_tbl
+        WHERE
+            parts_tbl.part_id = mrf.part_id
+    ) AS part_name,
         (select emp_name from employee where emp_id = mrf_purchase.purchase_requested_by) as purchase_req_by,
         (
         SELECT
