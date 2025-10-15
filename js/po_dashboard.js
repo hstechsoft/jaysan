@@ -449,8 +449,8 @@ $(document).ready(function () {
         var company = $("#company").data("po_order_to");
         var raw = $("#material_query").data("po_material_id");
         var emp_id = $("#emp_name").data("emp_id");
-        var fdate =  $("#form_date").val();
-        var tdate = $('#to_date').val()
+        var fdate =  $("#from_date").val();
+        var tdate = $('#to_date').val();
 
         get_po_dashboard(material, emp_id, raw, fdate, tdate,  company)
     })
