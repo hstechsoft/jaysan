@@ -39,7 +39,18 @@ FROM
     `mrf_purchase`
 INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
 left join parts_tbl on mrf_purchase.raw_material_part_id = parts_tbl.part_id
- WHERE mrf_batch.sts = 'create' and mrf_batch.batch_date<= CURRENT_DATE() and mrf_purchase.po_order_to =  $order_to_id";
+ WHERE mrf_batch.sts = 'create' and mrf_batch.batch_date<= CURRENT_DATE() and mrf_purchase.po_order_to =  $order_to_id and mrf_batch.batch_id not in (select ifnull(jp1.batch_id,0) from jaysan_po_material jp1 where batch_id not in(SELECT
+    IF(
+        IFNULL(SUM(qty),
+        0) >= mb.batch_qty,
+        0,
+        mb.batch_id
+    )
+FROM
+    jaysan_po_material inner join mrf_batch mb on jaysan_po_material.batch_id = mb.batch_id
+
+GROUP BY
+    mb.batch_id)    group by batch_id)";
 
 if ($conn->multi_query($sql)) {
     do {
