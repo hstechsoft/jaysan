@@ -8,6 +8,7 @@ var company = '';
 var consignee = '';
 var supplier = '';
 var terms = '';
+var po_no = '';
 var po_delivery_to = '';
 var po_order_to = '';
 var gst_details = '';
@@ -68,7 +69,7 @@ $(document).ready(function () {
             var batch_id = $(this).data("batch_id");
             let material_part_id = $(this).data("material_part_id");
             console.log(material_part_id);
-            
+
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
             let due_date = $(this).find("td").eq(2).text().trim();
@@ -87,6 +88,7 @@ $(document).ready(function () {
         });
 
         let po_terms = $("#terms_of_delivery_input").val();
+        let po_no = $("#po_no").val();
         if (allApproved) {
             // TODO: handle click here
             $("#overlay").fadeIn();
@@ -109,7 +111,7 @@ $(document).ready(function () {
                     orientation: "portrait",
                     paper_size: "A4",
                     stream: "no",
-                    email_to: "jaysanagriindustrial@gmail.com",
+                    email_to: "sanjay040611@gmail.com",
                     email_subject: "Invoice #1001",
                     email_body: "Hello, please find attached your invoice.",
                     pdf_password: "",        // optional
@@ -118,7 +120,7 @@ $(document).ready(function () {
                 success: function (res) {
                     console.log(res);
 
-                    insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url);
+                    insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_no);
                 },
                 error: function (xhr) {
                     alert("Error: " + xhr.responseText);
@@ -130,7 +132,7 @@ $(document).ready(function () {
             });
         }
         else {
-            insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "0", "");
+            insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "0", "", po_no);
         }
 
     });
@@ -154,7 +156,7 @@ $(document).ready(function () {
 
             var batch_id = $(this).data("batch_id");
             let material_part_id = $(this).data("material_part_id");
-            
+
             console.log(material_part_id);
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
@@ -174,6 +176,7 @@ $(document).ready(function () {
         });
 
         let po_terms = $("#terms_of_delivery_input").val();
+        let po_no = $("#po_no").val();
         if (allApproved) {
             // TODO: handle click here
             $("#overlay").fadeIn();
@@ -205,7 +208,7 @@ $(document).ready(function () {
                 success: function (res) {
                     console.log(res);
 
-                    update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_id);
+                    update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_id, po_no);
                 },
                 error: function (xhr) {
                     alert("Error: " + xhr.responseText);
@@ -217,7 +220,7 @@ $(document).ready(function () {
             });
         }
         else {
-            update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "0", "", po_id);
+            update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "0", "", po_id, po_no);
         }
 
     });
@@ -292,9 +295,10 @@ $(document).ready(function () {
         e.preventDefault();
 
         $("#terms_of_delivery_input").val(terms);
+        $("#po_no").val(po_no);
 
         $("#preview_Purchase").removeClass("d-none");
-        $(this).addClass("d-none");
+        // $(this).addClass("d-none");
 
         if ($("#selected_materials tr").length == 0) {
             salert("Error", "Please select at least one material.", "error");
@@ -303,12 +307,13 @@ $(document).ready(function () {
 
         else {
             $("#terms").modal("show");
+
         }
     });
 
     $("#terms_btn").on("click", function (e) {
         e.preventDefault();
-
+        $("#po_submit").addClass("d-none");
         let terms = $("#terms_of_delivery_input").val().trim();
         if (sub_but == 1) {
             $("#update_po").removeClass("d-none")
@@ -316,7 +321,7 @@ $(document).ready(function () {
         else {
             $("#mail_print").removeClass("d-none")
         }
-
+        $("#voucher_no").text("Voucher No: " + $("#po_no").val())
         $("#invoice_to").html(company);
         $("#consignee").html(consignee);
         $("#supplier").html(supplier);
@@ -324,6 +329,20 @@ $(document).ready(function () {
         // let tr_data =  $("#selected_materials").closest("tr");
 
         var count = 0;
+
+        if (gst_0.length > 0) {
+            var total_gst = 0
+            $.each(gst_0, function (key, val) {
+
+                total_gst += val
+            });
+            var gst_text = "input cgst @0%" + '<br>' + "input sgst @0%";
+            gst_details += gst_text + '<br>';
+            total_gst = total_gst * 0;
+            gst_amount_details += total_gst.toFixed(2) + '<br>' + total_gst.toFixed(2) + '<br>'
+            console.log("gst_0 " + gst_amount_details);
+
+        }
 
         if (gst_5.length > 0) {
             var total_gst = 0
@@ -647,6 +666,7 @@ function get_jaysan_po_material(po_id) {
 
                     company = obj.company_address;
                     terms = obj.terms;
+                    po_no = obj.po_no;
                     consignee = "Consignee (Ship to) <br>" + obj.con_name + "<br>" + obj.con_addr + "<br>e-mail : " + obj.con_email + "<br>GSTIN/UIN : " + obj.con_gst + "<br>State Name : " + obj.con_state_name;
                     supplier = "Supplier (Bill from) <br>" + obj.sub_name + "<br>" + obj.sub_addr + "<br>GSTIN/UIN : " + obj.sub_gst + "<br>State Name : " + obj.sub_state_name + "<br>Contact person : " + obj.sub_contact_person + "<br>Contact : " + obj.sub_contact + "<br>e-mail : " + obj.sub_email;
 
@@ -909,6 +929,7 @@ function get_mrf_po_details() {
 
                     var order_type_badge = "";
 
+
                     if (obj.order_type == "Regular") {
                         order_type_badge = "<span class='ms-1 badge bg-success'>R</span>"
                     }
@@ -925,12 +946,19 @@ function get_mrf_po_details() {
                         commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
                         // commitment_sts = obj.commitment_date
                     }
-
+                    var balance = '';
+                    var bal = parseInt(obj.batch_qty) - ((obj.pre_po_qty == null) ? '0' : parseInt(obj.pre_po_qty))
+                    if (bal != obj.batch_qty) {
+                        balance = "Ord: <b>" + ((obj.pre_po_qty == null) ? '0' : obj.pre_po_qty) + "</b><br>Balance: <b>" + bal + "</b> "
+                    }
+                    else {
+                        balance = '';
+                    }
                     count = count + 1;
                     $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-mrf_id='" + obj.mrf_id + "' ><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
                         "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
                         "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-                        "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "</td></tr>");
+                        "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td></tr>");
                 });
 
                 //    get_sales_order()
@@ -971,16 +999,23 @@ function get_mrf_po_company_wise(order_to) {
 
 
                 obj.forEach(function (obj) {
-console.log(obj.material_part_id);
+                    console.log(obj.material_part_id);
 
                     po_order_to = obj.po_order_to;
                     po_delivery_to = obj.po_delivery_to;
+                    var balance = '';
+                    if (obj.bal_qty != obj.batch_qty) {
+                        balance = "Ord: <b>" + obj.pre_qty + "</b><br>Balance: <b>" + obj.bal_qty + "</b> "
+                    }
+                    else {
+                        balance = '';
+                    }
                     $("#po_dashboard").append(
                         "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
                         "<td>" + obj.raw_material_part_id + "</td>" +
-                        "<td>" + obj.batch_qty_with_uom + "</td>" +
-                        "<td data-batch_qty='" + obj.batch_qty + "' contenteditable='true'>" + obj.batch_qty + "</td>" +
+                        "<td>" + obj.batch_qty_with_uom +"<br>"+balance+ "</td>" +
+                        "<td data-batch_qty='" + obj.bal_qty + "' contenteditable='true'>" + obj.bal_qty + "</td>" +
                         "<td contenteditable='true'>0</td>" +
                         "<td>" + obj.batch_date + "</td>" +
                         "<td><input type='date'disabled class='form-control date-input' value='" + obj.approx_due_date + "'></td>" +
@@ -1025,6 +1060,7 @@ function get_mrf_po_basic_details(mrf_id) {
 
                     company = obj.company_address;
                     terms = obj.terms;
+                    po_no = obj.max_po_no;
                     consignee = "Consignee (Ship to) <br>" + obj.con_name + "<br>" + obj.con_addr + "<br>e-mail : " + obj.con_email + "<br>GSTIN/UIN : " + obj.con_gst + "<br>State Name : " + obj.con_state_name;
                     supplier = "Supplier (Bill from) <br>" + obj.sub_name + "<br>" + obj.sub_addr + "<br>GSTIN/UIN : " + obj.sub_gst + "<br>State Name : " + obj.sub_state_name + "<br>Contact person : " + obj.sub_contact_person + "<br>Contact : " + obj.sub_contact + "<br>e-mail : " + obj.sub_email;
                 });
@@ -1046,7 +1082,7 @@ function get_mrf_po_basic_details(mrf_id) {
 }
 
 
-function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path, po_id) {
+function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path, po_id, po_no) {
     console.log(po_order_to);
     console.log(po_materials);
     console.log(po_email);
@@ -1064,6 +1100,7 @@ function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
             po_email: po_email,
             po_path: po_path,
             po_id: po_id,
+            po_no: po_no,
 
 
         },
@@ -1096,11 +1133,12 @@ function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 }
 
 
-function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path) {
+function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path, po_no) {
     console.log(po_order_to);
     console.log(po_materials);
     console.log(po_email);
     console.log(po_path);
+    console.log("sds" + po_no);
 
 
     $.ajax({
@@ -1113,6 +1151,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
             po_materials: po_materials,
             po_email: po_email,
             po_path: po_path,
+            po_no: po_no,
 
 
         },
@@ -1173,6 +1212,7 @@ function get_po_list() {
                     }
                     if (obj.email_sent == '0') {
                         edit = "<i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i>";
+                        ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
                     if (obj.approve_sts == '0') {
                         ic = "<i class='fa fa-times-circle' style='color:red'></i>";
