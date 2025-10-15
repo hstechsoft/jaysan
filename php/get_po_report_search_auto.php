@@ -20,7 +20,7 @@ $part  = "%" .  $part ."%";
 
 if($term == 'part')
 
-$sql = "SELECT mrf.mrf_id,parts_tbl.part_name
+$sql = "SELECT mrf.mrf_id,parts_tbl.part_name,parts_tbl.part_id
  FROM  material_request_form mrf INNER join parts_tbl on mrf.part_id= parts_tbl.part_id WHERE parts_tbl.part_name like '$part' group by parts_tbl.part_id";
  
 else if($term == 'raw')
