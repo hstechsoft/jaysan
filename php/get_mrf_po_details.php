@@ -59,18 +59,7 @@ INNER JOIN mrf_batch ON mrf_purchase.mrf_id = mrf_batch.mrf_id
 inner join material_request_form mrf on mrf_purchase.mrf_id = mrf.mrf_id
 left join parts_tbl on mrf_purchase.raw_material_part_id = parts_tbl.part_id
 WHERE
-    mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE() and mrf_batch.batch_id not in (select batch_id from jaysan_po_material where batch_id not in(SELECT
-    IF(
-        IFNULL(SUM(qty),
-        0) >= mrf_batch.batch_qty,
-        mrf_batch.batch_id,
-        0
-    )
-FROM
-    jaysan_po_material inner join mrf_batch on jaysan_po_material.batch_id = mrf_batch.batch_id
-
-GROUP BY
-    mrf_batch.batch_id)  and batch_id != null  group by batch_id);
+    mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE() and mrf_batch.batch_id not in (35);
 SQL;
 // $sql .= "SELECT
 //     mrf_purchase.mrf_id,
