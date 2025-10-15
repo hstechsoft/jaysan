@@ -18,7 +18,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-foreach ($receive_details as $detail) 
+foreach ($receive_details as $details) 
 { 
   
     $qty = $details['qty']; 
