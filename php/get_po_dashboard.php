@@ -4,7 +4,7 @@
 //  demo text 12345
 $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
 
- echo $material_query;
+
   $material_query = ($material_query == '') ? "1" :  "mrf_purchase.raw_material_part_id = '$material_query'";
   $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
     $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
