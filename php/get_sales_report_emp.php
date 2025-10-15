@@ -27,7 +27,7 @@ return $data;
 // INNER join sales_order_sts_view sosv  on sof.oid = sosv.oid where sof.oid = 119 GROUP by oid";
 
 if($approve_sts == "'0'")
-  $sql =  " SELECT pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro,  (select if(sum(amount)>5000,'advance','na') from jaysan_payment where oid = sof.oid and sts = 'approved') as pay_sts from sales_order_product  sop
+  $sql =  " SELECT  (select if(ifnull(sum(amount),0)>=5000,'advance','na') from jaysan_payment where oid = sof.oid and sts = 'approved'   GROUP by jaysan_payment.oid) as pay_sts,pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro  from sales_order_product  sop
 
   INNER join sales_product_view spv  on  sop.opid = spv.opid 
    INNER join sales_order_sts_view sosv  on  sop.opid = sosv.opid 
@@ -35,10 +35,10 @@ if($approve_sts == "'0'")
   INNER join employee emp on sales_pro.emp_id = emp.emp_id
   INNER join customer cus on sales_pro.customer_id = cus.cus_id
   INNER join sales_order_form sof  on  sales_pro.oid = sof.oid 
-  INNER join sale_order_payment_view sopv  on sales_pro.oid = sopv.oid WHERE sof.order_category =  $order_cat and 1    order by sof.order_no ASC";
+  INNER join sale_order_payment_view sopv  on sales_pro.oid = sopv.oid WHERE sof.order_category =  $order_cat and sales_pro.emp_id =  $emp_id     order by sof.order_no ASC";
 
   else
-$sql =  " SELECT pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro, (select if(sum(amount)>5000,'advance','na') from jaysan_payment where oid = sof.oid and sts = 'approved') as pay_sts from sales_order_product  sop
+$sql =  " SELECT (select if(ifnull(sum(amount),0)>=5000,'advance','na') from jaysan_payment where oid = sof.oid and sts = 'approved'   GROUP by jaysan_payment.oid) as pay_sts, pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro from sales_order_product  sop
 
 INNER join sales_product_view spv  on  sop.opid = spv.opid 
  INNER join sales_order_sts_view sosv  on  sop.opid = sosv.opid 
@@ -46,7 +46,7 @@ INNER join sales_order_form sof  on  sof.oid = sop.oid WHERE sof.approve_sts > 0
 INNER join employee emp on sales_pro.emp_id = emp.emp_id
 INNER join customer cus on sales_pro.customer_id = cus.cus_id
 INNER join sales_order_form sof  on  sales_pro.oid = sof.oid 
-INNER join sale_order_payment_view sopv  on sales_pro.oid = sopv.oid WHERE sof.order_category =  $order_cat and 1    order by sof.order_no ASC";
+INNER join sale_order_payment_view sopv  on sales_pro.oid = sopv.oid WHERE sof.order_category =  $order_cat and sales_pro.emp_id =  $emp_id     order by sof.order_no ASC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

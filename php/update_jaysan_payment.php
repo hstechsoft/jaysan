@@ -4,6 +4,7 @@
  $emp_id = test_input($_GET['emp_id']);
  $payment_id = test_input($_GET['payment_id']);
 $pay_date = test_input($_GET['pay_date']);
+$pay_sts = test_input($_GET['pay_sts']);
 
  
  
@@ -16,7 +17,7 @@ return $data;
 }
 
 $sql = "SET time_zone = '+05:30';"; 
-$sql .= "UPDATE jaysan_payment SET payment_date = $pay_date,  jaysan_payment.sts = 'approved' ,jaysan_payment.approved_by = $emp_id, jaysan_payment.approved_date = current_timestamp  WHERE jaysan_payment.payment_id = $payment_id AND jaysan_payment.payment_id = $payment_id";
+$sql .= "UPDATE jaysan_payment SET payment_date = $pay_date,  jaysan_payment.sts = $pay_sts ,jaysan_payment.approved_by = $emp_id, jaysan_payment.approved_date = current_timestamp  WHERE jaysan_payment.payment_id = $payment_id AND jaysan_payment.payment_id = $payment_id";
 
 
 

@@ -18,7 +18,7 @@ $sql .= <<<SQL
 SELECT
     mrf_purchase.mrf_id,
     mrf_purchase.mrf_purchase_id,
-   
+   (sele)
     parts_tbl.gstrate,
     parts_tbl.part_name as raw_material_part_id,
     mrf_batch.batch_date,
