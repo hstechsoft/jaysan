@@ -449,9 +449,10 @@ $(document).ready(function () {
         var company = $("#company").data("po_order_to");
         var raw = $("#material_query").data("po_material_id");
         var emp_id = $("#emp_name").data("emp_id");
-        var date_query = "mrf.dated between '" + $("#form_date").val() + "' and '" + $('#to_date').val() + "'"
+        var fdate =  $("#form_date").val();
+        var tdate = $('#to_date').val()
 
-        get_po_dashboard(material, emp_id, raw, date_query,  company)
+        get_po_dashboard(material, emp_id, raw, fdate, tdate,  company)
     })
 
 
@@ -502,7 +503,7 @@ $(document).ready(function () {
 // });
 
 
-function get_po_dashboard(m, e, rm, d, c) {
+function get_po_dashboard(m, e, rm, fd, td, c) {
     $.ajax({
         url: "php/get_po_dashboard.php",
         type: "get",
@@ -510,7 +511,8 @@ function get_po_dashboard(m, e, rm, d, c) {
             material_query: m,
             emp_query: e,
             part_query: rm,
-            date_query: d,
+            from_date: fd,
+            to_date: td,
             order_to_query: c,
 
 
