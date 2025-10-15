@@ -10,7 +10,7 @@ $po_delivery_to = ($_POST['po_delivery_to']);
 $po_terms = ($_POST['po_terms']);
 $po_email = ($_POST['po_email']);
 $po_path = ($_POST['po_path']);
-$po_no = isset($_POST['po_no'])?'0':$_POST['po_no'];
+$po_no = isset($_POST['po_no']) ? $_POST['po_no'] : '0';
 
 $po_materials = ($_POST['po_materials']);
 
@@ -24,7 +24,7 @@ return $data;
 }
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO jaysan_po ( po_order_to,po_delivery_to,po_terms,email_sent,po_path,po_no) VALUES ('$po_order_to','$po_delivery_to','$po_terms','$po_email','$po_path','$po_no')";
+$sql .= "INSERT INTO jaysan_po (po_order_to,po_delivery_to,po_terms,email_sent,po_path,po_no) VALUES ('$po_order_to','$po_delivery_to','$po_terms','$po_email','$po_path','$po_no')";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)
