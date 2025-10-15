@@ -6,7 +6,7 @@
 $received_by = test_input($_GET['received_by']);
 $dc_no = test_input($_GET['dc_no']);
 $dc_date = test_input($_GET['dc_date']);
-$receive_details = json_decode($_POST['receive_details'], true);
+$receive_details = json_decode($_GET['receive_details'], true);
 
  
  
