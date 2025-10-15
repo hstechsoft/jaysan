@@ -2,16 +2,26 @@
  include 'db_head.php';
 
 //  demo text 12345
-$material_query=  $_GET['material_query'];
- 
+$material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
+
+ echo $material_query;
   $material_query = ($material_query == '') ? "1" :  "mrf_purchase.raw_material_part_id = '$material_query'";
-  $date_query = ($_GET['date_query']);
-  $date_query = ($date_query == '') ? "1" :  "mrf_purchase.raw_material_part_id = '$material_query'";
-  $order_to_query = ($_GET['order_to_query']);
-$emp_query = ($_GET['emp_query']);
-$part_query = ($_GET['part_query']);
+  $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
+    $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+    
+  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " mrf.dated between  between  '$from_date' and '$to_date' ";
+  $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
+    $order_to_query = ($order_to_query == '') ? "1" :  "mrf_purchase.po_order_to  = '$order_to_query'";
  
- echo  $material_query ;
+ 
+    $emp_query = isset($_GET['emp_query']) ? $_GET['emp_query'] : '';
+    $emp_query = ($emp_query == '') ? "1" :  "create_emp.emp_id  = '$emp_query'";
+ 
+    $part_query = isset($_GET['part_query']) ? $_GET['part_query'] : '';
+
+    $part_query = ($part_query == '') ? "1" :  "mrf.part_id  = '$part_query'";
+ 
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
