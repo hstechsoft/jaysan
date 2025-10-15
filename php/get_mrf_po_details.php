@@ -62,15 +62,15 @@ WHERE
     mrf_batch.sts = 'create' AND mrf_batch.batch_date <= CURRENT_DATE() and mrf_batch.batch_id not in (select ifnull(batch_id,0) from jaysan_po_material where batch_id not in(SELECT
     IF(
         IFNULL(SUM(qty),
-        0) >= mrf_batch.batch_qty,
-        mrf_batch.batch_id,
+        0) >= mb.batch_qty,
+        mb.batch_id,
         0
     )
 FROM
-    jaysan_po_material inner join mrf_batch on jaysan_po_material.batch_id = mrf_batch.batch_id
+    jaysan_po_material inner join mrf_batch mb on jaysan_po_material.batch_id = mrf_batch.batch_id
 
 GROUP BY
-    mrf_batch.batch_id)    group by batch_id);
+    mb.batch_id)    group by batch_id);
 SQL;
 // $sql .= "SELECT
 //     mrf_purchase.mrf_id,
