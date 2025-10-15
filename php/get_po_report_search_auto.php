@@ -20,6 +20,11 @@ $part  = "%" .  $part ."%";
 
 if($term == 'part')
 
+$sql = "SELECT mrf.mrf_id,parts_tbl.part_name
+ FROM  material_request_form mrf INNER join parts_tbl on mrf.part_id= parts_tbl.part_id WHERE parts_tbl.part_name like '$part' group by parts_tbl.part_id";
+ 
+else if($term == 'raw')
+
 $sql = "SELECT jaysan_po_material.po_material_id,parts_tbl.part_name
  FROM  jaysan_po_material INNER join parts_tbl on jaysan_po_material.po_material_id = parts_tbl.part_id WHERE parts_tbl.part_name like '$part' group by parts_tbl.part_id";
 else 
