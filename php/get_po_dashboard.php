@@ -9,7 +9,7 @@ $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
   $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
     $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
     
-  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " mrf.dated between  between  '$from_date' and '$to_date' ";
+  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " mrf.dated between    '$from_date' and '$to_date' ";
   $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
     $order_to_query = ($order_to_query == '') ? "1" :  "mrf_purchase.po_order_to  = '$order_to_query'";
  
