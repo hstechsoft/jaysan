@@ -10,7 +10,7 @@
 $emp_query = ($_GET['emp_query']);
 $part_query = ($_GET['part_query']);
  
- 
+ echo  $material_query ;
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
