@@ -18,7 +18,7 @@ $sql .= "SELECT
     mrf_purchase.mrf_id,
      mrf_batch.batch_id,
     mrf_purchase.mrf_purchase_id,
-    SELECT max(po_id)+1 from jaysan_po as max_po_no,
+
     parts_tbl.gstrate,
     parts_tbl.part_name as raw_material_part_id,
      parts_tbl.part_id as material_part_id,
