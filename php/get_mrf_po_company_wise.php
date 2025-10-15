@@ -18,7 +18,7 @@ $sql .= "SELECT
     mrf_purchase.mrf_id,
      mrf_batch.batch_id,
     mrf_purchase.mrf_purchase_id,
- (select ifnull(sum(qty),0) - (select ifnull(sum(batch_qty),0) from mrf_batch batch1  where batch1.batch_id = mrf_batch.batch_id)  from jaysan_po_material jpm1 where jpm1.batch_id = mrf_batch.batch_id ) as bal_qty,
+ (select (select ifnull(sum(batch_qty),0) from mrf_batch batch1  where batch1.batch_id = mrf_batch.batch_id) - ifnull(sum(qty),0)  from jaysan_po_material jpm1 where jpm1.batch_id = mrf_batch.batch_id ) as bal_qty,
     parts_tbl.gstrate,
     parts_tbl.part_name as raw_material_part_id,
      parts_tbl.part_id as material_part_id,
