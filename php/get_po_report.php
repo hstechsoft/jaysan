@@ -41,8 +41,9 @@ $sql .= "SELECT
     jp.po_id,
     jp.po_date,
     (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to) order_to,
-    sum(jmat.qty) as total_po_qty,
-    sum(grn.qty) as inward_qty
+    sum(jmat.qty) over (partition by jp.po_id) as total_po_qty,
+        sum(jmat.qty) over (partition by grn.jaysan_po_material_id  ) as inward_qty
+  
  
 FROM
     jaysan_po jp
