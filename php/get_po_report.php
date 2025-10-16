@@ -38,7 +38,7 @@ $sql = "SET time_zone = '+05:30';";
 
 $sql .= "SELECT
     jp.po_no,
-        jp.po_id,
+    jp.po_id,
     jp.po_date,
     (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to) order_to,
     sum(jmat.qty) as total_po_qty,
