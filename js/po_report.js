@@ -134,25 +134,24 @@ $(document).ready(function () {
 
     $("#poreport_search").on("click", function () {
 
-        var part = '1';
-        var company = '1';
-        var date = '1';
 
         if ($("#from_date").val() && $("#to_date").val()) {
 
-            date = "po.date between '" + $("#from_date").val() + "' and '" + $('#to_date').val() + "'"
+            var from_date = $("#from_date").val();
+            var to_date =$('#to_date').val();
         }
         if ($("#part").data("part_id")) {
-            part = $("#part").data("part_id");
+            var part = $("#part").data("part_id");
         }
         if ($("#company").data("po_order_to")) {
-            company = $("#company").data("po_order_to");
+            var company = $("#company").data("po_order_to");
         }
         console.log(part);
         console.log(company);
-        console.log(date);
+        console.log(from_date);
+        console.log(to_date);
 
-        get_po_report(part, company, date);
+        get_po_report(part, company, from_date, to_date);
     })
 
     $("#po_report_reset").on("click", function () {
@@ -243,7 +242,7 @@ function insert_grn(dc_no, dc_date, details_po) {
 function get_po_receive_sts(po_id) {
     $.ajax({
         url: "php/get_po_receive_sts.php",
-        type: "get", //send it through get method
+        type: "get", //send /it through get method
         data: {
             po_id: po_id,
 
@@ -296,14 +295,15 @@ function get_po_receive_sts(po_id) {
 
 
 
-function get_po_report(part, company, date) {
+function get_po_report(part, company, fdate, tdate) {
     $.ajax({
         url: "php/get_po_report.php",
         type: "get", //send it through get method
         data: {
             material_query: part,
-            date_query: date,
-            order_to_query: company
+            order_to_query: company,
+            from_date: fdate,
+            to_date: tdate,
 
 
         },

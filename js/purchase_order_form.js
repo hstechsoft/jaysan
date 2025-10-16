@@ -61,7 +61,7 @@ $(document).ready(function () {
         $("#selected_materials").find("tr:not(:last-child)").each(function () {
             let apprv = $(this).data("approve");
             if (apprv == '0') {
-                alert("Some PO items are not approved. Please approve them first.");
+                // alert("Some PO items are not approved. Please approve them first.");
                 allApproved = false;
 
             }
@@ -86,7 +86,10 @@ $(document).ready(function () {
                 disc: disc,
             });
         });
+        if (allApproved == false) {
+            alert("Some PO items are not approved. Please approve them first.");
 
+        }
         let po_terms = $("#terms_of_delivery_input").val();
         let po_no = $("#po_no").val();
         if (allApproved) {
@@ -1014,7 +1017,7 @@ function get_mrf_po_company_wise(order_to) {
                         "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
                         "<td>" + obj.raw_material_part_id + "</td>" +
-                        "<td>" + obj.batch_qty_with_uom +"<br>"+balance+ "</td>" +
+                        "<td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td>" +
                         "<td data-batch_qty='" + obj.bal_qty + "' contenteditable='true'>" + obj.bal_qty + "</td>" +
                         "<td contenteditable='true'>0</td>" +
                         "<td>" + obj.batch_date + "</td>" +
@@ -1212,7 +1215,7 @@ function get_po_list() {
                     }
                     if (obj.email_sent == '0') {
                         edit = "<i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i>";
-                        ic = "<i class='fa fa-times-circle' style='color:red'></i>";
+                        // ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
                     if (obj.approve_sts == '0') {
                         ic = "<i class='fa fa-times-circle' style='color:red'></i>";
