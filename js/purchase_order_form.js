@@ -1220,7 +1220,7 @@ function get_po_list() {
                     if (obj.approve_sts == '0') {
                         ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
-                    $("#get_po_list").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'>" + ic + "</td><td class='text-center'>" + edit + "</td></tr>")
+                    $("#get_po_list").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'>" + ic + "</td><td class='text-center'>" + edit + "</td></tr>")
 
 
                 });
