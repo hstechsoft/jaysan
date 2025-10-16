@@ -242,6 +242,10 @@ $(document).ready(function () {
         $("#purchase_order_details").empty();
         clear_gst_arrays();
         $("#preview_Purchase").addClass("d-none");
+                $("#po_submit").removeClass("d-none");
+                
+        $("#mail_print").addClass("d-none");
+        $("#update_po").addClass("d-none");
         get_mrf_po_basic_details($(this).data("mrf_id"));
         $("#company_name").text("Company Name: " + $(this).closest("tr").find("td").eq(2).text());
         get_mrf_po_company_wise($(this).data("po_order_to"));
@@ -304,7 +308,6 @@ $(document).ready(function () {
         $("#terms_of_delivery_input").val(terms);
         $("#po_no").val(po_no);
 
-        $("#preview_Purchase").removeClass("d-none");
         // $(this).addClass("d-none");
 
         if ($("#selected_materials tr").length == 0) {
@@ -320,6 +323,8 @@ $(document).ready(function () {
 
     $("#terms_btn").on("click", function (e) {
         e.preventDefault();
+        $("#preview_Purchase").removeClass("d-none");
+
         $("#po_submit").addClass("d-none");
         let terms = $("#terms_of_delivery_input").val().trim();
         if (sub_but == 1) {
@@ -329,7 +334,7 @@ $(document).ready(function () {
             $("#mail_print").removeClass("d-none")
         }
         $("#voucher_no").text("Voucher No: " + $("#po_no").val())
-        $("#invoice_to").html(company);
+        $("#invoice_to").html("Invoice To <br>"+company);
         $("#consignee").html(consignee);
         $("#supplier").html(supplier);
 
@@ -632,6 +637,10 @@ $(document).ready(function () {
         po_id = $(this).data("po_id");
         sub_but = 1;
         get_jaysan_po_material(po_id);
+        $("#po_submit").removeClass("d-none");
+        $("#mail_print").addClass("d-none");
+        $("#update_po").addClass("d-none");
+
 
     })
 
