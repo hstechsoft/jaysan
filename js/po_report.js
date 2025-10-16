@@ -106,7 +106,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.part_name,
                                     value: item.part_name,
-                                    id: item.po_material_id
+                                    id: item.part_id
                                 };
                             }));
                         },
@@ -117,8 +117,8 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     // When a user selects a suggestion
-                    $(this).data("po_material_id", ui.item.id);
-                    console.log("po_material_id :", ui.item);
+                    $(this).data("part_id", ui.item.id);
+                    console.log("part_id :", ui.item);
                 }
             })
                 // ✅ Custom rendering of autocomplete dropdown
@@ -142,11 +142,11 @@ $(document).ready(function () {
 
             date = "po.date between '" + $("#from_date").val() + "' and '" + $('#to_date').val() + "'"
         }
-        if ($("#part").val()) {
-            part = $("#part").val();
+        if ($("#part").data("part_id")) {
+            part = $("#part").data("part_id");
         }
-        if ($("#company").val()) {
-            company = $("#company").val();
+        if ($("#company").data("po_order_to")) {
+            company = $("#company").data("po_order_to");
         }
         console.log(part);
         console.log(company);
