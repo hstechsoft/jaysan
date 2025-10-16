@@ -91,6 +91,7 @@ $(document).ready(function () {
 
         }
         let po_terms = $("#terms_of_delivery_input").val();
+        console.log(po_terms);
         let po_no = $("#po_no").val();
         if (allApproved) {
             // TODO: handle click here
@@ -958,7 +959,7 @@ function get_mrf_po_details() {
                         balance = '';
                     }
                     count = count + 1;
-                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-mrf_id='" + obj.mrf_id + "' ><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-mrf_id='" + obj.mrf_id + "' ><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id +" Batch: "+obj.batch_id+ ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
                         "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
                         "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
                         "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td></tr>");
@@ -1090,6 +1091,7 @@ function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
     console.log(po_materials);
     console.log(po_email);
     console.log(po_path);
+    console.log(po_terms);
 
 
     $.ajax({
@@ -1220,7 +1222,7 @@ function get_po_list() {
                     if (obj.approve_sts == '0') {
                         ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
-                    $("#get_po_list").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'>" + ic + "</td><td class='text-center'>" + edit + "</td></tr>")
+                    $("#get_po_list").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_no +"("+obj.po_id+ ")</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'>" + ic + "</td><td class='text-center'>" + edit + "</td></tr>")
 
 
                 });
