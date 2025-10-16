@@ -21,8 +21,8 @@ $sql .= "SELECT
     CASE 
         WHEN MIN(pom.is_approved) = 1 THEN 1   -- all approved
         ELSE 0                                 -- at least one not approved
-    END AS all_approved,
-    0 AS approve_sts
+    END AS approve_sts,
+   
 FROM
     jaysan_po po
 INNER JOIN jaysan_po_material pom 
