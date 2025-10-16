@@ -23,6 +23,7 @@ SELECT
     parts_tbl.part_name as raw_material_part_id,
     mrf_batch.batch_date,
     mrf_batch.batch_qty,
+    mrf_batch.batch_id,
     mrf_purchase.po_order_to,
     mrf_purchase.po_delivery_to,
     (SELECT parts_tbl.part_name from parts_tbl WHERE parts_tbl.part_id = mrf.part_id) as part_name,
