@@ -433,7 +433,7 @@ $(document).ready(function () {
             console.log(approve);
 
             if (materials !== "" && Due !== "" && quantity !== "" && rate !== "" && amount !== "") {
-                $("#purchase_order_details").append("<tr data-approve=" + approve + "><td>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
+                $("#purchase_order_details").append("<tr data-approve=" + approve + "><td  class='text-center' style='max-width: 5px;'>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
             }
             // if (count == $("#selected_materials tr").length - 1) {
 
@@ -446,11 +446,11 @@ $(document).ready(function () {
 
         console.log(words);
 
-        $("#purchase_order_details").append("<tr><th scope='col' colspan='3'></th></td><td></td><td></td><td></td><td></td><td id='raw_material_total_amount_id'>" + $("#raw_material_total_amount_id").text() + "</td></tr>" +
-            "<tr><td id='gst_details'>" + gst_details + "</td><td></td><td></td><td></td><td></td><td></td><td></td><td id='gst_amount_details'>" + gst_amount_details + "</td></tr>" +
-            "<tr><th scope='col'>Rounded Off</th><td></td><td></td><td></td><td></td><td></td><td></td><td id='less'>" + less.toFixed(2) + "</td></tr>" +
-            "<tr><th scope='col'>Total</th><td></td><td></td><td>" + $("#total").text() + "</td><td></td><td></td><td></td><td id='final_total'>" + Math.round(final_total).toFixed(2) + "</td></tr>" +
-            "<tr><td colspan='8'>Amount Chargeable (in words)<span class='text-end'>E.& O.E</span><br><b> INR " + words + "</b></td></tr>" +
+        $("#purchase_order_details").append("<tr><th scope='col' colspan='3' class='text-center'>Total</th></td><td></td><td></td><td></td><td></td><td id='raw_material_total_amount_id'>" + $("#raw_material_total_amount_id").text() + "</td></tr>" +
+            "<tr><td style='max-width: 5px;'></td><td id='gst_details'>" + gst_details + "</td><td></td><td></td><td></td><td></td><td></td><td id='gst_amount_details'>" + gst_amount_details + "</td></tr>" +
+            "<tr><td style='max-width: 5px;'></td><th scope='col'>Rounded Off</th><td></td><td></td><td></td><td></td><td></td><td id='less'>" + less.toFixed(2) + "</td></tr>" +
+            "<tr><td style='max-width: 5px;'></td><th scope='col'>Net Total</th><td></td><td>" + $("#total").text() + "</td><td></td><td></td><td></td><td id='final_total'>" + Math.round(final_total).toFixed(2) + "</td></tr>" +
+            "<tr><td colspan='8'>Amount Chargeable (in words)<span class='eoe'>E.& O.E</span><br><b> INR " + words + "</b></td></tr>" +
             "<tr><td colspan='4'>Remark <br>Po against by proforma</td><td colspan='4' class='text-end'><b>for JAYSAN AGRI INDUSTRIAL</b><br><br>Signature</td></tr>"
         );
         if (terms === "") {

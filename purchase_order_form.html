@@ -31,6 +31,9 @@
         #purchase_order_table tr {
             font-size: 12px;
         }
+        .eoe{
+            padding-left: 84%;
+        }
     </style>
 
 
@@ -241,7 +244,7 @@
                         </form>
                     </div>
 
-                    <div class="table-responsive mt-2">
+                    <div class="table-responsive mt-2" style="max-height: 450px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
                             <thead>
@@ -269,8 +272,8 @@
 
                         </table>
 
-                        <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
                     </div>
+                    <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
                 </div>
             </div>
         </div>
@@ -307,7 +310,7 @@
                         </tr>
                         <tr>
 
-                            <td style="width: 0;">S/No</td>
+                            <td style="max-width: 5px;">S/No</td>
                             <td>Description of Goods</td>
                             <td>Due on</td>
                             <td>Quantity</td>
@@ -438,7 +441,7 @@
     <!-- external js -->
     <script src="js/purchase_order_form.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
-    <script src="js/get_all_id.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
     <script src="js/mrf_popover.js" type="module"></script>
 
 </body>
