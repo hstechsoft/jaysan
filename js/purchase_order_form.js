@@ -1225,10 +1225,11 @@ function get_po_list() {
 
                     if (obj.email_sent == '1') {
                         ic += "<i class='fa-solid fa-envelope-circle-check text-success'></i>";
-                        edit;
                     }
-                    if (obj.email_sent == '0') {
-                        edit = "<i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i>";
+                    // if (obj.email_sent == '0')
+                         {
+
+                        edit += "<i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i>";
                         // ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
                     if (obj.approve_sts == '0') {
