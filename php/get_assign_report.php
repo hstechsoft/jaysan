@@ -285,7 +285,7 @@ SELECT
          soiv.type_name,
          '</p>',
          '<p class=\" m-0 p-0 small \"> Qty :',
-         soiv.required_qty,
+         total_ass_pro_qty,
          '</p></div><p class=\" m-0 p-0 small text-muted\">',
          soiv.sub_type,
          '</p>'
