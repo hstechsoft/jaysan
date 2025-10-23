@@ -2,10 +2,17 @@
  include 'db_head.php';
 
 //  demo text 12345
+$material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
+  $material_query = ($material_query == '') ? "1" :  " jmat.po_material_id = '$material_query'";
 
-  $material_query = ($_GET['material_query']);
-  $date_query = ($_GET['date_query']);
-  $order_to_query = ($_GET['order_to_query']);
+   $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
+    $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+    
+  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " jaysan_po.po_date between   '$from_date' and '$to_date' ";
+
+
+  $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
+  $order_to_query = ($order_to_query == '') ? "1" :  "jp.po_order_to = '$order_to_query'";
  
  
 function test_input($data) {
@@ -31,11 +38,12 @@ $sql = "SET time_zone = '+05:30';";
 
 $sql .= "SELECT
     jp.po_no,
-        jp.po_id,
+    jp.po_id,
     jp.po_date,
     (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to) order_to,
-    sum(jmat.qty) as total_po_qty,
-    sum(grn.qty) as inward_qty
+    sum(jmat.qty) over (partition by jp.po_id) as total_po_qty,
+        sum(jmat.qty) over (partition by grn.    ) as inward_qty
+  
  
 FROM
     jaysan_po jp

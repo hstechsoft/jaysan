@@ -1,7 +1,8 @@
 <?php
  include 'db_head.php';
 
-//  demo text 12345
+ 
+$part_id = test_input(($_GET['part_id']));
 
  
 function test_input($data) {
@@ -14,23 +15,19 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT
-    po.*,
-    (SELECT creditors.creditor_name 
-     FROM creditors 
-     WHERE creditors.creditor_id = po.po_order_to) AS order_to_name,
-    CASE 
-        WHEN MIN(pom.is_approved) = 1 THEN 1   -- all approved
-        ELSE 0                                 -- at least one not approved
-    END AS approve_sts
-   
+COUNT(mrf.mrf_id) as freq,
+sum(mrf.req_qty) as total_req_qty,
+    mrf_purchase.mrf_id,
+    creditors.creditor_name,
+    creditors.creditor_id
+    
 FROM
-    jaysan_po po
-INNER JOIN jaysan_po_material pom 
-    ON po.po_id = pom.jaysan_po_id
-GROUP BY
-    po.po_id;
-";
-    // jmat.po_material_id = '' AND jp.po_order_to = 1";
+    mrf_purchase
+    INNER JOIN creditors ON mrf_purchase.po_order_to = creditors.creditor_id
+inner join material_request_form mrf on mrf_purchase.mrf_id = mrf.mrf_id 
+WHERE
+    mrf.part_id = $part_id
+GROUP by mrf_purchase.po_order_to";
 
 if ($conn->multi_query($sql)) {
     do {
@@ -51,7 +48,6 @@ if ($conn->multi_query($sql)) {
     echo "Error: " . $conn->error;
 }
 $conn->close();
-
 
  ?>
 

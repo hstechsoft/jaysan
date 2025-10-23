@@ -1,7 +1,8 @@
 <?php
  include 'db_head.php';
 
-//  demo text 12345
+ 
+
 
  
 function test_input($data) {
@@ -13,24 +14,7 @@ return $data;
 }
 
 $sql = "SET time_zone = '+05:30';";
-$sql .= "SELECT
-    po.*,
-    (SELECT creditors.creditor_name 
-     FROM creditors 
-     WHERE creditors.creditor_id = po.po_order_to) AS order_to_name,
-    CASE 
-        WHEN MIN(pom.is_approved) = 1 THEN 1   -- all approved
-        ELSE 0                                 -- at least one not approved
-    END AS approve_sts
-   
-FROM
-    jaysan_po po
-INNER JOIN jaysan_po_material pom 
-    ON po.po_id = pom.jaysan_po_id
-GROUP BY
-    po.po_id;
-";
-    // jmat.po_material_id = '' AND jp.po_order_to = 1";
+$sql .= "SELECT count(mrf.part_id) as frq,sum(mrf.req_qty)as total_req_qty,mrf.mrf_id,mrf.part_id,parts_tbl.part_name FROM `material_request_form` mrf INNER join parts_tbl on mrf.part_id = parts_tbl.part_id GROUP by mrf.part_id;";
 
 if ($conn->multi_query($sql)) {
     do {
@@ -51,7 +35,6 @@ if ($conn->multi_query($sql)) {
     echo "Error: " . $conn->error;
 }
 $conn->close();
-
 
  ?>
 

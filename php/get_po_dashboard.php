@@ -2,12 +2,26 @@
  include 'db_head.php';
 
 //  demo text 12345
+$material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
 
-  $material_query = ($_GET['material_query']);
-  $date_query = ($_GET['date_query']);
-  $order_to_query = ($_GET['order_to_query']);
+
+  $material_query = ($material_query == '') ? "1" :  "mrf_purchase.raw_material_part_id = '$material_query'";
+  $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
+    $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
+    
+  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " mrf.dated between    '$from_date' and '$to_date' ";
+  $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
+    $order_to_query = ($order_to_query == '') ? "1" :  "mrf_purchase.po_order_to  = '$order_to_query'";
  
  
+    $emp_query = isset($_GET['emp_query']) ? $_GET['emp_query'] : '';
+    $emp_query = ($emp_query == '') ? "1" :  "create_emp.emp_id  = '$emp_query'";
+ 
+    $part_query = isset($_GET['part_query']) ? $_GET['part_query'] : '';
+
+    $part_query = ($part_query == '') ? "1" :  "mrf.part_id  = '$part_query'";
+ 
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -38,6 +52,7 @@ $sql .= "WITH
         mrf.emp_id,
         mrf.req_qty,
         mrf.req_date,
+        mrf_batch.batch_date,
         mrf.status,
         mrf.uom AS mrf_uom,
         mrf_batch.batch_id,
@@ -49,6 +64,15 @@ $sql .= "WITH
         mrf_purchase.approx_delivery_days,
         mrf_purchase.uom,
         mrf_purchase.raw_material_part_id,
+          (
+        SELECT
+            parts_tbl.part_name
+        FROM
+            parts_tbl
+        WHERE
+            parts_tbl.part_id = mrf.part_id
+    ) AS part_name,
+        (select emp_name from employee where emp_id = mrf_purchase.purchase_requested_by) as purchase_req_by,
         (
         SELECT
             parts_tbl.part_name
@@ -60,21 +84,23 @@ $sql .= "WITH
     create_emp.emp_name
 FROM
     material_request_form mrf
-LEFT JOIN employee create_emp ON
-    mrf.emp_id = create_emp.emp_id
+LEFT JOIN employee create_emp ON mrf.emp_id = create_emp.emp_id
 LEFT JOIN mrf_purchase ON mrf.mrf_id = mrf_purchase.mrf_id
 LEFT JOIN mrf_batch ON mrf.mrf_id = mrf_batch.mrf_id
-WHERE 1 order by mrf_id DESC
-   -- mrf.mrf_id = 209
-   --   create_emp.emp_id = 5
-   --      mrf.part_id = 2
+WHERE  $emp_query and  $date_query and $material_query and $order_to_query and $part_query order by mrf_id DESC
+
+   --   create_emp.emp_id = 5 
+   --      mrf_purchase.raw_material_part_id = 2
    -- mrf.dated between 
+   -- mrf_purchase.po_order_to = 2
+   --  mrf.part_id = 9
    
 ),
 po_cte AS(
     SELECT
         mrf_cte.*,
         jpm.jaysan_po_id,
+        (select po_date from jaysan_po where po_id =   jpm.jaysan_po_id) as po_date,
         jpm.qty AS po_batch_qty,
         jpm.due_on,
         jpm.jaysan_po_material_id
@@ -127,13 +153,13 @@ GROUP BY
 SELECT
     final_cte.*,
     if(mrf_purchase_id is null ,'no purchase entry',JSON_ARRAYAGG(
-            JSON_OBJECT('batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
+            JSON_OBJECT('po_date',po_date,'batch_date',batch_date,'batch_id',batch_id,'batch_qty',batch_qty,'po_no',jaysan_po_id,'total_received',rm_receive_qty_total,'due_date',due_on,'due_sts',if(due_on is null , 'no_sts',if(CURDATE() > due_on,'expire','active')),'receive_details',rd)) )as batch
     
     
 FROM
     final_cte
 GROUP BY
-    mrf_id";
+    mrf_id order by mrf_id desc limit 30";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
 if ($conn->multi_query($sql)) {
@@ -158,3 +184,4 @@ $conn->close();
 
 
  ?>
+

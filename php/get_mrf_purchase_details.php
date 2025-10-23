@@ -13,8 +13,8 @@ $data = "'".$data."'";
 return $data;
 }
 
-
- $sql = "SELECT
+$sql = <<<SQL
+SELECT
     mrf.*,
     pur.*,
   (SELECT creditors.creditor_name from creditors WHERE creditors.creditor_id = pur.po_order_to) as creditors_name,
@@ -42,7 +42,9 @@ LEFT JOIN mrf_purchase pur ON
     mrf.mrf_id = pur.mrf_id
 WHERE
     mrf.mrf_id = (SELECT 
-    IF(EXISTS(SELECT 1 FROM mrf_purchase WHERE mrf_id =  $mrf_id), $mrf_id, ifnull((SELECT pur.mrf_id from material_request_form mrf LEFT join mrf_purchase pur on  mrf.mrf_id = pur.mrf_id WHERE mrf.part_id = $part_id ORDER by mrf_id DESC LIMIT 1),0)))";
+    IF(EXISTS(SELECT 1 FROM mrf_purchase WHERE mrf_id =  $mrf_id), $mrf_id, ifnull((SELECT pur.mrf_id from material_request_form mrf LEFT join mrf_purchase pur on  mrf.mrf_id = pur.mrf_id WHERE mrf.part_id = $part_id ORDER by mrf_id DESC LIMIT 1),0)))  group by mrf.mrf_id
+SQL;
+
 
 $result = $conn->query($sql);
 

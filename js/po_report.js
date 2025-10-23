@@ -106,7 +106,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.part_name,
                                     value: item.part_name,
-                                    id: item.po_material_id
+                                    id: item.part_id
                                 };
                             }));
                         },
@@ -117,8 +117,8 @@ $(document).ready(function () {
                 },
                 select: function (event, ui) {
                     // When a user selects a suggestion
-                    $(this).data("po_material_id", ui.item.id);
-                    console.log("po_material_id :", ui.item);
+                    $(this).data("part_id", ui.item.id);
+                    console.log("part_id :", ui.item);
                 }
             })
                 // ✅ Custom rendering of autocomplete dropdown
@@ -134,25 +134,24 @@ $(document).ready(function () {
 
     $("#poreport_search").on("click", function () {
 
-        var part = '1';
-        var company = '1';
-        var date = '1';
 
         if ($("#from_date").val() && $("#to_date").val()) {
 
-            date = "po.date between '" + $("#from_date").val() + "' and '" + $('#to_date').val() + "'"
+            var from_date = $("#from_date").val();
+            var to_date =$('#to_date').val();
         }
-        if ($("#part").val()) {
-            part = $("#part").val();
+        if ($("#part").data("part_id")) {
+            var part = $("#part").data("part_id");
         }
-        if ($("#company").val()) {
-            company = $("#company").val();
+        if ($("#company").data("po_order_to")) {
+            var company = $("#company").data("po_order_to");
         }
         console.log(part);
         console.log(company);
-        console.log(date);
+        console.log(from_date);
+        console.log(to_date);
 
-        get_po_report(part, company, date);
+        get_po_report(part, company, from_date, to_date);
     })
 
     $("#po_report_reset").on("click", function () {
@@ -160,18 +159,90 @@ $(document).ready(function () {
     })
 
     $("#poreport_table").on("click", "tr", function () {
+
         get_po_receive_sts($(this).data("po_id"));
+    })
+    $("#poreport_item_table").on("input", "tr td", function () {
+        $("#po_report_input").removeClass("d-none");
+        var original_qnty = parseInt($(this).data("org_qty"));
+        var enter_qnty = parseInt($(this).text());
+        if (isNaN(enter_qnty)) {
+            $(this).text('');
+        } else if (enter_qnty > original_qnty) {
+            $(this).text(original_qnty);
+        } else if (enter_qnty < 0) {
+            $(this).text(0);
+        }
+    })
+
+    $("#po_report_btn").on("click", function () {
+        let details_po = [];
+        $("#poreport_item_table").find("tr").each(function () {
+
+            let po_id = $(this).data("jaysan_po_material_id");
+            let po_qty = $(this).find("td").eq(5).text();
+            if (po_id && po_qty != '0') {
+                details_po.push({
+                    jaysan_po_material_id: po_id,
+                    qty: po_qty,
+                });
+            }
+
+        })
+        let dc_no = $("#dc_no").val();
+        let dc_date = $("#dc_date").val();
+        if (dc_no != '' && dc_date != '' && details_po.length > 0) {
+            insert_grn(dc_no, dc_date, details_po);
+        }
+        else {
+            shw_toast('empty field', 'enter the fields');
+        }
     })
 });
 
 
 
 
+function insert_grn(dc_no, dc_date, details_po) {
+    $.ajax({
+        url: "php/insert_grn.php",
+        type: "get", //send it through get method
+        data: {
+            dc_no: dc_no,
+            dc_date: dc_date,
+            receive_details: JSON.stringify(details_po),
+            received_by: current_user_id,
+
+
+        },
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                location.reload();
+
+            }
+
+            else {
+                salert("Error", "User ", "error");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
+
 
 function get_po_receive_sts(po_id) {
     $.ajax({
         url: "php/get_po_receive_sts.php",
-        type: "get", //send it through get method
+        type: "get", //send /it through get method
         data: {
             po_id: po_id,
 
@@ -191,6 +262,9 @@ function get_po_receive_sts(po_id) {
                 obj.forEach(function (obj) {
                     count += 1;
                     var rjd = "";
+                    var org_qty = parseInt(obj.qty) - parseInt(obj.total_received);
+                    console.log(org_qty);
+
                     if (obj.receive_json_sts == 'nothing received') {
                         rjd = "<li class='list-group-item text-center text-danger'>Nothing Received</li>"
                     }
@@ -201,7 +275,7 @@ function get_po_receive_sts(po_id) {
                         })
                     }
 
-                    $("#poreport_item_table").append("<tr data-op_id='po_id'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  >" +rjd + "</ul></td><td>" +  obj.total_received + "</td></tr>")
+                    $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + "><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:200px; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
                 });
 
             }
@@ -221,14 +295,15 @@ function get_po_receive_sts(po_id) {
 
 
 
-function get_po_report(part, company, date) {
+function get_po_report(part, company, fdate, tdate) {
     $.ajax({
         url: "php/get_po_report.php",
         type: "get", //send it through get method
         data: {
             material_query: part,
-            date_query: date,
-            order_to_query: company
+            order_to_query: company,
+            from_date: fdate,
+            to_date: tdate,
 
 
         },
@@ -254,7 +329,7 @@ function get_po_report(part, company, date) {
                     }
                     percentage = Math.round(percentage);
                     if (percentage != 0) {
-                        status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "</div></div>" + percentage + "% Received";
+                        status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received";
                     }
                     else {
                         status = 'Not Received';

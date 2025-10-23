@@ -138,12 +138,46 @@
                                 <th scope="col">PO Quantity</th>
                                 <th scope="col">Received Quantity</th>
                                 <th scope="col">Total Received</th>
+                                <th scope="col">Quantity</th>
 
                             </tr>
                         </thead>
                         <tbody id="poreport_item_table">
                         </tbody>
                     </table>
+                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation d-none" id="po_report_input" novalidate
+                        onsubmit="return false">
+                        <div class="row " >
+                            <div class="col-4">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="dc_no" placeholder=""
+                                        required>
+                                    <label for="dc_no">Dc No
+                                        <span class="text-danger">*</span> </label>
+
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild Data
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-floating mb-2">
+                                    <input type="date" class="form-control rounded-3" id="dc_date" placeholder=""
+                                        required>
+                                    <label for="dc_date">Dc Date
+                                        <span class="text-danger">*</span> </label>
+
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild Data
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <button type="submit" class="btn btn-primary" id="po_report_btn">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
             <!-- content -->

@@ -27,6 +27,13 @@
         .custom-scroll::-webkit-scrollbar {
             display: none;
         }
+
+        /* #purchase_order_table tr {
+            font-size: 12px;
+        } */
+        .eoe{
+            padding-left: 84%;
+        }
     </style>
 
 
@@ -237,7 +244,7 @@
                         </form>
                     </div>
 
-                    <div class="table-responsive mt-2">
+                    <div class="table-responsive mt-2" style="max-height: 450px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
                             <thead>
@@ -265,8 +272,8 @@
 
                         </table>
 
-                        <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
                     </div>
+                    <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
                 </div>
             </div>
         </div>
@@ -275,38 +282,35 @@
             <h3 class="text-center">PURCHASE ORDER</h3>
 
             <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped " id="purchase_order_table">
+                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;" id="purchase_order_table">
                     <thead>
 
                         <tr>
-                            <th scope="col" rowspan="4" colspan="3" id="invoice_to">Invoice To</th>
-                            <th scope="col" colspan="2">Voucher No</th>
-                            <th scope="col" colspan="3">Date</th>
+                            <th scope="col" rowspan="3" colspan="2" id="invoice_to">Invoice To</th>
+                            <th scope="col" colspan="3" id="voucher_no">Voucher No</th>
+                            <th scope="col" colspan="3">Dated</th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="2"></th>
-                            <th scope="col" colspan="3">Model/Terms of payment</th>
+                            <th scope="col" colspan="3"></th>
+                            <th scope="col" colspan="3">Mode/Terms of payment</th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="2">Reference No. & Date</th>
+                            <th scope="col" colspan="3">Reference No. & Date</th>
                             <th scope="col" colspan="3">Other References</th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="2">Dispatched through</th>
+                            <th scope="col" colspan="2" id="consignee">Consignee</th>
+                            <th scope="col" colspan="3">Dispatched through</th>
                             <th scope="col" colspan="3">Destination</th>
                         </tr>
                         <tr>
-                            <th scope="col" colspan="3" id="consignee">Consignee</th>
-                            <th scope="col" rowspan="2" colspan="5" id="terms_of_delivery" class="text-start align-top">
-                            </th>
-                            Terms of Delivery</th>
-                        </tr>
-                        <tr>
-                            <th scope="col" colspan="3" id="supplier">Supplier</th>
+                            <th scope="col" colspan="2" id="supplier">Supplier</th>
+                            <th scope="col" colspan="6" id="terms_of_delivery" class="text-start align-top">
+                                Terms of Delivery</th>
                         </tr>
                         <tr>
 
-                            <td>S/No</td>
+                            <td style="max-width: 5px;">S/No</td>
                             <td>Description of Goods</td>
                             <td>Due on</td>
                             <td>Quantity</td>
@@ -362,9 +366,10 @@
             <button type="submit" class="btn btn-primary d-none" id="mail_print"><i class="fa fa-envelope"></i>
                 / <i class="fa fa-print"></i> </button>
             <button type="submit" class="btn btn-primary d-none" id="update_po"><i class="fa fa-envelope"></i>
-                </button>
+            </button>
             <!--Loading Overlay -->
-            <div id="overlay" style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6);z-index: 9999; color: white; font-size: 1.5rem; text-align: center; padding-top: 20%; ">
+            <div id="overlay"
+                style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6);z-index: 9999; color: white; font-size: 1.5rem; text-align: center; padding-top: 20%; ">
                 <i class="fa-solid fa-spinner fa-spin"></i> Please wait, the mail is sending...
             </div>
 
@@ -387,6 +392,16 @@
 
                             <div class="invalid-feedback">
                                 Kindly Enter Vaild
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="po_no" placeholder="">
+                            <label for="po_no">Po No
+                                <span class="text-danger">*</span> </label>
+
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild Data
                             </div>
                         </div>
 

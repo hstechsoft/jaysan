@@ -15,6 +15,7 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT
+    (SELECT max(po_id)+1 from jaysan_po ) as max_po_no,
  sup.creditors_terms as terms,
     sup.creditor_name as sub_name,
     sup.creditors_addr as sub_addr,
