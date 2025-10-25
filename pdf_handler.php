@@ -9,11 +9,11 @@ use PHPMailer\PHPMailer\Exception;
 // ========= Collect Parameters =========
 $params = [
     'save_path'     => $_POST['save_path'] ?? '',
-        'unique_file' => $_POST['unique_file'] ?? 'no', // ✅ New parameter
+    'unique_file'   => $_POST['unique_file'] ?? 'no',
     'file_name'     => $_POST['file_name'] ?? 'invoice.pdf',
     'header_html'   => $_POST['header_html'] ?? '',
     'footer_html'   => $_POST['footer_html'] ?? '',
-    'body_html'     => $_POST['body_html'] ?? '<h1>No data provided</h1>',
+    'body_html'     => urldecode($_POST['body_html'] ?? '<h1>No data provided</h1>'),
     'orientation'   => $_POST['orientation'] ?? 'portrait',
     'paper_size'    => $_POST['paper_size'] ?? 'A4',
     'margin_top'    => $_POST['margin_top'] ?? '80px',
@@ -26,24 +26,16 @@ $params = [
     'watermark_text'=> $_POST['watermark_text'] ?? ''
 ];
 
-
-
-
-
-
-$params['body_html'] = urldecode($params['body_html']);
+// ========= Prepare Save Path =========
 if (empty($params['save_path'])) {
-    // fallback if nothing provided
     $params['save_path'] = __DIR__ . '/storage/pdf/invoice_' . time();
 }
-
 
 $dir = dirname($params['save_path']);
 if (!is_dir($dir)) {
     mkdir($dir, 0775, true);
 }
 
-// ✅ Add timestamp or .pdf depending on unique_file
 if (strtolower($params['unique_file']) === 'yes') {
     $params['save_path'] .= '_' . time() . '.pdf';
 } else {
@@ -55,10 +47,19 @@ $options = new Options();
 $options->set('isHtml5ParserEnabled', true);
 $options->set('isRemoteEnabled', true);
 $options->set('defaultFont', 'DejaVu Sans');
-
 $dompdf = new Dompdf($options);
 
-// ========= Build Watermark =========
+// ========= Load External CSS =========
+$cssPath = __DIR__ . '/invoice_style.css';
+$css = file_exists($cssPath) ? file_get_contents($cssPath) : '';
+
+$css = str_replace(
+    ['80px', '40px', '50px', '40px'],
+    [$params['margin_top'], $params['margin_right'], $params['margin_bottom'], $params['margin_left']],
+    $css
+);
+
+// ========= Watermark =========
 $watermarkHtml = '';
 if (!empty($params['watermark_text'])) {
     $watermarkHtml = "
@@ -72,43 +73,49 @@ if (!empty($params['watermark_text'])) {
 $html = "
 <html>
 <head>
-  <style>
-    @page { margin: {$params['margin_top']} {$params['margin_right']} {$params['margin_bottom']} {$params['margin_left']}; }
-    header { position: fixed; top: -{$params['margin_top']}; left: 0; right: 0; height: 60px; }
-    footer { position: fixed; bottom: -{$params['margin_bottom']}; left: 0; right: 0; height: 30px; text-align:center; font-size:10px; color:#666; }
-    body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
-    .page-break { page-break-after: always; }
-
-    /* Clean Invoice Table */
-    table { border-collapse: collapse; width: 100%; font-size: 12px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-    th { background: #f2f2f2; }
-    tfoot td { font-weight: bold; background: #eee; }
-    thead { display: table-header-group; }
-    tfoot { display: table-footer-group; }
-  </style>
+<meta charset='UTF-8'>
+<style>
+$css
+</style>
 </head>
 <body>
   $watermarkHtml
-  <header>{$params['header_html']}</header>
-  <footer>{$params['footer_html']}<br>Page {PAGE_NUM} of {PAGE_COUNT}</footer>
+  <div class='header'>{$params['header_html']}</div>
+  <div class='footer'>{$params['footer_html']}<br>Page {PAGE_NUM} of {PAGE_COUNT}</div>
   <main>{$params['body_html']}</main>
 </body>
 </html>";
 
 // ========= Render PDF =========
-$dompdf->loadHtml($html, 'UTF-8');
+$dompdf->loadHtml($html);
 $dompdf->setPaper($params['paper_size'], $params['orientation']);
 $dompdf->render();
 
-// ========= Auto-create Folder & Save =========
+// ========= Add “To be continued…” on all pages except the last =========
+$canvas = $dompdf->getCanvas();
+$pageCount = $canvas->get_page_count();
+$font = $dompdf->getFontMetrics()->getFont("DejaVu Sans", "normal");
+$fontSize = 10;
 
+for ($i = 1; $i < $pageCount; $i++) {
+    $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $font, $fontSize) {
+        if ($pageNumber < $pageCount) {
+            $width = $canvas->get_width();
+            $height = $canvas->get_height();
+            $text = "To be continued...";
+            $textWidth = $canvas->getTextWidth($text, $font, $fontSize);
+            $x = ($width - $textWidth) / 2;
+            $y = $height - 30; // Position 30px from bottom
+            $canvas->text($x, $y, $text, $font, $fontSize);
+        }
+    }, $font, $fontSize);
+}
 
+// ========= Save File =========
 $pdfOutput = $dompdf->output();
 if (file_put_contents($params['save_path'], $pdfOutput) === false) {
-    $result = ['status' => 'error', 'message' => "❌ Could not save file at {$params['save_path']}"];
     header('Content-Type: application/json');
-    echo json_encode($result);
+    echo json_encode(['status' => 'error', 'message' => "❌ Could not save file at {$params['save_path']}"]);
     exit;
 }
 
@@ -140,12 +147,12 @@ if (!empty($params['email_to'])) {
     $email_status = '📄 File saved (email not sent)';
 }
 
-// ========= Return JSON for AJAX =========
+// ========= Return JSON =========
 header('Content-Type: application/json');
 echo json_encode([
     'status' => 'ok',
     'message' => '✅ PDF generated successfully!',
     'email_status' => $email_status,
-    'file_path' => $params['save_path'],       // Full path
-    'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path']) // for frontend
+    'file_path' => $params['save_path'],
+    'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
 ]);
