@@ -241,16 +241,17 @@ pma AS(
 pma_result AS(
     SELECT
         pma.actual_date,
+        mq,
         pma.opid,
         ul(
             "",
-            GROUP_CONCAT(
+         concat(li_class("active","Modification Requested"),   GROUP_CONCAT(
                 li(
                     CONCAT(date_only(modify_date),
                     '-',
                     mq)
                 ) SEPARATOR ''
-            )
+            ))
         ) AS modify_html
     FROM
         pma
@@ -261,6 +262,7 @@ pma_result AS(
 assign_product_full AS(
     SELECT
         assign_product_cte_result.opid,
+        mq,
         assign_product_cte_result.dcf_id,
         assign_product_cte_result.total_ass_pro_qty,
         assign_product_cte_result.dated AS assgin_date,
@@ -271,6 +273,10 @@ assign_product_full AS(
 )
 SELECT
     assign_product_full.opid,
+    mq,
+    soiv.model_id,
+    soiv.type_id,
+    soiv.sub_type,
     assign_product_full.total_ass_pro_qty,
     assign_product_full.assgin_date,
     assign_product_full.modify_html,
@@ -285,11 +291,12 @@ SELECT
          soiv.type_name,
          '</p>',
          '<p class=\" m-0 p-0 small \"> Qty :',
-         soiv.required_qty,
+        total_ass_pro_qty,
          '</p></div><p class=\" m-0 p-0 small text-muted\">',
          soiv.sub_type,
          '</p>'
          ) AS product_html
+
 FROM
     assign_product_full
 LEFT JOIN sales_order_info_view soiv ON
