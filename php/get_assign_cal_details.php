@@ -42,7 +42,7 @@ LEFT JOIN (
         ass.dated AS Date, 
         SUM(ass.qty) AS tot
     FROM 
-        assign_product ass where ass.assign_type = 'Production'
+        assign_product ass where ass.assign_type = 'Production' and dcf_id = 0
     GROUP BY 
         ass.dated
 ) att_data 

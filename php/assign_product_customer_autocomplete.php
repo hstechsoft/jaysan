@@ -82,7 +82,7 @@ FROM
 ) AS cus_info
 INNER JOIN customer ON cus_info.customer_id = customer.cus_id
 GROUP BY
-    oid) as final WHERE cus_name like '$term'";
+    oid) as final WHERE cus_name like '$term' group by cus_id";
 
 $result = $conn->query($sql);
 
