@@ -4,15 +4,38 @@ include 'db_head.php';
 
 
 $data = json_decode($_POST['allWeldingData'], true);
-
 $output_part_pr =  $_POST['output_part'];
+$did =  $_POST['did'];
 $component_cat =  $_POST['component_cat'];
 
 $totalRows = count($data); 
 $output_part ="0";
 $pre_process_id = "0";
 $cat = "" ;// Initialize pre_process_id to 0
+
+
+foreach ($did as $row) {
+
+
+$sql = "DELETE from process_wel_tbl WHERE process_id = $row" ;
+
+
+
+
+if ($conn->query($sql) === TRUE) {
+   
+  } else {
+    
+  }
+
+}
 foreach ($data as $row) {
+
+
+
+
+
+
    $process_id = $row['process']['process_id'];
 
    if ($row === end($data))
@@ -22,8 +45,7 @@ foreach ($data as $row) {
     }
  
 
-   
-   $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat)
+    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat)
    VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat')";
  
  if ($conn->query($sql_process) === TRUE) {
@@ -48,35 +70,6 @@ $in_pre_id = $pre_process_id;
       }
 
    }
-
-
-     if (count($row['extra_details']) > 0 ) 
-  {
-    foreach ($row['extra_details'] as $extra) {
-            $godown_id = isset($extra['godown_id']) ? $extra['godown_id'] : '';
-            $dep_id = isset($extra['dep_id']) ? $extra['dep_id'] : '';
-            $dep_sec_id = isset($extra['dep_sec_id']) ? $extra['dep_sec_id'] : '';
-            $dep_sec_machine_id = isset($extra['dep_sec_machine_id']) ? $extra['dep_sec_machine_id'] : '';
-            $min_time = isset($extra['min_time']) ? $extra['min_time'] : '';
-            $max_time = isset($extra['max_time']) ? $extra['max_time'] : '';
-          
-            $cost = isset($extra['cost']) ? $extra['cost'] : '';
-
-            $dep_id = sql_nullable($dep_id);
-            $dep_sec_id = sql_nullable($dep_sec_id);
-            $dep_sec_machine_id = sql_nullable($dep_sec_machine_id);
-
-            $insert_part = "INSERT INTO `process_extra_details` ( `godown_id`, `dep_id`, `dep_sec_id`, `dep_sec_machine_id`, `min_time`, `max_time`, `process_id`, `cost`) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$last_insert_id', '$cost');";
-
-if ($conn->query($insert_part) === TRUE) {
-    // Retrieve the last inserted ID
-   
-} else {
-    echo "Error: " . $insert_part . "<br>" . $conn->error;
-}
-           
-    }
-  }
 
    if ($row === end($data))
    {
