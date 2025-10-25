@@ -202,7 +202,56 @@
             <div class="col-md-4">
                 <div class="card calender" id="calender_card">
                     <h4 class="text-center">Calender Report</h4>
-                    <div class="card-body" id="calender"></div>
+                    <div class="card-body" id="calender">
+                                <div id="calendar_div" >
+                        <div id="calendar" class="p-2"></div>
+                        <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
+                            <div>
+                                <div class='input-group  input-group-sm' >
+                              
+                                    <input type='date' disabled id='production_date' class='form-control' placeholder='Date' >
+                                    
+                                    </div>
+                            </div>
+                          <div>
+                            <button id="assign_date_btn" type="button" class="btn btn-primary btn-sm">Ok</button>
+
+                          </div>
+                            
+                        </div> -->
+
+                
+                        <!-- <div class="card">
+                            <div class="card-header small">
+                                Order Details
+                            </div>
+                            <div class="card-body">
+                           
+                            </div>
+                        </div> -->
+
+                        <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
+                            <table id='production_table1' class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
+                                <thead class="small">
+                                    <tr class="small">
+                                        <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report</th>
+                                    </tr>
+                                    <tr class="small">
+                                        <th scope='col'>#</th>
+                                        <th scope='col'>Customer</th>
+                                        <th scope='col'>Machine</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='align-middle' id='production_table'>
+                                    <!-- Dynamic rows go here -->
+
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                    
+                    </div>
                 </div>
             </div>
         </div>

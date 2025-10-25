@@ -348,27 +348,27 @@ function get_assign_report() {
 
     if ($("#form_date").val() && $("#to_date").val()) {
 
-        date_query = "assign_info.dated between '" + $("#form_date").val() + "' and '" + $('#to_date').val() + "'"
+        date_query = " assign_product_full.assgin_date between '" + $("#form_date").val() + "' and '" + $('#to_date').val() + "'"
     }
     if ($("#customer").val()) {
 
-        cus_query = "assign_info.customer_id = '" + $("#customer").data("selected-cus_id") + "'"
+        cus_query = "soiv.customer_id = '" + $("#customer").data("selected-cus_id") + "'"
     }
     if ($("#product").val()) {
 
-        product_query = "assign_info.product = '" + $("#product").find("option:selected").text() + "'"
+        product_query = "soiv.product = '" + $("#product").find("option:selected").text() + "'"
     }
     if ($("#model").val()) {
 
-        model_query = "assign_info.model_id = '" + $("#model").val() + "'"
+        model_query = "soiv.model_id = '" + $("#model").val() + "'"
     }
     if ($("#type_drop").val()) {
 
-        type_query = "assign_info.type_id = '" + $("#type_drop").val() + "'"
+        type_query = "soiv.type_id = '" + $("#type_drop").val() + "'"
     }
     if ($("#sub_type").val()) {
 
-        sub_type_query = "assign_info.sub_type = '" + $("#sub_type").val() + "'"
+        sub_type_query = "soiv.sub_type = '" + $("#sub_type").val() + "'"
     }
 // console.log($("#product").find("option:selected").text());
 
@@ -401,7 +401,7 @@ function get_assign_report() {
                         count = count + 1;
                         // append logic here
 
-                        $("#report_tbl").append("<tr><td>" + count + "</td ><td>" + obj.cus_info + "</td><td>" + obj.product_html + "</td><td>" + obj.dated + "</td></tr>");
+                        $("#report_tbl").append("<tr><td>" + count + "</td ><td>" + obj.cus_info + "</td><td>" + obj.product_html +"</td><td>" + obj.assgin_date + "</td></tr>");
                     });
 
 
