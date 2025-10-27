@@ -19,7 +19,8 @@ return $data;
  $sql = "INSERT INTO dep_sec_machine ( ) VALUES ($)";
 
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+  $last_id = $conn->insert_id;
+   echo   $last_id;
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
