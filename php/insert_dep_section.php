@@ -15,8 +15,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-
- $sql = "INSERT INTO dep_section ( ) VALUES ($)";
+ $sql = "INSERT INTO dep_section ( dep_id,sec_name) VALUES ($dep_id,$sec_name)";
 
   if ($conn->query($sql) === TRUE) {
   $last_id = $conn->insert_id;

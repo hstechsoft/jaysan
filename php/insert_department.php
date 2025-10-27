@@ -16,7 +16,7 @@ return $data;
 }
 
 
- $sql = "INSERT INTO department ( ) VALUES ($)";
+ $sql = "INSERT INTO department ( godown_id,dep_name) VALUES ($godown_id,$dep_name)";
 
   if ($conn->query($sql) === TRUE) {
    $last_id = $conn->insert_id;
