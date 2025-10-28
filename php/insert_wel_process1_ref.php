@@ -4,7 +4,6 @@ include 'db_head.php';
 
 
 $data = json_decode($_POST['allWeldingData'], true);
-
 $output_part_pr =  $_POST['output_part'];
 $component_cat =  $_POST['component_cat'];
 
@@ -48,35 +47,6 @@ $in_pre_id = $pre_process_id;
       }
 
    }
-
-
-     if (count($row['extra_details']) > 0 ) 
-  {
-    foreach ($row['extra_details'] as $extra) {
-            $godown_id = isset($extra['godown_id']) ? $extra['godown_id'] : '';
-            $dep_id = isset($extra['dep_id']) ? $extra['dep_id'] : '';
-            $dep_sec_id = isset($extra['dep_sec_id']) ? $extra['dep_sec_id'] : '';
-            $dep_sec_machine_id = isset($extra['dep_sec_machine_id']) ? $extra['dep_sec_machine_id'] : '';
-            $min_time = isset($extra['min_time']) ? $extra['min_time'] : '';
-            $max_time = isset($extra['max_time']) ? $extra['max_time'] : '';
-          
-            $cost = isset($extra['cost']) ? $extra['cost'] : '';
-
-            $dep_id = sql_nullable($dep_id);
-            $dep_sec_id = sql_nullable($dep_sec_id);
-            $dep_sec_machine_id = sql_nullable($dep_sec_machine_id);
-
-            $insert_part = "INSERT INTO `process_extra_details` ( `godown_id`, `dep_id`, `dep_sec_id`, `dep_sec_machine_id`, `min_time`, `max_time`, `process_id`, `cost`) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$last_insert_id', '$cost');";
-
-if ($conn->query($insert_part) === TRUE) {
-    // Retrieve the last inserted ID
-   
-} else {
-    echo "Error: " . $insert_part . "<br>" . $conn->error;
-}
-           
-    }
-  }
 
    if ($row === end($data))
    {
