@@ -137,9 +137,10 @@ if ($conn->multi_query($sql)) {
       $model = $product['model'];
       $subtype = $product['subtype'];
       $qty = $product['qty']; 
-
+      $price = $product['price']; 
+       $billing_amount = $product['billing_amount']; 
   
-      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty) VALUES ( $sales_oid, '$type', '$model', '$subtype', '$qty');";
+      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price,billing_amount) VALUES ( $sales_oid, '$type', '$model', '$subtype', '$qty','$price','$billing_amount');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           

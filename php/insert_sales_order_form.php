@@ -118,8 +118,9 @@ if($paymentDetails != 0)
       $subtype = $product['subtype'];
       $qty = $product['qty']; 
       $price = $product['price']; 
+       $billing_amount = $product['billing_amount']; 
   
-      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price) VALUES ( '$oid', '$type', '$model', '$subtype', '$qty','$price');";
+      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price,billing_amount) VALUES ( '$oid', '$type', '$model', '$subtype', '$qty','$price','$billing_amount');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
