@@ -25,7 +25,7 @@ return $data;
 $dcf_id = 0;
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$dcf_report)";
+$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$dcf_report,$narration)";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)

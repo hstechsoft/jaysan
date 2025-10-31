@@ -119,10 +119,11 @@ if ($conn->multi_query($sql)) {
       $ref_no = $payment['ref_no'];
       $amount = $payment['amount'];
       $payment_date = $payment['payment_date'];
+         $utr_no = $payment['utr_no'];
     
 
   
-      $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts) VALUES ( '$amount','$payment_date',$sales_oid, '$ref_no', 'not_approve');";
+      $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts,utr_no) VALUES ( '$amount','$payment_date',$sales_oid, '$ref_no', 'not_approve','$utr_no');";
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           
