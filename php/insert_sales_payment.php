@@ -5,6 +5,7 @@
 $payment_date = test_input($_GET['payment_date']);
 $oid = test_input($_GET['oid']);
 $ref_no = test_input($_GET['ref_no']);
+$utr_no = test_input($_GET['utr_no']);
 
 
 
@@ -21,7 +22,7 @@ return $data;
 
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts) VALUES ( $amount,$payment_date,$oid, $ref_no, 'not_approve');";
+$sql .= "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts,utr_no) VALUES ( $amount,$payment_date,$oid, $ref_no, 'not_approve',$utr_no);";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)
