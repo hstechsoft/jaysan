@@ -26,7 +26,7 @@ return $data;
 
 
 
-$sql =  " SELECT pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro from sales_order_product  sop
+$sql =  " SELECT pro,sopv.pay_details,DATE_FORMAT((sof.dated), '%d-%m-%Y %r')  as dated,sof.order_no,sof.oid,emp.emp_name as emp,emp.emp_id   ,concat(cus.cus_name , ' - ' , cus.cus_phone) as cus,cus.cus_type from (SELECT sof.customer_id,sof.emp_id,sop.oid,GROUP_CONCAT(concat('<div class = \"card \"><div class = \"card-header m-0 p-0 border border-1  \">',product,'</div><div class = \"card-body\">',sts,'</div></div>') SEPARATOR '') as pro from sales_order_product  sop
 INNER join sales_product_view spv  on  sop.opid = spv.opid 
  INNER join sales_order_sts_view sosv  on  sop.opid = sosv.opid 
 INNER join sales_order_form sof  on  sof.oid = sop.oid where sof.order_category = 'Sales' GROUP by oid) as sales_pro 

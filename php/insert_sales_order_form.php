@@ -99,10 +99,11 @@ if($paymentDetails != 0)
       $ref_no = $payment['ref_no'];
       $amount = $payment['amount'];
       $payment_date = $payment['payment_date'];
+        $utr_no = $payment['utr_no'];
     
 
   
-      $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts) VALUES ( '$amount','$payment_date','$oid', '$ref_no', 'not_approve');";
+      $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts,utr_no) VALUES ( '$amount','$payment_date','$oid', '$ref_no', 'not_approve','$utr_no');";
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           
@@ -118,8 +119,9 @@ if($paymentDetails != 0)
       $subtype = $product['subtype'];
       $qty = $product['qty']; 
       $price = $product['price']; 
+       $billing_amount = $product['billing_amount']; 
   
-      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price) VALUES ( '$oid', '$type', '$model', '$subtype', '$qty','$price');";
+      $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price,billing_amount) VALUES ( '$oid', '$type', '$model', '$subtype', '$qty','$price','$billing_amount');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
