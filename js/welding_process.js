@@ -225,25 +225,25 @@ $(document).ready(function () {
 
       console.log(allWeldingData);
 
-      // $.ajax({
+      $.ajax({
 
-      //   url: 'php/insert_wel_process1.php',
-      //   method: 'POST',
-      //   data: {
-      //     allWeldingData: JSON.stringify(allWeldingData),
-      //     output_part: output_part,
-      //     component_cat: sel_comp_cat,
-      //     // inputPartsData: inputPartsData,
+        url: 'php/insert_wel_process1.php',
+        method: 'POST',
+        data: {
+          allWeldingData: JSON.stringify(allWeldingData),
+          output_part: output_part,
+          component_cat: sel_comp_cat,
+          // inputPartsData: inputPartsData,
 
-      //   },
-      //   success: function (response) {
-      //     console.log(response);
-      //     if (response.trim() == "ok") {
-      //       issaved = "yes"
-      //       location.reload()
-      //     }
-      //   }
-      // });
+        },
+        success: function (response) {
+          console.log(response);
+          if (response.trim() == "ok") {
+            issaved = "yes"
+            location.reload()
+          }
+        }
+      });
 
 
 
@@ -273,14 +273,9 @@ $(document).ready(function () {
 
     if (tbl_valid == true) {
 
-
-
-
-
-
-
       var allWeldingData = [];
-      var output_part = "0"
+      var output_part = "0";
+      var count = 0;
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
 
@@ -309,6 +304,7 @@ $(document).ready(function () {
           allWeldingData.push({
             input_parts: inputPartsArr,
             process: processData,
+            extra_details: extra_bom[count] ? extra_bom[count] : extra_bom[count] = []
 
 
           });
