@@ -13,6 +13,7 @@ var sel_output_part_id = "0"
 var process_id_array = [];
 var sel_comp_cat = ""
 var extra_bom = [];
+let editingRow = null;
 $(document).ready(function () {
   //   $('[id]').each(function(){
 
@@ -273,6 +274,12 @@ $(document).ready(function () {
 
     if (tbl_valid == true) {
 
+
+
+
+
+
+
       var allWeldingData = [];
       var output_part = "0";
       var count = 0;
@@ -309,6 +316,7 @@ $(document).ready(function () {
 
           });
         }
+        count++;
       });
 
       console.log(allWeldingData);
@@ -980,15 +988,44 @@ $(document).ready(function () {
     console.log($(this).index());
     $("#godown_form")[0].reset();
     $("#godown_table_data").empty();
-    if ($(this).index() == 0)// Get the index of the clicked td
-    {
+    if ($(this).index() == 0) {
 
-      $("#welding_table .tbl_selected").removeClass("tbl_selected")
-      $(this).addClass("tbl_selected")
-      if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
-        $("#godown_data").removeClass("d-none");
-      }
-      else {
+      $("#welding_table .tbl_selected").removeClass("tbl_selected");
+      $(this).addClass("tbl_selected");
+
+      const encodedExtra = $(this).data("extra");
+
+      if (encodedExtra) {
+        try {
+          const extra_data = JSON.parse(decodeURIComponent(encodedExtra));
+          console.log(extra_data);
+
+          // show table rows
+          extra_data.forEach(function (extra_obj) {
+
+            $("#godown_table_data").append(`
+            <tr data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
+              <td></td>
+              <td>${extra_obj.godown_name}</td>
+              <td>${extra_obj.dep_name}</td>
+              <td>${extra_obj.dep_sec_name}</td>
+              <td>${extra_obj.dep_sec_machine_name}</td>
+              <td>${extra_obj.min_time} ${extra_obj.max_time}</td>
+              <td>${extra_obj.cost}</td>
+              <td>
+                <i class='fa fa-pen pe-2 text-warning edit_extra btn'></i>
+                <i class='fa fa-trash text-danger delete_extra btn'></i>
+              </td>
+            </tr>
+          `);
+          });
+
+          $("#godown_data").removeClass("d-none");
+        } catch (err) {
+          console.error("Error parsing extra data:", err);
+          // $("#godown_data").addClass("d-none");
+        }
+      } else {
         $("#godown_data").addClass("d-none");
       }
 
@@ -1098,7 +1135,24 @@ $(document).ready(function () {
 
 
   $('#godown').on('input', function () {
+    if ($(this).val().trim() === '') {
+      $(this).removeData("godown_id");
+    }
+
+    $('#department').val('').removeData("dept_id");
+    $('#section').val('').removeData("section_id");
+    $('#machine').val('').removeData("machine_id");
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
     $("#department_add_btn").addClass("d-none");
+    $("#section_add_btn").addClass("d-none");
+    $("#machine_add_btn").addClass("d-none");
+
+    $("#department_da").empty();
+    $("#section_da").empty();
+    $("#machine_da").empty();
 
     //check the value not empty
     if ($('#godown').val() != "") {
@@ -1153,7 +1207,20 @@ $(document).ready(function () {
   });
 
   $('#department').on('input', function () {
+    $("#department_add_btn").removeClass("d-none");
+    $('#section').val('').removeData("section_id");
+    $('#machine').val('').removeData("machine_id");
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
+
     $("#section_add_btn").addClass("d-none");
+    $("#machine_add_btn").addClass("d-none");
+
+
+    $("#section_da").empty();
+    $("#machine_da").empty();
 
     //check the value not empty
     if ($('#department').val() != "") {
@@ -1193,6 +1260,7 @@ $(document).ready(function () {
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           get_dep_section(ui.item.id);
+          $("#department_add_btn").addClass("d-none");
           $("#section_add_btn").removeClass("d-none");
 
 
@@ -1208,9 +1276,20 @@ $(document).ready(function () {
   });
 
   $("#department_da").on("click", "li a", function () {
+    $('#section').val('').removeData("sec_id");
+    $('#machine').val('').removeData("mach_id");
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
+    $("#section_da").empty();
+    $("#machine_da").empty();
+
     $("#department").val($(this).text())
+    $("#department").data("dept_id", $(this).data("dept_id"))
     get_dep_section($(this).data("dept_id"))
     $("#section_add_btn").removeClass("d-none");
+    $("#department_add_btn").addClass("d-none");
   })
 
   $("#department_add_btn").on("click", function () {
@@ -1220,7 +1299,18 @@ $(document).ready(function () {
   })
 
   $('#section').on('input', function () {
+    $("#section_add_btn").removeClass("d-none");
+
+    $('#machine').val('').removeData("machine_id");
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
+
     $("#machine_add_btn").addClass("d-none");
+
+
+    $("#machine_da").empty();
 
     //check the value not empty
     if ($('#section').val() != "") {
@@ -1260,6 +1350,7 @@ $(document).ready(function () {
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           get_dep_sec_machine(ui.item.id);
+          $("#section_add_btn").addClass("d-none");
           $("#machine_add_btn").removeClass("d-none");
 
 
@@ -1274,20 +1365,39 @@ $(document).ready(function () {
 
   });
   $("#section_da").on("click", "li a", function () {
+
+    $('#machine').val('').removeData("mach_id");
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
+
+    $("#machine_da").empty();
+
     $("#section").val($(this).text())
+    $("#section").data('sec_id', $(this).data("sec_id"))
     get_dep_sec_machine($(this).data("sec_id"))
     $("#machine_add_btn").removeClass("d-none");
+    $("#section_add_btn").addClass("d-none");
 
   })
   $("#section_add_btn").on("click", function () {
 
-    var dept_id = $('#department').data("dept_id") || $('#department_da').data("dept_id");
+    var dept_id = $('#department').data("dept_id") || $('#department_da').find("li a").data("dept_id");
+    console.log(dept_id);
+
     var sec_name = $('#section').val();
     insert_dep_section(dept_id, sec_name);
   })
 
   $('#machine').on('input', function () {
-    console.log("sd");
+
+    $("#machine_add_btn").removeClass("d-none");
+
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
 
 
     if ($('#machine').val() != "") {
@@ -1328,6 +1438,8 @@ $(document).ready(function () {
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           // get_dep_section(ui.item.id)
+          $("#machine_add_btn").addClass("d-none");
+
 
 
         },
@@ -1341,11 +1453,21 @@ $(document).ready(function () {
 
   });
   $("#machine_da").on("click", "li a", function () {
+
+    $('#min_time').val('');
+    $('#max_time').val('');
+    $('#cost').val('');
+
     $("#machine").val($(this).text())
-    // get_machine($(this).data("mach_id"))
+    $("#machine").data("mach_id", $(this).data("mach_id"))
+    $("#machine_add_btn").addClass("d-none");
+
+    get_machine($(this).data("mach_id"))
   })
   $("#machine_add_btn").on("click", function () {
-    var sec_id = $('#section').data("sec_id") || $('#section_da').data("sec_id");
+    var sec_id = $('#section').data("sec_id") || $('#section_da').find("li a").data("sec_id");
+    console.log(sec_id);
+
     var mach_name = $('#machine').val();
     insert_dep_sec_machine(sec_id, mach_name);
   })
@@ -1353,71 +1475,157 @@ $(document).ready(function () {
 
   $(".form_godown_btn").on("click", function () {
 
-    $("#godown_table_data").empty();
+    // $("#godown_table_data").empty();
     var godown = $("#godown").val();
     var godown_id = $("#godown").data("godown_id");
-    var depart = $("#department").val() || $("#department_da").val();
-    var depart_id = $("#department").data("dept_id") || $("#department_da").find("li a").data("dept_id");
-    var section = $("#section").val() || $("#section_da").val();
-    var section_id = $("#section").data("sec_id") || $("#section_da").find("li a").data("sec_id");
-    var machine = $("#machine").val() || $("#machine_da").val();
-    var machine_id = $("#machine").data("mach_id") || $("#machine_da").find("li a").data("mach_id");
+    var depart = $("#department").val();
+    var depart_id = $("#department").data("dept_id");
+    var section = $("#section").val();
+    // var section = $("#section").val() || $("#section_da").val();
+    var section_id = $("#section").data("sec_id");
+    // var section_id = $("#section").data("sec_id") || $("#section_da").find("li a").data("sec_id");
+    var machine = $("#machine").val();
+    var machine_id = $("#machine").data("mach_id");
     var min = $("#min_time").val();
     var max = $("#max_time").val();
     var cost = $("#cost").val();
 
     if ($('#welding_table td.tbl_selected').length > 0) {
       var a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
-      if (extra_bom[a] === undefined || extra_bom[a].length < 1) {
+      if (extra_bom[a] === undefined) {
         extra_bom[a] = [];
-        extra_bom[a].push({
-          godown_id: godown_id,
-          dep_id: depart_id,
-          dep_sec_id: section_id,
-          dep_sec_machine_id: machine_id,
-          min_time: min,
-          max_time: max,
-          cost: cost
-        })
+      }
+
+      const newObj = {
+        godown_id,
+        dep_id: depart_id,
+        dep_sec_id: section_id,
+        dep_sec_machine_id: machine_id,
+        min_time: min,
+        max_time: max,
+        cost
+      };
+
+      if (editingRow) {
+        const editIndex = editingRow.index();
+
+        if (extra_bom[a][editIndex]) {
+          extra_bom[a][editIndex] = newObj;
+        } else {
+          extra_bom[a].push(newObj);
+        }
+
+        editingRow.attr({
+          "data-godown_id": godown_id,
+          "data-dept_id": depart_id,
+          "data-section_id": section_id,
+          "data-machine_id": machine_id
+        });
+
+        editingRow.find("td").eq(1).text(godown);
+        editingRow.find("td").eq(2).text(depart);
+        editingRow.find("td").eq(3).text(section);
+        editingRow.find("td").eq(4).text(machine);
+        editingRow.find("td").eq(5).text(min + " " + max);
+        editingRow.find("td").eq(6).text(cost);
+
+        editingRow = null;
       }
       else {
-        extra_bom[a].push({
-          godown_id: godown_id,
-          dep_id: depart_id,
-          dep_sec_id: section_id,
-          dep_sec_machine_id: machine_id,
-          min_time: min,
-          max_time: max,
-          cost: cost
-        })
+
+        extra_bom[a].push(newObj);
+
+        $("#godown_table_data").append(`
+        <tr data-godown_id="${godown_id}" data-dept_id="${depart_id}" data-section_id="${section_id}" data-machine_id="${machine_id}">
+          <td></td>
+          <td>${godown}</td>
+          <td>${depart}</td>
+          <td>${section}</td>
+          <td>${machine}</td>
+          <td>${min} ${max}</td>
+          <td>${cost}</td>
+          <td>
+            <i class='fa fa-pen pe-2 text-warning edit_extra btn'></i>
+            <i class='fa fa-trash text-danger delete_extra btn'></i>
+          </td>
+        </tr>
+      `);
       }
-
-    }
-    else {
-
     }
 
-    $("#godown_table_data").append("<tr><td></td><td>" + godown + "</td><td>" + depart + "</td><td>" + section + "</td><td>" + machine + "</td><td>" + min + " " + max + "</td><td>" + cost + "</td><td><i class='fa fa-pen pe-3 text-warning'></i><i class='fa fa-trash  text-danger'></i></td></tr>");
 
     $("#godown_form")[0].reset();
-    $("#department_add_btn").addClass("d-none");
-    $("#section_add_btn").addClass("d-none");
-    $("#machine_add_btn").addClass("d-none");
-  })
-
-  $("#godown_table_data").on("click", "i.fa-trash", function () {
-    $(this).closest("tr").remove();
+    $("#department, #section, #machine").val("").removeData("dept_id sec_id mach_id");
+    $("#min_time, #max_time, #cost").val("");
+    $("#department_da, #section_da, #machine_da").empty();
+    $("#department_add_btn, #section_add_btn, #machine_add_btn").addClass("d-none");
   });
 
+
+  $("#godown_table_data").on("click", "i.fa-trash", function () {
+
+    const icon = $(this);
+
+    swal({
+      title: "Are you sure - delete? ",
+      text: "You will not be recover this  again!",
+      icon: "warning",
+      buttons: [
+        'No, cancel it!',
+        'Yes, I am sure!'
+      ],
+      dangerMode: true,
+    }).then(function (isConfirm) {
+      if (isConfirm) {
+
+        const row = icon.closest("tr");
+
+        const index = row.index();
+
+        const a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
+
+        if (extra_bom[a] && extra_bom[a][index] !== undefined) {
+          extra_bom[a].splice(index, 1);
+        }
+
+        row.remove();
+
+        console.log("Deleted entry from extra_bom:", extra_bom[a]);
+
+
+      }
+
+    })
+
+  });
+
+
   $("#godown_table_data").on("click", "i.fa-pen", function () {
+    // get_department();
+
+    editingRow = $(this).closest("tr");
+
     let value = $(this).closest("tr").find("td").eq(5).text().trim();
     let parts = value.split(" ");
     let min = parts[0] || "";
     let max = parts[1] || "";
     $("#godown").val($(this).closest("tr").find("td").eq(1).text());
+    $("#godown").data("godown_id", $(this).closest("tr").data("godown_id"));
+    get_department($(this).closest("tr").data("godown_id"));
+
+
     $("#department").val($(this).closest("tr").find("td").eq(2).text());
+    $("#department").data("dept_id", $(this).closest("tr").data("dept_id"));
+    get_dep_section($(this).closest("tr").data("dept_id"));
+
     $("#section").val($(this).closest("tr").find("td").eq(3).text());
+    $("#section").data("sec_id", $(this).closest("tr").data("section_id"));
+    get_dep_sec_machine($(this).closest("tr").data("section_id"));
+
+
     $("#machine").val($(this).closest("tr").find("td").eq(4).text());
+    $("#machine").data("mach_id", $(this).closest("tr").data("machine_id"));
+
     $("#min_time").val(min);
     $("#max_time").val(max);
     $("#cost").val($(this).closest("tr").find("td").eq(6).text());
@@ -1458,7 +1666,7 @@ function get_dep_sec_machine(sec_id) {
 
         }
         else {
-          $("#machine_da").append("<li><a class='dropdown-item' >NO DATA</a></li>")
+          // $("#machine_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
 
 
         }
@@ -1540,7 +1748,7 @@ function get_dep_section(dept_id) {
 
         }
         else {
-          $("#section_da").append("<li><a class='dropdown-item' >NO DATA</a></li>")
+          // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
 
         }
       }
@@ -1626,7 +1834,7 @@ function get_department(godown_id) {
 
         }
         else {
-          $("#department_da").append("<li><a class='dropdown-item' >NO DATA</a></li>")
+          // $("#department_da").append("<li disabled><a class='dropdown-item'  >NO DATA</a></li>")
 
         }
       }
@@ -1918,6 +2126,7 @@ function get_bom_process_details(part_id, component_cat) {
       console.log(response);
 
       $("#welding_table").empty()
+      extra_bom = [];
       if (response.trim() != "error") {
 
         if (response.trim() != "0 result") {
@@ -1939,9 +2148,16 @@ function get_bom_process_details(part_id, component_cat) {
 
           obj1.forEach(function (obj) {
             count = count + 1;
+            const extra = encodeURIComponent(obj.extra || "[]");
+            $("#welding_table").append("<tr class='small'><td class='' data-extra=" + extra + ">" + count + "</td><td > <ul class='list-group'>" + obj.in_tbl + " </ul></td><td><ul class='list-group'>" + obj.pr_tbl + "</ul></td><td><ul class='list-group'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
 
-            $("#welding_table").append("<tr class='small'><td class=''>" + count + "</td><td > <ul class='list-group'>" + obj.in_tbl + " </ul></td><td><ul class='list-group'>" + obj.pr_tbl + "</ul></td><td><ul class='list-group'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
-
+            let parsedExtra = [];
+            try {
+              parsedExtra = JSON.parse(decodeURIComponent(obj.extra || "[]"));
+            } catch (e) {
+              parsedExtra = [];
+            }
+            extra_bom[count - 1] = parsedExtra;
 
           });
 
