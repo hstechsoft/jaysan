@@ -1,4 +1,5 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
  include 'db_head.php';
 
  $consignee = test_input($_POST['consignee']);
@@ -12,7 +13,8 @@ $dcf_report = ($_POST['dcf_report']);
 $narration =  test_input($_POST['narration']);
 
 
- 
+echo $dcf_report ;
+
  
 function test_input($data) {
 $data = trim($data);
@@ -25,7 +27,7 @@ return $data;
 $dcf_id = 0;
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$dcf_report,$narration)";
+$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$narration)";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)

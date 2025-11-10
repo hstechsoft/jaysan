@@ -4,6 +4,10 @@
 
 
  $utr_no = test_input($_GET['utr_no']);
+  $oid = test_input($_GET['oid']);
+    $payment_id = test_input($_GET['payment_id']);
+
+  
 
 function test_input($data) {
 $data = trim($data);
@@ -18,7 +22,7 @@ return $data;
 
 
 
-$sql = "SELECT 'available' as sts FROM `jaysan_payment` WHERE utr_no = $utr_no";
+$sql = "SELECT if($payment_id = payment_id,'ok','no') as  sts  FROM `jaysan_payment` WHERE utr_no = $utr_no ";
 
 
 $result = $conn->query($sql);
@@ -26,9 +30,9 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result)) {
-        $rows[] = $r;
+        echo $r["sts"];
     }
-    print json_encode($rows);
+    
 } else {
   echo "0 result";
 }
