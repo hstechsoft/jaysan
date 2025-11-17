@@ -1,18 +1,6 @@
-   const firebaseConfig = {
-    apiKey: "AIzaSyArBOz33-zRE8lMCj7d8mlzytL4hH6OSNQ",
-    authDomain: "jaysan-8fa8d.firebaseapp.com",
-    databaseURL: "https://jaysan-8fa8d-default-rtdb.firebaseio.com",
-    projectId: "jaysan-8fa8d",
-    storageBucket: "jaysan-8fa8d.appspot.com",
-    messagingSenderId: "1077120566221",
-    appId: "1:1077120566221:web:17e8bd20996c16bcc8fa84",
-    measurementId: "G-6JNJZT1YCV"
-  };
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-var cus_id = '0';
-var urlParams = new URLSearchParams(window.location.search);
+   
+  var cus_id = '0';
+  var urlParams = new URLSearchParams(window.location.search);
 
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
