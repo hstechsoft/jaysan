@@ -81,7 +81,7 @@ $(document).ready(function () {
                 batch_id: batch_id,
                 po_material_id: material_part_id,
                 qty: quantity,
-                material_rate: rate,
+            material_rate: rate,
                 is_approved: apprv,
                 due_on: due_date,
                 disc: disc,
