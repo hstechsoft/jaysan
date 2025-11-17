@@ -20,21 +20,21 @@ SELECT  GROUP_CONCAT(  concat('<li class=\"list-group-item d-flex justify-conten
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'godown_id',
-            ped.godown_id,
+            wtm.godown_id,
             'godown_name',
             creditors.creditor_name,
             'dep_id',
-            ped.dep_id,
+            wtm.dep_id,
             'dep_name',
             department.dep_name,
             'dep_sec_id',
-            ped.dep_sec_id,
+            wtm.dep_sec_id,
             'dep_sec_name',
             dep_section.sec_name,
             'dep_sec_machine_id',
-            ped.dep_sec_machine_id,
+            wtm.machine_id,
             'dep_sec_machine_name',
-            dep_sec_machine.machine_name,
+            jaysan_machine.machine_name,
             'min_time',
             min_time,
             'max_time',
@@ -47,11 +47,11 @@ SELECT  GROUP_CONCAT(  concat('<li class=\"list-group-item d-flex justify-conten
         )
     )
 FROM
-    `process_extra_details` ped
-INNER JOIN creditors ON creditors.creditor_id = ped.godown_id
-LEFT JOIN department ON department.dep_id = ped.dep_id
-LEFT JOIN dep_section ON dep_section.dep_sec_id = ped.dep_sec_id
-LEFT JOIN dep_sec_machine ON dep_sec_machine.dep_sec_machine_id = ped.dep_sec_machine_id
+    `work_time_master` wtm
+INNER JOIN creditors ON creditors.creditor_id = wtm.godown_id
+LEFT JOIN department ON department.dep_id = wtm.dep_id
+LEFT JOIN dep_section ON dep_section.dep_sec_id = wtm.dep_sec_id
+LEFT JOIN  jaysan_machine ON  jaysan_machine.jmid = wtm.machine_id
 WHERE
     process_id = pid
 GROUP BY
