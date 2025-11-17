@@ -5,7 +5,7 @@
 $exp_des = test_input($_GET['exp_des']);
     $exp_cat = test_input($_GET['exp_cat']);
     $exp_amount = test_input($_GET['exp_amount']);
-    $exp_date = test_input($_GET['exp_date']);
+    $exp_date = ($_GET['exp_date']);
      $exp_emp_id = test_input($_GET['exp_emp_id']);
 $exp_id = test_input($_GET['exp_id']);
 
@@ -21,7 +21,7 @@ return $data;
 
 
 
-$sql = "UPDATE expense SET exp_des = $exp_des,exp_cat = $exp_cat,exp_amount = $exp_amount,exp_date = $exp_date,exp_emp_id  = $exp_emp_id where exp_id = $exp_id";
+$sql = "UPDATE expense SET exp_des = $exp_des,exp_cat = $exp_cat,exp_amount = $exp_amount,exp_date = UNIX_TIMESTAMP('$exp_date') * 1000,exp_emp_id  = $exp_emp_id where exp_id = $exp_id";
   
   if ($conn->query($sql) === TRUE) {
    

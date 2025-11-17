@@ -3,6 +3,7 @@
 
  
  $exp_date = ($_GET['exp_date']);
+    $emp_id = ($_GET['emp_id']);
  
  
 function test_input($data) {
@@ -15,7 +16,7 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT * FROM `expense` WHERE exp_date BETWEEN UNIX_TIMESTAMP('$exp_date 00:00:00') * 1000
-                    AND UNIX_TIMESTAMP('$exp_date 23:59:59') * 1000 and exp_approve = 'no';";
+                    AND UNIX_TIMESTAMP('$exp_date 23:59:59') * 1000 and exp_approve = 'no' and exp_emp_id = '$emp_id';";
 
 if ($conn->multi_query($sql)) {
     do {
