@@ -5,7 +5,7 @@
  $exp_des =test_input($_GET['exp_des']);
  $exp_cat =test_input($_GET['exp_cat']);
  $exp_amount =test_input($_GET['exp_amount']);
- $exp_date =test_input($_GET['exp_date']);
+ $exp_date =($_GET['exp_date']);
  $exp_emp_id =test_input($_GET['exp_emp_id']);
  $exp_work_id =test_input($_GET['exp_work_id']);
 
@@ -25,7 +25,7 @@ return $data;
 
 
 $sql = "INSERT  INTO  expense (exp_des,exp_cat,exp_amount,exp_date,exp_emp_id,exp_work_id)
- VALUES ($exp_des,$exp_cat,$exp_amount,UNIX_TIMESTAMP($exp_date) * 1000,$exp_emp_id,$exp_work_id)";
+ VALUES ($exp_des,$exp_cat,$exp_amount,UNIX_TIMESTAMP('$exp_date') * 1000,$exp_emp_id,$exp_work_id)";
   
   if ($conn->query($sql) === TRUE) {
 
@@ -33,6 +33,7 @@ $sql = "INSERT  INTO  expense (exp_des,exp_cat,exp_amount,exp_date,exp_emp_id,ex
    
     
      if ($conn->query($sql_insert_exp_cat) === TRUE) {
+      echo "ok";
      } 
      else {
        echo "Error: " . $sql_insert_exp_cat . "<br>" . $conn->error;
