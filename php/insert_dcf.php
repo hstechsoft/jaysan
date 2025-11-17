@@ -13,7 +13,7 @@ $dcf_report = ($_POST['dcf_report']);
 $narration =  test_input($_POST['narration']);
 
 
-echo $dcf_report ;
+
 
  
 function test_input($data) {
