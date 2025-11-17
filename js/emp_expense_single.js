@@ -159,7 +159,6 @@ $(document).ready(function () {
 
   $("#exp_table").on("mousedown touchstart", "ul", function () {
     const $item = $(this);
-
     if (!isSelectionMode) {
       longPressTimer = setTimeout(() => {
 
@@ -272,45 +271,29 @@ $(document).ready(function () {
     };
   })
 
-  // $(".fa-trash").on("click", function () {
-  //   var row = $(this).data("row")
-  //   console.log(row);
-
-  //   if (row.data("exp_id")) {
-  //     var exp_id_arr = [row.data("exp_id")]
-  //     delete_expenses(exp_id_arr, row.data("exp_date"));
-  //     $(this).data("row").remove();
-  //     $("#edit_expense").trigger();
-
-  //   }
-  //   else {
-  //     $(this).data("row").remove();
-  //     $("#edit_expense").trigger();
-  //   }
-
-
-  // })
 
 
 
-  if (isSelectionMode != true) {
 
-    $("#exp_table").on("click", ".list-group", function () {
-      console.log($(this).data("exp_date"));
+  $("#exp_table").on("click", ".list-group", function () {
+
+    if (isSelectionMode) {
+      return;
+    }
+
+    console.log($(this).data("exp_date"));
 
 
-      $("#exp_category").val($(this).data("exp_cat"));
-      $("#exp_date").val($(this).data("exp_date"));
-      $("#exp_amount").val($(this).data("exp_amount"));
-      $("#exp_description").val($(this).data("exp_des"));
-      $("#update_expense").data("exp_id", $(this).data("exp_id"));
+    $("#exp_category").val($(this).data("exp_cat"));
+    $("#exp_date").val($(this).data("exp_date"));
+    $("#exp_amount").val($(this).data("exp_amount"));
+    $("#exp_description").val($(this).data("exp_des"));
+    $("#update_expense").data("exp_id", $(this).data("exp_id"));
 
-      $("#add_expense").addClass("d-none")
-      $("#update_expense").removeClass("d-none")
+    $("#add_expense").addClass("d-none")
+    $("#update_expense").removeClass("d-none")
 
-    })
-
-  }
+  })
 
 
 
