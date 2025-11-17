@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  
+
+
+
+</head>
+<body>
+  <div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+  
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+   
+</section>
+
+
+<!-- content -->
+
+
+<div class="container-fluid mt-3 " >
+
+  <div class="card mb-2">
+    <div class="card-header d-flex text-bg-primary justify-content-center">
+Expense
+    </div>
+
+    <div class="card-body  d-flex justify-content-between">
+      
+            <table  class="table   table-bordered  text-center " >
+                <thead >
+                  
+                  <tr>
+                  
+                    <th scope="col">Description</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">View</th>
+                    
+      
+                  
+                  </tr>
+                </thead>
+                <tbody class="align-middle ">
+
+                  <tr>
+                    <td>
+                      Unapproved
+                    </td>
+                    <td>
+                      <p class="p-0 m-0" id="unapprove_amt">&#x20b9; 0</p>
+                    </td>
+                    <td>
+                      <button type="submit" id="unapprove_view_btn" class="btn btn-primary" >View</button>
+                    </td>
+                   </tr> 
+                 <tr>
+                  <td>
+                    Declined
+                  </td>
+                  <td>
+                    <p class="p-0 m-0" id="decline_amt">&#x20b9; 0</p>
+                  </td>
+                  <td>
+                    
+                      <button type="submit" id="decline_view_btn" class="btn btn-primary" >View</button>
+                   
+                  </td>
+                 </tr> 
+              
+                 
+                </tbody>
+              </table>
+              
+              
+      
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center">
+        <button type="submit" id="exp_report" class="btn btn-primary" >Report</button>
+      </div>
+    </div>
+    
+        </div>
+  <form id="emp_exp_form">
+
+    <div class="card">
+        <div class="card-header text-center">
+<h6>Add Expense</h6>
+        </div>
+        <div class="card-body">
+            
+          <div class='input-group mb-3'> 
+            <label class='input-group-text mrequired' for='lead_source'><span>
+          Category
+            </span>
+            </label>
+            <input id='exp_cat' list="exp_cat_data" type='text' class='form-control' required >
+            <datalist id="exp_cat_data">
+       
+         
+           </datalist>
+            </div>
+
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="exp_des_txt"><span>
+                 Description
+                 </span>
+               </label>
+               <input id="exp_des_txt" type="text" class="form-control"  aria-label="Username" aria-describedby="basic-addon1" >
+             </div>
+
+            <div class="input-group mb-3">
+                <label class="input-group-text mrequired" for="exp_amt_txt"><span>
+                 Amount
+                 </span>
+               </label>
+               <input id="exp_amt_txt" type="number" class="form-control"  required >
+             </div>
+
+          <div class="input-group my-3 ">                         
+            <label class="input-group-text mrequired" for="pay_date"><span>
+           Date
+            </span></label>
+            <input type="datetime-local" id="pay_date"  class="form-control" aria-label="Username" aria-describedby="basic-addon1" required  >
+          </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-center">
+                <button type="submit" id="exp_add_btn" class="btn btn-primary" >Add</button>
+              </div>
+        </div>
+
+    </div>
+
+  </form>
+   
+  <div class="card  ">
+
+    <div class="card-body table_report d-flex justify-content-between gap-2">
+      
+            <table  class="table   table-bordered border-dark border-opacity-50 text-center " >
+                <thead >
+                  <tr>
+                  
+                    <th  colspan="6" scope="col" class="bg-info bg-opacity-25">
+                       
+                      <div class="d-flex justify-content-between">
+                        <h6> Expense Table</h6>
+                        <h6 class="text-dark" id="total_exp_txt"></h6>
+                        <button type="button" id="exp_delete_btn" class="btn btn-outline-danger btn-sm" ><i class="fa-solid fa-trash-can"></i></button>
+                      </div>
+                    </th>
+                  
+                  </tr>
+            <tr>
+            
+            </tr>
+                  <tr>
+                  
+                    <th scope="col">#</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    
+                    <th scope="col">Amount</th>
+                    
+                    <th scope="col">
+                        <input class="form-check-input" type="checkbox" id="sel_all_chk" value="">
+                      </th>
+                   
+                  
+                  </tr>
+                </thead>
+                <tbody class="align-middle " id="exp_table">
+                  
+              
+                 
+                </tbody>
+              </table>
+
+              
+      
+    </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-center ">
+        
+      <div>
+        <button type="button" id="submit_exp_btn" class="btn btn-primary" >Submit</button>
+      </div>
+      
+      </div>
+    </div>
+        </div>
+     
+    
+</div>
+
+<!-- content -->
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/menu.js" type="module"></script>
+<script src="js/emp_expense_single.js" type="module"></script>
+  <script src="js/get_all_id.js" type="module"></script>
+
+</body>
+</html>
