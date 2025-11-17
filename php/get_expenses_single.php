@@ -2,7 +2,7 @@
  include 'db_head.php';
 
  
- $exp_date = test_input($_GET['exp_date']);
+ $exp_date = ($_GET['exp_date']);
  
  
 function test_input($data) {
