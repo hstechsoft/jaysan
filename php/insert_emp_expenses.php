@@ -9,6 +9,9 @@
  $exp_emp_id =test_input($_GET['exp_emp_id']);
  $exp_work_id =test_input($_GET['exp_work_id']);
 
+echo $exp_des;
+echo $exp_cat;  
+echo $exp_date;
 
 function test_input($data) {
 $data = trim($data);
