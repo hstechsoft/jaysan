@@ -179,6 +179,64 @@
           <div class="card-header text-center m-0">
             <h6>ADD EXPENSES</h6>
           </div>
+
+          <div class="card-body">
+            <h3 class="text-center">Fuel</h3>
+            <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
+              onsubmit="return false">
+
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="" id="fuel_check_box">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" disabled id="fuel_vehicel_type" required>
+                      <option selected disabled value="null">Choose...</option>
+                      <option value="3">Two Wheeler</option>
+                      <option value="6">Four Wheeler</option>
+                    </select>
+                    <label for="fuel_vehicel_type">Fuel Vehicel Type</label>
+                    <div class="invalid-feedback">
+                      Kindly Select Vaild
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-floating mb-2">
+                    <input type="number" class="form-control rounded-3" disabled id="start_km" placeholder="" required>
+                    <label for="start_km">Start Km
+                      <span class="text-danger">*</span> </label>
+
+                    <div class="invalid-feedback">
+                      Kindly Enter Vaild Data
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-floating mb-2">
+                    <input type="number" class="form-control rounded-3" id="end_km" disabled placeholder="" required>
+                    <label for="end_km">End Km
+                      <span class="text-danger">*</span> </label>
+
+                    <div class="invalid-feedback">
+                      Kindly Enter Vaild Data
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary " disabled id="fuel_add">Add fuel</button>
+              </div>
+            </form>
+          </div>
+
           <div class="card-body m-0 p-0" id="">
             <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
               onsubmit="return false">

@@ -128,6 +128,67 @@ $(document).ready(function () {
 
   })
 
+  $("#fuel_check_box").on("change", function () {
+
+    if ($("#fuel_check_box").is(":checked")) {
+      $("#exp_category").val("fuel");
+      $("#fuel_vehicel_type").prop("disabled", false);
+      $("#start_km").prop("disabled", false);
+      $("#end_km").prop("disabled", false);
+      $("#fuel_add").prop("disabled", false);
+
+      $("#exp_category").prop("disabled", true);
+      $("#exp_amount").prop("disabled", true);
+      $("#exp_description").prop("disabled", true);
+    }
+    else {
+      $("#fuel_vehicel_type").prop("disabled", true);
+      $("#exp_category").val($("#fuel_check_box").data("cate") ? $("#fuel_check_box").data("cate"):"null");
+      $("#start_km").prop("disabled", true);
+      $("#end_km").prop("disabled", true);
+      $("#fuel_add").prop("disabled", true);
+
+      $("#exp_category").prop("disabled", false);
+      $("#exp_amount").prop("disabled", false);
+      $("#exp_description").prop("disabled", false);
+    }
+
+  })
+
+  $("#exp_category").on("change", function () {
+
+    if ($(this).val() == "fuel") {
+      $("#fuel_check_box").prop("checked", true).trigger("change");
+    }
+    else {
+      $("#fuel_check_box").data("cate", $(this).val())
+      $("#fuel_check_box").prop("checked", false).trigger("change");
+    }
+  })
+
+  $("#fuel_add").on("click", function () {
+    var v_type = $("#fuel_vehicel_type").val();
+    var skm = $("#start_km").val();
+    var ekm = $("#end_km").val();
+
+    if (v_type == null || skm == "" || ekm == "") {
+      salert("Warning", "Data missing", "warning");
+      return;
+    }
+
+    var total_km = parseFloat(ekm) - parseFloat(skm);
+    var km_amount = parseFloat(v_type) * total_km
+    if (v_type == 3) {
+      $("#exp_description").val("Two wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+
+    } else {
+      $("#exp_description").val("Four wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+
+    }
+
+    $("#exp_amount").val(km_amount);
+  })
+
 
   $("#add_expense").click(function () {
 
@@ -149,6 +210,11 @@ $(document).ready(function () {
     $("#exp_category").val("");
     $("#exp_description").val("");
     $("#exp_amount").val("");
+    $("#fuel_check_box").prop("checked", false).trigger("change");
+    $("#fuel_vehicel_type").val("");
+    $("#start_km").val("");
+    $("#end_km").val("");
+
 
   });
 
@@ -266,6 +332,10 @@ $(document).ready(function () {
       $("#exp_category").val("");
       $("#exp_description").val("");
       $("#exp_amount").val("");
+      $("#fuel_check_box").prop("checked", false).trigger("change");
+      $("#fuel_vehicel_type").val("null");
+      $("#start_km").val("");
+      $("#end_km").val("");
 
 
     };
@@ -284,7 +354,7 @@ $(document).ready(function () {
     console.log($(this).data("exp_date"));
 
 
-    $("#exp_category").val($(this).data("exp_cat"));
+    $("#exp_category").val($(this).data("exp_cat")).trigger("change");
     $("#exp_date").val($(this).data("exp_date"));
     $("#exp_amount").val($(this).data("exp_amount"));
     $("#exp_description").val($(this).data("exp_des"));
@@ -327,6 +397,10 @@ $(document).ready(function () {
     $("#exp_category").val("");
     $("#exp_description").val("");
     $("#exp_amount").val("");
+    $("#fuel_check_box").prop("checked", false).trigger("change");
+    $("#fuel_vehicel_type").val("");
+    $("#start_km").val("");
+    $("#end_km").val("");
 
     $("#add_expense").removeClass("d-none")
     $("#update_expense").addClass("d-none")
@@ -427,7 +501,7 @@ function get_expenses_single(exp_date) {
                     </div>
 
                         </ul>`);
-                        
+
 
           });
           get_expense_summary_single()
