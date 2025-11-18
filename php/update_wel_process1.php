@@ -88,7 +88,7 @@ $in_pre_id = $pre_process_id;
             $dep_sec_id = sql_nullable($dep_sec_id);
             $dep_sec_machine_id = sql_nullable($dep_sec_machine_id);
 
-            $insert_part = "INSERT INTO `work_time_master` ( `godown_id`, `dep_id`, `dep_sec_id`, `machine_id`, `min_time`, `max_time`, `process_id`, `cost`) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$last_insert_id', '$cost');";
+            $insert_part = "INSERT INTO `work_time_master` ( `godown_id`, `dep_id`, `dep_sec_id`, `machine_id`, `min_time`, `max_time`, `process_id`, `cost`) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$process_id', '$cost');";
 
 if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID

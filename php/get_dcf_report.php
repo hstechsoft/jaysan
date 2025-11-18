@@ -3,8 +3,9 @@
 
 
  $customer_query = ($_GET['customer']) == '' ? 1 : "cus.cus_id  = " . ($_GET['customer']);
- $dcrf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf1.sts  = " . ($_GET['dcf_sts']);
- 
+ $dcrf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf1.sts  = '" . ($_GET['dcf_sts']) . "'";
+$sof_query = ($_GET['order_no']) == '' ? 1 : "sof.order_no  = " . ($_GET['order_no']);
+
  
 function test_input($data) {
 $data = trim($data);
@@ -50,7 +51,7 @@ sof_details AS(
     INNER JOIN sales_order_form sof ON
         sof.oid = sop_details.oid
        INNER JOIN sales_product sp ON
-        sp.opid = sop_details.opid
+        sp.opid = sop_details.opid where $sof_query
 ),
 final AS(
     SELECT
@@ -66,7 +67,7 @@ final AS(
 ),
 dcf_final as (SELECT
     dcf_id,    JSON_ARRAYAGG(
-        JSON_OBJECT('order_no',order_no,'cus_name',cus_name,'product',product,'emp','emp_name')) as sale_order
+        JSON_OBJECT('order_no',order_no,'cus_name',cus_name,'product',product,'emp',emp_name)) as sale_order
 FROM
     final GROUP by dcf_id)
     
