@@ -427,8 +427,10 @@ function get_expenses_single(exp_date) {
                     </div>
 
                         </ul>`);
+                        
 
-          })
+          });
+          get_expense_summary_single()
 
         }
 

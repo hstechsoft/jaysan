@@ -26,7 +26,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysan/chase_entry.html",
+      "url": "http://localhost/jaysan/emp_expense_single.html",
       // "webRoot": "E:/web/htdocs/jaysan",
       "webRoot": "C:/xampp/htdocs/jaysan",
       "userDataDir": true,
