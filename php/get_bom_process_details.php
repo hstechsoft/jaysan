@@ -40,7 +40,7 @@ SELECT  GROUP_CONCAT(  concat('<li class=\"list-group-item d-flex justify-conten
             'max_time',
             max_time,
             'cost',
-            cost
+            wtm.cost
 
             
             
@@ -57,7 +57,7 @@ WHERE
 GROUP BY
     process_id) as extra  from (
 
- 
+    
 
 
   SELECT @rownum := 0
