@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  
+
+
+
+</head>
+<body onload=" ">
+    <section>
+   
+      </section>
+<div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+ 
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+   
+</section>
+
+
+<div class="container-fluid">
+<div class="d-flex gap-1">
+
+
+  <div class="col-6 ">
+    <div class="card mt-3 ">
+      <div class="card-header">
+        <h5 class="text-center">Add Web role </h5>
+      </div>
+      <div class="card-body ">
+        <div class="input-group mb-3">   
+          <label class="input-group-text" for="role_name"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+          </span>
+        </label>
+        <input id="role_name" type="text" class="form-control" placeholder="Role Name" aria-label="Username" aria-describedby="basic-addon1" >
+      </div>
+
+<div class="d-flex gap-2">
+ 
+
+<div class="input-group mb-3">
+
+  
+
+  <select class="form-select" id="menu_dropdown">
+                  
+    
+   
+        
+      </select>
+</div>
+
+<div>
+  <button class="btn btn-primary" id="menu_add_btn" type="button">Add</button>
+
+</div>
+</div>
+
+<div class='input-group mb-2 ' >
+    <textarea class='form-control' id='menu_text' placeholder='menu_text' rows='5' ></textarea>
+    </div>
+
+    
+<div class='input-group mb-2 ' >
+  <textarea class='form-control' id='app_res_text' placeholder='Roles and Responsibility' rows='5' ></textarea>
+  </div>
+      </div>
+
+      
+<div class="d-flex justify-content-center">
+  <button class="btn btn-primary" id="role_submit_btn" type="button">Submit</button>
+</div>
+<div class="d-flex justify-content-center">
+  <button class="btn btn-primary " id="role_update_btn" type="button">Update</button>
+</div>
+          </div>
+
+
+       
+  </div>
+  <div class="col-6">
+    <div class="card mt-3  ">
+      <div class="card-header">
+        <h5 class="text-center">Web Role </h5>
+      </div>
+      <div class="card-body table-responsive "  style="max-height: 65vh; overflow-y: auto;">
+        <table id=""  class="table  table-bordered border-dark border-opacity-50 text-center "   >
+          <thead >
+            <tr>
+            
+              <th  colspan="5" scope="col" class="bg-info bg-opacity-25"> Menu list</th>
+            
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">#</th>
+              <th scope="col">role</th>
+              <th scope="col">menu</th>
+              <th scope="col">Res</th>
+              <th scope="col">Update</th>
+            
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="menu_all_table" >
+            
+           
+      
+            
+           
+          </tbody>
+        </table>
+      </div>
+          </div>
+
+      
+  </div>
+  
+</div>
+<div class="d-flex gap-1">
+
+
+  <div class="col-6 ">
+    <div class="card mt-3 ">
+      <div class="card-header">
+        <h5 class="text-center">Add App role </h5>
+      </div>
+      <div class="card-body ">
+        <div class="input-group mb-3">   
+          <label class="input-group-text" for="app_role_name"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+          </span>
+        </label>
+        <select class="form-select" id="app_role_name">
+                  
+    
+   
+        
+        </select>
+      </div>
+
+<div class="d-flex gap-2">
+ 
+
+<div class="input-group mb-3">
+
+  
+
+  <select class="form-select" id="app_menu_dropdown">
+                  
+    
+   
+        
+      </select>
+</div>
+
+<div>
+  <button class="btn btn-primary" id="app_menu_add_btn" type="button">Add</button>
+
+</div>
+</div>
+
+<div class='input-group mb-2 ' >
+    <textarea class='form-control' id='app_menu_text' placeholder='menu_text' rows='10' ></textarea>
+    </div>
+      </div>
+
+      
+<div class="d-flex justify-content-center">
+  <button class="btn btn-primary" id="app_role_submit_btn" type="button">Submit</button>
+</div>
+<div class="d-flex justify-content-center">
+  <button class="btn btn-primary " id="app_role_update_btn" type="button">Update</button>
+</div>
+          </div>
+
+
+       
+  </div>
+  <div class="col-6">
+    <div class="card mt-3  ">
+      <div class="card-header">
+        <h5 class="text-center">App Role </h5>
+      </div>
+      <div class="card-body table-responsive "  style="max-height: 65vh; overflow-y: auto;">
+        <table id=""  class="table  table-bordered border-dark border-opacity-50 text-center "   >
+          <thead >
+            <tr>
+            
+              <th  colspan="4" scope="col" class="bg-info bg-opacity-25"> Menu list</th>
+            
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">#</th>
+              <th scope="col">role</th>
+              <th scope="col">menu</th>
+              <th scope="col">Update</th>
+            
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="app_menu_all_table" >
+            
+           
+      
+            
+           
+          </tbody>
+        </table>
+      </div>
+          </div>
+
+      
+  </div>
+  
+</div>   
+    
+
+
+</div>
+
+<!-- content -->
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/role.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+</body>
+</html>
