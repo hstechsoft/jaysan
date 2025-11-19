@@ -17,7 +17,7 @@ return $data;
 
 $subtype_name = "%".$subtype_name."%";
 
-$sql = "SELECT * FROM jaysan_model_subtype WHERE subtype_name LIKE $subtype_name and mtid = $mtid " ;
+$sql = "SELECT * FROM jaysan_model_subtype WHERE subtype_name LIKE '$subtype_name' and mtid = $mtid " ;
 
 
 $result = $conn->query($sql);

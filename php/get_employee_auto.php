@@ -2,7 +2,7 @@
  include 'db_head.php';
 
 
- $emp_name = test_input($_GET['emp_name']);
+ $emp_name = ($_GET['emp_name']);
  
 
 
@@ -16,7 +16,7 @@ return $data;
 
 $emp_name = "%".$emp_name."%";
 
-$sql = "SELECT emp_name,emp_id FROM employee WHERE emp_name LIKE $emp_name " ;
+$sql = "SELECT emp_name,emp_id FROM employee WHERE emp_name LIKE '$emp_name' " ;
 
 
 $result = $conn->query($sql);
