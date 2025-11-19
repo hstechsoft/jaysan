@@ -10,6 +10,23 @@ $(document).ready(function () {
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
+  // filter section
+
+  $("#myInput_web").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+
+    $("#view_role .form-check").filter(function () {
+      $(this).toggle($(this).find("label").text().toLowerCase().indexOf(value) > -1);
+    });
+  });
+
+  $("#myInput_app").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+
+    $("#view_app_role .form-check").filter(function () {
+      $(this).toggle($(this).find("label").text().toLowerCase().indexOf(value) > -1);
+    });
+  });
 
 
 
@@ -17,8 +34,18 @@ $(document).ready(function () {
 
     let selectedOption = $(this).find("option:selected");
 
+    let vall = selectedOption.val();
+
+
     $("#role_name").val(selectedOption.val());
     $("#web_res_text").val(selectedOption.data("res"))
+
+    let currentAppRoleSelect = $("#app_role_name_select").val();
+
+    if (currentAppRoleSelect !== vall) {
+      $("#app_role_name_select").val(vall).trigger("change");
+      // return;
+    }
 
     let menu = selectedOption.data("menu");
 
@@ -28,7 +55,7 @@ $(document).ready(function () {
 
     get_role_type(menu)
 
-
+    $("#myInput_web").val("");
     $("#role_submit_btn").addClass("d-none");
     $("#role_edit_btn").removeClass("d-none");
   });
@@ -165,7 +192,7 @@ $(document).ready(function () {
 
 
 
-    $("#view_all_role_name").on("click", ".fa-eye", function () {
+  $("#view_all_role_name").on("click", ".fa-eye", function () {
     $(this).addClass("d-none");
     $("#view_all_role_name").find(".fa-home").removeClass("d-none");
     $("#view_all_app_roles").removeClass("d-none");
@@ -184,9 +211,17 @@ $(document).ready(function () {
   $("#app_role_name_select").on("change", function () {
 
     let AppselectedOption = $(this).find("option:selected");
+    let vall = AppselectedOption.val();
 
     $("#app_role_name").val(AppselectedOption.val());
     $("#app_res_text").val(AppselectedOption.data("res") || "")
+
+    let currentRoleSelect = $("#role_name_select").val();
+
+    if (currentRoleSelect !== vall) {
+      $("#role_name_select").val(vall).trigger("change");
+      // return;
+    }
 
     let menu = AppselectedOption.data("menu");
 
@@ -196,7 +231,7 @@ $(document).ready(function () {
 
     get_app_menu_master(menu)
 
-
+    $("#myInput_app").val("");
     $("#app_role_submit_btn").addClass("d-none");
     $("#app_role_edit_btn").removeClass("d-none");
   });
@@ -256,7 +291,7 @@ $(document).ready(function () {
 
   });
 
-  
+
   $("#app_role_submit_btn").on("click", function () {
     var role = $("#app_role_name").val();
     // var res = $("#web_res_text").val();
@@ -414,7 +449,7 @@ function get_app_menu_all() {
 
           obj.forEach(function (obj) {
 
-            
+
             $("#app_role_name_select").append(" <option data-menu='" + obj.menu_name + "' data-res='" + obj.res + "' value='" + obj.role + "'>" + obj.role + "</option>")
 
             // count = count + 1;
@@ -422,7 +457,7 @@ function get_app_menu_all() {
 
           });
 
-console.log($('#app_menu_all_table').html());
+          console.log($('#app_menu_all_table').html());
 
         }
         else {
@@ -519,13 +554,13 @@ function get_role_type(menu) {
 
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
-                </div></div>`);
+              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
+                </div>`);
 
             } else {
 
-              $("#view_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
-                </div>`);
+              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
+                `);
 
 
             }
@@ -584,13 +619,13 @@ function get_app_menu_master(menu) {
 
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_app_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
-                </div></div>`);
+              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
+                </div>`);
 
             } else {
 
-              $("#view_app_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
-                </div>`);
+              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
+                `);
 
             }
 

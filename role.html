@@ -99,48 +99,32 @@
 
 
         </div>
-        <div class="col-6">
-          <div class="card mt-3">
-            <div class="card-header d-flex justify-content-between">
-              <h5 class="text-center">Web Role </h5>
-              <!-- <button type="button" class="btn btn-primary" id="view_all_roles"><i class="fa fa-eye"></i><i
-                  class="fa fa-home d-none"></i></button> -->
-            </div>
-            <div class="card-body table-responsive d-none " id="view_web_role"
-              style="max-height: 65vh; overflow-y: auto;">
-              <table id="" class="table  table-bordered border-dark border-opacity-50 text-center ">
-                <thead>
-                  <tr>
+        <div class="col-12 col-md-6">
+          <div class="card mt-3 shadow-sm border-0">
 
-                    <th colspan="5" scope="col" class="bg-info bg-opacity-25"> Menu list</th>
+            <div class="card-header bg-mute border-0">
+              <div class="d-flex justify-content-between align-items-center">
 
-                  </tr>
+                <h5 class="m-0">Web Role</h5>
 
-                  <tr>
+                <div class="input-group input-group-sm" style="width: 180px;">
+                  <span class="input-group-text bg-white border-0">
+                    <i class="fa fa-search text-muted"></i>
+                  </span>
+                  <input type="text" id="myInput_web" class="form-control border-0 bg-white" placeholder="Search...">
+                </div>
 
-                    <th scope="col">#</th>
-                    <th scope="col">role</th>
-                    <th scope="col">menu</th>
-                    <th scope="col">Res</th>
-                    <th scope="col">Update</th>
-
-                  </tr>
-                </thead>
-                <tbody class="align-middle " id="menu_all_table">
-
-
-
-
-
-                </tbody>
-              </table>
+              </div>
             </div>
 
-            <div class="row g-2 p-2" id="view_role" style="max-height: 65vh; overflow-y: auto;"></div>
+            <div class="card-body pt-2">
+              <div class="row g-2" id="view_role" style="max-height: 65vh; overflow-y: auto;"></div>
+            </div>
+
           </div>
-
-
         </div>
+
+
 
       </div>
       <div class="d-flex gap-1">
@@ -152,45 +136,6 @@
               <h5 class="text-center">Add App role </h5>
             </div>
             <div class="card-body ">
-              <!-- <div class="input-group mb-3">
-                <label class="input-group-text" for="app_role_name"><span>
-                    <i class="fa-solid fa-clipboard h6"></i>
-                  </span>
-                </label>
-                <select class="form-select" id="app_role_name">
-
-
-
-
-                </select>
-              </div>
-
-              <div class="d-flex gap-2">
-
-
-                <div class="input-group mb-3">
-
-
-
-                  <select class="form-select" id="app_menu_dropdown">
-
-
-
-
-                  </select>
-                </div>
-
-                <div>
-                  <button class="btn btn-primary" id="app_menu_add_btn" type="button">Add</button>
-
-                </div>
-              </div>
-
-              <div class='input-group mb-2 '>
-                <textarea class='form-control' id='app_menu_text' placeholder='menu_text' rows='10'></textarea>
-              </div>
-            </div> -->
-
 
               <div class="row">
 
@@ -214,12 +159,6 @@
 
                 </div>
 
-                <!-- <div class="col-12">
-                  <div class='input-group mb-2 '>
-                    <textarea class='form-control' id='app_res_text' placeholder='Roles and Responsibility'
-                      rows='5'></textarea>
-                  </div>
-                </div> -->
 
               </div>
 
@@ -233,47 +172,33 @@
 
           </div>
         </div>
-        <div class="col-6">
-          <div class="card mt-3  ">
-            <div class="card-header d-flex justify-content-between">
-              <h5 class="text-center">App Role </h5>
-              <!-- <button type="button" class="btn btn-primary" id="view_all_role_name"><i class="fa fa-eye"></i><i
-                  class="fa fa-home d-none"></i></button> -->
-            </div>
-            <div class="card-body table-responsive d-none" id="view_all_app_roles"
-              style="max-height: 65vh; overflow-y: auto;">
-              <table id="" class="table  table-bordered border-dark border-opacity-50 text-center ">
-                <thead>
-                  <tr>
+        <div class="col-12 col-md-6">
+          <div class="card mt-3 shadow-sm border-0">
 
-                    <th colspan="4" scope="col" class="bg-info bg-opacity-25"> Menu list</th>
+            <!-- Header -->
+            <div class="card-header bg-mute border-0">
+              <div class="d-flex justify-content-between align-items-center">
 
-                  </tr>
+                <h5 class="m-0">App Role</h5>
 
-                  <tr>
+                <div class="input-group input-group-sm" style="width: 180px;">
+                  <span class="input-group-text bg-white border-0">
+                    <i class="fa fa-search text-muted"></i>
+                  </span>
+                  <input type="text" id="myInput_app" class="form-control border-0 bg-white" placeholder="Search...">
+                </div>
 
-                    <th scope="col">#</th>
-                    <th scope="col">role</th>
-                    <th scope="col">menu</th>
-                    <th scope="col">Update</th>
-
-                  </tr>
-                </thead>
-                <tbody class="align-middle " id="app_menu_all_table">
-
-
-
-
-
-                </tbody>
-              </table>
+              </div>
             </div>
 
-            <div class="row g-2 p-2" id="view_app_role" style="max-height: 65vh; overflow-y: auto;"></div>
+            <!-- Body -->
+            <div class="card-body pt-2">
+              <div class="row g-2" id="view_app_role" style="max-height: 65vh; overflow-y: auto;"></div>
+            </div>
+
           </div>
-
-
         </div>
+
 
       </div>
 
