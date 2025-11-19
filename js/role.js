@@ -417,8 +417,8 @@ function get_app_menu_all() {
             
             $("#app_role_name_select").append(" <option data-menu='" + obj.menu_name + "' data-res='" + obj.res + "' value='" + obj.role + "'>" + obj.role + "</option>")
 
-            count = count + 1;
-            $('#app_menu_all_table').append("<tr><td>" + count + "</td><td  style='max-width: 100px;'>" + obj.role + "</td><td  style='max-width: 150px;'>" + obj.menu_name + "</td><td>" + "<button  type='button' class='btn  btn-lg text-danger' ><i class='fa-solid fa-pen-to-square'></i></button>" + "</td></tr>")
+            // count = count + 1;
+            // $('#app_menu_all_table').append("<tr><td>" + count + "</td><td  style='max-width: 100px;'>" + obj.role + "</td><td  style='max-width: 150px;'>" + obj.menu_name + "</td><td>" + "<button  type='button' class='btn  btn-lg text-danger' ><i class='fa-solid fa-pen-to-square'></i></button>" + "</td></tr>")
 
           });
 
@@ -519,12 +519,12 @@ function get_role_type(menu) {
 
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_role").append(`<div class="col-6"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label" for="${obj.menu_name}">${obj.menu_name}</label>
+              $("#view_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
                 </div></div>`);
 
             } else {
 
-              $("#view_role").append(`<div class="col-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label" for="${obj.menu_name}">${obj.menu_name}</label></div>
+              $("#view_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
                 </div>`);
 
 
@@ -584,12 +584,12 @@ function get_app_menu_master(menu) {
 
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_app_role").append(`<div class="col-6"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label" for="${obj.menu_name}">${obj.menu_name}</label>
+              $("#view_app_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
                 </div></div>`);
 
             } else {
 
-              $("#view_app_role").append(`<div class="col-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label" for="${obj.menu_name}">${obj.menu_name}</label></div>
+              $("#view_app_role").append(`<div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
                 </div>`);
 
             }
@@ -718,8 +718,8 @@ function get_all_role() {
 
 
 
-            count = count + 1;
-            $("#menu_all_table").append("<tr><td>" + count + "</td><td  style='max-width: 100px;'>" + obj.role + "</td><td  style='max-width: 150px;'>" + obj.menu + "</td><td  style='max-width: 150px;'>" + obj.res + "</td><td>" + "<button  type='button' class='btn  btn-lg text-danger' ><i class='fa-solid fa-pen-to-square'></i></button>" + "</td>  </tr> ")
+            // count = count + 1;
+            // $("#menu_all_table").append("<tr><td>" + count + "</td><td  style='max-width: 100px;'>" + obj.role + "</td><td  style='max-width: 150px;'>" + obj.menu + "</td><td  style='max-width: 150px;'>" + obj.res + "</td><td>" + "<button  type='button' class='btn  btn-lg text-danger' ><i class='fa-solid fa-pen-to-square'></i></button>" + "</td>  </tr> ")
           });
         }
       }
