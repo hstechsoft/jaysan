@@ -2,7 +2,7 @@
  include 'db_head.php';
 
 
- $subtype_name = test_input($_GET['subtype_name']);
+ $subtype_name = ($_GET['subtype_name']);
   $mtid = test_input($_GET['mtid']);
  
 
