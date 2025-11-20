@@ -27,6 +27,48 @@
             border-radius: 8px;
             font-size: 13px;
         }
+
+        #compactFilterBar .filter-box {
+            display: flex;
+            align-items: center;
+            gap: 0px;
+            padding: 6px 8px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            min-width: 100px;
+        }
+
+        #compactFilterBar .filter-box i {
+            font-size: 12px;
+            color: #555;
+        }
+
+        #compactFilterBar .filter-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 12px;
+            padding: 4px;
+            background: none;
+        }
+
+        #compactFilterBar .filter-btn-action {
+            padding: 6px 14px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (max-width: 768px) {
+            #compactFilterBar .filter-box {
+                min-width: 48%;
+            }
+        }
     </style>
 
 
@@ -79,155 +121,156 @@
         <!-- content -->
 
 
-        <div id="filterBar" class=" filter-floating mt-4">
+        <div class="d-flex gap-1 flex-wrap align-items-center mt-3" id="compactFilterBar">
 
-            <form class="needs-validation" novalidate onsubmit="return false">
+            <div class="row">
 
-                <div class="row g-3">
-
-                    <!-- Left Section -->
-                    <div class="col-md-5">
-                        <div class="row g-3">
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="text" id="emp_auto" class="form-control" placeholder="">
-                                    <label for="emp_auto">Employee</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="text" id="cust_auto" class="form-control" placeholder="">
-                                    <label for="cust_auto">Customer</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="number" id="cust_phone_auto" class="form-control" placeholder="">
-                                    <label for="cust_phone_auto">Customer Number</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="date" id="s_date" class="form-control" placeholder="">
-                                    <label for="s_date">Start Date</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="date" id="e_date" class="form-control" placeholder="">
-                                    <label for="e_date">End Date</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-6 filter-col">
-                                <div class="form-floating">
-                                    <input type="number" id="order_no" class="form-control" placeholder="">
-                                    <label for="order_no">Order Number</label>
-                                </div>
-                            </div>
-
-                        </div>
+                <div class="col-md-2">
+                    <!-- Employee -->
+                    <div class="filter-box">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="emp_auto" class="filter-input" placeholder="Employee">
                     </div>
 
-                    <!-- Middle Section -->
-                    <div class="col-md-4">
-                        <div class="row g-3">
+                    <!-- Customer -->
+                    <div class="filter-box">
+                        <i class="fa fa-users"></i>
+                        <input type="text" id="cust_auto" class="filter-input" placeholder="Customer">
+                    </div>
+                </div>
 
-                            <div class="col-md-6 col-6 filter-col">
-                                <div class="form-floating">
-                                    <select id="product_name_select" class="form-select">
-                                        <option value="null" selected disabled>Choose...</option>
-                                    </select>
-                                    <label for="product_name_select">Product Name</label>
-                                </div>
-                            </div>
+                <div class="col-md-2">
+                    <!-- Start Date -->
+                    <div class="filter-box">
+                        <i class="fa fa-calendar"></i>
+                        <input type="date" id="s_date" class="filter-input">
+                    </div>
 
-                            <div class="col-md-6 col-6 filter-col">
-                                <div class="form-floating">
-                                    <select id="model_select" class="form-select">
-                                        <option value="null" selected disabled>Choose...</option>
-                                    </select>
-                                    <label for="model_select">Model</label>
-                                </div>
-                            </div>
+                    <!-- Customer No -->
+                    <div class="filter-box">
+                        <i class="fa fa-phone"></i>
+                        <input type="number" id="cust_phone_auto" class="filter-input" placeholder="Mobile">
+                    </div>
+                </div>
 
-                            <div class="col-md-6 col-6 filter-col">
-                                <div class="form-floating">
-                                    <select id="type_select" class="form-select">
-                                        <option value="null" selected disabled>Choose...</option>
-                                    </select>
-                                    <label for="type_select">Type</label>
-                                </div>
-                            </div>
+                <div class="col-md-2">
+                    <!-- End Date -->
+                    <div class="filter-box">
+                        <i class="fa fa-calendar-check"></i>
+                        <input type="date" id="e_date" class="filter-input">
+                    </div>
 
-                            <div class="col-md-4 col-4 filter-col">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="sub_type_select"
-                                        placeholder="">
-                                    <label for="sub_type_select">Sub Type</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-2 filter-col">
-                                <button type="submit" class="btn btn-primary" id="sub_type_add_btn"><i
-                                        class="fa fa-plus"></i></button>
-                            </div>
+                    <!-- Order No -->
+                    <div class="filter-box">
+                        <i class="fa fa-hashtag"></i>
+                        <input type="number" id="order_no" class="filter-input" placeholder="Order No">
+                    </div>
+                </div>
 
+                
+
+                <div class="col-md-2">
+                    <!-- Product -->
+                    <div class="filter-box">
+                        <i class="fa fa-box"></i>
+                        <select id="product_name_select" class="filter-input">
+                            <option disabled selected value="null">Product</option>
+                        </select>
+                    </div>
+
+                    <!-- Model -->
+                    <div class="filter-box">
+                        <i class="fa fa-cube"></i>
+                        <select id="model_select" class="filter-input">
+                            <option disabled selected value="null">Model</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <!-- Type -->
+                    <div class="filter-box">
+                        <i class="fa fa-tags"></i>
+                        <select id="type_select" class="filter-input">
+                            <option disabled selected value="null">Type</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex">
+                        <!-- Sub Type -->
+                        <div class="filter-box">
+                            <i class="fa fa-list"></i>
+                            <input type="text" id="sub_type_select" class="filter-input" placeholder="Sub Type">
                         </div>
+
+                        <!-- Add Sub Type Button -->
+                        <button class="filter-btn-action bg-primary text-white" id="sub_type_add_btn">
+                            <i class="fa fa-plus"></i> Add
+                        </button>
                     </div>
 
 
-                    <!-- Right Section -->
-                    <div class="col-md-3">
-                        <div class="row g-3">
 
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <select id="status" class="form-select">
-                                        <option value="null" selected disabled>Choose...</option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                    </select>
-                                    <label for="status">Status</label>
-                                </div>
-                            </div>
+                </div>
 
-                            <div class="col-6">
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control rounded-3" placeholder=""
-                                        id="sub_type_box"></textarea>
-                                    <label for="sub_type_box">Sub Type</label>
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <button type="button" class="btn btn-primary" id="filter_btn">
-                                    <i class="fa fa-search"></i>
-                                </button>
-
-                                <button type="reset" class="btn btn-warning border" id="clear_btn">
-                                    <i class="fa-solid fa-broom"></i>
-                                </button>
-                            </div>
-
+                <div class="col-md-2">
+                    <div class="d-flex">
+                        <div class="filter-box">
+                            <i class="fa fa-list"></i>
+                            <input type="text" id="sub_type_box" class="filter-input" disabled placeholder="Sub Type">
                         </div>
 
+                        <!-- Clear -->
+                        <button class="filter-btn-action bg-warning border-0" id="clear_btn">
+                            <i class="fa fa-broom"></i> Clear
+                        </button>
                     </div>
 
-            </form>
+
+                    <div class="d-flex justify-content-between">
+
+                        <!-- Status -->
+                        <div class="filter-box">
+                            <i class="fa fa-check-circle"></i>
+                            <select id="status" class="filter-input">
+                                <option disabled selected value="null">Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="done">Done</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                        <!-- Filter -->
+                        <button class="filter-btn-action bg-primary text-white" id="filter_btn">
+                            <i class="fa fa-search"></i> Filter
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
+
 
 
         <div class="table-responsive " style="max-height: 80vh; overflow-y: auto;">
 
             <table id='order_table1' class='table table-bordered border-dark border-opacity-50 text-center small'>
-                <thead>
+                <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
                     <tr>
 
                         <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>

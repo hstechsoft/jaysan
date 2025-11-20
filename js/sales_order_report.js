@@ -422,7 +422,7 @@ function assign_product_get_product_list() {
           var obj = JSON.parse(response);
           var count = 0
 
-          $("#product_name_select").append(`<option value="null" selected disabled>Choose...</option>`)
+          $("#product_name_select").append(`<option value="null" selected disabled>Product...</option>`)
 
           obj.forEach(function (obj) {
             count = count + 1;
@@ -477,7 +477,7 @@ function assign_product_get_model_list(product_id) {
           var obj = JSON.parse(response);
           var count = 0
 
-          $("#model_select").append(`<option value="null" selected disabled>Choose...</option>`)
+          $("#model_select").append(`<option value="null" selected disabled>Model...</option>`)
 
           obj.forEach(function (obj) {
             count = count + 1;
@@ -532,7 +532,7 @@ function assign_product_get_type_list(model_id) {
           var obj = JSON.parse(response);
           var count = 0
 
-          $("#type_select").append(`<option value="null" selected disabled>Choose...</option>`)
+          $("#type_select").append(`<option value="null" selected disabled>Type...</option>`)
 
 
           obj.forEach(function (obj) {
