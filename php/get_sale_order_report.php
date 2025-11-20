@@ -11,7 +11,7 @@ $unassigned_qty_query = ($_GET['unassigned_qty']) == '' ? 1 : "unassigned_qty  >
 $godown_query = ($_GET['godown']) == '' ? 1 : "godown  = " . test_input($_GET['godown']) . " and assign_type = 'Finshed'";
 $production_date_query  = ($_GET['production_date']) == '' ? 1 : "dated  between " . ($_GET['production_date']) . " and assign_type = 'Production'";
 
-$dcf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf_sts  = " . test_input($_GET['dcf_sts']);
+// $dcf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf_sts  = " . test_input($_GET['dcf_sts']);
 
 
 $product_id_query = ($_GET['product_id']) == '' ? 1 : "product_id  = " . test_input($_GET['product_id']);
@@ -89,7 +89,7 @@ sum(qty) over (PARTITION by opid,dcf_id) as dcf_count,
 sum(qty) over (PARTITION by opid) as total_dcf_count
 FROM assign_product ap INNER join dcf on ap.dcf_id = dcf.dcf_id ),
 
-dcf_details as (SELECT opid,dcf_id,dcf_sts,dcf_count,total_dcf_count from dcf_info where $dcf_sts_query
+dcf_details as (SELECT opid,dcf_id,dcf_sts,dcf_count,total_dcf_count from dcf_info where 1
 -- WHERE opid = 687 and dcf_sts = 'HOD'
 GROUP by opid,dcf_id order by opid )
 ,
