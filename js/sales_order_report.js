@@ -1010,15 +1010,22 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
           $('#order_table').empty()
           var obj = JSON.parse(response);
           var count = 0
-          var pro = ''
 
           obj.forEach(function (obj) {
             count = count + 1;
 
+            var pro = '';
+            let accId = `acc-${obj.order_no}`;
+            let headingId = `heading-${obj.order_no}`;
+            let collapseId = `collapse-${obj.order_no}`;
             var product = JSON.parse(obj.product);
 
 
-            product.forEach(function (item) {
+            product.forEach(function (item, index) {
+
+              accId += `-${index}`;
+              headingId += `-${index}`;
+              collapseId += `-${index}`;
 
               var ass_details = '';
               var dcf_details = '';
@@ -1026,18 +1033,34 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
               var ass_info = item.assign_info;
               var dcf = item.dcf_details;
 
-              if (dcf != null) {
 
+              if (dcf != null && item.remain_dcf > 0) {
                 dcf.forEach(function (d) {
-                  // dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
-                  //       ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
-                  //   </div>`;
-                  dcf_details += `
-                    <span class="badge bg-secondary mx-1">
-                        ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
-                    </span>`;
+                  dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
+                        ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}  dcf - 3/5  <span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>
+                    </div>`;
                 })
-
+              }
+              else if (dcf != null && item.remain_dcf <= 0) {
+                dcf.forEach(function (d) {
+                  dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
+                        ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
+                    </div>`;
+                })
+              }
+              else if (dcf == null && item.remain_dcf > 0) {
+                dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
+                        dcf - 3/5  <span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>
+                    </div>`;
+                // dcf_details += `
+                //   <span class="badge bg-secondary mx-1">
+                //       ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
+                //   </span>`;
+              }
+              else {
+                dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
+                        No data
+                    </div>`;
               }
 
               if (item.unassigned_qty == 0) {
@@ -1079,38 +1102,61 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
               }
               else {
                 ass_details = `
-    <div class="card bg-danger text-white border-0 p-2 small">
-        <div class="d-flex justify-content-between align-items-center">
-            <span>Unassigned</span>
-            <span class="badge bg-light text-danger blink-badge">
-                ${item.unassigned_qty}
-            </span>
-        </div>
-    </div>`
+                  <div class="card bg-danger text-white border-0 p-2 small">
+                      <div class="d-flex justify-content-between align-items-center">
+                          <span>Unassigned</span>
+                          <span class="badge bg-light text-danger blink-badge">
+                              ${item.unassigned_qty}
+                          </span>
+                      </div>
+                  </div>`
               }
 
 
               pro += `
-                <div class="card shadow-sm border-0 mb-2">
+<div class="accordion mb-2" id="${accId}">
+    <div class="accordion-item border-0 shadow-sm">
 
-                    <div class="card-header bg-light py-2 px-3">
-                        <div class="row text-center text-dark small fw-semibold">
-                            <div class="col">${item.product}</div>
-                            <div class="col">${item.model_name}</div>
-                            <div class="col">${item.type_name}</div>
-                            <div class="col">${item.required_qty}</div>
-                        </div>
-                        <div class="text-muted small mt-1">${item.sub_type}   ${dcf_details}</div>
+        <h2 class="accordion-header" id="${headingId}">
+            <button class="accordion-button bg-light py-2 px-3 collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#${collapseId}"
+                    aria-expanded="false"
+                    aria-controls="${collapseId}">
+
+                <div class="container-fluid">
+                    <div class="row text-center text-dark small fw-semibold">
+                        <div class="col">${item.product}</div>
+                        <div class="col">${item.model_name}</div>
+                        <div class="col">${item.type_name}</div>
+                        <div class="col">${item.required_qty}</div>
                     </div>
-                    
-                  
+                    <div class="text-muted small mt-1">${item.sub_type}</div>
+                </div>
+
+            </button>
+        </h2>
+
+        <div id="${collapseId}"
+             class="accordion-collapse collapse"
+             aria-labelledby="${headingId}"
+             data-bs-parent="#${accId}">
+            
+            <div class="accordion-body p-0">
+                ${dcf_details}
+            </div>
+        </div>
+
+        <div class="card-body py-2 px-3">
+            ${ass_details}
+        </div>
+
+    </div>
+</div>
+`;
 
 
-                    <div class="card-body py-2 px-3">
-                        ${ass_details}
-                    </div>
-
-                </div>`;
 
             });
 
