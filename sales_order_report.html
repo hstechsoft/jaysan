@@ -69,6 +69,27 @@
                 min-width: 48%;
             }
         }
+
+        .blink-badge {
+            animation: pulseBlink 1s infinite;
+        }
+
+        @keyframes pulseBlink {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.25);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 
 
@@ -167,7 +188,7 @@
                     </div>
                 </div>
 
-                
+
 
                 <div class="col-md-2">
                     <!-- Product -->
@@ -233,9 +254,6 @@
                             <i class="fa fa-check-circle"></i>
                             <select id="status" class="filter-input">
                                 <option disabled selected value="null">Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="done">Done</option>
-                                <option value="cancelled">Cancelled</option>
                             </select>
                         </div>
 
@@ -264,6 +282,8 @@
 
 
         </div>
+
+
 
 
 
@@ -300,6 +320,7 @@
 
             </table>
         </div>
+
 
 
 

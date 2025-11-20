@@ -125,12 +125,12 @@ $(document).ready(function () {
         cacheLength: 0,
         select: function (event, ui) {
 
-          $(this).data("selected-cus_id", ui.item.cus_id);
+          $(this).data("cus_id", ui.item.cus_id);
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           //  get_bom(ui.item.id)
           $("#cust_phone_auto").val(ui.item.phone);
-          console.log($("#cust_auto").data("selected-cus_id"));
+          // console.log($("#cust_auto").data("selected-cus_id"));
 
 
 
@@ -186,7 +186,7 @@ $(document).ready(function () {
         cacheLength: 0,
         select: function (event, ui) {
 
-          $(this).data("selected-cus_id", ui.item.cus_id);
+          $(this).data("cus_id", ui.item.cus_id);
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           //  get_bom(ui.item.id)
@@ -207,10 +207,12 @@ $(document).ready(function () {
   });
 
   assign_product_get_product_list();
+  get_production_sts();
 
   $("#product_name_select").on("change", function (event) {
     event.preventDefault();
     $("#model_select").val("null");
+    $("#sub_type_box").val("");
     $("#type_select").val("null");
     $("#sub_type_select").val("");
     assign_product_get_model_list($(this).val());
@@ -222,6 +224,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     $("#type_select").val("null");
+    $("#sub_type_box").val("");
     $("#sub_type_select").val("");
 
     assign_product_get_type_list($(this).val());
@@ -232,6 +235,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     $("#sub_type_select").val("");
+    $("#sub_type_box").val("");
     $('#sub_type_select').data("type_id", $(this).val());
 
   });
@@ -319,24 +323,27 @@ $(document).ready(function () {
 
   $("#filter_btn").on("click", function () {
 
-    var emp = $("#emp_auto").val();
-    var cust = $("#cust_auto").val();
-    var cust_phone = $("#cust_phone_auto").val();
-    var s_date = $("#s_date").val();
-    var e_date = $("#e_date").val();
-    var order_no = $("#order_no").val();
-    var product_name = $("#product_name_select").val();
-    var model = $("#model_select").val();
-    var type = $("#type_select").val();
-    var sub_type_box = $("#sub_type_box").val();
-    var status = $("#status").val();
+    var emp = $("#emp_auto").val() || "";
+    var cust = $("#cust_auto").data("cus_id") || "";
+    var cust_phone = $("#cust_phone_auto").val() || "";
+    var s_date = $("#s_date").val() || "";
+    var e_date = $("#e_date").val() || "";
+    var order_no = $("#order_no").val() || "";
+    var product_name = $("#product_name_select").val() || "";
+    var model = $("#model_select").val() || "";
+    var type = $("#type_select").val() || "";
+    var sub_type_box = $("#sub_type_box").val() || "";
+    var statuss = $("#status").val() || "";
 
-    if (emp === "" && cust === "" && cust_phone === "" && s_date === "" && e_date === "" && order_no === "" && (product_name === "" || product_name === null) && (model === "" || model === null) && (type === "" || type === null) && sub_type_box === "" && (status === "" || status === null)) {
+    if (emp === "" && cust === "" && cust_phone === "" && s_date === "" && e_date === "" && order_no === "" && (product_name === "" || product_name === null) && (model === "" || model === null) && (type === "" || type === null) && sub_type_box === "" && (statuss === "" || statuss === null)) {
       salert("Warning", "At least one field is required", "warning");
       return;
     }
 
-    alert("Filter applied");
+    // alert("Filter applied");
+    get_sale_order_report(
+      cust, order_no, statuss, product_name, type, model, sub_type_box
+    )
     sub_type_box_value = ""
   });
 
@@ -395,10 +402,73 @@ $(document).ready(function () {
 
   });
 
+  $("#clear_btn").on("click", function () {
+    window.location.reload();
+  })
+
 
 
 });
 
+
+
+
+
+
+function get_production_sts() {
+
+
+  $.ajax({
+    url: "php/get_production_sts.php",
+    type: "get", //send it through get method
+    data: {
+      // key : value
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+          $("#status").empty();
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+          $("#status").append(`<option value="null" selected disabled>Product...</option>`)
+
+          obj.forEach(function (obj) {
+            count = count + 1;
+            // append logic here
+
+            $("#status").append("<option value=\"" + obj.assign_type + "\">" + obj.assign_type + "</option>")
+          });
+
+
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function assign_product_get_product_list() {
 
@@ -906,31 +976,148 @@ function get_assign_sts(order_id) {
 
 
 
-function get_sales_order() {
+function get_sale_order_report(cust, order_no, statuss, product_name, type, model, sub_type_box) {
 
 
   $.ajax({
-    url: "php/get_sales_report1.php",
+    url: "php/get_sale_order_report.php",
     type: "get", //send it through get method
     data: {
-
+      customer_id: cust || "",
+      order_no: order_no || "",
+      dcf_sts: statuss || "",
+      product_id: product_name || "",
+      type_id: type || "",
+      model_id: model || "",
+      sub_type: sub_type_box || "",
+      customer: "",
+      assign_type: "",
+      unassigned_qty: "",
+      godown: "",
+      production_date: "",
+      sale_order_date: "",
+      order_category: "",
+      remain_dcf: "",
     },
     success: function (response) {
       console.log(response);
 
 
-      $('#order_table').empty()
       if (response.trim() != "error") {
 
         if (response.trim() != "0 result") {
 
+          $('#order_table').empty()
           var obj = JSON.parse(response);
           var count = 0
-
+          var pro = ''
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + obj.pay_details + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+
+            var product = JSON.parse(obj.product);
+
+
+            product.forEach(function (item) {
+
+              var ass_details = '';
+              var dcf_details = '';
+
+              var ass_info = item.assign_info;
+              var dcf = item.dcf_details;
+
+              if (dcf != null) {
+
+                dcf.forEach(function (d) {
+                  // dcf_details += `<div class="card-header bg-light text-dark fw-bold py-2 px-3">
+                  //       ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
+                  //   </div>`;
+                  dcf_details += `
+                    <span class="badge bg-secondary mx-1">
+                        ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
+                    </span>`;
+                })
+
+              }
+
+              if (item.unassigned_qty == 0) {
+                ass_info.forEach(function (ass) {
+
+                  var godown_details = '';
+
+                  ass.assign_details.forEach(function (g) {
+
+                    if (ass.assign_type == "Production") {
+
+                      godown_details = `<div class="card-body py-1 small text-center text-dark"><p>${g.production_date} - <b>${g.production_date_count}</i></p></div>`;
+                      return;
+                    }
+                    else if (ass.assign_type == "Finshed") {
+
+                      godown_details = `<div class="card-body py-1 small text-center text-dark"><p>${g.godown_name} - <b>${g.finished_godown_count}</i></p></div>`;
+                      return;
+                    }
+
+
+                    // godown_details += `<p>${g.godown_name ?? ''} - ${g.finished_godown_count}</p>`;
+                  });
+
+
+
+                  ass_details += `
+                    <div class="card border mb-2">
+                        <div class="card-header py-1 bg-white text-center text-dark small fw-bold">
+                            ${ass.assign_type} 
+                            <span class="badge bg-primary ms-1">${ass.assigntype_total_count}</span>
+                        </div>
+                        
+                            ${godown_details}
+                        
+                    </div>`;
+                });
+
+              }
+              else {
+                ass_details = `
+    <div class="card bg-danger text-white border-0 p-2 small">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>Unassigned</span>
+            <span class="badge bg-light text-danger blink-badge">
+                ${item.unassigned_qty}
+            </span>
+        </div>
+    </div>`
+              }
+
+
+              pro += `
+                <div class="card shadow-sm border-0 mb-2">
+
+                    <div class="card-header bg-light py-2 px-3">
+                        <div class="row text-center text-dark small fw-semibold">
+                            <div class="col">${item.product}</div>
+                            <div class="col">${item.model_name}</div>
+                            <div class="col">${item.type_name}</div>
+                            <div class="col">${item.required_qty}</div>
+                        </div>
+                        <div class="text-muted small mt-1">${item.sub_type}   ${dcf_details}</div>
+                    </div>
+                    
+                  
+
+
+                    <div class="card-body py-2 px-3">
+                        ${ass_details}
+                    </div>
+
+                </div>`;
+
+            });
+
+
+
+
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.oid + "</td><td class = 'small ' style='max-width: 250px;'>" + obj.pay_details + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button data-emp_id = '" + "emp_id" + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 
@@ -977,7 +1164,7 @@ function check_login() {
   }
 
   else {
-    get_sales_order()
+    get_sale_order_report()
     // get_sales_order_approval(1)
   }
 }
@@ -1007,7 +1194,7 @@ function get_current_userid_byphoneid() {
           current_user_name = obj.emp_name;
         });
 
-        get_sales_order()
+        get_sale_order_report()
         //  get_sales_order_approval(1)
       }
 
