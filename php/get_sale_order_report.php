@@ -106,15 +106,20 @@ dcf_final as (SELECT opid, JSON_ARRAYAGG(
        sop_view as(  SELECT oid,opid,order_category,customer_id,dated as sale_order_date,order_no,cus_name,cus_phone,product,model_name,type_name,sub_type from  sales_order_info_view 
         WHERE 1  and $product_id_query and $order_no_query and $type_id_query and $model_id_query and $sub_type_query
                    --  product_id = 30 and order_no = 1 and  type_id = '' and model_id = '' and sub_type in ('')
-                  )           
+                  )       ,    
      
         
       -- SELECT sop.opid,dcf_details,ifnull(total_dcf_count,0) as dcf_count from dcf_final  right join sales_order_product sop on sop.opid = dcf_final.opid
       
-      SELECT sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
+     final as( SELECT sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
        JSON_ARRAYAGG(
         JSON_OBJECT('product',product,'model_name',model_name,'type_name',type_name,'sub_type',sub_type,'dcf_details',dcf_details,'dcf_count',dcf_count,'required_qty',required_qty,'assigned_qty',assigned_qty,'unassigned_qty',unassigned_qty,'remain_dcf',required_qty - dcf_count,'assign_info',assign_info)) as product
-       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query GROUP by oid limit 50
+       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query  GROUP by oid limit 50) 
+
+       select final.*,pay_details,paid,total_payment,bal from final left join sale_order_payment_view on final.oid = sale_order_payment_view.oid;
+
+
+
       -- WHERE  customer_id = 11493 and sale_order_date BETWEEN '2025-01-12' and '2025-02-1' and order_category = 'Sales' and remain_dcf > 0 and  required_qty - dcf_count > 0
    
 
