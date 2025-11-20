@@ -79,7 +79,7 @@ RIGHT JOIN sales_order_product sop ON
 
 assign_product_details as(select opid,assign_type,qty,godown,
 dated as production_date,godown_name,assigned_qty,required_qty,unassigned_qty,assigntype_total_count,finished_godown_count,production_date_count from ass_info WHERE 1 
-and $assign_type_query and $unassigned_qty_query and $godown_query and $production_date_query and 
+and $assign_type_query and $unassigned_qty_query and $godown_query and $production_date_query  
 
 -- AND assign_type in ("Waiting") and unassigned_qty > 1 and godown = 0 and dated BETWEEN '2025-05-10' and '2025-12-10' 
 
@@ -114,7 +114,7 @@ dcf_final as (SELECT opid, JSON_ARRAYAGG(
       SELECT sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
        JSON_ARRAYAGG(
         JSON_OBJECT('product',product,'model_name',model_name,'type_name',type_name,'sub_type',sub_type,'dcf_details',dcf_details,'dcf_count',dcf_count,'required_qty',required_qty,'assigned_qty',assigned_qty,'unassigned_qty',unassigned_qty,'remain_dcf',required_qty - dcf_count,'assign_info',assign_info)) as product
-       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query GROUP by oid
+       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query GROUP by oid limit 50
       -- WHERE  customer_id = 11493 and sale_order_date BETWEEN '2025-01-12' and '2025-02-1' and order_category = 'Sales' and remain_dcf > 0 and  required_qty - dcf_count > 0
    
 
