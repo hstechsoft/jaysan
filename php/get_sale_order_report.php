@@ -6,7 +6,7 @@
 //  $dcrf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf1.sts  = '" . ($_GET['dcf_sts']) . "'";
 // $sof_query = ($_GET['order_no']) == '' ? 1 : "sof.order_no  = " . ($_GET['order_no']);
 
-$assign_type_query = ($_GET['assign_type']) == '' ? 1 : "ap.assign_type  = " . test_input($_GET['assign_type']);
+$assign_type_query = ($_GET['assign_type']) == '' ? 1 : "assign_type  = " . test_input($_GET['assign_type']);
 $unassigned_qty_query = ($_GET['unassigned_qty']) == '' ? 1 : "unassigned_qty  > " . test_input($_GET['unassigned_qty']);
 $godown_query = ($_GET['godown']) == '' ? 1 : "godown  = " . test_input($_GET['godown']) . " and assign_type = 'Finshed'";
 $production_date_query  = ($_GET['production_date']) == '' ? 1 : "dated  between " . ($_GET['production_date']) . " and assign_type = 'Production'";
