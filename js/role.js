@@ -551,15 +551,17 @@ function get_role_type(menu) {
 
           obj.forEach(function (obj) {
 
+            let safeIdd = "role_" + obj.menu_name.replace(/\s+/g, "_").replace(/[^\w\-]/g, "");
+
 
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
+              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${safeIdd}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${safeIdd}">${obj.menu_name}</label>
                 </div>`);
 
             } else {
 
-              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
+              $("#view_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${safeIdd}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${safeIdd}">${obj.menu_name}</label></div>
                 `);
 
 
@@ -616,15 +618,15 @@ function get_app_menu_master(menu) {
 
           obj.forEach(function (obj) {
 
-
+            let safeId = obj.menu_name.replace(/\s+/g, "_").replace(/[^\w\-]/g, "");
             if (menu && menu.has(obj.menu_name)) {
 
-              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label>
+              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" checked type="checkbox" id="${safeId}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${safeId}">${obj.menu_name}</label>
                 </div>`);
 
             } else {
 
-              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${obj.menu_name}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${obj.menu_name}">${obj.menu_name}</label></div>
+              $("#view_app_role").append(`<div class="col-4 form-check"><input class="form-check-input" type="checkbox" id="${safeId}" value="${obj.menu_name}"><label class="form-check-label word-break" for="${safeId}">${obj.menu_name}</label></div>
                 `);
 
             }
