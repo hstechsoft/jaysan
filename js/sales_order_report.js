@@ -186,12 +186,12 @@ $(document).ready(function () {
         cacheLength: 0,
         select: function (event, ui) {
 
-          $(this).data("cus_id", ui.item.cus_id);
+          $("#cust_auto").data("cus_id", ui.item.cus_id);
           //   $('#part_name_out').data("selected-part_id", ui.item.id);
           //   $('#part_name_out').val(ui.item.part_name)
           //  get_bom(ui.item.id)
           $("#cust_auto").val(ui.item.label);
-          console.log($("#cust_phone_auto").data("selected-cus_id"));
+          console.log( ui.item.cus_id);
 
 
 
@@ -325,24 +325,30 @@ $(document).ready(function () {
 
     var emp = $("#emp_auto").val() || "";
     var cust = $("#cust_auto").data("cus_id") || "";
-    var cust_phone = $("#cust_phone_auto").val() || "";
-    var s_date = $("#s_date").val() || "";
-    var e_date = $("#e_date").val() || "";
     var order_no = $("#order_no").val() || "";
     var product_name = $("#product_name_select").val() || "";
     var model = $("#model_select").val() || "";
     var type = $("#type_select").val() || "";
     var sub_type_box = $("#sub_type_box").val() || "";
     var statuss = $("#status").val() || "";
-
-    if (emp === "" && cust === "" && cust_phone === "" && s_date === "" && e_date === "" && order_no === "" && (product_name === "" || product_name === null) && (model === "" || model === null) && (type === "" || type === null) && sub_type_box === "" && (statuss === "" || statuss === null)) {
+    var unassigned_qty = $("#unassigned_qty").val() || "";
+    var payment = $("#payment").val() || "";
+    var sale_date = $("#sale_s_date").val()+" and "+ $("#sale_e_date").val() || "";
+    var production_date = $("#production_s_date").val()+" and "+ $("#production_e_date").val() || "";
+    var order_category = $("#sales_cate :checked") ? "sale" : "required" || '';
+    var godown = $("#godown").val() || "";
+    var remaining_dcf = $("#remaining_dcf").val() || "";
+    
+    console.log($("#cust_auto").data("cus_id"));
+    
+    if (emp === "" && cust === "" && order_category === "" && godown === "" && e_date === "" && order_no === "" && unassigned_qty === "" && payment === "" && sale_date === "" && production_date === "" && remaining_dcf === "" && (product_name === "" || product_name === null) && (model === "" || model === null) && (type === "" || type === null) && sub_type_box === "" && (statuss === "" || statuss === null)) {
       salert("Warning", "At least one field is required", "warning");
       return;
     }
 
     // alert("Filter applied");
     get_sale_order_report(
-      cust, order_no, statuss, product_name, type, model, sub_type_box
+      emp, cust, order_no, statuss, product_name, type, model, sub_type_box, unassigned_qty, payment, sale_date, godown, production_date, remaining_dcf, order_category
     )
     sub_type_box_value = ""
   });
@@ -437,7 +443,7 @@ function get_production_sts() {
           var obj = JSON.parse(response);
           var count = 0
 
-          $("#status").append(`<option value="null" selected disabled>Product...</option>`)
+          $("#status").append(`<option value="null" selected disabled>Status...</option>`)
 
           obj.forEach(function (obj) {
             count = count + 1;
@@ -650,7 +656,7 @@ function get_godown_name() {
     },
     success: function (response) {
       $('#godown').empty()
-      $('#godown').append("<option disabled  selected>Choose Options...</option>")
+      $('#godown').append("<option disabled  selected>Choose Godown...</option>")
 
       if (response.trim() != "error") {
 
@@ -976,7 +982,7 @@ function get_assign_sts(order_id) {
 
 
 
-function get_sale_order_report(cust, order_no, statuss, product_name, type, model, sub_type_box) {
+function get_sale_order_report(emp, cust, order_no, statuss, product_name, type, model, sub_type_box, unassigned_qty, payment, sale_date, godown, production_date, remaining_dcf, order_category) {
 
 
   $.ajax({
@@ -985,19 +991,19 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
     data: {
       customer_id: cust || "",
       order_no: order_no || "",
-      dcf_sts: statuss || "",
+      assign_type: statuss || "",
       product_id: product_name || "",
       type_id: type || "",
       model_id: model || "",
       sub_type: sub_type_box || "",
-      customer: "",
-      assign_type: "",
-      unassigned_qty: "",
-      godown: "",
-      production_date: "",
-      sale_order_date: "",
-      order_category: "",
-      remain_dcf: "",
+      emp_id: emp || "",
+      unassigned_qty: unassigned_qty || "",
+      godown: godown || "",
+      production_date: production_date || "",
+      sale_order_date: sale_date || "",
+      order_category: order_category || "",
+      remain_dcf: remaining_dcf || "",
+      payment: payment || "",
     },
     success: function (response) {
       console.log(response);
@@ -1034,20 +1040,22 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
 
               let blink = "";
 
-              if (dcf != null && item.remain_dcf > 0) {
-                blink = `<span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>`;
-              } else if (dcf == null && item.remain_dcf > 0) {
+              if (item.remain_dcf > 0) {
                 blink = `<span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>`;
               }
+              // else if (dcf == null && item.remain_dcf > 0) {
+              //   blink = `<span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>`;
+              // }
 
+              let dcf_ratio = parseFloat(item.required_qty)-parseFloat(item.remain_dcf)
               let dcf_details = `
                   <div class="accordion" id="${accId}">
                     <div class="accordion-item">
-                      <h2 class="accordion-header" id="${headingId}">
+                      <h2 class="accordion-header" id="${headingId}" >
                         <button class="accordion-button collapsed py-1 px-2  ali  gn-items-center" id="accordion_head_btn" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="false" aria-controls="${collapseId}">
 
-                          <span class="fw-bold pe-5">DCF Details</span>
-                          ${blink}
+                          <span class="fw-bold pe-4" style="font-size: 11px">DCF Details</span><span class="pe-4" style="font-size: 11px">dcf - ${dcf_ratio}/${item.required_qty}</span>
+                          ${blink} 
 
                         </button>
                       </h2>
@@ -1055,33 +1063,13 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
                         <div class="accordion-body py-2 px-2">
                     `;
 
-              if (dcf != null && item.remain_dcf > 0) {
-                dcf.forEach(function (d) {
-                  dcf_details += `
-                    <div class="card-header bg-light text-dark fw-bold py-1 px-2">
-                      ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
-                      &nbsp; | &nbsp;
-                      dcf - ${item.remain_dcf}/${item.dcf_count}
-                      <span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>
-                    </div>`;
-                });
-              }
-
-              else if (dcf != null && item.remain_dcf <= 0) {
+              if (dcf != null) {
                 dcf.forEach(function (d) {
                   dcf_details += `
                     <div class="card-header bg-light text-dark fw-bold py-1 px-2">
                       ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
                     </div>`;
                 });
-              }
-
-              else if (dcf == null && item.remain_dcf > 0) {
-                dcf_details += `
-                  <div class="card-header bg-light text-dark fw-bold py-1 px-2">
-                    dcf - ${item.remain_dcf}/${item.dcf_count}
-                    <span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>
-                  </div>`;
               }
 
               else {
@@ -1173,7 +1161,7 @@ function get_sale_order_report(cust, order_no, statuss, product_name, type, mode
 
 
 
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.oid + "</td><td class = 'small ' style='max-width: 250px;'>" + obj.pay_details + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button data-emp_id = '" + "emp_id" + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + obj.pay_details + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 

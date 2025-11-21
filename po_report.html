@@ -98,21 +98,22 @@
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary " id="poreport_search">Search</button>
-                        <button type="reset" class="btn btn-warning " id="po_report_reset">Reset</button>
+                        <button type="button" class="btn btn-warning " id="po_report_reset">Reset</button>
                     </div>
                 </form>
 
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow-y: auto; max-height: 95vh;">
                     <table class="table caption-top table-bordered table-striped ">
                         <caption></caption>
-                        <thead>
+                        <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
 
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Po.Id</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Order to</th>
+                                <th scope="col" style="width: 10%;">Date</th>
+                                <th scope="col" style="width: 13%;">Order to</th>
                                 <th scope="col">Status</th>
+                                <th scope="col">Quantity</th>
 
                             </tr>
                         </thead>
@@ -127,58 +128,56 @@
             </div>
 
             <div class="col-md-6">
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow-y: auto; max-height: 70vh;">
                     <table class="table caption-top table-bordered table-striped ">
                         <caption></caption>
-                        <thead>
+                        <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
 
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Material Name</th>
-                                <th scope="col">PO Quantity</th>
+                                <th scope="col" style="width: 10%;">PO Quantity</th>
                                 <th scope="col">Received Quantity</th>
-                                <th scope="col">Total Received</th>
-                                <th scope="col">Quantity</th>
+                                <th scope="col" style="width: 10%;">Total Received</th>
+                                <th scope="col" style="width: 10%;">Quantity</th>
 
                             </tr>
                         </thead>
                         <tbody id="poreport_item_table">
                         </tbody>
                     </table>
-                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation d-none" id="po_report_input" novalidate
-                        onsubmit="return false">
-                        <div class="row " >
-                            <div class="col-4">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="dc_no" placeholder=""
-                                        required>
-                                    <label for="dc_no">Dc No
-                                        <span class="text-danger">*</span> </label>
-
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-floating mb-2">
-                                    <input type="date" class="form-control rounded-3" id="dc_date" placeholder=""
-                                        required>
-                                    <label for="dc_date">Dc Date
-                                        <span class="text-danger">*</span> </label>
-
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary" id="po_report_btn">Submit</button>
-                            </div>
-                        </div>
-                    </form>
 
                 </div>
+                <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation d-none" id="po_report_input"
+                    novalidate onsubmit="return false">
+                    <div class="row ">
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="dc_no" placeholder="" required>
+                                <label for="dc_no">Dc No
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control rounded-3" id="dc_date" placeholder="" required>
+                                <label for="dc_date">Dc Date
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary" id="po_report_btn">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <!-- content -->
 
@@ -211,7 +210,7 @@
         <!-- external js -->
         <script src="js/po_report.js" type="module"></script>
         <script src="js/menu.js" type="module"></script>
-        <script src="js/get_all_id.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

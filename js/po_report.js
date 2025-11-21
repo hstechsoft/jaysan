@@ -134,11 +134,13 @@ $(document).ready(function () {
 
     $("#poreport_search").on("click", function () {
 
+        $("#poreport_item_table").empty();
+        $("#po_report_input").addClass('d-none');
 
         if ($("#from_date").val() && $("#to_date").val()) {
 
             var from_date = $("#from_date").val();
-            var to_date =$('#to_date').val();
+            var to_date = $('#to_date').val();
         }
         if ($("#part").data("part_id")) {
             var part = $("#part").data("part_id");
@@ -155,11 +157,11 @@ $(document).ready(function () {
     })
 
     $("#po_report_reset").on("click", function () {
-        $("#poreport_table").empty();
+        window.location.reload();
     })
 
     $("#poreport_table").on("click", "tr", function () {
-
+        $("#po_report_input").addClass('d-none');
         get_po_receive_sts($(this).data("po_id"));
     })
     $("#poreport_item_table").on("input", "tr td", function () {
@@ -181,7 +183,7 @@ $(document).ready(function () {
 
             let po_id = $(this).data("jaysan_po_material_id");
             let po_qty = $(this).find("td").eq(5).text();
-            if (po_id && po_qty != '0') {
+            if (po_id && po_qty != '0' && po_qty != '') {
                 details_po.push({
                     jaysan_po_material_id: po_id,
                     qty: po_qty,
@@ -259,23 +261,61 @@ function get_po_receive_sts(po_id) {
 
 
 
-                obj.forEach(function (obj) {
+                obj.forEach(function (obj, index) {
                     count += 1;
                     var rjd = "";
                     var org_qty = parseInt(obj.qty) - parseInt(obj.total_received);
                     console.log(org_qty);
 
                     if (obj.receive_json_sts == 'nothing received') {
-                        rjd = "<li class='list-group-item text-center text-danger'>Nothing Received</li>"
+                        rjd = "<li class='list-group-item text-center text-danger' style='font-size: 12px'>Nothing Received</li>"
                     }
                     else {
                         var received_data = JSON.parse(obj.receive_json_sts);
-                        received_data.forEach(function (item) {
-                            rjd += "<li class='list-group-item'>Emp Name: " + item.received_by + '<br>Dc No: ' + item.dc_no + '<br>Dc Date: ' + item.dc_date + '<br>Dc Quantity: ' + item.qty + "</li>"
-                        })
+
+                        rjd += `
+                                <div class="accordion" id="receiveAccordion">
+                            `;
+
+                        let headId = "recHead" + index;
+                        let collapseId = "recCollapse" + index;
+                        received_data.forEach(function (item, index) {
+
+                            headId += index;
+                            collapseId += index;
+                            rjd += `
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="${headId}">
+                                        <button class="accordion-button collapsed" 
+                                                type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#${collapseId}" 
+                                                aria-expanded="false"
+                                                aria-controls="${collapseId}"
+                                                style="font-size: 12px;">
+                                            <strong>${item.received_by}</strong> &nbsp; • &nbsp; Quantity:  <strong> ${item.qty}</strong>
+                                        </button>
+                                    </h2>
+
+                                    <div id="${collapseId}" 
+                                        class="accordion-collapse collapse" 
+                                        aria-labelledby="${headId}" 
+                                        data-bs-parent="#receiveAccordion">
+                                        
+                                        <div class="accordion-body py-2 px-2" style="font-size: 12px;">
+                                            <div><strong>DC Date:</strong> ${item.dc_date}</div>
+                                            <div><strong>DC No:</strong> ${item.dc_no}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        rjd += `</div>`;
                     }
 
-                    $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + "><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:200px; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
+
+                    $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
                 });
 
             }
@@ -327,14 +367,14 @@ function get_po_report(part, company, fdate, tdate) {
                     } else {
                         percentage = (parseFloat(obj.inward_qty) / parseFloat(obj.total_po_qty)) * 100;
                     }
-                    percentage = Math.round(percentage);
-                    if (percentage != 0) {
+                   percentage = Math.round(percentage * 100) / 100;
+                    if (percentage > 0) {
                         status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received";
                     }
                     else {
                         status = 'Not Received';
                     }
-                    $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td></tr>")
+                    $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "  style='font-size: 12px'><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td><td>" + obj.inward_qty + "/" + obj.total_po_qty + "</td></tr>")
                 });
 
             }
