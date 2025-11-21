@@ -2,16 +2,12 @@
  include 'db_head.php';
 
 
-//  $customer_query = ($_GET['customer']) == '' ? 1 : "cus.cus_id  = " . ($_GET['customer']);
-//  $dcrf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf1.sts  = '" . ($_GET['dcf_sts']) . "'";
-// $sof_query = ($_GET['order_no']) == '' ? 1 : "sof.order_no  = " . ($_GET['order_no']);
-
 $assign_type_query = ($_GET['assign_type']) == '' ? 1 : "assign_type  = " . test_input($_GET['assign_type']);
-$unassigned_qty_query = ($_GET['unassigned_qty']) == '' ? 1 : "unassigned_qty  > " . test_input($_GET['unassigned_qty']);
+$unassigned_qty_query = ($_GET['unassigned_qty']) == '' ? 1 : "unassigned_qty  >= " . test_input($_GET['unassigned_qty']);
 $godown_query = ($_GET['godown']) == '' ? 1 : "godown  = " . test_input($_GET['godown']) . " and assign_type = 'Finshed'";
 $production_date_query  = ($_GET['production_date']) == '' ? 1 : "dated  between " . ($_GET['production_date']) . " and assign_type = 'Production'";
 
-// $dcf_sts_query = ($_GET['dcf_sts']) == '' ? 1 : "dcf_sts  = " . test_input($_GET['dcf_sts']);
+
 
 
 $product_id_query = ($_GET['product_id']) == '' ? 1 : "product_id  = " . test_input($_GET['product_id']);
@@ -24,9 +20,10 @@ $sub_type_query = ($_GET['sub_type']) == '' ? 1 : "sub_type  = " . test_input($_
 $customer_id_query = ($_GET['customer_id']) == '' ? 1 : "customer_id  = " . test_input($_GET['customer_id']);
 $sale_order_date_query = ($_GET['sale_order_date']) == '' ? 1 : "sale_order_date  between " . ($_GET['sale_order_date']); 
 $order_category_query = ($_GET['order_category']) == '' ? 1 : "order_category  = " . test_input($_GET['order_category']);
-$remain_dcf_query = ($_GET['remain_dcf']) == '' ? 1 : " required_qty - dcf_count  > " . test_input($_GET['remain_dcf']);
+$remain_dcf_query = ($_GET['remain_dcf']) == '' ? 1 : " required_qty - dcf_count  >= " . test_input($_GET['remain_dcf']);
 
-
+$emp_id_query = ($_GET['emp_id']) == '' ? 1 : " emp_id  = " . test_input($_GET['emp_id']);
+$payment_query = ($_GET['payment']) == '' ? 1 : " bal  >= " . test_input($_GET['payment']);
 
 
  
@@ -103,7 +100,7 @@ dcf_final as (SELECT opid, JSON_ARRAYAGG(
         JSON_OBJECT('dcf_id',dcf_id,'dc_sts',dcf_sts,'dcf_count',dcf_count)) as dcf_details,total_dcf_count from dcf_details GROUP by opid ),
       dcf_final1 as (SELECT sop.opid,dcf_details,ifnull(total_dcf_count,0) as dcf_count from dcf_final  right join sales_order_product sop on sop.opid = dcf_final.opid),  
         
-       sop_view as(  SELECT oid,opid,order_category,customer_id,dated as sale_order_date,order_no,cus_name,cus_phone,product,model_name,type_name,sub_type from  sales_order_info_view 
+       sop_view as(  SELECT emp_id,emp_name,oid,opid,order_category,customer_id,dated as sale_order_date,order_no,cus_name,cus_phone,product,model_name,type_name,sub_type from  sales_order_info_view 
         WHERE 1  and $product_id_query and $order_no_query and $type_id_query and $model_id_query and $sub_type_query
                    --  product_id = 30 and order_no = 1 and  type_id = '' and model_id = '' and sub_type in ('')
                   )       ,    
@@ -111,12 +108,12 @@ dcf_final as (SELECT opid, JSON_ARRAYAGG(
         
       -- SELECT sop.opid,dcf_details,ifnull(total_dcf_count,0) as dcf_count from dcf_final  right join sales_order_product sop on sop.opid = dcf_final.opid
       
-     final as( SELECT sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
+     final as( SELECT emp_id,emp_name,sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
        JSON_ARRAYAGG(
         JSON_OBJECT('product',product,'model_name',model_name,'type_name',type_name,'sub_type',sub_type,'dcf_details',dcf_details,'dcf_count',dcf_count,'required_qty',required_qty,'assigned_qty',assigned_qty,'unassigned_qty',unassigned_qty,'remain_dcf',required_qty - dcf_count,'assign_info',assign_info)) as product
-       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query  GROUP by oid limit 50) 
+       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query   GROUP by oid limit 50) 
 
-       select final.*,pay_details,paid,total_payment,bal from final left join sale_order_payment_view on final.oid = sale_order_payment_view.oid;
+       select final.*,pay_details,paid,total_payment,bal from final left join sale_order_payment_view on final.oid = sale_order_payment_view.oid where  $payment_query and $emp_id_query;
 
 
 
