@@ -37,19 +37,19 @@ $sql = "SET time_zone = '+05:30';";
 // left join jaysan_inward on jp.po_id = jaysan_inward.ref_id and jaysan_inward.inward_cat = 'po'
 
 $sql .= "SELECT
-    jp.po_no,
-    jp.po_id,
-    jp.po_date,
-    (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to) order_to,
-    sum(jmat.qty) over (partition by jp.po_id) as total_po_qty,
-        sum(jmat.qty) over (partition by grn.    ) as inward_qty
-  
- 
+jp.po_no,
+jp.po_date,
+jp.po_id,
+sum(jmat.qty) as total_po_qty,
+
+ifnull(sum(grn.qty),0) as inward_qty,
+    (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to)  as order_to
+    
 FROM
-    jaysan_po jp
-INNER JOIN jaysan_po_material jmat ON  jmat.jaysan_po_id = jp.po_id
-    LEFT join grn  on jmat.jaysan_po_material_id = grn.jaysan_po_material_id    
-WHERE $material_query and $date_query and  $order_to_query GROUP by jp.po_id";
+  jaysan_po_material   jmat
+INNER JOIN jaysan_po jp  ON  jmat.jaysan_po_id = jp.po_id 
+LEFT join grn on jmat.jaysan_po_material_id = grn.jaysan_po_material_id where  $material_query and  $date_query and  $order_to_query  GROUP by po_id
+";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
 if ($conn->multi_query($sql)) {
