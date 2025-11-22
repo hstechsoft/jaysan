@@ -995,6 +995,8 @@ function get_assign_sts(order_id) {
 
 function get_sale_order_report(emp, cust, order_no, statuss, product_name, type, model, sub_type_box, unassigned_qty, payment, sale_date, godown, production_date, remaining_dcf, order_category) {
 
+  console.log("emp:"+ emp, "cust:"+ cust, "order_no:"+ order_no, "statuss:"+ statuss, "product_name:"+ product_name, "type:"+ type, "model:"+ model, "sub_type_box:"+ sub_type_box, "unassigned_qty:"+ unassigned_qty, "payment:"+ payment, "sale_date:"+ sale_date, "godown:"+ godown, "production_date:"+ production_date, "remaining_dcf:"+ remaining_dcf, "order_category:"+ order_category);
+  
 
   $.ajax({
     url: "php/get_sale_order_report.php",
@@ -1022,9 +1024,9 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
       if (response.trim() != "error") {
 
+          $('#order_table').empty()
         if (response.trim() != "0 result") {
 
-          $('#order_table').empty()
           var obj = JSON.parse(response);
           var count = 0
 
@@ -1179,7 +1181,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
         }
         else {
-          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+          $('#order_table').append("<tr><td colspan='8' class='text-center text-danger'>No sale order available</td></tr>")
 
         }
       }
