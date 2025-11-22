@@ -49,137 +49,239 @@
 
         </section>
         <div class="row py-5">
-            <div class="col-md-6">
+
+            <!-- Toggle -->
+            <div class="col-12">
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="po_entery_form">
+                    <label class="form-check-label" for="po_entery_form">PO Entry</label>
+                </div>
+            </div>
+
+            <!-- LEFT SIDE (Filter + PO Table) -->
+            <div class="col-md-6" id="filter_section1">
                 <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="poreport_form" novalidate
                     onsubmit="return false">
                     <div class="row">
+
                         <div class="col-md-6">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="part" placeholder="">
-                                <label for="part">Part
-                                    <span class="text-danger">*</span> </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
+                                <input type="text" class="form-control rounded-3" id="part">
+                                <label for="part">Part <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="company" placeholder="">
-                                <label for="company">Company
-                                    <span class="text-danger">*</span> </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
+                                <input type="text" class="form-control rounded-3" id="company">
+                                <label for="company">Company <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-floating mb-2">
-                                <input type="date" class="form-control rounded-3" id="from_date" placeholder="">
-                                <label for="from_date">From date
-
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
+                                <input type="date" class="form-control rounded-3" id="from_date">
+                                <label for="from_date">From Date</label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-floating mb-2">
-                                <input type="date" class="form-control rounded-3" id="to_date" placeholder="">
-                                <label for="to_date">To date
-
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
+                                <input type="date" class="form-control rounded-3" id="to_date">
+                                <label for="to_date">To Date</label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
+
                     </div>
+
                     <div>
-                        <button type="submit" class="btn btn-primary " id="poreport_search">Search</button>
-                        <button type="button" class="btn btn-warning " id="po_report_reset">Reset</button>
+                        <button type="submit" class="btn btn-primary" id="poreport_search">Search</button>
+                        <button type="button" class="btn btn-warning" id="po_report_reset">Reset</button>
                     </div>
                 </form>
 
-                <div class="table-responsive" style="overflow-y: auto; max-height: 95vh;">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption></caption>
+                <!-- PO REPORT TABLE -->
+                <div class="table-responsive" style="overflow-y:auto; max-height:95vh;">
+                    <table class="table caption-top table-bordered table-striped">
                         <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
-
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Po.Id</th>
-                                <th scope="col" style="width: 10%;">Date</th>
-                                <th scope="col" style="width: 13%;">Order to</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Quantity</th>
-
+                                <th>#</th>
+                                <th>PO No</th>
+                                <th style="width:10%;">Date</th>
+                                <th style="width:13%;">Order To</th>
+                                <th>Status</th>
+                                <th>Quantity</th>
                             </tr>
                         </thead>
-                        <tbody id="poreport_table">
-
-
-                        </tbody>
-
-
+                        <tbody id="poreport_table"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="table-responsive" style="overflow-y: auto; max-height: 70vh;">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption></caption>
+            <!-- RIGHT SIDE (Item table + DC input form) -->
+            <div class="col-md-6" id="filter_section2">
+                <div class="table-responsive mb-3" style="overflow-y:auto; max-height:70vh;">
+                    <table class="table caption-top table-bordered table-striped">
                         <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
-
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Material Name</th>
-                                <th scope="col" style="width: 10%;">PO Quantity</th>
-                                <th scope="col">Received Quantity</th>
-                                <th scope="col" style="width: 10%;">Total Received</th>
-                                <th scope="col" style="width: 10%;">Quantity</th>
-
+                                <th>#</th>
+                                <th>Material Name</th>
+                                <th style="width:10%;">PO Quantity</th>
+                                <th>Received Qty</th>
+                                <th style="width:10%;">Total Received</th>
+                                <th style="width:10%;">Quantity</th>
                             </tr>
                         </thead>
-                        <tbody id="poreport_item_table">
-                        </tbody>
+                        <tbody id="poreport_item_table"></tbody>
                     </table>
-
                 </div>
+
+                <!-- DC ENTRY FORM -->
                 <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation d-none" id="po_report_input"
                     novalidate onsubmit="return false">
-                    <div class="row ">
+                    <div class="row">
+
                         <div class="col-4">
                             <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="dc_no" placeholder="" required>
-                                <label for="dc_no">Dc No
-                                    <span class="text-danger">*</span> </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
+                                <input type="text" class="form-control rounded-3" id="dc_no" required>
+                                <label for="dc_no">DC No <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
+
                         <div class="col-4">
                             <div class="form-floating mb-2">
-                                <input type="date" class="form-control rounded-3" id="dc_date" placeholder="" required>
-                                <label for="dc_date">Dc Date
-                                    <span class="text-danger">*</span> </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
+                                <input type="date" class="form-control rounded-3" id="dc_date" required>
+                                <label for="dc_date">DC Date <span class="text-danger">*</span></label>
+                                <div class="invalid-feedback">Kindly Enter Valid Data</div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary" id="po_report_btn">Submit</button>
+
+                        <div class="col-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100" id="po_report_btn">Submit</button>
                         </div>
+
                     </div>
                 </form>
             </div>
-            <!-- content -->
+
+            <!-- PO ENTRY FULL FORM -->
+            <div class="col-md-12 d-none d-flex justify-content-between" id="entry_po">
+
+                <!-- LEFT SIDE FORM -->
+                <div style="width: 49%;">
+                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="entry_po_form" novalidate
+                        onsubmit="return false">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="entry_company">
+                                    <label for="entry_company">Company <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Kindly Enter Valid Data</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="entry_part">
+                                    <label for="entry_part">Part <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Kindly Enter Valid Data</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="date" class="form-control rounded-3" id="entry_date">
+                                    <label for="entry_date">Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex gap-2">
+                                <div class="form-floating mb-2 flex-grow-1">
+                                    <input type="number" class="form-control rounded-3" id="entry_price">
+                                    <label for="entry_price">Price</label>
+                                </div>
+                                <div class="form-floating mb-2 flex-grow-1">
+                                    <input type="number" class="form-control rounded-3" id="entry_gst">
+                                    <label for="entry_gst">GST</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex gap-2">
+                                <div class="form-floating mb-2 flex-grow-1">
+                                    <input type="number" class="form-control rounded-3" id="entry_qty">
+                                    <label for="entry_qty">Quantity</label>
+                                </div>
+
+                                <div class="form-floating mb-2 flex-grow-1">
+                                    <select class="form-select" id="entry_uom" required>
+                                        <option disabled selected value="null">Choose...</option>
+                                        <option value="Nos">Nos</option>
+                                        <option value="No">No</option>
+                                        <option value="NUM">NUM</option>
+                                        <option value="Pcs">Pcs</option>
+                                        <option value="Sets">Sets</option>
+                                        <option value="Sheet">Sheet</option>
+                                        <option value="kgs">kgs</option>
+                                        <option value="Ltr">Ltr</option>
+                                        <option value="mls">mls</option>
+                                        <option value="Mts">Mts</option>
+                                        <option value="mtrs">mtrs</option>
+                                        <option value="mm">mm</option>
+                                        <option value="CUM">CUM</option>
+                                    </select>
+                                    <label for="entry_uom">UOM</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control rounded-3" id="entry_dc_no">
+                                    <label for="entry_dc_no">DC No</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary" id="entry_po_submit_btn">Submit</button>
+                            <button type="submit" class="btn btn-primary d-none"
+                                id="entry_po_update_btn">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RIGHT SIDE TABLE -->
+                <div style="width: 49%;">
+                    <div class="table-responsive" style="overflow-y:auto; max-height:95vh;">
+                        <table class="table caption-top table-bordered table-striped">
+                            <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>DC.No</th>
+                                    <th>Company Name</th>
+                                    <th>Material Name</th>
+                                    <th>Date</th>
+                                    <th>Price</th>
+                                    <th>GST</th>
+                                    <th>Quantity</th>
+                                    <th>UOM</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="po_entery_form_table"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
 
         </div>
 
@@ -191,6 +293,8 @@
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
         <!-- jQuery UI CSS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         <!-- bootstrap include -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

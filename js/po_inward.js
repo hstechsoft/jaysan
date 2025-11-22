@@ -200,6 +200,178 @@ $(document).ready(function () {
             shw_toast('empty field', 'enter the fields');
         }
     })
+
+
+    $("#po_entery_form ").on("change", function () {
+        $("#poreport_table").empty();
+        $("#poreport_item_table").empty();
+        $("#po_report_input").addClass("d-none");
+        if ($(this).is(":checked")) {
+            $("#filter_section1").addClass("d-none");
+            $("#filter_section2").addClass("d-none");
+            $("#entry_po").removeClass("d-none");
+        }
+        else {
+            $("#entry_po").addClass("d-none");
+            $("#filter_section1").removeClass("d-none");
+            $("#filter_section2").removeClass("d-none");
+        }
+    })
+
+    $('#entry_part').on('input', function () {
+        //check the value not empty
+        if ($('#entry_part').val() != "") {
+            $('#entry_part').autocomplete({
+                //get data from databse return as array of object which contain label,value
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/mrf_partname_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+                            part_name: $("#entry_part").val(),
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    part_name: item.part_name,
+                                    gst: item.gstrate
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("part_id", ui.item.id);
+                    // $(this).data("gst_rate", ui.item.gst);
+                    $('#entry_gst').val(ui.item.gst);
+                    // $('#part_name_out').val(ui.item.part_name)
+                    // get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.part_name + "</strong></div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    // ADD ROW
+    $("#entry_po_submit_btn").on("click", function () {
+
+        let rowCount = $("#po_entery_form_table tr").length + 1;
+
+        $("#po_entery_form_table").append(`
+        <tr>
+            <td>${rowCount}</td>
+            <td>${$("#entry_dc_no").val()}</td>
+            <td>${$("#entry_company").val()}</td>
+            <td>${$("#entry_part").val()}</td>
+            <td>${$("#entry_date").val()}</td>
+            <td>${$("#entry_price").val()}</td>
+            <td>${$("#entry_gst").val()}</td>
+            <td>${$("#entry_qty").val()}</td>
+            <td>${$("#entry_uom").val()}</td>
+            <td>
+                <button type="button" class="btn btn-warning" id="edit_po_c_btn"><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-danger" id="delete_po_c_btn"><i class="fa fa-trash"></i></button>
+            </td>
+        </tr>`);
+
+        clearForm();
+    });
+
+
+    // EDIT ROW (delegated)
+    $(document).on("click", "#edit_po_c_btn", function () {
+
+        $("#entry_po_submit_btn").addClass("d-none");
+        $("#entry_po_update_btn").removeClass("d-none");
+
+        var row = $(this).closest("tr");
+        $("#entry_po_update_btn").data("row", row);
+
+        $("#entry_dc_no").val(row.find("td").eq(1).text());
+        $("#entry_company").val(row.find("td").eq(2).text());
+        $("#entry_part").val(row.find("td").eq(3).text());
+        $("#entry_date").val(row.find("td").eq(4).text());
+        $("#entry_price").val(row.find("td").eq(5).text());
+        $("#entry_gst").val(row.find("td").eq(6).text());
+        $("#entry_qty").val(row.find("td").eq(7).text());
+        $("#entry_uom").val(row.find("td").eq(8).text());
+    });
+
+
+    // UPDATE ROW
+    $("#entry_po_update_btn").on("click", function () {
+
+        var row = $(this).data("row");
+
+        row.find("td").eq(1).text($("#entry_dc_no").val());
+        row.find("td").eq(2).text($("#entry_company").val());
+        row.find("td").eq(3).text($("#entry_part").val());
+        row.find("td").eq(4).text($("#entry_date").val());
+        row.find("td").eq(5).text($("#entry_price").val());
+        row.find("td").eq(6).text($("#entry_gst").val());
+        row.find("td").eq(7).text($("#entry_qty").val());
+        row.find("td").eq(8).text($("#entry_uom").val());
+
+        $("#entry_po_submit_btn").removeClass("d-none");
+        $("#entry_po_update_btn").addClass("d-none");
+
+        clearForm();
+    });
+    // DELETE ROW
+    $(document).on("click", "#delete_po_c_btn", function () {
+
+        let btn = this; // store button reference
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This row will be deleted!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                $(btn).closest("tr").remove();
+            }
+
+        });
+    });
+
+
+    //  CLEAR FORM FUNCTION
+    function clearForm() {
+        $("#entry_dc_no").val("");
+        $("#entry_company").val("");
+        $("#entry_part").val("");
+        $("#entry_date").val("");
+        $("#entry_price").val("");
+        $("#entry_gst").val("");
+        $("#entry_qty").val("");
+        $("#entry_uom").val("null");
+    }
+
+
 });
 
 
@@ -319,7 +491,7 @@ function get_po_receive_sts(po_id) {
                         $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
                     });
                 }
-                else{
+                else {
                     $("#poreport_item_table").append("<tr><td class='text-center text-danger'colspan='6'>No Po Available</td></tr>")
                 }
             }
@@ -356,7 +528,7 @@ function get_po_report(part, company, fdate, tdate) {
             console.log(response);
 
             if (response.trim() != "error") {
-                    $("#poreport_table").empty();
+                $("#poreport_table").empty();
                 if (response.trim() != "0 result") {
 
 
@@ -381,7 +553,7 @@ function get_po_report(part, company, fdate, tdate) {
                         else {
                             status = 'Not Received';
                         }
-                        $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "  style='font-size: 12px'><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td><td>" + obj.inward_qty + "/" + obj.total_po_qty + "</td></tr>")
+                        $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "  style='font-size: 12px'><td>" + count + "</td><td>" + obj.po_no + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td><td>" + obj.inward_qty + "/" + obj.total_po_qty + "</td></tr>")
                     });
 
                 }
