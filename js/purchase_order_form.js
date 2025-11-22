@@ -260,7 +260,7 @@ $(document).ready(function () {
         get_mrf_po_company_wise($(this).data("po_order_to"));
     })
 
-    $("#po_dashboard").on("input", "tr td", function () {
+    $("#po_dashboard_table").on("input", "tr td", function () {
         var order_qnty = parseInt($(this).text());
 
         var original_qnty = parseInt($(this).closest("tr").find("td").eq(3).data("batch_qty"));
@@ -271,7 +271,7 @@ $(document).ready(function () {
         }
     })
 
-    $("#po_dashboard").on("change", ".material-check", function () {
+    $("#po_dashboard_table").on("change", ".material-check", function () {
 
 
         let row = $(this).closest("tr");
@@ -521,7 +521,7 @@ $(document).ready(function () {
         const row = $(this).closest("tr");
         const materialId = row.data("batch_id");
 
-        $("#po_dashboard tr[data-batch_id='" + materialId + "']")
+        $("#po_dashboard_table tr[data-batch_id='" + materialId + "']")
             .find("input[type='checkbox']")
             .prop("checked", false);
         row.remove();
@@ -675,7 +675,7 @@ function get_jaysan_po_material(po_id) {
             console.log(response);
 
 
-            $("#po_dashboard").empty();
+            $("#po_dashboard_table").empty();
 
             $("#selected_materials").empty();
 
@@ -702,7 +702,7 @@ function get_jaysan_po_material(po_id) {
                     mat.forEach(function (mat) {
                         console.log(mat.material_id);
 
-                        $("#po_dashboard").append(
+                        $("#po_dashboard_table").append(
                             "<tr data-batch_id='" + mat.batch_id + "' data-uom='" + mat.uom + "' data-raw_material_rate='" + mat.material_rate + "' data-gst_rate='" + mat.gst + "' data-approve='" + mat.is_approved + "' data-material_part_id='" + mat.material_id + "'>" +
                             "<td><input class='form-check-input material-check' type='checkbox' value='" + mat.batch_id + "'></td>" +
                             "<td>" + mat.material_name + "</td>" +
@@ -717,7 +717,7 @@ function get_jaysan_po_material(po_id) {
 
                 });
 
-                $("#po_dashboard .material-check").prop("checked", true).trigger("change");
+                $("#po_dashboard_table .material-check").prop("checked", true).trigger("change");
                 //    get_sales_order()
             }
 
@@ -1015,7 +1015,7 @@ function get_mrf_po_company_wise(order_to) {
             console.log(response);
 
 
-            $("#po_dashboard").empty();
+            $("#po_dashboard_table").empty();
 
             $("#selected_materials").empty();
 
@@ -1036,7 +1036,7 @@ function get_mrf_po_company_wise(order_to) {
                     else {
                         balance = '';
                     }
-                    $("#po_dashboard").append(
+                    $("#po_dashboard_table").append(
                         "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
                         "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
                         "<td>" + obj.raw_material_part_id + "</td>" +
