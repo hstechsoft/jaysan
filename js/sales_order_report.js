@@ -191,7 +191,7 @@ $(document).ready(function () {
           //   $('#part_name_out').val(ui.item.part_name)
           //  get_bom(ui.item.id)
           $("#cust_auto").val(ui.item.label);
-          console.log( ui.item.cus_id);
+          console.log(ui.item.cus_id);
 
 
 
@@ -333,14 +333,25 @@ $(document).ready(function () {
     var statuss = $("#status").val() || "";
     var unassigned_qty = $("#unassigned_qty").val() || "";
     var payment = $("#payment").val() || "";
-    var sale_date = $("#sale_s_date").val()+" and "+ $("#sale_e_date").val() || "";
-    var production_date = $("#production_s_date").val()+" and "+ $("#production_e_date").val() || "";
     var order_category = $("#sales_cate :checked") ? "sale" : "required" || '';
     var godown = $("#godown").val() || "";
     var remaining_dcf = $("#remaining_dcf").val() || "";
-    
+
+
+
+    var sale_date = "";
+    if ($("#sale_s_date").val() != "" && $("#sale_e_date").val() != "") {
+      sale_date = $("#sale_s_date").val() + " and " + $("#sale_e_date").val();
+    }
+
+    var production_date = "";
+    if ($("#production_s_date").val() != "" && $("#production_e_date").val() != "") {
+      production_date = $("#production_s_date").val() || + " and " + $("#production_e_date").val();
+    }
+
     console.log($("#cust_auto").data("cus_id"));
-    
+    console.log(production_date);
+
     if (emp === "" && cust === "" && order_category === "" && godown === "" && e_date === "" && order_no === "" && unassigned_qty === "" && payment === "" && sale_date === "" && production_date === "" && remaining_dcf === "" && (product_name === "" || product_name === null) && (model === "" || model === null) && (type === "" || type === null) && sub_type_box === "" && (statuss === "" || statuss === null)) {
       salert("Warning", "At least one field is required", "warning");
       return;
@@ -1047,7 +1058,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
               //   blink = `<span class="badge bg-danger text-white blink-badge">${item.remain_dcf}</span>`;
               // }
 
-              let dcf_ratio = parseFloat(item.required_qty)-parseFloat(item.remain_dcf)
+              let dcf_ratio = parseFloat(item.required_qty) - parseFloat(item.remain_dcf)
               let dcf_details = `
                   <div class="accordion" id="${accId}">
                     <div class="accordion-item">
