@@ -256,34 +256,35 @@ function get_po_receive_sts(po_id) {
 
             if (response.trim() != "error") {
                 $("#poreport_item_table").empty();
-                var obj = JSON.parse(response);
-                var count = 0;
+                if (response.trim() != "0 result") {
+                    var obj = JSON.parse(response);
+                    var count = 0;
 
 
 
-                obj.forEach(function (obj, index) {
-                    count += 1;
-                    var rjd = "";
-                    var org_qty = parseInt(obj.qty) - parseInt(obj.total_received);
-                    console.log(org_qty);
+                    obj.forEach(function (obj, index) {
+                        count += 1;
+                        var rjd = "";
+                        var org_qty = parseInt(obj.qty) - parseInt(obj.total_received);
+                        console.log(org_qty);
 
-                    if (obj.receive_json_sts == 'nothing received') {
-                        rjd = "<li class='list-group-item text-center text-danger' style='font-size: 12px'>Nothing Received</li>"
-                    }
-                    else {
-                        var received_data = JSON.parse(obj.receive_json_sts);
+                        if (obj.receive_json_sts == 'nothing received') {
+                            rjd = "<li class='list-group-item text-center text-danger' style='font-size: 12px'>Nothing Received</li>"
+                        }
+                        else {
+                            var received_data = JSON.parse(obj.receive_json_sts);
 
-                        rjd += `
+                            rjd += `
                                 <div class="accordion" id="receiveAccordion">
                             `;
 
-                        let headId = "recHead" + index;
-                        let collapseId = "recCollapse" + index;
-                        received_data.forEach(function (item, index) {
+                            let headId = "recHead" + index;
+                            let collapseId = "recCollapse" + index;
+                            received_data.forEach(function (item, index) {
 
-                            headId += index;
-                            collapseId += index;
-                            rjd += `
+                                headId += index;
+                                collapseId += index;
+                                rjd += `
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="${headId}">
                                         <button class="accordion-button collapsed" 
@@ -309,15 +310,18 @@ function get_po_receive_sts(po_id) {
                                     </div>
                                 </div>
                             `;
-                        });
+                            });
 
-                        rjd += `</div>`;
-                    }
+                            rjd += `</div>`;
+                        }
 
 
-                    $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
-                });
-
+                        $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
+                    });
+                }
+                else{
+                    $("#poreport_item_table").append("<tr><td class='text-center text-danger'colspan='6'>No Po Available</td></tr>")
+                }
             }
 
             else {
@@ -352,10 +356,10 @@ function get_po_report(part, company, fdate, tdate) {
             console.log(response);
 
             if (response.trim() != "error") {
+                    $("#poreport_table").empty();
                 if (response.trim() != "0 result") {
 
 
-                    $("#poreport_table").empty();
                     var obj = JSON.parse(response);
                     var count = 0;
 
@@ -381,7 +385,8 @@ function get_po_report(part, company, fdate, tdate) {
                     });
 
                 }
-                else{
+                else {
+                    $("#poreport_table").append("<tr><td class='text-center text-danger'colspan='6'>No Po Available</td></tr>")
                     console.log("0 result");
                 }
             }
