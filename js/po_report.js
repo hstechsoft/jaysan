@@ -352,31 +352,38 @@ function get_po_report(part, company, fdate, tdate) {
             console.log(response);
 
             if (response.trim() != "error") {
-                $("#poreport_table").empty();
-                var obj = JSON.parse(response);
-                var count = 0;
+                if (response.trim() != "0 result") {
+
+
+                    $("#poreport_table").empty();
+                    var obj = JSON.parse(response);
+                    var count = 0;
 
 
 
-                obj.forEach(function (obj) {
-                    count += 1;
-                    var percentage = 0;
-                    var status = '';
-                    if (obj.inward_qty == null || obj.total_po_qty == 0) {
-                        percentage = 0;
-                    } else {
-                        percentage = (parseFloat(obj.inward_qty) / parseFloat(obj.total_po_qty)) * 100;
-                    }
-                   percentage = Math.round(percentage * 100) / 100;
-                    if (percentage > 0) {
-                        status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received";
-                    }
-                    else {
-                        status = 'Not Received';
-                    }
-                    $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "  style='font-size: 12px'><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td><td>" + obj.inward_qty + "/" + obj.total_po_qty + "</td></tr>")
-                });
+                    obj.forEach(function (obj) {
+                        count += 1;
+                        var percentage = 0;
+                        var status = '';
+                        if (obj.inward_qty == null || obj.total_po_qty == 0) {
+                            percentage = 0;
+                        } else {
+                            percentage = (parseFloat(obj.inward_qty) / parseFloat(obj.total_po_qty)) * 100;
+                        }
+                        percentage = Math.round(percentage * 100) / 100;
+                        if (percentage > 0) {
+                            status = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received";
+                        }
+                        else {
+                            status = 'Not Received';
+                        }
+                        $("#poreport_table").append("<tr data-po_id=" + obj.po_id + "  style='font-size: 12px'><td>" + count + "</td><td>" + obj.po_id + "</td><td>" + obj.po_date + "</td><td>" + obj.order_to + "</td><td>" + status + "</td><td>" + obj.inward_qty + "/" + obj.total_po_qty + "</td></tr>")
+                    });
 
+                }
+                else{
+                    console.log("0 result");
+                }
             }
 
             else {
