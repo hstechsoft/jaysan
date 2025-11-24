@@ -61,18 +61,14 @@ if ($conn->multi_query($sql)) {
  
 
 
-      $sql_insert_subtype = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
+      $sql_insert_pomaterial = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
 
-      if ($conn->query($sql_insert_subtype) === TRUE) {
-          
-      } else {
-          echo "Error: " . $sql_insert_subtype . "<br>" . $conn->error;
-      }
-
-      if($is_ext_po == '1'){
+      if ($conn->query($sql_insert_pomaterial) === TRUE) {
+          $last_insert_id = $conn->insert_id;
+              if($is_ext_po == '1'){
         
 
-          $sql_grn = "INSERT INTO grn ( jaysan_po_material_id,qty,received_by,dc_no,dc_date) VALUES ('$po_material_id','$qty',$received_by,$dc_no,$dc_date)";
+          $sql_grn = "INSERT INTO grn ( jaysan_po_material_id,qty,received_by,dc_no,dc_date) VALUES ('$last_insert_id','$qty',$received_by,$dc_no,$dc_date)";
 
           if ($conn->query($sql_grn) === TRUE) {
 
@@ -80,6 +76,11 @@ if ($conn->multi_query($sql)) {
               echo "Error: " . $sql_grn . "<br>" . $conn->error;
           }
       }
+      } else {
+          echo "Error: " . $sql_insert_pomaterial . "<br>" . $conn->error;
+      }
+
+  
     }
 
 
