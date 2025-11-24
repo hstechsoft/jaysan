@@ -68,7 +68,7 @@ if ($conn->multi_query($sql)) {
               if($is_ext_po == '1'){
         
 
-          $sql_grn = "INSERT INTO grn ( jaysan_po_material_id,qty,received_by,dc_no,dc_date) VALUES ('$last_insert_id','$qty',$received_by,$dc_no,$dc_date)";
+          $sql_grn = "INSERT INTO grn ( jaysan_po_material_id,qty,received_by,dc_no,dc_date) VALUES ('$last_insert_id','$qty',$received_by,$dc_no,'$dc_date')";
 
           if ($conn->query($sql_grn) === TRUE) {
 
