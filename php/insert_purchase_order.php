@@ -12,7 +12,12 @@ $po_email = ($_POST['po_email']);
 $po_path = ($_POST['po_path']);
 $po_no = isset($_POST['po_no']) ? $_POST['po_no'] : '0';
 $is_ext_po = isset($_POST['is_ext_po']) ? $_POST['is_ext_po'] : '0';
+if($is_ext_po == '1'){
+$received_by = ($_POST['received_by']);
+$dc_no = ($_POST['dc_no']);
+$dc_date = ($_POST['dc_date']);
 
+}
 
 $po_materials = ($_POST['po_materials']);
 
@@ -63,7 +68,22 @@ if ($conn->multi_query($sql)) {
       } else {
           echo "Error: " . $sql_insert_subtype . "<br>" . $conn->error;
       }
+
+      if($is_ext_po == '1'){
+        
+
+          $sql_grn = "INSERT INTO grn ( jaysan_po_material_id,qty,received_by,dc_no,dc_date) VALUES ('$po_material_id','$qty',$received_by,$dc_no,$dc_date)";
+
+          if ($conn->query($sql_grn) === TRUE) {
+
+          } else {
+              echo "Error: " . $sql_grn . "<br>" . $conn->error;
+          }
+      }
     }
+
+
+
 
   echo "ok";
 } else {
