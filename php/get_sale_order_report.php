@@ -26,7 +26,36 @@ $emp_id_query = ($_GET['emp_id']) == '' ? 1 : " emp_id  = " . test_input($_GET['
 $payment_query = ($_GET['payment']) == '' ? 1 : " bal  >= " . test_input($_GET['payment']);
 
 
- 
+ echo $assign_type_query;
+ echo "\n";
+ echo $unassigned_qty_query;
+  echo "\n";
+    echo $godown_query;
+     echo "\n";
+    echo $production_date_query;
+     echo "\n";
+    echo $product_id_query;
+     echo "\n";
+    echo $order_no_query;
+     echo "\n";
+    echo $type_id_query;
+     echo "\n";
+    echo $model_id_query;
+     echo "\n";
+    echo $sub_type_query;
+     echo "\n";
+    echo $customer_id_query;
+     echo "\n";
+    echo $sale_order_date_query;
+     echo "\n";
+    echo $order_category_query;
+     echo "\n";
+    echo $remain_dcf_query;
+     echo "\n";
+    echo $emp_id_query;
+     echo "\n";
+    echo $payment_query;
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
