@@ -203,6 +203,7 @@ $(document).ready(function () {
 
 
     $("#po_entery_form ").on("change", function () {
+        // alert();
         $("#poreport_table").empty();
         $("#poreport_item_table").empty();
         $("#po_report_input").addClass("d-none");
@@ -217,6 +218,60 @@ $(document).ready(function () {
             $("#filter_section2").removeClass("d-none");
         }
     })
+
+    $('#entry_company').on('input', function () {
+        //check the value not empty
+        if ($('#entry_company').val() != "") {
+            $('#entry_company').autocomplete({
+                //get data from databse return as array of object which contain label,value
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: $("#entry_company").val(),
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id,
+                                    address: item.creditors_addr,
+                                    // gst: item.gstrate
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("creditor_id", ui.item.id);
+                    // $(this).data("gst_rate", ui.item.gst);
+                    $('#entry_address').val(ui.item.address);
+                    // $('#part_name_out').val(ui.item.part_name)
+                    // get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong></div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     $('#entry_part').on('input', function () {
         //check the value not empty
@@ -273,48 +328,134 @@ $(document).ready(function () {
     });
 
     // ADD ROW
-    $("#entry_po_submit_btn").on("click", function () {
+    let t_price = 0;
+    let t_qty = 0;
 
-        let rowCount = $("#po_entery_form_table tr").length + 1;
+    $("#entry_po_add_btn").on("click", function () {
+
+        var dc_no = $("#entry_dc_no").val();
+        var company_id = $("#entry_company").data("creditor_id");
+        var part = $("#entry_part").data("part_id");
+        var date = $("#entry_date").val();
+        var price = Number($("#entry_price").val());
+        var gst = $("#entry_gst").val();
+        var qty = Number($("#entry_qty").val());
+        var uom = $("#entry_uom").val();
+
+        if (!dc_no || !company_id || !part || !date || !price || !gst || !qty || uom == "null") {
+            salert("Warning", "Fill the fields", "warning");
+            return;
+        }
+
+        $("#company_details").html(`<strong>Invoice From</strong><br>${$("#entry_company").val()} - ${$("#entry_address").val()}</td>`);
+        $("#company_details").data("comp_id", company_id);
+        $("#dc_no_head").text($("#entry_dc_no").val());
+        $("#dc_date_head").text($("#entry_date").val());
+        $("#vehicle_head").text($("#entry_vehicle").val());
+        $("#received_by_head").text(current_user_name);
+
+        t_price += price;
+        t_qty += qty;
+
+        let rowCount = $("#po_entery_form_table tr").length;
 
         $("#po_entery_form_table").append(`
-        <tr>
+        <tr data-discount='${$("#entry_discount").val()}' data-part_id="${part}">
             <td>${rowCount}</td>
-            <td>${$("#entry_dc_no").val()}</td>
-            <td>${$("#entry_company").val()}</td>
             <td>${$("#entry_part").val()}</td>
-            <td>${$("#entry_date").val()}</td>
-            <td>${$("#entry_price").val()}</td>
-            <td>${$("#entry_gst").val()}</td>
-            <td>${$("#entry_qty").val()}</td>
-            <td>${$("#entry_uom").val()}</td>
+            <td>${price}</td>
+            <td>${gst}</td>
+            <td>${qty}</td>
+            <td>${uom}</td>
             <td>
-                <button type="button" class="btn btn-warning" id="edit_po_c_btn"><i class="fa fa-edit"></i></button>
-                <button type="button" class="btn btn-danger" id="delete_po_c_btn"><i class="fa fa-trash"></i></button>
+                <button type="button" class="btn btn-warning edit_po_c_btn"><i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-danger delete_po_c_btn"><i class="fa fa-trash"></i></button>
             </td>
-        </tr>`);
+        </tr>
+    `);
 
+        // Remove old total row
+        $("#po_entery_form_table tr.total-row").remove();
+
+        // Append updated total
+        $("#po_entery_form_table").append(`
+        <tr class="total-row">
+            <td colspan="2" class='text-center'><strong>Total</strong></td>
+            <td>${t_price}</td>
+            <td></td>
+            <td>${t_qty}</td>
+            <td colspan="2"></td>
+        </tr>
+    `);
+
+        $("#entry_po_submit_btn").removeClass("d-none")
         clearForm();
     });
 
 
+    $("#entry_po_submit_btn").on("click", function () {
+
+        var a = 0;
+        var comp = $("#company_details").data("comp_id");
+        var dc = $("#dc_no_head").text();
+        var datee = $("#dc_date_head").text();
+        var vec = $("#vehicle_head").text();
+        var rev_by = current_user_id;
+        var po_material = [];
+
+        $("#po_entery_form_table tr").each(function () {
+
+            if ($(this).is(":last-child")) {
+                return;
+            }
+            const rate = $(this).find("td").eq(2).text().trim();
+            const qty = $(this).find("td").eq(4).text().trim();
+            const part_id_m = $(this).data("part_id");
+
+            if (rate != "" && qty != "" && part_id_m != "") {
+                po_material.push({
+                    po_material_id: part_id_m,
+                    material_rate: rate,
+                    qty: qty,
+                    batch_id: "",
+                    is_approved: "",
+                    disc: $(this).data("discount"),
+                    due_on: "",
+                });
+            } else {
+                salert("Warning", "Table data missing", "warning");
+            }
+        });
+
+        console.log(comp, dc, datee, rev_by, po_material);
+
+        if (comp != "" && dc != "" && datee != "" && rev_by != "" && po_material.length > 0) {
+            insert_purchase_order(comp, dc, datee, rev_by, po_material);
+        }
+        else {
+            alert()
+        }
+
+    })
+
     // EDIT ROW (delegated)
     $(document).on("click", "#edit_po_c_btn", function () {
 
-        $("#entry_po_submit_btn").addClass("d-none");
+        $("#entry_po_add_btn").addClass("d-none");
         $("#entry_po_update_btn").removeClass("d-none");
 
         var row = $(this).closest("tr");
         $("#entry_po_update_btn").data("row", row);
 
-        $("#entry_dc_no").val(row.find("td").eq(1).text());
-        $("#entry_company").val(row.find("td").eq(2).text());
-        $("#entry_part").val(row.find("td").eq(3).text());
-        $("#entry_date").val(row.find("td").eq(4).text());
-        $("#entry_price").val(row.find("td").eq(5).text());
-        $("#entry_gst").val(row.find("td").eq(6).text());
-        $("#entry_qty").val(row.find("td").eq(7).text());
-        $("#entry_uom").val(row.find("td").eq(8).text());
+        // $("#entry_dc_no").val(row.find("td").eq(1).text());
+        // $("#entry_company").val(row.find("td").eq(2).text());
+        $("#entry_part").val(row.find("td").eq(1).text());
+        // $("#entry_date").val(row.find("td").eq().text());
+        $("#entry_price").val(row.find("td").eq(2).text());
+        $("#entry_gst").val(row.find("td").eq(3).text());
+        $("#entry_qty").val(row.find("td").eq(4).text());
+        $("#entry_uom").val(row.find("td").eq(5).text());
+        $("#entry_discount").val(row.data("discount"));
     });
 
 
@@ -323,16 +464,14 @@ $(document).ready(function () {
 
         var row = $(this).data("row");
 
-        row.find("td").eq(1).text($("#entry_dc_no").val());
-        row.find("td").eq(2).text($("#entry_company").val());
-        row.find("td").eq(3).text($("#entry_part").val());
-        row.find("td").eq(4).text($("#entry_date").val());
-        row.find("td").eq(5).text($("#entry_price").val());
-        row.find("td").eq(6).text($("#entry_gst").val());
-        row.find("td").eq(7).text($("#entry_qty").val());
-        row.find("td").eq(8).text($("#entry_uom").val());
+        row.find("td").eq(1).text($("#entry_part").val());
+        // row.find("td").eq(2).text($("#entry_date").val());
+        row.find("td").eq(2).text($("#entry_price").val());
+        row.find("td").eq(3).text($("#entry_gst").val());
+        row.find("td").eq(4).text($("#entry_qty").val());
+        row.find("td").eq(5).text($("#entry_uom").val());
 
-        $("#entry_po_submit_btn").removeClass("d-none");
+        $("#entry_po_add_btn").removeClass("d-none");
         $("#entry_po_update_btn").addClass("d-none");
 
         clearForm();
@@ -361,20 +500,72 @@ $(document).ready(function () {
 
     //  CLEAR FORM FUNCTION
     function clearForm() {
-        $("#entry_dc_no").val("");
-        $("#entry_company").val("");
+        // $("#entry_dc_no").val("");
+        // $("#entry_company").val("");
         $("#entry_part").val("");
-        $("#entry_date").val("");
+        // $("#entry_date").val("");
         $("#entry_price").val("");
         $("#entry_gst").val("");
         $("#entry_qty").val("");
         $("#entry_uom").val("null");
+        $("#entry_discount").val("");
+        $("#entry_address").val("");
     }
 
 
 });
 
 
+
+function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
+    console.log(comp);
+    console.log(dc);
+    console.log(datee);
+    console.log(rev_by);
+    console.log("sds" + po_material);
+
+
+    $.ajax({
+        url: "php/insert_purchase_order.php",
+        type: "post", //send it through get method
+        data: {
+            po_order_to: comp,
+            is_ext_po: "1",
+            received_by: rev_by,
+            dc_no: dc,
+            dc_date: datee,
+            po_materials: po_material
+
+
+        },
+        success: function (response) {
+
+
+            console.log(response);
+            if (response.trim() == "ok") {
+                // location.reload();
+                alert("success")
+
+            }
+
+            else {
+                salert("Error", "User ", "error");
+                // location.reload();
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        },
+        complete: function () {
+            //  Hide overlay and re-enable button
+            $("#overlay").fadeOut();
+            $("#mail_print").prop("disabled", false);
+        }
+    });
+}
 
 
 function insert_grn(dc_no, dc_date, details_po) {

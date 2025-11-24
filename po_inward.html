@@ -174,9 +174,8 @@
 
                 <!-- LEFT SIDE FORM -->
                 <div style="width: 49%;">
-                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="entry_po_form" novalidate
+                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
                         onsubmit="return false">
-
                         <div class="row">
 
                             <div class="col-md-6">
@@ -188,13 +187,31 @@
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="entry_part">
-                                    <label for="entry_part">Part <span class="text-danger">*</span></label>
-                                    <div class="invalid-feedback">Kindly Enter Valid Data</div>
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control rounded-3" placeholder=""
+                                        id="entry_address"></textarea>
+                                    <label for="entry_address">Address</label>
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild
+                                    </div>
                                 </div>
                             </div>
 
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control rounded-3" id="entry_dc_no">
+                                    <label for="entry_dc_no">DC No</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="entry_vehicle">
+                                    <label for="entry_vehicle">Vehicle</label>
+                                </div>
+                            </div>
+
+                            
                             <div class="col-md-6">
                                 <div class="form-floating mb-2">
                                     <input type="date" class="form-control rounded-3" id="entry_date">
@@ -202,14 +219,42 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 d-flex gap-2">
-                                <div class="form-floating mb-2 flex-grow-1">
+                        </div>
+                    </form>
+                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="entry_po_form" novalidate
+                        onsubmit="return false">
+
+                        <div class="row">
+
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="entry_part">
+                                    <label for="entry_part">Part <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback">Kindly Enter Valid Data</div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2 ">
                                     <input type="number" class="form-control rounded-3" id="entry_price">
                                     <label for="entry_price">Price</label>
                                 </div>
+                            </div>
+
+
+                            <div class="col-md-6 d-flex gap-2">
+
                                 <div class="form-floating mb-2 flex-grow-1">
                                     <input type="number" class="form-control rounded-3" id="entry_gst">
                                     <label for="entry_gst">GST</label>
+                                </div>
+
+                                <div class="form-floating mb-2  flex-grow-1">
+                                    <input type="number" class="form-control rounded-3" id="entry_discount"
+                                        placeholder="" required>
+                                    <label for="entry_discount">Discount</label>
                                 </div>
                             </div>
 
@@ -240,17 +285,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-floating mb-2">
-                                    <input type="number" class="form-control rounded-3" id="entry_dc_no">
-                                    <label for="entry_dc_no">DC No</label>
-                                </div>
-                            </div>
+
 
                         </div>
 
                         <div>
-                            <button type="submit" class="btn btn-primary" id="entry_po_submit_btn">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="entry_po_add_btn">Add</button>
                             <button type="submit" class="btn btn-primary d-none"
                                 id="entry_po_update_btn">Update</button>
                         </div>
@@ -263,24 +303,50 @@
                         <table class="table caption-top table-bordered table-striped">
                             <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
                                 <tr>
-                                    <th>#</th>
-                                    <th>DC.No</th>
-                                    <th>Company Name</th>
-                                    <th>Material Name</th>
-                                    <th>Date</th>
+                                    <td id="company_details"  class="text-start" rowspan="2" colspan="3"></td>
+                                    <th colspan="2">DC.NO</th>
+                                    <th id="dc_no_head" colspan="2"></th>
+                                </tr>
+                                <tr>
+                                    <th  colspan="2" >Date</th>
+                                    <th id="dc_date_head" colspan="2" ></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-start" rowspan="2">
+                                        <strong>Invoice To : </strong><br>
+                                        JAYSAN AGRI INDUSTRIAL
+                                        80-1, 1C, Valiyampalayam,Coimbatore - 641048
+                                        GSTIN/UIN : 33AALFJ3271B1ZQ
+                                        State Name : Tamilnadu Code : 33
+                                    </td>
+                                    <th  colspan="2" >Vehicle Type</th>
+                                    <th id="vehicle_head" colspan="2" ></th>
+                                </tr>
+                                <tr>
+                                    <th  colspan="2" >Received By</th>
+                                    <th id="received_by_head" colspan="2" ></th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 0%;">#</th>
+                                    <th style="width: 40%;">Material Name</th>
                                     <th>Price</th>
                                     <th>GST</th>
                                     <th>Quantity</th>
                                     <th>UOM</th>
-                                    <th>Action</th>
+                                    <th style="width: 20%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="po_entery_form_table"></tbody>
                         </table>
                     </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary d-none" id="entry_po_submit_btn">Submit</button>
+                    </div>
                 </div>
 
             </div>
+
+
 
 
         </div>
@@ -305,7 +371,7 @@
             crossorigin="anonymous"></script>
 
         <!-- font awesome -->
-        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+        <!-- <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script> -->
 
         <!-- Sweet alert -->
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -314,7 +380,7 @@
         <!-- external js -->
         <script src="js/po_inward.js" type="module"></script>
         <script src="js/menu.js" type="module"></script>
-        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+        <script src="js/get_all_id.js" type="module"></script>
 
 </body>
 
