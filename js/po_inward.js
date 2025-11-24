@@ -357,22 +357,24 @@ $(document).ready(function () {
         t_price += price;
         t_qty += qty;
 
-        let rowCount = $("#po_entery_form_table tr").length;
+        let rowCount = $("#po_entery_form_table tr:not(.total-row)").length;
+        rowCount = rowCount + 1;
 
         $("#po_entery_form_table").append(`
-        <tr data-discount='${$("#entry_discount").val()}' data-part_id="${part}">
-            <td>${rowCount}</td>
-            <td>${$("#entry_part").val()}</td>
-            <td>${price}</td>
-            <td>${gst}</td>
-            <td>${qty}</td>
-            <td>${uom}</td>
-            <td>
-                <button type="button" class="btn btn-warning edit_po_c_btn"><i class="fa fa-edit"></i></button>
-                <button type="button" class="btn btn-danger delete_po_c_btn"><i class="fa fa-trash"></i></button>
-            </td>
-        </tr>
-    `);
+                <tr data-discount='${$("#entry_discount").val()}' data-part_id="${part}">
+                    <td>${rowCount}</td>
+                    <td>${$("#entry_part").val()}</td>
+                    <td>${price}</td>
+                    <td>${gst}</td>
+                    <td>${qty}</td>
+                    <td>${uom}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning edit_po_c_btn"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-danger delete_po_c_btn"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                `);
+
 
         // Remove old total row
         $("#po_entery_form_table tr.total-row").remove();
@@ -439,18 +441,16 @@ $(document).ready(function () {
     })
 
     // EDIT ROW (delegated)
-    $(document).on("click", "#edit_po_c_btn", function () {
+    $(document).on("click", ".edit_po_c_btn", function () {
 
         $("#entry_po_add_btn").addClass("d-none");
         $("#entry_po_update_btn").removeClass("d-none");
 
-        var row = $(this).closest("tr");
+        let row = $(this).closest("tr");
         $("#entry_po_update_btn").data("row", row);
 
-        // $("#entry_dc_no").val(row.find("td").eq(1).text());
-        // $("#entry_company").val(row.find("td").eq(2).text());
+        // Fill form with row values
         $("#entry_part").val(row.find("td").eq(1).text());
-        // $("#entry_date").val(row.find("td").eq().text());
         $("#entry_price").val(row.find("td").eq(2).text());
         $("#entry_gst").val(row.find("td").eq(3).text());
         $("#entry_qty").val(row.find("td").eq(4).text());
@@ -458,28 +458,33 @@ $(document).ready(function () {
         $("#entry_discount").val(row.data("discount"));
     });
 
-
-    // UPDATE ROW
     $("#entry_po_update_btn").on("click", function () {
 
-        var row = $(this).data("row");
+        let row = $(this).data("row");
 
         row.find("td").eq(1).text($("#entry_part").val());
-        // row.find("td").eq(2).text($("#entry_date").val());
         row.find("td").eq(2).text($("#entry_price").val());
         row.find("td").eq(3).text($("#entry_gst").val());
         row.find("td").eq(4).text($("#entry_qty").val());
         row.find("td").eq(5).text($("#entry_uom").val());
 
+        // Update row data attributes
+        row.data("discount", $("#entry_discount").val());
+        row.data("part_id", $("#entry_part").data("part_id"));
+
+        // Reset UI
         $("#entry_po_add_btn").removeClass("d-none");
         $("#entry_po_update_btn").addClass("d-none");
 
         clearForm();
-    });
-    // DELETE ROW
-    $(document).on("click", "#delete_po_c_btn", function () {
 
-        let btn = this; // store button reference
+        recalcTotals();
+    });
+
+    // DELETE ROW
+    $(document).on("click", ".delete_po_c_btn", function () {
+
+        let btn = this;
 
         Swal.fire({
             title: "Are you sure?",
@@ -491,11 +496,20 @@ $(document).ready(function () {
         }).then((result) => {
 
             if (result.isConfirmed) {
+
                 $(btn).closest("tr").remove();
+
+                $("#po_entery_form_table tr:not(.total-row)").each(function (index) {
+                    $(this).find("td").eq(0).text(index + 1);
+                });
+
+                recalcTotals();
+
             }
 
         });
     });
+
 
 
     //  CLEAR FORM FUNCTION
@@ -510,6 +524,35 @@ $(document).ready(function () {
         $("#entry_uom").val("null");
         $("#entry_discount").val("");
         $("#entry_address").val("");
+    }
+
+    function recalcTotals() {
+
+        let t_price = 0;
+        let t_qty = 0;
+
+        // Loop through all item rows except total-row
+        $("#po_entery_form_table tr:not(.total-row)").each(function () {
+            let price = Number($(this).find("td").eq(2).text());
+            let qty = Number($(this).find("td").eq(4).text());
+
+            t_price += price;
+            t_qty += qty;
+        });
+
+        // Remove old total row
+        $("#po_entery_form_table tr.total-row").remove();
+
+        // Append updated total
+        $("#po_entery_form_table").append(`
+        <tr class="total-row">
+            <td colspan="2" class="text-center"><strong>Total</strong></td>
+            <td>${t_price}</td>
+            <td></td>
+            <td>${t_qty}</td>
+            <td colspan="2"></td>
+        </tr>
+    `);
     }
 
 
@@ -543,8 +586,8 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 
             console.log(response);
             if (response.trim() == "ok") {
-                // location.reload();
-                alert("success")
+                location.reload();
+                // alert("success")
 
             }
 
