@@ -6,10 +6,10 @@ ini_set('display_errors', 1);
  include 'db_head.php';
 
  $po_order_to = ($_POST['po_order_to']);
-$po_delivery_to = ($_POST['po_delivery_to']);
-$po_terms = ($_POST['po_terms']);
-$po_email = ($_POST['po_email']);
-$po_path = ($_POST['po_path']);
+$po_delivery_to = isset($_POST['po_delivery_to']) ? $_POST['po_delivery_to'] : '359';
+$po_terms = isset($_POST['po_terms']) ? $_POST['po_terms'] : '';
+$po_email = isset($_POST['po_email']) ? $_POST['po_email'] : '';
+$po_path = isset($_POST['po_path']) ? $_POST['po_path'] : '';
 $po_no = isset($_POST['po_no']) ? $_POST['po_no'] : '0';
 $is_ext_po = isset($_POST['is_ext_po']) ? $_POST['is_ext_po'] : '0';
 if($is_ext_po == '1'){
