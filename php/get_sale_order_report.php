@@ -111,9 +111,9 @@ dcf_final as (SELECT opid, JSON_ARRAYAGG(
      final as( SELECT emp_id,emp_name,sop_view.oid,sop_view.opid,sop_view.order_category,sop_view.customer_id,sop_view.sale_order_date,sop_view.order_no,sop_view.cus_name,sop_view.cus_phone,
        JSON_ARRAYAGG(
         JSON_OBJECT('product',product,'model_name',model_name,'type_name',type_name,'sub_type',sub_type,'dcf_details',dcf_details,'dcf_count',dcf_count,'required_qty',required_qty,'assigned_qty',assigned_qty,'unassigned_qty',unassigned_qty,'remain_dcf',required_qty - dcf_count,'assign_info',assign_info)) as product
-       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query   GROUP by oid limit 50) 
+       from sop_view inner join dcf_final1 on sop_view.opid = dcf_final1.opid inner join assign_final on assign_final.opid =  sop_view.opid  where   $customer_id_query and  $sale_order_date_query  and $order_category_query and  $remain_dcf_query   GROUP by oid ) 
 
-       select final.*,pay_details,paid,total_payment,bal from final left join sale_order_payment_view on final.oid = sale_order_payment_view.oid where  $payment_query and $emp_id_query;
+       select final.*,pay_details,paid,total_payment,bal from final left join sale_order_payment_view on final.oid = sale_order_payment_view.oid where  $payment_query and $emp_id_query order by final.order_no desc;
 
 
 
