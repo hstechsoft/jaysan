@@ -333,7 +333,7 @@ $(document).ready(function () {
     var statuss = $("#status").val() || "";
     var unassigned_qty = $("#unassigned_qty").val() || "";
     var payment = $("#payment").val() || "";
-    var order_category = $("#sales_cate :checked") ? "sale" : "required" || '';
+    var order_category = $("#sales_cate :checked") ? "Sales" : "Requirement" || '';
     var godown = $("#godown").val() || "";
     var remaining_dcf = $("#remaining_dcf").val() || "";
 

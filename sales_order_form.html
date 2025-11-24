@@ -1,61 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-     <!-- Bootstrap CSS -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-     <!-- bootsttrap icons -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <title>Document</title>
-  
-  <!-- external css -->
-  <link rel="stylesheet" type="text/css" href="/soft/style.css">
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-   
-  <style>
-     .custom-fixed-table {
-        height: 400px; 
-        overflow-y: auto;
-        position: relative;
-    }
-    .custom-fixed-table table {
-        width: 100%;
-        table-layout: fixed;
-    }
-    .custom-fixed-table th, 
-    .custom-fixed-table td {
-        width: 10vw; /* Fixed width for all cells */
-        word-wrap: break-word;
-    }
-    .custom-fixed-table thead th {
-        position: sticky;
-        top: 0;
-        background-color: #f8f9fa;
-        z-index: 10;
-    }
-    .custom-fixed-table tbody tr.fixed-row td {
-        position: sticky;
-        top: 38px;
-        background-color: #ffffff;
-        z-index: 5;
-    }
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="/soft/style.css">
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
-</style>
+    <style>
+        .custom-fixed-table {
+            height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .custom-fixed-table table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .custom-fixed-table th,
+        .custom-fixed-table td {
+            width: 10vw;
+            /* Fixed width for all cells */
+            word-wrap: break-word;
+        }
+
+        .custom-fixed-table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 10;
+        }
+
+        .custom-fixed-table tbody tr.fixed-row td {
+            position: sticky;
+            top: 38px;
+            background-color: #ffffff;
+            z-index: 5;
+        }
+    </style>
 
 
 
 </head>
+
 <body>
     <section>
-   
-      </section>
 
-      <div class="modal fade" id="sales_pay" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sales_payLabel" aria-hidden="true">
+    </section>
+
+    <div class="modal fade" id="sales_pay" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="sales_payLabel" aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -65,418 +72,428 @@
                 <div class="modal-body m-0  mb-2">
                     <div class="card">
                         <div class="card-header">
-                           Payment Details
+                            Payment Details
                         </div>
                         <div class="card-header">
                             <div class="">
                                 <div class="mt-1 ">
-                                    <div class='input-group '> 
+                                    <div class='input-group '>
                                         <label class='input-group-text ' for='total_payment_m'><span>
-                                        Total payment 
-                                        </span>
+                                                Total payment
+                                            </span>
                                         </label>
-                                        <input id='total_payment_m' type='number' class='form-control'  disabled>
-                                        </div>
+                                        <input id='total_payment_m' type='number' class='form-control' disabled>
+                                    </div>
                                 </div>
                                 <div class="mt-1 ">
-                                   
-                                        
-                                        <div class='input-group '> 
-                                            <label class='input-group-text ' for='nex_payment_date_m'><span>
-                                                Next payment date 
+
+
+                                    <div class='input-group '>
+                                        <label class='input-group-text ' for='nex_payment_date_m'><span>
+                                                Next payment date
                                             </span>
-                                            </label>
-                                            <input type='datetime-local' id='nex_payment_date_m' class='form-control' placeholder='Date' >
-                                            </div>
+                                        </label>
+                                        <input type='datetime-local' id='nex_payment_date_m' class='form-control'
+                                            placeholder='Date'>
+                                    </div>
                                 </div>
-                                <div class="mt-1 d-flex  justify-content-around" >
+                                <div class="mt-1 d-flex  justify-content-around">
 
                                     <p class="small my-auto"> Paid : &#8377; <span id="total_amount_m"> 0</span> </p>
                                     <button id="update_pay_btn" class="btn btn-primary btn-sm">Ok</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="card-body">
-                         
-                <div class="row row-cols-1 ">
-            
-                 
-            
-                    <div class="col">
-                        <div class='input-group mb-2'> 
-                            <label class='input-group-text' for='amount_m'><span>
-                            Amount 
-                            </span>
-                            </label>
-                            <input id='amount_m' type='number' class='form-control'  >
-                            </div>
-                    </div>
-            
-                    <div class="col">
-                       
-            
-                            <div class='input-group mb-2'> 
-                                <label class='input-group-text' for='ref_no'><span>
-                                    Paid on
-                                </span>
-                                </label>
-                                <input type='datetime-local' id='payment_date_m' class='form-control' placeholder='Date' >
+
+                            <div class="row row-cols-1 ">
+
+
+
+                                <div class="col">
+                                    <div class='input-group mb-2'>
+                                        <label class='input-group-text' for='amount_m'><span>
+                                                Amount
+                                            </span>
+                                        </label>
+                                        <input id='amount_m' type='number' class='form-control'>
+                                    </div>
                                 </div>
-                    </div>
-            
-                    <div class="col">
-                        <div class='input-group mb-2'> 
-                            <label class='input-group-text' for='ref_no'><span>
-                         Reference No
-                            </span>
-                            </label>
-                            <input id='ref_no_m' type='text' class='form-control'  >
+
+                                <div class="col">
+
+
+                                    <div class='input-group mb-2'>
+                                        <label class='input-group-text' for='ref_no'><span>
+                                                Paid on
+                                            </span>
+                                        </label>
+                                        <input type='datetime-local' id='payment_date_m' class='form-control'
+                                            placeholder='Date'>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class='input-group mb-2'>
+                                        <label class='input-group-text' for='ref_no'><span>
+                                                Reference No
+                                            </span>
+                                        </label>
+                                        <input id='ref_no_m' type='text' class='form-control'>
+                                    </div>
+                                </div>
+
+                                <div class="col d-flex justify-content-center gap-2">
+                                    <div class='input-group mb-2'>
+                                        <label class='input-group-text' for='utr_no_m'><span>
+                                                UTR No
+                                            </span>
+                                        </label>
+                                        <input id='utr_no_m' type='text' class='form-control'>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="payment_add_btn_m" type="button">
+                                        Add</button>
+                                </div>
+
                             </div>
-                    </div>
-            
-                    <div class="col d-flex justify-content-center gap-2">
-                         <div class='input-group mb-2'> 
-                <label class='input-group-text' for='utr_no_m'><span>
-                UTR No
-                </span>
-                </label>
-                <input id='utr_no_m' type='text' class='form-control'  >
-                </div>
-                        <button class="btn btn-primary btn-sm" id="payment_add_btn_m" type="button"> Add</button>
-                    </div>
-                  
-                </div>
-            
-                <table id='payment_table1_m' class='table table-bordered border-dark border-opacity-50 text-center ' >
-                    <thead class="small">
-                    <tr class="small">
-                    
-                    <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
-                    
-                    </tr>
-                    
-                    <tr class="small">
-                    
-                     <th scope='col'>#</th>
-                   <th scope='col'>Ref No</th>
-                   <th scope='col'>UTR No</th>
-                   <th scope='col'>Amount</th>
-                   <th scope='col'>Dated</th>
-                   <th scope='col'>Status</th>
-                   <th scope='col'>Delete</th>
-                   
-                    
-                    </tr>
-                    </thead>
-                    <tbody class='align-middle small' id='payment_table_m'>
-                    
-                    </tbody>
-                    </table>
+
+                            <table id='payment_table1_m'
+                                class='table table-bordered border-dark border-opacity-50 text-center '>
+                                <thead class="small">
+                                    <tr class="small">
+
+                                        <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
+
+                                    </tr>
+
+                                    <tr class="small">
+
+                                        <th scope='col'>#</th>
+                                        <th scope='col'>Ref No</th>
+                                        <th scope='col'>UTR No</th>
+                                        <th scope='col'>Amount</th>
+                                        <th scope='col'>Dated</th>
+                                        <th scope='col'>Status</th>
+                                        <th scope='col'>Delete</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody class='align-middle small' id='payment_table_m'>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    
 
-                </div>
+
                 </div>
             </div>
         </div>
+    </div>
 
-      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header ">
-            <strong class="me-auto toast-title">Toast Title</strong>
-            <small class="text-muted">Just now</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body toast-description">
-            Hello, this is a Bootstrap toast message!
-          </div>
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
         </div>
-      </div>
-<div class="container-fluid ">
-    <!-- top bar -->
-   
-   
-    
-<section id="menu_bar">
-   
-</section>
-<!-- Add New Process Modal -->
-<form id="sales_order_form1" onsubmit="return false">
-    <div class="card ">
-        <div class="card-header d-flex justify-content-center">
-          Order form - Marketing
-        </div>
+    </div>
+    <div class="container-fluid ">
+        <!-- top bar -->
 
-        <div class="card-body">
-            <div class='input-group'>
-                <div class='input-group-prepend '>
-                <span class='input-group-text mrequired' id='basic-addon1'>
-                Order Catergory </span>
-                
-                </div> 
-                <select class='custom-select form-control' id='order_category' required>
-               <option  value="" selected disabled>Choose Options...</option>
-               <option value='Sales'>Sales</option>
-               <option value='Requirement'>Requirement</option>
-               
-                
-                </select>
+
+
+        <section id="menu_bar">
+
+        </section>
+        <!-- Add New Process Modal -->
+        <form id="sales_order_form1" onsubmit="return false">
+            <div class="card ">
+                <div class="card-header d-flex justify-content-center">
+                    Order form - Marketing
                 </div>
-
-                <div class="card mt-1">
-                    <div class="card-header d-flex justify-content-between">
-                       
-                       <div>
-                        <p class="m-0 p-0">   Product Details</p>
-                       </div> 
-                     <div>
-                      <div class="d-none d-sm-block">
-                        <a href="jaysan_product_entry.html" class="btn btn-secondary btn-sm" id="view_product_btn"> <i class="fa fa-plus" aria-hidden="true"></i></a>
-
-                      </div>  
-                     </div>
-                </div>
-
 
                 <div class="card-body">
-                    <form id="sales_product_form" onsubmit="return false">
+                    <div class='input-group'>
+                        <div class='input-group-prepend '>
+                            <span class='input-group-text mrequired' id='basic-addon1'>
+                                Order Catergory </span>
 
-                        <div class="row row-cols-sm-2 row-cols-1">
-            
-                            <div class="col">
-                                <div class='input-group mb-2'>
-                                    <div class='input-group-prepend '>
-                                    <span class='input-group-text ' id='basic-addon1'>
-                                    product </span>
-                                    
-                                    </div> 
-                                    <select class='custom-select form-control'  id='product' >
-                                   <option  value="" selected disabled>Choose Options...</option>
-                                  
-                                    
-                                    </select>
-                                    </div>
-                            </div>
-                    
-                            <div class="col">
-                                <div class='input-group mb-2'>
-                                    <div class='input-group-prepend '>
-                                    <span class='input-group-text ' id='basic-addon1'>
-                                    Model </span>
-                                    
-                                    </div> 
-                                    <select class='custom-select form-control'  id='pmodel'  disabled>
-                                   <option  value="" selected disabled>Choose Options...</option>
-                                 
-                                   
-                                    
-                                    </select>
-                                    </div>
-                            </div>
-    
-                            <div class="col">
-                                <div class='input-group mb-2'>
-                                    <div class='input-group-prepend '>
-                                    <span class='input-group-text' id='basic-addon1'>
-                                    Type </span>
-                                    
-                                    </div> 
-                                    <select class='custom-select form-control'  id='ptype'  disabled>
-                                   <option  value="" selected disabled>Choose Options...</option>
-                                 
-                                   
-                                    
-                                    </select>
-                                    </div>
-                            </div>
-                              <div class="col">
-                                <div class='input-group mb-2'> 
-                                    <label class='input-group-text ' for='qty'><span>
-                                    qty 
-                                    </span>
-                                    </label>
-                                    <input id='qty' type='number' class='form-control'  >
-                                    </div>
-                            </div>
-                            <div class="col">
-                                <div class='input-group '> 
-                                    <label class='input-group-text ' for='billing_price'><span>
-                                  Billing Amount
-                                    </span>
-                                    </label>
-                                    <input id='billing_price' type='number' class='form-control'  >
-                                    </div>
-                                    <!-- <p class="m-0 p-0 small text-muted d-none" id="price_word" >hi</p> -->
-                            </div>
-                          
-
-                                 <div class="col">
-                                <div class='input-group '> 
-                                    <label class='input-group-text ' for='machine_price'><span>
-                                    Price/Machine
-                                    </span>
-                                    </label>
-                                    <input id='machine_price' type='number' class='form-control'  >
-                                      
-    <span class="input-group-text">CN : <span class="ms-1" id="credit_amount"> 0 </span></span>
-
-                                    </div>
-                                    <!-- <p class="m-0 p-0 small text-muted d-none" id="price_word" >hi</p> -->
-                            </div>
-                          
-              
                         </div>
-
-                     <div class="card d-none" id="product_sub_type_card">
-                        <div class="card-header">
-                            Product Sub Type
-                        </div>
-                        <div class="card-body ">
-                          <div class="row row-cols-sm-4 row-cols-2 "  id="sub_type_div">
-                         
-                          </div>
-                       
-                          
-                       
-                        </div>
-                     </div>
+                        <select class='custom-select form-control' id='order_category' required>
+                            <option value="" selected disabled>Choose Options...</option>
+                            <option value='Sales'>Sales</option>
+                            <option value='Requirement'>Requirement</option>
 
 
+                        </select>
                     </div>
 
-                    
-                    <div class="d-flex justify-content-center">
-                        <button class="btn btn-primary btn-sm " type="button" id="add_sale_product_btn">Add</button>
-                    </div>
-                  
-              
-<div>
+                    <div class="card mt-1">
+                        <div class="card-header d-flex justify-content-between">
 
-    <div class="table-responsive">
-    <table id='sales_product1' class='table table-bordered border-dark border-opacity-50 text-center mt-1' >
-        <thead class="small">
-        <tr>
-        
-        <th colspan='10' scope='col' class='bg-info bg-opacity-25 small'>Product</th>
-        
-        </tr>
-        
-        <tr class="small">
-        
-         <th scope='col'>#</th>
-       <th scope='col'>product</th>
-       <th scope='col'>model</th>
-       <th scope='col'>type</th>
-
-       <th scope='col'>sub type</th>
-       
-       <th scope='col'>Qty</th>
-       <th scope='col'>Price</th>
-        <th scope='col'>Billing </th>
-       <th scope='col'>Delete</th>
-        </tr>
-        </thead>
-        <tbody class='align-middle small' id='sales_product'>
-        
-        </tbody>
-        </table>
-    </div>
-</div>
-
-                </div>        
-           
-
-        </div>
-    </div>
-    
-     
-                      
-    <div class="card">
-        <div class="card-header">
-            Customer Details
-    </div>
-    <div class="card-body">
-        <div class="row row-cols-sm-2 row-cols-1">
-            <div class="col">
-                <div class='input-group mb-2'> 
-                    <label class='input-group-text mrequired'  for='cus_name'><span>
-                    customer Name 
-                    </span>
-                    </label>
-                    <input id='cus_name' type='text'  required class='form-control'  >
-                    </div>
-            </div>
-          
-            <div class="col">
-                <div class='input-group mb-2'> 
-                    <label class='input-group-text mrequired' for='pincode'><span>
-                    pincode 
-                    </span>
-                    </label>
-                    <input id='pincode' type='text' required class='form-control'  >
-                    </div>
-            </div>
-            <div class="col">
-                <div class='input-group mb-2'> 
-                    <label class='input-group-text mrequired ' required for='cus_phone'><span>
-                    customer Phone 
-                    </span>
-                    </label>
-                    <input id='cus_phone' type='text' required class='form-control'  >
-                    </div>
-            </div>
-            <div class="col">
-                <div class='input-group mb-2 ' >
-                    <textarea class='form-control' id='delivery_address' placeholder='Delivery Address' rows='2' ></textarea>
-                    </div>
-            </div>
-        </div>
-     
-    </div>
-          
-        
-        </div>
-    
-        <div class="card">
-            <div class="card-header">
-               Payment Details
-            </div>
-            <div class="card-header">
-                <div class=" d-sm-flex justify-content-between">
-                    <div class="m-sm-0 mt-1 ">
-                        <div class='input-group '> 
-                            <label class='input-group-text ' for='total_payment'><span>
-                            Total payment 
-                            </span>
-                            </label>
-                            <input id='total_payment' type='number' class='form-control'  required>
+                            <div>
+                                <p class="m-0 p-0"> Product Details</p>
                             </div>
-                    </div>
-                    <div class="m-sm-0 mt-1 ">
-                       
-                            
-                            <div class='input-group '> 
-                                <label class='input-group-text ' for='nex_payment_date'><span>
-                                    Next payment date 
-                                </span>
-                                </label>
-                                <input type='datetime-local' id='nex_payment_date' class='form-control' placeholder='Date' >
+                            <div>
+                                <div class="d-none d-sm-block">
+                                    <a href="jaysan_product_entry.html" class="btn btn-secondary btn-sm"
+                                        id="view_product_btn"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+
                                 </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card-body">
+                            <form id="sales_product_form" onsubmit="return false">
+
+                                <div class="row row-cols-sm-2 row-cols-1">
+
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <div class='input-group-prepend '>
+                                                <span class='input-group-text ' id='basic-addon1'>
+                                                    product </span>
+
+                                            </div>
+                                            <select class='custom-select form-control' id='product'>
+                                                <option value="" selected disabled>Choose Options...</option>
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <div class='input-group-prepend '>
+                                                <span class='input-group-text ' id='basic-addon1'>
+                                                    Model </span>
+
+                                            </div>
+                                            <select class='custom-select form-control' id='pmodel' disabled>
+                                                <option value="" selected disabled>Choose Options...</option>
+
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <div class='input-group-prepend '>
+                                                <span class='input-group-text' id='basic-addon1'>
+                                                    Type </span>
+
+                                            </div>
+                                            <select class='custom-select form-control' id='ptype' disabled>
+                                                <option value="" selected disabled>Choose Options...</option>
+
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <label class='input-group-text ' for='qty'><span>
+                                                    qty
+                                                </span>
+                                            </label>
+                                            <input id='qty' type='number' class='form-control'>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class='input-group '>
+                                            <label class='input-group-text ' for='billing_price'><span>
+                                                    Billing Amount
+                                                </span>
+                                            </label>
+                                            <input id='billing_price' type='number' class='form-control'>
+                                        </div>
+                                        <!-- <p class="m-0 p-0 small text-muted d-none" id="price_word" >hi</p> -->
+                                    </div>
+
+
+                                    <div class="col">
+                                        <div class='input-group '>
+                                            <label class='input-group-text ' for='machine_price'><span>
+                                                    Price/Machine
+                                                </span>
+                                            </label>
+                                            <input id='machine_price' type='number' class='form-control'>
+
+                                            <span class="input-group-text">CN : <span class="ms-1" id="credit_amount"> 0
+                                                </span></span>
+
+                                        </div>
+                                        <!-- <p class="m-0 p-0 small text-muted d-none" id="price_word" >hi</p> -->
+                                    </div>
+
+
+                                </div>
+
+                                <div class="card d-none" id="product_sub_type_card">
+                                    <div class="card-header">
+                                        Product Sub Type
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="row row-cols-sm-4 row-cols-2 " id="sub_type_div">
+
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary btn-sm " type="button" id="add_sale_product_btn">Add</button>
+                        </div>
+
+
+                        <div>
+
+                            <div class="table-responsive">
+                                <table id='sales_product1'
+                                    class='table table-bordered border-dark border-opacity-50 text-center mt-1'>
+                                    <thead class="small">
+                                        <tr>
+
+                                            <th colspan='10' scope='col' class='bg-info bg-opacity-25 small'>Product
+                                            </th>
+
+                                        </tr>
+
+                                        <tr class="small">
+
+                                            <th scope='col'>#</th>
+                                            <th scope='col'>product</th>
+                                            <th scope='col'>model</th>
+                                            <th scope='col'>type</th>
+
+                                            <th scope='col'>sub type</th>
+
+                                            <th scope='col'>Qty</th>
+                                            <th scope='col'>Price</th>
+                                            <th scope='col'>Billing </th>
+                                            <th scope='col'>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class='align-middle small' id='sales_product'>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="m-sm-0 mt-1 d-flex d-sm-block justify-content-center" >
-                        <p class="small my-auto"> Paid : &#8377; <span id="total_amount"> 0</span> </p>
-                    </div>
-                    
+
+
                 </div>
             </div>
-            <div class="card-body">
-             
-    <div class="row row-cols-1 row-cols-sm-2">
 
-        
-        <!-- <div class="col">
+
+
+            <div class="card">
+                <div class="card-header">
+                    Customer Details
+                </div>
+                <div class="card-body">
+                    <div class="row row-cols-sm-2 row-cols-1">
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text mrequired' for='cus_name'><span>
+                                        customer Name
+                                    </span>
+                                </label>
+                                <input id='cus_name' type='text' required class='form-control'>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text mrequired' for='pincode'><span>
+                                        pincode
+                                    </span>
+                                </label>
+                                <input id='pincode' type='text' required class='form-control'>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text mrequired ' required for='cus_phone'><span>
+                                        customer Phone
+                                    </span>
+                                </label>
+                                <input id='cus_phone' type='text' required class='form-control'>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class='input-group mb-2 '>
+                                <textarea class='form-control' id='delivery_address' placeholder='Delivery Address'
+                                    rows='2'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Payment Details
+                </div>
+                <div class="card-header">
+                    <div class=" d-sm-flex justify-content-between">
+                        <div class="m-sm-0 mt-1 ">
+                            <div class='input-group '>
+                                <label class='input-group-text ' for='total_payment'><span>
+                                        Total payment
+                                    </span>
+                                </label>
+                                <input id='total_payment' type='number' class='form-control' required>
+                            </div>
+                        </div>
+                        <div class="m-sm-0 mt-1 ">
+
+
+                            <div class='input-group '>
+                                <label class='input-group-text ' for='nex_payment_date'><span>
+                                        Next payment date
+                                    </span>
+                                </label>
+                                <input type='datetime-local' id='nex_payment_date' class='form-control'
+                                    placeholder='Date'>
+                            </div>
+                        </div>
+                        <div class="m-sm-0 mt-1 d-flex d-sm-block justify-content-center">
+                            <p class="small my-auto"> Paid : &#8377; <span id="total_amount"> 0</span> </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="row row-cols-1 row-cols-sm-2">
+
+
+                        <!-- <div class="col">
             <div class='input-group mb-2'> 
                 <label class='input-group-text mrequired' for='total_payment'><span>
                 Total payment 
@@ -505,262 +522,271 @@
                 </div>
         </div> -->
 
-        <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text' for='amount'><span>
-                Amount 
-                </span>
-                </label>
-                <input id='amount' type='number' class='form-control'  >
-                </div>
-        </div>
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='amount'><span>
+                                        Amount
+                                    </span>
+                                </label>
+                                <input id='amount' type='number' class='form-control'>
+                            </div>
+                        </div>
 
-        <div class="col">
-           
+                        <div class="col">
 
-                <div class='input-group mb-2'> 
-                    <label class='input-group-text' for='ref_no'><span>
-                        Paid on
-                    </span>
-                    </label>
-                    <input type='datetime-local' id='payment_date' class='form-control' placeholder='Date' >
+
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='ref_no'><span>
+                                        Paid on
+                                    </span>
+                                </label>
+                                <input type='datetime-local' id='payment_date' class='form-control' placeholder='Date'>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='ref_no'><span>
+                                        Reference
+                                    </span>
+                                </label>
+                                <input id='ref_no' type='text' class='form-control'>
+                            </div>
+                        </div>
+
+                        <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0 gap-2">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='utr_no'><span>
+                                        UTR No
+                                    </span>
+                                </label>
+                                <input id='utr_no' type='text' class='form-control'>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="payment_add_btn" type="button"> Add</button>
+                        </div>
+
                     </div>
-        </div>
 
-        <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text' for='ref_no'><span>
-                Reference
-                </span>
-                </label>
-                <input id='ref_no' type='text' class='form-control'  >
-                </div>
-        </div>
+                    <table id='payment_table1' class='table table-bordered border-dark border-opacity-50 text-center '>
+                        <thead class="small">
+                            <tr class="small">
 
-        <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0 gap-2">
-              <div class='input-group mb-2'> 
-                <label class='input-group-text' for='utr_no'><span>
-                UTR No
-                </span>
-                </label>
-                <input id='utr_no' type='text' class='form-control'  >
-                </div>
-            <button class="btn btn-primary btn-sm" id="payment_add_btn" type="button"> Add</button>
-        </div>
-      
-    </div>
+                                <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
 
-    <table id='payment_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
-        <thead class="small">
-        <tr class="small">
-        
-        <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
-        
-        </tr>
-        
-        <tr class="small">
-        
-         <th scope='col'>#</th>
-       <th scope='col'>Ref No</th>
-        <th scope='col'>UTR No</th>
-       <th scope='col'>Amount</th>
-       <th scope='col'>Dated</th>
-       <th scope='col'>Delete</th>
-       
-        
-        </tr>
-        </thead>
-        <tbody class='align-middle small' id='payment_table'>
-        
-        </tbody>
-        </table>
-            </div>
-        </div>
-    
-        <div class="card">
-            <div class="card-header">
-               Order Details
-            </div>
-            <div class="card-body">
-    <div class="row row-cols-1  row-cols-sm-2">
-      
-         
-        <div class="col">
-         
-            <div class='input-group mb-2'>
-                <div class='input-group-prepend '>
-                <span class='input-group-text mrequired' id='basic-addon1'>
-               Order type </span>
-                
-                </div> 
-                <select class='custom-select form-control' id='order_type' required>
-               <option  value="" selected disabled>Choose Options...</option>
-               <option value='Emergency'>Emergency</option>
-               <option value='Reqular'>Reqular</option>
-               
-                
-                </select>
-                </div> 
-    
-                
-        </div>
-    
-        <div class="col">
-            <div class='input-group mb-2'>
-                <div class='input-group-prepend '>
-                <span class='input-group-text mrequired' id='basic-addon1'>
-              OE Supply </span>
-                
-                </div> 
-                <select class='custom-select form-control' id='oe_supply' required>
-               <option  value="" selected disabled>Choose Options...</option>
-               <option value='1'>Yes</option>
-               <option value='0'>No</option>
-               
-                
-                </select>
-                </div>
-        </div>
-      
-    
-        <div class="col">
-            <div class='input-group mb-2 ' >
-                <div class='input-group-prepend '>
-                <span class='input-group-text ' >
-                    commitment date </span>
-                
-                </div> 
-                <input type='datetime-local' id='commitment_date' class='form-control' placeholder='Date' >
-                
-                </div>
-            </div> 
-    
-        <div class="col">
-            <div class='input-group mb-2 ' >
-                <div class='input-group-prepend '>
-                <span class='input-group-text ' >
-                Document date </span>
-                
-                </div> 
-                <input type='datetime-local' id='dated' class='form-control' disabled placeholder='Date' >
-                
-                </div>
-        </div>
-    
-    
-        <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text mrequired' for='required_qty'><span>
-                required qty 
-                </span>
-                </label>
-                <input id='required_qty' type='number' value="0" class='form-control' disabled required >
-                </div>
-        </div>
-      
-    </div>
-    
-    <div class="fixed-bottom m-0 p-0 d-none" id="price_word_div">
-        <div class="alert alert-primary m-0 p-0" role="alert">
-         <p id="price_word"></p>
-          </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-header">
-            color choice
-        </div>
-        <div class="card-body">
-            <div class="d-flex gap-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault"id="regular_clr_chk"  checked>
-                    <label class="form-check-label" for="regular_clr_chk">
-                regular
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="custom_color_chk" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                  Customize
-                    </label>
-                  </div>
-            </div>
-          
-    
-              <div class='input-group mb-2 ' >
-                <textarea class='form-control' id='color_choice_des' placeholder='custom color' rows='2' ></textarea>
-                </div>
-        </div>
-    </div>
-    
-    <div class="card">
-        <div class="card-header">
-           chasis No
-        </div>
-        <div class="card-body">
-            <div class="d-flex gap-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio"  name="flexRadioDefault3" id="regular_chasis_chk"  checked>
-                    <label class="form-check-label" for="regular_chasis_chk">
-                regular
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault3"  id="custom_chasis_chk" >
-                    <label class="form-check-label" for="flexRadioDefault2">
-                  Customize
-                    </label>
-                  </div>
-            </div>
-            
-    
-              <div class='input-group mb-2 ' >
-                <textarea class='form-control' id='chasis_choice_des' placeholder='please entercustom Chsis no' rows='2' ></textarea>
-                </div>
-        </div>
-    </div>
-    
-    <div class="col mt-1">
-        <div class='input-group mb-2 ' >
-            <textarea class='form-control' id='any_other_spec' placeholder='any other spec' rows='2' ></textarea>
-            </div>
-    </div>
-    
-    <div class='input-group mb-2'> 
-        <label class='input-group-text' for='loading_type'><span>
-    Loading Type
-        </span>
-        </label>
-        <input id='loading_type' type='text' class='form-control'  >
-        </div>
-            </div>
-        </div>
-    
-     
-    
-    <div class="card-footer">
-        <div class="d-flex justify-content-center">
-            <button class="btn btn-primary" type="submit" id="insert_order_btn">Submit</button>
-            <button class="btn btn-primary" type="submit" id="update_order_btn">Update</button>
-        </div>
-     
-    </div>
-    
-    
+                            </tr>
+
+                            <tr class="small">
+
+                                <th scope='col'>#</th>
+                                <th scope='col'>Ref No</th>
+                                <th scope='col'>UTR No</th>
+                                <th scope='col'>Amount</th>
+                                <th scope='col'>Dated</th>
+                                <th scope='col'>Delete</th>
 
 
-    <div class="table-responsive">
-<table id='order_table1' class='table table-bordered border-dark border-opacity-50 text-center small' >
-    <thead >
-    <tr>
-    
-    <th colspan='11' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
-    
-    </tr>
-    
-    <tr>
-    
-     <!-- <th scope='col'>#</th>
+                            </tr>
+                        </thead>
+                        <tbody class='align-middle small' id='payment_table'>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    Order Details
+                </div>
+                <div class="card-body">
+                    <div class="row row-cols-1  row-cols-sm-2">
+
+
+                        <div class="col">
+
+                            <div class='input-group mb-2'>
+                                <div class='input-group-prepend '>
+                                    <span class='input-group-text mrequired' id='basic-addon1'>
+                                        Order type </span>
+
+                                </div>
+                                <select class='custom-select form-control' id='order_type' required>
+                                    <option value="" selected disabled>Choose Options...</option>
+                                    <option value='Emergency'>Emergency</option>
+                                    <option value='Reqular'>Reqular</option>
+
+
+                                </select>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <div class='input-group-prepend '>
+                                    <span class='input-group-text mrequired' id='basic-addon1'>
+                                        OE Supply </span>
+
+                                </div>
+                                <select class='custom-select form-control' id='oe_supply' required>
+                                    <option value="" selected disabled>Choose Options...</option>
+                                    <option value='1'>Yes</option>
+                                    <option value='0'>No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <div class='input-group mb-2 '>
+                                <div class='input-group-prepend '>
+                                    <span class='input-group-text '>
+                                        commitment date </span>
+
+                                </div>
+                                <input type='datetime-local' id='commitment_date' class='form-control'
+                                    placeholder='Date'>
+
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class='input-group mb-2 '>
+                                <div class='input-group-prepend '>
+                                    <span class='input-group-text '>
+                                        Document date </span>
+
+                                </div>
+                                <input type='datetime-local' id='dated' class='form-control' disabled
+                                    placeholder='Date'>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col">
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text mrequired' for='required_qty'><span>
+                                        required qty
+                                    </span>
+                                </label>
+                                <input id='required_qty' type='number' value="0" class='form-control' disabled required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="fixed-bottom m-0 p-0 d-none" id="price_word_div">
+                        <div class="alert alert-primary m-0 p-0" role="alert">
+                            <p id="price_word"></p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            color choice
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="regular_clr_chk" checked>
+                                    <label class="form-check-label" for="regular_clr_chk">
+                                        regular
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="custom_color_chk">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Customize
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class='input-group mb-2 '>
+                                <textarea class='form-control' id='color_choice_des' placeholder='custom color'
+                                    rows='2'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            chasis No
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault3"
+                                        id="regular_chasis_chk" checked>
+                                    <label class="form-check-label" for="regular_chasis_chk">
+                                        regular
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault3"
+                                        id="custom_chasis_chk">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Customize
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <div class='input-group mb-2 '>
+                                <textarea class='form-control' id='chasis_choice_des'
+                                    placeholder='please entercustom Chsis no' rows='2'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mt-1">
+                        <div class='input-group mb-2 '>
+                            <textarea class='form-control' id='any_other_spec' placeholder='any other spec'
+                                rows='2'></textarea>
+                        </div>
+                    </div>
+
+                    <div class='input-group mb-2'>
+                        <label class='input-group-text' for='loading_type'><span>
+                                Loading Type
+                            </span>
+                        </label>
+                        <input id='loading_type' type='text' class='form-control'>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary" type="submit" id="insert_order_btn">Submit</button>
+                    <button class="btn btn-primary" type="submit" id="update_order_btn">Update</button>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="table-responsive">
+                <table id='order_table1' class='table table-bordered border-dark border-opacity-50 text-center small'>
+                    <thead>
+                        <tr>
+
+                            <th colspan='11' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
+
+                        </tr>
+
+                        <tr>
+
+                            <!-- <th scope='col'>#</th>
    <th scope='col'>order no</th>
    <th scope='col'>Order Catergory</th>
    <th scope='col'>Product</th>
@@ -769,40 +795,40 @@
    <th scope='col'>edit</th>
    <th scope='col'>delete</th>
    <th scope='col'>Pay</th> -->
-    
 
-   
 
-   <th scope='col'>#</th>
-   <th scope='col'>order no</th>
-   <th scope='col'>Dated</th>
-   <th scope='col'>Employee</th>
-   <th scope='col'>Payment</th>
-   <th scope='col'>customer</th>
-   <th scope='col'>Product</th>
-   <th scope='col'>edit</th>
-   <th scope='col'>delete</th>
-   <th scope='col'>Pay</th>
-    <th scope='col'>Download</th>
-    </tr>
-    </thead>
-    <tbody class='align-middle ' id='order_table'>
-    
-    </tbody>
-    </table>
-    </div>
-    <div class="table-responsive">
-    <table id='order_table1' class='table table-bordered border-dark border-opacity-50 text-center small' >
-        <thead >
-        <tr>
-        
-        <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Approved Sales Order</th>
-        
-        </tr>
-        
-        <tr>
-        
-         <!-- <th scope='col'>#</th>
+
+
+                            <th scope='col'>#</th>
+                            <th scope='col'>order no</th>
+                            <th scope='col'>Dated</th>
+                            <th scope='col'>Employee</th>
+                            <th scope='col'>Payment</th>
+                            <th scope='col'>customer</th>
+                            <th scope='col'>Product</th>
+                            <th scope='col'>edit</th>
+                            <th scope='col'>delete</th>
+                            <th scope='col'>Pay</th>
+                            <th scope='col'>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody class='align-middle ' id='order_table'>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive">
+                <table id='order_table1' class='table table-bordered border-dark border-opacity-50 text-center small'>
+                    <thead>
+                        <tr>
+
+                            <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Approved Sales Order</th>
+
+                        </tr>
+
+                        <tr>
+
+                            <!-- <th scope='col'>#</th>
        <th scope='col'>order no</th>
        <th scope='col'>Order Catergory</th>
        <th scope='col'>Product</th>
@@ -810,41 +836,41 @@
        <th scope='col'>Dated</th>
        <th scope='col'>Download</th>
        <th scope='col'>Pay</th> -->
-       
 
 
-       <th scope='col'>#</th>
-        <th scope='col'>order no</th>
-        <th scope='col'>Dated</th>
-        <th scope='col'>Employee</th>
-        <th scope='col'>Payment</th>
-        <th scope='col'>customer</th>
-        <th scope='col'>Product</th>
-     
-        <th scope='col'>Download</th>
-        <th scope='col'>DCF</th>
-        <th scope='col'>Pay</th>
-        
-        </tr>
-        </thead>
-        <tbody class='align-middle ' id='app_order_table'>
-        
-        </tbody>
-        </table>
-    </div>
 
-    <div class="table-responsive">
-        <table id='req_table1' class='table table-bordered border-dark border-opacity-50 text-center small' >
-            <thead >
-            <tr>
-            
-            <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Requirement Order</th>
-            
-            </tr>
-            
-            <tr>
-            
-             <!-- <th scope='col'>#</th>
+                            <th scope='col'>#</th>
+                            <th scope='col'>order no</th>
+                            <th scope='col'>Dated</th>
+                            <th scope='col'>Employee</th>
+                            <th scope='col'>Payment</th>
+                            <th scope='col'>customer</th>
+                            <th scope='col'>Product</th>
+
+                            <th scope='col'>Download</th>
+                            <th scope='col'>DCF</th>
+                            <th scope='col'>Pay</th>
+
+                        </tr>
+                    </thead>
+                    <tbody class='align-middle ' id='app_order_table'>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table id='req_table1' class='table table-bordered border-dark border-opacity-50 text-center small'>
+                    <thead>
+                        <tr>
+
+                            <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Requirement Order</th>
+
+                        </tr>
+
+                        <tr>
+
+                            <!-- <th scope='col'>#</th>
            <th scope='col'>order no</th>
            <th scope='col'>Order Catergory</th>
            <th scope='col'>Product</th>
@@ -853,288 +879,295 @@
            <th scope='col'>edit</th>
            <th scope='col'>delete</th>
            <th scope='col'>Pay</th> -->
-            
-        
-          
-        
-           <th scope='col'>#</th>
-           <th scope='col'>order no</th>
-           <th scope='col'>Dated</th>
-           <th scope='col'>Employee</th>
-           <th scope='col'>Payment</th>
-           <th scope='col'>customer</th>
-           <th scope='col'>Product</th>
-           <th scope='col'>edit</th>
-           <th scope='col'>delete</th>
-           <th scope='col'>Sales Order</th>
-            </tr>
-            </thead>
-            <tbody class='align-middle ' id='req_table'>
-            
-            </tbody>
-            </table>
+
+
+
+
+                            <th scope='col'>#</th>
+                            <th scope='col'>order no</th>
+                            <th scope='col'>Dated</th>
+                            <th scope='col'>Employee</th>
+                            <th scope='col'>Payment</th>
+                            <th scope='col'>customer</th>
+                            <th scope='col'>Product</th>
+                            <th scope='col'>edit</th>
+                            <th scope='col'>delete</th>
+                            <th scope='col'>Sales Order</th>
+                        </tr>
+                    </thead>
+                    <tbody class='align-middle ' id='req_table'>
+
+                    </tbody>
+                </table>
             </div>
-</form>
-<!-- content -->
+        </form>
+        <!-- content -->
 
 
-<div class="card d-none" id="order_form_div">
-    <div class="card-header d-flex justify-content-center">
-     Sales  Order Approval Form
-    </div>
-    <div class="card-body" id="order_form">
-      
+        <div class="card d-none" id="order_form_div">
+            <div class="card-header d-flex justify-content-center">
+                Sales Order Approval Form
+            </div>
+            <div class="card-body" id="order_form">
 
 
-           
-        <div class="d-flex justify-content-center mt-2 mb-0  text-bg-light border border-1 d-flex justify-content-around ">
-           
-           
-            <img src="/soft/img/jaysan_logo.png" class="img-fluid my-auto " style=" max-height: 50px;" alt="">
 
-   
 
-    </div>
-            <div class="d-flex justify-content-center  text-bg-light p-2 border border-1">
-           
-                    <p class="small my-auto  "> order catergory : <span class="fw-bold" id="order_category_tbl"></span></p>
+                <div
+                    class="d-flex justify-content-center mt-2 mb-0  text-bg-light border border-1 d-flex justify-content-around ">
 
-           
+
+                    <img src="/soft/img/jaysan_logo.png" class="img-fluid my-auto " style=" max-height: 50px;" alt="">
+
+
+
+                </div>
+                <div class="d-flex justify-content-center  text-bg-light p-2 border border-1">
+
+                    <p class="small my-auto  "> order catergory : <span class="fw-bold" id="order_category_tbl"></span>
+                    </p>
+
+
+
+                </div>
+
+                <table id='' class='  table table-sm table-bordered border-dark border-opacity-50 text-center '>
+                    <thead>
+                        <tr class="small">
+                            <th scope="col" class="small">Order No</th>
+                            <td class="small" id="order_no_tbl"></td>
+
+                            <th scope="col" class="small">Employee</th>
+                            <td class="small" id="emp_name_tbl"></td>
+
+
+                        </tr>
+                        <tr class="small">
+                            <th scope="col" class="small">Date</th>
+                            <td class="small" id="document_date_tbl"></td>
+
+                            <th scope="col" class="small">Desigination</th>
+                            <td class="small" id="desigi_tbl"></td>
+
+
+                        </tr>
+
+
+                        <tr class="small">
+
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Customer</th>
+
+                        </tr>
+
+
+
+                        <tr class="small">
+                            <th scope="col"> Name</th>
+                            <td id="cus_name_tbl"></td>
+                            <th scope="col">Phone</th>
+                            <td id="cus_phone_tbl"></td>
+
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Address</th>
+                            <td id="delivery_address_tbl" colspan="3"></td>
+                        </tr>
+
+                        <tr class="small">
+
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25 small'>Product</th>
+
+                        </tr>
+
+
+                    </thead>
+                    <tbody class='align-middle small' id='sales_order_table'>
+                        <tr class="small">
+                            <th scope="col" class="small">Production Untill</th>
+                            <td colspan="3" id="production_untill_tbl" class="small "></td>
+
+
+
+
+                        </tr>
+
+                        <tr>
+
+                        </tr>
+                        <tr class="small">
+                            <th>S.no</th>
+                            <th>Product/Model/Type</th>
+                            <th>Sub Type</th>
+                            <th>Qty</th>
+                        </tr>
+                        <tr class="small" id="app_product_details">
+
+                        </tr>
+                        <tr class="small">
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Prodcut Status</th>
+                        </tr>
+                        <tr class="small" id="product_status_tr">
+
+
+                        </tr>
+
+                        </tr>
+
+                        <tr class="small">
+
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment</th>
+
+                        </tr>
+                        <tr class="small">
+
+                            <td colspan="2"> Total : <span id="total_payment_tbl"></span> </td>
+                            <td colspan="2"> Advance : <span id="advance_payment_tbl"></span></td>
+
+                        </tr>
+                        <tr class="small">
+                            <td colspan="2">
+                                Balance : <span id="balance_payment_tbl"></span>
+                            </td>
+                            <td colspan="2">
+                                Next Payment Date : <span id="nex_payment_date_tbl"></span>
+                            </td>
+                        </tr>
+                        <tr class="small">
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment Details</th>
+                        </tr>
+                        <tr class="small">
+
+
+                            <th colspan="2" scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Approved</th>
+                        </tr>
+                        <tr class="small" id="payment_details_tr">
+
+                        </tr>
+
+                        <tr class="small">
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Order Details</th>
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Order Type</th>
+                            <td id="order_type_tbl"></td>
+                            <th scope="col">
+                                OE Supply
+                            </th>
+                            <td id="oe_supply_tbl"></td>
+
+
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Commitment Date</th>
+                            <td id="commitment_date_tbl"></td>
+                            <th scope="col"> Qty</th>
+                            <td id="required_qty_tbl"></td>
+
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Color Type</th>
+                            <td colspan="3" id="regular_clr_chk_tbl"></td>
+
+
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Color Choice</th>
+                            <td colspan="3" id="color_choice_des_tbl"></td>
+                        </tr>
+                        <tr class="small">
+                            <th scope="col">Chasis No</th>
+                            <td colspan="3" id="regular_chasis_chk_tbl"></td>
+
+
+                        </tr>
+
+                        <tr class="small">
+                            <th scope="col">Chasis Choice</th>
+                            <td colspan="3" id="chasis_choice_des_tbl"></td>
+                        </tr>
+
+
+                        <tr class="small">
+                            <th scope="col">Loading Type</th>
+                            <td colspan="3" id="loading_type_tbl"></td>
+                        </tr>
+
+                        <tr class="small">
+                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Any Other Specs</th>
+
+                        </tr>
+                        <tr class="small">
+                            <td colspan="6" class="p-0 m-0" id="any_other_spec_tbl"> </td>
+
+
+                        </tr>
+                        <tr class="small text-bg-light">
+                            <th colspan="2">
+                                Submitted by Business Head
+                            </th>
+                            <th>Authorized Approval</th>
+                            <th>Received by Production Head</th>
+                        </tr>
+                        <tr class="small">
+                            <td colspan="2" class="p-4"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+
+
+
 
             </div>
-            
-            <table id='' class='  table table-sm table-bordered border-dark border-opacity-50 text-center ' >
-                <thead >
-                    <tr class="small">
-                        <th scope="col" class="small">Order No</th>
-                        <td class="small" id="order_no_tbl"></td>
-                       
-                        <th scope="col" class="small">Employee</th>
-                        <td class="small" id="emp_name_tbl"></td>
-                        
-                      
-                    </tr>  
-                    <tr class="small">
-                        <th scope="col" class="small">Date</th>
-                        <td class="small" id="document_date_tbl"></td>
-                       
-                        <th scope="col" class="small">Desigination</th>
-                        <td class="small" id="desigi_tbl"></td>
-                        
-                      
-                    </tr>
-
-                       
-                <tr class="small">
-                
-                    <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Customer</th>
-                  
-                    </tr>
-
-                              
-        
-    <tr class="small">
-        <th scope="col"> Name</th>
-        <td id="cus_name_tbl"></td>
-        <th scope="col">Phone</th>
-        <td id="cus_phone_tbl"></td>
-
-    </tr>
-    <tr class="small">
-        <th scope="col">Address</th>
-        <td id="delivery_address_tbl" colspan="3"></td>
-    </tr>
-                        
-                <tr class="small">
-                
-                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25 small'>Product</th>
-                
-                </tr>
-                
-             
-                </thead>
-                <tbody class='align-middle small' id='sales_order_table'>
-                    <tr class="small">
-                        <th scope="col" class="small">Production Untill</th>
-                        <td colspan="3" id="production_untill_tbl" class="small "></td>
-                      
-    
-                        
-                      
-                    </tr>
-              
-                <tr >
-
-                </tr>
-                <tr class="small">
-                    <th>S.no</th>
-                    <th>Product/Model/Type</th>
-                    <th>Sub Type</th>
-                    <th>Qty</th>
-                </tr>
-                <tr class="small" id="app_product_details">
-                  
-                </tr>
-                <tr class="small">
-                    <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Prodcut Status</th>
-                </tr> 
-                <tr class="small" id="product_status_tr">
-           
-                    
-                    </tr>
-                    
-                </tr>
-
-    <tr class="small">
-                
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment</th>
-       
-        </tr>
-        <tr class="small">
-           
-            <td colspan="2"> Total  : <span id="total_payment_tbl"></span> </td>
-            <td colspan="2"> Advance : <span id="advance_payment_tbl"></span></td>
-            
-        </tr>
-        <tr class="small">
-            <td colspan="2">
-                Balance : <span id ="balance_payment_tbl"></span>
-            </td>
-            <td colspan="2">
-                Next Payment Date : <span id ="nex_payment_date_tbl"></span>
-            </td>
-            </tr>
-            <tr class="small">
-                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment Details</th>
-                </tr> 
-                <tr class="small">
-                  
-                  
-                    <th colspan="2" scope="col">Date</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Approved</th>
-                </tr>
-                <tr class="small" id="payment_details_tr">
-                   
-                </tr>
-
-        <tr class="small">
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Order Details</th>
-        </tr>
-        <tr class="small">
-            <th scope="col">Order Type</th>
-            <td id="order_type_tbl"></td>
-            <th scope="col">
-                OE Supply
-            </th>
-            <td id="oe_supply_tbl"></td>
-           
-            
-            </tr>
-            <tr  class="small">
-                <th scope="col">Commitment Date</th>
-                <td id="commitment_date_tbl"></td>
-                <th scope="col"> Qty</th>
-                <td id="required_qty_tbl"></td>
-
-            </tr>
-            <tr  class="small">
-                <th scope="col">Color Type</th>
-                <td colspan="3" id="regular_clr_chk_tbl"></td>
-             
-
-            </tr>
-            <tr class="small">
-                <th scope="col">Color Choice</th>
-                <td colspan="3" id="color_choice_des_tbl"></td>
-            </tr>
-            <tr  class="small">
-                <th scope="col">Chasis No</th>
-                <td colspan="3" id="regular_chasis_chk_tbl"></td>
-              
-
-            </tr>
-
-            <tr  class="small">
-                <th scope="col">Chasis Choice</th>
-                <td colspan="3" id="chasis_choice_des_tbl"></td>
-            </tr>
-
-            
-            <tr  class="small">
-                <th scope="col">Loading Type</th>
-                <td colspan="3" id="loading_type_tbl"></td>
-            </tr>
-
-      <tr class="small">
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Any Other Specs</th>
-        
-        </tr>
-        <tr class="small">
-            <td colspan="6" class="p-0 m-0" id="any_other_spec_tbl">  </td>
-
-
-        </tr>
-        <tr class="small text-bg-light">
-<th colspan="2">
-Submitted by Business Head
-</th>
-<th>Authorized Approval</th>
-<th>Received by Production Head</th>
-        </tr>
-        <tr class="small">
-<td colspan="2" class="p-4"></td>
-<td></td>
-<td></td>
-        </tr>
-                      
-                </tbody>
-                </table>   
-        
-            
-
-
-    
-
-</div>
-
-  
 
 
 
 
- 
-</div> 
 
 
 
-</div>
+        </div>
 
-   
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- jQuery UI -->
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-<!-- jQuery UI CSS -->
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS -->
 
     <!-- bootstrap include -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
 
-<!-- font awesome -->
-<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 
-<!-- Sweet alert -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script src="js/printThis.js" type="module"></script>
+    <script src="js/printThis.js" type="module"></script>
 
-<!-- external js -->
-<script src="js/sales_order_form.js" type="module"></script>
-<script src="js/menu.js" type="module"></script>
-<!-- <script src="js/get_all_id.js" type="module"></script> -->
+    <!-- external js -->
+    <script src="js/sales_order_form.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
+    
 </html>
