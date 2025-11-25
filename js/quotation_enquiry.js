@@ -558,6 +558,10 @@ $(document).ready(function () {
 
   $("#quotation_list_table").on("dblclick", "tr", function (event) {
 
+    $('html, body').animate({
+      scrollTop: $("#head_fixed-row").offset().top
+    }, 300);
+
     if ($(this).find("td").data('part-id') == null)
       switch_process("process")
     else
@@ -684,6 +688,11 @@ $(document).ready(function () {
 
 
   $("#head_fixed-row").on("click", "i.fa-edit", function () {
+
+    $('html, body').animate({
+        scrollTop: $("#add_vendor_btn").offset().top
+    }, 300);
+
     $(".spec_add_btn").addClass("d-none");
     $("#spec_update_btn").removeClass('d-none');
     $("#spec_update_btn").data("rqid", $(this).data("rqid"))
@@ -1077,9 +1086,9 @@ function get_rate_quotation_part(part_id, process_id) {
 
       if (response.trim() != "error") {
         $("#head_fixed-row").empty()
-        $("#head_fixed-row").append("<td>Vendor</td>")
+        $("#head_fixed-row").append("<td style='font-size: 13px;'>Vendor</td>")
         $("#company_quotation_details").empty()
-        $("#company_quotation_details").append("<tr class='fixed-row'><td>Specification</td></tr>")
+        $("#company_quotation_details").append("<tr class='fixed-row' style='font-size: 13px;'><td>Specification</td></tr>")
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
@@ -1098,7 +1107,7 @@ function get_rate_quotation_part(part_id, process_id) {
 
             count = count + 1;
 
-            $("#head_fixed-row").append("<th style='min-width:25vw'><div class='d-flex justify-content-between align-item-center gap-2'><div class=''><p class='text-truncate  small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit my-auto' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select  rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div class='my-auto'>" + dclass + "</div></div></th>")
+            $("#head_fixed-row").append("<th style='min-width:25vw; font-size:15px'><div class='d-flex justify-content-between align-item-center gap-2'><div class=''><p class='text-truncate  small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit my-auto' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select  rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div class='my-auto'>" + dclass + "</div></div></th>")
             $("#head_fixed-row th:last-child").find(".rating").val(obj.rating);
 
             var spec = ""
@@ -1134,7 +1143,7 @@ function get_rate_quotation_part(part_id, process_id) {
                 for (let i = 1; i < count; i++) {
                   emptyCells += "<td></td>";
                 }
-                table.append("<tr><td>" + item.label + "</td>" + emptyCells + "<td>" + item.value + "</td></tr>");
+                table.append("<tr style='font-size: 13px;'><td>" + item.label + "</td>" + emptyCells + "<td>" + item.value + "</td></tr>");
               }
               // if (!labelExists) {
               //   table.append("<tr><td>" + item.label + "</td><td>" + item.value + "</td></tr>");
@@ -1193,11 +1202,15 @@ function get_quotation_report() {
 
           obj.forEach(function (obj) {
             count++;
-            $("#quotation_report").append("<tr><td>" + count + "</td><td>" + obj.part_name + "</td><td><ul class='list-group'></ul></td></tr>");
+
             var detls = JSON.parse(obj.details);
+            var l_details = "";
+            var q_count = 0;
             detls.forEach(function (item) {
-              $("#quotation_report tr").find("td:last-child").find("ul").append("<li class='list-group-item'>" + item.vendor_name + " - " + item.vendor_phone + "<br></li>");
+              q_count += 1;
+              l_details += "<li class='list-group-item'>" + item.vendor_name + " - " + item.vendor_phone + "<br></li>";
             })
+            $("#quotation_report").append("<tr style='font-size: 13px'><td class='text-center align-middle'>" + count + "</td><td class='text-center align-middle'>" + obj.part_name + " <b class='text-danger'>(" + q_count + ") </b>" + "</td><td><ul class='list-group' style='max-height: 100px; overflow-y: auto;'>" + l_details + "</ul></td></tr>");
 
 
           });
@@ -1253,7 +1266,7 @@ function get_quotation_list(sts) {
               qtype = "<i class=\"fa-solid fa-industry\"></i>"
             }
             count = count + 1;
-            $('#quotation_list_table').append("<tr><td data-part-id='" + obj.part_id + "' data-rqid='" + obj.rqid + "' data-process-id='" + obj.process_id + "' data-part-no='" + obj.part_no + "'data-img_addr='" + obj.img_addr + "'data-part_name='" + obj.part_name + "'>" + obj.part_name + "<span class= 'text-danger'> (" + obj.qno + ") </span><span class= 'text-success'>" + qtype + " </span></td></tr>")
+            $('#quotation_list_table').append("<tr  style='font-size: 13px;'><td data-part-id='" + obj.part_id + "' data-rqid='" + obj.rqid + "' data-process-id='" + obj.process_id + "' data-part-no='" + obj.part_no + "'data-img_addr='" + obj.img_addr + "'data-part_name='" + obj.part_name + "'>" + obj.part_name + "<span class= 'text-danger'> (" + obj.qno + ") </span><span class= 'text-success'>" + qtype + " </span></td></tr>")
 
 
           });
