@@ -97,6 +97,17 @@ $(document).ready(function () {
     });
 
 
+    $("#myInput_web").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#material_chart tr").filter(function () {
+            var materialName = $(this).find("td:nth-child(2)").text().toLowerCase();
+            $(this).toggle(materialName.indexOf(value) > -1);
+        });
+    });
+
+
+
     google.charts.load("current", { packages: ["corechart"] });
     google.charts.setOnLoadCallback(get_material_chart);
 
@@ -144,6 +155,7 @@ $(document).ready(function () {
     }
     $("#material_chart").on("click", "tr", function () {
         $("#next_chart").removeClass("d-none");
+        $("#part_name_head").text($(this).find("td").eq(1).text() + "  Chart")
         get_mf_company_chart($(this).data("part_id"));
         get_material_frequency_chart($(this).data("part_id"));
         // Fetch data from your PHP API
@@ -552,7 +564,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             }
                             percentage = Math.round(percentage);
                             if (percentage != 0) {
-                                progress = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received out of "+item.batch_qty;
+                                progress = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received out of " + item.batch_qty;
                             }
                             else {
                                 progress = 'Not Received';
@@ -582,7 +594,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             else {
                                 status = "<span class='text-primary text-danger fw-bold  ps-5'>" + item.due_sts + "</span>"
                             }
-                            batch += "<li class='list-group-item'><div class='row'><div class='col-6 border'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + " " + status + "<br>"+progress+"</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
+                            batch += "<li class='list-group-item'><div class='row'><div class='col-6 border'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
 
                         })
                         purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + "-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"

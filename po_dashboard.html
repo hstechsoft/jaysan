@@ -38,7 +38,7 @@
                 Hello, this is a Bootstrap toast message!
             </div>
         </div>
-        
+
     </div>
     <div class="container-fluid ">
         <!-- top bar -->
@@ -50,16 +50,34 @@
         </section>
 
         <!-- content -->
-        <div class="py-5 row">
+        <div class="py-2 row">
             <div class="col-6">
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <div class="table-responsive" style="max-height: 750px; overflow-y: auto;">
                     <table class="table caption-top table-bordered table-striped ">
                         <caption>Material Details</caption>
                         <thead>
 
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">MRF Material</th>
+                                <th scope="col" class="align-middle">
+
+                                    <div class="d-flex align-items-center justify-content-between">
+
+                                        <span class="fw-semibold">MRF Material</span>
+
+                                        <div class="input-group input-group-sm" style="width: 180px;">
+                                            <span class="input-group-text bg-light border-end-0">
+                                                <i class="fa fa-search text-muted"></i>
+                                            </span>
+                                            <input type="text" id="myInput_web"
+                                                class="form-control border-start-0 bg-light" placeholder="Search..."
+                                                style="box-shadow:none;">
+                                        </div>
+
+                                    </div>
+
+                                </th>
+
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Frequency</th>
 
@@ -75,14 +93,32 @@
                 </div>
             </div>
             <div class="col-6">
-                <div id="material_piechart_3d" style="width: 900px; height: 500px;"></div>
+
+                <div class="card " id="">
+                    <div class="card-header">
+                        Overall Chart
+                    </div>
+                    <div class="card-body" style="height: 390px;" id="">
+                        <div id="material_piechart_3d" style="width: 700px; height: 400px;"></div>
+                    </div>
+                </div>
+
+                <div class="card d-none" id="next_chart">
+                    <div class="card-header" id="">
+                        <p id="part_name_head"></p>
+
+                    </div>
+                    <div class="card-body" style="height: 290px;" id="">
+                        <div id="company_piechart_3d" style="width: 700px; height: 350px;"></div>
+                    </div>
+                </div>
+
             </div>
 
 
 
-            <div class="col-6 d-none" id="next_chart">
-                <div id="company_piechart_3d" style="width: 900px; height: 500px;"></div>
-            </div>
+
+
             <div class="col-6 d-none" id="next_chart">
                 <div id="frequency_line_chart" style="width: 900px; height: 500px;"></div>
             </div>
@@ -267,7 +303,7 @@
     <!-- external js -->
     <script src="js/po_dashboard.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
-    <script src="js/get_all_id.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 
