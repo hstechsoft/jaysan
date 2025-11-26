@@ -269,8 +269,8 @@ function get_godown_name() {
 
         },
         success: function (response) {
-            $('#godown').empty()
-            $('#godown').append("<option disabled  selected>Choose Godown...</option>")
+            $('#godown, #pro_godownn, #wait_godownn, #finish_godownn ').empty()
+            $('#godown, #pro_godownn, #wait_godownn, #finish_godownn ').append("<option disabled  selected>Choose Godown...</option>")
 
             if (response.trim() != "error") {
 
@@ -283,6 +283,9 @@ function get_godown_name() {
                     obj.forEach(function (obj) {
                         count = count + 1;
                         $('#godown').append("<option data-des = '" + obj.des + "' value = '" + obj.gid + "'>" + obj.godown_name + "</option>")
+                        $('#pro_godownn').append("<option data-des = '" + obj.des + "' value = '" + obj.gid + "'>" + obj.godown_name + "</option>")
+                        $('#wait_godownn').append("<option data-des = '" + obj.des + "' value = '" + obj.gid + "'>" + obj.godown_name + "</option>")
+                        $('#finish_godownn').append("<option data-des = '" + obj.des + "' value = '" + obj.gid + "'>" + obj.godown_name + "</option>")
 
                     });
 
