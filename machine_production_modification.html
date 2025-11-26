@@ -17,7 +17,129 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  <style>
+      .fc-daygrid-day.fc-day-selected {
+    background-color: gainsboro!important;  /* Example blue color for selected date */
+    
+  }
 
+
+.no_qty .fc-event-title {
+    font-weight: bolder;
+    color: green;
+}
+
+.above_qty .fc-event-title {
+    font-weight: normal;
+    color: red;
+}
+
+.below_qty .fc-event-title {
+  font-weight: bold;
+    color: coral;
+}
+  
+    .date-picker-container {
+        max-width: 400px;
+        margin: 0px auto;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .form-label::after {
+        content: '*';
+        color: red;
+        margin-left: 2px;
+    }
+/* Set a fixed height for each row in the month view */
+
+
+/* Align content to fit smaller rows */
+.fc-daygrid-day-frame {
+    padding: 0.5px !important; /* Adjust padding */
+    display: flex;
+    align-items: center; /* Vertically center the content */
+    justify-content: center; /* Horizontally center the content */
+}
+
+/* Adjust date number font size */
+.fc-daygrid-day-top {
+    font-size: 10px !important; /* Smaller date numbers */
+}
+
+/* Make event text smaller and more compact */
+.fc-event {
+    font-size: 8px !important; /* Smaller font for event text */
+    padding: 0.5px !important;    /* Reduce padding for events */
+    display: flex;
+    align-items: center; /* Vertically center the content */
+    justify-content: center; /* Horizontally center the content */
+
+}
+
+.fc-col-header-cell {
+    font-size: 10px !important; /* Adjust to desired font size */
+    padding: 5px !important;    /* Optional: Reduce padding if needed */
+}
+
+/* Optional: Adjust the header row height */
+.fc-col-header {
+    height: 30px !important; /* Reduce the overall header row height */
+}
+
+.fc-toolbar-title {
+    font-size: 12px !important; /* Adjust the font size */
+    font-weight: bold;          /* Make it bold (if desired) */
+    padding: 5px;              /* Adjust padding for spacing */
+    text-align: center;         /* Center the title */
+}
+
+.fc-prev-button, .fc-next-button, .fc-today-button {
+   
+    font-size: 12px !important; /* Adjust font size of buttons */
+    padding: 3px 3px !important; /* Adjust padding for buttons */
+    background-color: #007bff; /* Change background color */
+    color: #ffffff;            /* Change text color */
+    border: none;              /* Remove default border */
+    border-radius: 4px;       /* Add rounded corners */
+    cursor: pointer;           /* Change cursor on hover */
+}
+    #sub_type_div input[type="checkbox"]:disabled {
+    color: black;
+    opacity: 1; /* Override default opacity for the disabled state */
+    cursor: not-allowed; /* Optional: keeps the pointer style consistent */
+}
+
+
+     .custom-fixed-table {
+        height: 400px; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .custom-fixed-table table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .custom-fixed-table th, 
+    .custom-fixed-table td {
+        width: 10vw; /* Fixed width for all cells */
+        word-wrap: break-word;
+    }
+    .custom-fixed-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    .custom-fixed-table tbody tr.fixed-row td {
+        position: sticky;
+        top: 38px;
+        background-color: #ffffff;
+        z-index: 5;
+    }
+</style>
 
 
 
@@ -171,6 +293,8 @@
                     </div>
                 </div>
 
+                
+
                 <div class="card machine_production_card mt-5" id="machine_production_report_card">
                     <h4 class="text-center">Machine Production Report</h4>
                     <div class="card-body ">
@@ -205,6 +329,20 @@
                     <div class="card-body" id="calender">
                                 <div id="calendar_div" >
                         <div id="calendar" class="p-2"></div>
+<div class="d-flex   justify-content-center gap-2  align-content-center">
+<div>
+    <p>Selected Date : </p>
+</div>
+
+  <div>
+                                <div class='input-group  input-group-sm' >
+                              
+                                    <input type='date' disabled id='production_date' class='form-control' placeholder='Date' >
+                                    
+                                    </div>
+                            </div>
+</div>
+                       
                         <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
                             <div>
                                 <div class='input-group  input-group-sm' >
@@ -231,7 +369,7 @@
                         </div> -->
 
                         <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
-                            <table id='production_table1' class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
+                            <table id='' class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
                                 <thead class="small">
                                     <tr class="small">
                                         <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report</th>
@@ -242,7 +380,7 @@
                                         <th scope='col'>Machine</th>
                                     </tr>
                                 </thead>
-                                <tbody class='align-middle' id='production_table'>
+                                <tbody class='align-middle' id='production_table_cal'>
                                     <!-- Dynamic rows go here -->
 
                                 </tbody>
@@ -275,6 +413,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
+
+        <script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
+"></script>
 
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
