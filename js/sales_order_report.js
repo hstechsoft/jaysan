@@ -423,6 +423,10 @@ $(document).ready(function () {
     window.location.reload();
   })
 
+  $(document).on("click", ".dcf-row strong", function () {
+    let id = $(this).closest(".dcf-row").data("dcf");
+    window.location.href = "dcf_report_all.html?dcf_id_para=" + id;
+  });
 
 
 });
@@ -995,8 +999,8 @@ function get_assign_sts(order_id) {
 
 function get_sale_order_report(emp, cust, order_no, statuss, product_name, type, model, sub_type_box, unassigned_qty, payment, sale_date, godown, production_date, remaining_dcf, order_category) {
 
-  console.log("emp:"+ emp, "cust:"+ cust, "order_no:"+ order_no, "statuss:"+ statuss, "product_name:"+ product_name, "type:"+ type, "model:"+ model, "sub_type_box:"+ sub_type_box, "unassigned_qty:"+ unassigned_qty, "payment:"+ payment, "sale_date:"+ sale_date, "godown:"+ godown, "production_date:"+ production_date, "remaining_dcf:"+ remaining_dcf, "order_category:"+ order_category);
-  
+  console.log("emp:" + emp, "cust:" + cust, "order_no:" + order_no, "statuss:" + statuss, "product_name:" + product_name, "type:" + type, "model:" + model, "sub_type_box:" + sub_type_box, "unassigned_qty:" + unassigned_qty, "payment:" + payment, "sale_date:" + sale_date, "godown:" + godown, "production_date:" + production_date, "remaining_dcf:" + remaining_dcf, "order_category:" + order_category);
+
 
   $.ajax({
     url: "php/get_sale_order_report.php",
@@ -1024,7 +1028,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
       if (response.trim() != "error") {
 
-          $('#order_table').empty()
+        $('#order_table').empty()
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
@@ -1079,8 +1083,8 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
               if (dcf != null) {
                 dcf.forEach(function (d) {
                   dcf_details += `
-                    <div class="card-header bg-light text-dark fw-bold py-1 px-2">
-                      ${d.dcf_id} • ${d.dc_sts} • ${d.dcf_count}
+                    <div class="card-header bg-light text-dark fw-bold py-1 px-2 dcf-row" data-dcf="${d.dcf_id}">
+                      <strong>${d.dcf_id}</strong> • ${d.dc_sts} • ${d.dcf_count}
                     </div>`;
                 });
               }
