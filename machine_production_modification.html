@@ -17,129 +17,164 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-   
-  <style>
-      .fc-daygrid-day.fc-day-selected {
-    background-color: gainsboro!important;  /* Example blue color for selected date */
-    
-  }
+
+    <style>
+        .fc-daygrid-day.fc-day-selected {
+            background-color: gainsboro !important;
+            /* Example blue color for selected date */
+
+        }
 
 
-.no_qty .fc-event-title {
-    font-weight: bolder;
-    color: green;
-}
+        .no_qty .fc-event-title {
+            font-weight: bolder;
+            color: green;
+        }
 
-.above_qty .fc-event-title {
-    font-weight: normal;
-    color: red;
-}
+        .above_qty .fc-event-title {
+            font-weight: normal;
+            color: red;
+        }
 
-.below_qty .fc-event-title {
-  font-weight: bold;
-    color: coral;
-}
-  
-    .date-picker-container {
-        max-width: 400px;
-        margin: 0px auto;
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .form-label::after {
-        content: '*';
-        color: red;
-        margin-left: 2px;
-    }
-/* Set a fixed height for each row in the month view */
+        .below_qty .fc-event-title {
+            font-weight: bold;
+            color: coral;
+        }
 
+        .date-picker-container {
+            max-width: 400px;
+            margin: 0px auto;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-/* Align content to fit smaller rows */
-.fc-daygrid-day-frame {
-    padding: 0.5px !important; /* Adjust padding */
-    display: flex;
-    align-items: center; /* Vertically center the content */
-    justify-content: center; /* Horizontally center the content */
-}
+        .form-label::after {
+            content: '*';
+            color: red;
+            margin-left: 2px;
+        }
 
-/* Adjust date number font size */
-.fc-daygrid-day-top {
-    font-size: 10px !important; /* Smaller date numbers */
-}
-
-/* Make event text smaller and more compact */
-.fc-event {
-    font-size: 8px !important; /* Smaller font for event text */
-    padding: 0.5px !important;    /* Reduce padding for events */
-    display: flex;
-    align-items: center; /* Vertically center the content */
-    justify-content: center; /* Horizontally center the content */
-
-}
-
-.fc-col-header-cell {
-    font-size: 10px !important; /* Adjust to desired font size */
-    padding: 5px !important;    /* Optional: Reduce padding if needed */
-}
-
-/* Optional: Adjust the header row height */
-.fc-col-header {
-    height: 30px !important; /* Reduce the overall header row height */
-}
-
-.fc-toolbar-title {
-    font-size: 12px !important; /* Adjust the font size */
-    font-weight: bold;          /* Make it bold (if desired) */
-    padding: 5px;              /* Adjust padding for spacing */
-    text-align: center;         /* Center the title */
-}
-
-.fc-prev-button, .fc-next-button, .fc-today-button {
-   
-    font-size: 12px !important; /* Adjust font size of buttons */
-    padding: 3px 3px !important; /* Adjust padding for buttons */
-    background-color: #007bff; /* Change background color */
-    color: #ffffff;            /* Change text color */
-    border: none;              /* Remove default border */
-    border-radius: 4px;       /* Add rounded corners */
-    cursor: pointer;           /* Change cursor on hover */
-}
-    #sub_type_div input[type="checkbox"]:disabled {
-    color: black;
-    opacity: 1; /* Override default opacity for the disabled state */
-    cursor: not-allowed; /* Optional: keeps the pointer style consistent */
-}
+        /* Set a fixed height for each row in the month view */
 
 
-     .custom-fixed-table {
-        height: 400px; 
-        overflow-y: auto;
-        position: relative;
-    }
-    .custom-fixed-table table {
-        width: 100%;
-        table-layout: fixed;
-    }
-    .custom-fixed-table th, 
-    .custom-fixed-table td {
-        width: 10vw; /* Fixed width for all cells */
-        word-wrap: break-word;
-    }
-    .custom-fixed-table thead th {
-        position: sticky;
-        top: 0;
-        background-color: #f8f9fa;
-        z-index: 10;
-    }
-    .custom-fixed-table tbody tr.fixed-row td {
-        position: sticky;
-        top: 38px;
-        background-color: #ffffff;
-        z-index: 5;
-    }
-</style>
+        /* Align content to fit smaller rows */
+        .fc-daygrid-day-frame {
+            padding: 0.5px !important;
+            /* Adjust padding */
+            display: flex;
+            align-items: center;
+            /* Vertically center the content */
+            justify-content: center;
+            /* Horizontally center the content */
+        }
+
+        /* Adjust date number font size */
+        .fc-daygrid-day-top {
+            font-size: 10px !important;
+            /* Smaller date numbers */
+        }
+
+        /* Make event text smaller and more compact */
+        .fc-event {
+            font-size: 8px !important;
+            /* Smaller font for event text */
+            padding: 0.5px !important;
+            /* Reduce padding for events */
+            display: flex;
+            align-items: center;
+            /* Vertically center the content */
+            justify-content: center;
+            /* Horizontally center the content */
+
+        }
+
+        .fc-col-header-cell {
+            font-size: 10px !important;
+            /* Adjust to desired font size */
+            padding: 5px !important;
+            /* Optional: Reduce padding if needed */
+        }
+
+        /* Optional: Adjust the header row height */
+        .fc-col-header {
+            height: 30px !important;
+            /* Reduce the overall header row height */
+        }
+
+        .fc-toolbar-title {
+            font-size: 12px !important;
+            /* Adjust the font size */
+            font-weight: bold;
+            /* Make it bold (if desired) */
+            padding: 5px;
+            /* Adjust padding for spacing */
+            text-align: center;
+            /* Center the title */
+        }
+
+        .fc-prev-button,
+        .fc-next-button,
+        .fc-today-button {
+
+            font-size: 12px !important;
+            /* Adjust font size of buttons */
+            padding: 3px 3px !important;
+            /* Adjust padding for buttons */
+            background-color: #007bff;
+            /* Change background color */
+            color: #ffffff;
+            /* Change text color */
+            border: none;
+            /* Remove default border */
+            border-radius: 4px;
+            /* Add rounded corners */
+            cursor: pointer;
+            /* Change cursor on hover */
+        }
+
+        #sub_type_div input[type="checkbox"]:disabled {
+            color: black;
+            opacity: 1;
+            /* Override default opacity for the disabled state */
+            cursor: not-allowed;
+            /* Optional: keeps the pointer style consistent */
+        }
+
+
+        .custom-fixed-table {
+            height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .custom-fixed-table table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .custom-fixed-table th,
+        .custom-fixed-table td {
+            width: 10vw;
+            /* Fixed width for all cells */
+            word-wrap: break-word;
+        }
+
+        .custom-fixed-table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 10;
+        }
+
+        .custom-fixed-table tbody tr.fixed-row td {
+            position: sticky;
+            top: 38px;
+            background-color: #ffffff;
+            z-index: 5;
+        }
+    </style>
 
 
 
@@ -173,177 +208,276 @@
 
         <!-- content -->
         <div class="row py-5">
-            <div class="col-md-8">
-                <div class="card machine_production" id="machine_production">
+            <div class="col-md-8 mx-auto">
 
-                    <h4 class="text-center">Machine Production Modification</h4>
+                <div class="card shadow-sm rounded-3">
+                    <h5 class="py-2 m-0 text-center bg-dark text-light rounded-top">
+                        <i class="bi bi-gear"></i> Machine Production Modification
+                    </h5>
 
-                    <div class="card-body ">
+                    <div class="card-body pb-1">
 
-                        <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation"
-                            id="machine_production_form" novalidate onsubmit="return false">
-                            <div class="row">
+                        <form id="machine_production_form" class="needs-validation" novalidate>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="customer"
-                                            placeholder="Enter the customer" required>
-                                        <label for="customer">customer
-                                            <span class="text-danger">*</span> </label>
+                            <div class="row g-2">
 
-                                        <div class="invalid-feedback">
-                                            Kindly Enter Vaild Data
-                                        </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="order" required>
+                                        <label><i class="bi bi-receipt text-primary"></i> Order *</label>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating mb-3">
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="customer" required>
+                                        <label><i class="bi bi-person-badge text-success"></i> Customer *</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-floating">
                                         <select class="form-select" id="product" required>
-                                            <option selected disabled value="">select Product...</option>
+                                            <option disabled selected>Select Product...</option>
                                         </select>
-                                        <label for="product">Product</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
-                                        </div>
+                                        <label><i class="bi bi-box-seam text-info"></i> Product *</label>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating mb-3">
+                                <div class="col-md-3">
+                                    <div class="form-floating">
                                         <select class="form-select" id="model" required>
-                                            <option selected disabled value="">select Model...</option>
+                                            <option disabled selected>Select Model...</option>
                                         </select>
-                                        <label for="model">Model</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
-                                        </div>
+                                        <label><i class="bi bi-cpu text-warning"></i> Model *</label>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating mb-3">
+                                <div class="col-md-3">
+                                    <div class="form-floating">
                                         <select class="form-select" id="type_drop" required>
-                                            <option selected disabled value="">select Type...</option>
+                                            <option disabled selected>Select Type...</option>
                                         </select>
-                                        <label for="type_drop">Type</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
-                                        </div>
+                                        <label><i class="bi bi-layers text-success"></i> Type *</label>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="form-floating mb-3">
+                                <div class="col-md-3">
+                                    <div class="form-floating">
                                         <select class="form-select" id="sub_type" required>
-                                            <option selected disabled value="">select Sub Type...</option>
+                                            <option disabled selected>Select Sub Type...</option>
                                         </select>
-                                        <label for="sub_type">Sub Type</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
-                                        </div>
+                                        <label><i class="bi bi-diagram-3 text-danger"></i> Sub Type *</label>
                                     </div>
                                 </div>
 
-                                <div class="card date" id="date">
-                                    <strong class="text-center">Date</strong>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12 col-md-6">
-                                                <div class="form-floating mb-2">
-                                                    <input type="date" class="form-control rounded-3" id="form_date"
-                                                        placeholder="Select the starting date" required>
-                                                    <label for="form_date">Start Date
-                                                        <span class="text-danger">*</span> </label>
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="godown">
+                                            <option disabled selected>Choose...</option>
+                                        </select>
+                                        <label><i class="bi bi-building text-primary"></i> Godown</label>
+                                    </div>
+                                </div>
 
-                                                    <div class="invalid-feedback">
-                                                        Kindly Select Vaild Data
-                                                    </div>
-                                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="emp" placeholder="">
+                                        <label for="emp">Employee </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="ass_type">
+                                            <option value="Production">Production</option>
+                                            <option value="Finished">Finished</option>
+                                            <option value="Waiting">Waiting</option>
+                                        </select>
+                                        <label><i class="bi bi-check2-circle text-success"></i> Assign Type</label>
+                                    </div>
+                                </div>
+
+                                <!-- Dates Section -->
+                                <div class="col-md-4 p-2 border rounded-3 bg-light">
+
+                                    <h6 class="text-center text-primary mb-2"><i class="bi bi-calendar-event"></i>
+                                        Production Date</h6>
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="form_date" required>
+                                                <label>Start Date *</label>
                                             </div>
-
-                                            <div class="col-12 col-md-6">
-                                                <div class="form-floating mb-2">
-                                                    <input type="date" class="form-control rounded-3" id="to_date"
-                                                        placeholder="Select the end date" required>
-                                                    <label for="to_date">To date
-                                                        <span class="text-danger">*</span> </label>
-
-                                                    <div class="invalid-feedback">
-                                                        Kindly Select Vaild Data
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="to_date" required>
+                                                <label>To Date *</label>
                                             </div>
+                                        </div>
+                                    </div>
 
-                                            <div class="text-center">
-                                                <button type="reset" class="btn btn-secondary " id="clear_btn"><i
-                                                        class="bi bi-trash"></i> Clear</button>
+                                </div>
 
-                                                <button type="submit" class="btn btn-secondary " id="search_btn"><i
-                                                        class="bi bi-search"></i>Search</button>
+                                <div class="col-md-4 p-2 border rounded-3 bg-light">
+
+                                    <h6 class="text-center text-danger mb-2"><i class="bi bi-bag-check"></i> Sales Date
+                                    </h6>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="s_form_date" required>
+                                                <label>Start Date *</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="date" class="form-control" id="e_to_date" required>
+                                                <label>To Date *</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
+                            <div class="text-center mt-3">
+                                <button type="reset" class="btn btn-outline-dark btn-sm">
+                                    <i class="bi bi-arrow-repeat"></i> Reset
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-sm ms-2" id="search_btn">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
+                            </div>
                         </form>
 
+                        <div class="production d-none">
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="production_category" id="date_change" value="Date">
+                                    Date
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="production_category" id="godown_change" value="Godown">
+                                    Godown
+                                </label>
+                            </div>
+                            <div class="form-floating mb-2 d-none" id="pro_date">
+                                <input type="date" class="form-control rounded-3" id="pro_date_chng" placeholder="">
+                                <label for="pro_date_chng">date </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 d-none" id="pro_godown">
+                                <div class="form-floating">
+                                    <select class="form-select" id="godown">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="godown d-none">
+                            <div class="col-md-3 d-none" id="pro_godown">
+                                <div class="form-floating">
+                                    <select class="form-select" id="godown">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="waiting d-none">
+
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="waiting_category" id="wait_date_change" value="Date">
+                                    Date
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown">
+                                    Godown
+                                </label>
+                            </div>
+                            <div class="form-floating mb-2 d-none" id="wait_date">
+                                <input type="date" class="form-control rounded-3" id="pro_date_chng" placeholder="">
+                                <label for="pro_date_chng">date </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 d-none" id="wait_godown">
+                                <div class="form-floating">
+                                    <select class="form-select" id="godown">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
-                
 
-                <div class="card machine_production_card mt-5" id="machine_production_report_card">
-                    <h4 class="text-center">Machine Production Report</h4>
-                    <div class="card-body ">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-bordered table-striped " id="production_table">
-                                <caption></caption>
-                                <thead>
 
+                <!-- RESULT TABLE -->
+                <div class="card shadow-sm">
+                    <h5 class="text-center py-2 m-0 border-bottom bg-light">Machine Production Report</h5>
+                    <div class="card-body p-2">
+                        <div class="table-responsive" style='height:450px; overflow-y:auto'>
+                            <table class="table table-bordered table-striped table-sm" id="production_table">
+                                <thead class="table-light">
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Customer</th>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Date</th>
+                                        <th style="width: 0%;">#</th>
+                                        <th style="width: 30%;">Customer</th>
+                                        <th style="width: 20%;">Product</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
-                                <tbody id="report_tbl">
-
-
-
-                                </tbody>
-
-
+                                <tbody id="report_tbl"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
+
             </div>
+
+
 
             <div class="col-md-4">
                 <div class="card calender" id="calender_card">
                     <h4 class="text-center">Calender Report</h4>
                     <div class="card-body" id="calender">
-                                <div id="calendar_div" >
-                        <div id="calendar" class="p-2"></div>
-<div class="d-flex   justify-content-center gap-2  align-content-center">
-<div>
-    <p>Selected Date : </p>
-</div>
+                        <div id="calendar_div">
+                            <div id="calendar" class="p-2"></div>
+                            <div class="d-flex   justify-content-center gap-2  align-content-center">
+                                <div>
+                                    <p>Selected Date : </p>
+                                </div>
 
-  <div>
-                                <div class='input-group  input-group-sm' >
-                              
-                                    <input type='date' disabled id='production_date' class='form-control' placeholder='Date' >
-                                    
+                                <div>
+                                    <div class='input-group  input-group-sm'>
+
+                                        <input type='date' disabled id='production_date' class='form-control'
+                                            placeholder='Date'>
+
                                     </div>
+                                </div>
                             </div>
-</div>
-                       
-                        <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
+
+                            <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
                             <div>
                                 <div class='input-group  input-group-sm' >
                               
@@ -358,8 +492,8 @@
                             
                         </div> -->
 
-                
-                        <!-- <div class="card">
+
+                            <!-- <div class="card">
                             <div class="card-header small">
                                 Order Details
                             </div>
@@ -368,27 +502,29 @@
                             </div>
                         </div> -->
 
-                        <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
-                            <table id='' class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
-                                <thead class="small">
-                                    <tr class="small">
-                                        <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report</th>
-                                    </tr>
-                                    <tr class="small">
-                                        <th scope='col'>#</th>
-                                        <th scope='col'>Customer</th>
-                                        <th scope='col'>Machine</th>
-                                    </tr>
-                                </thead>
-                                <tbody class='align-middle' id='production_table_cal'>
-                                    <!-- Dynamic rows go here -->
+                            <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
+                                <table id=''
+                                    class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
+                                    <thead class="small">
+                                        <tr class="small">
+                                            <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report
+                                            </th>
+                                        </tr>
+                                        <tr class="small">
+                                            <th scope='col'>#</th>
+                                            <th scope='col'>Customer</th>
+                                            <th scope='col'>Machine</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class='align-middle' id='production_table_cal'>
+                                        <!-- Dynamic rows go here -->
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
-                        
-                    </div>
-                    
+
                     </div>
                 </div>
             </div>
@@ -414,7 +550,7 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
 
-        <script src="
+    <script src="
 https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
 "></script>
 
@@ -428,7 +564,7 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
     <!-- external js -->
     <script src="js/machine_production_modification.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
-    <script src="js/get_all_id.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 
