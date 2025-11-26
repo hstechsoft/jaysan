@@ -5,8 +5,7 @@
 $fvalue = test_input($_GET['fvalue']);
 $ftype = test_input($_GET['ftype']);
 $std = test_input($_GET['std']);
-
-
+$fid = test_input($_GET['fid']);
  
  
 function test_input($data) {
