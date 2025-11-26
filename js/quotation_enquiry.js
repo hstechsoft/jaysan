@@ -1495,7 +1495,7 @@ function get_vendor() {
           obj.forEach(function (obj) {
             count = count + 1;
             $('#vendor_name').val(obj.creditor_name)
-            $('#vendor_phone').val(obj.creditor_phone)
+            $('#vendor_phone').val(obj.creditor_phone ? obj.creditor_phone: obj.creditor_mobile)
             $('#vendor_gst').val(obj.creditor_gst)
             $('#vendor_addr').val(obj.creditors_addr)
 
@@ -1504,7 +1504,8 @@ function get_vendor() {
 
           });
 
-          $("#vendor_form :input").prop("disabled", true);
+          // $("#vendor_form :input").prop("disabled", true);
+          $("#vendor_gst").prop("disabled", true);
 
         }
         else {
