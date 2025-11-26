@@ -1934,6 +1934,7 @@ function insert_custom_field_master() {
         $('#fvalue').val("")
         $("#preview_body").empty()
         get_part_spec()
+        get_spec_details($("#part_name").data("selected-part_id"))
       }
 
 
