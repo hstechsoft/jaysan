@@ -301,7 +301,8 @@
                                 <!-- Dates Section -->
                                 <div class="col-md-4 p-2 border rounded-3 bg-light">
 
-                                    <h6 class="text-center text-primary mb-2"><i class="bi bi-calendar-event"></i>
+                                    <h6 class="text-start text-primary mb-2" style="font-size: 12px;"><i
+                                            class="bi bi-calendar-event"></i>
                                         Production Date</h6>
                                     <div class="row g-2 mb-2">
                                         <div class="col-md-6">
@@ -322,7 +323,8 @@
 
                                 <div class="col-md-4 p-2 border rounded-3 bg-light">
 
-                                    <h6 class="text-center text-danger mb-2"><i class="bi bi-bag-check"></i> Sales Date
+                                    <h6 class="text-start text-danger mb-2" style="font-size: 12px;"><i
+                                            class="bi bi-bag-check"></i> Sales Date
                                     </h6>
                                     <div class="row g-2">
                                         <div class="col-md-6">
@@ -342,7 +344,7 @@
                             </div>
 
                             <div class="text-center mt-3">
-                                <button type="reset" class="btn btn-outline-dark btn-sm">
+                                <button type="reset" class="btn btn-outline-dark btn-sm" id="reset_btn">
                                     <i class="bi bi-arrow-repeat"></i> Reset
                                 </button>
                                 <button type="submit" class="btn btn-primary btn-sm ms-2" id="search_btn">
@@ -351,82 +353,8 @@
                             </div>
                         </form>
 
-                        <div class="production d-none">
-                            <div class="radio-group">
-                                <label>
-                                    <input type="radio" name="production_category" id="date_change" value="Date">
-                                    Date
-                                </label>
-
-                                <label>
-                                    <input type="radio" name="production_category" id="godown_change" value="Godown">
-                                    Godown
-                                </label>
-                            </div>
-                            <div class="form-floating mb-2 d-none" id="pro_date">
-                                <input type="date" class="form-control rounded-3" id="pro_date_chng" placeholder="">
-                                <label for="pro_date_chng">date </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 d-none" id="pro_godown">
-                                <div class="form-floating">
-                                    <select class="form-select" id="pro_godownn">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="godown d-none">
-                            <div class="col-md-3 d-none" id="finish_godownn">
-                                <div class="form-floating">
-                                    <select class="form-select" id="finish_godown">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="waiting d-none">
-
-                            <div class="radio-group">
-                                <label>
-                                    <input type="radio" name="waiting_category" id="wait_date_change" value="Date">
-                                    Date
-                                </label>
-
-                                <label>
-                                    <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown">
-                                    Godown
-                                </label>
-                            </div>
-                            <div class="form-floating mb-2 d-none" id="wait_date">
-                                <input type="date" class="form-control rounded-3" id="pro_date_chng" placeholder="">
-                                <label for="pro_date_chng">date </label>
-
-                                <div class="invalid-feedback">
-                                    Kindly Enter Vaild Data
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 d-none" id="wait_godown">
-                                <div class="form-floating">
-                                    <select class="form-select" id="wait_godownn">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building text-primary"></i> Godown</label>
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
+
                 </div>
 
 
@@ -458,8 +386,8 @@
 
             <div class="col-md-4">
                 <div class="card calender" id="calender_card">
-                    <h4 class="text-center">Calender Report</h4>
-                    <div class="card-body" id="calender">
+                    <h4 class="text-center" style="font-size: 15px;">Calender Report</h4>
+                    <div class="card-body p-0" id="calender">
                         <div id="calendar_div">
                             <div id="calendar" class="p-2"></div>
                             <div class="d-flex   justify-content-center gap-2  align-content-center">
@@ -527,11 +455,133 @@
 
                     </div>
                 </div>
+
+
+                <div class="card bg-light border-top p-2">
+                    <div class="production d-none">
+                        <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gear"></i> Production Update</h6>
+
+                        <div class="d-flex gap-4 align-items-center mb-2 ps-2">
+                            <label class="fw-medium me-3">
+                                <input type="radio" name="production_category" id="date_change" value="Date"
+                                    class="form-check-input me-1">
+                                Date
+                            </label>
+
+                            <label class="fw-medium">
+                                <input type="radio" name="production_category" id="godown_change" value="Godown"
+                                    class="form-check-input me-1">
+                                Godown
+                            </label>
+                        </div>
+
+                        <div class="row px-2">
+                            <div class="col-md-6 mb-2 d-none" id="pro_date">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="pro_date_chng">
+                                    <label for="pro_date_chng"><i class="bi bi-calendar-date"></i> Change
+                                        Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2 d-none" id="pro_godown">
+                                <div class="form-floating">
+                                    <select class="form-select" id="pro_godownn">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building"></i> Select Godown</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
+                                        <i class="bi bi-check2-circle"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="godown d-none">
+                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-box-seam"></i> Finished Movement</h6>
+                        <div class="row px-2">
+                            <div class="col-md-6 mb-2 d-none" id="finish_godownn">
+                                <div class="form-floating">
+                                    <select class="form-select" id="finish_godown">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building"></i> Godown</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
+                                <i class="bi bi-check2-circle"></i> Submit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="waiting d-none">
+                        <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hourglass-split"></i> Waiting Status
+                            Update</h6>
+
+                        <div class="d-flex gap-4 align-items-center mb-2 ps-2">
+                            <label class="fw-medium me-3">
+                                <input type="radio" name="waiting_category" id="wait_date_change" value="Date"
+                                    class="form-check-input me-1">
+                                Date
+                            </label>
+
+                            <label class="fw-medium">
+                                <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown"
+                                    class="form-check-input me-1">
+                                Godown
+                            </label>
+                        </div>
+
+                        <div class="row px-2">
+                            <div class="col-md-6 mb-2 d-none" id="wait_date">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="wait_pro_date">
+                                    <label for="wait_pro_date"><i class="bi bi-calendar2-week"></i> Select
+                                        Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2 d-none" id="wait_godown">
+                                <div class="form-floating">
+                                    <select class="form-select" id="wait_godownn">
+                                        <option disabled selected>Choose...</option>
+                                    </select>
+                                    <label><i class="bi bi-building"></i> Godown</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
+                                        <i class="bi bi-check2-circle"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-
+    <div id="selection_card" style="position: fixed; bottom: 15px; left: 15px; 
+            background:rgb(255, 255, 255); border-radius:6px; color: #0033ff;
+            padding:12px 18px; font-weight:bold; 
+            box-shadow:0 0 10px rgba(0,0,0,0.2); 
+            display:none; z-index:999">
+    </div>
 
 
     <!-- jQuery -->

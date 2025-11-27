@@ -11,11 +11,13 @@ var cedate = ""
 var selected_date = ""
 var selected_type = ""
 
+
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
 
         initialView: 'dayGridMonth',
+        selectable: true,
 
 
         headerToolbar: {
@@ -46,20 +48,21 @@ document.addEventListener('DOMContentLoaded', function () {
             get_calender_assign(format_date_mysql(format_date_start(csdate)), format_date_mysql(format_date_start(cedate)))
         },
         dateClick: function (info) {
+            triggerCalendarDate(info.dateStr);
             // Display the clicked date
-            removeHighlightedDates();
+            // removeHighlightedDates();
 
             // Highlight the clicked date
-            highlightSelectedDate(info.dateStr);
+            // highlightSelectedDate(info.dateStr);
 
             // $('#selected_date_div').removeClass('d-none')
             // $('#selected_date').html(info.dateStr)
-            console.log((info.dateStr));
+            // console.log((info.dateStr));
 
             // $("#assign_date").modal('hide');
-            $('#production_date').val(info.dateStr)
-            selected_date = info.dateStr
-            get_cal_assign_report(selected_date)
+            // $('#production_date').val(info.dateStr)
+            // selected_date = info.dateStr
+            // get_cal_assign_report(selected_date)
 
 
         },
@@ -67,6 +70,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+function triggerCalendarDate(dateString) {
+
+    removeHighlightedDates();
+    calendar.gotoDate(dateString);  // Go to selected month
+    calendar.select(dateString);    // Highlight/Select date
+    highlightSelectedDate(dateString);
+
+    $('#production_date').val(dateString);
+    selected_date = dateString;
+
+    get_cal_assign_report(dateString);  // API Call
+}
 
 $(document).ready(function () {
 
@@ -189,9 +205,9 @@ $(document).ready(function () {
 
     });
 
-    // $("#clear_btn").on("click", function (event){
-    //     $("#machine_production_form").empty()
-    // })
+    $("#reset_btn").on("click", function () {
+        window.location.reload()
+    })
 
     let selectedAssignIds = [];
 
@@ -199,6 +215,7 @@ $(document).ready(function () {
 
         let status_type = $(this).data("type");
         let id = $(this).data("ass_id");
+        let parentRow = $(this).closest("td");
 
         let parent = $(this).closest("td").find(".order-check");
         let allChild = $(this).closest("ul").find(".ass-check");
@@ -211,6 +228,20 @@ $(document).ready(function () {
             selectedAssignIds = selectedAssignIds.filter(x => x !== id);
         }
 
+
+        let total = parentRow.find(".ass-check").length;
+        let checked = parentRow.find(".ass-check:checked").length;
+
+        if ($(".ass-check:checked").length > 0) {
+            $("#selection_card")
+                .html(`<b class='text-danger'>${status_type}</b> -Selected Qty: <span style='color:green; font-size: 20px'>${$(".ass-check:checked").length}</span>`)
+                .fadeIn();
+        } else {
+            $("#selection_card").fadeOut();
+        }
+
+        parentRow.find(".count-label").text(`${checked}/${total} Qty`);
+
         parent.prop("checked", allChild.length === checkedChild.length);
 
 
@@ -222,24 +253,35 @@ $(document).ready(function () {
         else if (status_type == "Waiting")
             $(".waiting").removeClass("d-none");
 
-        else if (status_type == "Finshed")
+
+        else if (status_type == "Finshed") {
             $(".godown").removeClass("d-none");
+            $("#finish_godown").data("a_type", "Finshed")
+        }
 
 
         $("#date_change").on("change", function () {
+            $(this).data("a_type", "Production");
             $("#pro_date").removeClass("d-none");
             $("#pro_godown").addClass("d-none");
         });
         $("#godown_change").on("change", function () {
+            $(this).data("a_type", "Production");
             $("#pro_date").addClass("d-none");
             $("#pro_godown").removeClass("d-none");
         });
 
+        $(document).on("change", "#pro_date_chng, #wait_pro_date", function () {
+            let dt = $(this).val();
+            if (dt) triggerCalendarDate(dt);
+        });
         $("#wait_date_change").on("change", function () {
+            $(this).data("a_type", "Waiting");
             $("#wait_date").removeClass("d-none");
             $("#wait_godown").addClass("d-none");
         });
         $("#wait_godown_change").on("change", function () {
+            $(this).data("a_type", "Waiting");
             $("#wait_date").addClass("d-none");
             $("#wait_godown").removeClass("d-none");
         });
@@ -251,6 +293,43 @@ $(document).ready(function () {
     $(document).on('change', '.order-check', function () {
         let check = $(this).is(":checked");
         $(this).closest("td").find(".ass-check").prop("checked", check).trigger("change");
+    });
+
+    $("#mp_alter_btn").on('click', function () {
+
+        let pro_date = $("#pro_date_chng").val();
+        let pro_godown = $("#pro_godownn").val();
+        let wait_date = $("#wait_pro_date").val();
+        let wait_godown = $("#wait_godownn").val();
+        let finish_godown = $("#finish_godown").val();
+
+        if (selectedAssignIds.length === 0) {
+            salert("Warning", "No Assign Items Selected", "warning");
+            return;
+        }
+        console.log(pro_date == '' && wait_date == '');
+
+
+        if ((pro_date != "" || wait_date != "") && (pro_godown == null && wait_godown == null && finish_godown == null)) {
+            // alert('d')
+            let dateToSend = pro_date || wait_date;
+            let AssTypeToSend = $("#date_change").data("a_type") || $("#wait_date_change").data("a_type");
+
+            update_assign_product(dateToSend, AssTypeToSend, "", selectedAssignIds);
+            return;
+        }
+
+        if (pro_date == '' && wait_date == '' && (pro_godown != null || wait_godown != null || finish_godown != null)) {
+            // alert("g")
+            let godownToSend = pro_godown || wait_godown || finish_godown;
+            let AssTypeToSend = $("#godown_change").data("a_type") || $("#wait_godown_change").data("a_type") || $("#finish_godown").data("a_type");
+
+            update_assign_product("", AssTypeToSend, godownToSend, selectedAssignIds);
+            return;
+        }
+
+        // --------------------- INVALID / MIXED ---------------------
+        salert("Warning", "Enter EITHER Date OR Godown only", "warning");
     });
 
 
@@ -270,7 +349,7 @@ function get_godown_name() {
         },
         success: function (response) {
             $('#godown, #pro_godownn, #wait_godownn, #finish_godownn ').empty()
-            $('#godown, #pro_godownn, #wait_godownn, #finish_godownn ').append("<option disabled  selected>Choose Godown...</option>")
+            $('#godown, #pro_godownn, #wait_godownn, #finish_godownn ').append("<option disabled  selected value='null'>Choose Godown...</option>")
 
             if (response.trim() != "error") {
 
@@ -676,6 +755,51 @@ function get_cal_assign_report(cal_date) {
 
 }
 
+function update_assign_product(dateToSend, AssTypeToSend, godownToSend, selectedAssignIds) {
+
+    console.log(dateToSend);
+    console.log(AssTypeToSend);
+    console.log(godownToSend);
+    console.log(selectedAssignIds);
+
+
+    $.ajax({
+        url: "php/update_assign_product.php",
+        type: "get", //send it through get method
+        data: {
+
+            dated: dateToSend,
+            assign_type: AssTypeToSend,
+            godown: godownToSend,
+            ass_id_array: JSON.stringify(selectedAssignIds),
+
+        },
+        success: function (response) {
+            $('#production_table_cal').empty()
+
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                shw_toast("success", "Updated Successfully")
+                $("#selection_card").fadeOut();
+                if (dateToSend) triggerCalendarDate(dateToSend)
+                $("#search_btn").trigger("click");
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+
 function get_sale_order_mreport(sale_date, production_date) {
 
     var godown = $("#godown").val() || "";
@@ -723,22 +847,26 @@ function get_sale_order_mreport(sale_date, production_date) {
 
                         var ass = JSON.parse(obj.assign_details);
                         var ass_d = "";
+                        var li_count = 0;
 
                         ass.forEach(function (item) {
 
                             if (item.assign_type == 'Production') {
+                                li_count += 1;
                                 ass_d += `<li class="list-group-item">
                                 Production - ${item.dated} 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Production' data-ass_id='${item.ass_id}'>
                                 </li>`;
                             }
                             if (item.assign_type == 'Finshed') {
+                                li_count += 1;
                                 ass_d += `<li class="list-group-item">
                                     Finished - ${item.godown_name} 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Finshed' data-ass_id='${item.ass_id}'>
                                 </li>`;
                             }
                             if (item.assign_type == 'Waiting') {
+                                li_count += 1;
                                 ass_d += `<li class="list-group-item" >
                                     Waiting 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}" data-type='Waiting' data-ass_id='${item.ass_id}'>
@@ -756,8 +884,8 @@ function get_sale_order_mreport(sale_date, production_date) {
                                 <td>${count}</td>
                                 <td>${obj.cus_name} - ${obj.cus_phone}</td>
                                 <td>${pro_d}</td>
-                                <td>
-                                    <input class="form-check-input mb-2 order-check" type="checkbox" id="order_${obj.oid}">
+                                <td><div  class='d-flex justify-content-between px-3'><span class="count-label">${0}/${li_count} Qty</span><div>
+                                     Check All <input class="form-check-input mb-2  order-check" type="checkbox" id="order_${obj.oid}"></div></div>
                                     <ul class="list-group" style='height:80px; overflow-y:auto'>${ass_d}</ul>
                                 </td>
                             </tr>
