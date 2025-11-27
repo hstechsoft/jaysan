@@ -4,9 +4,7 @@
  $dated = test_input($_GET['dated']);
 $assign_type = test_input($_GET['assign_type']);
 $godown = test_input($_GET['godown']);
-$ass_id = test_input($_GET['ass_id']);
-
-
+$ass_id_array = json_decode($_GET['ass_id_array'], true);
  
  
 function test_input($data) {
@@ -28,13 +26,19 @@ if ($assign_type == "'Production'") {
   exit();
 }
 
- $sql =  "UPDATE  assign_product SET dated =  $dated,assign_type =  $assign_type,godown =  $godown WHERE ass_id =  $ass_id";
+
+foreach ($ass_id_array as $ass_id) {
+  $ass_id = test_input($ass_id);
+  $sql =  "UPDATE  assign_product SET dated =  $dated,assign_type =  $assign_type,godown =  $godown WHERE ass_id =  $ass_id";
 
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+  
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
+}
+ echo "ok";
+
 $conn->close();
 
  ?>
