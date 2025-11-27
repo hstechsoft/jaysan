@@ -41,7 +41,7 @@ with ap_details as( SELECT
   ap.*,
   godown.godown_name
 FROM assign_product ap
-LEFT JOIN godown ON godown.gid = ap.godown wHERE 1 and $assign_type_query and  $godown_query and  $production_date_query and assign_type in ('Finshed','Production','Waiting')
+LEFT JOIN godown ON godown.gid = ap.godown wHERE 1 and $assign_type_query and  $godown_query and  $production_date_query and assign_type in ('Finshed','Production','Waiting') and dcf_id = 0
 ),
 ap_final as ( SELECT
     ap.opid,
