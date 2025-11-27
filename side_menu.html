@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Sidebar UI (Bootstrap Collapse)</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #eef2f6;
+        }
+
+        .logout-wrapper {
+            margin-top: auto;
+            padding: 10px 0;
+        }
+
+        .sidebar {
+            width: 78px;
+            height: 100vh;
+            background: #fff;
+            border-right: 1px solid #eee;
+            transition: .35s;
+            overflow: hidden;
+            padding-top: 18px;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.expanded {
+            width: 270px;
+        }
+
+        /* Expand sidebar on hover */
+        .sidebar:not(.expanded):hover {
+            width: 270px;
+        }
+
+        .sidebar:not(.expanded):hover .menu-text {
+            opacity: 1;
+            width: auto;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #1777ff;
+        }
+
+        .logo {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .brand span {
+            opacity: 0;
+            transition: .3s;
+        }
+
+        .sidebar.expanded .brand span {
+            opacity: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            margin: 4px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: .25s;
+            color: #444;
+            font-size: 15px;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            background: #eaf3ff;
+        }
+
+        .menu-item.active {
+            background: #e6f0ff;
+            border: 1px solid #bcd6ff;
+        }
+
+        .menu-text {
+            opacity: 0;
+            width: 0;
+            white-space: nowrap;
+            transition: .3s;
+        }
+
+        .sidebar.expanded .menu-text {
+            opacity: 1;
+            width: auto;
+        }
+
+        /* Wrapper to correctly position submenu */
+        .menu-wrapper {
+            position: relative;
+        }
+
+        /* Submenu block */
+        .submenu {
+            padding-left: 30px;
+        }
+
+        .submenu .submenu-item {
+            padding: 6px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 6px;
+            transition: .25s;
+        }
+
+        .submenu .submenu-item:hover {
+            background: #edf5ff;
+        }
+
+        /* Position submenu beside its menu item when collapsed */
+        .sidebar:not(.expanded) .submenu {
+            position: absolute;
+            left: 78px;
+            top: 100%;
+            /* FIXED: now appears at the correct vertical position */
+            min-width: 200px;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            padding: 10px;
+        }
+
+        /* Show submenu on hover */
+        .sidebar:not(.expanded) .menu-item:hover+.submenu,
+        .sidebar:not(.expanded) .submenu:hover {
+            display: block;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 78px;
+            transition: left 0.35s;
+            z-index: 2000;
+            /* Make button visible above sidebar */
+        }
+
+        /* Move button when sidebar is expanded */
+        .sidebar.expanded~.toggle-btn {
+            left: 270px;
+        }
+
+        /* Move button when sidebar is hover-expanded */
+        .sidebar:not(.expanded):hover~.toggle-btn {
+            left: 270px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <i class="bi bi-lightning-fill logo"></i>
+            <span class="menu-text">Hi Admin</span>
+        </div>
+
+        <div class="menu-item active">
+            <i class="bi bi-house-door"></i>
+            <span class="menu-text">Home</span>
+        </div>
+
+        <div class="menu-item">
+            <i class="bi bi-file-earmark-text"></i>
+            <span class="menu-text">Contracts</span>
+        </div>
+
+        <div class="menu-item">
+            <i class="bi bi-bell"></i>
+            <span class="menu-text">Notifications</span>
+        </div>
+
+        <!-- Employee with wrapper -->
+        <div class="menu-wrapper">
+            <div class="menu-item d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#empMenu">
+                <i class="bi bi-person-badge" style="color:#ff6733;"></i>
+                <span class="menu-text">Employee</span>
+                <i class="bi bi-chevron-right arrow ms-auto"></i>
+            </div>
+
+            <div class="collapse submenu" id="empMenu">
+                <div class="submenu-item">Account employee</div>
+
+                <div class="submenu-item d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#itMenu">
+                    IT employee
+                    <i class="bi bi-chevron-right arrow ms-auto"></i>
+                </div>
+
+                <div class="collapse sub-submenu" id="itMenu">
+                    <div class="sub-sub-item">Design employee</div>
+                    <div class="sub-sub-item">DevOps employee</div>
+                </div>
+
+                <div class="submenu-item">Canteen employee</div>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <i class="bi bi-building" style="color:#2878ff;"></i>
+            <span class="menu-text">Real estate</span>
+        </div>
+
+        <div class="menu-item">
+            <i class="bi bi-car-front" style="color:#05c1d9;"></i>
+            <span class="menu-text">Vehicles</span>
+        </div>
+
+
+
+
+        <div class="logout-wrapper">
+            <div class="menu-item">
+                <i class="bi bi-box-arrow-right" style="color:#d9534f;"></i>
+                <span class="menu-text">Logout</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary toggle-btn" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("expanded");
+        }
+    </script>
+
+</body>
+
+</html>

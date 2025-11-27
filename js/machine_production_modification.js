@@ -194,12 +194,12 @@ $(document).ready(function () {
 
         var production_date = "";
         if ($("#form_date").val() != "" && $("#to_date").val() != "") {
-            production_date = $("#form_date").val() + " and " + $("#to_date").val();
+            production_date = "'"+$("#form_date").val() +"'"+ " and " +"'"+ $("#to_date").val()+"'";
         }
 
         var sale_date = "";
         if ($("#s_form_date").val() != "" && $("#e_to_date").val() != "") {
-            sale_date = $("#s_form_date").val() || + " and " + $("#e_to_date").val();
+            sale_date = "'"+$("#s_form_date").val()+"'"+ " and " +"'"+ $("#e_to_date").val()+"'";
         }
         get_sale_order_mreport(sale_date, production_date);
 
@@ -812,7 +812,7 @@ function get_sale_order_mreport(sale_date, production_date) {
     var assign_type = $("#ass_type").val() || "";
     var order_no = $("#order").val() || "";
     var emp_id = $("#emp").data("emp_id") || "";
-    console.log(assign_type);
+    console.log(production_date);
 
     $.ajax({
         url: "php/get_sale_order_mreport.php",
@@ -842,7 +842,7 @@ function get_sale_order_mreport(sale_date, production_date) {
 
                     var obj = JSON.parse(response);
                     var count = 0
-
+var ddd = 0;
 
                     obj.forEach(function (obj) {
                         count++;
@@ -876,6 +876,8 @@ function get_sale_order_mreport(sale_date, production_date) {
                             }
                         });
 
+                        ddd +=li_count
+                        
                         var pro_d = `<div class="card">
                             <div class="card-header">${obj.product} - ${obj.model_name} - ${obj.type_name}</div>
                             <div class="card-body">${obj.sub_type}</div>
@@ -893,6 +895,8 @@ function get_sale_order_mreport(sale_date, production_date) {
                             </tr>
                         `);
                     });
+                    console.log(ddd);
+                    
 
 
 
