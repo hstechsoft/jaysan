@@ -256,7 +256,6 @@ $(document).ready(function () {
 
         else if (status_type == "Finshed") {
             $(".godown").removeClass("d-none");
-            $("#finish_godown").data("a_type", "Finshed")
         }
 
 
@@ -266,7 +265,6 @@ $(document).ready(function () {
             $("#pro_godown").addClass("d-none");
         });
         $("#godown_change").on("change", function () {
-            $(this).data("a_type", "Production");
             $("#pro_date").addClass("d-none");
             $("#pro_godown").removeClass("d-none");
         });
@@ -281,7 +279,6 @@ $(document).ready(function () {
             $("#wait_godown").addClass("d-none");
         });
         $("#wait_godown_change").on("change", function () {
-            $(this).data("a_type", "Waiting");
             $("#wait_date").addClass("d-none");
             $("#wait_godown").removeClass("d-none");
         });
@@ -295,13 +292,14 @@ $(document).ready(function () {
         $(this).closest("td").find(".ass-check").prop("checked", check).trigger("change");
     });
 
-    $("#mp_alter_btn").on('click', function () {
+    $("#mp_alter_btn1, #mp_alter_btn2, #mp_alter_btn3").on('click', function () {
+        // alert($(this).data("sbtn"))
 
         let pro_date = $("#pro_date_chng").val();
         let pro_godown = $("#pro_godownn").val();
         let wait_date = $("#wait_pro_date").val();
         let wait_godown = $("#wait_godownn").val();
-        let finish_godown = $("#finish_godown").val();
+        let finish_godown = $("#finish_godownn").val();
 
         if (selectedAssignIds.length === 0) {
             salert("Warning", "No Assign Items Selected", "warning");
@@ -313,18 +311,21 @@ $(document).ready(function () {
         if ((pro_date != "" || wait_date != "") && (pro_godown == null && wait_godown == null && finish_godown == null)) {
             // alert('d')
             let dateToSend = pro_date || wait_date;
-            let AssTypeToSend = $("#date_change").data("a_type") || $("#wait_date_change").data("a_type");
+            let AssTypeToSend = "Production";
 
             update_assign_product(dateToSend, AssTypeToSend, "", selectedAssignIds);
+
+            $("#pro_date_chng,#pro_godownn,#wait_pro_date,#wait_godownn,#finish_godownn").val("");
             return;
         }
 
         if (pro_date == '' && wait_date == '' && (pro_godown != null || wait_godown != null || finish_godown != null)) {
             // alert("g")
             let godownToSend = pro_godown || wait_godown || finish_godown;
-            let AssTypeToSend = $("#godown_change").data("a_type") || $("#wait_godown_change").data("a_type") || $("#finish_godown").data("a_type");
+            let AssTypeToSend = "Finshed";
 
             update_assign_product("", AssTypeToSend, godownToSend, selectedAssignIds);
+            $("#pro_date_chng,#pro_godownn,#wait_pro_date,#wait_godownn,#finish_godownn").val("");
             return;
         }
 
@@ -811,6 +812,7 @@ function get_sale_order_mreport(sale_date, production_date) {
     var assign_type = $("#ass_type").val() || "";
     var order_no = $("#order").val() || "";
     var emp_id = $("#emp").data("emp_id") || "";
+    console.log(assign_type);
 
     $.ajax({
         url: "php/get_sale_order_mreport.php",
@@ -894,6 +896,7 @@ function get_sale_order_mreport(sale_date, production_date) {
 
 
 
+                    $("#selection_card").fadeOut();
 
                 }
                 else {

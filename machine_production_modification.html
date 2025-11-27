@@ -291,7 +291,7 @@
                                     <div class="form-floating">
                                         <select class="form-select" id="ass_type">
                                             <option value="Production">Production</option>
-                                            <option value="Finished">Finished</option>
+                                            <option value="Finshed">Finished</option>
                                             <option value="Waiting">Waiting</option>
                                         </select>
                                         <label><i class="bi bi-check2-circle text-success"></i> Assign Type</label>
@@ -459,19 +459,19 @@
 
                 <div class="card bg-light border-top p-2">
                     <div class="production d-none">
-                        <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gear"></i> Production Update</h6>
+                        <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gear"></i> Update</h6>
 
                         <div class="d-flex gap-4 align-items-center mb-2 ps-2">
                             <label class="fw-medium me-3">
                                 <input type="radio" name="production_category" id="date_change" value="Date"
                                     class="form-check-input me-1">
-                                Date
+                                Production
                             </label>
 
                             <label class="fw-medium">
                                 <input type="radio" name="production_category" id="godown_change" value="Godown"
                                     class="form-check-input me-1">
-                                Godown
+                                Finish
                             </label>
                         </div>
 
@@ -494,7 +494,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="text-end mt-3">
-                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
+                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn1">
                                         <i class="bi bi-check2-circle"></i> Submit
                                     </button>
                                 </div>
@@ -505,41 +505,41 @@
                     </div>
 
                     <div class="godown d-none">
-                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-box-seam"></i> Finished Movement</h6>
+                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-box-seam"></i>Update</h6>
                         <div class="row px-2">
-                            <div class="col-md-6 mb-2 d-none" id="finish_godownn">
+                            <div class="col-md-6 mb-2 ">
                                 <div class="form-floating">
-                                    <select class="form-select" id="finish_godown">
+                                    <select class="form-select" id="finish_godownn">
                                         <option disabled selected>Choose...</option>
                                     </select>
                                     <label><i class="bi bi-building"></i> Godown</label>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="text-end mt-3">
-                            <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
-                                <i class="bi bi-check2-circle"></i> Submit
-                            </button>
+                            <div class="col-md-6">
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn2">
+                                        <i class="bi bi-check2-circle"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="waiting d-none">
-                        <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hourglass-split"></i> Waiting Status
+                        <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hourglass-split"></i>
                             Update</h6>
 
                         <div class="d-flex gap-4 align-items-center mb-2 ps-2">
                             <label class="fw-medium me-3">
                                 <input type="radio" name="waiting_category" id="wait_date_change" value="Date"
                                     class="form-check-input me-1">
-                                Date
+                                Production
                             </label>
 
                             <label class="fw-medium">
                                 <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown"
                                     class="form-check-input me-1">
-                                Godown
+                                Finish
                             </label>
                         </div>
 
@@ -562,7 +562,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="text-end mt-3">
-                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn">
+                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn3">
                                         <i class="bi bi-check2-circle"></i> Submit
                                     </button>
                                 </div>

@@ -26,7 +26,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysan/po_inward.html",
+      "url": "http://localhost/jaysan/machine_production_modification.html",
       // "webRoot": "E:/web/htdocs/jaysan",
       "webRoot": "C:/xampp/htdocs/jaysan",
       "userDataDir": true,
