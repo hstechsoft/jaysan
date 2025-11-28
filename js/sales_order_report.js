@@ -341,12 +341,12 @@ $(document).ready(function () {
 
     var sale_date = "";
     if ($("#sale_s_date").val() != "" && $("#sale_e_date").val() != "") {
-      sale_date = $("#sale_s_date").val() + " and " + $("#sale_e_date").val();
+      sale_date = "'"+$("#sale_s_date").val()+"'" + " and " + "'"+$("#sale_e_date").val()+"'";
     }
 
     var production_date = "";
     if ($("#production_s_date").val() != "" && $("#production_e_date").val() != "") {
-      production_date = $("#production_s_date").val() || + " and " + $("#production_e_date").val();
+      production_date = "'"+$("#production_s_date").val()+"'" || + " and " + "'"+$("#production_e_date").val()+"'";
     }
 
     console.log($("#cust_auto").data("cus_id"));
