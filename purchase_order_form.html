@@ -31,7 +31,7 @@
         /* #purchase_order_table tr {
             font-size: 12px;
         } */
-        .eoe{
+        .eoe {
             padding-left: 84%;
         }
     </style>
@@ -71,7 +71,16 @@
                 <div class="col-md-6">
                     <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped">
-                            <caption>PO Report</caption>
+                            <div class="d-flex justify-content-between">
+                                <h6>PO Report</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_report_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
                             <thead>
 
                                 <tr>
@@ -96,7 +105,16 @@
 
                     <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped">
-                            <caption>Po List</caption>
+                            <div class="d-flex justify-content-between">
+                                <h6>Po List</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_list_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
                             <thead>
 
                                 <tr>
@@ -121,7 +139,16 @@
 
                     <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
-                            <caption>PO Dashboard</caption>
+                            <div class="d-flex">
+                                <h6>PO Dashboard</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_dash_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
                             <thead>
 
                                 <tr>
@@ -282,7 +309,8 @@
             <!-- <h3 class="text-center" id="hess">PURCHASE ORDER</h3> -->
 
             <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;" id="purchase_order_table">
+                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;"
+                    id="purchase_order_table">
                     <thead>
 
                         <tr>

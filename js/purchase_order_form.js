@@ -49,6 +49,33 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
+    $("#po_report_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#po_report tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    $("#po_list_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#get_po_list tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+
+    $("#po_dash_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#po_dashboard_table tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+
+
 
     // mail function
     $("#mail_print").on("click", function (e) {
@@ -81,7 +108,7 @@ $(document).ready(function () {
                 batch_id: batch_id,
                 po_material_id: material_part_id,
                 qty: quantity,
-            material_rate: rate,
+                material_rate: rate,
                 is_approved: apprv,
                 due_on: due_date,
                 disc: disc,
@@ -645,6 +672,8 @@ $(document).ready(function () {
 
     $("#get_po_list").on("click", "tr td i.fa-pen-to-square", function () {
         po_id = $(this).data("po_id");
+        console.log(po_id);
+
         sub_but = 1;
         get_jaysan_po_material(po_id);
         $("#po_submit").removeClass("d-none");
@@ -685,7 +714,7 @@ function get_jaysan_po_material(po_id) {
 
                 obj.forEach(function (obj) {
                     company_name = obj.con_name
-                    $("#company_name").text("Company Name: " + obj.con_name);
+                    $("#company_name").text("Company Name: " + obj.sub_name);
                     po_order_to = obj.po_order_to;
                     po_delivery_to = obj.po_delivery_to;
                     var materials_list = obj.materials_list;
@@ -1187,7 +1216,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
             console.log(response);
             if (response.trim() == "ok") {
-                // location.reload();
+                location.reload();
 
             }
 
