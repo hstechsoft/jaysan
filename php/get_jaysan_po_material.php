@@ -49,7 +49,7 @@ INNER JOIN jaysan_po_material jpm ON
 LEFT JOIN creditors con ON
     po.po_delivery_to = con.creditor_id
 LEFT JOIN creditors sup ON
-    po.po_delivery_to = sup.creditor_id WHERE jaysan_po_id =  $jaysan_po_id   group by po.po_id ";
+    po.po_order_to = sup.creditor_id WHERE jaysan_po_id =  $jaysan_po_id   group by po.po_id ";
 
 $result = $conn->query($sql);
 
