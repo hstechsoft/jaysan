@@ -30,7 +30,7 @@ customer.cus_phone,jaysan_model_type.type_name as type,line_no FROM
         FROM
             assign_product
         INNER JOIN sales_order_product ON sales_order_product.opid = assign_product.opid
-        inner join machine_line on machine_line.ass_id = assign_product.ass_id 
+        inner join machine_line on machine_line.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 and finished_details = 'no_sts'
     ) AS hs
 INNER JOIN sales_order_form ON hs.oid = sales_order_form.oid
 ) AS hs1
