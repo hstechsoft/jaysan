@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
-$production_date_query  = ($_GET['production_date']) == '' ? 1 : "dated  =  '" . ($_GET['production_date']) . "' and assign_type = 'Production'";
+$production_date_query  = ($_GET['production_date']) == '' ? 0 : "dated  =  '" . ($_GET['production_date']) . "' and assign_type = 'Production'";
 
 
 
@@ -21,14 +21,16 @@ return $data;
 $sql = <<<SQL
 with ap_details as( SELECT
   ap.*,
+  machine_production.line_no
   godown.godown_name
 FROM assign_product ap
-LEFT JOIN godown ON godown.gid = ap.godown wHERE  $production_date_query and assign_type in ('Production') and dcf_id = 0 and finished_details = 'no_sts'
+LEFT JOIN godown ON godown.gid = ap.godown inner join  machine_production on ap.ass_id = machine_production.ass_id wHERE  $production_date_query and assign_type in ('Production') and dcf_id = 0 and finished_details = 'no_sts'
 ),
 ap_final as ( SELECT
     ap.opid,
     JSON_ARRAYAGG(
         JSON_OBJECT(
+            'line_no', machine_production.line_no,
             'ass_id', ap.ass_id,
             'opid', ap.opid,
             'dated', ap.dated,
