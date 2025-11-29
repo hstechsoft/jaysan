@@ -2,8 +2,11 @@
 <?php
  include 'db_head.php';
 
-$ass_id = test_input($_GET['ass_id']);
-    $dated = test_input($_GET['dated']);
+$old_ass_id = test_input($_GET['old_ass_id']);
+$new_ass_id = test_input($_GET['new_ass_id']);
+$old_line_no = test_input($_GET['old_line_no']);
+$new_line_no = test_input($_GET['new_line_no']);
+    
    
 
 
@@ -17,25 +20,24 @@ $data = "'".$data."'";
 return $data;
 }
 
-// Check if record exists
-$check_sql = "SELECT 1 FROM `machine_production` WHERE ass_id = $ass_id AND dated = $dated";
-$result = $conn->query($check_sql);
-
-if ($result && $result->num_rows > 0) {
-    echo "Record already exists";
-    $conn->close();
-    exit;
-}
 
 
 
-$sql = "UPDATE expense SET exp_des = $exp_des,exp_cat = $exp_cat,exp_amount = $exp_amount,exp_date = UNIX_TIMESTAMP('$exp_date') * 1000,exp_emp_id  = $exp_emp_id where exp_id = $exp_id";
+$sql = "UPDATE machine_production SET line_no = $new_line_no WHERE  ass_id = $old_ass_id";
   
   if ($conn->query($sql) === TRUE) {
    
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
+
+  $sql1 = "UPDATE machine_production SET line_no = $old_line_no WHERE  ass_id = $new_ass_id";
+  if ($conn->query($sql1) === TRUE) {
+  }
+    else {
+    echo "Error: " . $sql1 . "<br>" . $conn->error;
+  }
+
   echo "ok";
   
 
