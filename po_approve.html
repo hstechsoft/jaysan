@@ -43,80 +43,93 @@
     <!-- top bar -->
 
 
-
-    <section id="menu_bar">
-
-    </section>
-
-    <div class="row py-5">
-
-      <div class="col-md-6">
-        <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
-          <table class="table caption-top table-bordered table-striped">
-            <caption>Po List</caption>
-            <thead>
-
-              <tr>
-                <th scope="col">S/No</th>
-                <th scope="col">Po no</th>
-                <th scope="col">Order To</th>
-                <th scope="col">Po Date</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody id="get_po_list">
-
-
-            </tbody>
-
-
-          </table>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="table-responsive mt-2">
-          <table class="table caption-top table-bordered table-striped ">
-            <caption></caption>
-            <thead>
-
-              <tr>
-              <tr>
-                <th></th>
-                <th scope="col">Materials</th>
-                <th scope="col">Batch Date</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Rate</th>
-                <th scope="col">Discount</th>
-
-              </tr>
-
-              </tr>
-            </thead>
-            <tbody id="selected_materials">
-
-
-
-            </tbody>
-
-
-          </table>
-
-          <div class="btn_group d-flex justify-content-center mt-3">
-            <button type="button" class="btn btn-success" id="po_approve_btn">
-              <i class="fa-solid fa-circle-check me-1"></i> Approve
+     <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
             </button>
 
-            <!-- <button type="button" class="btn btn-danger" id="po_reject_btn">
-              <i class="fa-solid fa-circle-xmark me-1"></i> Reject
-            </button> -->
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
+
+    <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+    <div class="page-wrapper">
+
+      <div class="row py-5">
+
+        <div class="col-md-6">
+          <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
+            <table class="table caption-top table-bordered table-striped">
+              <caption>Po List</caption>
+              <thead>
+
+                <tr>
+                  <th scope="col">S/No</th>
+                  <th scope="col">Po no</th>
+                  <th scope="col">Order To</th>
+                  <th scope="col">Po Date</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="get_po_list">
+
+
+              </tbody>
+
+
+            </table>
           </div>
         </div>
+
+        <div class="col-md-6">
+          <div class="table-responsive mt-2">
+            <table class="table caption-top table-bordered table-striped ">
+              <caption></caption>
+              <thead>
+
+                <tr>
+                <tr>
+                  <th></th>
+                  <th scope="col">Materials</th>
+                  <th scope="col">Batch Date</th>
+                  <th scope="col">Due Date</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Rate</th>
+                  <th scope="col">Discount</th>
+
+                </tr>
+
+                </tr>
+              </thead>
+              <tbody id="selected_materials">
+
+
+
+              </tbody>
+
+
+            </table>
+
+            <div class="btn_group d-flex justify-content-center mt-3">
+              <button type="button" class="btn btn-success" id="po_approve_btn">
+                <i class="fa-solid fa-circle-check me-1"></i> Approve
+              </button>
+
+              <!-- <button type="button" class="btn btn-danger" id="po_reject_btn">
+              <i class="fa-solid fa-circle-xmark me-1"></i> Reject
+            </button> -->
+            </div>
+          </div>
+        </div>
+
       </div>
-
     </div>
-
   </div>
 
 
@@ -146,7 +159,7 @@
   <!-- external js -->
   <script src="js/po_approve.js" type="module"></script>
   <script src="js/menu.js" type="module"></script>
-  <script src="js/get_all_id.js" type="module"></script>
+  <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

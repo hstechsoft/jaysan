@@ -531,12 +531,12 @@ $(document).ready(function () {
     get_qcount($('#search_quotation').val())
     get_quotation_list($('#search_quotation').val())
   });
-  $('.fixed-row').on("click", "td i.fa-rocket", function () {
+  $('.fixed-row').on("click", "td #fa-rocket", function () {
     let url = $(this).data("spec_pdf");
 
     window.open(url, '_blank');
   })
-  $('.fixed-row').on("click", "td i.fa-quora", function () {
+  $('.fixed-row').on("click", "td #fa-quora", function () {
     let url = $(this).data("quat_pdf");
     window.open(url, '_blank');
   })
@@ -598,7 +598,7 @@ $(document).ready(function () {
 
   });
 
-  $("#part_spec_tbody").on("click", "tr i.fa-edit", function () {
+  $("#part_spec_tbody").on("click", "tr #fa-edit", function () {
     let fid = $(this).data("fid");
     console.log(fid);
     $("#add_field").addClass("d-none");
@@ -687,7 +687,7 @@ $(document).ready(function () {
   // });
 
 
-  $("#head_fixed-row").on("click", "i.fa-edit", function () {
+  $("#head_fixed-row").on("click", "#fa-edit", function () {
 
     $('html, body').animate({
         scrollTop: $("#add_vendor_btn").offset().top
@@ -946,7 +946,7 @@ function get_spec_details(part_id) {
 
 
                 // Append row
-                $("#part_spec_tbody").append(`<tr data-fid=${item.fid}><td>${count}</td><td>${item.flabel}</td><td>${item.ftype}</td><td>${item.fvalue || ""}</td><td><i class='fa fa-edit' data-fid='${item.fid}'></i></td></tr>`);
+                $("#part_spec_tbody").append(`<tr data-fid=${item.fid}><td>${count}</td><td>${item.flabel}</td><td>${item.ftype}</td><td>${item.fvalue || ""}</td><td><button type='submit' class='btn btn-primary' id='fa-edit'><i class='fa fa-edit' data-fid='${item.fid}'></i></button></td></tr>`);
               });
             }
             else {
@@ -1107,14 +1107,14 @@ function get_rate_quotation_part(part_id, process_id) {
 
             count = count + 1;
 
-            $("#head_fixed-row").append("<th style='min-width:25vw; font-size:15px'><div class='d-flex justify-content-between align-item-center gap-2'><div class=''><p class='text-truncate  small'>" + obj.creditor_name + "</p></div><i class='fa fa-edit my-auto' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i><div><div class='input-group'><select class='form-select  rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div class='my-auto'>" + dclass + "</div></div></th>")
+            $("#head_fixed-row").append("<th style='min-width:25vw; font-size:15px'><div class='d-flex justify-content-between align-item-center gap-2'><div class=''><p class='text-truncate  small'>" + obj.creditor_name + "</p></div><button type='submit' class='btn btn-primary' id='fa-edit'><i class='fa fa-edit my-auto' data-rqpid='" + obj.rqpid + "' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "'></i></button><div><div class='input-group'><select class='form-select  rating' data-rqid='" + obj.rqid + "' data-vendor_id='" + obj.vendor_id + "' data-rqpid='" + obj.rqpid + "'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option></select></div></div><div class='my-auto'>" + dclass + "</div></div></th>")
             $("#head_fixed-row th:last-child").find(".rating").val(obj.rating);
 
             var spec = ""
             if (obj.spec_addr != "")
-              spec = "<i class='fa-solid fa-rocket px-2' data-spec_pdf='" + obj.spec_addr + "'></i>"
+              spec = "<button type='submit' class='btn btn-primary' id='fa-rocket'><i class='fa-solid fa-rocket px-2' data-spec_pdf='" + obj.spec_addr + "'></i></button>"
             if (obj.quotation_addr != "")
-              spec = spec + "<i class='fa-brands fa-quora' data-quat_pdf=" + obj.quotation_addr + "></i>"
+              spec = spec + "<button type='submit' class='btn btn-primary' id='fa-quora'><i class='fa-brands fa-quora' data-quat_pdf=" + obj.quotation_addr + "></i></button>"
 
             $('.fixed-row').append("<td>" + spec + "</td>");
 

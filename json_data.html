@@ -47,36 +47,49 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
-
-        </section>
-
-        <!-- content -->
-
-        <div class="table-responsive">
-            <table class="table caption-top table-bordered table-striped " id="stockTable">
-                <caption></caption>
-                <thead>
-
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Part No</th>
-                        <th scope="col">GST (%)</th>
-                        <th scope="col">Base Units</th>
-                    </tr>
-                </thead>
-                <tbody id="json_data">
-                    
-
-
-                </tbody>
-
-
-            </table>
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
         </div>
 
+        <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped " id="stockTable">
+                    <caption></caption>
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Part No</th>
+                            <th scope="col">GST (%)</th>
+                            <th scope="col">Base Units</th>
+                        </tr>
+                    </thead>
+                    <tbody id="json_data">
+
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
     </div>
 
 
@@ -106,7 +119,7 @@
     <!-- external js -->
     <script src="js/json_data.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
-    <script src="js/get_all_id.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

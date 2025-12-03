@@ -1,11 +1,28 @@
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar" aria-label="Main sidebar">
 
-  <!-- Brand -->
-  <div class="brand px-2 mb-2">
-    <i class="bi bi-lightning-fill logo"></i>
-    <span class="menu-text">Welcome</span>
+
+  <div class="sidebar-user">
+    <div class="sidebar-user-info">
+      <i class="fa-regular fa-circle-user user-icon"></i>
+
+      <div class="user-text">
+        <p class="welcome-text">hey <span id="role_name_txt"></span></p>
+        <p class="username" id="unamed"></p>
+      </div>
+
+      <!-- <button class="user-dropdown-toggle" data-bs-toggle="dropdown">
+        <i class="bi bi-chevron-down"></i>
+      </button> -->
+    </div>
+
+    <!-- <ul class="dropdown-menu sidebar-dropdown">
+      <li><a class="dropdown-item" href="reset_pass.html"><i class="fa-solid fa-key me-2"></i>Modify Password</a></li>
+      <li><button id="topbar_logout_btn" class="dropdown-item"><i
+            class="fa-solid fa-right-from-bracket me-2"></i>Logout</button></li>
+    </ul> -->
   </div>
+
 
   <!-- Menu list -->
   <nav class="nav-list" role="navigation">
@@ -107,11 +124,13 @@
       <div class="flyout">
         <a id="emp_single_detail" class="submenu-item" href="emp_single_detail.html">User Report</a>
         <a id="admin_employee_report" class="submenu-item" href="admin_employee_report.html">Detailed Report</a>
-        <a id="admin_employee_report_self" class="submenu-item" href="admin_employee_report_self.html">Detailed Report Self</a>
+        <a id="admin_employee_report_self" class="submenu-item" href="admin_employee_report_self.html">Detailed Report
+          Self</a>
         <a id="attendance_report" class="submenu-item" href="attendance_report.html">Attendance report</a>
 
         <a id="work_summary_report" class="submenu-item" href="work_summary_report.html">Summary report</a>
-        <a id="work_summary_report_self" class="submenu-item" href="work_summary_report_self.html">Summary report Self</a>
+        <a id="work_summary_report_self" class="submenu-item" href="work_summary_report_self.html">Summary report
+          Self</a>
 
         <a id="work_search" class="submenu-item" href="work_search.html">Work Report</a>
         <a id="work_search_self" class="submenu-item" href="work_search_self.html">Work Report Self</a>
@@ -154,11 +173,13 @@
       <div class="collapse">
         <a id="emp_single_detail" class="list-group-item" href="emp_single_detail.html">User Report</a>
         <a id="admin_employee_report" class="list-group-item" href="admin_employee_report.html">Detailed Report</a>
-        <a id="admin_employee_report_self" class="list-group-item" href="admin_employee_report_self.html">Detailed Report Self</a>
+        <a id="admin_employee_report_self" class="list-group-item" href="admin_employee_report_self.html">Detailed
+          Report Self</a>
         <a id="attendance_report" class="list-group-item" href="attendance_report.html">Attendance report</a>
 
         <a id="work_summary_report" class="list-group-item" href="work_summary_report.html">Summary report</a>
-        <a id="work_summary_report_self" class="list-group-item" href="work_summary_report_self.html">Summary report Self</a>
+        <a id="work_summary_report_self" class="list-group-item" href="work_summary_report_self.html">Summary report
+          Self</a>
 
         <a id="work_search" class="list-group-item" href="work_search.html">Work Report</a>
         <a id="work_search_self" class="list-group-item" href="work_search_self.html">Work Report Self</a>
@@ -316,7 +337,8 @@
 
       <div class="collapse">
         <a id="create_dealer" class="list-group-item" href="create_dealer.html">Dealer Entry</a>
-        <a id="create_warranty_terms" class="list-group-item" href="create_warranty_terms.html">Create Warranty Terms</a>
+        <a id="create_warranty_terms" class="list-group-item" href="create_warranty_terms.html">Create Warranty
+          Terms</a>
         <a id="check_warranty" class="list-group-item" href="check_warranty.html">Dealer Report</a>
         <a id="service_requset" class="list-group-item" href="service_requset.html">Service Request</a>
         <a id="extended_warranty" class="list-group-item" href="extended_warranty.html">Extended Warranty Request</a>
@@ -368,7 +390,8 @@
 
       <div class="collapse">
         <a id="quotation_enquiry" class="list-group-item" href="quotation_enquiry.html">Quotation Enquiry</a>
-        <a id="quotation_enquiry_master" class="list-group-item" href="quotation_enquiry_master.html">Quotation Master</a>
+        <a id="quotation_enquiry_master" class="list-group-item" href="quotation_enquiry_master.html">Quotation
+          Master</a>
       </div>
     </div>
 
@@ -408,14 +431,18 @@
       <div class="flyout">
         <a id="material_request_form" class="submenu-item" href="material_request_form.html">Material Request Form</a>
         <a id="material_request_form_tally" class="submenu-item" href="material_request_form_tally.html">MRF Tally</a>
-        <a id="material_request_form_purchase" class="submenu-item" href="material_request_form_purchase.html">MRF Purchase</a>
+        <a id="material_request_form_purchase" class="submenu-item" href="material_request_form_purchase.html">MRF
+          Purchase</a>
         <a id="material_request_form_md" class="submenu-item" href="material_request_form_md.html">MRF MD</a>
       </div>
 
       <div class="collapse">
-        <a id="material_request_form" class="list-group-item" href="material_request_form.html">Material Request Form</a>
-        <a id="material_request_form_tally" class="list-group-item" href="material_request_form_tally.html">MRF Tally</a>
-        <a id="material_request_form_purchase" class="list-group-item" href="material_request_form_purchase.html">MRF Purchase</a>
+        <a id="material_request_form" class="list-group-item" href="material_request_form.html">Material Request
+          Form</a>
+        <a id="material_request_form_tally" class="list-group-item" href="material_request_form_tally.html">MRF
+          Tally</a>
+        <a id="material_request_form_purchase" class="list-group-item" href="material_request_form_purchase.html">MRF
+          Purchase</a>
         <a id="material_request_form_md" class="list-group-item" href="material_request_form_md.html">MRF MD</a>
       </div>
     </div>
@@ -426,6 +453,9 @@
 
     <!-- Logout -->
     <div class="logout-wrapper">
+      <a class="dropdown-item menu-item" href="reset_pass.html"><i class="fa-solid fa-key"></i><span
+          class="menu-text">Modify Password</span></a>
+
       <a id="topbar_logout_btn" class="menu-item" href="#">
         <i class="bi bi-box-arrow-right" style="color:#d9534f;"></i>
         <span class="menu-text">Logout</span>

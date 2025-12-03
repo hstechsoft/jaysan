@@ -34,91 +34,104 @@
 
 
     <!-- navbar -->
+     <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-    <section id="menu_bar">
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
 
-    </section>
-    <!-- Add New Process Modal -->
-    <div class="card">
-      <div class="card-header">
-        <h6>
-          Create Master Specification
-        </h6>
-      </div>
-      <div class="card-body">
-        <div class='input-group mb-2'>
-          <div class='input-group-prepend '>
-            <span class='input-group-text ' id='basic-addon1'>
-              Field Type </span>
+    <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+    <div class="page-wrapper">
+      <!-- Add New Process Modal -->
+      <div class="card">
+        <div class="card-header">
+          <h6>
+            Create Master Specification
+          </h6>
+        </div>
+        <div class="card-body">
+          <div class='input-group mb-2'>
+            <div class='input-group-prepend '>
+              <span class='input-group-text ' id='basic-addon1'>
+                Field Type </span>
+
+            </div>
+            <select class='custom-select form-control' id='field_type'>
+              <option value='null' selected>Choose Options...</option>
+              <option value='text'>Text</option>
+              <option value='dropdown'>Dropdown</option>
+
+
+
+            </select>
+          </div>
+
+          <div class='input-group mb-2'>
+            <label class='input-group-text' for='flabel'><span>
+                label
+              </span>
+            </label>
+            <input id='flabel' type='text' class='form-control'>
+          </div>
+
+          <div class='input-group mb-2 '>
+            <textarea class='form-control' id='fvalue' placeholder='value' rows='2'></textarea>
+          </div>
+
+          <div class="d-flex  justify-content-center mb-2">
+            <button class='btn btn-primary' id='preview' type='button'>Preview</button>
 
           </div>
-          <select class='custom-select form-control' id='field_type'>
-            <option value='null' selected>Choose Options...</option>
-            <option value='text'>Text</option>
-            <option value='dropdown'>Dropdown</option>
+          <div class="card-footer">
+            <div class="card">
+              <div class="card-header d-flex justify-content-center">
+                <h6>Preview</h6>
+              </div>
+              <div class="card-body" id="preview_body">
 
-
-
-          </select>
-        </div>
-
-        <div class='input-group mb-2'>
-          <label class='input-group-text' for='flabel'><span>
-              label
-            </span>
-          </label>
-          <input id='flabel' type='text' class='form-control'>
-        </div>
-
-        <div class='input-group mb-2 '>
-          <textarea class='form-control' id='fvalue' placeholder='value' rows='2'></textarea>
-        </div>
-
-        <div class="d-flex  justify-content-center mb-2">
-          <button class='btn btn-primary' id='preview' type='button'>Preview</button>
-
-        </div>
-        <div class="card-footer">
-          <div class="card">
-            <div class="card-header d-flex justify-content-center">
-              <h6>Preview</h6>
-            </div>
-            <div class="card-body" id="preview_body">
+              </div>
+              <div class="card-footer d-flex justify-content-center">
+                <button class='btn btn-primary' id='add_field' type=''>Add Field</button>
+                <button class='btn btn-primary d-none' id='update_field' type=''>Update Field</button>
+              </div>
 
             </div>
-            <div class="card-footer d-flex justify-content-center">
-              <button class='btn btn-primary' id='add_field' type=''>Add Field</button>
-              <button class='btn btn-primary d-none' id='update_field' type=''>Update Field</button>
-            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="card">
+        <div class="card-header d-flex justify-content-center">
+          <h6>Master Specification</h6>
+        </div>
+        <div class="card-body">
+
+          <div class="row row-cols-2" id="parts_spec">
 
           </div>
-        </div>
-
-      </div>
-
-
-    </div>
 
 
 
-    <div class="card">
-      <div class="card-header d-flex justify-content-center">
-        <h6>Master Specification</h6>
-      </div>
-      <div class="card-body">
 
-        <div class="row row-cols-2" id="parts_spec">
+
 
         </div>
-
-
-
-
-
-
       </div>
     </div>
-
   </div>
 
 
@@ -154,7 +167,7 @@
   <!-- external js -->
   <script src="js/quotation_enquiry_master.js" type="module"></script>
   <script src="js/menu.js" type="module"></script>
-  <script src="js/get_all_id.js" type="module"></script>
+  <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

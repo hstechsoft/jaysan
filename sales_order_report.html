@@ -181,86 +181,198 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
 
-        </section>
+        <section id="menu_bar" class="d-none"></section>
 
-        <!-- content -->
 
-        <div class="row">
 
-            <div class="col-md-2">
-                <div id="compactFilterBar">
 
-                    <h6 class="text-center">Sale Order</h6>
 
-                    <!-- Employee -->
-                    <!-- <div class="filter-box">
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+            <div class="row">
+
+
+
+
+                <div class="col-md-10">
+                    <div class="table-responsive " style="max-height: 90vh; overflow-y: auto;">
+
+                        <table id='order_table1'
+                            class='table table-bordered border-dark border-opacity-50 text-center small'>
+                            <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
+                                <tr>
+
+                                    <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th scope='col'>#</th>
+                                    <th scope='col' style="width: 10%;">
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-hashtag"></i>
+                                                <input type="number" id="order_no" class="filter-input text-dark"
+                                                    placeholder="Order No">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box text-center" style="background-color: #f6f4f4;">
+                                                Dated</div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-user"></i>
+                                                <input type="text" id="emp_auto" class="filter-input text-dark"
+                                                    placeholder="Employee">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-money"></i>
+                                                <select id="payment" class="filter-input text-dark">
+                                                    <option disabled selected value="null">Payment</option>
+                                                    <option value="1">Pending</option>
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar" class="d-flex">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-users"></i>
+                                                <input type="text" id="cust_auto" class="filter-input text-dark"
+                                                    placeholder="Customer">
+                                            </div>
+
+                                            <!-- Customer No -->
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-phone"></i>
+                                                <input type="number" id="cust_phone_auto" class="filter-input text-dark"
+                                                    placeholder="Mobile">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box" style="background-color: #f6f4f4;">Product
+                                            </div>
+                                        </div>
+                                    </th>
+
+                                    <!-- <th scope='col'>Download</th> -->
+                                    <th scope='col' style="width: 10%;">
+
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box " style="background-color: #f6f4f4;">DCF
+                                            </div>
+                                        </div>
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+
+                            <tbody class='align-middle ' id='order_table'>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div id="compactFilterBar">
+
+                        <h6 class="text-center">Sale Order</h6>
+
+                        <!-- Employee -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-user"></i>
                         <input type="text" id="emp_auto" class="filter-input" placeholder="Employee">
                     </div> -->
 
-                    <!-- Order No -->
-                    <!-- <div class="filter-box">
+                        <!-- Order No -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-hashtag"></i>
                         <input type="number" id="order_no" class="filter-input" placeholder="Order No">
                     </div> -->
 
-                    <!-- Order Category -->
-                    <div class="filter-box">
-                        <i class="fa fa-list"></i>
+                        <!-- Order Category -->
+                        <div class="filter-box">
+                            <i class="fa fa-list"></i>
 
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio"  name="order_category" checked id="sales_cate" value="sales">
-                                Sales
-                            </label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="order_category" checked id="sales_cate" value="sales">
+                                    Sales
+                                </label>
 
-                            <label>
-                                <input type="radio" name="order_category" id="requirement_cate" value="requirement">
-                                Requirement
-                            </label>
+                                <label>
+                                    <input type="radio" name="order_category" id="requirement_cate" value="requirement">
+                                    Requirement
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <!-- Start Date -->
-                    <div class="filter-box">
-                        <i class="fa fa-calendar"></i>
-                        <input type="date" id="sale_s_date" class="filter-input">
-                    </div>
+                        <!-- Start Date -->
+                        <div class="filter-box">
+                            <i class="fa fa-calendar"></i>
+                            <input type="date" id="sale_s_date" class="filter-input">
+                        </div>
 
-                    <!-- End Date -->
-                    <div class="filter-box">
-                        <i class="fa fa-calendar-check"></i>
-                        <input type="date" id="sale_e_date" class="filter-input">
-                    </div>
+                        <!-- End Date -->
+                        <div class="filter-box">
+                            <i class="fa fa-calendar-check"></i>
+                            <input type="date" id="sale_e_date" class="filter-input">
+                        </div>
 
-                    <!-- <div class="hr"></div>
+                        <!-- <div class="hr"></div>
 
                     <h6 class="text-center">Customer</h6> -->
 
-                    <!-- Customer -->
-                    <!-- <div class="filter-box">
+                        <!-- Customer -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-users"></i>
                         <input type="text" id="cust_auto" class="filter-input" placeholder="Customer">
                     </div> -->
 
-                    <!-- Customer No -->
-                    <!-- <div class="filter-box">
+                        <!-- Customer No -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-phone"></i>
                         <input type="number" id="cust_phone_auto" class="filter-input" placeholder="Mobile">
                     </div> -->
 
-                    <!-- Unassigned Quantity -->
-                    <!-- <div class="filter-box">
+                        <!-- Unassigned Quantity -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-phone"></i>
                         <input type="number" id="unassigned_qty" class="filter-input" placeholder="Unassigned Quantity">
                     </div> -->
 
-                    <!-- Payment -->
-                    <!-- <div class="filter-box">
+                        <!-- Payment -->
+                        <!-- <div class="filter-box">
                         <i class="fa fa-money"></i>
                         <select id="payment" class="filter-input">
                             <option disabled selected value="null">Payment</option>
@@ -271,573 +383,479 @@
                     </div> -->
 
 
-                    <div class="hr"></div>
+                        <div class="hr"></div>
 
-                    <h6 class="text-center">Product</h6>
+                        <h6 class="text-center">Product</h6>
 
-                    <!-- Product -->
-                    <div class="filter-box">
-                        <i class="fa fa-box"></i>
-                        <select id="product_name_select" class="filter-input">
-                            <option disabled selected value="null">Product</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex gap-1">
-
-                        <!-- Model -->
-                        <div class="filter-box flex-grow-1">
-                            <i class="fa fa-cube"></i>
-                            <select id="model_select" class="filter-input">
-                                <option disabled selected value="null">Model</option>
+                        <!-- Product -->
+                        <div class="filter-box">
+                            <i class="fa fa-box"></i>
+                            <select id="product_name_select" class="filter-input">
+                                <option disabled selected value="null">Product</option>
                             </select>
                         </div>
 
-                        <!-- Type -->
-                        <div class="filter-box flex-grow-1">
-                            <i class="fa fa-tags"></i>
-                            <select id="type_select" class="filter-input">
-                                <option disabled selected value="null">Type</option>
-                            </select>
+                        <div class="d-flex gap-1">
+
+                            <!-- Model -->
+                            <div class="filter-box flex-grow-1">
+                                <i class="fa fa-cube"></i>
+                                <select id="model_select" class="filter-input">
+                                    <option disabled selected value="null">Model</option>
+                                </select>
+                            </div>
+
+                            <!-- Type -->
+                            <div class="filter-box flex-grow-1">
+                                <i class="fa fa-tags"></i>
+                                <select id="type_select" class="filter-input">
+                                    <option disabled selected value="null">Type</option>
+                                </select>
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <div class="d-flex gap-1">
+                            <!-- Sub Type -->
+                            <div class="filter-box flex-grow-1">
+                                <i class="fa fa-list"></i>
+                                <input type="text" id="sub_type_select" class="filter-input" placeholder="Sub Type">
+                            </div>
 
-                    <div class="d-flex gap-1">
-                        <!-- Sub Type -->
-                        <div class="filter-box flex-grow-1">
+                            <!-- Add Sub Type Button -->
+                            <button class="filter-btn-action bg-primary text-white" id="sub_type_add_btn">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="filter-box">
                             <i class="fa fa-list"></i>
-                            <input type="text" id="sub_type_select" class="filter-input" placeholder="Sub Type">
+                            <input type="text" id="sub_type_box" class="filter-input" disabled placeholder="Sub Type">
                         </div>
 
-                        <!-- Add Sub Type Button -->
-                        <button class="filter-btn-action bg-primary text-white" id="sub_type_add_btn">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
+                        <div class="hr"></div>
 
-                    <div class="filter-box">
-                        <i class="fa fa-list"></i>
-                        <input type="text" id="sub_type_box" class="filter-input" disabled placeholder="Sub Type">
-                    </div>
+                        <h6 class="text-center">DCF</h6>
 
-                    <div class="hr"></div>
-
-                    <h6 class="text-center">DCF</h6>
-
-                    <!-- Status -->
-                    <div class="filter-box">
-                        <i class="fa fa-check-circle"></i>
-                        <select id="status" class="filter-input">
-                            <option disabled selected value="null">Status</option>
-                        </select>
-                    </div>
-
-                    <!-- Godown -->
-                    <div class="filter-box">
-                        <i class="fa fa-warehouse"></i>
-                        <select id="godown" class="filter-input">
-                            <option disabled selected value="null">Godown</option>
-                        </select>
-                    </div>
-
-                    <div class="d-flex gap-1">
-                        <!-- Remaining DCF -->
-                        <div class="filter-box flex-grow-1">
-                            <i class="fa fa-phone"></i>
-                            <input type="number" id="remaining_dcf" class="filter-input" placeholder="Remain DCF">
+                        <!-- Status -->
+                        <div class="filter-box">
+                            <i class="fa fa-check-circle"></i>
+                            <select id="status" class="filter-input">
+                                <option disabled selected value="null">Status</option>
+                            </select>
                         </div>
 
-                        <!-- Unassigned Quantity -->
-                        <div class="filter-box flex-grow-1">
-                            <i class="fa fa-phone"></i>
-                            <input type="number" id="unassigned_qty" class="filter-input"
-                                placeholder="Unassigned Quantity">
+                        <!-- Godown -->
+                        <div class="filter-box">
+                            <i class="fa fa-warehouse"></i>
+                            <select id="godown" class="filter-input">
+                                <option disabled selected value="null">Godown</option>
+                            </select>
                         </div>
+
+                        <div class="d-flex gap-1">
+                            <!-- Remaining DCF -->
+                            <div class="filter-box flex-grow-1">
+                                <i class="fa fa-phone"></i>
+                                <input type="number" id="remaining_dcf" class="filter-input" placeholder="Remain DCF">
+                            </div>
+
+                            <!-- Unassigned Quantity -->
+                            <div class="filter-box flex-grow-1">
+                                <i class="fa fa-phone"></i>
+                                <input type="number" id="unassigned_qty" class="filter-input"
+                                    placeholder="Unassigned Quantity">
+                            </div>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="filter-box">
+                            <i class="fa fa-calendar"></i>
+                            <input type="date" id="production_s_date" class="filter-input">
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="filter-box">
+                            <i class="fa fa-calendar-check"></i>
+                            <input type="date" id="production_e_date" class="filter-input">
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-1">
+                            <!-- Clear -->
+                            <button class="filter-btn-action bg-warning border-0" id="clear_btn">
+                                <i class="fa fa-broom"></i> Clear
+                            </button>
+
+                            <!-- Filter -->
+                            <button class="filter-btn-action bg-primary text-white" id="filter_btn">
+                                <i class="fa fa-search"></i> Filter
+                            </button>
+                        </div>
+
                     </div>
-
-                    <!-- Start Date -->
-                    <div class="filter-box">
-                        <i class="fa fa-calendar"></i>
-                        <input type="date" id="production_s_date" class="filter-input">
-                    </div>
-
-                    <!-- End Date -->
-                    <div class="filter-box">
-                        <i class="fa fa-calendar-check"></i>
-                        <input type="date" id="production_e_date" class="filter-input">
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-1">
-                        <!-- Clear -->
-                        <button class="filter-btn-action bg-warning border-0" id="clear_btn">
-                            <i class="fa fa-broom"></i> Clear
-                        </button>
-
-                        <!-- Filter -->
-                        <button class="filter-btn-action bg-primary text-white" id="filter_btn">
-                            <i class="fa fa-search"></i> Filter
-                        </button>
-                    </div>
-
                 </div>
             </div>
 
 
-            <div class="col-md-10">
-                <div class="table-responsive " style="max-height: 90vh; overflow-y: auto;">
 
-                    <table id='order_table1'
-                        class='table table-bordered border-dark border-opacity-50 text-center small'>
-                        <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
-                            <tr>
 
-                                <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
 
-                            </tr>
 
-                            <tr>
 
-                                <th scope='col'>#</th>
-                                <th scope='col' style="width: 10%;">
-                                    <div id="compactFilterBar">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-hashtag"></i>
-                                            <input type="number" id="order_no" class="filter-input text-dark"
-                                                placeholder="Order No">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box text-center" style="background-color: #f6f4f4;">
-                                            Dated</div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-user"></i>
-                                            <input type="text" id="emp_auto" class="filter-input text-dark"
-                                                placeholder="Employee">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-money"></i>
-                                            <select id="payment" class="filter-input text-dark">
-                                                <option disabled selected value="null">Payment</option>
-                                                <option value="1">Pending</option>
-                                                <option value="">All</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar" class="d-flex">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-users"></i>
-                                            <input type="text" id="cust_auto" class="filter-input text-dark"
-                                                placeholder="Customer">
-                                        </div>
 
-                                        <!-- Customer No -->
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-phone"></i>
-                                            <input type="number" id="cust_phone_auto" class="filter-input text-dark"
-                                                placeholder="Mobile">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
 
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box" style="background-color: #f6f4f4;">Product
-                                        </div>
-                                    </div>
-                                </th>
 
-                                <!-- <th scope='col'>Download</th> -->
-                                <th scope='col' style="width: 10%;">
 
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box " style="background-color: #f6f4f4;">DCF
-                                        </div>
-                                    </div>
-                                </th>
+
+
+
+            <div class="card d-none" id="order_form_div">
+                <div class="card-header d-flex justify-content-center">
+                    Sales Order Approval Form
+                </div>
+                <div class="card-body" id="order_form">
+
+
+
+
+                    <div
+                        class="d-flex justify-content-center mt-2 mb-0  text-bg-light border border-1 d-flex justify-content-around ">
+
+
+                        <img src="/jaysan_12-08/img/jaysan_logo.png" class="img-fluid my-auto "
+                            style=" max-height: 50px;" alt="">
+
+
+
+                    </div>
+                    <div class="d-flex justify-content-center  text-bg-light p-2 border border-1">
+
+                        <p class="small my-auto  "> order catergory : <span class="fw-bold"
+                                id="order_category_tbl"></span>
+                        </p>
+
+
+
+                    </div>
+
+                    <table id='' class='  table table-sm table-bordered border-dark border-opacity-50 text-center '>
+                        <thead>
+                            <tr class="small">
+                                <th scope="col" class="small">Order No</th>
+                                <td class="small" id="order_no_tbl"></td>
+
+                                <th scope="col" class="small">Employee</th>
+                                <td class="small" id="emp_name_tbl"></td>
 
 
                             </tr>
+                            <tr class="small">
+                                <th scope="col" class="small">Date</th>
+                                <td class="small" id="document_date_tbl"></td>
+
+                                <th scope="col" class="small">Desigination</th>
+                                <td class="small" id="desigi_tbl"></td>
+
+
+                            </tr>
+
+
+                            <tr class="small">
+
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Customer</th>
+
+                            </tr>
+
+
+
+                            <tr class="small">
+                                <th scope="col"> Name</th>
+                                <td id="cus_name_tbl"></td>
+                                <th scope="col">Phone</th>
+                                <td id="cus_phone_tbl"></td>
+
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Address</th>
+                                <td id="delivery_address_tbl" colspan="3"></td>
+                            </tr>
+
+                            <tr class="small">
+
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25 small'>Product</th>
+
+                            </tr>
+
+
                         </thead>
+                        <tbody class='align-middle small' id='sales_order_table'>
+                            <tr class="small">
+                                <th scope="col" class="small">Production Untill</th>
+                                <td colspan="3" id="production_untill_tbl" class="small "></td>
 
-                        <tbody class='align-middle ' id='order_table'>
+
+
+
+                            </tr>
+
+                            <tr>
+
+                            </tr>
+                            <tr class="small">
+                                <th>S.no</th>
+                                <th>Product/Model/Type</th>
+                                <th>Sub Type</th>
+                                <th>Qty</th>
+                            </tr>
+                            <tr class="small" id="app_product_details">
+
+                            </tr>
+                            <tr class="small">
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Prodcut Status</th>
+                            </tr>
+                            <tr class="small" id="product_status_tr">
+
+
+                            </tr>
+
+                            </tr>
+
+                            <tr class="small">
+
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment</th>
+
+                            </tr>
+                            <tr class="small">
+
+                                <td colspan="2"> Total : <span id="total_payment_tbl"></span> </td>
+                                <td colspan="2"> Advance : <span id="advance_payment_tbl"></span></td>
+
+                            </tr>
+                            <tr class="small">
+                                <td colspan="2">
+                                    Balance : <span id="balance_payment_tbl"></span>
+                                </td>
+                                <td colspan="2">
+                                    Next Payment Date : <span id="nex_payment_date_tbl"></span>
+                                </td>
+                            </tr>
+                            <tr class="small">
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment Details</th>
+                            </tr>
+                            <tr class="small">
+
+
+                                <th colspan="2" scope="col">Date</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Approved</th>
+                            </tr>
+                            <tr class="small" id="payment_details_tr">
+
+                            </tr>
+
+                            <tr class="small">
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Order Details</th>
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Order Type</th>
+                                <td id="order_type_tbl"></td>
+                                <th scope="col">
+                                    OE Supply
+                                </th>
+                                <td id="oe_supply_tbl"></td>
+
+
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Commitment Date</th>
+                                <td id="commitment_date_tbl"></td>
+                                <th scope="col"> Qty</th>
+                                <td id="required_qty_tbl"></td>
+
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Color Type</th>
+                                <td colspan="3" id="regular_clr_chk_tbl"></td>
+
+
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Color Choice</th>
+                                <td colspan="3" id="color_choice_des_tbl"></td>
+                            </tr>
+                            <tr class="small">
+                                <th scope="col">Chasis No</th>
+                                <td colspan="3" id="regular_chasis_chk_tbl"></td>
+
+
+                            </tr>
+
+                            <tr class="small">
+                                <th scope="col">Chasis Choice</th>
+                                <td colspan="3" id="chasis_choice_des_tbl"></td>
+                            </tr>
+
+
+                            <tr class="small">
+                                <th scope="col">Loading Type</th>
+                                <td colspan="3" id="loading_type_tbl"></td>
+                            </tr>
+
+                            <tr class="small">
+                                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Any Other Specs</th>
+
+                            </tr>
+                            <tr class="small">
+                                <td colspan="6" class="p-0 m-0" id="any_other_spec_tbl"> </td>
+
+
+                            </tr>
+                            <tr class="small text-bg-light">
+                                <th colspan="2">
+                                    Submitted by Business Head
+                                </th>
+                                <th>Authorized Approval</th>
+                                <th>Received by Production Head</th>
+                            </tr>
+                            <tr class="small">
+                                <td colspan="2" class="p-4"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
 
                         </tbody>
-
                     </table>
+
+
+
+
+
+
                 </div>
+
+
+
+
+
+
+
             </div>
 
-        </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        <div class="card d-none" id="order_form_div">
-            <div class="card-header d-flex justify-content-center">
-                Sales Order Approval Form
-            </div>
-            <div class="card-body" id="order_form">
-
-
-
-
-                <div
-                    class="d-flex justify-content-center mt-2 mb-0  text-bg-light border border-1 d-flex justify-content-around ">
-
-
-                    <img src="/jaysan_12-08/img/jaysan_logo.png" class="img-fluid my-auto " style=" max-height: 50px;"
-                        alt="">
-
-
-
+            <div class="card d-none" id="dispatch_form_div">
+                <div class="card-header d-flex justify-content-center">
+                    <h6>Dispatch Clearance Form</h6>
                 </div>
-                <div class="d-flex justify-content-center  text-bg-light p-2 border border-1">
+                <div class="card-body">
+                    <div class='input-group mb-2'>
+                        <div class='input-group-prepend '>
+                            <span class='input-group-text ' id='basic-addon1'>
+                                godown </span>
 
-                    <p class="small my-auto  "> order catergory : <span class="fw-bold" id="order_category_tbl"></span>
-                    </p>
-
-
-
-                </div>
-
-                <table id='' class='  table table-sm table-bordered border-dark border-opacity-50 text-center '>
-                    <thead>
-                        <tr class="small">
-                            <th scope="col" class="small">Order No</th>
-                            <td class="small" id="order_no_tbl"></td>
-
-                            <th scope="col" class="small">Employee</th>
-                            <td class="small" id="emp_name_tbl"></td>
+                        </div>
+                        <select class='custom-select form-control' id='godown'>
+                            <option disabled selected>Choose Options...</option>
 
 
-                        </tr>
-                        <tr class="small">
-                            <th scope="col" class="small">Date</th>
-                            <td class="small" id="document_date_tbl"></td>
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="button" id="add_godown">
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                            <th scope="col" class="small">Desigination</th>
-                            <td class="small" id="desigi_tbl"></td>
-
-
-                        </tr>
-
-
-                        <tr class="small">
-
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Customer</th>
-
-                        </tr>
-
-
-
-                        <tr class="small">
-                            <th scope="col"> Name</th>
-                            <td id="cus_name_tbl"></td>
-                            <th scope="col">Phone</th>
-                            <td id="cus_phone_tbl"></td>
-
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Address</th>
-                            <td id="delivery_address_tbl" colspan="3"></td>
-                        </tr>
-
-                        <tr class="small">
-
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25 small'>Product</th>
-
-                        </tr>
-
-
-                    </thead>
-                    <tbody class='align-middle small' id='sales_order_table'>
-                        <tr class="small">
-                            <th scope="col" class="small">Production Untill</th>
-                            <td colspan="3" id="production_untill_tbl" class="small "></td>
+                    <div class='input-group mb-2 '>
+                        <textarea class='form-control' id='godown_des' placeholder='godown_des' disabled
+                            rows='4'></textarea>
+                    </div>
 
 
 
 
-                        </tr>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h6>Customer</h6>
+                            <button class="btn btn-outline-danger border-0 btn-sm"> <i class="fa fa-pencil"
+                                    aria-hidden="true"></i> </button>
+                        </div>
+                        <div class="card-body">
+                            <div class='input-group mb-2 ' disabled>
+                                <textarea class='form-control' id='buyer' placeholder='buyer' rows='2'
+                                    disabled></textarea>
+                            </div>
 
+                            <div class='input-group mb-2' disabled>
+                                <label class='input-group-text' for='buy_gst'><span>
+                                        Gst
+                                    </span>
+                                </label>
+                                <input id='buy_gst' type='text' class='form-control' disabled>
+                            </div>
+
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='buy_contact'><span>
+                                        Contact
+                                    </span>
+                                </label>
+                                <input id='buy_contact' type='text' class='form-control' disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h6>Consignee</h6>
+                            <div class='form-check form-control-sm'>
+                                <label class='form-check-label small' for='same'>
+                                    Same As Customer
+                                </label>
+                                <input class='form-check-input' type='checkbox' value='' id='same'>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class='input-group mb-2 '>
+                                <textarea class='form-control' id='consignee' placeholder='consignee'
+                                    rows='2'></textarea>
+                            </div>
+
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='con_gst'><span>
+                                        Gst
+                                    </span>
+                                </label>
+                                <input id='con_gst' type='text' class='form-control'>
+                            </div>
+
+                            <div class='input-group mb-2'>
+                                <label class='input-group-text' for='con_contact'><span>
+                                        Contact
+                                    </span>
+                                </label>
+                                <input id='con_contact' type='text' class='form-control'>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <table class="table table-bordered">
                         <tr>
-
-                        </tr>
-                        <tr class="small">
-                            <th>S.no</th>
-                            <th>Product/Model/Type</th>
-                            <th>Sub Type</th>
-                            <th>Qty</th>
-                        </tr>
-                        <tr class="small" id="app_product_details">
-
-                        </tr>
-                        <tr class="small">
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Prodcut Status</th>
-                        </tr>
-                        <tr class="small" id="product_status_tr">
-
-
-                        </tr>
-
-                        </tr>
-
-                        <tr class="small">
-
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment</th>
-
-                        </tr>
-                        <tr class="small">
-
-                            <td colspan="2"> Total : <span id="total_payment_tbl"></span> </td>
-                            <td colspan="2"> Advance : <span id="advance_payment_tbl"></span></td>
-
-                        </tr>
-                        <tr class="small">
-                            <td colspan="2">
-                                Balance : <span id="balance_payment_tbl"></span>
+                            <td style="position: relative;">
+                                <span style="position: absolute; top: 0; right: 0;" class="text-bg-secondary">Top
+                                    Right</span>
+                                Content here
                             </td>
-                            <td colspan="2">
-                                Next Payment Date : <span id="nex_payment_date_tbl"></span>
-                            </td>
-                        </tr>
-                        <tr class="small">
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment Details</th>
-                        </tr>
-                        <tr class="small">
-
-
-                            <th colspan="2" scope="col">Date</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Approved</th>
-                        </tr>
-                        <tr class="small" id="payment_details_tr">
 
                         </tr>
-
-                        <tr class="small">
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Order Details</th>
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Order Type</th>
-                            <td id="order_type_tbl"></td>
-                            <th scope="col">
-                                OE Supply
-                            </th>
-                            <td id="oe_supply_tbl"></td>
+                    </table>
 
 
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Commitment Date</th>
-                            <td id="commitment_date_tbl"></td>
-                            <th scope="col"> Qty</th>
-                            <td id="required_qty_tbl"></td>
-
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Color Type</th>
-                            <td colspan="3" id="regular_clr_chk_tbl"></td>
-
-
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Color Choice</th>
-                            <td colspan="3" id="color_choice_des_tbl"></td>
-                        </tr>
-                        <tr class="small">
-                            <th scope="col">Chasis No</th>
-                            <td colspan="3" id="regular_chasis_chk_tbl"></td>
-
-
-                        </tr>
-
-                        <tr class="small">
-                            <th scope="col">Chasis Choice</th>
-                            <td colspan="3" id="chasis_choice_des_tbl"></td>
-                        </tr>
-
-
-                        <tr class="small">
-                            <th scope="col">Loading Type</th>
-                            <td colspan="3" id="loading_type_tbl"></td>
-                        </tr>
-
-                        <tr class="small">
-                            <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Any Other Specs</th>
-
-                        </tr>
-                        <tr class="small">
-                            <td colspan="6" class="p-0 m-0" id="any_other_spec_tbl"> </td>
-
-
-                        </tr>
-                        <tr class="small text-bg-light">
-                            <th colspan="2">
-                                Submitted by Business Head
-                            </th>
-                            <th>Authorized Approval</th>
-                            <th>Received by Production Head</th>
-                        </tr>
-                        <tr class="small">
-                            <td colspan="2" class="p-4"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-
-
-
-
-
-            </div>
-
-
-
-
-
-
-
-        </div>
-
-
-
-
-        <div class="card d-none" id="dispatch_form_div">
-            <div class="card-header d-flex justify-content-center">
-                <h6>Dispatch Clearance Form</h6>
-            </div>
-            <div class="card-body">
-                <div class='input-group mb-2'>
-                    <div class='input-group-prepend '>
-                        <span class='input-group-text ' id='basic-addon1'>
-                            godown </span>
-
-                    </div>
-                    <select class='custom-select form-control' id='godown'>
-                        <option disabled selected>Choose Options...</option>
-
-
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="button" id="add_godown">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                        </button>
-                    </div>
                 </div>
-
-                <div class='input-group mb-2 '>
-                    <textarea class='form-control' id='godown_des' placeholder='godown_des' disabled
-                        rows='4'></textarea>
-                </div>
-
-
-
-
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h6>Customer</h6>
-                        <button class="btn btn-outline-danger border-0 btn-sm"> <i class="fa fa-pencil"
-                                aria-hidden="true"></i> </button>
-                    </div>
-                    <div class="card-body">
-                        <div class='input-group mb-2 ' disabled>
-                            <textarea class='form-control' id='buyer' placeholder='buyer' rows='2' disabled></textarea>
-                        </div>
-
-                        <div class='input-group mb-2' disabled>
-                            <label class='input-group-text' for='buy_gst'><span>
-                                    Gst
-                                </span>
-                            </label>
-                            <input id='buy_gst' type='text' class='form-control' disabled>
-                        </div>
-
-                        <div class='input-group mb-2'>
-                            <label class='input-group-text' for='buy_contact'><span>
-                                    Contact
-                                </span>
-                            </label>
-                            <input id='buy_contact' type='text' class='form-control' disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h6>Consignee</h6>
-                        <div class='form-check form-control-sm'>
-                            <label class='form-check-label small' for='same'>
-                                Same As Customer
-                            </label>
-                            <input class='form-check-input' type='checkbox' value='' id='same'>
-
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class='input-group mb-2 '>
-                            <textarea class='form-control' id='consignee' placeholder='consignee' rows='2'></textarea>
-                        </div>
-
-                        <div class='input-group mb-2'>
-                            <label class='input-group-text' for='con_gst'><span>
-                                    Gst
-                                </span>
-                            </label>
-                            <input id='con_gst' type='text' class='form-control'>
-                        </div>
-
-                        <div class='input-group mb-2'>
-                            <label class='input-group-text' for='con_contact'><span>
-                                    Contact
-                                </span>
-                            </label>
-                            <input id='con_contact' type='text' class='form-control'>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <table class="table table-bordered">
-                    <tr>
-                        <td style="position: relative;">
-                            <span style="position: absolute; top: 0; right: 0;" class="text-bg-secondary">Top
-                                Right</span>
-                            Content here
-                        </td>
-
-                    </tr>
-                </table>
-
-
             </div>
         </div>
     </div>

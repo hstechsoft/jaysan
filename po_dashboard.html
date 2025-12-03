@@ -44,124 +44,239 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
 
-        </section>
+        <section id="menu_bar" class="d-none"></section>
 
-        <!-- content -->
-        <div class="py-2 row">
-            <div class="col-6">
-                <div class="table-responsive" style="max-height: 750px; overflow-y: auto;">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption>Material Details</caption>
-                        <thead>
 
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col" class="align-middle">
 
-                                    <div class="d-flex align-items-center justify-content-between">
 
-                                        <span class="fw-semibold">MRF Material</span>
 
-                                        <div class="input-group input-group-sm" style="width: 180px;">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-search text-muted"></i>
-                                            </span>
-                                            <input type="text" id="myInput_web"
-                                                class="form-control border-start-0 bg-light" placeholder="Search..."
-                                                style="box-shadow:none;">
+        <div class="page-wrapper">
+
+            <!-- content -->
+            <div class="py-2 row">
+                <div class="col-6">
+                    <div class="table-responsive" style="max-height: 750px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption>Material Details</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="align-middle">
+
+                                        <div class="d-flex align-items-center justify-content-between">
+
+                                            <span class="fw-semibold">MRF Material</span>
+
+                                            <div class="input-group input-group-sm" style="width: 180px;">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="fa fa-search text-muted"></i>
+                                                </span>
+                                                <input type="text" id="myInput_web"
+                                                    class="form-control border-start-0 bg-light" placeholder="Search..."
+                                                    style="box-shadow:none;">
+                                            </div>
+
                                         </div>
 
-                                    </div>
+                                    </th>
 
-                                </th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Frequency</th>
 
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Frequency</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="material_chart">
+                                </tr>
+                            </thead>
+                            <tbody id="material_chart">
 
 
-                        </tbody>
+                            </tbody>
 
 
-                    </table>
-                </div>
-            </div>
-            <div class="col-6">
-
-                <div class="card " id="">
-                    <div class="card-header">
-                        Overall Chart
-                    </div>
-                    <div class="card-body" style="height: 390px;" id="">
-                        <div id="material_piechart_3d" style="width: 700px; height: 400px;"></div>
+                        </table>
                     </div>
                 </div>
+                <div class="col-6">
 
-                <div class="card d-none" id="next_chart">
-                    <div class="card-header" id="">
-                        <p id="part_name_head"></p>
-
+                    <div class="card " id="">
+                        <div class="card-header">
+                            Overall Chart
+                        </div>
+                        <div class="card-body" style="height: 390px;" id="">
+                            <div id="material_piechart_3d" style="width: 700px; height: 400px;"></div>
+                        </div>
                     </div>
-                    <div class="card-body" style="height: 290px;" id="">
-                        <div id="company_piechart_3d" style="width: 700px; height: 350px;"></div>
+
+                    <div class="card d-none" id="next_chart">
+                        <div class="card-header" id="">
+                            <p id="part_name_head"></p>
+
+                        </div>
+                        <div class="card-body" style="height: 290px;" id="">
+                            <div id="company_piechart_3d" style="width: 700px; height: 350px;"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="col-6 d-none" id="next_chart">
+                    <div id="frequency_line_chart" style="width: 900px; height: 500px;"></div>
+                </div>
+
+
+                <div class="col-6 d-none" id="next_chart">
+                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption>Company Details</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Companies</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Frequency</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="company_chart">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col-6 d-none" id="next_chart">
+                    <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption>Frequency Details</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Quantity</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="frequency_chart">
+
+
+                            </tbody>
+
+
+                        </table>
                     </div>
                 </div>
 
             </div>
 
+            <div class="py-5">
+                <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="po_details_form" novalidate
+                    onsubmit="return false">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="part" placeholder="">
+                                <label for="part">Material
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="emp_name" placeholder="">
+                                <label for="emp_name">Employee
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control rounded-3" id="from_date" placeholder="">
+                                <label for="from_date">From Date
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control rounded-3" id="to_date" placeholder="">
+                                <label for="to_date">To Date
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="raw_material" placeholder="">
+                                <label for="raw_material">Raw Material
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="company" placeholder="">
+                                <label for="company">Company
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 pt-2 text-center">
+                            <button type="submit" class="btn btn-primary" id="search"><i
+                                    class="fa fa-search"></i></button>
+                        </div>
+                    </div>
 
 
-
-
-            <div class="col-6 d-none" id="next_chart">
-                <div id="frequency_line_chart" style="width: 900px; height: 500px;"></div>
-            </div>
-
-
-            <div class="col-6 d-none" id="next_chart">
-                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                </form>
+                <div class="table-responsive">
                     <table class="table caption-top table-bordered table-striped ">
-                        <caption>Company Details</caption>
+                        <caption></caption>
                         <thead>
 
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Companies</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Frequency</th>
+                                <th scope="col">MRF Details</th>
+                                <th scope="col">Purchase details</th>
+                                <th scope="col">Batch Details</th>
 
                             </tr>
                         </thead>
-                        <tbody id="company_chart">
-
-
-                        </tbody>
-
-
-                    </table>
-                </div>
-            </div>
-            <div class="col-6 d-none" id="next_chart">
-                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption>Frequency Details</caption>
-                        <thead>
-
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Quantity</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="frequency_chart">
-
+                        <tbody id="po_dashboard_details">
 
                         </tbody>
 
@@ -171,107 +286,6 @@
             </div>
 
         </div>
-
-        <div class="py-5">
-            <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="po_details_form" novalidate
-                onsubmit="return false">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="part" placeholder="">
-                            <label for="part">Material
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="emp_name" placeholder="">
-                            <label for="emp_name">Employee
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="date" class="form-control rounded-3" id="from_date" placeholder="">
-                            <label for="from_date">From Date
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="date" class="form-control rounded-3" id="to_date" placeholder="">
-                            <label for="to_date">To Date
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="raw_material" placeholder="">
-                            <label for="raw_material">Raw Material
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="company" placeholder="">
-                            <label for="company">Company
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 pt-2 text-center">
-                        <button type="submit" class="btn btn-primary" id="search"><i class="fa fa-search"></i></button>
-                    </div>
-                </div>
-
-
-            </form>
-            <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped ">
-                    <caption></caption>
-                    <thead>
-
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">MRF Details</th>
-                            <th scope="col">Purchase details</th>
-                            <th scope="col">Batch Details</th>
-
-                        </tr>
-                    </thead>
-                    <tbody id="po_dashboard_details">
-
-                    </tbody>
-
-
-                </table>
-            </div>
-        </div>
-
-
 
     </div>
 

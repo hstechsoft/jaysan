@@ -174,6 +174,79 @@
             background-color: #ffffff;
             z-index: 5;
         }
+
+
+
+
+        /* Ultra-compact modern form */
+        .styled-form .form-control,
+        .styled-form .form-select {
+            height: 40px;
+            /* smaller height */
+            border-radius: 10px;
+            border: 1px solid #d0d0d0;
+            padding-left: 36px !important;
+            /* reduced left padding */
+            padding-right: 10px !important;
+            font-size: 13px;
+        }
+
+        .form-floating>.form-select {
+            padding-top: 0.99rem;
+            padding-bottom: 0rem;
+        }
+
+        .styled-form .form-floating>label {
+            padding-left: 36px !important;
+            font-size: 12px;
+        }
+
+        .styled-form .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #777;
+        }
+
+        .styled-form .form-floating {
+            position: relative;
+            margin-bottom: 5px !important;
+            /* reduce spacing between fields */
+        }
+
+        /* Card padding reduced */
+        .styled-card {
+            padding: 8px 10px !important;
+        }
+
+        .styled-card .card-body {
+            padding: 8px !important;
+        }
+
+        .styled-title {
+            font-size: 12px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        /* section boxes (condensed) */
+        .section-box {
+            padding: 6px 8px !important;
+            background: #f7f7f7;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-top: 6px;
+        }
+
+        /* Buttons compact */
+        .btn-clear,
+        .btn-filter {
+            padding: 4px 14px !important;
+            border-radius: 16px !important;
+            font-size: 13px !important;
+        }
     </style>
 
 
@@ -201,211 +274,249 @@
 
 
 
-        <section id="menu_bar">
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
+
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
+
+        <section id="menu_bar" class="d-none"></section>
 
 
-        </section>
 
-        <!-- content -->
-        <div class="row py-5">
-            <div class="col-md-8 mx-auto">
 
-                <div class="card shadow-sm rounded-3">
-                    <h5 class="py-2 m-0 text-center bg-dark text-light rounded-top">
-                        <i class="bi bi-gear"></i> Machine Production Modification
-                    </h5>
 
-                    <div class="card-body pb-1">
+        <div class="page-wrapper">
+            <!-- content -->
+            <div class="row py-1">
+                <div class="col-md-2 mx-auto">
 
-                        <form id="machine_production_form" class="needs-validation" novalidate>
+                    <div class="card shadow-sm rounded-3 styled-card">
+                        <h5 class="m-0 text-center bg-dark text-light rounded-top py-2">
+                            <i class="bi bi-filter"></i> Filter
+                        </h5>
 
-                            <div class="row g-2">
+                        <div class="card-body styled-form">
 
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <input type="number" class="form-control" id="order" required>
-                                        <label><i class="bi bi-receipt text-primary"></i> Order *</label>
-                                    </div>
-                                </div>
+                            <form id="machine_production_form" class="needs-validation" novalidate>
 
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="customer" required>
-                                        <label><i class="bi bi-person-badge text-success"></i> Customer *</label>
-                                    </div>
-                                </div>
+                                <div class="row g-0">
 
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="product" required>
-                                            <option disabled selected>Select Product...</option>
-                                        </select>
-                                        <label><i class="bi bi-box-seam text-info"></i> Product *</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="model" required>
-                                            <option disabled selected>Select Model...</option>
-                                        </select>
-                                        <label><i class="bi bi-cpu text-warning"></i> Model *</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="type_drop" required>
-                                            <option disabled selected>Select Type...</option>
-                                        </select>
-                                        <label><i class="bi bi-layers text-success"></i> Type *</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="sub_type" required>
-                                            <option disabled selected>Select Sub Type...</option>
-                                        </select>
-                                        <label><i class="bi bi-diagram-3 text-danger"></i> Sub Type *</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="godown">
-                                            <option disabled selected>Choose...</option>
-                                        </select>
-                                        <label><i class="bi bi-building text-primary"></i> Godown</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="emp" placeholder="">
-                                        <label for="emp">Employee </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="ass_type">
-                                            <option value="Production">Production</option>
-                                            <option value="Finshed">Finished</option>
-                                            <option value="Waiting">Waiting</option>
-                                        </select>
-                                        <label><i class="bi bi-check2-circle text-success"></i> Assign Type</label>
-                                    </div>
-                                </div>
-
-                                <!-- Dates Section -->
-                                <div class="col-md-4 p-2 border rounded-3 bg-light">
-
-                                    <h6 class="text-start text-primary mb-2" style="font-size: 12px;"><i
-                                            class="bi bi-calendar-event"></i>
-                                        Production Date</h6>
-                                    <div class="row g-2 mb-2">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="date" class="form-control" id="form_date" required>
-                                                <label>Start Date *</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="date" class="form-control" id="to_date" required>
-                                                <label>To Date *</label>
-                                            </div>
+                                    <!-- Order -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-receipt input-icon"></i>
+                                            <input type="number" class="form-control" id="order" required>
+                                            <label>Order *</label>
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <div class="col-md-4 p-2 border rounded-3 bg-light">
-
-                                    <h6 class="text-start text-danger mb-2" style="font-size: 12px;"><i
-                                            class="bi bi-bag-check"></i> Sales Date
-                                    </h6>
-                                    <div class="row g-2">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="date" class="form-control" id="s_form_date" required>
-                                                <label>Start Date *</label>
-                                            </div>
+                                    <!-- Customer -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-person-badge input-icon text-success"></i>
+                                            <input type="text" class="form-control" id="customer" required>
+                                            <label>Customer *</label>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="date" class="form-control" id="e_to_date" required>
-                                                <label>To Date *</label>
+                                    </div>
+
+                                    <!-- Product -->
+                                    <div class="col-12 styled-form">
+                                        <div class="form-floating">
+                                            <i class="bi bi-box-seam input-icon text-info"></i>
+                                            <select class="form-select" id="product" required>
+                                                <option disabled selected>Select Product...</option>
+                                            </select>
+                                            <label>Product *</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Model -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-cpu input-icon text-warning"></i>
+                                            <select class="form-select" id="model" required>
+                                                <option disabled selected>Select Model...</option>
+                                            </select>
+                                            <label>Model *</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Type -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-layers input-icon text-success"></i>
+                                            <select class="form-select" id="type_drop" required>
+                                                <option disabled selected>Select Type...</option>
+                                            </select>
+                                            <label>Type *</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sub Type -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-diagram-3 input-icon text-danger"></i>
+                                            <select class="form-select" id="sub_type" required>
+                                                <option disabled selected>Select Sub Type...</option>
+                                            </select>
+                                            <label>Sub Type *</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Godown -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-building input-icon text-primary"></i>
+                                            <select class="form-select" id="godown">
+                                                <option disabled selected>Choose...</option>
+                                            </select>
+                                            <label>Godown</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Employee -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-people input-icon"></i>
+                                            <input type="text" class="form-control" id="emp">
+                                            <label>Employee</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Assign Type -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <i class="bi bi-check2-circle input-icon text-success"></i>
+                                            <select class="form-select" id="ass_type">
+                                                <option value="Production" selected>Production</option>
+                                                <option value="Finshed">Finished</option>
+                                                <option value="Waiting">Waiting</option>
+                                            </select>
+                                            <label>Assign Type</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Production Date Section -->
+                                    <div class="col-12 section-box">
+                                        <div class="styled-title text-primary">
+                                            <i class="bi bi-calendar-event"></i> Production Date
+                                        </div>
+
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <i class="bi bi-calendar input-icon"></i>
+                                                    <input type="date" class="form-control" id="form_date" required>
+                                                    <label>Start *</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <i class="bi bi-calendar-check input-icon"></i>
+                                                    <input type="date" class="form-control" id="to_date" required>
+                                                    <label>End *</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Sales Date Section -->
+                                    <div class="col-12 section-box">
+                                        <div class="styled-title text-danger">
+                                            <i class="bi bi-bag-check"></i> Sales Date
+                                        </div>
+
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <i class="bi bi-calendar input-icon"></i>
+                                                    <input type="date" class="form-control" id="s_form_date" required>
+                                                    <label>Start *</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="form-floating">
+                                                    <i class="bi bi-calendar-check input-icon"></i>
+                                                    <input type="date" class="form-control" id="e_to_date" required>
+                                                    <label>End *</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
 
-                            <div class="text-center mt-3">
-                                <button type="reset" class="btn btn-outline-dark btn-sm" id="reset_btn">
-                                    <i class="bi bi-arrow-repeat"></i> Reset
-                                </button>
-                                <button type="submit" class="btn btn-primary btn-sm ms-2" id="search_btn">
-                                    <i class="bi bi-search"></i> Search
-                                </button>
-                            </div>
-                        </form>
+                                <!-- Buttons -->
+                                <div class="text-center mt-2">
+                                    <button type="reset" class="btn btn-clear btn-sm btn-warning me-2" id="reset_btn">
+                                        <i class="bi bi-brush"></i> Clear
+                                    </button>
+                                    <button type="submit" class="btn btn-filter btn-sm btn-primary" id="search_btn">
+                                        <i class="bi bi-funnel"></i> Filter
+                                    </button>
+                                </div>
 
+                            </form>
+                        </div>
                     </div>
 
                 </div>
 
 
 
-                <!-- RESULT TABLE -->
-                <div class="card shadow-sm">
-                    <h5 class="text-center py-2 m-0 border-bottom bg-light">Machine Production Report</h5>
-                    <div class="card-body p-2">
-                        <div class="table-responsive" style='height:450px; overflow-y:auto'>
-                            <table class="table table-bordered table-striped table-sm" id="production_table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 0%;">#</th>
-                                        <th style="width: 30%;">Customer</th>
-                                        <th style="width: 20%;">Product</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="report_tbl"></tbody>
-                            </table>
+                <div class="col-md-6">
+                    <!-- RESULT TABLE -->
+                    <div class="card shadow-sm">
+                        <h5 class="text-center py-2 m-0 border-bottom bg-light">Machine Production Report</h5>
+                        <div class="card-body p-2">
+                            <div class="table-responsive" style='height:85vh; overflow-y:auto'>
+                                <table class="table table-bordered table-striped table-sm" id="production_table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 0%;">#</th>
+                                            <th style="width: 25%;">Customer</th>
+                                            <th style="width: 25%;">Product</th>
+                                            <th>Machine Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="report_tbl"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
-            </div>
 
+                <div class="col-md-4">
+                    <div class="card calender" id="calender_card">
+                        <h4 class="text-center" style="font-size: 15px;">Calender Report</h4>
+                        <div class="card-body p-0" id="calender">
+                            <div id="calendar_div">
+                                <div id="calendar" class="p-2"></div>
+                                <div class="d-flex   justify-content-center gap-2  align-content-center">
+                                    <div>
+                                        <p>Selected Date : </p>
+                                    </div>
 
+                                    <div>
+                                        <div class='input-group  input-group-sm'>
 
-            <div class="col-md-4">
-                <div class="card calender" id="calender_card">
-                    <h4 class="text-center" style="font-size: 15px;">Calender Report</h4>
-                    <div class="card-body p-0" id="calender">
-                        <div id="calendar_div">
-                            <div id="calendar" class="p-2"></div>
-                            <div class="d-flex   justify-content-center gap-2  align-content-center">
-                                <div>
-                                    <p>Selected Date : </p>
-                                </div>
+                                            <input type='date' disabled id='production_date' class='form-control'
+                                                placeholder='Date'>
 
-                                <div>
-                                    <div class='input-group  input-group-sm'>
-
-                                        <input type='date' disabled id='production_date' class='form-control'
-                                            placeholder='Date'>
-
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
+                                <!-- <div class="d-flex justify-content-center gap-2" id="production_div">
                             <div>
                                 <div class='input-group  input-group-sm' >
                               
@@ -421,7 +532,7 @@
                         </div> -->
 
 
-                            <!-- <div class="card">
+                                <!-- <div class="card">
                             <div class="card-header small">
                                 Order Details
                             </div>
@@ -430,191 +541,196 @@
                             </div>
                         </div> -->
 
-                            <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
-                                <table id=''
-                                    class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
-                                    <thead class="small">
-                                        <tr class="small">
-                                            <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report
-                                            </th>
-                                        </tr>
-                                        <tr class="small">
-                                            <th scope='col'>#</th>
-                                            <th scope='col'>Customer</th>
-                                            <th scope='col'>Machine</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class='align-middle' id='production_table_cal'>
-                                        <!-- Dynamic rows go here -->
+                                <div style="max-height: 50vh; overflow-y: auto; border: 1px solid #ccc;" class="mt-1">
+                                    <table id=''
+                                        class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
+                                        <thead class="small">
+                                            <tr class="small">
+                                                <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production
+                                                    Report
+                                                </th>
+                                            </tr>
+                                            <tr class="small">
+                                                <th scope='col'>#</th>
+                                                <th scope='col'>Customer</th>
+                                                <th scope='col'>Machine</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class='align-middle' id='production_table_cal'>
+                                            <!-- Dynamic rows go here -->
 
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="card bg-light border-top p-2">
-                    <div class="production d-none">
-                        <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gear"></i> Update</h6>
-
-                        <div class="d-flex gap-4 align-items-center mb-2 ps-2">
-                            <label class="fw-medium me-3">
-                                <input type="radio" name="production_category" id="date_change" value="Date"
-                                    class="form-check-input me-1">
-                                Production
-                            </label>
-
-                            <label class="fw-medium">
-                                <input type="radio" name="production_category" id="godown_change" value="Godown"
-                                    class="form-check-input me-1">
-                                Finish
-                            </label>
-                        </div>
-
-                        <div class="row px-2">
-                            <div class="col-md-6 mb-2 d-none" id="pro_date">
-                                <div class="form-floating">
-                                    <input type="date" class="form-control" id="pro_date_chng">
-                                    <label for="pro_date_chng"><i class="bi bi-calendar-date"></i> Change
-                                        Date</label>
+                                        </tbody>
+                                    </table>
                                 </div>
+
                             </div>
 
-                            <div class="col-md-6 mb-2 d-none" id="pro_godown">
-                                <div class="form-floating">
-                                    <select class="form-select" id="pro_godownn">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building"></i> Select Godown</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-end mt-3">
-                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn1">
-                                        <i class="bi bi-check2-circle"></i> Submit
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div class="godown d-none">
-                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-box-seam"></i>Update</h6>
-                        <div class="row px-2">
-                            <div class="col-md-6 mb-2 ">
-                                <div class="form-floating">
-                                    <select class="form-select" id="finish_godownn">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building"></i> Godown</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-end mt-3">
-                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn2">
-                                        <i class="bi bi-check2-circle"></i> Submit
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="waiting d-none">
-                        <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hourglass-split"></i>
-                            Update</h6>
 
-                        <div class="d-flex gap-4 align-items-center mb-2 ps-2">
-                            <label class="fw-medium me-3">
-                                <input type="radio" name="waiting_category" id="wait_date_change" value="Date"
-                                    class="form-check-input me-1">
-                                Production
-                            </label>
+                    <div class="card bg-light border-top p-2">
+                        <div class="production d-none">
+                            <h6 class="fw-bold text-primary mb-2"><i class="bi bi-gear"></i> Update</h6>
 
-                            <label class="fw-medium">
-                                <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown"
-                                    class="form-check-input me-1">
-                                Finish
-                            </label>
+                            <div class="d-flex gap-4 align-items-center mb-2 ps-2">
+                                <label class="fw-medium me-3">
+                                    <input type="radio" name="production_category" id="date_change" value="Date"
+                                        class="form-check-input me-1">
+                                    Production
+                                </label>
+
+                                <label class="fw-medium">
+                                    <input type="radio" name="production_category" id="godown_change" value="Godown"
+                                        class="form-check-input me-1">
+                                    Finish
+                                </label>
+                            </div>
+
+                            <div class="row px-2">
+                                <div class="col-md-6 mb-2 d-none" id="pro_date">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="pro_date_chng">
+                                        <label for="pro_date_chng"><i class="bi bi-calendar-date"></i> Change
+                                            Date</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-2 d-none" id="pro_godown">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="pro_godownn">
+                                            <option disabled selected>Choose...</option>
+                                        </select>
+                                        <label><i class="bi bi-building"></i> Select Godown</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn1">
+                                            <i class="bi bi-check2-circle"></i> Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
 
-                        <div class="row px-2">
-                            <div class="col-md-6 mb-2 d-none" id="wait_date">
-                                <div class="form-floating">
-                                    <input type="date" class="form-control" id="wait_pro_date">
-                                    <label for="wait_pro_date"><i class="bi bi-calendar2-week"></i> Select
-                                        Date</label>
+                        <div class="godown d-none">
+                            <h6 class="fw-bold text-success mb-2"><i class="bi bi-box-seam"></i>Update</h6>
+                            <div class="row px-2">
+                                <div class="col-md-6 mb-2 ">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="finish_godownn">
+                                            <option disabled selected>Choose...</option>
+                                        </select>
+                                        <label><i class="bi bi-building"></i> Godown</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2 d-none" id="wait_godown">
-                                <div class="form-floating">
-                                    <select class="form-select" id="wait_godownn">
-                                        <option disabled selected>Choose...</option>
-                                    </select>
-                                    <label><i class="bi bi-building"></i> Godown</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-end mt-3">
-                                    <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn3">
-                                        <i class="bi bi-check2-circle"></i> Submit
-                                    </button>
+                                <div class="col-md-6">
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn2">
+                                            <i class="bi bi-check2-circle"></i> Submit
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="waiting d-none">
+                            <h6 class="fw-bold text-warning mb-2"><i class="bi bi-hourglass-split"></i>
+                                Update</h6>
 
+                            <div class="d-flex gap-4 align-items-center mb-2 ps-2">
+                                <label class="fw-medium me-3">
+                                    <input type="radio" name="waiting_category" id="wait_date_change" value="Date"
+                                        class="form-check-input me-1">
+                                    Production
+                                </label>
+
+                                <label class="fw-medium">
+                                    <input type="radio" name="waiting_category" id="wait_godown_change" value="Godown"
+                                        class="form-check-input me-1">
+                                    Finish
+                                </label>
+                            </div>
+
+                            <div class="row px-2">
+                                <div class="col-md-6 mb-2 d-none" id="wait_date">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="wait_pro_date">
+                                        <label for="wait_pro_date"><i class="bi bi-calendar2-week"></i> Select
+                                            Date</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-2 d-none" id="wait_godown">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="wait_godownn">
+                                            <option disabled selected>Choose...</option>
+                                        </select>
+                                        <label><i class="bi bi-building"></i> Godown</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-primary px-4" id="mp_alter_btn3">
+                                            <i class="bi bi-check2-circle"></i> Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="selection_card" style="position: fixed; bottom: 15px; left: 15px; 
+            <div id="selection_card" style="position: fixed; top: 15px; left: 17%; 
             background:rgb(255, 255, 255); border-radius:6px; color: #0033ff;
             padding:12px 18px; font-weight:bold; 
             box-shadow:0 0 10px rgba(0,0,0,0.2); 
             display:none; z-index:999">
-    </div>
+            </div>
+        </div>
 
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- jQuery UI -->
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-    <!-- jQuery UI CSS -->
+        <!-- jQuery UI CSS -->
 
-    <!-- bootstrap include -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-        crossorigin="anonymous"></script>
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
 
-    <script src="
+        <script src="
 https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
 "></script>
 
-    <!-- font awesome -->
-    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 
-    <!-- Sweet alert -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-    <!-- external js -->
-    <script src="js/machine_production_modification.js" type="module"></script>
-    <script src="js/menu.js" type="module"></script>
-    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+        <!-- Bootstrap 5 JS (required for dropdown) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- external js -->
+        <script src="js/machine_production_modification.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

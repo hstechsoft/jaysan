@@ -420,3 +420,395 @@
 
 
 
+:root {
+  --sidebar-collapsed-w: 50px;
+  --sidebar-expanded-w: 270px;
+
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #eaf3ff;
+  --sidebar-border: #e5eaf0;
+  --text-color: #333;
+  --brand-color: #1777ff;
+
+  --flyout-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  --transition: 0.25s ease;
+}
+
+/* GLOBAL */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: #eef2f6;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* width: var(--sidebar-collapsed-w); */
+  width: 52px;
+  height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition);
+  z-index: 1000;
+  overflow: visible !important;
+}
+
+
+/* USER BOX INSIDE SIDEBAR */
+.sidebar-user {
+  padding: 14px 14px;
+  border-bottom: 1px solid var(--sidebar-border);
+  position: relative;
+}
+
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-icon {
+  font-size: 28px;
+  color: var(--brand-color);
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.welcome-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.username {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Button that opens dropdown */
+.user-dropdown-toggle {
+  margin-left: auto;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.user-dropdown-toggle i {
+  font-size: 16px;
+}
+
+/* Dropdown menu inside sidebar */
+.sidebar-dropdown {
+  position: absolute !important;
+  top: 60px;
+  left: 14px;
+  width: 200px;
+  z-index: 3000;
+}
+
+
+.logo {
+  font-size: 26px;
+}
+
+/* NAV LIST */
+.nav-list {
+  /* display: flex;
+  flex-direction: column; */
+  gap: 2px;
+  padding: 12px 10px;
+}
+
+/* MENU ITEM */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: var(--text-color);
+  white-space: nowrap;
+  transition: background var(--transition);
+  position: relative;
+}
+
+.menu-item:hover {
+  background: var(--sidebar-hover);
+}
+
+.menu-item i {
+  font-size: 14px;
+  color: var(--brand-color);
+}
+
+/* TEXT FADE-IN */
+.menu-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: opacity var(--transition), width var(--transition);
+}
+
+.menu-wrapper,
+.sub-wrapper {
+  position: relative;
+}
+
+.sidebar.expanded .menu-text,
+.sidebar:not(.expanded):hover .menu-text {
+  opacity: 1;
+  width: auto;
+
+}
+
+/* COLLAPSED ALIGNMENT */
+.sidebar:not(.expanded) .menu-item {
+  /* justify-content: center; */
+  padding: 5px 0;
+}
+
+.sidebar:not(.expanded) .menu-text {
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+
+
+/* ---------- make user-text hidden except when sidebar.expanded ---------- */
+
+/* Default: hide user-text (high specificity + !important to override utilities) */
+aside.sidebar .sidebar-user .user-text p {
+  display: none;
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: opacity 180ms ease, max-width 220ms ease;
+  white-space: nowrap;
+}
+
+/* When sidebar has .expanded -> show user text */
+aside.sidebar:hover .sidebar-user .user-text p {
+  display: block !important;
+  opacity: 1;
+  max-width: 240px;
+  /* adjust to fit your content */
+}
+
+/* layout helpers so icon + text align nicely whether expanded or not */
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* keep user icon visible always, even when collapsed */
+.sidebar-user-info .user-icon {
+  flex: 0 0 auto;
+  font-size: 20px;
+}
+
+/* ensure text lines are compact */
+.sidebar-user .welcome-text,
+.sidebar-user .username {
+  margin: 0;
+  line-height: 1;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* optional: if parent has width 0 when collapsed, avoid layout jump */
+aside.sidebar:not(.expanded) .sidebar-user-info {
+  /* when collapsed, keep icon centered */
+  /* justify-content: center; */
+}
+
+
+
+/* MAIN FLYOUT */
+.flyout {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 0px;
+  width: 240px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--flyout-shadow);
+  padding: 3px;
+  display: none;
+  z-index: 2000;
+}
+
+/* SHOW FLYOUT IN COLLAPSED MODE */
+.sidebar:not(.expanded) .menu-wrapper:hover>.flyout {
+  display: block !important;
+}
+
+/* SHOW FLYOUT IN EXPANDED MODE */
+.sidebar.expanded .menu-wrapper:hover>.flyout {
+  display: block !important;
+}
+
+/* SUBMENU ITEMS */
+.submenu-item {
+  padding: 8px 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background var(--transition);
+  font-size: 12px;
+}
+
+.submenu-item:hover {
+  background: #f5f9ff;
+  font-size: 14px;
+}
+
+/* NESTED FLYOUT */
+.sub-flyout {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 0px;
+  width: 210px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  display: none;
+  box-shadow: var(--flyout-shadow);
+  z-index: 3000;
+}
+
+.sub-flyout a:hover {
+  background: #f5f9ff;
+  font-size: 14px;
+}
+
+.sub-flyout a {
+  padding: 8px 10px;
+}
+
+.submenu-item:hover>.sub-flyout {
+  display: block;
+}
+
+.sub-wrapper:hover>.sub-flyout {
+  display: block !important;
+}
+
+/* EXPANDED MODE SUBMENU (OPEN ON HOVER) */
+.sidebar.expanded .collapse {
+  display: none !important;
+}
+
+.sidebar.expanded .menu-wrapper:hover>.collapse,
+.sidebar.expanded .menu-wrapper .flyout:hover~.collapse,
+.sidebar.expanded .menu-wrapper .flyout:hover,
+.sidebar.expanded .menu-wrapper .sub-wrapper:hover>.collapse,
+.sidebar.expanded .menu-wrapper .sub-wrapper:hover .sub-flyout {
+  display: block !important;
+}
+
+
+/* ARROW ROTATION */
+.arrow {
+  margin-left: auto;
+  transition: transform var(--transition);
+}
+
+.menu-wrapper:hover>.menu-item .arrow,
+.menu-wrapper .flyout:hover~.menu-item .arrow,
+.sub-wrapper:hover>.menu-item .arrow {
+  transform: rotate(90deg);
+}
+
+
+.nav-list a,
+.menu-wrapper a,
+.flyout a,
+.sub-flyout a {
+  text-decoration: none;
+  font-size: 12px;
+}
+
+/* LOGOUT SPACING */
+.logout-wrapper {
+  margin-top: 48%;
+  padding-bottom: 20px;
+}
+
+
+
+
+
+.sidebar.expanded {
+  width: var(--sidebar-expanded-w);
+}
+
+.sidebar:not(.expanded):hover {
+  width: var(--sidebar-expanded-w);
+}
+
+.page-wrapper {
+  padding-top: 10px;
+  margin-left: 0px;
+  transition: margin-left var(--transition);
+}
+
+
+.sidebar .expanded:hover~.page-wrapper {
+  margin-left: 285px !important;
+}
+
+#page_start{
+  gap : 32rem;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .flyout {
+    width: 150px;
+  }
+
+  .sub-flyout {
+    width: 130px;
+  }
+
+  .sidebar.expanded {
+    width: 130px !important;
+  }
+
+  .sidebar:not(.expanded):hover {
+    width: 130px !important;
+  }
+
+  .nav-list a,
+  .menu-wrapper a,
+  .flyout a,
+  .sub-flyout a{
+    font-size: 10px;
+  }
+
+  #page_start{
+  gap : 2rem;
+}
+}

@@ -272,8 +272,7 @@ $(document).ready(function () {
     get_po_list();
 
 
-    $("#po_report").on("click", " tr ", function (e) {
-        e.preventDefault();
+    $("#po_report").on("click", " tr ", function () {
 
         $("#purchase_order_details").empty();
         clear_gst_arrays();
@@ -544,7 +543,7 @@ $(document).ready(function () {
         $("#extra_po_order_form")[0].reset();
     });
 
-    $("#selected_materials").on("click", ".fa-trash", function () {
+    $("#selected_materials").on("click", "#fa-trash", function () {
         const row = $(this).closest("tr");
         const materialId = row.data("batch_id");
 
@@ -670,7 +669,7 @@ $(document).ready(function () {
     });
 
 
-    $("#get_po_list").on("click", "tr td i.fa-pen-to-square", function () {
+    $("#get_po_list").on("click", "tr td #fa-pen-to-square", function () {
         po_id = $(this).data("po_id");
         console.log(po_id);
 
@@ -683,7 +682,7 @@ $(document).ready(function () {
 
     })
 
-    $("#get_po_list").on("click", "tr td i.fa-print", function () {
+    $("#get_po_list").on("click", "tr td #fa-print", function () {
         let path = $(this).data("po_path");
         console.log(path);
 
@@ -859,7 +858,7 @@ function get_po_order_total(row_ref) {
             "<td>" + batch_qty + " " + uom + "</td>" +
             "<td>" + raw_material_rate + "</td>" +
             "<td>" + amnt + "</td>" +
-            "<td><i class='fa fa-trash'></i></td>" +
+            "<td><button type='submit' class='btn btn-primary ' id='fa-trash'><i class='fa fa-trash'></i></button></td>" +
             "</tr>";
 
         if ($("#selected_materials tr#totalRow").length > 0) {
@@ -1034,6 +1033,8 @@ function get_mrf_po_details() {
 
 
 function get_mrf_po_company_wise(order_to) {
+    console.log(order_to);
+    
     $.ajax({
         url: "php/get_mrf_po_company_wise.php",
         type: "get", //send it through get method
@@ -1042,6 +1043,7 @@ function get_mrf_po_company_wise(order_to) {
         },
         success: function (response) {
             console.log(response);
+            console.log("RAW RESPONSE:", response);
 
 
             $("#po_dashboard_table").empty();
@@ -1049,37 +1051,43 @@ function get_mrf_po_company_wise(order_to) {
             $("#selected_materials").empty();
 
             if (response.trim() != "error") {
-                var obj = JSON.parse(response);
+
+                if (response.trim() != "0 result") {
+                    var obj = JSON.parse(response);
 
 
 
-                obj.forEach(function (obj) {
-                    console.log(obj.material_part_id);
+                    obj.forEach(function (obj) {
+                        console.log();
 
-                    po_order_to = obj.po_order_to;
-                    po_delivery_to = obj.po_delivery_to;
-                    var balance = '';
-                    if (obj.bal_qty != obj.batch_qty) {
-                        balance = "Ord: <b>" + obj.pre_qty + "</b><br>Balance: <b>" + obj.bal_qty + "</b> "
-                    }
-                    else {
-                        balance = '';
-                    }
-                    $("#po_dashboard_table").append(
-                        "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
-                        "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
-                        "<td>" + obj.raw_material_part_id + "</td>" +
-                        "<td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td>" +
-                        "<td data-batch_qty='" + obj.bal_qty + "' contenteditable='true'>" + obj.bal_qty + "</td>" +
-                        "<td contenteditable='true'>0</td>" +
-                        "<td>" + obj.batch_date + "</td>" +
-                        "<td><input type='date'disabled class='form-control date-input' value='" + obj.approx_due_date + "'></td>" +
-                        "</tr>"
-                    );
-                });
+                        po_order_to = obj.po_order_to;
+                        po_delivery_to = obj.po_delivery_to;
+                        var balance = '';
+                        if (obj.bal_qty != obj.batch_qty) {
+                            balance = "Ord: <b>" + obj.pre_qty + "</b><br>Balance: <b>" + obj.bal_qty + "</b> "
+                        }
+                        else {
+                            balance = '';
+                        }
+                        $("#po_dashboard_table").append(
+                            "<tr data-batch_id='" + obj.batch_id + "' data-uom='" + obj.uom + "' data-material_part_id='" + obj.material_part_id + "' data-raw_material_rate='" + obj.raw_material_rate + "' data-gst_rate='" + obj.gstrate + "'>" +
+                            "<td><input class='form-check-input material-check' type='checkbox' value='" + obj.batch_id + "'></td>" +
+                            "<td>" + obj.raw_material_part_id + "</td>" +
+                            "<td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td>" +
+                            "<td data-batch_qty='" + obj.bal_qty + "' contenteditable='true'>" + obj.bal_qty + "</td>" +
+                            "<td contenteditable='true'>0</td>" +
+                            "<td>" + obj.batch_date + "</td>" +
+                            "<td><div  class='d-flex'  style='font-size: 12px'><input type='date'disabled class='form-control date-input' value='" + obj.approx_due_date + "'><b class='ms-2'> "+obj.mrf_id+"</b></div></td>" +
+                            "</tr>"
+                        );
+                    });
 
 
-                //    get_sales_order()
+                    //    get_sales_order()
+                }
+                else {
+                    $("#po_dashboard_table").append("<tr><td class='text-center text-danger'>No Form Available</td></tr>")
+                }
             }
 
             else {
@@ -1259,20 +1267,20 @@ function get_po_list() {
                 obj.forEach(function (obj) {
                     count += 1;
 
-                    var edit = "<i class='fa-solid fa-print'  data-po_path=" + obj.po_path + "></i>"
-                    ic = "<i class='fa fa-check-circle text-success pe-3'></i>"
+                    var edit = "<button type='submit' class='btn btn-primary' id='fa-print' data-po_path=" + obj.po_path + "><i class='fa-solid fa-print'  ></i>"
+                    ic = "<button type='submit' class='btn btn-primary' id='fa-check-circle'><i class='fa fa-check-circle text-success pe-3'></i></button>"
 
                     if (obj.email_sent == '1') {
-                        ic += "<i class='fa-solid fa-envelope-circle-check text-success'></i>";
+                        ic += "<button type='submit' class='btn btn-primary' id='fa-envelope-circle-check'><i class='fa-solid fa-envelope-circle-check text-success'></i></button>";
                     }
                     // if (obj.email_sent == '0')
                     {
 
-                        edit += "<i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i>";
+                        edit += "<button type='submit' class='btn btn-primary' id='fa-pen-to-square'><i class='fa-solid fa-pen-to-square' data-po_id=" + obj.po_id + "></i></button>";
                         // ic = "<i class='fa fa-times-circle' style='color:red'></i>";
                     }
                     if (obj.approve_sts == '0') {
-                        ic = "<i class='fa fa-times-circle' style='color:red'></i>";
+                        ic = "<button type='submit' class='btn btn-primary' id='fa-times-circle'><i class='fa fa-times-circle' style='color:red'></i></button>";
                     }
                     $("#get_po_list").append("<tr data-po_id=" + obj.po_id + "><td>" + count + "</td><td>" + obj.po_no + "(" + obj.po_id + ")</td><td>" + obj.order_to_name + "</td><td>" + obj.po_date + "</td><td class='text-center'>" + ic + "</td><td class='text-center'>" + edit + "</td></tr>")
 

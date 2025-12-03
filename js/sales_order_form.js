@@ -435,7 +435,7 @@ else if($(this).hasClass('pay_btn'))
         {
 
           var len = $('#sales_product tr').length +1
-          $('#sales_product').append(" <tr class='small'> <td>"+len + "</td> <td>"+$('#product :selected').text()+"</td> <td data-model_id='"+$('#pmodel').val()+"'>"+$('#pmodel :selected').text()+"</td> <td data-type_id='"+$('#ptype').val()+"'>"+$('#ptype :selected').text()+"</td> <td>"+sub_type+"</td> <td>"+$('#qty').val()+"</td><td>"+$('#machine_price').val()+"</td><td>"+$('#billing_price').val()+"</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+          $('#sales_product').append(" <tr class='small'> <td>"+len + "</td> <td>"+$('#product :selected').text()+"</td> <td data-model_id='"+$('#pmodel').val()+"'>"+$('#pmodel :selected').text()+"</td> <td data-type_id='"+$('#ptype').val()+"'>"+$('#ptype :selected').text()+"</td> <td>"+sub_type+"</td> <td>"+$('#qty').val()+"</td><td>"+$('#machine_price').val()+"</td><td>"+$('#billing_price').val()+"</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
           console.log("ok");
           console.log($('#product :selected').text());
  
@@ -588,7 +588,7 @@ delete_sales_product(btn_val)
         if($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "" && $('#utr_no').val() != "")
         {
           var len = $('#payment_table tr').length +1
-          $('#payment_table').append("<tr class='small'> <td>"+len+"</td> <td>"+$('#ref_no').val()+"</td> <td>"+$('#utr_no').val()+"</td> <td>"+$('#amount').val()+"</td> <td>"+$('#payment_date').val()+"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          $('#payment_table').append("<tr class='small'> <td>"+len+"</td> <td>"+$('#ref_no').val()+"</td> <td>"+$('#utr_no').val()+"</td> <td>"+$('#amount').val()+"</td> <td>"+$('#payment_date').val()+"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 
           $('#ref_no').val("")
           $('#utr_no').val("")
@@ -1264,7 +1264,7 @@ bd = "disabled"
 console.log(obj.pay_sts);
 
 
-     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  "+bd+" type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td></tr>")
+     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  "+bd+" type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td></tr>")
   });
 
  
@@ -1324,7 +1324,7 @@ var count =0
 
 
      
-     $('#app_order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
+     $('#app_order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
   });
 
  
@@ -1383,7 +1383,7 @@ var count =0
 
 
 
-     $('#req_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='sale_btn btn btn-success btn-sm border-0'><i class='fa-solid fa-diamond-turn-right'></i></td></tr>")
+     $('#req_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='sale_btn btn btn-success btn-sm border-0'><i class='fa-solid fa-diamond-turn-right'></i></td></tr>")
   });
 
  
@@ -1639,7 +1639,7 @@ var count =0
 var total_amount = 0
   obj.forEach(function (obj) {
      count = count +1;
-     $('#payment_table').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td><td contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+     $('#payment_table').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td><td contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 total_amount = total_amount +   Number(obj.amount)
 
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
@@ -1702,7 +1702,7 @@ sts = "<i class='fa-solid fa-thumbs-up'></i>"
 
     $('#total_payment_m').val(obj.total_payment)
      count = count +1;
-     $('#payment_table_m').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td> <td  contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td><td>"+sts + "</td><td><button value  = '"+obj.payment_id+"' class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+     $('#payment_table_m').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td> <td  contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td><td>"+sts + "</td><td><button value  = '"+obj.payment_id+"' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 total_amount = total_amount +   Number(obj.amount)
 
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
@@ -1757,7 +1757,7 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-     $('#sales_product').append(" <tr class='small'> <td>"+count + "</td> <td>"+obj.produt+"</td> <td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td> <td data-type_id='"+obj.type_id+"'>"+obj.type_name+"</td> <td>"+obj.sub_type+"</td> <td contenteditable='true'  class='editable-qty'>"+obj.required_qty+"</td> <td contenteditable='true' class='editable-price'>"+obj.price+"</td>   <td contenteditable='true' class='editable-price'>"+obj.billing_amount+"</td> <td> <button name='db_delete' value ='"+ obj.opid+"' type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+     $('#sales_product').append(" <tr class='small'> <td>"+count + "</td> <td>"+obj.produt+"</td> <td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td> <td data-type_id='"+obj.type_id+"'>"+obj.type_name+"</td> <td>"+obj.sub_type+"</td> <td contenteditable='true'  class='editable-qty'>"+obj.required_qty+"</td> <td contenteditable='true' class='editable-price'>"+obj.price+"</td>   <td contenteditable='true' class='editable-price'>"+obj.billing_amount+"</td> <td> <button name='db_delete' value ='"+ obj.opid+"' type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
         
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
  })
