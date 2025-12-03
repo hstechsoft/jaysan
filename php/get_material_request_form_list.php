@@ -5,7 +5,11 @@
 $emp_id = test_input($_POST['emp_id']);
 
 $status = json_decode($_POST['status'], true);
-
+$mrf_purchase_by = isset($_POST['mrf_purchase_by']) ? ($_POST['mrf_purchase_by']) : 'all';
+$mrf_purchase_query = "1";
+ if($mrf_purchase_by != 'all') {
+$mrf_purchase_query = "mrf_purchase.purchase_requested_by = $mrf_purchase_by";
+ }
  
 function test_input($data) {
 $data = trim($data);
@@ -65,7 +69,7 @@ if($emp_id != "'all'") {
 } else {
    $sql =  $sql. "1=1";
 }
-
+$sql  = $sql . " AND " . $mrf_purchase_query;
 $sql = $sql . " ORDER BY mrf.mrf_id DESC";
 
 if ($conn->multi_query($sql)) {

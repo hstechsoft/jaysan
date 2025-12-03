@@ -16,7 +16,16 @@ return $data;
 
 
 
- $sql = "SELECT * FROM bom_output WHERE bom_output.part_id =$part_id ";
+ $sql = "SELECT bom_output.*,
+       (SELECT 1
+        FROM process_wel_tbl pwl
+        WHERE pwl.output_part COLLATE utf8mb4_unicode_ci = 
+              bom_output.part_id COLLATE utf8mb4_unicode_ci
+          AND pwl.component_cat COLLATE utf8mb4_unicode_ci = 
+              bom_output.component_cat COLLATE utf8mb4_unicode_ci
+       ) AS process
+FROM bom_output
+WHERE bom_output.part_id = =$part_id ";
 
 $result = $conn->query($sql);
 
