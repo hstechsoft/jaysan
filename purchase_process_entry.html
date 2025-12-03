@@ -69,350 +69,363 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
-
-        </section>
-
-        <!-- content -->
-        <div class="container-fluid py-2">
-
-            <div class="row g-2">
-
-                <!-- LEFT SIDE -->
-                <div class="col-md-6">
-
-                    <!-- Part -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-layers"></i> Part
-                        </div>
-                        <div class="card-body p-2">
-
-                            <div class="row g-2">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="rm_type">
-                                        <label for="rm_type">Raw Material Type</label>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="rm_part_no">
-                                        <label for="rm_part_no">Part No</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- Process -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-gear"></i> Process
-                        </div>
-                        <div class="card-body p-2">
-                            <div class="row g-2 align-items-end">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" value="Purchase" class="form-control" id="purchase">
-                                        <label for="purchase">Process</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto">
-                                    <button class="btn btn-primary btn-sm" id="purchase_add_btn">
-                                        <i class="bi bi-plus"></i> ADD
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Final Godown -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-house-door"></i> Final Godown
-                        </div>
-
-                        <div class="card-body p-2">
-                            <div class="row g-2">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="final_godown">
-                                        <label for="final_godown">Godown Name</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto">
-                                    <button class="btn btn-primary btn-sm" id="final_godown_add_btn">
-                                        <i class="bi bi-plus"></i> ADD
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Godown List -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-list-check"></i> Godown List
-                        </div>
-
-                        <div class="card-body p-2">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-sm table-striped small">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Godown Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Balaji Steels</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Varun CNC</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- RM Process List -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-diagram-3"></i> RM Process List
-                        </div>
-
-                        <div class="card-body p-2">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-sm small">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>RM Part</th>
-                                            <th>Process</th>
-                                            <th>Labour/Machine</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Steel</td>
-                                            <td>Cutting</td>
-                                            <td>Machine</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Steel</td>
-                                            <td>Welding</td>
-                                            <td>Labour</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <!-- RIGHT SIDE -->
-                <!-- RAW MATERIAL WORKOUT + PRICE (LEFT COL) -->
-                <div class="col-md-6">
-
-                    <!-- Raw Material Workout -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-calculator"></i> Raw Material Workout
-                        </div>
-
-                        <div class="card-body p-2">
-                            <div class="row g-2">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="number" class="form-control" id="weight">
-                                        <label for="weight">Weight</label>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="number" class="form-control" id="length">
-                                        <label for="length">Length</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mt-1">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="type">
-                                        <label for="type">Type</label>
-                                    </div>
-                                </div>
-
-                                <div class="col-auto">
-                                    <button class="btn btn-primary btn-sm" id="rm_workout_add_btn">
-                                        <i class="bi bi-plus"></i> Add
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Raw Material Price -->
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-premium-header">
-                            <i class="bi bi-cash-coin"></i> Raw Material Price
-                        </div>
-
-                        <div class="card-body p-2">
-
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control" id="godown">
-                                <label for="godown">Godown</label>
-                            </div>
-
-                            <div class="form-floating mb-2">
-                                <input type="number" class="form-control" id="Price">
-                                <label for="Price">Price</label>
-                            </div>
-
-                            <button class="btn btn-primary btn-sm" id="rm_price">
-                                <i class="bi bi-plus"></i> Add
-                            </button>
-
-                            <hr class="my-2">
-
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-sm small">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Godown</th>
-                                            <th>Price</th>
-                                            <th>Default</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Balaji Steels</td>
-                                            <td>200</td>
-                                            <td>yes</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Agro Steels</td>
-                                            <td>3500</td>
-                                            <td>no</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Process Extra Details -->
-                    <div class="card shadow-sm">
-                        <div class="card-premium-header">
-                            <i class="bi bi-info-circle"></i> Process Extra Details
-                        </div>
-
-                        <div class="card-body p-2">
-                            <div class="row g-2 mb-2">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="vendor">
-                                        <label for="vendor">Vendor</label>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="number" class="form-control" id="cost">
-                                        <label for="cost">Cost</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mb-2">
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="min_time">
-                                        <label for="min_time">Min Time</label>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="max_time">
-                                        <label for="max_time">Max Time</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-floating mb-1">
-                                <input type="text" class="form-control" id="location">
-                                <label for="location">Location</label>
-                            </div>
-                        </div>
-
-                        <div class="card-footer p-2">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-sm small">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Vendor</th>
-                                            <th>Cost</th>
-                                            <th>Min Time</th>
-                                            <th>Max Time</th>
-                                            <th>Location</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Balaji steels</td>
-                                            <td>360</td>
-                                            <td>10</td>
-                                            <td>20</td>
-                                            <td>url</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Balaji steels</td>
-                                            <td>360</td>
-                                            <td>10</td>
-                                            <td>20</td>
-                                            <td>url</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-
-
-
-
-            </div>
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
         </div>
 
+        <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+            <div class="container-fluid py-2">
+
+                <div class="row g-2">
+
+                    <!-- LEFT SIDE -->
+                    <div class="col-md-6">
+
+                        <!-- Part -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-layers"></i> Part
+                            </div>
+                            <div class="card-body p-2">
+
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="rm_type">
+                                            <label for="rm_type">Raw Material Type</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="rm_part_no">
+                                            <label for="rm_part_no">Part No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Process -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-gear"></i> Process
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" value="Purchase" class="form-control" id="purchase">
+                                            <label for="purchase">Process</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary btn-sm" id="purchase_add_btn">
+                                            <i class="bi bi-plus"></i> ADD
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Final Godown -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-house-door"></i> Final Godown
+                            </div>
+
+                            <div class="card-body p-2">
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="final_godown">
+                                            <label for="final_godown">Godown Name</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary btn-sm" id="final_godown_add_btn">
+                                            <i class="bi bi-plus"></i> ADD
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Godown List -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-list-check"></i> Godown List
+                            </div>
+
+                            <div class="card-body p-2">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm table-striped small">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Godown Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Balaji Steels</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Varun CNC</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RM Process List -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-diagram-3"></i> RM Process List
+                            </div>
+
+                            <div class="card-body p-2">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-sm small">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>RM Part</th>
+                                                <th>Process</th>
+                                                <th>Labour/Machine</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Steel</td>
+                                                <td>Cutting</td>
+                                                <td>Machine</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Steel</td>
+                                                <td>Welding</td>
+                                                <td>Labour</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- RIGHT SIDE -->
+                    <!-- RAW MATERIAL WORKOUT + PRICE (LEFT COL) -->
+                    <div class="col-md-6">
+
+                        <!-- Raw Material Workout -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-calculator"></i> Raw Material Workout
+                            </div>
+
+                            <div class="card-body p-2">
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="weight">
+                                            <label for="weight">Weight</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="length">
+                                            <label for="length">Length</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-2 mt-1">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="type">
+                                            <label for="type">Type</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary btn-sm" id="rm_workout_add_btn">
+                                            <i class="bi bi-plus"></i> Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Raw Material Price -->
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-premium-header">
+                                <i class="bi bi-cash-coin"></i> Raw Material Price
+                            </div>
+
+                            <div class="card-body p-2">
+
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" id="godown">
+                                    <label for="godown">Godown</label>
+                                </div>
+
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control" id="Price">
+                                    <label for="Price">Price</label>
+                                </div>
+
+                                <button class="btn btn-primary btn-sm" id="rm_price">
+                                    <i class="bi bi-plus"></i> Add
+                                </button>
+
+                                <hr class="my-2">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-sm small">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Godown</th>
+                                                <th>Price</th>
+                                                <th>Default</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Balaji Steels</td>
+                                                <td>200</td>
+                                                <td>yes</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Agro Steels</td>
+                                                <td>3500</td>
+                                                <td>no</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Process Extra Details -->
+                        <div class="card shadow-sm">
+                            <div class="card-premium-header">
+                                <i class="bi bi-info-circle"></i> Process Extra Details
+                            </div>
+
+                            <div class="card-body p-2">
+                                <div class="row g-2 mb-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="vendor">
+                                            <label for="vendor">Vendor</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="number" class="form-control" id="cost">
+                                            <label for="cost">Cost</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-2 mb-2">
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="min_time">
+                                            <label for="min_time">Min Time</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="max_time">
+                                            <label for="max_time">Max Time</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-1">
+                                    <input type="text" class="form-control" id="location">
+                                    <label for="location">Location</label>
+                                </div>
+                            </div>
+
+                            <div class="card-footer p-2">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-sm small">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Vendor</th>
+                                                <th>Cost</th>
+                                                <th>Min Time</th>
+                                                <th>Max Time</th>
+                                                <th>Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Balaji steels</td>
+                                                <td>360</td>
+                                                <td>10</td>
+                                                <td>20</td>
+                                                <td>url</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Balaji steels</td>
+                                                <td>360</td>
+                                                <td>10</td>
+                                                <td>20</td>
+                                                <td>url</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
     </div>
 
 

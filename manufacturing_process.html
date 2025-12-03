@@ -49,188 +49,203 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
-
-        </section>
-
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white fw-bold">
-                <i class="fa fa-industry me-1"></i> Manufacturing Process
-            </div>
-
-            <div class="card-body">
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm">
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Part</th>
-                                <th>Godown</th>
-                                <th>Department</th>
-                                <th>Section</th>
-                                <th>Process</th>
-                                <th>Min Time</th>
-                                <th>Max Time</th>
-                                <th>Cost</th>
-                                <th>Required</th>
-                                <th>Stock</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Scale Frame</td>
-                                <td>Jaysan agri industry</td>
-                                <td>Assembly</td>
-                                <td>Traveling Motor</td>
-                                <td>Drilling</td>
-                                <td>20</td>
-                                <td>30</td>
-                                <td>520</td>
-                                <td>50</td>
-                                <td>26</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-            <div class="card-footer">
-
-                <div class="row g-3">
-
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control rounded-3" id="product" placeholder="">
-                            <label for="product"><i class="fa fa-box me-1"></i> Product</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="text" class="form-control rounded-3" id="model" placeholder="">
-                            <label for="model"><i class="fa fa-tag me-1"></i> Model</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-floating">
-                            <input type="number" class="form-control rounded-3" id="Req_qty" placeholder="">
-                            <label for="Req_qty"><i class="fa fa-sort-numeric-up me-1"></i> Required Qty</label>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="button" class="btn btn-primary w-100" id="view_btn">
-                            <i class="fa fa-eye me-1"></i> View
-                        </button>
-                    </div>
-
-                </div>
-
-            </div>
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
         </div>
 
+        <section id="menu_bar" class="d-none"></section>
 
-        <div class="row mt-4 g-4">
 
-            <!-- External Godown Wise Report -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm">
-                        <caption class="fw-bold"><i class="fa fa-warehouse me-1"></i> External Godown Wise Report
-                        </caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Godown</th>
-                                <th>Process</th>
-                                <th>Required</th>
-                                <th>Stock</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Jaysan agri industry -2</td>
-                                <td>Coating</td>
-                                <td>100</td>
-                                <td>58</td>
-                                <td><i class="fa fa-clock me-1"></i>01:10 PM</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+
+
+        <div class="page-wrapper">
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fa fa-industry me-1"></i> Manufacturing Process
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Part</th>
+                                    <th>Godown</th>
+                                    <th>Department</th>
+                                    <th>Section</th>
+                                    <th>Process</th>
+                                    <th>Min Time</th>
+                                    <th>Max Time</th>
+                                    <th>Cost</th>
+                                    <th>Required</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Scale Frame</td>
+                                    <td>Jaysan agri industry</td>
+                                    <td>Assembly</td>
+                                    <td>Traveling Motor</td>
+                                    <td>Drilling</td>
+                                    <td>20</td>
+                                    <td>30</td>
+                                    <td>520</td>
+                                    <td>50</td>
+                                    <td>26</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-3" id="product" placeholder="">
+                                <label for="product"><i class="fa fa-box me-1"></i> Product</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-3" id="model" placeholder="">
+                                <label for="model"><i class="fa fa-tag me-1"></i> Model</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" class="form-control rounded-3" id="Req_qty" placeholder="">
+                                <label for="Req_qty"><i class="fa fa-sort-numeric-up me-1"></i> Required Qty</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary w-100" id="view_btn">
+                                <i class="fa fa-eye me-1"></i> View
+                            </button>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Raw Material Purchase -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm">
-                        <caption class="fw-bold"><i class="fa fa-shopping-cart me-1"></i> Raw Material Purchase
-                        </caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Vendor</th>
-                                <th>Material</th>
-                                <th>Required</th>
-                                <th>Stock</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Gopal Coating</td>
-                                <td>Door</td>
-                                <td>100</td>
-                                <td>58</td>
-                                <td><i class="fa fa-clock me-1"></i>01:10 PM</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-            <!-- Department Wise Report -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm">
-                        <caption class="fw-bold"><i class="fa fa-building me-1"></i> Department Wise Report</caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Department</th>
-                                <th>Section</th>
-                                <th>Process</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Assembly</td>
-                                <td>Gearbox</td>
-                                <td>Grinning</td>
-                                <td><i class="fa fa-clock me-1"></i>11:30 AM</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="row mt-4 g-4">
+
+                <!-- External Godown Wise Report -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <caption class="fw-bold"><i class="fa fa-warehouse me-1"></i> External Godown Wise Report
+                            </caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Godown</th>
+                                    <th>Process</th>
+                                    <th>Required</th>
+                                    <th>Stock</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Jaysan agri industry -2</td>
+                                    <td>Coating</td>
+                                    <td>100</td>
+                                    <td>58</td>
+                                    <td><i class="fa fa-clock me-1"></i>01:10 PM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <button type="button" class="btn btn-primary mt-2" id="make_request">
-                    <i class="fa fa-paper-plane me-1"></i> Make Request
-                </button>
+                <!-- Raw Material Purchase -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <caption class="fw-bold"><i class="fa fa-shopping-cart me-1"></i> Raw Material Purchase
+                            </caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vendor</th>
+                                    <th>Material</th>
+                                    <th>Required</th>
+                                    <th>Stock</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Gopal Coating</td>
+                                    <td>Door</td>
+                                    <td>100</td>
+                                    <td>58</td>
+                                    <td><i class="fa fa-clock me-1"></i>01:10 PM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Department Wise Report -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm">
+                            <caption class="fw-bold"><i class="fa fa-building me-1"></i> Department Wise Report
+                            </caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Department</th>
+                                    <th>Section</th>
+                                    <th>Process</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Assembly</td>
+                                    <td>Gearbox</td>
+                                    <td>Grinning</td>
+                                    <td><i class="fa fa-clock me-1"></i>11:30 AM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="button" class="btn btn-primary mt-2" id="make_request">
+                        <i class="fa fa-paper-plane me-1"></i> Make Request
+                    </button>
+                </div>
+
             </div>
 
+            <!-- content -->
         </div>
-
-        <!-- content -->
     </div>
 
 

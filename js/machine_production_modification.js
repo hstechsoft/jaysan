@@ -13,6 +13,10 @@ var selected_type = ""
 
 
 document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
 
@@ -85,6 +89,26 @@ function triggerCalendarDate(dateString) {
 }
 
 $(document).ready(function () {
+
+
+
+    // Move to next field on Enter
+    document.querySelectorAll('#machine_production_form input, #machine_production_form select, #machine_production_form textarea, #machine_production_form button')
+        .forEach((field, index, fields) => {
+            field.addEventListener('keydown', function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault(); // stop form submit
+                    let next = fields[index + 1];
+                    if (next) next.focus();
+                }
+                if (e.key === "Escape") {
+                    e.preventDefault(); // stop form submit
+                    let prev = fields[index - 1];
+                    if (prev) prev.focus();
+                }
+            });
+        });
+
 
 
     $("#menu_bar").load('menu.html',
@@ -194,12 +218,12 @@ $(document).ready(function () {
 
         var production_date = "";
         if ($("#form_date").val() != "" && $("#to_date").val() != "") {
-            production_date = "'"+$("#form_date").val() +"'"+ " and " +"'"+ $("#to_date").val()+"'";
+            production_date = "'" + $("#form_date").val() + "'" + " and " + "'" + $("#to_date").val() + "'";
         }
 
         var sale_date = "";
         if ($("#s_form_date").val() != "" && $("#e_to_date").val() != "") {
-            sale_date = "'"+$("#s_form_date").val()+"'"+ " and " +"'"+ $("#e_to_date").val()+"'";
+            sale_date = "'" + $("#s_form_date").val() + "'" + " and " + "'" + $("#e_to_date").val() + "'";
         }
         get_sale_order_mreport(sale_date, production_date);
 
@@ -812,7 +836,7 @@ function get_sale_order_mreport(sale_date, production_date) {
     var assign_type = $("#ass_type").val() || "";
     var order_no = $("#order").val() || "";
     var emp_id = $("#emp").data("emp_id") || "";
-    console.log(production_date);
+    console.log("godown:" + godown, "cid:" + customer_id, "sub_type:" + sub_type, "mid:" + model_id, "type:" + type_id, "product_id:" + product_id, "ass_id:" + assign_type, "order:" + order_no, "emp_id:" + emp_id);
 
     $.ajax({
         url: "php/get_sale_order_mreport.php",
@@ -834,15 +858,15 @@ function get_sale_order_mreport(sale_date, production_date) {
         },
         success: function (response) {
             console.log(response);
-            $("#report_tbl").empty();
 
             if (response.trim() != "error") {
 
+                $("#report_tbl").empty();
                 if (response.trim() != "0 result") {
 
                     var obj = JSON.parse(response);
                     var count = 0
-var ddd = 0;
+                    var ddd = 0;
 
                     obj.forEach(function (obj) {
                         count++;
@@ -876,8 +900,8 @@ var ddd = 0;
                             }
                         });
 
-                        ddd +=li_count
-                        
+                        ddd += li_count
+
                         var pro_d = `<div class="card">
                             <div class="card-header">${obj.product} - ${obj.model_name} - ${obj.type_name}</div>
                             <div class="card-body">${obj.sub_type}</div>
@@ -896,7 +920,7 @@ var ddd = 0;
                         `);
                     });
                     console.log(ddd);
-                    
+
 
 
 

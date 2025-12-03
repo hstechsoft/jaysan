@@ -63,190 +63,201 @@
         <!-- top bar -->
 
 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
 
-        <section id="menu_bar">
-
-        </section>
-
-        <!-- content -->
-
-        <div class="row g-3">
-
-            <!-- In Process Table -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table caption-top table-bordered table-striped">
-                        <caption>In Process Table</caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Vendor</th>
-                                <th>Part</th>
-                                <th>Process</th>
-                                <th>Qty</th>
-                                <th>Status</th>
-                                <th>Emergency</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Varun CNC</td>
-                                <td>Frame</td>
-                                <td>Fine Coating</td>
-                                <td>30</td>
-                                <td><span class="badge bg-success">Approved</span></td>
-                                <td><i class="fa fa-exclamation-circle text-danger fs-5"></i></td>
-                                <td>2025-10-26</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Auto Ready Materials -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table caption-top table-bordered table-striped">
-                        <caption>Auto Ready Materials</caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Vendor</th>
-                                <th>Part</th>
-                                <th>Qty</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Raju Electro</td>
-                                <td>Bearing</td>
-                                <td>68</td>
-                                <td>2025-10-11</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Location Form -->
-            <div class="col-md-6">
-                <div class="card p-3 shadow-sm">
-                    <h6 class="mb-3">Update Material Movement</h6>
-
-                    <div class="row g-4">
-
-                        <!-- Left: FORM -->
-                        <div class="col-md-6">
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control" id="location" placeholder="">
-                                <label for="location">Location</label>
-                            </div>
-
-                            <div class="form-floating mb-2">
-                                <input type="number" class="form-control" id="dc_no" placeholder="">
-                                <label for="dc_no">DC Number</label>
-                            </div>
-
-                            <div class="form-floating mb-2">
-                                <select id="pick_or_drop" class="form-select">
-                                    <option disabled selected value="">Choose...</option>
-                                    <option value="pick">Pick Up</option>
-                                    <option value="drop">Drop</option>
-                                </select>
-                                <label for="pick_or_drop">Pick / Drop</label>
-                            </div>
-
-                            <button class="btn btn-primary w-100 mt-2">Add</button>
-                        </div>
-
-                        <!-- Right: Stylish Movement Graphic -->
-                        <div class="col-md-6">
-                            <div class="movement-card p-3 rounded-3">
-
-                                <!-- Top: Start -->
-                                <div class="timeline-item d-flex">
-                                    <div class="icon-circle bg-success shadow-sm">
-                                        <i class="fa fa-flag-checkered"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-0">Start Location</h6>
-                                        <small class="text-muted">Pickup point</small>
-                                    </div>
-                                </div>
-
-                                <!-- Middle Line -->
-                                <div class="timeline-line mx-3 my-2"></div>
-
-                                <!-- Middle Node -->
-                                <div class="timeline-item d-flex">
-                                    <div class="icon-circle bg-primary shadow-sm">
-                                        <i class="fa fa-truck"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-0">On Route</h6>
-                                        <small class="text-muted">Material in transit</small>
-                                    </div>
-                                </div>
-
-                                <!-- Middle Line -->
-                                <div class="timeline-line mx-3 my-2"></div>
-
-                                <!-- End: Destination -->
-                                <div class="timeline-item d-flex">
-                                    <div class="icon-circle bg-danger shadow-sm">
-                                        <i class="fa fa-map-marker"></i>
-                                    </div>
-                                    <div class="ms-3">
-                                        <h6 class="mb-0">End Location</h6>
-                                        <small class="text-muted">Drop destination</small>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pick/Drop Table -->
-            <div class="col-md-6">
-                <div class="table-responsive">
-                    <table class="table caption-top table-bordered table-striped">
-                        <caption>Pick / Drop Records</caption>
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th>
-                                <th>Location</th>
-                                <th>DC No</th>
-                                <th>Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Location URL</td>
-                                <td>1596</td>
-                                <td>Pick Up</td>
-                                <td class="action-icons">
-                                    <i class="fa fa-edit text-primary"></i>
-                                    <i class="fa fa-trash text-danger"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
         </div>
 
+        <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <div class="row g-3">
+
+                <!-- In Process Table -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped">
+                            <caption>In Process Table</caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vendor</th>
+                                    <th>Part</th>
+                                    <th>Process</th>
+                                    <th>Qty</th>
+                                    <th>Status</th>
+                                    <th>Emergency</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Varun CNC</td>
+                                    <td>Frame</td>
+                                    <td>Fine Coating</td>
+                                    <td>30</td>
+                                    <td><span class="badge bg-success">Approved</span></td>
+                                    <td><i class="fa fa-exclamation-circle text-danger fs-5"></i></td>
+                                    <td>2025-10-26</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Auto Ready Materials -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped">
+                            <caption>Auto Ready Materials</caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vendor</th>
+                                    <th>Part</th>
+                                    <th>Qty</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Raju Electro</td>
+                                    <td>Bearing</td>
+                                    <td>68</td>
+                                    <td>2025-10-11</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Location Form -->
+                <div class="col-md-6">
+                    <div class="card p-3 shadow-sm">
+                        <h6 class="mb-3">Update Material Movement</h6>
+
+                        <div class="row g-4">
+
+                            <!-- Left: FORM -->
+                            <div class="col-md-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" id="location" placeholder="">
+                                    <label for="location">Location</label>
+                                </div>
+
+                                <div class="form-floating mb-2">
+                                    <input type="number" class="form-control" id="dc_no" placeholder="">
+                                    <label for="dc_no">DC Number</label>
+                                </div>
+
+                                <div class="form-floating mb-2">
+                                    <select id="pick_or_drop" class="form-select">
+                                        <option disabled selected value="">Choose...</option>
+                                        <option value="pick">Pick Up</option>
+                                        <option value="drop">Drop</option>
+                                    </select>
+                                    <label for="pick_or_drop">Pick / Drop</label>
+                                </div>
+
+                                <button class="btn btn-primary w-100 mt-2">Add</button>
+                            </div>
+
+                            <!-- Right: Stylish Movement Graphic -->
+                            <div class="col-md-6">
+                                <div class="movement-card p-3 rounded-3">
+
+                                    <!-- Top: Start -->
+                                    <div class="timeline-item d-flex">
+                                        <div class="icon-circle bg-success shadow-sm">
+                                            <i class="fa fa-flag-checkered"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">Start Location</h6>
+                                            <small class="text-muted">Pickup point</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Middle Line -->
+                                    <div class="timeline-line mx-3 my-2"></div>
+
+                                    <!-- Middle Node -->
+                                    <div class="timeline-item d-flex">
+                                        <div class="icon-circle bg-primary shadow-sm">
+                                            <i class="fa fa-truck"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">On Route</h6>
+                                            <small class="text-muted">Material in transit</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Middle Line -->
+                                    <div class="timeline-line mx-3 my-2"></div>
+
+                                    <!-- End: Destination -->
+                                    <div class="timeline-item d-flex">
+                                        <div class="icon-circle bg-danger shadow-sm">
+                                            <i class="fa fa-map-marker"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h6 class="mb-0">End Location</h6>
+                                            <small class="text-muted">Drop destination</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pick/Drop Table -->
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped">
+                            <caption>Pick / Drop Records</caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Location</th>
+                                    <th>DC No</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Location URL</td>
+                                    <td>1596</td>
+                                    <td>Pick Up</td>
+                                    <td class="action-icons">
+                                        <i class="fa fa-edit text-primary"></i>
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 

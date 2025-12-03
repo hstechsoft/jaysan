@@ -174,16 +174,16 @@ $(document).ready(function () {
   });
 
 
-  $("#view_all_roles").on("click", ".fa-eye", function () {
+  $("#view_all_roles").on("click", "#fa-eye", function () {
     $(this).addClass("d-none");
-    $("#view_all_roles").find(".fa-home").removeClass("d-none");
+    $("#view_all_roles").find("#fa-home").removeClass("d-none");
     $("#view_web_role").removeClass("d-none");
     $("#view_role").addClass("d-none");
 
   })
-  $("#view_all_roles").on("click", ".fa-home", function () {
+  $("#view_all_roles").on("click", "#fa-home", function () {
     $(this).addClass("d-none");
-    $("#view_all_roles").find(".fa-eye").removeClass("d-none");
+    $("#view_all_roles").find("#fa-eye").removeClass("d-none");
     $("#view_web_role").addClass("d-none");
     $("#view_role").removeClass("d-none");
 
@@ -192,16 +192,16 @@ $(document).ready(function () {
 
 
 
-  $("#view_all_role_name").on("click", ".fa-eye", function () {
+  $("#view_all_role_name").on("click", "#fa-eye", function () {
     $(this).addClass("d-none");
-    $("#view_all_role_name").find(".fa-home").removeClass("d-none");
+    $("#view_all_role_name").find("#fa-home").removeClass("d-none");
     $("#view_all_app_roles").removeClass("d-none");
     $("#view_app_role").addClass("d-none");
 
   })
-  $("#view_all_role_name").on("click", ".fa-home", function () {
+  $("#view_all_role_name").on("click", "#fa-home", function () {
     $(this).addClass("d-none");
-    $("#view_all_role_name").find(".fa-eye").removeClass("d-none");
+    $("#view_all_role_name").find("#fa-eye").removeClass("d-none");
     $("#view_all_app_roles").addClass("d-none");
     $("#view_app_role").removeClass("d-none");
 
