@@ -25,7 +25,7 @@ return $data;
               bom_output.component_cat COLLATE utf8mb4_unicode_ci
        ) AS process
 FROM bom_output
-WHERE bom_output.part_id = =$part_id ";
+WHERE bom_output.part_id = $part_id ";
 
 $result = $conn->query($sql);
 
