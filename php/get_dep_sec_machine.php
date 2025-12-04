@@ -14,7 +14,7 @@ return $data;
 }
 
 
- $sql = "SELECT dep_sec_machine_id as machine_id,machine_name,dep_sec_id as sec_id FROM jaysan_machine where dep_sec_id = $sec_id";
+ $sql = "SELECT jmid as machine_id,machine_name,dep_sec_id as sec_id FROM jaysan_machine where dep_sec_id = $sec_id";
 
 $result = $conn->query($sql);
 
