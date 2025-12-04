@@ -53,9 +53,9 @@ LEFT JOIN department ON department.dep_id = wtm.dep_id
 LEFT JOIN dep_section ON dep_section.dep_sec_id = wtm.dep_sec_id
 LEFT JOIN  jaysan_machine ON  jaysan_machine.jmid = wtm.machine_id
 WHERE
-    process_id = pid
+    ori_process_id = pid
 GROUP BY
-    process_id) as extra  from (
+    ori_process_id) as extra  from (
 
     
 
