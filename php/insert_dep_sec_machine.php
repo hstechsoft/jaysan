@@ -18,7 +18,7 @@ return $data;
 
 
 
- $sql = "INSERT INTO dep_sec_machine ( machine_name,sec_id) VALUES ($machine_name,$sec_id)";
+ $sql = "INSERT INTO  jaysan_machine ( machine_name,dep_sec_id) VALUES ($machine_name,$sec_id)";
 
   if ($conn->query($sql) === TRUE) {
   $last_id = $conn->insert_id;

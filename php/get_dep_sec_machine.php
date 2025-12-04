@@ -14,7 +14,7 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM dep_sec_machine where sec_id = $sec_id";
+ $sql = "SELECT * FROM jaysan_machine where dep_sec_id = $sec_id";
 
 $result = $conn->query($sql);
 
