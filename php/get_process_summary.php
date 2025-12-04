@@ -52,7 +52,7 @@ JSON_ARRAYAGG(
                   
                    ifnull(ex.cost,0) as cost,
                     sum(a) as process_extra_count,
-                    (select jaysan_proces.process_name from jaysan_proces where jaysan_proces.process_id = ex.pid) as process_name
+                    (select jaysan_process.process_name from jaysan_process where jaysan_process.process_id = ex.pid) as process_name
                    from extra ex
     LEFT join creditors cre on ex.godown_id = cre.creditor_id
     LEFT join  department dep on ex.dep_id = dep.dep_id
