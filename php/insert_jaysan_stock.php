@@ -8,7 +8,7 @@ $finished_process_no = test_input($_GET['finished_process_no']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
 
-$finished_godown = ($_GET['finished_godown']);
+$finished_godown = test_input($_GET['finished_godown']);
 
 sql_nullable($godown);
 sql_nullable($dep);
