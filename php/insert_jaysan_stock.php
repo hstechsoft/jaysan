@@ -10,11 +10,11 @@ $qty = test_input($_GET['qty']);
 
 $finished_godown = ($_GET['finished_godown']);
 
-sql_nullable($godown);
-sql_nullable($dep);
-sql_nullable($sec);
+$godown = sql_nullable($godown);
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
 
-sql_nullable($finished_godown);
+$finished_godown = sql_nullable($finished_godown);
  
  echo sql_nullable($godown);
   echo sql_nullable($dep);
