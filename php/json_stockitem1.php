@@ -3,8 +3,8 @@
 include 'db_head.php';
 
 
-   
-    $filename = 'StockItem.json';
+
+    $filename = __DIR__ . '/../tally/Json/JAStkItem.JSON';
 
     if (file_exists($filename)) {
         $json = file_get_contents($filename);
@@ -14,6 +14,7 @@ include 'db_head.php';
  foreach ($data['StockItem'] as $item) {
 echo $i.". ";
 echo $item['Name'] . "\t\t<br>\t\t";
+
 if(isset($item['MULTICOMPONENTLIST'])) {
         foreach ($item['MULTICOMPONENTLIST'] as $component)
         {
@@ -31,10 +32,10 @@ if(isset($component['MULTICOMPONENTITEMLIST'])){
 $component_cat = $component['COMPONENTLISTNAME'];
 
      
-             $sql_bom = "INSERT INTO bom_output (part_id,component_cat) VALUES ( (SELECT part_id FROM parts_tbl WHERE part_name = '$out_part_name'),'$component_cat')";
+  //            $sql_bom = "INSERT INTO bom_output (part_id,component_cat) VALUES ( (SELECT part_id FROM parts_tbl WHERE part_name = '$out_part_name'),'$component_cat')";
             
-  if ($conn->query($sql_bom) === TRUE) {
-  $last_insert_id = $conn->insert_id;
+  // if ($conn->query($sql_bom) === TRUE) {
+  // $last_insert_id = $conn->insert_id;
 
     foreach ($component['MULTICOMPONENTITEMLIST'] as $component_item)
   {
@@ -50,23 +51,23 @@ echo "- " . $in_part_qty. "\t\t";
 echo "<br>";
 
 
-$sql = "INSERT  INTO bom_input (bom_id,qty,part_id)
- VALUES ($last_insert_id ,$in_part_qty , (SELECT part_id FROM parts_tbl WHERE part_name = '$in_part_name'))";
+// $sql = "INSERT  INTO bom_input (bom_id,qty,part_id)
+//  VALUES ($last_insert_id ,$in_part_qty , (SELECT part_id FROM parts_tbl WHERE part_name = '$in_part_name'))";
   
-  if ($conn->query($sql) === TRUE) {
+//   if ($conn->query($sql) === TRUE) {
    
     
-  } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-  }
+//   } else {
+//     echo "Error: " . $sql . "<br>" . $conn->error;
+//   }
   
   }
                       
 
-  }
- else {
-    echo "Error: " . $sql_bom . "<br>" . $conn->error;
-  }
+//   }
+//  else {
+//     echo "Error: " . $sql_bom . "<br>" . $conn->error;
+//   }
 
 
 
