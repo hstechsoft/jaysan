@@ -14,14 +14,250 @@
     <title>Document</title>
 
     <!-- external css -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style1.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
 
     <style>
-        #purchase_order_table tr {
+        /* MAIN CONTAINER */
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 60px;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        /* --- PREMIUM STEP CARD --- */
+        .flow-step {
+            position: relative;
+            width: 200px;
+            padding: 10px 0px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+            transition: 0.25s ease;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .flow-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-step.active {
+            background: #eef3ff;
+        }
+
+        .flow-step.active:hover {
+            transform: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* Header */
+        .flow-step-header {
+            cursor: pointer;
+            width: 100%;
             font-size: 12px;
+        }
+
+        /* ICON */
+        .flow-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 3px auto;
+            background: linear-gradient(145deg, #ffffff, #eef1ff);
+            border: 3px solid #7281ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #5f6dff;
+        }
+
+        /* MATERIALS CARD */
+
+        .flow-materials {
+            margin-top: 5px;
+            background: #f6f7ff;
+            border: 1px solid #e2e4ff;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 10px;
+            color: #333;
+            text-align: left;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            max-height: 25vh;
+            overflow-y: auto;
+        }
+
+        .flow-materials ul {
+            padding-left: 0px;
+            margin: 0;
+            list-style: none;
+        }
+
+        /* Accordion collapsed */
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        /* When open, max-height will be set in JS */
+        .accordion-body.open {
+            /* nothing needed here */
+        }
+
+
+        /* ARROW BETWEEN STEPS */
+        .flow-step::after {
+            content: "➜";
+            font-size: 26px;
+            color: #5062ff;
+            position: absolute;
+            top: 50%;
+            right: -45px;
+            transform: translateY(-50%);
+            opacity: 0.7;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* Container holding badge + clock */
+        .top-right-wrapper {
+            position: absolute;
+            top: -5px;
+            /*right: -5px;*/
+            display: flex;
+            align-items: center;
+            gap: 102px;
+        }
+
+        /* Small red badge showing process_extra_count */
+        .extra-count {
+            font-size: 11px;
+            padding: 4px 7px;
+            z-index: 2;
+        }
+
+        /* Clock icon styling */
+        .clock-icon {
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 6px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .clock-icon:hover {
+            background: #f3f3f3;
+        }
+
+        .process-card {
+            background: #ffffff;
+            border: 1px solid #e6e8f2;
+            border-left: 4px solid #4c6fff;
+            transition: 0.25s ease;
+            font-size: 12px;
+            max-height: 300vh;
+            overflow-y: auto;
+        }
+
+        .process-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        .process-title {
+            font-weight: 700;
+            color: #3246d3;
+            font-size: 12px;
+        }
+
+        .step-index {
+            color: #6c7bff;
+            font-weight: 900;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .toggle-details {
+            font-size: 11px;
+        }
+
+        .details-box {
+            background: #f8f9ff;
+            border: 1px solid #dfe3ff;
+        }
+
+        .detail-item {
+            font-size: 13px;
+            padding: 3px 0;
+        }
+
+        .extra-item {
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .total-summary-card {
+            background: linear-gradient(135deg, #f7f9ff, #eef2ff);
+            border: 1px solid #d4dbff;
+            border-left: 5px solid #4c6fff;
+            transition: 0.3s ease;
+        }
+
+        .total-summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+        }
+
+        .summary-label {
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-size: 15px;
+        }
+
+        .summary-row {
+            border-bottom: 1px dashed #d5d8ef;
+            padding-bottom: 4px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
         }
     </style>
 
@@ -75,90 +311,85 @@
                         <label for="bom_part_search">Part Name</label>
 
                     </div>
-                    <div class="table-responsive d-none" id="bom_type_table">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption></caption>
-                            <thead>
 
-                                <tr>
-                                    <th scope="col" class="text-center">BOM Type</th>
+                    <div class="accordion mt-3 shadow-sm rounded" id="accordionExample">
 
+                        <div class="accordion-item d-none" id="bom_list_table">
 
-                                </tr>
-                            </thead>
-                            <tbody id="bom_type_table_body">
-                                <tr>
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                                    aria-controls="collapseOne">
+                                    <i class="bi bi-list-check me-2"></i> BOM List
+                                </button>
+                            </h2>
 
-                                    <td></td>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
 
-                                </tr>
+                                <div class="accordion-bodyy bg-light">
+                                    <ul class="list-group list-group-flush" id="bom_list_table_body"></ul>
+                                </div>
 
+                            </div>
 
-                            </tbody>
+                        </div>
 
-
-                        </table>
                     </div>
 
-                </div>
 
-                <div class="col-md-5">
-                    <div class="table-responsive">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption></caption>
-                            <thead>
+                    <div style="max-height: 65vh; overflow-y: auto;" class="position-relative">
 
+                        <table class="table table-bordered mt-4 d-none" id="bom_material_table">
+                            <thead class="table-primary" style="position: sticky; top: 0; z-index: 1; font-size: 13px;">
                                 <tr>
-                                    <th scope="col" class="text-center">BOM List</th>
-
-
+                                    <th class="d-flex justify-content-between">Material Name <b
+                                            class="badge bg-secondary" id="m_count"></b></th>
+                                    <th>Qty</th>
                                 </tr>
                             </thead>
-                            <tbody id="bom_list_table_body">
-                                <tr>
-
-                                    <td></td>
-
-                                </tr>
-
-
-                            </tbody>
-
-
+                            <tbody id="bom_material_table_body" style="font-size: 13px;"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="col-md-5">
-                    <div class="table-responsive">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption></caption>
-                            <thead>
+                <div class="col-md-7 d-none" id="bom_process_table">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb" id="back">
+                            </ol>
+                        </nav>
+                    <div class="card " id="">
+                        <div class="card-header text-center" id="bom_process_table_cardHeader">
 
-                                <tr>
-                                    <th scope="col" class="text-center">Process</th>
+                        </div>
+                        <div class="card-body">
 
-                                </tr>
-                            </thead>
-                            <tbody id="bom_process_table_body">
-                                <tr>
-
-                                    <td></td>
-
-                                </tr>
-
-
-                            </tbody>
-
-
-                        </table>
+                            <div class="flow-container" id="processFlow"></div>
+                        </div>
                     </div>
+
                 </div>
+
+                <div class="col-md-3 d-none" id="bom_process_summary_table">
+
+
+                </div>
+
+
 
             </div>
 
 
         </div>
+
+        <div class="modal" id="inputPopup">
+            <div class="modal-content" id="modalBox">
+                <span class="close-btn" id="closeBtn">&times;</span>
+                <h3 id="popupTitle"></h3>
+                <div id="popupBody"></div>
+            </div>
+        </div>
+
 
 
         <!-- jQuery -->

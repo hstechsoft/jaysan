@@ -24,7 +24,7 @@ $(document).ready(function () {
   });
 
 
-  $("#menu_bar").load('menu.html',
+  $("#menu_bar").load('menu1.html',
     function () {
       $('#topbar_logout_btn').on('click', function () {
         //salert("Logout","are you sure" , "warning")

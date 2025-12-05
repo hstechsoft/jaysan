@@ -169,6 +169,7 @@ $(document).ready(function () {
 
   //   });
   $('#submit_btn').on('click', function () {
+    $('#submit_btn').prop('disabled', true);
     var processData = []
     var inputPartsData = [];
     var tbl_valid = true;
@@ -262,6 +263,7 @@ $(document).ready(function () {
 
 
   $('#update_btn').on('click', function () {
+    $('#update_btn').prop('disabled', true);
     var del_process_list = [];
     var tbl_valid = true;
     $("#welding_table tr").each(function () {
@@ -1489,6 +1491,8 @@ $(document).ready(function () {
     var min = $("#min_time").val();
     var max = $("#max_time").val();
     var cost = $("#cost").val();
+    console.log(machine_id, section_id);
+    
 
     if ($('#welding_table td.tbl_selected').length > 0) {
       var a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
@@ -1681,6 +1685,8 @@ function get_dep_sec_machine(sec_id) {
 
 }
 function insert_dep_sec_machine(sec_id, mach_name) {
+  console.log(sec_id, mach_name);
+  
   $.ajax({
     url: "php/insert_dep_sec_machine.php",
     type: "get", //send it through get method
