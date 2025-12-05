@@ -19,7 +19,16 @@ sql_nullable($qty);
 sql_nullable($dated);
 sql_nullable($finished_godown);
  
- 
+ echo $godown;
+  echo $dep;
+    echo $sec;
+      echo $finished_process_no;
+      echo $batch_id;
+        echo $qty;
+        echo $dated;
+          echo $finished_godown;
+
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -27,6 +36,8 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+
+
 
 
  $sql = "INSERT INTO jaysan_stock ( godown,dep,sec,finished_process_no,batch_id,qty,dated,finished_godown) VALUES ($godown,$dep,$sec,$finished_process_no,$batch_id,$qty,$dated,$finished_godown)";
