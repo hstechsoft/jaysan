@@ -23,6 +23,8 @@ WITH RECURSIVE process_details AS (
    process_final as(SELECT pd.*,ip.input_part_id,(SELECT parts_tbl.part_name from parts_tbl WHERE parts_tbl.part_id = ip.input_part_id ) as part_name ,
       JSON_ARRAYAGG(
         JSON_OBJECT(
+          'process_availble',
+            (SELECT 1 FROM process_wel_tbl WHERE process_wel_tbl.output_part =  ip.input_part_id  and process_wel_tbl.component_cat = pd.component_cat and cat = "out"),
             'part_id',
             ip.input_part_id,
             'part_name',
