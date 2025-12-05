@@ -16,14 +16,14 @@ sql_nullable($sec);
 
 sql_nullable($finished_godown);
  
- echo $godown;
-  echo $dep;
-    echo $sec;
+ echo sql_nullable($godown);
+  echo sql_nullable($dep);
+    echo sql_nullable($sec);
       echo $finished_process_no;
       echo $batch_id;
         echo $qty;
 
-          echo $finished_godown;
+          echo sql_nullable($finished_godown);
 
 
 function test_input($data) {
