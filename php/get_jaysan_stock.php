@@ -16,6 +16,12 @@
 
     $sec_query = ($sec_query == '') ? "1" :  "sec  = '$sec_query'";
 
+    $part_query = isset($_GET['part_query']) ? $_GET['part_query'] : '';
+    $part_query = ($part_query == '') ? "1" :  "output_part  = '$part_query'";
+
+    $qty_query = isset($_GET['qty_query']) ? $_GET['qty_query'] : '';
+    $qty_query = ($qty_query == '') ? "1" :  "qty  >= '$qty_query'";
+
 
  
  
@@ -28,13 +34,13 @@ return $data;
 }
 
 
- $sql = " with stock as(SELECT js.*,
+ $sql = " with stock as(SELECT js.*,pwl.output_part,
               
               creditors.creditor_name,department.dep_name,dep_section.sec_name FROM `jaysan_stock` js  
 inner join process_wel_tbl pwl on js.finished_process_no = pwl.process_id
 LEFT join creditors on creditors.creditor_id = js.godown
 LEFT join department on department.dep_id = js.dep
-LEFT join dep_section on dep_section.dep_sec_id = js.sec WHERE 1)
+LEFT join dep_section on dep_section.dep_sec_id = js.sec WHERE $date_query and  $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query)
 
 SELECT* from stock GROUP by dated ORDER by dated DESC limit 100";
 
