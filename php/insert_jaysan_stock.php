@@ -1,14 +1,14 @@
 <?php
  include 'db_head.php';
 
- $godown = test_input($_GET['godown']);
-$dep = test_input($_GET['dep']);
-$sec = test_input($_GET['sec']);
+ $godown = ($_GET['godown']);
+$dep = ($_GET['dep']);
+$sec = ($_GET['sec']);
 $finished_process_no = test_input($_GET['finished_process_no']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
 
-$finished_godown = test_input($_GET['finished_godown']);
+$finished_godown = ($_GET['finished_godown']);
 
 sql_nullable($godown);
 sql_nullable($dep);
