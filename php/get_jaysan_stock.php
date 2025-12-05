@@ -34,9 +34,8 @@ return $data;
 }
 
 
- $sql = " with stock as(SELECT js.*,pwl.output_part,
-              
-              creditors.creditor_name,department.dep_name,dep_section.sec_name FROM `jaysan_stock` js  
+ $sql = " with stock as(SELECT js.*,pwl.output_part,(select parts_tbl.part_name from parts_tbl where parts_tbl.part_id = pwl.output_part) as part_name,
+                            creditors.creditor_name,department.dep_name,dep_section.sec_name FROM `jaysan_stock` js  
 inner join process_wel_tbl pwl on js.finished_process_no = pwl.process_id
 LEFT join creditors on creditors.creditor_id = js.godown
 LEFT join department on department.dep_id = js.dep
