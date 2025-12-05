@@ -15,15 +15,7 @@ $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 
 $finished_godown = sql_nullable($finished_godown);
- 
- echo sql_nullable($godown);
-  echo sql_nullable($dep);
-    echo sql_nullable($sec);
-      echo $finished_process_no;
-      echo $batch_id;
-        echo $qty;
 
-          echo sql_nullable($finished_godown);
 
 
 function test_input($data) {
