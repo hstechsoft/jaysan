@@ -32,6 +32,8 @@ $(document).ready(function () {
   $('#emp_auto').on('input', function () {
     //check the value not empty
     if ($('#emp_auto').val() != "") {
+      $('#emp_auto').data("emp_id", '');
+
       $('#emp_auto').autocomplete({
         //get data from databse return as array of object which contain label,value
 
@@ -89,7 +91,9 @@ $(document).ready(function () {
 
   $('#cust_auto').on('input', function () {
     //check the value not empty
+    $('#cust_phone_auto').val("")
     if ($('#cust_auto').val() != "") {
+      $('#cust_auto').data("cus_id", '');
       $('#cust_auto').autocomplete({
         //get data from databse return as array of object which contain label,value
 
@@ -147,9 +151,11 @@ $(document).ready(function () {
 
   $('#cust_phone_auto').on('input', function () {
     //check the value not empty
+      $('#cust_auto').val("");
     let cus_no = $(this).val().trim();
     cus_no = "%" + cus_no + "%";
     if (cus_no != "") {
+      // $('#cust_auto').data("cus_id", '');
 
       $('#cust_phone_auto').autocomplete({
         //get data from databse return as array of object which contain label,value
@@ -321,9 +327,16 @@ $(document).ready(function () {
     }
   })
 
+  $("#order_no, #cust_phone_auto, #cust_auto, #payment, #emp_auto").on("input change", function () {
+
+    $("#filter_btn").trigger("click");
+
+  });
+
+
   $("#filter_btn").on("click", function () {
 
-    var emp = $("#emp_auto").val() || "";
+    var emp = $("#emp_auto").data("emp_id") || "";
     var cust = $("#cust_auto").data("cus_id") || "";
     var order_no = $("#order_no").val() || "";
     var product_name = $("#product_name_select").val() || "";
@@ -341,12 +354,12 @@ $(document).ready(function () {
 
     var sale_date = "";
     if ($("#sale_s_date").val() != "" && $("#sale_e_date").val() != "") {
-      sale_date = "'"+$("#sale_s_date").val()+"'" + " and " + "'"+$("#sale_e_date").val()+"'";
+      sale_date = "'" + $("#sale_s_date").val() + "'" + " and " + "'" + $("#sale_e_date").val() + "'";
     }
 
     var production_date = "";
     if ($("#production_s_date").val() != "" && $("#production_e_date").val() != "") {
-      production_date = "'"+$("#production_s_date").val()+"'" || + " and " + "'"+$("#production_e_date").val()+"'";
+      production_date = "'" + $("#production_s_date").val() + "'" || + " and " + "'" + $("#production_e_date").val() + "'";
     }
 
     console.log($("#cust_auto").data("cus_id"));
