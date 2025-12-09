@@ -14,12 +14,13 @@ return $data;
 }
 
 
- $sql = "with pay_summary as (SELECT  sof.oid,'true' as sts from sales_order_form  sof inner join jaysan_payment jp on jp.oid = sof.oid WHERE jp.sts = 'not_approve' GROUP by sof.oid),
-unassigned as (SELECT  sop.required_qty,sop.oid , (sop.required_qty - sum(ifnull(ap.qty,0))) as un_assign from sales_order_product sop left join assign_product ap on sop.opid = ap.opid GROUP by sop.opid),
-unass_summary as (SELECT oid,sum(un_assign) as unass_qty from unassigned GROUP by oid)
+ $sql = "with unassigned as (SELECT  sop.required_qty,sop.oid , (sop.required_qty - sum(ifnull(ap.qty,0))) as un_assign from sales_order_product sop LEFT join assign_product ap on sop.opid = ap.opid GROUP by sop.opid),
+summary as (SELECT sof.oid,sof.order_no,sum(un_assign) as unass_qty ,'un_assign' as sts from unassigned inner join sales_order_form sof on sof.oid = unassigned.oid  WHERE sof.order_category = \"Sales\" GROUP by sof.oid HAVING sum(un_assign)>0 ),
+pay_summary as(SELECT  sof.order_no,sof.oid,'true' as sts from sales_order_form  sof inner join jaysan_payment jp on jp.oid = sof.oid WHERE jp.sts = 'not_approve' GROUP by sof.oid) 
 
-
-SELECT sof.oid,pay_summary.sts,unass_qty from sales_order_form sof LEFT join pay_summary on sof.oid = pay_summary.oid left join unass_summary on sof.oid = unass_summary.oid";
+SELECT JSON_ARRAYAGG(JSON_OBJECT('order_no',order_no)) as order_no,COUNT(oid) as total_pay_approval,'pay_approval' as sts from pay_summary group by sts UNION all 
+SELECT JSON_ARRAYAGG(
+        JSON_OBJECT('order_no',order_no)) as order_no,COUNT(oid) as total_unassigned_order,'un_assign' as sts from summary group by sts;";
 
 $result = $conn->query($sql);
 
