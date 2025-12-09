@@ -5,6 +5,7 @@ $username = "u333142350_db_user";
 $password = ":wi9x57Ci2";
 $dbname = "u333142350_jaysan";
 
+
 // $servername = "localhost";
 // $username = "u211327498_jaysan_user";
 // $password = "Admin@123";
