@@ -14,7 +14,7 @@ return $data;
 }
 
 
- $sql = "SELECT * from  custom_field_master WHERE std = 1";
+ $sql = "SELECT sts,dcf_id from dcf";
 
 $result = $conn->query($sql);
 
