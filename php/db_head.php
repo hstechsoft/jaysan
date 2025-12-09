@@ -1,10 +1,9 @@
 <?php
 
-$servername = "srv841.hstgr.io";
-$username = "u211327498_jaysan_user";
-$password = "Admin@123";
-$dbname = "u211327498_jaysan";
-
+$servername = "srv1002.hstgr.io";
+$username = "u333142350_db_user";
+$password = ":wi9x57Ci2";
+$dbname = "u333142350_jaysan";
 
 // $servername = "localhost";
 // $username = "u211327498_jaysan_user";
