@@ -36,7 +36,7 @@ echo 'godown =' . $godown . ' dep =' . $dep . ' sec =' . $sec . ' part_id =' . $
 $conn->query("SET time_zone = '+05:30'");
 
 // Check if record exists
-$check_sql = "SELECT qty FROM jaysan_stock WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
+$check_sql = "SELECT qty FROM jaysan_stock WHERE (godown = $godown OR $godown IS NULL)AND (dep = $dep OR $dep IS NULL)AND (sec = $sec OR $sec IS NULL)AND (part_id = $part_id )";
 $result = $conn->query($check_sql);
 
 if ($result->num_rows > 0) {
@@ -50,7 +50,9 @@ if ($result->num_rows > 0) {
 }
 
   if ($conn->query($sql) === TRUE) {
-$check_master = "SELECT master_id FROM sec_stock_master WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
+$check_master = "SELECT *
+FROM sec_stock_master
+WHERE (godown = $godown OR $godown IS NULL)AND (dep = $dep OR $dep IS NULL)AND (sec = $sec OR $sec IS NULL)AND (part_id = $part_id );";
 $master_result = $conn->query($check_master);
 if ($master_result->num_rows > 0) {
   // Record exists, update it
