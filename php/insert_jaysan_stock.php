@@ -61,9 +61,7 @@ if ($master_result->num_rows > 0) {
      $master_sql_result =   $conn->query($master_sql);
       if ($master_sql_result->num_rows > 0) {
       }
-      else {
-        echo "Error: " . $master_sql . "<br>" . $conn->error;
-      }
+      
       
 } else {
   // Record doesn't exist, insert it
@@ -72,9 +70,7 @@ if ($master_result->num_rows > 0) {
       $master_sql_result =   $conn->query($master_sql);
       if ($master_sql_result->num_rows > 0) {
       }
-      else {
-        echo "Error: " . $master_sql . "<br>" . $conn->error;
-      }
+    
 }
     echo "ok";
 
