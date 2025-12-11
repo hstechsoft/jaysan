@@ -60,7 +60,7 @@ if ($master_result->num_rows > 0) {
 } else {
   // Record doesn't exist, insert it
   $master_sql = "INSERT INTO sec_stock_master (godown,dep,sec,part_id,min_qty,max_qty) 
-      VALUES ($godown,$dep,$sec,$part_id,$min_qty,$qty)";
+      VALUES ($godown,$dep,$sec,$part_id,$min_qty,$max_qty)";
       $conn->query($master_sql);
 }
     echo "ok";
