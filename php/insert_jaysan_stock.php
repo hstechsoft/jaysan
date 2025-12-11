@@ -31,7 +31,7 @@ return $data;
 }
 
 
-
+echo 'godown =' . $godown . ' dep =' . $dep . ' sec =' . $sec . ' part_id =' . $part_id;
 // Set MySQL timezone
 $conn->query("SET time_zone = '+05:30'");
 
