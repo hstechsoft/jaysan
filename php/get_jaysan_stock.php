@@ -4,7 +4,7 @@
   $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
     $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
     
-  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  "dated between    '$from_date' and '$to_date' ";
+  // $date_query = ($from_date == '' || $to_date  == '') ? "1" :  "dated between    '$from_date' and '$to_date' ";
   $creditor_query = isset($_GET['creditor_query']) ? $_GET['creditor_query'] : '';
     $creditor_query = ($creditor_query == '') ? "1" :  "godown  = '$creditor_query'";
  
@@ -32,7 +32,7 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
-$sql = "with stock as(SELECT js.stock_id,part_id,qty,godown,dep,sec,
+$sql = "with stock_wo as(SELECT js.stock_id,part_id,qty,godown,dep,sec,
 cre.creditor_name as unit,
 ifnull(dep.dep_name,'no-department') as department,
 ifnull(sec.sec_name,'no-section') as section,
@@ -44,6 +44,8 @@ FROM `jaysan_stock` js
 LEFT join creditors cre on  js.godown = cre.creditor_id 
 LEFT join department dep on  js.dep = dep.dep_id 
 LEFT join dep_section sec on  js.sec = sec.dep_sec_id 
+WHERE  1),
+ stock as(SELECT * from stock_wo
 WHERE  $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query),
 sec_stock as(SELECT stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
 dep_stock as(SELECT stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
