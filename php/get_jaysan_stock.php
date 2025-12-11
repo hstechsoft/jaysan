@@ -32,16 +32,29 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+$sql = "with stock as(SELECT js.stock_id,finished_process_no,qty,godown,dep,sec,
+cre.creditor_name as unit,
+ifnull(dep.dep_name,'no-department') as department,
+ifnull(sec.sec_name,'no-section') as section,
+sum(qty) over (PARTITION by finished_process_no) as total_stock,
+sum(qty) over (PARTITION by finished_process_no,godown) as total_stock_godown,
+sum(qty) over (PARTITION by finished_process_no,godown,dep) as total_stock_dep,
+sum(qty) over (PARTITION by finished_process_no,godown,dep,sec) as total_stock_sec
+FROM `jaysan_stock` js
+LEFT join creditors cre on  js.godown = cre.creditor_id 
+LEFT join department dep on  js.dep = dep.dep_id 
+LEFT join dep_section sec on  js.sec = sec.dep_sec_id 
+WHERE  $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query),
+sec_stock as(SELECT stock_id,finished_process_no,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by finished_process_no,godown,dep,sec),
+dep_stock as(SELECT stock_id,finished_process_no,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('section',section,'Section_qty',total_stock_sec)) as sec_wise_total from sec_stock GROUP by finished_process_no,godown,dep),
+        unit_stock as (SELECT stock_id,finished_process_no,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('department',department,'department_qty',total_stock_dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by finished_process_no,godown)
+        
+        SELECT stock_id,finished_process_no,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('unit',unit,'godown_qty',total_stock_godown,'department_details',dep_total)) as unit_total from unit_stock GROUP by finished_process_no";
 
-
- $sql = " with stock as(SELECT js.*,pwl.output_part,(select parts_tbl.part_name from parts_tbl where parts_tbl.part_id = pwl.output_part) as part_name,
-                            creditors.creditor_name,department.dep_name,dep_section.sec_name FROM `jaysan_stock` js  
-inner join process_wel_tbl pwl on js.finished_process_no = pwl.process_id
-LEFT join creditors on creditors.creditor_id = js.godown
-LEFT join department on department.dep_id = js.dep
-LEFT join dep_section on dep_section.dep_sec_id = js.sec WHERE $date_query and  $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query)
-
-SELECT* from stock GROUP by dated ORDER by dated DESC limit 100";
+ 
 
 $result = $conn->query($sql);
 
