@@ -27,11 +27,11 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+echo "godown: ".$godown." dep: ".$dep." sec: ".$sec." part_id: ".$part_id." batch_id: ".$batch_id." qty: ".$qty." finished_godown: ".$finished_godown." remark: ".$remark."\n";
 
 // Set MySQL timezone
 $conn->query("SET time_zone = '+05:30'");
- $sql = "INSERT INTO jaysan_stock ( godown,dep,sec,part_id,batch_id,qty,finished_godown) VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown)";
+
 // Check if record exists
 $check_sql = "SELECT qty FROM jaysan_stock WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
 $result = $conn->query($check_sql);
