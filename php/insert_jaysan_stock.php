@@ -7,7 +7,7 @@ $sec = ($_GET['sec']);
 $part_id = test_input($_GET['part_id']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
-$remark = test_input($_GET['remark']);
+$remark = isset($_GET['remark']) && $_GET['remark'] != '' ? test_input($_GET['remark']) : "''";
 
 $finished_godown = ($_GET['finished_godown']);
 
@@ -29,7 +29,8 @@ return $data;
 
 
 
-
+// Set MySQL timezone
+$conn->query("SET time_zone = '+05:30'");
  $sql = "INSERT INTO jaysan_stock ( godown,dep,sec,part_id,batch_id,qty,finished_godown) VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown)";
 // Check if record exists
 $check_sql = "SELECT qty FROM jaysan_stock WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
