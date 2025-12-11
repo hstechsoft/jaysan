@@ -7,6 +7,7 @@ $sec = ($_GET['sec']);
 $part_id = test_input($_GET['part_id']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
+$remark = test_input($_GET['remark']);
 
 $finished_godown = ($_GET['finished_godown']);
 
@@ -36,12 +37,12 @@ $result = $conn->query($check_sql);
 
 if ($result->num_rows > 0) {
   // Record exists, update it
-  $sql = "UPDATE jaysan_stock SET batch_id=$batch_id, qty=$qty, finished_godown=$finished_godown 
+  $sql = "UPDATE jaysan_stock SET batch_id=$batch_id, qty=$qty, finished_godown=$finished_godown , remark=$remark
       WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
 } else {
   // Record doesn't exist, insert it
-  $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown) 
-      VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown)";
+  $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
+      VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown,$remark)";
 }
 
   if ($conn->query($sql) === TRUE) {
