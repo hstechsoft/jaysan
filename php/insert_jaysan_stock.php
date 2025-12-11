@@ -57,7 +57,7 @@ $master_result = $conn->query($check_master);
 if ($master_result->num_rows > 0) {
   // Record exists, update it
   $master_sql = "UPDATE sec_stock_master SET min_qty=$min_qty,max_qty=$max_qty
-      WHERE godown=$godown AND dep=$dep AND sec=$sec AND part_id=$part_id";
+      WHERE (godown = $godown OR $godown IS NULL)AND (dep = $dep OR $dep IS NULL)AND (sec = $sec OR $sec IS NULL)AND (part_id = $part_id )";
      $master_sql_result =   $conn->query($master_sql);
       if ($master_sql_result->num_rows > 0) {
       }
