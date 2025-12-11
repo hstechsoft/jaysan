@@ -4,7 +4,7 @@
  $godown = ($_GET['godown']);
 $dep = ($_GET['dep']);
 $sec = ($_GET['sec']);
-$finished_process_no = test_input($_GET['finished_process_no']);
+$part_id = test_input($_GET['part_id']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
 
@@ -29,7 +29,7 @@ return $data;
 
 
 
- $sql = "INSERT INTO jaysan_stock ( godown,dep,sec,finished_process_no,batch_id,qty,finished_godown) VALUES ($godown,$dep,$sec,$finished_process_no,$batch_id,$qty,$finished_godown)";
+ $sql = "INSERT INTO jaysan_stock ( godown,dep,sec,part_id,batch_id,qty,finished_godown) VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown)";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
