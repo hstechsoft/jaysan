@@ -77,8 +77,8 @@ if ($master_result->num_rows > 0) {
   $master_sql = "UPDATE sec_stock_master SET min_qty=$min_qty,max_qty=$max_qty
       WHERE  store_type = $store_type AND (part_id = $part_id ) AND store_id = $store_id;";
      $master_sql_result =   $conn->query($master_sql);
-      if ($master_sql_result->num_rows > 0) {
-      }
+      // if ($master_sql_result->num_rows > 0) {
+      // }
       
       
 } else {
@@ -86,8 +86,8 @@ if ($master_result->num_rows > 0) {
   $master_sql = "INSERT INTO sec_stock_master (part_id,min_qty,max_qty,store_type,store_id) 
       VALUES ($part_id,$min_qty,$max_qty,$store_type,$store_id)";
       $master_sql_result =   $conn->query($master_sql);  
-      if ($master_sql_result->num_rows > 0) {
-      }
+      // if ($master_sql_result->num_rows > 0) {
+      // }
     
 }
 }
