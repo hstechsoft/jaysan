@@ -61,7 +61,7 @@ left join  request godown_requset on  js.sec =  godown_requset.store_id and godo
 WHERE  1),
  stock as(SELECT * from stock_wo
 WHERE   $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query and $min_order_query),
-sec_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
+sec_stock as(SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
 dep_stock as(SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('sec_req',sec_req,'section',section,'Section_qty',total_stock_sec,'sec_id',sec,'sec_min',sec_min,'sec_max',sec_max)) as sec_wise_total from sec_stock GROUP by part_id,godown,dep),
         unit_stock as (SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
