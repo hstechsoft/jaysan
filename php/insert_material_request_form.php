@@ -64,6 +64,7 @@ if ($conn->multi_query($sql)) {
 
 
     foreach ($req_id as $rid) {
+     
         $sql_update_req = "UPDATE emp_material_request SET mrf_id = $mrf_id WHERE emp_material_request_id = '$rid'";
         if ($conn->query($sql_update_req) !== TRUE) {
             echo "Error: " . $sql_update_req . "<br>" . $conn->error;
@@ -71,7 +72,7 @@ if ($conn->multi_query($sql)) {
             exit;
         }
     }
-    echo "ok";
+     echo "ok";
 } else {
     echo "Error: " . $conn->error;
 }
