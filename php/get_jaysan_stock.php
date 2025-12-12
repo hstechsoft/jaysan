@@ -66,9 +66,11 @@ sec_stock as(SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep
 dep_stock as(SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('sec_req',sec_req,'section',section,'Section_qty',total_stock_sec,'sec_id',sec,'sec_min',sec_min,'sec_max',sec_max)) as sec_wise_total from sec_stock GROUP by part_id,godown,dep),
         unit_stock as (SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
-        JSON_OBJECT('dep_req',dep_req,'dep_min',dep_min,'dep_max',dep_max,'department',department,'department_qty',total_stock_dep,'dep_id',dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by part_id,godown)
+        JSON_OBJECT('dep_req',dep_req,'dep_min',dep_min,'dep_max',dep_max,'department',department,'department_qty',total_stock_dep,'dep_id',dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by part_id,godown),
+        req_detials as (SELECT part_id, JSON_ARRAYAGG(
+        JSON_OBJECT('emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty)) as req_details FROM `emp_material_request` emr1 INNER join employee emp  on emp.emp_id = emr1.emp_id   WHERE  mrf_id is null  GROUP by store_type,store_id,part_id)
         
-        SELECT sec_req,dep_req,godown_req,stock_id,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,(select part_name from parts_tbl where part_id = unit_stock.part_id) as part_name ,(select min_order_qty from parts_tbl where part_id = unit_stock.part_id) as min_order_qty, part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        SELECT (select req_details from req_detials rd where rd.part_id = unit_stock.part_id) as req_details, sec_req,dep_req,godown_req,stock_id,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,(select part_name from parts_tbl where part_id = unit_stock.part_id) as part_name ,(select min_order_qty from parts_tbl where part_id = unit_stock.part_id) as min_order_qty, part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('godown_req',godown_req,'godown_min',godown_min,'godown_max',godown_max,'unit',unit,'godown_qty',total_stock_godown,'godown_id',godown,'department_details',dep_total)) as unit_total from unit_stock GROUP by part_id";
 
  
