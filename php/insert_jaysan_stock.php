@@ -26,6 +26,21 @@ foreach ($stock_master as $stock_master_data)
   $store_type = isset($stock_master_data['store_type']) ? test_input($stock_master_data['store_type']) : "''";
 echo "min_qty =" . $min_qty . " max_qty = " . $max_qty . " store_type = " . $store_type;
 }
+// Sample JSON format for stock_master parameter:
+// [
+//   {
+//     "min_qty": "10",
+//     "max_qty": "100",
+//     "store_type": "warehouse"
+//   },
+//   {
+//     "min_qty": "5",
+//     "max_qty": "50",
+//     "store_type": "retail"
+//   }
+// ]
+// URL encoded example:
+// stock_master=[{"min_qty":"10","max_qty":"100","store_type":"warehouse"}]
 
 function test_input($data) {
 $data = trim($data);
