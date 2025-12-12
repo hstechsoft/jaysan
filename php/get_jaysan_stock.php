@@ -56,8 +56,8 @@ left join  sec_stock_master cre_master on  js.godown =  cre_master.store_id and 
 left join  sec_stock_master dep_master on  js.dep =  dep_master.store_id and dep_master.store_type = 'dep' and dep_master.part_id = js.part_id
 left join  sec_stock_master sec_master on  js.sec =  sec_master.store_id and sec_master.store_type = 'sec' and sec_master.part_id = js.part_id
 left join  request sec_requset on  js.sec =  sec_requset.store_id and sec_requset.store_type = 'sec' and sec_requset.part_id = js.part_id 
-left join  request dep_requset on  js.sec =  dep_requset.store_id and dep_requset.store_type = 'dep' and dep_requset.part_id = js.part_id 
-left join  request godown_requset on  js.sec =  godown_requset.store_id and godown_requset.store_type = 'godown' and godown_requset.part_id = js.part_id 
+left join  request dep_requset on  js.dep =  dep_requset.store_id and dep_requset.store_type = 'dep' and dep_requset.part_id = js.part_id 
+left join  request godown_requset on  js.godown =  godown_requset.store_id and godown_requset.store_type = 'godown' and godown_requset.part_id = js.part_id 
 WHERE  1),
  stock as(SELECT * from stock_wo
 WHERE   $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query and $min_order_query),
