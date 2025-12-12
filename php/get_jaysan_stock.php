@@ -56,7 +56,7 @@ dep_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_
         unit_stock as (SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('dep_min',dep_min,'dep_max',dep_max,'department',department,'department_qty',total_stock_dep,'dep_id',dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by part_id,godown)
         
-        SELECT stock_id,(select godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,part_name from parts_tbl where part_id = unit_stock.part_id) as part_name , part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        SELECT stock_id,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,(select part_name from parts_tbl where part_id = unit_stock.part_id) as part_name , part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('godown_min',godown_min,'godown_max',godown_max,'unit',unit,'godown_qty',total_stock_godown,'godown_id',godown,'department_details',dep_total)) as unit_total from unit_stock GROUP by part_id";
 
  
