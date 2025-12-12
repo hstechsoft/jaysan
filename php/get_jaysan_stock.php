@@ -32,8 +32,8 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
-$sql = "with stock_wo as(SELECT js.stock_id,part_id,qty,godown,dep,sec,
-cre.creditor_name as unit,
+$sql = "with stock_wo as(SELECT js.stock_id,js.part_id,qty,godown,dep,sec,
+cre.creditor_name as unit,cre_master.min_qty as godown_min,cre_master.max_qty as godown_max,dep_master.min_qty as dep_min,dep_master.max_qty as dep_max,sec_master.min_qty as sec_min,sec_master.max_qty as sec_max,
 ifnull(dep.dep_name,'no-department') as department,
 ifnull(sec.sec_name,'no-section') as section,
 sum(qty) over (PARTITION by part_id) as total_stock,
@@ -44,17 +44,20 @@ FROM `jaysan_stock` js
 LEFT join creditors cre on  js.godown = cre.creditor_id 
 LEFT join department dep on  js.dep = dep.dep_id 
 LEFT join dep_section sec on  js.sec = sec.dep_sec_id 
+left join  sec_stock_master cre_master on  js.godown =  cre_master.store_id and cre_master.store_type = 'godown'
+left join  sec_stock_master dep_master on  js.dep =  dep_master.store_id and dep_master.store_type = 'dep'
+left join  sec_stock_master sec_master on  js.sec =  sec_master.store_id and sec_master.store_type = 'sec'
 WHERE  1),
  stock as(SELECT * from stock_wo
 WHERE   $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query),
-sec_stock as(SELECT stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
-dep_stock as(SELECT stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
-        JSON_OBJECT('section',section,'Section_qty',total_stock_sec,'sec_id',sec)) as sec_wise_total from sec_stock GROUP by part_id,godown,dep),
-        unit_stock as (SELECT stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
-        JSON_OBJECT('department',department,'department_qty',total_stock_dep,'dep_id',dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by part_id,godown)
+sec_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
+dep_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('section',section,'Section_qty',total_stock_sec,'sec_id',sec,'sec_min',sec_min,'sec_max',sec_max)) as sec_wise_total from sec_stock GROUP by part_id,godown,dep),
+        unit_stock as (SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('dep_min',dep_min,'dep_max',dep_max,'department',department,'department_qty',total_stock_dep,'dep_id',dep,'section_details',sec_wise_total)) as dep_total from dep_stock GROUP by part_id,godown)
         
-        SELECT stock_id,(select part_name from parts_tbl where part_id = unit_stock.part_id) as part_name , part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
-        JSON_OBJECT('unit',unit,'godown_qty',total_stock_godown,'godown_id',godown,'department_details',dep_total)) as unit_total from unit_stock GROUP by part_id";
+        SELECT stock_id,(select godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,part_name from parts_tbl where part_id = unit_stock.part_id) as part_name , part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
+        JSON_OBJECT('godown_min',godown_min,'godown_max',godown_max,'unit',unit,'godown_qty',total_stock_godown,'godown_id',godown,'department_details',dep_total)) as unit_total from unit_stock GROUP by part_id";
 
  
 
