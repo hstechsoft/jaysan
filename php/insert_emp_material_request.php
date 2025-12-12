@@ -2,7 +2,8 @@
  include 'db_head.php';
 
  $emp_id = test_input($_GET['emp_id']);
-$sec_id = test_input($_GET['sec_id']);
+$store_id = test_input($_GET['store_id']);
+$store_type = test_input($_GET['store_type']);
 $dated = test_input($_GET['dated']);
 $part_id = test_input($_GET['part_id']);
 $qty = test_input($_GET['qty']);
@@ -18,8 +19,9 @@ $data = "'".$data."'";
 return $data;
 }
 
+
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO emp_material_request ( emp_id,sec_id,dated,part_id,qty) VALUES ($emp_id,$sec_id,$dated,$part_id,$qty)";
+$sql .= "INSERT INTO emp_material_request ( emp_id,store_id,store_type,dated,part_id,qty) VALUES ($emp_id,$store_id,$store_type,$dated,$part_id,$qty)";
 
 if ($conn->multi_query($sql) === TRUE) {
     echo "ok";
