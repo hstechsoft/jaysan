@@ -69,8 +69,7 @@ if ($result->num_rows > 0) {
   $max_qty = isset($stock_master_data['max_qty']) ? test_input($stock_master_data['max_qty']) : "''";
   $store_type = isset($stock_master_data['store_type']) ? test_input($stock_master_data['store_type']) : "''";
   $store_id =  isset($stock_master_data['store_id']) ? test_input($stock_master_data['store_id']) : "''";
-$check_master = "SELECT * FROM sec_stock_master.
-
+$check_master = "SELECT * FROM sec_stock_master
 WHERE store_type = $store_type AND  part_id = $part_id  AND store_id = $store_id;";
 $master_result = $conn->query($check_master);
 if ($master_result->num_rows > 0) {
