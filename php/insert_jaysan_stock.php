@@ -72,12 +72,12 @@ if ($result->num_rows > 0) {
     foreach ($stock_master as $stock_master_data) 
 { 
 $check_master = "SELECT * FROM sec_stock_master
-WHERE store_type = $store_type AND  part_id = $part_id ;";
+WHERE store_type = $store_type AND  part_id = $part_id  AND store_id = $store_id;";
 $master_result = $conn->query($check_master);
 if ($master_result->num_rows > 0) {
   // Record exists, update it
   $master_sql = "UPDATE sec_stock_master SET min_qty=$min_qty,max_qty=$max_qty
-      WHERE  store_type = $store_type AND (part_id = $part_id )";
+      WHERE  store_type = $store_type AND (part_id = $part_id ) AND store_id = $store_id;";
      $master_sql_result =   $conn->query($master_sql);
       if ($master_sql_result->num_rows > 0) {
       }
@@ -85,9 +85,9 @@ if ($master_result->num_rows > 0) {
       
 } else {
   // Record doesn't exist, insert it
-  $master_sql = "INSERT INTO sec_stock_master (part_id,min_qty,max_qty,store_type) 
-      VALUES ($part_id,$min_qty,$max_qty,$store_type)";
-      $master_sql_result =   $conn->query($master_sql);
+  $master_sql = "INSERT INTO sec_stock_master (part_id,min_qty,max_qty,store_type,store_id) 
+      VALUES ($part_id,$min_qty,$max_qty,$store_type,$store_id)";
+      $master_sql_result =   $conn->query($master_sql);  
       if ($master_sql_result->num_rows > 0) {
       }
     
