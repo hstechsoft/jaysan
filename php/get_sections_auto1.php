@@ -3,6 +3,7 @@
 
  $term = ($_GET['term']);
  $dep_id = ($_GET['dep_id']);
+  $part_id  = test_input($_GET['part_id']); 
 
 
 
@@ -17,7 +18,7 @@ return $data;
 }
 $term = "%".$term."%";
 
- $sql = "SELECT * FROM dep_section left join  sec_stock_master on  dep_section.dep_sec_id =  sec_stock_master.store_id and sec_stock_master.store_type = 'sec' WHERE sec_name like  '$term' and dep_id =  '$dep_id'";
+ $sql = "SELECT * FROM dep_section left join  sec_stock_master on  dep_section.dep_sec_id =  sec_stock_master.store_id and sec_stock_master.store_type = 'sec' and sec_stock_master.part_id = $part_id WHERE sec_name like  '$term' and dep_id =  '$dep_id'";
 
 $result = $conn->query($sql);
 
