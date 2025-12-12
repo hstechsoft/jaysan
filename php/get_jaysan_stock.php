@@ -22,6 +22,9 @@
     $qty_query = isset($_GET['qty_query']) ? $_GET['qty_query'] : '';
     $qty_query = ($qty_query == '') ? "1" :  "qty  >= '$qty_query'";
 
+    $min_order_query = isset($_GET['min_order_query']) ? $_GET['min_order_query'] : '';
+    $min_order_query = ($min_order_query == '') ? "1" :  "(total_stock_godown  <= dep_min OR total_stock_dep <= dep_min OR total_stock_sec <= sec_min)"; 
+
 
  
  
@@ -44,12 +47,12 @@ FROM `jaysan_stock` js
 LEFT join creditors cre on  js.godown = cre.creditor_id 
 LEFT join department dep on  js.dep = dep.dep_id 
 LEFT join dep_section sec on  js.sec = sec.dep_sec_id 
-left join  sec_stock_master cre_master on  js.godown =  cre_master.store_id and cre_master.store_type = 'godown'
-left join  sec_stock_master dep_master on  js.dep =  dep_master.store_id and dep_master.store_type = 'dep'
-left join  sec_stock_master sec_master on  js.sec =  sec_master.store_id and sec_master.store_type = 'sec'
+left join  sec_stock_master cre_master on  js.godown =  cre_master.store_id and cre_master.store_type = 'godown' and cre_master.part_id = js.part_id
+left join  sec_stock_master dep_master on  js.dep =  dep_master.store_id and dep_master.store_type = 'dep' and dep_master.part_id = js.part_id
+left join  sec_stock_master sec_master on  js.sec =  sec_master.store_id and sec_master.store_type = 'sec' and sec_master.part_id = js.part_id
 WHERE  1),
  stock as(SELECT * from stock_wo
-WHERE   $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query),
+WHERE   $creditor_query and  $dep_query and  $sec_query and $part_query and $qty_query and $min_order_query),
 sec_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec from stock GROUP by part_id,godown,dep,sec),
 dep_stock as(SELECT godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,stock_id,part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('section',section,'Section_qty',total_stock_sec,'sec_id',sec,'sec_min',sec_min,'sec_max',sec_max)) as sec_wise_total from sec_stock GROUP by part_id,godown,dep),
