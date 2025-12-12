@@ -50,14 +50,14 @@ $conn->query("SET time_zone = '+05:30'");
 
 // Check if record exists
 $check_sql = "SELECT qty FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = $part_id )";
-echo $check_sql."\n";
+
 $result = $conn->query($check_sql);
 
 if ($result->num_rows > 0) {
   // Record exists, update it
   $sql = "UPDATE jaysan_stock   SET batch_id=$batch_id, qty= $qty, finished_godown=$finished_godown , remark=$remark,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = $part_id )";
-      echo $sql;
+    
 } else {
   // Record doesn't exist, insert it
   $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
