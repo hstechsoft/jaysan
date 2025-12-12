@@ -18,11 +18,7 @@ $finished_godown = sql_nullable($finished_godown);
 
 $stock_master = json_decode($_GET['stock_master'], true);
 
-foreach ($stock_master as $stock_master_data) 
-{ 
-  
-echo "min_qty =" . $min_qty . " max_qty = " . $max_qty . " store_type = " . $store_type;
-}
+
 // Sample JSON format for stock_master parameter:
 // [
 //   {
