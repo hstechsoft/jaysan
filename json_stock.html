@@ -74,14 +74,14 @@
                 <div class="col-md-2">
 
                     <!-- Toggle -->
-                    <div class="d-flex align-items-center mb-1">
+                    <!-- <div class="d-flex align-items-center mb-1">
                         <div class="form-check form-switch m-0">
                             <input class="form-check-input" type="checkbox" id="toggel_stock">
                         </div>
                         <label class="ms-1 small fw-semibold" for="toggel_stock">
                             <i class="bi bi-sliders"></i> Mode
                         </label>
-                    </div>
+                    </div> -->
 
                     <!-- INSERT CARD -->
                     <div class="card shadow-sm" id="stock_insert_card">
@@ -97,19 +97,77 @@
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_part">
 
                             <label class="form-label mb-0 small">
-                                <i class="bi bi-warehouse"></i> Godown
+                                <i class="bi bi-warehouse"></i> Unit
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_godown">
+
+                            <div class="row g-2 d-none" id="u_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm" id="stock_unit_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm" id="stock_unit_max_qty">
+                                </div>
+
+                            </div>
 
                             <label class="form-label mb-0 small">
                                 <i class="bi bi-building"></i> Department
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_department">
 
+                            <div class="row g-2 d-none" id="d_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_department_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_department_max_qty">
+                                </div>
+
+                            </div>
+
                             <label class="form-label mb-0 small">
                                 <i class="bi bi-diagram-3"></i> Section
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_section">
+
+                            <div class="row g-2 d-none" id="s_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_section_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number " class="form-control form-control-sm"
+                                        id="stock_section_max_qty">
+                                </div>
+
+                            </div>
 
                             <label class="form-label mb-0 small">
                                 <i class="bi bi-123"></i> Quantity
@@ -119,71 +177,13 @@
                             <button type="submit" class="btn btn-primary btn-sm w-100" id="stock_insert_btn">
                                 <i class="bi bi-check2-circle"></i> Submit
                             </button>
+                            <button type="submit" class="btn btn-warning btn-sm w-100 d-none" id="stock_update_btn">
+                                <i class="fa fa-edit    "></i> Update
+                            </button>
 
                         </form>
                     </div>
 
-                    <!-- SEARCH CARD -->
-                    <div class="card shadow-sm d-none" id="search_stock_insert_card">
-                        <div class="card-header bg-info text-white py-1 small">
-                            <i class="bi bi-search"></i> Search Stock
-                        </div>
-
-                        <form class="p-2 bg-light small" onsubmit="return false">
-
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-box"></i> Part Name
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="search_stock_part">
-
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-warehouse"></i> Godown
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="search_stock_godown">
-
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-building"></i> Department
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="search_stock_department">
-
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-diagram-3"></i> Section
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="search_stock_section">
-
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-123"></i> Quantity
-                            </label>
-                            <input type="number" class="form-control form-control-sm mb-2" id="search_stock_qty">
-
-                            <div class="row g-1 mb-2">
-                                <div class="col">
-                                    <label class="form-label mb-0 small">
-                                        <i class="bi bi-calendar"></i> From
-                                    </label>
-                                    <input type="date" class="form-control form-control-sm" id="search_stock_f_date">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label mb-0 small">
-                                        <i class="bi bi-calendar-check"></i> To
-                                    </label>
-                                    <input type="date" class="form-control form-control-sm" id="search_stock_e_date">
-                                </div>
-                            </div>
-
-                            <div class="d-flex gap-1">
-                                <button class="btn btn-primary btn-sm w-50" id="search_stock_insert_btn">
-                                    <i class="bi bi-search"></i> Search
-                                </button>
-
-                                <button class="btn btn-warning btn-sm w-50" id="clear_stock_insert_btn">
-                                    <i class="bi bi-eraser"></i> Clear
-                                </button>
-                            </div>
-
-                        </form>
-                    </div>
 
                 </div>
 
@@ -200,22 +200,70 @@
                                 <input type="text" id="stock_tabel_search" class="form-control border-0 bg-white"
                                     placeholder="Search...">
                             </div>
+                            <div class="d-flex ms-5 ps-5 gap-3">
+                                <button type="button" class="btn btn-light " id="printExcel"><i
+                                        class="fa fa-print text-success"></i></button>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" id="toggel_stock_part_group">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary " id="">Request <span
+                                    class="badge bg-danger blink">4</span></button>
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped ">
-                                <thead>
+                            <table class="table table-bordered " id="stock_table">
+                                <thead class="align-middle small">
 
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Part</th>
-                                        <th scope="col">Godown</th>
-                                        <th scope="col">Dept</th>
-                                        <th scope="col">Section</th>
-                                        <th scope="col">Qty</th>
+                                        <th>#</th>
 
+                                        <!-- PART -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2 "
+                                                    id="search_stock_part" placeholder="Part">
+                                            </div>
+                                        </th>
+
+                                        <!-- UNIT -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-box-seam position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_unit" placeholder="Unit">
+                                            </div>
+                                        </th>
+
+                                        <!-- DEPARTMENT -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-building position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_dep" placeholder="Department">
+                                            </div>
+                                        </th>
+
+                                        <!-- SECTION -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-diagram-3 position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_sec" placeholder="Section">
+                                            </div>
+                                        </th>
+
+                                        <!-- QTY -->
+                                        <th class="text-center">Qty</th>
                                     </tr>
+
                                 </thead>
+
                                 <tbody id="stock_tbady"></tbody>
 
                                 </tbody>
@@ -226,6 +274,31 @@
                     </div>
 
                 </div>
+            </div>
+
+
+
+            <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="requestModalLabel">Request Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group"  id="request_modal_body"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"  id="req_details_btn">Request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card " id="">
+                <p>the blink has to stop when its has its max value</p>
             </div>
 
 
@@ -251,6 +324,9 @@
 
         <!-- font awesome -->
         <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+        <!-- excel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 
         <!-- Sweet alert -->
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

@@ -258,6 +258,87 @@ $(document).ready(function () {
         chart.draw(data, options);
     }
 
+
+    google.charts.setOnLoadCallback(get_mrf_chart);
+
+    function get_mrf_chart() {
+        $.ajax({
+            url: "php/mrf_graph.php",
+            type: "GET",
+            success: function (response) {
+                if (response.trim() !== "error") {
+                    var obj = JSON.parse(response);
+                    drawMRFChart(obj);
+                } else {
+                    alert("Error fetching data!");
+                }
+            },
+            error: function (xhr) {
+                console.error("AJAX Error:", xhr);
+            }
+        });
+    }
+
+    function drawMRFChart(dataArray) {
+
+        // Count statuses
+        let statusCount = {};
+
+        dataArray.forEach(item => {
+            let status = item.status;
+            statusCount[status] = (statusCount[status] || 0) + 1;
+        });
+
+        // Prepare chart data
+        let chartData = [['Status', 'Count']];
+        let mdCount = 0; // FIXED accumulator
+
+        for (let key in statusCount) {
+            chartData.push([key, statusCount[key]]);
+
+            if (key == 'created') {
+                $("#request").text(statusCount[key]);
+                // $("#request").css("color", "#ff9900");
+            }
+            else if (key == 'tally_stock_approved') {
+                $("#tally").text(statusCount[key]);
+                $("#tally").css("color", "#ff9900");
+            }
+            else if (key == 'approved' || key == 'md_redo') {
+
+                mdCount += statusCount[key];
+                $("#purchase").text(mdCount);
+                $("#purchase").css("color", "#3366cc");
+            }
+            else if (key == 'md_approved') {
+                $("#md").text(statusCount[key]);
+                $("#md").css("color", "#dc3912");
+            }
+            else if (key == 'order_placed') {
+                $("#order").text(statusCount[key]);
+                // $("#order").css("color", ""); // add if needed
+            }
+        }
+
+
+        var data = google.visualization.arrayToDataTable(chartData);
+
+        var options = {
+            title: 'MRF Status Chart',
+            is3D: true,
+            pieSliceText: 'value',
+            legend: { position: 'right' },
+            chartArea: { width: '100%', height: '100%' },
+            // colors: ['#0d6efd', '#6f42c1', '#d63384', '#198754', '#fd7e14'] // CUSTOM COLORS
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById("MRF_chart")
+        );
+        chart.draw(data, options);
+    }
+
+
     $('#company').on('input', function () {
         //check the value not empty
 
@@ -467,6 +548,19 @@ $(document).ready(function () {
         get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company)
     })
 
+
+    $("#flexSwitchCheckDefault").on("change", function () {
+
+        if ($(this).is(":checked")) {
+            $(".material_chart_data").addClass("d-none");
+            $(".mrf_table").removeClass("d-none");
+        }
+        else {
+            $(".material_chart_data").removeClass("d-none");
+            $(".mrf_table").addClass("d-none");
+        }
+
+    })
 
 });
 
