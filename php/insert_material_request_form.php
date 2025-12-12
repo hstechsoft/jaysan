@@ -16,6 +16,7 @@ $material_receipt_status = test_input($_GET['material_receipt_status']);
 $prepared_by = test_input($_GET['prepared_by']);
 
 $physical_stock_array = json_decode($_GET['physical_stock_array'], true);
+$req_id = json_decode($_GET['req_id'], true);
     $mrf_id = 0;
     $uom = test_input($_GET['uom']);
 function test_input($data) {
@@ -56,6 +57,16 @@ if ($conn->multi_query($sql)) {
         $sql_insert_physical_stock = "INSERT INTO internal_godown_stock_physical (mrf_id,godown_id,qty) VALUES ($mrf_id,'$godown_id','$qty')";
         if ($conn->query($sql_insert_physical_stock) !== TRUE) {
             echo "Error: " . $sql_insert_physical_stock . "<br>" . $conn->error;
+            $conn->close();
+            exit;
+        }
+    }
+
+
+    foreach ($req_id as $rid) {
+        $sql_update_req = "UPDATE emp_material_request SET mrf_id = $mrf_id WHERE emp_material_request_id = '$rid'";
+        if ($conn->query($sql_update_req) !== TRUE) {
+            echo "Error: " . $sql_update_req . "<br>" . $conn->error;
             $conn->close();
             exit;
         }

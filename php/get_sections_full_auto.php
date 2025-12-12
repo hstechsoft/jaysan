@@ -15,6 +15,7 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+$term = "%".trim($term)."%";
 
  $sql = "SELECT ds.*,dep.dep_id,dep.godown_id FROM `dep_section` ds inner join department dep on ds.dep_id = dep.dep_id WHERE sec_name like  '$term'";
 
