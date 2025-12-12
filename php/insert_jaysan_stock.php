@@ -43,7 +43,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-echo "dep: " . $dep . " sec: " . $sec . " part_id: " . $part_id . "\n";
+echo "godown: " . $godown . " dep: " . $dep . " sec: " . $sec . " part_id: " . $part_id . "\n";
 
 // Set MySQL timezone
 $conn->query("SET time_zone = '+05:30'");
