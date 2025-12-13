@@ -6,6 +6,7 @@ var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var top_req_count = 0;
 var clicked = 0
+let stockData = [];
 // console.log(current_user_name);
 
 $(document).ready(function () {
@@ -685,43 +686,64 @@ $(document).ready(function () {
 
 
 
-    $("#printExcel").click(function () {
+    $("#printExcel").on("click", function () {
 
-        let table = document.querySelector("#stock_table");
-        let rows = table.querySelectorAll("tr");
+        if (!stockData || stockData.length === 0) {
+            alert("No data to export");
+            return;
+        }
 
-        // Create temporary table for export
-        let tempTable = document.createElement("table");
+        let excelData = [];
 
-        rows.forEach(row => {
-            let cells = row.children;
+        stockData.forEach(item => {
+            let unitTotals = [];
 
-            if (cells.length < 3) return;
-
-            let newRow = document.createElement("tr");
-
-            // Keep only middle columns (remove first & last)
-            for (let i = 1; i < cells.length - 1; i++) {
-                newRow.appendChild(cells[i].cloneNode(true));
+            try {
+                unitTotals = JSON.parse(item.unit_total || "[]");
+            } catch {
+                unitTotals = [];
             }
 
-            tempTable.appendChild(newRow);
+            if (unitTotals.length === 0) {
+                excelData.push({
+                    Part: item.part_name,
+                    Unit: "",
+                    Department: "",
+                    Section: "",
+                    Qty: item.total_stock
+                });
+                return;
+            }
+
+            unitTotals.forEach(unit => {
+                (unit.department_details || []).forEach(dep => {
+                    (dep.section_details || []).forEach(sec => {
+                        excelData.push({
+                            Part: item.part_name,
+                            Unit: unit.unit,
+                            Department: dep.department,
+                            Section: sec.section,
+                            Qty: sec.Section_qty ?? ""
+                        });
+                    });
+                });
+            });
         });
 
-        // Convert to workbook
-        let workbook = XLSX.utils.table_to_book(tempTable, { sheet: "Stock Data" });
+        let ws = XLSX.utils.json_to_sheet(excelData);
 
-        // ---------- ADD CURRENT DATE TO FILE NAME ----------
-        let today = new Date();
-        let yyyy = today.getFullYear();
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); // month
-        let dd = String(today.getDate()).padStart(2, '0');      // day
+        ws["!cols"] = Object.keys(excelData[0]).map(k => ({
+            wch: Math.max(k.length, ...excelData.map(r => (r[k] || "").toString().length)) + 2
+        }));
 
-        let fileName = `StockData_${yyyy}-${mm}-${dd}.xlsx`;
-        // ----------------------------------------------------
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Stock Data");
 
-        XLSX.writeFile(workbook, fileName);
+        let today = new Date().toISOString().split("T")[0];
+        XLSX.writeFile(wb, `StockData_${today}.xlsx`);
     });
+
+
 
     $("#toggel_stock_part_group").on("change", function () {
         if ($(this).is(":checked")) {
@@ -926,7 +948,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                 if (response.trim() != '0 result') {
 
                     // assume `response` is the JSON string you showed
-                    var obj = JSON.parse(response);
+                    stockData = JSON.parse(response);
+                    var obj = stockData;
                     var count = 0;
 
                     obj.forEach(function (item) {
