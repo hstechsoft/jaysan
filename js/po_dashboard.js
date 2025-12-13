@@ -688,7 +688,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             else {
                                 status = "<span class='text-primary text-danger fw-bold  ps-5'>" + item.due_sts + "</span>"
                             }
-                            batch += "<li class='list-group-item'><div class='row'><div class='col-6 border'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
+                            batch += "<li class='list-group-item'><div class='row'><div class='col-6 border' style='font-size:12px'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no +"("+ item.po_id+")"+ " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
 
                         })
                         purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + "-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
