@@ -68,6 +68,30 @@
             padding: .3rem .8rem !important;
             font-size: .8rem !important;
         }
+
+        #mobile_form_view_r {
+            display: none;
+        }
+
+        #mobile_form_view {
+            display: block;
+        }
+
+        @media screen and (max-width: 747px) {
+            #mobile_form_view_r {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #mobile_form_view {
+                display: none;
+            }
+
+            .table th,
+            .table td {
+                font-size: .65rem !important;
+            }
+        }
     </style>
 
 </head>
@@ -113,9 +137,17 @@
 
             <!-- content -->
 
+            <div id="mobile_form_view_r">
+                <div class="form-check form-switch m-0" style="font-size: 20px;">
+                    <input class="form-check-input" type="checkbox" id="mobile_form_view_btn">
+                    <label for="mobile_form_view_btn" class="cursor-pointer">
+                        <i class="fa-solid fa-align-right"></i>
+                    </label>
+                </div>
+            </div>
             <div class="row">
 
-                <div class="col-md-2">
+                <div class="col-md-2" id="mobile_form_view">
                     <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
                         onsubmit="return false">
 
@@ -154,10 +186,17 @@
                     <div class="table-responsive">
                         <table class="table caption-top table-bordered table-striped ">
                             <thead>
-                                <tr>
+                                <tr class="text-center">
                                     <th scope="col">#</th>
                                     <th scope="col">Part</th>
-                                    <th scope="col">Qty</th>
+                                    <th scope="col" class="d-flex justify-content-between">Qty
+                                        <div class="form-check form-switch m-0 d-none" id="tog">
+                                            <input class="form-check-input" type="checkbox" id="section_min_max_view">
+                                            <label for="section_min_max_view" class="cursor-pointer">
+                                                <i class="fa fa-eye"></i>
+                                            </label>
+                                        </div>
+                                    </th>
                                     <th scope="col">Action</th>
 
                                 </tr>

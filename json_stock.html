@@ -101,6 +101,7 @@
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_godown">
 
+
                             <div class="row g-2 d-none" id="u_min_max">
 
                                 <div class="col-6">
@@ -119,10 +120,15 @@
 
                             </div>
 
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-building"></i> Department
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="stock_department">
+                            <div class="d-flex align-items-end gap-1">
+                                <span><label class="form-label mb-0 small">
+                                        <i class="bi bi-building"></i> Department
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm mb-1"
+                                        id="stock_department"></span>
+                                <button type="button" class="btn btn-primary btn-sm d-none"
+                                        id="dep_add_btn">+</button>
+                            </div>
 
                             <div class="row g-2 d-none" id="d_min_max">
 
@@ -144,10 +150,20 @@
 
                             </div>
 
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-diagram-3"></i> Section
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="stock_section">
+                            <div class="d-flex align-items-end gap-1">
+                                <span>
+                                    <label class="form-label mb-0 small">
+                                        <i class="bi bi-diagram-3"></i> Section
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm mb-1" id="stock_section">
+                                </span>
+
+                                <button type="button" class="btn btn-primary btn-sm d-none" id="sec_add_btn">
+                                    +
+                                </button>
+                            </div>
+
+
 
                             <div class="row g-2 d-none" id="s_min_max">
 
@@ -195,15 +211,21 @@
                             <div class="d-flex  align-items-center gap-3">
                                 <i class="bi bi-table"></i> Stock Records
 
-                                <div class="form-check form-switch m-0" style="font-size: 20px;">
+                                <div class="form-check form-switch m-0">
                                     <input class="form-check-input" type="checkbox" id="toggel_stock_part_group">
                                     <label for="toggel_stock_part_group" class="cursor-pointer">
-                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                        Min Stock Alert
                                     </label>
                                 </div>
                             </div>
-                            <div class="d-flex ms-5 ps-5 gap-3">
+                            <div class="d-flex align-items-center gap-3">
 
+                                <div class="form-check  form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" id="toggel_stock_part_reduce">
+                                    <label for="toggel_stock_part_reduce" class="cursor-pointer">
+                                        <i class="fa fa-eye text-ligth"></i>
+                                    </label>
+                                </div>
                                 <button type="submit" class="btn btn-primary " id="reqest_btn_top"><span
                                         id="text_span">Requested</span> <span class="badge bg-danger blink"
                                         id="span_req_count"></span></button>

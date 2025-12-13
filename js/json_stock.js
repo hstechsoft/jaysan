@@ -5,6 +5,7 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var top_req_count = 0;
+var clicked = 0
 // console.log(current_user_name);
 
 $(document).ready(function () {
@@ -114,6 +115,8 @@ $(document).ready(function () {
         $("#d_min_max").addClass("d-none");
         $("#s_min_max").addClass("d-none");
         $("#u_min_max").addClass("d-none");
+        $("#dep_add_btn").addClass("d-none");
+        $("#sec_add_btn").addClass("d-none");
         //check the value not empty
         if ($('#stock_godown').val() != "") {
             $("#stock_unit_min_qty").val("");
@@ -158,6 +161,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("godown_id") != '') {
                         $("#u_min_max").removeClass("d-none");
+                        $("#dep_add_btn").removeClass("d-none");
                     }
                     console.log(ui.item.min, ui.item.max);
 
@@ -178,6 +182,16 @@ $(document).ready(function () {
 
     });
 
+    $("#dep_add_btn").on("click", function () {
+        var go_id = $('#stock_godown').data("godown_id");
+        var dept_name = $('#stock_department').val();
+        if (go_id == undefined || dept_name == '') {
+            salert('Warning', "Data Missing", "warning");
+            return;
+        }
+        insert_department(go_id, dept_name);
+    })
+
     $('#stock_department').on('input', function () {
         console.log($("#stock_godown").data("godown_id"));
 
@@ -185,6 +199,8 @@ $(document).ready(function () {
         $('#stock_section').val('').data("sec_id", '');
         $("#d_min_max").addClass("d-none");
         $("#s_min_max").addClass("d-none");
+        $("#sec_add_btn").addClass("d-none");
+
         //check the value not empty
         if ($('#stock_department').val() != "") {
 
@@ -230,6 +246,8 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("dept_id") != '') {
                         $("#d_min_max").removeClass('d-none');
+                        $("#dep_add_btn").addClass('d-none')
+                        $("#sec_add_btn").removeClass('d-none')
                     }
                     if (ui.item.min != null && ui.item.max != null) {
                         $("#stock_department_min_qty").val(ui.item.min);
@@ -248,6 +266,19 @@ $(document).ready(function () {
         }
 
     });
+
+    $("#sec_add_btn").on("click", function () {
+
+        var dept_id = $('#stock_department').data("dept_id");
+        console.log(dept_id);
+
+        var sec_name = $('#stock_section').val();
+        if (dept_id == undefined || sec_name == '') {
+            salert('Warning', "Data Missing", "warning");
+            return;
+        }
+        insert_dep_section(dept_id, sec_name);
+    })
 
     $('#stock_section').on('input', function () {
 
@@ -298,6 +329,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("sec_id") != '') {
                         $("#s_min_max").removeClass("d-none");
+                        $("#sec_add_btn").addClass('d-none')
                     }
                     if (ui.item.min != null && ui.item.max != null) {
                         $("#stock_section_min_qty").val(ui.item.min);
@@ -702,8 +734,10 @@ $(document).ready(function () {
         }
     })
 
-    var clicked = 0
+
     $("#reqest_btn_top").on("click", function () {
+        // top_req_count = 0;
+
         console.log(top_req_count);
 
         if (clicked == 0) {
@@ -766,7 +800,7 @@ $(document).ready(function () {
 
 
     $("#req_detai").on("click", function () {
-
+        $("#requestModal").modal("hide");
         var q = $("#mrf_req_qty").text().trim();
         var r_arr = encodeURIComponent(JSON.stringify(reqIdArray));
 
@@ -777,7 +811,11 @@ $(document).ready(function () {
             + '&req_id_para=' + r_arr;
     });
 
+    $("#toggel_stock_part_reduce").on("change", function () {
+        get_jaysan_stock();
+        console.log($(this).is(":checked"));
 
+    })
 
 
 
@@ -836,6 +874,9 @@ function insert_jaysan_stock(part, godown, department, section, qty, stock_maste
                 $("#stock_department_max_qty").val('');
                 $("#stock_section_min_qty").val('');
                 $("#stock_section_max_qty").val('');
+                $("#d_min_max").addClass("d-none");
+                $("#s_min_max").addClass("d-none");
+                $("#u_min_max").addClass("d-none");
 
                 $("#stock_insert_btn").prop("disabled", false);
             }
@@ -882,7 +923,6 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
             if (response.trim() != 'error') {
                 $("#stock_tbady").empty();
                 top_req_count = 0;
-
                 if (response.trim() != '0 result') {
 
                     // assume `response` is the JSON string you showed
@@ -941,49 +981,68 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                 var sections = depObj.section_details || [];
 
                                 sections.forEach(function (secObj, secIndex) {
-                                    var tr = `<tr class='text-center align-middle'>`;
+                                    var tr = `<tr class='text-center align-middle' style='font-size: 12px'>`;
 
                                     // Part-level cells: only on the very first row for this item
                                     if (unitIndex === 0 && depIndex === 0 && secIndex === 0) {
                                         var blink = '';
                                         var p_req = '';
+                                        var p_min_max = '';
                                         var total_stock = item.total_stock ?? 0;
-                                        if (item.req_details !== null) {
+                                        if (item.req_details !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             // var req_d = JSON.parse(item.req_details);
                                             // console.log(req_d);
 
-                                            p_req = `<button type="button" id='req_details_btn' data-req_details='${item.req_details}' data-part_id='${item.part_id}' class="btn btn-success p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell"></i></button>`
+                                            p_req = `<button type="button" id='req_details_btn' data-req_details='${item.req_details}' data-part_id='${item.part_id}' class="btn p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell text-success"></i></button>`
                                         }
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
+                                        if ($("#toggel_stock_part_reduce").is(":checked")) {
+                                            // alert()
+                                            p_min_max = `<span class='badge bg-danger ${blink}'>${item.min_order_qty}</span>`;
+                                        }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
-                                        tr += `<td rowspan="${itemRowSpan}">${p_req} ${item.part_name || ""} - <span class="border border-primary p-2 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>  <span class='badge bg-danger ${blink}'>${item.min_order_qty}</span></td>`;
+                                        tr += `<td rowspan="${itemRowSpan}">${p_req} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
                                     if (depIndex === 0 && secIndex === 0) {
                                         var blink = '';
                                         var req = '';
+                                        var g_min_max = '';
                                         let godown_min = unitObj.godown_min ?? 0;
                                         let godown_max = unitObj.godown_max ?? 0;
-                                        if (unitObj.godown_req !== null) {
+                                        if (unitObj.godown_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
                                                 g_req_count++;
                                             })
                                             top_req_count += g_req_count;
+                                            console.log(top_req_count);
                                             req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
+                                        } else if (unitObj.godown_req !== null) {
+                                            var g_req_count = 0;
+                                            unitObj.godown_req.forEach(function (greq) {
+                                                g_req_count++;
+                                            })
+                                            top_req_count += g_req_count;
                                         }
+
+
                                         if (unitObj.godown_qty <= unitObj.godown_min) { blink = `blink`; }
-                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} - <span contenteditable class="border border-primary p-2 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${unitObj.godown_qty}</span> <span class='badge bg-danger ${blink}'>${godown_min}</span><span class='badge bg-success ms-1'>${godown_max}</span></td>`;
+                                        if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
+                                            g_min_max = `<span class='badge bg-danger ${blink}'>${godown_min}</span><span class='badge bg-success ms-1'>${godown_max}</span>`;
+                                        }
+                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${unitObj.godown_qty}</span>${g_min_max} </td>`;
                                     }
 
                                     // Department cell: only for first section of this department
                                     if (secIndex === 0) {
                                         var blink = '';
                                         var dd_req = '';
+                                        var d_min_max = '';
                                         let dep_min = depObj.dep_min ?? 0;
                                         let dep_max = depObj.dep_max ?? 0;
-                                        if (depObj.dep_req !== null) {
+                                        if (depObj.dep_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var d_req_count = 0;
                                             depObj.dep_req.forEach(function (greq) {
                                                 d_req_count++;
@@ -992,25 +1051,50 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             top_req_count += d_req_count;
                                             dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
                                         }
+                                        else if (depObj.dep_req !== null) {
+                                            var d_req_count = 0;
+                                            depObj.dep_req.forEach(function (greq) {
+                                                d_req_count++;
+
+                                            })
+                                            top_req_count += d_req_count;
+                                        }
+                                        console.log(top_req_count);
+
+                                        if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
+                                            d_min_max = ` <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span>`;
+                                        }
                                         if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
-                                        tr += `<td rowspan="${sections.length}">${dd_req} ${depName} - <span contenteditable class="border border-primary p-2 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${depObj.department_qty}</span> <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span> </td>`;
+                                        tr += `<td rowspan="${sections.length}">${dd_req} ${depName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${depObj.department_qty}</span>${d_min_max} </td>`;
                                     }
 
                                     // Section and Section_qty
                                     var blink = '';
                                     var ss_req = '';
+                                    var s_min_max = '';
                                     let sec_min = secObj.sec_min ?? 0;
                                     let sec_max = secObj.sec_max ?? 0;
-                                    if (secObj.sec_req !== null) {
+                                    if (secObj.sec_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                         var s_req_count = 0;
                                         secObj.sec_req.forEach(function (greq) {
                                             s_req_count++;
                                         })
                                         top_req_count += s_req_count;
                                         ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`
+                                    } else if (secObj.sec_req !== null) {
+                                        var s_req_count = 0;
+                                        secObj.sec_req.forEach(function (greq) {
+                                            s_req_count++;
+                                        })
+                                        top_req_count += s_req_count;
                                     }
+                                    console.log(top_req_count);
+
                                     if (secObj.Section_qty <= secObj.sec_min) { blink = `blink`; }
-                                    tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
+                                    if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
+                                        s_min_max = `<span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
+                                    }
+                                    tr += `<td>${ss_req} ${secObj.section || ""} ${s_min_max}</td>`;
                                     tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span></td>`;
 
                                     tr += "</tr>";
@@ -1019,6 +1103,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                             });
                         });
                     });
+
                     $("#span_req_count").text(top_req_count)
 
                 }
@@ -1047,6 +1132,64 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 }
 
 
+function insert_department(go_id, dept_name) {
+    $.ajax({
+        url: "php/insert_department.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: go_id,
+            dep_name: dept_name,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() > 0) {
+                $("#stock_department").data("dept_id", response);
+                shw_toast("success", "Department Added")
+                $("#dep_add_btn").addClass("d-none")
+                $("#sec_add_btn").removeClass("d-none")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
+function insert_dep_section(dept_id, sec_name) {
+    $.ajax({
+        url: "php/insert_dep_section.php",
+        type: "get", //send it through get method
+        data: {
+            dep_id: dept_id,
+            sec_name: sec_name,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() > 0) {
+                $("#stock_section").data("sec_id", response);
+                shw_toast("success", "Section Added");
+                $("#sec_add_btn").addClass("d-none");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
 
 function insert_new_process(processId) {
 

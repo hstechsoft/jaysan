@@ -37,6 +37,13 @@ $(document).ready(function () {
     );
 
 
+    $("#mobile_form_view_btn").on("change", function(){
+        if($(this).is(":checked")){
+            $("#mobile_form_view").css("display", "block");
+        }else{
+            $("#mobile_form_view").css("display", "none");
+        }
+    })
 
     check_login();
 
@@ -209,6 +216,9 @@ $(document).ready(function () {
     });
 
 
+    $("#section_min_max_view").on("change", function(){
+        get_jaysan_stock(sec_id, dep_id, godown_id);
+    })
     // get_jaysan_stock(27)
 
 
@@ -267,6 +277,7 @@ function insert_jaysan_stock(part, godown_id, dep_id, sec_id, qty, stock_master_
 }
 
 function get_jaysan_stock(sec_query, dep_query, creditor_query) {
+    $("#tog").removeClass("d-none")
     // console.log("fd " + from_date, "td " + to_date, "g " + creditor_query, "d " + dep_query, "s " + sec_query, "p " + part_query, "q " + qty_query, "min_order_query " + min_order_query);
 
     $.ajax({
@@ -357,7 +368,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                         var total_stock = item.total_stock ?? 0;
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
-                                        tr += `<td rowspan="${itemRowSpan}"> ${item.part_name || ""} - <span class="border border-secondary p-1 me-2 border-1 rounded-1"     data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>  <span class='badge bg-danger ${blink}'>${item.min_order_qty}</span></td>`;
+                                        tr += `<td rowspan="${itemRowSpan}"> ${item.part_name || ""}</td>`;
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
@@ -396,6 +407,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
 
                                     // Section and Section_qty
                                     var blink = '';
+                                    var s_min_max = '';
                                     var remaining_qut = 0;
                                     let sec_min = secObj.sec_min ?? 0;
                                     let sec_max = secObj.sec_max ?? 0;
@@ -403,8 +415,13 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     console.log(isNaN(remaining_qut) ? 0 : remaining_qut, "item.part_id : " + item.part_id);
 
                                     if (secObj.Section_qty <= secObj.sec_min) { blink = `blink`; }
+                                    if($("#section_min_max_view").is(":checked")){
+                                        s_min_max = `<span class=' ms-2 badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
+                                    }
                                     // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
-                                    tr += `<td><span class="border border-primary p-1  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span><span class=' ms-2 badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td><td><button class='btn btn-success' data-bs-toggle="modal" data-bs-target="#requestModal" data-part_id='${item.part_id}' data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'  id='fa-bell'><i class="fa-regular fa-bell"></i> </button></td>`;
+                                    tr += `<td><span class="border border-primary px-3  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span>${s_min_max}</td>
+                                    
+                                    <td><button class='btn' data-bs-toggle="modal" data-bs-target="#requestModal" data-part_id='${item.part_id}' data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'  id='fa-bell'><i class="fa-regular fa-bell text-success"></i> </button></td>`;
 
                                     tr += "</tr>";
                                     $("#section_stock_tbody").append(tr);
