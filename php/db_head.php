@@ -47,5 +47,29 @@ function sql_nullable($value) {
     return "'" . $conn->real_escape_string($value) . "'";
   }
 
+  function log_delete_query($sql) {
+
+    // Log only DELETE statements
+    if (preg_match('/^\s*delete\s+/i', $sql)) {
+
+        $logLine = sprintf(
+            "[%s] | USER:%s | IP:%s | FILE:%s | SQL:%s\n",
+            date('Y-m-d H:i:s'),
+            $_SESSION['user_id'] ?? 'NA',
+            $_SERVER['REMOTE_ADDR'] ?? 'CLI',
+            $_SERVER['SCRIPT_NAME'] ?? 'UNKNOWN',
+            $sql
+        );
+
+        // APPEND MODE (no overwrite)
+        file_put_contents(
+            __DIR__ . '/delete_sql.log',
+            $logLine,
+            FILE_APPEND | LOCK_EX
+        );
+    }
+}
+
+
 // UPDATE policy set cus_id = 16 WHERE cus_id = 320 or cus_id = 188 or cus_id = 189 or cus_id = 191 or cus_id = 192 or cus_id = 193 or cus_id = 194 or cus_id = 195 or cus_id = 196 or cus_id = 205 or cus_id = 206 or cus_id = 207 or cus_id = 209 or cus_id = 210 or cus_id = 212
 ?>
