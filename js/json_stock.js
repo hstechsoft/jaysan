@@ -4,7 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
-
+var top_req_count = 0;
 // console.log(current_user_name);
 
 $(document).ready(function () {
@@ -611,6 +611,10 @@ $(document).ready(function () {
 
             get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
         }
+        else {
+            get_jaysan_stock();
+
+        }
     });
 
 
@@ -698,92 +702,83 @@ $(document).ready(function () {
         }
     })
 
+    var clicked = 0
+    $("#reqest_btn_top").on("click", function () {
+        console.log(top_req_count);
+
+        if (clicked == 0) {
+            var request_query = 1;
+            get_jaysan_stock('', '', '', '', '', '', '', '', request_query)
+            clicked = 1;
+            $("#text_span").text("All");
+            $("#span_req_count").addClass("d-none");
+
+        }
+        else {
+            get_jaysan_stock();
+            clicked = 0;
+            $("#text_span").text("Requested");
+            $("#span_req_count").removeClass("d-none");
+        }
+    })
+
+    let reqIdArray = [];
+    let totalQty = 0;
+    let part_idddd = '';
+
     $("#stock_tbady").on("click", "#req_details_btn", function () {
-        // clear modal
-        $("#request_modal_body").html("");
 
-        // raw attribute (use .attr to get exact string)
-        let raw = $(this).attr("data-req_details");
-        let parsed;
+        var requested_detail = $(this).attr("data-req_details");
+        requested_detail = JSON.parse(requested_detail);
 
-        try {
-            parsed = JSON.parse(raw);
-        } catch (e) {
-            console.error("First JSON.parse failed:", e, raw);
-            // maybe it's double-encoded string like '"[{...}]"'
-            try {
-                parsed = JSON.parse(JSON.parse(raw));
-            } catch (e2) {
-                console.error("Double JSON.parse also failed:", e2);
-                $("#request_modal_body").append(`<li class="list-group-item text-danger">Invalid request details</li>`);
-                return;
-            }
-        }
 
-        // Normalize and collect all inner req rows into a single array `entries`
-        let entries = [];
+        $("#request_modal_body").empty();
+        reqIdArray = [];
+        totalQty = 0;
+        part_idddd = $(this).data('part_id');
 
-        // helper to extract an inner array from a value that might be string or array
-        function extractArray(val) {
-            if (!val) return [];
-            if (Array.isArray(val)) return val;
-            if (typeof val === "string") {
-                try {
-                    const parsedVal = JSON.parse(val);
-                    return Array.isArray(parsedVal) ? parsedVal : [];
-                } catch (e) {
-                    console.warn("Could not parse inner req_details string:", val);
-                    return [];
-                }
-            }
-            return [];
-        }
+        requested_detail.forEach(group => {
 
-        if (Array.isArray(parsed)) {
-            // parsed = [ { req_details: [...] }, { req_details: "..." }, ... ]
-            parsed.forEach(obj => {
-                if (obj && obj.req_details) {
-                    entries = entries.concat(extractArray(obj.req_details));
-                }
+            group.req_details.forEach(item => {
+
+                reqIdArray.push(item.req_id);
+                totalQty += Number(item.qty);
+
+                $("#request_modal_body").append(`
+                <li class="list-group-item d-flex justify-content-between">
+                    <span> ${item.emp} - ${item.store_type} - ${item.store}</span>
+                    <strong class='text-success'> ${item.qty}</strong>
+                </li>
+            `);
             });
-        } else if (parsed && parsed.req_details) {
-            // parsed = { req_details: [...] } or req_details is string
-            entries = entries.concat(extractArray(parsed.req_details));
-        } else {
-            console.error("Unexpected structure for req_details:", parsed);
-            $("#request_modal_body").append(`<li class="list-group-item text-danger">No request details found</li>`);
-            return;
-        }
 
-        // Now entries is a flat array of { emp, req_id, dated, qty, store_type, store }
-        if (entries.length === 0) {
-            $("#request_modal_body").append(`<li class="list-group-item">No requests</li>`);
-            return;
-        }
-
-        let req_qty = 0;
-        let html = "";
-
-        entries.forEach(greq => {
-            const qty = parseFloat(greq.qty) || 0;
-            req_qty += qty;
-
-            html += `
-            <li class="list-group-item d-flex justify-content-between">
-                <span style="font-size:12px;">${greq.emp || ""} → ${greq.store_type || ""} → ${greq.store || ""}</span>
-                <span class="text-success fw-bold">${qty}</span>
-            </li>
-        `;
         });
 
-        // Append rows + total
-        $("#request_modal_body").append(html);
+        // Total Qty at bottom
         $("#request_modal_body").append(`
-        <li class="list-group-item d-flex justify-content-between">
-            Total <span class="border p-2 rounded-3" contenteditable>${req_qty}</span>
+        <li class="list-group-item list-group-item-info text-end  d-flex justify-content-between">
+            <strong>Total Qty:</strong><strong contenteditable id='mrf_req_qty'> ${totalQty}</strong>
         </li>
     `);
+
+        $("#requestModal").modal("show");
     });
+
+
+    $("#req_detai").on("click", function () {
+
+        var q = $("#mrf_req_qty").text().trim();
+        var r_arr = encodeURIComponent(JSON.stringify(reqIdArray));
+
+        window.location.href =
+            'material_request_form.html'
+            + '?part_id_para=' + part_idddd
+            + '&qty_para=' + q
+            + '&req_id_para=' + r_arr;
+    });
+
+
+
 
 
 
@@ -861,7 +856,7 @@ function insert_jaysan_stock(part, godown, department, section, qty, stock_maste
 }
 
 
-function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query) {
+function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
     console.log("fd " + from_date, "td " + to_date, "g " + creditor_query, "d " + dep_query, "s " + sec_query, "p " + part_query, "q " + qty_query, "min_order_query " + min_order_query);
 
     $.ajax({
@@ -877,6 +872,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
             part_query: part_query,
             qty_query: qty_query,
             min_order_query: min_order_query,
+            requst_query: request_query,
         },
         success: function (response) {
             console.log(response);
@@ -885,6 +881,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
             if (response.trim() != 'error') {
                 $("#stock_tbady").empty();
+                top_req_count = 0;
 
                 if (response.trim() != '0 result') {
 
@@ -955,7 +952,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             // var req_d = JSON.parse(item.req_details);
                                             // console.log(req_d);
 
-                                            p_req = `<button type="button" id='req_details_btn' data-req_details='${JSON.stringify(item.req_details)}' class="btn btn-success p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell"></i></button>`
+                                            p_req = `<button type="button" id='req_details_btn' data-req_details='${item.req_details}' data-part_id='${item.part_id}' class="btn btn-success p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell"></i></button>`
                                         }
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
@@ -973,6 +970,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             unitObj.godown_req.forEach(function (greq) {
                                                 g_req_count++;
                                             })
+                                            top_req_count += g_req_count;
                                             req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
                                         }
                                         if (unitObj.godown_qty <= unitObj.godown_min) { blink = `blink`; }
@@ -989,7 +987,9 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             var d_req_count = 0;
                                             depObj.dep_req.forEach(function (greq) {
                                                 d_req_count++;
+
                                             })
+                                            top_req_count += d_req_count;
                                             dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
                                         }
                                         if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
@@ -1006,6 +1006,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         secObj.sec_req.forEach(function (greq) {
                                             s_req_count++;
                                         })
+                                        top_req_count += s_req_count;
                                         ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`
                                     }
                                     if (secObj.Section_qty <= secObj.sec_min) { blink = `blink`; }
@@ -1018,6 +1019,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                             });
                         });
                     });
+                    $("#span_req_count").text(top_req_count)
 
                 }
 

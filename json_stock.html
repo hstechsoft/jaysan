@@ -191,24 +191,27 @@
                 <div class="col-md-10">
 
                     <div class="card shadow-sm">
-                        <div class="card-header bg-secondary text-white py-1 small d-flex justify-content-center gap-3">
-                            <i class="bi bi-table"></i> Stock Records
-                            <div class="input-group input-group-sm" style="width: 180px;">
-                                <span class="input-group-text bg-white border-0">
-                                    <i class="fa fa-search text-muted"></i>
-                                </span>
-                                <input type="text" id="stock_tabel_search" class="form-control border-0 bg-white"
-                                    placeholder="Search...">
-                            </div>
-                            <div class="d-flex ms-5 ps-5 gap-3">
-                                <button type="button" class="btn btn-light " id="printExcel"><i
-                                        class="fa fa-print text-success"></i></button>
-                                <div class="form-check form-switch m-0">
+                        <div class="card-header bg-secondary text-white py-1 small d-flex justify-content-between">
+                            <div class="d-flex  align-items-center gap-3">
+                                <i class="bi bi-table"></i> Stock Records
+
+                                <div class="form-check form-switch m-0" style="font-size: 20px;">
                                     <input class="form-check-input" type="checkbox" id="toggel_stock_part_group">
+                                    <label for="toggel_stock_part_group" class="cursor-pointer">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </label>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary " id="">Request <span
-                                    class="badge bg-danger blink">4</span></button>
+                            <div class="d-flex ms-5 ps-5 gap-3">
+
+                                <button type="submit" class="btn btn-primary " id="reqest_btn_top"><span
+                                        id="text_span">Requested</span> <span class="badge bg-danger blink"
+                                        id="span_req_count"></span></button>
+
+                                <button type="button" class="btn btn-light " id="printExcel"><i
+                                        class="fa fa-print text-success"></i></button>
+
+                            </div>
                         </div>
 
                         <div class="table-responsive">
@@ -287,18 +290,14 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <ul class="list-group"  id="request_modal_body"></ul>
+                            <ul class="list-group" id="request_modal_body"></ul>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary"  id="req_details_btn">Request</button>
+                            <button type="button" class="btn btn-primary" id="req_detai">Request</button>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="card " id="">
-                <p>the blink has to stop when its has its max value</p>
             </div>
 
 
