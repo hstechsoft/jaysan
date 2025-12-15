@@ -34,7 +34,7 @@ if ($conn->multi_query($sql)) {
     } while ($conn->next_result());
 
 $sql_delete =  "DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  $po_id";
-
+log_delete_query($sql_delete);
   if ($conn->query($sql_delete) === TRUE) {
  
   } else {

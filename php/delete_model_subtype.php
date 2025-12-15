@@ -16,7 +16,7 @@ return $data;
 $sql = "DELETE from jaysan_model_subtype WHERE msid = $msid" ;
 
 
-
+log_delete_query($sql);
 
 if ($conn->query($sql) === TRUE) {
     echo "ok";

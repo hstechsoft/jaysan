@@ -15,7 +15,7 @@ return $data;
 
 
 $sql = "DELETE from role_assign WHERE id = $org_id" ;
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

@@ -18,7 +18,7 @@ $sql = "DELETE from proforma_invoice WHERE pino = $id" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

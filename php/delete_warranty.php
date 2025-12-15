@@ -15,7 +15,7 @@ return $data;
 
 $sql = "DELETE from wterms WHERE wid = $wid" ;
 
-
+log_delete_query($sql);
 
 
 if ($conn->query($sql) === TRUE) {

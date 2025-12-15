@@ -17,7 +17,7 @@ $sql = "DELETE from jaysan_payment WHERE payment_id = $payment_id" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
   } else {

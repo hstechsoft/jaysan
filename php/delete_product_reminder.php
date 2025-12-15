@@ -16,7 +16,7 @@ return $data;
 
 
  $sql = "DELETE  from product_reminder_master WHERE id = $id ";
-
+log_delete_query($sql);
  if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

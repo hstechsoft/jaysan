@@ -37,7 +37,7 @@ WITH RECURSIVE process_chain AS (
 SELECT process_id
 FROM process_chain)
 ";
-  
+  log_delete_query($sql_delete_input);
   if ($conn->query($sql_delete_input) === TRUE) {
   
 

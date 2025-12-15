@@ -15,7 +15,7 @@ return $data;
 
 $sql = "DELETE from expense WHERE exp_id = $exp_id" ;
 
-
+log_delete_query($sql);
 
 
 if ($conn->query($sql) === TRUE) {

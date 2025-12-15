@@ -17,7 +17,7 @@ $sql = "DELETE from marketing_lead WHERE lead_id = $lead_id" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

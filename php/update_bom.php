@@ -11,7 +11,7 @@ $bom_list = $_POST['bom_list'];
 $sql_delete = "DELETE from bom_output WHERE bom_id = '$bom_id '" ;
 
 
-
+log_delete_query($sql_delete);
 
 if ($conn->query($sql_delete) === TRUE) {
  

@@ -10,21 +10,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  if( $update_p == "Update")
  {
   $sql_part_delete = "DELETE FROM part_assign_tbl WHERE part_id =  $part_id ";
-  
+  log_delete_query($sql_part_delete);
   if ($conn->query($sql_part_delete) === TRUE) {
   
 
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql_part_delete . "<br>" . $conn->error;
   }
 
   $sql_rule_delete = "DELETE FROM part_rule WHERE part_id =  $part_id ";
-  
+  log_delete_query($sql_rule_delete);
   if ($conn->query($sql_rule_delete) === TRUE) {
   
 
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql_rule_delete . "<br>" . $conn->error;
   }
 
  }

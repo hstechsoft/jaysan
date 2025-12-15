@@ -73,7 +73,7 @@ if ($conn->query($sql_update_input) === TRUE) {
 
 
 $sql_delete_input = "DELETE FROM input_parts WHERE process_id = $delete_process_id";
-  
+  log_delete_query($sql_delete_input);
   if ($conn->query($sql_delete_input) === TRUE) {
   
 
@@ -82,7 +82,7 @@ $sql_delete_input = "DELETE FROM input_parts WHERE process_id = $delete_process_
   }
 
 $sql_delete_prs = "DELETE FROM process_tbl WHERE process_id = $delete_process_id";
-  
+  log_delete_query($sql_delete_prs);
   if ($conn->query($sql_delete_prs) === TRUE) {
    
 

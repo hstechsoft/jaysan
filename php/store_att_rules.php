@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  {
   
   $sql_rule_delete = "DELETE FROM att_approval_chart WHERE role_id =  $role_id ";
-  
+  log_delete_query($sql_rule_delete);
   if ($conn->query($sql_rule_delete) === TRUE) {
   
 

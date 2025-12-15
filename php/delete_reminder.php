@@ -15,7 +15,7 @@ return $data;
 
 
 $sql = "DELETE from reminder_master WHERE remind_id = $remind_id" ;
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

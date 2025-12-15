@@ -14,7 +14,7 @@ return $data;
 
 
 $sql = "DELETE from dealer WHERE did = $did" ;
-
+log_delete_query($sql);
 
 
 

@@ -18,7 +18,7 @@ $sql = "DELETE from work_type WHERE work_type_id = $work_type_id" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

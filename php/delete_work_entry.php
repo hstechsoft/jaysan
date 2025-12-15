@@ -21,10 +21,13 @@ if ($row = $result->fetch_assoc()) {
   $work_id = $row['work_id'];
 
   // Delete from child tables first
+  log_delete_query("DELETE FROM work_process WHERE work_id = '$work_id'");
   $conn->query("DELETE FROM work_process WHERE work_id = '$work_id'");
+  log_delete_query("DELETE FROM work_break WHERE work_id = '$work_id'");
   $conn->query("DELETE FROM work_break WHERE work_id = '$work_id'");
 
   // Then delete from main table
+  log_delete_query("DELETE FROM work_done_table WHERE work_id = '$work_id'");
   $conn->query("DELETE FROM work_done_table WHERE work_id = '$work_id'");
 
   echo "ok";

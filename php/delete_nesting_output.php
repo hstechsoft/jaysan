@@ -18,7 +18,7 @@ $sql = "DELETE from nesting_output_part WHERE nopid = $nopid" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
   } else {

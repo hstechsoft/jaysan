@@ -52,7 +52,7 @@ WHERE mrf_id = $mrf_id";
   if ($conn->query($sql) === TRUE) {
 
     $sql_delete =  "DELETE  FROM mrf_batch WHERE mrf_id =  $mrf_id";
-
+log_delete_query($sql_delete);
   if ($conn->query($sql_delete) === TRUE) {
  
   } else {

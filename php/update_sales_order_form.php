@@ -45,7 +45,7 @@ return $data;
 
 
   $sql_delete_product = "DELETE FROM sales_order_product WHERE sales_order_product.oid = $sales_oid";
-
+log_delete_query($sql_delete_product);
   if ($conn->query($sql_delete_product) === TRUE) {
   
     } else {
@@ -53,7 +53,7 @@ return $data;
     }
   
 $sql_delete_payment = "DELETE FROM jaysan_payment WHERE jaysan_payment.oid = $sales_oid";
-
+log_delete_query($sql_delete_payment);
 if ($conn->query($sql_delete_payment) === TRUE) {
 
   } else {

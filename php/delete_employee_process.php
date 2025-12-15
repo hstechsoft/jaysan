@@ -17,6 +17,7 @@ if ($id == "''") {
 }
 
 $sql = "DELETE FROM employee_process WHERE id = $id";
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
 } else {

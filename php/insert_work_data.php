@@ -35,6 +35,8 @@ if ($action === "update") {
     }
 
     // 2. Delete old process/break data
+    log_delete_query("DELETE FROM work_process WHERE work_id = '$work_id'");
+    log_delete_query("DELETE FROM work_break WHERE work_id = '$work_id'");
     $conn->query("DELETE FROM work_process WHERE work_id = '$work_id'");
     $conn->query("DELETE FROM work_break WHERE work_id = '$work_id'");
 

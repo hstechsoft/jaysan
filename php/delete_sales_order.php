@@ -16,7 +16,7 @@ return $data;
 $sql = "DELETE from sales_order_form WHERE oid = $oid" ;
 
 
-
+log_delete_query($sql);
 
 if ($conn->query($sql) === TRUE) {
     echo "ok";

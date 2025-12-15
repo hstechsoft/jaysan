@@ -41,6 +41,7 @@ if ( $conn->query($sql_u) === TRUE) {
 }
 
 $sql_d = "DELETE from  employee  WHERE emp_id = $old_emp_id";
+log_delete_query($sql_d);
 if ( $conn->query($sql_d) === TRUE) {
 } 
  else {

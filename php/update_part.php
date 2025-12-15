@@ -18,6 +18,7 @@ if ($part_id > 0 && !empty($part_name) && !empty($part_no)) {
 
     // Clear existing part assignments in part_assign_tbl for this part_id
     $query = "DELETE FROM part_assign_tbl WHERE part_id = ?";
+    log_delete_query($query);
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $part_id);
     $stmt->execute();

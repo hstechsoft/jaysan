@@ -17,7 +17,7 @@ return $data;
 $sql_del = "DELETE from app_menu WHERE role = $role" ;
 
 
-
+log_delete_query($sql);
 
 if ($conn->query($sql_del) === TRUE) {
     

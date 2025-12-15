@@ -9,7 +9,7 @@ function test_input($data) {
 if (isset($_POST['ext_id'])) {
     $id = test_input($_POST['ext_id']);
     $sql = "DELETE FROM extra_time_master WHERE ext_id = $id";
-
+log_delete_query($sql);
     if ($conn->query($sql)) {
         echo "ok";
     } else {

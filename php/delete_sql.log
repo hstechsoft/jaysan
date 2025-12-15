@@ -1,1 +1,8 @@
 [2025-12-13 12:26:11] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_app_all.php | SQL:DELETE from app_menu WHERE role = '' OR '1'='1'
+[2025-12-13 12:48:36] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_organization.php | SQL:DELETE from role_assign WHERE id = '20'
+[2025-12-13 14:20:39] | USER:NA | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2504
+[2025-12-13 14:20:39] | USER:NA | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2505
+[2025-12-13 14:20:39] | USER:NA | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2506
+[2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_process WHERE work_id = '859'
+[2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_break WHERE work_id = '859'
+[2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_done_table WHERE work_id = '859'

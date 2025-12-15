@@ -23,7 +23,7 @@ if($rate > 0)
   }
 }
 
-
+log_delete_query($sql_delete);
 if ($conn->query($sql_delete) === TRUE) {
  $insert_part_spec = "INSERT  INTO rate_quotation_spec (rqid,spec_details)
 VALUES ($rqid,'$part_spec_data')";

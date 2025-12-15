@@ -16,7 +16,7 @@ return $data;
 
 $sql = "DELETE from customer WHERE cus_id = $cus_id" ;
 
-
+log_delete_query($sql);
 
 
 if ($conn->query($sql) === TRUE) {

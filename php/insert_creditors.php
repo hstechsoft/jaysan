@@ -22,7 +22,7 @@ return $data;
 
   if ($conn->query($sql) === TRUE) {
     $creditors_id = $conn->insert_id;
-   echo "ok";
+   echo $creditors_id;
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }

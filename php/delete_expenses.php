@@ -16,7 +16,7 @@ return $data;
 
 foreach($exp_id_arr as $exp_id){
  $sql =  "DELETE  FROM  expense WHERE exp_id =  $exp_id";
-
+log_delete_query($sql);
   if ($conn->query($sql) === TRUE) {
 
   } else {

@@ -16,7 +16,7 @@ return $data;
 
 
  $sql =  "DELETE  FROM godown WHERE gid =  $gid";
-
+log_delete_query($sql);
   if ($conn->query($sql) === TRUE) {
    echo "ok";
   } else {

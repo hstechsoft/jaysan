@@ -17,7 +17,7 @@ return $data;
 
 
  $sql =  "DELETE FROM jaysan_machine  WHERE jmid =  $jmid";
-
+log_delete_query($sql);
   if ($conn->query($sql) === TRUE) {
    echo "ok";
   } else {

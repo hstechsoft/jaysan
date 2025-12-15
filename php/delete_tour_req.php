@@ -16,6 +16,7 @@ return $data;
 $sql = "DELETE from att_req WHERE id = $id" ;
 
 
+log_delete_query($sql);
 
 
 if ($conn->query($sql) === TRUE) {

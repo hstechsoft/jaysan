@@ -17,7 +17,7 @@ return $data;
 
 
  $sql =  "DELETE  FROM sujith WHERE suith_id =  $su_id";
-
+log_delete_query($sql);
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";

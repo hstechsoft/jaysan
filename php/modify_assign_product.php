@@ -47,7 +47,7 @@ for ($i = 0; $i < $qty; $i++) {
 
 // delete the record
     $sql_delete =  "DELETE  FROM assign_product WHERE ass_id =   $del_id";
-
+log_delete_query($sql_delete);
     if ($conn->query($sql_delete) === TRUE) {
     //  echo  $del_id."deleted". "<br>";
      $sql_update = "UPDATE assign_product SET  line_no =  line_no - 1  where line_no >  $line_no and assign_type = 'Production'";

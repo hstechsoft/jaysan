@@ -21,7 +21,7 @@ return $data;
 
 
 $sql = "DELETE FROM input_parts WHERE input_parts.id = $change_input_id";
-  
+  log_delete_query($sql);
   if ($conn->query($sql) === TRUE) {
     
    

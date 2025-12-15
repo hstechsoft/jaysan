@@ -20,7 +20,7 @@ foreach ($did as $row) {
 $sql = "DELETE from process_wel_tbl WHERE process_id = $row" ;
 
 
-
+log_delete_query($sql);
 
 if ($conn->query($sql) === TRUE) {
    

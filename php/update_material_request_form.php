@@ -38,6 +38,7 @@ if ($conn->multi_query($sql)) {
     } while ($conn->more_results() && $conn->next_result());
     // Delete existing records for this mrf_id in internal_godown_stock_physical
     $sql_delete_physical_stock = "DELETE FROM internal_godown_stock_physical WHERE mrf_id=$mrf_id";
+    log_delete_query($sql_delete_physical_stock);
     if ($conn->query($sql_delete_physical_stock) !== TRUE) {
         echo "Error deleting physical stock: " . $conn->error;
         $conn->close();

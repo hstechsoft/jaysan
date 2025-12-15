@@ -17,7 +17,7 @@ $sql = "DELETE from policy WHERE policy.policy_no = $policy_id" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
   } else {

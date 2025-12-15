@@ -17,7 +17,7 @@ $sql = "DELETE from sales_order_product WHERE opid = $opid" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
   } else {

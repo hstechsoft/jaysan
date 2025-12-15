@@ -17,7 +17,7 @@ $sql = "DELETE from jaysan_model_type WHERE mtid = $mtid" ;
 
 
 
-
+log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
   } else {

@@ -16,7 +16,7 @@ return $data;
 
 
  $sql =  "DELETE  FROM work_time_master WHERE wtid =  $wtid";
-
+log_delete_query($sql);
   if ($conn->query($sql) === TRUE) {
    echo "ok";
   } else {
