@@ -19,7 +19,7 @@ if ($emp_id == '' || $process_id == '') {
 }
 
 // Check if already exists
-$check_sql = "SELECT id FROM employee_process WHERE emp_id = $emp_id AND process_id = $process_id";
+$check_sql = "SELECT id FROM employee_process WHERE emp_id = $emp_id AND process_id = $process_id and machine_id = $machine_id";
 $check_result = $conn->query($check_sql);
 
 if ($check_result->num_rows > 0) {
