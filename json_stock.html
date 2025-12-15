@@ -91,15 +91,21 @@
 
                         <form class="p-2 bg-light small" onsubmit="return false">
 
+
                             <label class="form-label mb-0 small">
                                 <i class="bi bi-box"></i> Part Name
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_part">
 
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-warehouse"></i> Unit
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="stock_godown">
+                            <div class="d-flex align-items-end gap-1">
+                                <span>
+                                    <label class="form-label mb-0 small">
+                                        <i class="bi bi-warehouse"></i> Unit
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm mb-1"
+                                        id="stock_godown"></span>
+                                <button type="button" class="btn btn-primary btn-sm d-none" id="unit_add_btn">+</button>
+                            </div>
 
 
                             <div class="row g-2 d-none" id="u_min_max">
@@ -126,8 +132,7 @@
                                     </label>
                                     <input type="text" class="form-control form-control-sm mb-1"
                                         id="stock_department"></span>
-                                <button type="button" class="btn btn-primary btn-sm d-none"
-                                        id="dep_add_btn">+</button>
+                                <button type="button" class="btn btn-primary btn-sm d-none" id="dep_add_btn">+</button>
                             </div>
 
                             <div class="row g-2 d-none" id="d_min_max">

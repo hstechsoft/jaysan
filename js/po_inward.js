@@ -164,42 +164,311 @@ $(document).ready(function () {
         $("#po_report_input").addClass('d-none');
         get_po_receive_sts($(this).data("po_id"));
     })
-    $("#poreport_item_table").on("input", "tr td", function () {
-        $("#po_report_input").removeClass("d-none");
-        var original_qnty = parseInt($(this).data("org_qty"));
-        var enter_qnty = parseInt($(this).text());
-        if (isNaN(enter_qnty)) {
-            $(this).text('');
-        } else if (enter_qnty > original_qnty) {
-            $(this).text(original_qnty);
-        } else if (enter_qnty < 0) {
-            $(this).text(0);
+    let selectedRow = null;
+
+    /* -----------------------------
+       ROW CLICK → OPEN MODAL
+    ------------------------------ */
+    $("#poreport_item_table").on("click", "tr td", function () {
+
+        selectedRow = $(this).closest("tr");
+
+        // Reset modal fields
+        $("#qty").val("");
+        $("#unit_auto, #department_auto, #section_auto")
+            .data({ godown_id: "", dept_id: "", sec_id: "" })
+            .addClass("d-none");
+
+        $(".form-check-input").prop("checked", false);
+
+        $("#inwardModal").modal("show");
+
+        // let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
+        // let entered_qty = parseFloat($(this).text()) || 0;
+
+        // // Clamp value
+        // if (entered_qty < 0) entered_qty = 0;
+        // if (entered_qty > original_qty) entered_qty = original_qty;
+
+        $("#qty").val(selectedRow.data("org_qty"));
+    });
+
+    /* -----------------------------
+       ONLY ONE CHECKBOX + SHOW INPUT
+    ------------------------------ */
+    $(".form-check-input").on("change", function () {
+
+        $(".form-check-input").not(this).prop("checked", false);
+        $("#unit_auto, #department_auto, #section_auto").addClass("d-none").val('');
+
+        if (this.checked) {
+            if (this.id === "unit_chk") $("#unit_auto").removeClass("d-none");
+            if (this.id === "department_chk") $("#department_auto").removeClass("d-none");
+            if (this.id === "section_chk") $("#section_auto").removeClass("d-none");
         }
-    })
+    });
 
-    $("#po_report_btn").on("click", function () {
-        let details_po = [];
-        $("#poreport_item_table").find("tr").each(function () {
+    /* -----------------------------
+       QTY INPUT VALIDATION (LIVE)
+    ------------------------------ */
+    $("#qty").on("input", function () {
 
-            let po_id = $(this).data("jaysan_po_material_id");
-            let po_qty = $(this).find("td").eq(5).text();
-            if (po_id && po_qty != '0' && po_qty != '') {
-                details_po.push({
-                    jaysan_po_material_id: po_id,
-                    qty: po_qty,
-                });
-            }
+        if (!selectedRow) return;
 
-        })
-        let dc_no = $("#dc_no").val();
-        let dc_date = $("#dc_date").val();
-        if (dc_no != '' && dc_date != '' && details_po.length > 0) {
-            insert_grn(dc_no, dc_date, details_po);
+        let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
+        let entered_qty = parseFloat($(this).val());
+
+        if (entered_qty < 0) {
+            $(this).val(0);
+            return;
+        }
+
+        if (entered_qty > original_qty) {
+            $(this).val(original_qty);
+        }
+    });
+
+    /* -----------------------------
+       UPDATE BUTTON VALIDATION
+    ------------------------------ */
+    $("#inward_modal_btn").on("click", function () {
+
+        if (!selectedRow) return;
+
+        let qty = parseFloat($("#qty").val());
+        let store_id = "";
+        let store_type = "";
+
+        // Quantity validation
+        if (isNaN(qty) || qty <= 0) {
+            salert("Warning", "Quantity must be greater than 0", "warning");
+            return;
+        }
+
+        // Store selection
+        if ($("#unit_chk").is(":checked")) {
+            store_id = $("#unit_auto").data("godown_id");
+            store_type = "unit";
+        }
+        else if ($("#department_chk").is(":checked")) {
+            store_id = $("#department_auto").data("dep_id");
+            store_type = "dep";
+        }
+        else if ($("#section_chk").is(":checked")) {
+            store_id = $("#section_auto").data("sec_id");
+            store_type = "sec";
         }
         else {
-            shw_toast('empty field', 'enter the fields');
+            salert("Warning", "Please select Unit / Department / Section", "warning");
+            return;
         }
-    })
+
+        if (!store_id) {
+            salert("Warning", "Please select a valid store", "warning");
+            return;
+        }
+
+        // Update row
+        selectedRow.find("td").eq(5).text(qty);
+        selectedRow.data({ store_id, store_type });
+
+        $("#inwardModal").modal("hide");
+        $("#po_report_input").removeClass("d-none")
+    });
+
+    /* -----------------------------
+       FINAL SUBMIT
+    ------------------------------ */
+    $("#po_report_btn").on("click", function () {
+
+        let details_po = [];
+
+        $("#poreport_item_table tr").each(function () {
+
+            let po_id = $(this).data("jaysan_po_material_id");
+            let qty = parseFloat($(this).find("td").eq(5).text());
+            let store_id = $(this).data("store_id");
+            let store_type = $(this).data("store_type");
+
+            if (po_id && qty > 0 && store_id && store_type) {
+                details_po.push({
+                    jaysan_po_material_id: po_id,
+                    qty: qty,
+                    store_id: store_id,
+                    store_type: store_type
+                });
+            }
+        });
+
+        let dc_no = $("#dc_no").val();
+        let dc_date = $("#dc_date").val();
+        let dc_type = $("#dc_bill").is(":checked") ? "Invoice" : "dc";
+
+        if (!dc_no || !dc_date || details_po.length === 0) {
+            shw_toast("Warning", "Please fill all required fields");
+            return;
+        }
+
+        insert_grn(dc_no, dc_date, details_po, dc_type);
+    });
+
+
+
+    $('#section_auto').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#section_auto').val() !== "") {
+            $('#section_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_full_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id,
+                                    dep: item.dep_id,
+                                    godown: item.godown_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#department_auto').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#department_auto').val() !== "") {
+            $('#department_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_departments_auto2.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.dep_name,
+                                    value: item.dep_name,
+                                    id: item.dep_id,
+                                    godown: item.godown_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("dep_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#unit_auto').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#unit_auto').val() !== "") {
+            $('#unit_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
 
     $("#po_entery_form ").on("change", function () {
@@ -611,15 +880,18 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 }
 
 
-function insert_grn(dc_no, dc_date, details_po) {
+function insert_grn(dc_no, dc_date, details_po, dc_type) {
+    console.log(details_po);
+    
     $.ajax({
-        url: "php/insert_grn.php",
+        // url: "php/insert_grn.php",
         type: "get", //send it through get method
         data: {
             dc_no: dc_no,
             dc_date: dc_date,
             receive_details: JSON.stringify(details_po),
             received_by: current_user_id,
+            dc_type: dc_type,
 
 
         },
@@ -722,7 +994,7 @@ function get_po_receive_sts(po_id) {
                         }
 
 
-                        $("#poreport_item_table").append("<tr data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td contenteditable='true'  data-org_qty=" + org_qty + ">0</td></tr>")
+                        $("#poreport_item_table").append("<tr data-org_qty=" + org_qty + " data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td>0</td></tr>")
                     });
                 }
                 else {
