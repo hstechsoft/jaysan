@@ -13,6 +13,7 @@ $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 $finished_godown = sql_nullable($finished_godown);
+$emp_id  = test_input($_GET['emp_id']);
 
 
 
@@ -55,13 +56,13 @@ $result = $conn->query($check_sql);
 
 if ($result->num_rows > 0) {
   // Record exists, update it
-  $sql = "UPDATE jaysan_stock   SET batch_id=$batch_id, qty= $qty, finished_godown=$finished_godown , remark=$remark,dated = NOW()
+  $sql = "UPDATE jaysan_stock   SET emp_id=$emp_id, batch_id=$batch_id, qty= $qty, finished_godown=$finished_godown , remark=$remark,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = $part_id )";
     
 } else {
   // Record doesn't exist, insert it
-  $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
-      VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown,$remark)";
+  $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark,emp_id) 
+      VALUES ($godown,$dep,$sec,$part_id,$batch_id,$qty,$finished_godown,$remark,$emp_id)";
 }
 
   if ($conn->query($sql) === TRUE) {
