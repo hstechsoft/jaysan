@@ -63,7 +63,7 @@ if ($conn->multi_query($sql)) {
 
 
       $sql_insert_pomaterial = "INSERT INTO jaysan_po_material ( material_rate,jaysan_po_id,po_material_id,qty,batch_id,is_approved,disc,due_on) VALUES ('$material_rate','$po_id','$po_material_id','$qty',$batch_id,'$is_approved','$disc','$due_on');";
-echo $sql_insert_pomaterial."<br>";
+
       if ($conn->query($sql_insert_pomaterial) === TRUE) {
           $last_insert_id = $conn->insert_id;
               if($is_ext_po == '1'){
