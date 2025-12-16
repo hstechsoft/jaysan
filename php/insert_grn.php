@@ -99,7 +99,7 @@ if ($result->num_rows > 0) {
     
 } else {
   // Record doesn't exist, insert it
-  $remark = "inward stock updated dc". $dc_no;
+  $remark = "inward stock inserted dc";
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
       VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,$remark)";
 
