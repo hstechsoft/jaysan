@@ -15,6 +15,7 @@ $is_ext_po = isset($_POST['is_ext_po']) ? $_POST['is_ext_po'] : '0';
 if($is_ext_po == '1'){
 $received_by = ($_POST['received_by']);
 $dc_no = ($_POST['dc_no']);
+$dc_no1 = ($_POST['dc_no']);
 $dc_date = ($_POST['dc_date']);
 
 }
