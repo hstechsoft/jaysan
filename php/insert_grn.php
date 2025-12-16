@@ -74,7 +74,9 @@ if ($result->num_rows > 0) {
 }
 
     }
-   
+   $godown = sql_nullable($godown);
+   $dep = sql_nullable($dep);
+   $sec = sql_nullable($sec);
 
     echo "godown: $godown dep: $dep sec: $sec <br>";
 
