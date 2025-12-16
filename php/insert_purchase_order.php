@@ -74,8 +74,8 @@ if ($conn->multi_query($sql)) {
           if ($conn->query($sql_grn) === TRUE) {
 
 
-$store_id = $details['store_id'];
-    $store_type = $details['store_type'];
+$store_id = $po_materials['store_id'];
+    $store_type = $po_materials['store_type'];
     $dep = '';
     $godown = '';
     $sec = '';
