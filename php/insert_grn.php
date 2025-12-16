@@ -76,6 +76,8 @@ if ($result->num_rows > 0) {
     }
    
 
+    echo "godown: $godown dep: $dep sec: $sec <br>";
+
     $check_sql = "SELECT qty FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =(select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
 
 $result = $conn->query($check_sql);
