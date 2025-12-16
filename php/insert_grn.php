@@ -87,7 +87,7 @@ $result = $conn->query($check_sql);
 if ($result->num_rows > 0) {
   // Record exists, update it
   $qty = $qty + $result->fetch_assoc()['qty'];
-  $remark = "'inward stock updated dc- $dc_no'";
+  $remark = "inward stock updated dc". $dc_no;
   $sql_stock = "UPDATE jaysan_stock   SET  qty= $qty,remark= $remark ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
 
