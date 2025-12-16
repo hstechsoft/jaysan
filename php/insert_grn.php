@@ -27,20 +27,20 @@ foreach ($receive_details as $details)
     $jaysan_po_material_id = $details['jaysan_po_material_id']; 
     $store_id = $details['store_id'];
     $store_type = $details['store_type'];
-    $dep = null;
-    $godown = null;
-    $sec = null;
+    $dep = '';
+    $godown = '';
+    $sec = '';
 
     if($store_type == 'godown')
     {
-     $dep =   null;
-     $sec =  null;
+     $dep =   '';
+     $sec =  '';
      $godown =  $store_id;
     }
     else if($store_type == 'dep')
     {
 
-     $sec =  null;
+     $sec =  '';
      
 $sql_store_type = "SELECT * FROM department WHERE dep_id  = $store_id";
 $result = $conn->query($sql_store_type);
@@ -88,14 +88,26 @@ if ($result->num_rows > 0) {
   // Record exists, update it
   $qty = $qty + $result->fetch_assoc()['qty'];
   $remark = "'inward stock updated dc- $dc_no'";
-  $sql = "UPDATE jaysan_stock   SET  qty= $qty,remark= $remark ,dated = NOW()
+  $sql_stock = "UPDATE jaysan_stock   SET  qty= $qty,remark= $remark ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
+
+       if ($conn->query($sql_stock) === TRUE) {
+   
+  } else {
+    echo "Error: " . $sql_stock . "<br>" . $conn->error;
+  }
     
 } else {
   // Record doesn't exist, insert it
   $remark = "'inward stock dc- $dc_no'";
-  $sql = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
+  $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,batch_id,qty,finished_godown,remark) 
       VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,$remark)";
+
+        if ($conn->query($sql_stock) === TRUE) {
+        }
+  else {
+    echo "Error: " . $sql_stock . "<br>" . $conn->error;
+  }
 }
 
 
