@@ -133,7 +133,7 @@ $result = $conn->query($check_sql);
 if ($result->num_rows > 0) {
   // Record exists, update it
   $qty = $qty + $result->fetch_assoc()['qty'];
-  $remark = "inward stock updated dc". $dc_no1;
+  $remark = "new inward stock updated dc". $dc_no1;
   $sql_stock = "UPDATE jaysan_stock   SET  qty= $qty,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =   $po_material_id)";
 
@@ -145,9 +145,9 @@ if ($result->num_rows > 0) {
     
 } else {
   // Record doesn't exist, insert it
-  $remark = "inward stock inserted dc" . $dc_no1;
+  $remark = "new inward stock inserted dc" . $dc_no1;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark) 
-      VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,'$remark')";
+      VALUES ($godown,$dep,$sec, $po_material_id,$qty,'$remark')";
 
         if ($conn->query($sql_stock) === TRUE) {
         }
