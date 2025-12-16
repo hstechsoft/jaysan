@@ -130,186 +130,160 @@ $(document).ready(function () {
         }
     });
 
+    $('#section_autoo').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#section_autoo').val() !== "") {
+            $('#section_autoo').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_full_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id,
+                                    dep: item.dep_id,
+                                    godown: item.godown_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
 
 
-    $("#poreport_search").on("click", function () {
+                },
 
-        $("#poreport_item_table").empty();
-        $("#po_report_input").addClass('d-none');
-
-        if ($("#from_date").val() && $("#to_date").val()) {
-
-            var from_date = $("#from_date").val();
-            var to_date = $('#to_date').val();
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
         }
-        if ($("#part").data("part_id")) {
-            var part = $("#part").data("part_id");
-        }
-        if ($("#company").data("po_order_to")) {
-            var company = $("#company").data("po_order_to");
-        }
-        console.log(part);
-        console.log(company);
-        console.log(from_date);
-        console.log(to_date);
 
-        get_po_report(part, company, from_date, to_date);
-    })
-
-    $("#po_report_reset").on("click", function () {
-        window.location.reload();
-    })
-
-    $("#poreport_table").on("click", "tr", function () {
-        $("#po_report_input").addClass('d-none');
-        get_po_receive_sts($(this).data("po_id"));
-    })
-    let selectedRow = null;
-
-    /* -----------------------------
-       ROW CLICK → OPEN MODAL
-    ------------------------------ */
-    $("#poreport_item_table").on("click", "tr td", function () {
-
-        selectedRow = $(this).closest("tr");
-
-        // Reset modal fields
-        $("#qty").val("");
-        $("#unit_auto, #department_auto, #section_auto")
-            .data({ godown_id: "", dept_id: "", sec_id: "" })
-            .addClass("d-none");
-
-        $(".form-check-input").prop("checked", false);
-
-        $("#inwardModal").modal("show");
-
-        // let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
-        // let entered_qty = parseFloat($(this).text()) || 0;
-
-        // // Clamp value
-        // if (entered_qty < 0) entered_qty = 0;
-        // if (entered_qty > original_qty) entered_qty = original_qty;
-
-        $("#qty").val(selectedRow.data("org_qty"));
     });
 
-    /* -----------------------------
-       ONLY ONE CHECKBOX + SHOW INPUT
-    ------------------------------ */
-    $(".form-check-input").on("change", function () {
+    $('#department_autoo').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#department_autoo').val() !== "") {
+            $('#department_autoo').autocomplete({
+                //get data from databse return as array of object which contain label,value
 
-        $(".form-check-input").not(this).prop("checked", false);
-        $("#unit_auto, #department_auto, #section_auto").addClass("d-none").val('');
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_departments_auto2.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
 
-        if (this.checked) {
-            if (this.id === "unit_chk") $("#unit_auto").removeClass("d-none");
-            if (this.id === "department_chk") $("#department_auto").removeClass("d-none");
-            if (this.id === "section_chk") $("#section_auto").removeClass("d-none");
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.dep_name,
+                                    value: item.dep_name,
+                                    id: item.dep_id,
+                                    godown: item.godown_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("dep_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
         }
+
     });
 
-    /* -----------------------------
-       QTY INPUT VALIDATION (LIVE)
-    ------------------------------ */
-    $("#qty").on("input", function () {
+    $('#unit_autoo').on('input', function () {
+        // alert()
+        //check the value not empty
+        if ($('#unit_autoo').val() !== "") {
+            $('#unit_autoo').autocomplete({
+                //get data from databse return as array of object which contain label,value
 
-        if (!selectedRow) return;
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
 
-        let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
-        let entered_qty = parseFloat($(this).val());
+                        },
+                        dataType: "json",
+                        success: function (data) {
 
-        if (entered_qty < 0) {
-            $(this).val(0);
-            return;
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
         }
 
-        if (entered_qty > original_qty) {
-            $(this).val(original_qty);
-        }
-    });
-
-    /* -----------------------------
-       UPDATE BUTTON VALIDATION
-    ------------------------------ */
-    $("#inward_modal_btn").on("click", function () {
-
-        if (!selectedRow) return;
-
-        let qty = parseFloat($("#qty").val());
-        let store_id = "";
-        let store_type = "";
-
-        // Quantity validation
-        if (isNaN(qty) || qty <= 0) {
-            salert("Warning", "Quantity must be greater than 0", "warning");
-            return;
-        }
-
-        // Store selection
-        if ($("#unit_chk").is(":checked")) {
-            store_id = $("#unit_auto").data("godown_id");
-            store_type = "unit";
-        }
-        else if ($("#department_chk").is(":checked")) {
-            store_id = $("#department_auto").data("dep_id");
-            store_type = "dep";
-        }
-        else if ($("#section_chk").is(":checked")) {
-            store_id = $("#section_auto").data("sec_id");
-            store_type = "sec";
-        }
-        else {
-            salert("Warning", "Please select Unit / Department / Section", "warning");
-            return;
-        }
-
-        if (!store_id) {
-            salert("Warning", "Please select a valid store", "warning");
-            return;
-        }
-
-        // Update row
-        selectedRow.find("td").eq(5).text(qty);
-        selectedRow.data({ store_id, store_type });
-
-        $("#inwardModal").modal("hide");
-        $("#po_report_input").removeClass("d-none")
-    });
-
-    /* -----------------------------
-       FINAL SUBMIT
-    ------------------------------ */
-    $("#po_report_btn").on("click", function () {
-
-        let details_po = [];
-
-        $("#poreport_item_table tr").each(function () {
-
-            let po_id = $(this).data("jaysan_po_material_id");
-            let qty = parseFloat($(this).find("td").eq(5).text());
-            let store_id = $(this).data("store_id");
-            let store_type = $(this).data("store_type");
-
-            if (po_id && qty > 0 && store_id && store_type) {
-                details_po.push({
-                    jaysan_po_material_id: po_id,
-                    qty: qty,
-                    store_id: store_id,
-                    store_type: store_type
-                });
-            }
-        });
-
-        let dc_no = $("#dc_no").val();
-        let dc_date = $("#dc_date").val();
-        let dc_type = $("#dc_bill").is(":checked") ? "Invoice" : "dc";
-
-        if (!dc_no || !dc_date || details_po.length === 0) {
-            shw_toast("Warning", "Please fill all required fields");
-            return;
-        }
-
-        insert_grn(dc_no, dc_date, details_po, dc_type);
     });
 
 
@@ -470,6 +444,203 @@ $(document).ready(function () {
 
     });
 
+    $("#poreport_search").on("click", function () {
+
+        $("#poreport_item_table").empty();
+        $("#po_report_input").addClass('d-none');
+
+        if ($("#from_date").val() && $("#to_date").val()) {
+
+            var from_date = $("#from_date").val();
+            var to_date = $('#to_date').val();
+        }
+        if ($("#part").data("part_id")) {
+            var part = $("#part").data("part_id");
+        }
+        if ($("#company").data("po_order_to")) {
+            var company = $("#company").data("po_order_to");
+        }
+        console.log(part);
+        console.log(company);
+        console.log(from_date);
+        console.log(to_date);
+
+        get_po_report(part, company, from_date, to_date);
+    })
+
+    $("#po_report_reset").on("click", function () {
+        window.location.reload();
+    })
+
+    $("#poreport_table").on("click", "tr", function () {
+        $("#po_report_input").addClass('d-none');
+        get_po_receive_sts($(this).data("po_id"));
+    })
+    let selectedRow = null;
+
+    /* -----------------------------
+        ROW CLICK → OPEN MODAL
+    ------------------------------ */
+    $("#poreport_item_table").on("click", "tr td.clickk", function () {
+
+        selectedRow = $(this).closest("tr");
+
+        // Reset modal fields
+        $("#qty").val("");
+        $("#unit_auto, #department_auto, #section_auto")
+            .data({ godown_id: "", dept_id: "", sec_id: "" })
+            .addClass("d-none");
+
+        $(".form-check-input").prop("checked", false);
+
+        $("#inwardModal").modal("show");
+
+        // let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
+        // let entered_qty = parseFloat($(this).text()) || 0;
+
+        // // Clamp value
+        // if (entered_qty < 0) entered_qty = 0;
+        // if (entered_qty > original_qty) entered_qty = original_qty;
+
+        $("#qty").val(selectedRow.data("org_qty"));
+    });
+
+    /* -----------------------------
+        ONLY ONE CHECKBOX + SHOW INPUT
+    ------------------------------ */
+    $(".select_uds").on("change", function () {
+
+        $(".select_uds").not(this).prop("checked", false);
+
+        $("#unit_auto, #department_auto, #section_auto")
+            .addClass("d-none")
+            .val("");
+
+        if (this.checked) {
+            switch (this.id) {
+                case "unit_chk":
+                    $("#unit_auto").removeClass("d-none");
+                    break;
+                case "department_chk":
+                    $("#department_auto").removeClass("d-none");
+                    break;
+                case "section_chk":
+                    $("#section_auto").removeClass("d-none");
+                    break;
+            }
+        }
+    });
+
+
+    /* -----------------------------
+        QTY INPUT VALIDATION (LIVE)
+    ------------------------------ */
+    $("#qty").on("input", function () {
+
+        if (!selectedRow) return;
+
+        let original_qty = parseFloat(selectedRow.data("org_qty")) || 0;
+        let entered_qty = parseFloat($(this).val());
+
+        if (entered_qty < 0) {
+            $(this).val(0);
+            return;
+        }
+
+        if (entered_qty > original_qty) {
+            $(this).val(original_qty);
+        }
+    });
+
+    /* -----------------------------
+        UPDATE BUTTON VALIDATION
+    ------------------------------ */
+    $("#inward_modal_btn").on("click", function () {
+
+        if (!selectedRow) return;
+
+        let qty = parseFloat($("#qty").val());
+        let store_id = "";
+        let store_type = "";
+
+        // Quantity validation
+        if (isNaN(qty) || qty <= 0) {
+            salert("Warning", "Quantity must be greater than 0", "warning");
+            return;
+        }
+
+        // Store selection
+        if ($("#unit_chk").is(":checked")) {
+            store_id = $("#unit_auto").data("godown_id");
+            store_type = "godown";
+        }
+        else if ($("#department_chk").is(":checked")) {
+            store_id = $("#department_auto").data("dep_id");
+            store_type = "dep";
+        }
+        else if ($("#section_chk").is(":checked")) {
+            store_id = $("#section_auto").data("sec_id");
+            store_type = "sec";
+        }
+
+        else {
+            salert("Warning", "Please select Unit / Department / Section", "warning");
+            return;
+        }
+
+
+        if (!store_id) {
+            salert("Warning", "Please select a valid store", "warning");
+            return;
+        }
+
+        // Update row
+        selectedRow.find("td").eq(5).text(qty);
+        selectedRow.data({ store_id, store_type });
+
+        $("#inwardModal").modal("hide");
+        $("#po_report_input").removeClass("d-none")
+    });
+
+    /* -----------------------------
+        FINAL SUBMIT
+    ------------------------------ */
+    $("#po_report_btn").on("click", function () {
+
+        let details_po = [];
+
+        $("#poreport_item_table tr").each(function () {
+
+            let po_id = $(this).data("jaysan_po_material_id");
+            let qty = parseFloat($(this).find("td").eq(5).text());
+            let store_id = $(this).data("store_id");
+            let store_type = $(this).data("store_type");
+
+            if (po_id && qty > 0 && store_id && store_type) {
+                details_po.push({
+                    jaysan_po_material_id: po_id,
+                    qty: qty,
+                    store_id: store_id,
+                    store_type: store_type
+                });
+            }
+        });
+
+        let dc_no = $("#dc_no").val();
+        let dc_date = $("#dc_date").val();
+        let dc_type = $("#dc_bill").is(":checked") ? "Invoice" : "dc";
+
+        if (!dc_no || !dc_date || details_po.length === 0) {
+            shw_toast("Warning", "Please fill all required fields");
+            return;
+        }
+
+        insert_grn(dc_no, dc_date, details_po, dc_type);
+    });
+
+
+
+
 
     $("#po_entery_form ").on("change", function () {
         // alert();
@@ -596,6 +767,29 @@ $(document).ready(function () {
 
     });
 
+    $(".select_po_uds").on("change", function () {
+
+        $(".select_po_uds").not(this).prop("checked", false);
+
+        $("#unit_autoo, #department_autoo, #section_autoo")
+            .addClass("d-none")
+            .val("");
+
+        if (this.checked) {
+            switch (this.id) {
+                case "unit_chkk":
+                    $("#unit_autoo").removeClass("d-none");
+                    break;
+                case "department_chkk":
+                    $("#department_autoo").removeClass("d-none");
+                    break;
+                case "section_chkk":
+                    $("#section_autoo").removeClass("d-none");
+                    break;
+            }
+        }
+    });
+
     // ADD ROW
     let t_price = 0;
     let t_qty = 0;
@@ -610,6 +804,31 @@ $(document).ready(function () {
         var gst = $("#entry_gst").val();
         var qty = Number($("#entry_qty").val());
         var uom = $("#entry_uom").val();
+        var e_store_id = '';
+        var e_store_type = '';
+
+        // Store selection
+        if ($("#unit_chkk").is(":checked")) {
+            e_store_id = $("#unit_autoo").data("godown_id");
+            e_store_type = "godown";
+        }
+        else if ($("#department_chkk").is(":checked")) {
+            e_store_id = $("#department_autoo").data("dep_id");
+            e_store_type = "dep";
+        }
+        else if ($("#section_chkk").is(":checked")) {
+            e_store_id = $("#section_autoo").data("sec_id");
+            e_store_type = "sec";
+        }
+        else {
+            salert("Warning", "Please select Unit / Department / Section", "warning");
+            return;
+        }
+
+        if (!e_store_id) {
+            salert("Warning", "Please select a valid store", "warning");
+            return;
+        }
 
         if (!dc_no || !company_id || !part || !date || !price || !gst || !qty || uom == "null") {
             salert("Warning", "Fill the fields", "warning");
@@ -630,7 +849,7 @@ $(document).ready(function () {
         rowCount = rowCount + 1;
 
         $("#po_entery_form_table").append(`
-                <tr data-discount='${$("#entry_discount").val()}' data-part_id="${part}">
+                <tr data-discount='${$("#entry_discount").val()}' data-part_id="${part}" data-store_id="${e_store_id}" data-store_type="${e_store_type}">
                     <td>${rowCount}</td>
                     <td>${$("#entry_part").val()}</td>
                     <td>${price}</td>
@@ -682,6 +901,8 @@ $(document).ready(function () {
             const rate = $(this).find("td").eq(2).text().trim();
             const qty = $(this).find("td").eq(4).text().trim();
             const part_id_m = $(this).data("part_id");
+            const store_id = $(this).data("store_id");
+            const store_type = $(this).data("store_type");
 
             if (rate != "" && qty != "" && part_id_m != "") {
                 po_material.push({
@@ -692,6 +913,8 @@ $(document).ready(function () {
                     is_approved: "",
                     disc: $(this).data("discount"),
                     due_on: "",
+                    store_id: store_id,
+                    store_type: store_type,
                 });
             } else {
                 salert("Warning", "Table data missing", "warning");
@@ -830,6 +1053,7 @@ $(document).ready(function () {
 
 
 function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
+
     console.log(comp);
     console.log(dc);
     console.log(datee);
@@ -881,10 +1105,10 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 
 
 function insert_grn(dc_no, dc_date, details_po, dc_type) {
-    console.log(details_po);
-    
+    console.log(details_po, dc_date, dc_no, dc_type);
+
     $.ajax({
-        // url: "php/insert_grn.php",
+        url: "php/insert_grn.php",
         type: "get", //send it through get method
         data: {
             dc_no: dc_no,
@@ -994,7 +1218,7 @@ function get_po_receive_sts(po_id) {
                         }
 
 
-                        $("#poreport_item_table").append("<tr data-org_qty=" + org_qty + " data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td>0</td></tr>")
+                        $("#poreport_item_table").append("<tr data-org_qty=" + org_qty + " data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td class='clickk'>0</td></tr>")
                     });
                 }
                 else {

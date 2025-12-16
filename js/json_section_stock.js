@@ -9,6 +9,8 @@ var dep_id = '';
 var sec_id = '';
 $(document).ready(function () {
 
+    get_dep_section();
+
     $("#section_stock_tabel_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
@@ -37,10 +39,10 @@ $(document).ready(function () {
     );
 
 
-    $("#mobile_form_view_btn").on("change", function(){
-        if($(this).is(":checked")){
+    $("#mobile_form_view_btn").on("change", function () {
+        if ($(this).is(":checked")) {
             $("#mobile_form_view").css("display", "block");
-        }else{
+        } else {
             $("#mobile_form_view").css("display", "none");
         }
     })
@@ -49,62 +51,74 @@ $(document).ready(function () {
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-    $('#section').on('input', function () {
-
-        //check the value not empty
-        if ($('#section').val() != "") {
-            $('#section').autocomplete({
-                //get data from databse return as array of object which contain label,value
-
-                source: function (request, response) {
-                    $.ajax({
-                        url: "php/get_sections_full_auto.php",
-                        type: "get", //send it through get method
-                        data: {
-                            term: request.term,
-
-                        },
-                        dataType: "json",
-                        success: function (data) {
-
-                            console.log(data);
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.sec_name,
-                                    value: item.sec_name,
-                                    id: item.dep_sec_id,
-                                    dep: item.dep_id,
-                                    godown: item.godown_id,
-                                };
-                            }));
-
-                        }
-
-                    });
-                },
-                minLength: 2,
-                cacheLength: 0,
-                select: function (event, ui) {
-
-                    $(this).data("sec_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
-                    dep_id = ui.item.dep;
-                    godown_id = ui.item.godown;
-                    sec_id = ui.item.id;
-                    get_jaysan_stock(ui.item.id, ui.item.dep, ui.item.godown);
+    // $('#section').on('input', function () {
+    //     $("#section_select_stock").val("null")
+    //     $(this).data("sec_id", '');
+    //     $("#add_stock_row").addClass("d-none");
 
 
-                },
+    //     //check the value not empty
+    //     if ($('#section').val() != "") {
+    //         $('#section').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
 
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
-                    .appendTo(ul);
-            };
-        }
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_sections_full_auto.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
 
-    });
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.sec_name,
+    //                                 value: item.sec_name,
+    //                                 id: item.dep_sec_id,
+    //                                 dep: item.dep_id,
+    //                                 godown: item.godown_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("sec_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+    //                 if ($(this).data("sec_id") != undefined) {
+    //                     $("#add_stock_row").removeClass("d-none");
+    //                     $("#section_select_stock").val($(this).data("sec_id"))
+
+    //                 }
+    //                 else {
+    //                     $("#add_stock_row").addClass("d-none");
+    //                 }
+    //                 dep_id = ui.item.dep;
+    //                 godown_id = ui.item.godown;
+    //                 sec_id = ui.item.id;
+    //                 get_jaysan_stock(ui.item.id, ui.item.dep, ui.item.godown);
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
 
     $('#part').on('input', function () {
         //check the value not empty
@@ -216,10 +230,123 @@ $(document).ready(function () {
     });
 
 
-    $("#section_min_max_view").on("change", function(){
+    $("#section_min_max_view").on("change", function () {
         get_jaysan_stock(sec_id, dep_id, godown_id);
     })
     // get_jaysan_stock(27)
+
+    $("#section_select_stock").on("change", function () {
+
+        let section_id = $(this).val();
+        let selectedOption = $(this).find("option:selected");
+
+        let dept_id = selectedOption.data("dep_id");
+        let sec_name = selectedOption.data("sec_name");
+
+        if (section_id) {
+            get_jaysan_stock(section_id, dept_id, '1166');
+
+            sec_id = section_id;
+            dep_id = dept_id;
+            godown_id = 1166;
+            $("#section").data("sec_id", section_id);
+            $("#section").val(sec_name);
+            if ($("#section_select_stock").val() != '' && $("#section_select_stock").val() != "null") {
+                $("#add_stock_row").removeClass("d-none");
+            }
+            else {
+                $("#add_stock_row").addClass("d-none");
+            }
+        } else {
+            $("#add_stock_row").addClass("d-none");
+            salert("Warning", "data missing", "warning");
+        }
+    });
+
+
+    $("#add_stock_row").on("click", function () {
+        let row = $(`
+                    <tr>
+                        <td></td>
+                        <td contenteditable class="part"></td>
+                        <td contenteditable class="qty"></td>
+                        <td></td>
+                    </tr>
+                `);
+
+        $("#section_stock_tbody").append(row);
+        row.find(".part").focus();
+    });
+
+
+
+$("#section_stock_tbody").on("focus", ".part", function () {
+
+    let $partCell = $(this);
+
+    if ($partCell.data("autocomplete")) return;
+
+    $partCell.autocomplete({
+        minLength: 2,
+        source: function (request, response) {
+            $.ajax({
+                url: "php/get_part_name_auto1.php",
+                type: "get",
+                dataType: "json",
+                data: {
+                    part: request.term,
+                    term: "part"
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.part_name,
+                            value: item.part_name,
+                            id: item.part_id
+                        };
+                    }));
+                }
+            });
+        },
+        select: function (event, ui) {
+            event.preventDefault();
+
+            // set part
+            $partCell.text(ui.item.label);
+            $partCell.data("part_id", ui.item.id);
+
+            // 👉 MOVE TO QTY
+            $partCell.closest("tr").find(".qty").focus();
+        }
+    });
+
+    $partCell.data("autocomplete", true);
+});
+
+
+    $("#section_stock_tbody").on("keydown", ".qty", function (e) {
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+
+            let row = $(this).closest("tr");
+
+            let qty = $(this).text().trim();
+            let partCell = row.find(".part");
+            let part_id = partCell.data("part_id");
+
+            if (!part_id || !qty || isNaN(qty)) {
+                salert("Warning", "Part or quantity missing", "warning");
+                return;
+            }
+
+            insert_jaysan_stock(part_id, godown_id, dep_id, sec_id, qty, '{}');
+
+            // Lock row
+            row.find("[contenteditable]").attr("contenteditable", false);
+        }
+    });
+
 
 
 
@@ -278,6 +405,8 @@ function insert_jaysan_stock(part, godown_id, dep_id, sec_id, qty, stock_master_
 }
 
 function get_jaysan_stock(sec_query, dep_query, creditor_query) {
+    console.log(sec_query, dep_query, creditor_query);
+
     $("#tog").removeClass("d-none")
     // console.log("fd " + from_date, "td " + to_date, "g " + creditor_query, "d " + dep_query, "s " + sec_query, "p " + part_query, "q " + qty_query, "min_order_query " + min_order_query);
 
@@ -416,7 +545,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     console.log(isNaN(remaining_qut) ? 0 : remaining_qut, "item.part_id : " + item.part_id);
 
                                     if (secObj.Section_qty <= secObj.sec_min) { blink = `blink`; }
-                                    if($("#section_min_max_view").is(":checked")){
+                                    if ($("#section_min_max_view").is(":checked")) {
                                         s_min_max = `<span class=' ms-2 badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
                                     // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
@@ -539,6 +668,62 @@ function insert_new_process(processId) {
 
 }
 
+
+function get_dep_section() {
+
+    $.ajax({
+        url: "php/get_dep_section.php",
+        type: "get", //send it through get method
+        data: {
+            dep_id: 27,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#section_select_stock").empty();
+                if (response.trim() != "0 result") {
+
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+                    $("#section_select_stock").append("<option class='' value='null'> select section...  </option>")
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+
+                        $("#section_select_stock").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
+
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
 
 
 

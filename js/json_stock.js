@@ -677,23 +677,39 @@ $(document).ready(function () {
 
     })
 
-    $("#stock_tbady").on("blur", "span[contenteditable]", function (e) {
+    let enterPressed = false;
 
-        // if (e.key === "Enter") {
-        //     e.preventDefault();
+    $("#stock_tbady").on("focus", "span[contenteditable]", function () {
+        // Store original value on focus
+        $(this).data("original", $(this).text().trim());
+        enterPressed = false;
+    }).on("keydown", "span[contenteditable]", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            enterPressed = true;
 
-        var part = $(this).data("part_id") || '';
-        var godown = $(this).data("unit_id") || '';
-        var department = $(this).data("dep_id") || '';
-        var section = $(this).data("sec_id") || '';
-        var qty = $(this).text().trim();
-        var stock_master_json = "{}";
+            var part = $(this).data("part_id") || '';
+            var godown = $(this).data("unit_id") || '';
+            var department = $(this).data("dep_id") || '';
+            var section = $(this).data("sec_id") || '';
+            var qty = $(this).text().trim();
+            var stock_master_json = "{}";
 
-        console.log("part", part, "godown", godown, "department", department, "section", section, "qty", qty);
+            console.log("part", part, "godown", godown, "department", department, "section", section, "qty", qty);
 
-        insert_jaysan_stock(part, godown, department, section, qty, stock_master_json);
-        // }
-    });
+            insert_jaysan_stock(part, godown, department, section, qty, stock_master_json);
+
+            // remove focus after save
+            $(this).blur();
+        }
+    })
+        .on("blur", "span[contenteditable]", function () {
+            // If Enter not pressed, restore original value
+            if (!enterPressed) {
+                $(this).text($(this).data("original"));
+            }
+        });
+
 
 
 
@@ -1315,8 +1331,9 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
 
 
+
 function insert_creditors(unit) {
-alert()
+    alert()
 
     $.ajax({
         url: "php/insert_creditors.php",
@@ -1355,7 +1372,7 @@ alert()
 
 function insert_department(go_id, dept_name) {
     console.log(go_id);
-    
+
     $.ajax({
         url: "php/insert_department.php",
         type: "get", //send it through get method
@@ -1373,7 +1390,7 @@ function insert_department(go_id, dept_name) {
                 shw_toast("success", "Department Added")
                 $("#dep_add_btn").addClass("d-none")
                 $("#sec_add_btn").removeClass("d-none")
-                
+
             }
 
 
