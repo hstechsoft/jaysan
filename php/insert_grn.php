@@ -5,6 +5,7 @@
 
 $received_by = test_input($_GET['received_by']);
 $dc_no = test_input($_GET['dc_no']);
+$dc_no1 = ($_GET['dc_no']);
 $dc_date = test_input($_GET['dc_date']);
 $receive_details = json_decode($_GET['receive_details'], true);
 $dc_type = test_input($_GET['dc_type']);
@@ -78,7 +79,6 @@ if ($result->num_rows > 0) {
    $dep = sql_nullable($dep);
    $sec = sql_nullable($sec);
 
-    echo "godown: $godown dep: $dep sec: $sec <br>";
 
     $check_sql = "SELECT qty FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =(select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
 
@@ -87,8 +87,8 @@ $result = $conn->query($check_sql);
 if ($result->num_rows > 0) {
   // Record exists, update it
   $qty = $qty + $result->fetch_assoc()['qty'];
-  $remark = "inward stock updated dc". $dc_no;
-  $sql_stock = "UPDATE jaysan_stock   SET  qty= $qty,remark= $remark ,dated = NOW()
+  $remark = "inward stock updated dc". $dc_no1;
+  $sql_stock = "UPDATE jaysan_stock   SET  qty= $qty,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
 
        if ($conn->query($sql_stock) === TRUE) {
@@ -99,10 +99,10 @@ if ($result->num_rows > 0) {
     
 } else {
   // Record doesn't exist, insert it
-  $remark = "inward stock inserted dc";
+  $remark = "inward stock inserted dc" . $dc_no1;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark) 
       VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,'$remark')";
-echo $sql_stock;
+
         if ($conn->query($sql_stock) === TRUE) {
         }
   else {
