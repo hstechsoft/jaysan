@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+    <style>
+        .custom-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* #purchase_order_table tr {
+            font-size: 12px;
+        } */
+        .eoe {
+            padding-left: 84%;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid ">
+        <!-- top bar -->
+
+
+
+        <section id="menu_bar">
+
+        </section>
+        <!-- Purchase order form  -->
+
+        <div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped" style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;">
+                            <div class="d-flex justify-content-between">
+                                <h6>PO Report</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_report_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
+                            <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center;  background: #f0f0f0;">
+
+                                <tr>
+                                    <th scope="col">S/No</th>
+                                    <th scope="col" style="width: 100%;">MRF Details</th>
+                                    <th scope="col">Order To</th>
+                                    <th scope="col">RM</th>
+                                    <th scope="col">Batch Date</th>
+
+                                    <th scope="col">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="po_report">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+
+                    <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped">
+                            <div class="d-flex justify-content-between">
+                                <h6>Po List</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_list_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
+                            <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
+
+                                <tr>
+                                    <th scope="col">S/No</th>
+                                    <th scope="col">Po no</th>
+                                    <th scope="col">Order To</th>
+                                    <th scope="col">Po Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="get_po_list">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="table-responsive custom-scroll" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <div class="d-flex">
+                                <h6>PO Dashboard</h6>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="po_dash_search" class="form-control border-0 bg-white"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
+                            <thead  style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
+
+                                <tr>
+                                    <th class="text-center" id="company_name" colspan="7">Company Name:</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Materials</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Order Quantity</th>
+                                    <th scope="col">Discount%</th>
+                                    <th scope="col">Batch Date</th>
+                                    <th scope="col">Due Date</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="po_dashboard_table">
+
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <div>
+                        <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="extra_po_order_form"
+                            novalidate onsubmit="return false">
+
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="material" placeholder=""
+                                            required>
+                                        <label for="material">Material
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="quantity" placeholder=""
+                                            required>
+                                        <label for="quantity">Quantity
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="uom" required>
+                                            <option selected disabled value="">Choose...</option>
+                                            <option value="Nos">Nos</option>
+                                            <option value="No">No</option>
+                                            <option value="NUM">NUM</option>
+                                            <option value="Pcs">Pcs</option>
+                                            <option value="Sets">Sets</option>
+                                            <option value="Sheet">Sheet</option>
+                                            <option value="kgs">kgs</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="mls">mls</option>
+                                            <option value="Mts">Mts</option>
+                                            <option value="mtrs">mtrs</option>
+                                            <option value="mm">mm</option>
+                                            <option value="CUM">CUM</option>
+                                        </select>
+                                        <label for="uom">uom</label>
+                                        <div class="invalid-feedback">
+                                            Kindly Select Vaild
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="tel" class="form-control rounded-3" id="rate" placeholder=""
+                                            required>
+                                        <label for="rate">Rate
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="tel" class="form-control rounded-3" id="discount" min="0" max="100"
+                                            placeholder="" required>
+                                        <label for="discount">Discount
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-floating mb-2">
+                                        <input type="date" class="form-control rounded-3" id="due_date" placeholder=""
+                                            required>
+                                        <label for="due_date">Due Date
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary " id="extra_po_add">Add PO</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive mt-2" style="max-height: 450px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead>
+
+                                <tr>
+                                <tr>
+                                    <th scope="col">Materials</th>
+                                    <th scope="col">Batch Date</th>
+                                    <th scope="col">Due Date</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Rate</th>
+                                    <th scope="col">Discount Amount</th>
+                                    <th scope="col">Delete</th>
+
+                                </tr>
+
+                                </tr>
+                            </thead>
+                            <tbody id="selected_materials">
+
+
+
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary my-3" id="po_submit">Preview</button>
+                </div>
+            </div>
+        </div>
+        <!-- Purchase order table preview-->
+        <div class="container py-5  d-none" id="preview_Purchase">
+            <!-- <h3 class="text-center" id="hess">PURCHASE ORDER</h3> -->
+
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;"
+                    id="purchase_order_table">
+                    <thead>
+
+                        <tr>
+                            <th scope="col" rowspan="3" colspan="2" id="invoice_to">Invoice To</th>
+                            <th scope="col" colspan="3" id="voucher_no">Voucher No</th>
+                            <th scope="col" colspan="3">Dated</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" colspan="3"></th>
+                            <th scope="col" colspan="3">Mode/Terms of payment</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" colspan="3">Reference No. & Date</th>
+                            <th scope="col" colspan="3">Other References</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" colspan="2" id="consignee">Consignee</th>
+                            <th scope="col" colspan="3" id="dsa">Dispatched through</th>
+                            <th scope="col" colspan="3" id="dsa">Destination</th>
+                        </tr>
+                        <tr>
+                            <th scope="col" colspan="2" id="supplier">Supplier</th>
+                            <th scope="col" colspan="6" id="terms_of_delivery" class="text-start align-top">
+                                Terms of Delivery</th>
+                        </tr>
+                        <tr>
+
+                            <td id="sno">S/No</td>
+                            <td>Description of Goods</td>
+                            <td>Due on</td>
+                            <td>Quantity</td>
+                            <td>Rate</td>
+                            <td>Per</td>
+                            <td>Disc.%</td>
+                            <td>Amount</td>
+
+                        </tr>
+                    </thead>
+                    <tbody id="purchase_order_details">
+
+
+                        <!-- <tr>
+
+                            <td></td>
+                            <td>Total</td>
+                            <td></td>
+                            <td>5555</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Rs</td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Amount chargeable (in words)</td>
+                            <th colspan="7"></th>
+                        </tr>
+                        <tr>
+                            <td>Remark</td>
+                            <th colspan="7"></th>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">PO against by proforma</td>
+                            <th colspan="2"></th>
+                            <td colspan="2">for JAYSAN AGRI INDUSTRIAL Signatory</td>
+                            <th colspan="2"></th>
+                        </tr> -->
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary d-none" id="mail_print"><i class="fa fa-envelope"></i>
+                / <i class="fa fa-print"></i> </button>
+            <button type="submit" class="btn btn-primary d-none" id="update_po"><i class="fa fa-envelope"></i>
+            </button>
+            <!--Loading Overlay -->
+            <div id="overlay"
+                style="display:none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6);z-index: 9999; color: white; font-size: 1.5rem; text-align: center; padding-top: 20%; ">
+                <i class="fa-solid fa-spinner fa-spin"></i> Please wait, the mail is sending...
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="terms" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="termsLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered  ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsLabel">Terms of Delivery</h5>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control rounded-3" placeholder="" id="terms_of_delivery_input"
+                                required style="height: 120px"></textarea>
+                            <label for="terms_of_delivery_input">Terms of Delivery</label>
+
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="po_no" placeholder="">
+                            <label for="po_no">Po No
+                                <span class="text-danger">*</span> </label>
+
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild Data
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-4 " id="terms_btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content -->
+
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- external js -->
+    <script src="js/purchase_order_form.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+    <script src="js/mrf_popover.js" type="module"></script>
+
+</body>
+
+</html>

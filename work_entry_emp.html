@@ -331,31 +331,7 @@
   <div class="col-sm-8 col-12 m-0 p-0">
  <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="work_time_form" novalidate onsubmit="return false">
 
-<!-- content -->
-<div class="mb-2">
-  <label class="form-label d-block">
-    <i class="fa fa-user me-1 text-primary"></i> Employee <span class="text-danger">*</span>
-  </label>
-  <div class="d-flex gap-2 align-items-center">
-    <div class="form-floating flex-grow-1">
-      <select class="form-select" id="emp" required>
-        <option selected disabled value="">Choose...</option>
-      </select>
-      <label for="emp">Employee</label>
-      <div class="invalid-feedback">
-        Kindly select valid employee
-      </div>
-    </div>
-    <button id="openProcessModalBtn" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#employeeProcessModal" disabled>
-      <i class="fa fa-plus"></i> 
-    </button>
 
-    <button id="printProcessBtn" type="button" class="btn btn-success " disabled>
-  <i class="fa fa-print"></i> 
-</button>
-
-  </div>
-</div>
 
 
 
@@ -444,10 +420,10 @@
 
      
     </h2>
-    <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#extra_time_master">
+    <!-- <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#extra_time_master">
       <i class="fa-solid fa-mug-hot me-1"></i> Add New
      
-    </button>
+    </button> -->
     </div>
  
 
@@ -677,7 +653,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- external js -->
-<script src="js/work_entry.js" type="module"></script>
+<script src="js/work_entry_emp.js" type="module"></script>
 <script src="js/menu.js" type="module"></script>
 <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
