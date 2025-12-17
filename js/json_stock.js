@@ -1172,6 +1172,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                             (unitObj.department_details || []).forEach(function (depObj, depIndex) {
                                 var depName = depObj.department || "";
                                 var sections = depObj.section_details || [];
+                                var unit_stock_qty = 0;
+                                var dep_stock_qty = 0;
 
                                 sections.forEach(function (secObj, secIndex) {
                                     var tr = `<tr class='text-center align-middle' style='font-size: 12px'>`;
@@ -1209,6 +1211,14 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var g_min_max = '';
                                         let godown_min = unitObj.godown_min ?? 0;
                                         let godown_max = unitObj.godown_max ?? 0;
+                                        let final_unit_qty = unitObj.godown_qty;
+
+                                        // if no-department exists, override
+                                        unitObj.department_details.forEach(depObj => {
+                                            if (depObj.dep_name === 'no-department') {
+                                                final_unit_qty = depObj.department_qty;
+                                            }
+                                        });
                                         if (unitObj.godown_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
@@ -1230,7 +1240,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                             g_min_max = `<span class='badge bg-danger ${blink}'>${godown_min}</span><span class='badge bg-success ms-1'>${godown_max}</span>`;
                                         }
-                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${unitObj.godown_qty}</span>${g_min_max} </td>`;
+                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} (${unitObj.godown_qty}) - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${final_unit_qty}</span>${g_min_max} </td>`;
                                     }
 
                                     // Department cell: only for first section of this department
@@ -1238,8 +1248,17 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var blink = '';
                                         var dd_req = '';
                                         var d_min_max = '';
+                                        var editt_span = '';
                                         let dep_min = depObj.dep_min ?? 0;
                                         let dep_max = depObj.dep_max ?? 0;
+                                        let final_dep_qty = depObj.department_qty;
+
+                                        // if no-section exists, override
+                                        depObj.section_details.forEach(secObj => {
+                                            if (secObj.section === 'no-section') {
+                                                final_dep_qty = secObj.Section_qty;
+                                            }
+                                        });
                                         if (depObj.dep_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var d_req_count = 0;
                                             depObj.dep_req.forEach(function (greq) {
@@ -1262,7 +1281,12 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                             d_min_max = ` <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span>`;
                                         }
-                                        tr += `<td rowspan="${sections.length}">${dd_req} ${depName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${depObj.department_qty}</span>${d_min_max} </td>`;
+                                        if (depName != 'no-department') {
+                                            editt_span = `(${depObj.department_qty}) - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${final_dep_qty}</span>${d_min_max} `
+                                        } else {
+                                            unit_stock_qty = depObj.department_qty;
+                                        }
+                                        tr += `<td rowspan="${sections.length}">${dd_req}  ${depName != 'no-department' ? depName : ""}</td>`;
                                     }
 
                                     // Section and Section_qty
@@ -1291,7 +1315,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                     if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                         s_min_max = `<span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
-                                    tr += `<td>${ss_req} ${secObj.section || ""} ${s_min_max}</td>`;
+                                    if (secObj.section == 'no-section') { dep_stock_qty = secObj.Section_qty };
+                                    tr += `<td>${ss_req} ${secObj.section != 'no-section' ? `${secObj.section || ""} ${s_min_max}` : ''}</td>`;
                                     tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable class='px-3 py-1' data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span></td>`;
 
                                     tr += "</tr>";
