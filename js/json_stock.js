@@ -1258,11 +1258,10 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             top_req_count += d_req_count;
                                         }
                                         console.log(top_req_count);
-
+                                        if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
                                         if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                             d_min_max = ` <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span>`;
                                         }
-                                        if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
                                         tr += `<td rowspan="${sections.length}">${dd_req} ${depName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${depObj.department_qty}</span>${d_min_max} </td>`;
                                     }
 

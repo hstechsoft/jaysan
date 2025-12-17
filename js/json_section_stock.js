@@ -675,7 +675,7 @@ function get_dep_section() {
         url: "php/get_dep_section.php",
         type: "get", //send it through get method
         data: {
-            dep_id: 27,
+            dep_id: 29,
 
         },
         success: function (response) {
