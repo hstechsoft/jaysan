@@ -21,7 +21,7 @@ return $data;
 }
 $sql = "SELECT log.*,emp.emp_name,creditors.creditor_name as godown,dep.dep_name,sec.sec_name,parts_tbl.part_name  FROM `jaysan_stock_log` log 
 INNER join employee emp on log.emp_id = emp.emp_id
-inner join parts parts_tbl on log.part_id = parts_tbl.part_id
+inner join  parts_tbl on log.part_id = parts_tbl.part_id
 LEFT join creditors on log.godown = creditors.creditor_id
 LEFT join department dep on log.dep = dep.dep_id
 LEFT join dep_section sec on log.sec = sec.dep_sec_id WHERE $emp_query AND $part_query ORDER BY log.log_id DESC";
