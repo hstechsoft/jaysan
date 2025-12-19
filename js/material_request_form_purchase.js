@@ -112,7 +112,8 @@ if ($(this).hasClass("view_hide")) {
           $(this).addClass('was-validated');
           return;
         }
-      
+      $("#material_request_form_purchase_btn").prop("disabled", true);
+      $("#material_request_form_purchase_update_btn").prop("disabled", true);
         $(this).addClass('was-validated');
 
 
