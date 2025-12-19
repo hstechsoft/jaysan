@@ -6,3 +6,5 @@
 [2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_process WHERE work_id = '859'
 [2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_break WHERE work_id = '859'
 [2025-12-13 14:21:42] | USER:NA | IP:::1 | FILE:/jaysanERP/php/delete_work_entry.php | SQL:DELETE FROM work_done_table WHERE work_id = '859'
+[2025-12-19 06:46:44] | USER:NA | IP:::1 | FILE:/jaysanERP/php/update_material_request_form.php | SQL:DELETE FROM internal_godown_stock_physical WHERE mrf_id='1022'
+[2025-12-19 06:52:15] | USER:NA | IP:::1 | FILE:/jaysanERP/php/update_material_request_form_tally.php | SQL:DELETE FROM internal_godown_stock_tally WHERE mrf_id='1022'

@@ -62,7 +62,12 @@ if ($conn->multi_query($sql)) {
         }
     }
 
-
+ $req_id = is_array($req_id) ? $req_id : [];
+        $req_count = count($req_id);
+       
+        if($req_count  > 0){
+         
+        
     foreach ($req_id as $rid) {
      
         $sql_update_req = "UPDATE emp_material_request SET mrf_id = $mrf_id WHERE emp_material_request_id = '$rid'";
@@ -71,7 +76,7 @@ if ($conn->multi_query($sql)) {
             $conn->close();
             exit;
         }
-    }
+    }}
      echo "ok";
 } else {
     echo "Error: " . $conn->error;
