@@ -1105,7 +1105,7 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 
 
 function insert_grn(dc_no, dc_date, details_po, dc_type) {
-    console.log(details_po, dc_date, dc_no, dc_type);
+    console.log(details_po, dc_date, dc_no, dc_type, current_user_id);
 
     $.ajax({
         url: "php/insert_grn.php",

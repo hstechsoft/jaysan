@@ -67,13 +67,25 @@
         <div class="page-wrapper">
 
             <!-- content -->
+            <div class="d-flex">
+                <div class=" m-1">
+                    <input type="text" class="form-control rounded-3" id="part_search" placeholder="Part">
+                </div>
+                <div class=" m-1">
+                    <input type="text" class="form-control rounded-3" id="emp_search" placeholder="Employee">
+                </div>
+                <div class="m-1">
+                    <button type="button" class="btn btn-success " id="excel_bnt"><i
+                            class="fa fa-file-excel"></i></button>
+                </div>
+            </div>
             <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped ">
-                    <caption></caption>
+                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;">
                     <thead>
                         <tr>
-                            <th>  <input type="text" id="stock_history_search" class="form-control border-0 bg-white"
-                                        placeholder="Search..."></th>
+                            <th style="width: 5%;"> <input type="text" id="stock_history_search" class="form-control border-0 bg-white"
+                                    placeholder="Search..."></th>
+                            <th>Part</th>
                             <th>Date</th>
                             <th>Action</th>
                             <th>Godown</th>
@@ -119,6 +131,7 @@
 
         <!-- Sweet alert -->
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 
         <!-- external js -->

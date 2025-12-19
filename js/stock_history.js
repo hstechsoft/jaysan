@@ -25,7 +25,7 @@ $(document).ready(function () {
     );
 
 
-        $("#stock_history_search").on("keyup", function () {
+    $("#stock_history_search").on("keyup", function () {
         const value = $(this).val().toLowerCase();
 
         $("#stock_history_tbody tr").each(function () {
@@ -40,8 +40,159 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-get_stock_log()
+    get_stock_log()
 
+
+    $('#part_search').on('input', function () {
+        //check the value not empty
+        $(this).data("part_id", "");
+        if ($('#part_search').val() != "") {
+            $('#part_search').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/mrf_partname_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            part_name: request.term,
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#part_search').on("change", function () {
+        alert("c")
+        if ($(this).data('part_id') != '') {
+            alert()
+            get_stock_log($(this).data("part_id"))
+        }
+    })
+
+
+    $('#emp_search').on('input', function () {
+        //check the value not empty
+        $(this).data("emp_id", "");
+        if ($('#emp_search').val() != "") {
+            $('#emp_search').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_emp_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            emp_name: $('#emp_search').val(),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.emp_name,
+                                    value: item.emp_name,
+                                    id: item.emp_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("emp_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#emp_search').on("change", function () {
+        if ($(this).data('part_id') != '') {
+            get_stock_log($(this).data("part_id"))
+        }
+    })
+
+    $("#excel_bnt").on("click", function () {
+
+        let csv = [];
+        $(".table tr").each(function () {
+            let row = [];
+            $(this).find("th, td").each(function () {
+                row.push(`"${$(this).text().trim()}"`);
+            });
+            csv.push(row.join(","));
+        });
+
+        if (csv.length <= 1) {
+            alert("No data to export");
+            return;
+        }
+
+        const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+        const downloadLink = document.createElement("a");
+
+        downloadLink.download = "stock_history.csv";
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        downloadLink.style.display = "none";
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    });
 
 
 
@@ -54,13 +205,13 @@ get_stock_log()
 
 
 
-function get_stock_log() {
+function get_stock_log(part_id) {
     $.ajax({
         url: "php/get_stock_log.php",
         type: "get",
         data: {
             emp_query: "",
-            part_query: ""
+            part_query: part_id,
         },
         success: function (response) {
 
@@ -74,6 +225,7 @@ function get_stock_log() {
                     const tr = `
                         <tr>
                             <td>${index + 1}</td>
+                            <td>${row.part_name}</td>
                             <td>${row.dated}</td>
                             <td>${row.action_type}</td>
                             <td>${row.godown ?? "-"}</td>
