@@ -186,14 +186,14 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <thead>
                                 <tr class="text-center">
                                     <th scope="col">#</th>
-                                    <th scope="col">Part</th>
+                                    <th scope="col"><input type="text" name="" id="section_stock_tabel_search" placeholder="Part"></th>
                                     <th scope="col" class="d-flex justify-content-between">Qty
-                                        <div class="form-check form-switch m-0 d-none" id="tog">
+                                        <div class="form-check form-switch m-0 d-none ms-3" id="tog">
                                             <input class="form-check-input" type="checkbox" id="section_min_max_view">
                                             <label for="section_min_max_view" class="cursor-pointer">
                                                 <i class="fa fa-eye"></i>
@@ -236,6 +236,7 @@
             </div>
         </div>
 
+        
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

@@ -67,96 +67,200 @@
 
             <!-- content -->
 
+            <div class="row">
+                <h5 class="text-center text-primary">5:1 Anti Abrasive Sleeve 4T X1M</h5>
 
-            <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped ">
-                    <caption></caption>
-                    <thead>
+                <div class="col-md-6">
 
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Part name</th>
-                            <th scope="col">Total Qty</th>
-                            <th scope="col">Action</th>
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption class="text-center bg-light text-dark">Part available From</caption>
+                            <thead>
 
-                        </tr>
-                    </thead>
-                    <tbody id="store_stock_allocate_tbody">
-                        <tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Stock Place</th>
+                                    <th scope="col">Total Qty</th>
+                                    <th scope="col">Allocate Qty</th>
+                                    <th scope="col">Balance Qty</th>
 
-                            <td>1</td>
-                            <td>5:1 Anti Abrasive Sleeve 4T X1M <span class="badge bg-danger">500</span><span
-                                    class="ms-2 badge bg-success">2000</span></td>
-                            <td>1520</td>
-                            <td><button type="button" id="modal" data-part_id="12" data-available_qty="1520"><i
-                                        class="fa fa-tasks"></i></button></td>
+                                </tr>
+                            </thead>
+                            <tbody id="store_stock_allocate_tbody">
+                                <tr>
 
-                        </tr>
+                                    <td>1</td>
+                                    <td>Store</td>
+                                    <td>1520</td>
+                                    <td contenteditable="true">520</td>
+                                    <td>1000</td>
 
-                        <tr>
-                            
-                                        <td>2</td>
-                            <td>Roller cup <span class="badge bg-danger">1000</span><span
-                                    class="ms-2 badge bg-success">6000</span></td>
-                            <td>5500</td>
-                            <td><button type="button" id="modal"  data-part_id="102" data-available_qty="5500"><i
-                                        class="fa fa-tasks"></i></button></td>
-                        </tr>
+                                </tr>
 
+                                <tr>
 
-                    </tbody>
+                                    <td>2</td>
+                                    <td>Roller</td>
+                                    <td>5500</td>
+                                    <td contenteditable=""></td>
+                                    <td>5500</td>
+                                </tr>
 
 
-                </table>
+                                <tr>
+                                    <td colspan="4" class="text-center">Total Transfer Qty</td>
+                                    <td class="text-success fw-bold">520</td>
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center px-5 border border-4">
+                        <ul class="mb-0">
+                            <li class="d-flex justify-content-between ">Store <span
+                                    class="ps-2 text-danger fw-bold">520</span></li>
+                        </ul>
+                        <button type="button" class="btn btn-primary " id="modal">>></button>
+                        <ul class="mb-0">
+                            <li class="d-flex justify-content-between ">Pump <span
+                                    class="ps-2 text-success fw-bold">20</span></li>
+                            <li class="d-flex justify-content-between ">Traveling Motor <span
+                                    class="ps-2 text-success fw-bold">500</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption class="text-center bg-light text-dark">Part Request From</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="material_requested_details">
+                                <tr>
+
+                                    <td>1</td>
+                                    <td>Pump</td>
+                                    <td>20</td>
+                                    <td>2025/10/01</td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
+                                            <i class="fa fa-exchange"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>2</td>
+                                    <td>Traveling Motor</td>
+                                    <td>500</td>
+                                    <td>2025/12/18</td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
+                                            <i class="fa fa-exchange"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <button type="button" class="btn btn-primary " id="">Request</button>
+
+                </div>
+
+
             </div>
+
 
         </div>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="stockModalLabel">Stock Allocation</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">BR 1052 Main Roller30 Dia 3F</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-check">
-                            <input class="form-check-input allocate_uds" type="checkbox" id="unit_chk">
-                            <label class="form-check-label" for="unit_chk">Unit</label>
-                        </div>
+                        <div class="table-responsive">
+                            <table class="table caption-top table-bordered table-striped ">
+                                <caption></caption>
+                                <thead>
 
-                        <div class="form-check">
-                            <input class="form-check-input allocate_uds" type="checkbox" id="department_chk">
-                            <label class="form-check-label" for="department_chk">Department</label>
-                        </div>
+                                    <tr>
+                                        <th scope="col">Stock Place</th>
+                                        <th scope="col">Available Quantity</th>
+                                        <th scope="col">Required Quantity</th>
+                                        <th scope="col">UOM</th>
 
-                        <div class="form-check">
-                            <input class="form-check-input allocate_uds" type="checkbox" id="section_chk">
-                            <label class="form-check-label" for="section_chk">Section</label>
-                        </div>
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                    <tr>
 
-                        <input type="text" class="form-control mt-2 d-none" id="allocate_unit" placeholder="Enter Unit">
-                        <input type="text" class="form-control mt-2 d-none" id="allocate_department"
-                            placeholder="Enter Department">
-                        <input type="text" class="form-control mt-2 d-none" id="allocate_section"
-                            placeholder="Enter Section">
+                                        <td>Store</td>
+                                        <td>300</td>
+                                        <td contenteditable="true"></td>
+                                        <td>Nos</td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td>Roller</td>
+                                        <td>453</td>
+                                        <td contenteditable="true"></td>
+                                        <td>Nos</td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td>Hydraulic</td>
+                                        <td>269</td>
+                                        <td contenteditable="true"></td>
+                                        <td>Nos</td>
+
+                                    </tr>
 
 
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="allocate_qty" placeholder="">
-                            <label for="allocate_qty">Quantity </label>
+                                </tbody>
+
+
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="allocate_btn">Allocate</button>
+                        <button type="button" class="btn btn-primary">Add</button>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

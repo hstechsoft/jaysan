@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        #purchase_order_table tr {
+            font-size: 12px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+        <!-- top bar -->
+
+
+
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
+
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div>
+
+        <section id="menu_bar" class="d-none"></section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="quotation_view_switch">
+                <label class="form-check-label" for="quotation_view_switch"><span
+                        class="badge bg-primary">3</span></label>
+            </div>
+
+            <div class="table-responsive" style="font-size: 8px;" id="internal_allocation">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption></caption>
+                    <thead class="fw-bold">
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Part name</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Approved By</th>
+                            <th scope="col">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                        <tr>
+
+                            <td>1</td>
+                            <td>BRP 1927 32X3 Angle</td>
+                            <td>Store</td>
+                            <td>Hydraulic</td>
+                            <td>220</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-success " id=""><i class="fa fa-check-circle"></i>
+                                </button></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>2</td>
+                            <td>BRP 5006 A Travelling Motorbox</td>
+                            <td>Store</td>
+                            <td>Traveling motor</td>
+                            <td>30</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-primary " id=""><i class="fa fa-check-circle"></i>
+                                </button></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>3</td>
+                            <td>BR 1052 Main Roller30 Dia 3F</td>
+                            <td>Store</td>
+                            <td>Roller</td>
+                            <td>430</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-success " id="" data-bs-toggle="modal" data-bs-target="#exampleModal"  ><i class="fa fa-check-circle"></i>
+                                </button></td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <div class="table-responsive d-none" style="font-size: 8px;" id="quotation_allocation">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption>Quotations</caption>
+                    <thead class="fw-bold">
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Part Name</th>
+                            <th scope="col">Stock Form</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Approved By</th>
+                            <th scope="col">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                        <tr>
+
+                            <td>1</td>
+                            <td>Vellavan Traders - 1567</td>
+                            <td>Br 4006 Brass Bush</td>
+                            <td>Store</td>
+                            <td>23</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-primary " id=""><i
+                                        class="fa fa-check-circle"></i></button></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>2</td>
+                            <td>Vellavan Traders - 1567</td>
+                            <td>Br 4002 Clutch Spring</td>
+                            <td>Store</td>
+                            <td>48</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-success " id=""><i
+                                        class="fa fa-check-circle"></i></button></td>
+
+                        </tr>
+                        <tr>
+
+                            <td>3</td>
+                            <td>Vellavan Traders - 1567</td>
+                            <td>Br 3017 Rotor Flush</td>
+                            <td>Store</td>
+                            <td>12</td>
+                            <td>Swondarya</td>
+                            <td><button type="button" class="btn btn-success " id=""><i
+                                        class="fa fa-check-circle"></i></button></td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+        </div>
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">BR 1052 Main Roller30 Dia 3F</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-2">
+                            <input type="number" class="form-control rounded-3" id="i" placeholder="">
+                            <label for="i">Quantity
+                            </label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="" placeholder="">
+                            <label for="">Remarks
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
+
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+        <!-- external js -->
+        <script src="js/stock_issue.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+
+</body>
+
+</html>

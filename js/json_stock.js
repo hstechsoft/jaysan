@@ -424,7 +424,7 @@ $(document).ready(function () {
 
     $('#search_stock_part').on('input', function () {
         //check the value not empty
-
+        $('#search_stock_part').data("process_id", '');
         if ($('#search_stock_part').val() != "") {
             $('#search_stock_part').autocomplete({
                 //get data from databse return as array of object which contain label,value
@@ -481,7 +481,7 @@ $(document).ready(function () {
 
 
     $('#search_stock_unit').on('input', function () {
-
+        $('#search_stock_unit').data("godown_id", '');
         //check the value not empty
         if ($('#search_stock_unit').val() != "") {
             $('#search_stock_unit').autocomplete({
@@ -535,7 +535,7 @@ $(document).ready(function () {
 
 
     $('#search_stock_dep').on('input', function () {
-
+        $('#search_stock_dep').data("dept_id", "");
         //check the value not empty
         if ($('#search_stock_dep').val() != "") {
             $('#search_stock_dep').autocomplete({
@@ -584,7 +584,7 @@ $(document).ready(function () {
     });
 
     $('#search_stock_sec').on('input', function () {
-
+        $('#search_stock_sec').data("sec_id", '');
         //check the value not empty
         if ($('#search_stock_sec').val() != "") {
             $('#search_stock_sec').autocomplete({
@@ -653,11 +653,11 @@ $(document).ready(function () {
             var to_date = $("#search_stock_e_date").val() || '';
 
             console.log({ part_query, creditor_query, dep_query, sec_query, qty_query, from_date, to_date });
-
-            get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
+            fetchStock();
+            // get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
         }
         else {
-            get_jaysan_stock();
+            // get_jaysan_stock();
 
         }
     });
@@ -830,17 +830,12 @@ $(document).ready(function () {
 
 
     $("#req_detai").on("click", function () {
+
         $("#requestModal").modal("hide");
         var q = $("#mrf_req_qty").text().trim();
-        var r_arr = '';
         console.log(reqIdArray);
+        var r_arr = reqIdArray.length > 0 ? encodeURIComponent(JSON.stringify(reqIdArray)) : '';
 
-        if (reqIdArray !== '') {
-            r_arr = encodeURIComponent(JSON.stringify(reqIdArray))
-        }
-        else {
-            r_arr = '';
-        }
 
 
         window.location.href =

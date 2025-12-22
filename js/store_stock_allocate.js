@@ -213,35 +213,39 @@ $(document).ready(function () {
     });
 
     var select_modalBtn = '';
-    $("#store_stock_allocate_tbody").on("click", "#modal", function(){
-
-        select_modalBtn = $(this);
+    $("#modal").on("click", function () {
+        $("#stockModal").modal("show");
 
 
     })
 
-    $("#allocate_qty").on("input", function(){
-
-        var part_id = select_modalBtn.data("part_id");
+    $("#stockModal").on("change", "#allocated_qty", function () {
+        // var part_id = select_modalBtn.data("part_id");
         var available_qty = select_modalBtn.data("available_qty");
-
         var entered_qty = $(this).val();
+        alert("ava" + available_qty + "-" + "  enter " + entered_qty);
+        if (entered_qty < 0) {
+            alert("<0");
 
-        if(entered_qty < 0 ){
             $(this).val(0);
         }
-        else if(entered_qty > available_qty){
+        else if (entered_qty > available_qty) {
+            alert("1");
             $(this).val(available_qty);
         }
     })
 
-    $("#allocate_btn").on("click", function(){
+    $("#allocate_btn").on("click", function () {
+        $("#stockModal").modal("hide");
         var part_id = select_modalBtn.data("part_id");
 
     })
 
 
+    $("#store_stock_exchange_btn").on("click", function () {
+        $("#store_stock_exchangeModal").modal("show");
 
+    })
 
 });
 
