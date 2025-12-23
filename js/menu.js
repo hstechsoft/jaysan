@@ -1,12 +1,30 @@
 
 var role = localStorage.getItem("ls_emp_role")
 var cun = localStorage.getItem("ls_uname")
-
+// var phone_id = localStorage.getItem("app_phone_id")
+var phone_id = "cbbfc05f5d5a3abe";
+var start = ''
 
 // console.log(role)
 // CLICK TO EXPAND SIDEBAR
 
 $(document).ready(function () {
+
+  if (phone_id && phone_id !== "null") {
+
+    console.log("Phone ID:", phone_id);
+    get_app_menu1(phone_id);
+
+
+  } else {
+
+    // Start button UX
+    $("#start_btn")
+      .text("You don't have access")
+      .removeClass("btn-primary")
+      .addClass("btn-danger fw-bold");
+  }
+
 
   $("#fa-bars").on("click", function () {
 
@@ -24,7 +42,7 @@ $(document).ready(function () {
   });
 
 
-  $("#menu_bar").load('menu1.html',
+  $("#menu_bar").load('menu.html',
     function () {
       $('#topbar_logout_btn').on('click', function () {
         //salert("Logout","are you sure" , "warning")
@@ -81,6 +99,23 @@ $(document).ready(function () {
 
 
 
+  $("#mobile_menu a").each(function () {
+    if (this.href === window.location.href) {
+      $(this).addClass("active fw-semibold");
+    }
+  });
+  $("#mobile_menu").on("click", "a", function () {
+    bootstrap.Offcanvas.getInstance(
+      document.getElementById("mobileOffcanvas")
+    )?.hide();
+  });
+
+  $("#start_btn").on("click", function () {
+    if (window.APP_START_URL) {
+      window.location.href = window.APP_START_URL;
+    }
+  });
+
 
 
 
@@ -91,7 +126,49 @@ $(document).ready(function () {
 
 
 
+function get_app_menu1(phone_id) {
 
+  $.ajax({
+    url: "php/get_app_menu1.php",
+    type: "GET",
+    data: { phone_id: phone_id, },
+    dataType: "json",
+    success: function (response) {
+
+      if (!Array.isArray(response) || response.length === 0) {
+        console.warn("No menu data");
+        return;
+      }
+
+      $("#mobile_menu").empty();
+
+      let startUrl = "";
+
+      response.forEach(item => {
+
+        if (item.iswebview === "true") {
+
+          let url = item.menu_url.replace(
+            "your_phone_id",
+            phone_id
+          );
+
+          if (item.menu_id === "1") {
+            startUrl = url;
+          }
+
+          $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><img class='me-2' src="${item.menu_icon}" width="18" height="18" />${item.menu_name}</a></li>`);
+        }
+      });
+
+      window.APP_START_URL = startUrl;
+
+    },
+    error: function (xhr, status, error) {
+      console.error("Menu load failed:", error);
+    }
+  });
+}
 
 
 function get_role() {

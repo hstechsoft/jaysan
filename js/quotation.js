@@ -5,92 +5,271 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 $(document).ready(function () {
-    var allWeldingData = [];
+    /* ---------------- FORM NAVIGATION ---------------- */
 
-    var processData = {
-        process_id: "297",
+    const form = document.getElementById("agroForm");
+    const formFields = Array.from(
+        form.querySelectorAll(
+            "input:not([type=hidden]):not([disabled]), select, textarea, button"
+        )
+    );
 
-    };
+    let addBtnEnterCount = 0;
+    let modalNextInput = null;
+    let selectedFromModal = false;
 
-
-    var arr_obj = []
-    arr_obj[1] = [];
-    arr_obj[0] = [];
-    arr_obj[1].push({
-        godown_id: "1",
-        dep_id: "1",
-        dep_sec_id: "",
-        dep_sec_machine_id: "",
-        min_time: "",
-        max_time: "",
-        cost: ""
-
-    });
-
-    arr_obj[1].push({
-        godown_id: "10",
-        dep_id: "1",
-        dep_sec_id: "",
-        dep_sec_machine_id: "",
-        min_time: "",
-        max_time: "",
-        cost: ""
-    });
-
-    allWeldingData.push({
-        input_parts: arr_obj[0],
-        process: processData,
+    formFields.forEach((field, index) => {
+        field.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
 
 
-    });
-
-    processData = {
-        process_id: "298",
-
-    };
-    allWeldingData.push({
-        input_parts: arr_obj[1],
-        process: processData,
-
-
-    });
-
-    console.log(allWeldingData);
-
-
-    $.ajax({
-        url: "php/ref_delete.php",
-        type: "POST", //send it through get method
-        data: {
-            allWeldingData: JSON.stringify(allWeldingData),
-        },
-        success: function (response) {
-
-
-            if (response.trim() != "error") {
-                console.log(response);
-
-                if (response.trim() != "0 result") {
-
-
-
-
+                if (field.id === "add_quotation") {
+                    addBtnEnterCount++;
+                    if (addBtnEnterCount === 2) {
+                        addBtnEnterCount = 0;
+                        createRow();
+                        focusFirstCell();
+                    }
+                    return;
                 }
-                else {
-                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
 
-                }
+                const next = formFields[index + 1];
+                if (next) next.focus();
             }
 
+            if (e.key === "Escape") {
+                e.preventDefault();
+                const prev = formFields[index - 1];
+                if (prev) prev.focus();
+            }
+        });
+    });
+
+    /* ---------------- TABLE LOGIC ---------------- */
+
+    const tableBody = document.getElementById("quotation_body");
+
+    let count = 1;
+
+    function createRow() {
+        const row = document.createElement("tr");
+
+        for (let i = 0; i < 8; i++) {
+            const td = document.createElement("td");
+
+
+            if (i === 0) {
+                td.textContent = count++;
+                td.classList.add("text-center");
+            }
+            else if (i === 7) {
+                td.textContent = "0.00";
+            }
+            else {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.className = "form-control table-input";
+
+                if (i === 1) {
+                    input.classList.add("quotation_part");
+                }
+
+                td.appendChild(input);
+            }
+
+            row.appendChild(td);
+        }
+
+        tableBody.appendChild(row);
+        addTdNavigation(row);
+        initPartAutocomplete(row);
+    }
+
+
+    function totalCalculation(row) {
+
+
+        row = $(row);
+
+        const qty = parseFloat(row.find("td").eq(2).find("input").val()) || 0;
+        const discount = parseFloat(row.find("td").eq(5).find("input").val()) || 0;
+        const rate = parseFloat(row.find("td").eq(6).find("input").val()) || 0;
+
+        const total =
+            (rate - (discount / 100 * rate)) * qty;
+
+
+        row.find("td").last().text(total.toFixed(2));
+    }
 
 
 
+    function addTdNavigation(row) {
+        const inputs = Array.from(row.querySelectorAll("input"));
 
-        },
-        error: function (xhr) {
-            //Do Something to handle error
+        inputs.forEach((input, index) => {
+            input.addEventListener("keydown", (e) => {
+
+                // CTRL + A
+                if (e.ctrlKey && e.key.toLowerCase() === "a") {
+                    e.preventDefault();
+                    insert();
+                    return;
+                }
+
+                // ENTER
+                if (e.key === "Enter") {
+                    e.preventDefault();
+
+                    const next = inputs[index + 1];
+
+                    // PART COLUMN LOGIC
+                    if (input.classList.contains("quotation_part")) {
+                        const part = input.value.trim();
+
+                        if (!part) {
+                            salert("Warning", "Select the part", "warning");
+                            return;
+                        }
+
+                        modalNextInput = next || null;
+                        const modal = bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById("exampleModal")
+                        );
+                        modal.show();
+                        return;
+                    }
+
+                    // NORMAL NAVIGATION
+                    if (next) {
+                        next.focus();
+                    } else {
+                        totalCalculation(row);
+
+                        const nextRow = row.nextElementSibling;
+                        if (nextRow) {
+                            const nextInputs = nextRow.querySelectorAll("input");
+                            if (nextInputs.length) nextInputs[0].focus();
+                        } else {
+                            createRow();
+                            focusLastRowFirstCell();
+                        }
+                    }
+                }
+
+                // ESC
+                if (e.key === "Escape") {
+                    e.preventDefault();
+
+                    if (index > 0) {
+                        inputs[index - 1].focus();
+                    } else {
+                        const prevRow = row.previousElementSibling;
+                        if (prevRow) {
+                            const prevInputs = prevRow.querySelectorAll("input");
+                            prevInputs[prevInputs.length - 1].focus();
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+
+    const modalEl = document.getElementById("exampleModal");
+
+    modalEl.addEventListener("shown.bs.modal", () => {
+        modalEl.querySelector(".list-group-item")?.focus();
+    });
+
+    document.getElementById("exampleModal").addEventListener("hidden.bs.modal", () => {
+        if (selectedFromModal && modalNextInput) {
+            modalNextInput.focus();
+            modalNextInput = null;
+            selectedFromModal = false;
         }
     });
+
+    /* ---------------- MODAL KEYBOARD ---------------- */
+
+    document.getElementById("godownList").addEventListener("keydown", (e) => {
+        const items = [...document.querySelectorAll("#godownList .list-group-item")];
+        const index = items.indexOf(document.activeElement);
+
+        if (e.key === "ArrowDown" && index < items.length - 1) {
+            e.preventDefault();
+            items[index + 1].focus();
+        }
+
+        if (e.key === "ArrowUp" && index > 0) {
+            e.preventDefault();
+            items[index - 1].focus();
+        }
+
+        if (e.key === "Enter") {
+            e.preventDefault();
+            selectedFromModal = true;
+            bootstrap.Modal.getInstance(modalEl).hide();
+        }
+    });
+
+
+
+    function focusFirstCell() {
+        const firstInput = tableBody.querySelector("input");
+        if (firstInput) firstInput.focus();
+    }
+
+    function focusLastRowFirstCell() {
+        const lastRow = tableBody.lastElementChild;
+        if (lastRow) {
+            lastRow.querySelector("input").focus();
+        }
+    }
+
+
+    /* ---------------- INSERT FUNCTION ---------------- */
+
+    function insert() {
+        alert("Ctrl + A detected → insert() called");
+    }
+
+    function initPartAutocomplete(row) {
+        $(row).find(".quotation_part").autocomplete({
+            minLength: 2,
+            cacheLength: 0,
+
+            source: function (request, response) {
+                $.ajax({
+                    url: "php/get_part_name_auto1.php",
+                    type: "GET",
+                    dataType: "json",
+                    data: {
+                        part: request.term,
+                        term: "part"
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.part_name,
+                                value: item.part_name,
+                                id: item.part_id
+                            };
+                        }));
+                    }
+                });
+            },
+
+            select: function (event, ui) {
+                $(this).data("process_id", ui.item.id);
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append("<div>" + item.label + "</div>")
+                .appendTo(ul);
+        };
+    }
 
 
     $("#menu_bar").load('menu.html',
@@ -117,118 +296,12 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-    $("#printInvoice").on("click", function (event) {
-        event.preventDefault();
-        // TODO: handle click here
-
-        const win = window.open("storage%2Fpdf%2Finvoice1001.pdf", "_blank");
-        // Some browsers need a delay before printing
-        const printTimer = setInterval(() => {
-            if (win.document.readyState === "complete") {
-                clearInterval(printTimer);
-                win.focus();
-                win.print();
-            }
-        }, 500);
-    });
-    $("#print").on("click", function (event) {
-        event.preventDefault();
-        // TODO: handle click here
-        var invoiceHtml = $("#invoicePreview").prop("outerHTML");
-
-        // Encode it to protect HTML structure in POST
-        var encodedHtml = encodeURIComponent(invoiceHtml);
-        $.ajax({
-            url: "pdf_handler.php",
-            method: "POST",
-            data: {
-                save_path: "storage/pdf/invoice1001",
-                file_name: "Invoice.pdf",
-                unique_file: "no",
-                header_html: "<h3>HS Tech Soft - Invoice</h3>",
-                footer_html: "<p>Generated by HS Tech Soft ERP</p>",
-                body_html: encodedHtml,
-                orientation: "portrait",
-                paper_size: "A4",
-                stream: "no",
-                // email_to: "nklharish1@gmail.com",
-                // email_subject: "Invoice #1001",
-                // email_body: "Hello, please find attached your invoice.",
-                // pdf_password: "",        // optional
-                // watermark_text: ""       // optional
-            },
-            success: function (res) {
-                console.log(res);
-                if (res.download_url) {
-                    // 3️⃣ open PDF and trigger browser print dialog
-                    const win = window.open(res.download_url, "_blank");
-                    // Some browsers need a delay before printing
-                    const printTimer = setInterval(() => {
-                        if (win.document.readyState === "complete") {
-                            clearInterval(printTimer);
-                            win.focus();
-                            win.print();
-                        }
-                    }, 500);
-                } else {
-                    alert("PDF generated, but no download URL returned");
-                }
-            },
-            error: function (xhr) {
-                alert("Error: " + xhr.responseText);
-            }
-        });
-    });
-
-
 
 
 
 });
 
 
-
-// $.ajax({
-//     url: "pdf_handler.php",
-//     method: "POST",
-//     data: {
-//         save_path: "E:/web/htdocs/jaysanERP/storage/pdf/invoice1001.pdf",
-//         file_name: "Invoice_1001.pdf",
-//         header_html: "<h3>HS Tech Soft - Invoice</h3>",
-//         footer_html: "<p>Generated by HS Tech Soft ERP</p>",
-//         body_html: `
-//             <h2>Invoice #1001</h2>
-//             <p><strong>Customer:</strong> Jaysan Agri Industrial</p>
-//             <table>
-//               <thead>
-//                 <tr><th>Sl.No</th><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
-//               </thead>
-//               <tbody>
-//                 <tr><td>1</td><td>Baler Service</td><td>1</td><td>1500</td><td>1500</td></tr>
-//                 <tr><td>2</td><td>Spare Part</td><td>2</td><td>450</td><td>900</td></tr>
-//               </tbody>
-//               <tfoot>
-//                 <tr><td colspan="4" style="text-align:right">Grand Total</td><td>2400</td></tr>
-//               </tfoot>
-//             </table>
-//         `,
-//         orientation: "portrait",
-//         paper_size: "A4",
-//         stream: "no",
-//         email_to: "nklharish1@gmail.com",
-//         email_subject: "Invoice #1001",
-//         email_body: "Hello, please find attached your invoice.",
-//         pdf_password: "",        // optional
-//         watermark_text: ""       // optional
-//     },
-//     success: function(res) {
-//         console.log(res);
-//         alert(res.message);
-//     },
-//     error: function(xhr) {
-//         alert("Error: " + xhr.responseText);
-//     }
-// });
 
 
 

@@ -20,10 +20,37 @@
 
 
     <style>
-        #purchase_order_table tr {
-            font-size: 12px;
+        /* Reduce overall spacing */
+        .compact-form .form-floating {
+            margin-bottom: 0.4rem !important;
+        }
+
+        /* Reduce input height */
+        .compact-form .form-control,
+        .compact-form .form-select {
+            height: 2.2rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Adjust floating labels */
+        .compact-form .form-floating>label {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Accordion padding reduction */
+        .accordion-body {
+            padding: 0.6rem;
+        }
+
+        /* Button size */
+        .compact-form .btn {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
         }
     </style>
+
 
 </head>
 
@@ -71,8 +98,8 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
-                        onsubmit="return false">
+                    <form class="p-4 border rounded-4 shadow-sm bg-light  compact-form needs-validation" id="agroForm"
+                        novalidate onsubmit="return false">
 
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
@@ -88,16 +115,16 @@
 
 
                                         <div class="form-floating mb-2">
-                                            <input type="text" class="form-control rounded-3" id="quotation_no"
+                                            <input type="text" class="form-control rounded-3" id="voucher_no"
                                                 placeholder="">
-                                            <label for="quotation_no">Quotation No </label>
+                                            <label for="voucher_no">Voucher No </label>
                                         </div>
 
                                         <div class="d-flex">
                                             <div class="form-floating mb-2">
-                                                <input type="text" class="form-control rounded-3" id="customer"
+                                                <input type="text" class="form-control rounded-3" id="party"
                                                     placeholder="">
-                                                <label for="customer">customer
+                                                <label for="party">Party
                                                 </label>
                                             </div>
                                             <div class="d-flex justify-content-center align-items-center">
@@ -118,70 +145,64 @@
                                             <label for="cus_gst_no">GST No
                                             </label>
                                         </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="mode_of_payment"
+                                                placeholder="">
+                                            <label for="mode_of_payment">Mode Of payment
+                                            </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="other_reference"
+                                                placeholder="">
+                                            <label for="other_reference">Other Reference</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="teams_of_delivery"
+                                                placeholder="">
+                                            <label for="teams_of_delivery">Team Of Delivery </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="number" class="form-control rounded-3" id="order_no"
+                                                placeholder="">
+                                            <label for="order_no">Order No</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="extra_details"
+                                                placeholder="">
+                                            <label for="extra_details">Extra Details </label>
+                                        </div>
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="delar_customer"
+                                                placeholder="">
+                                            <label for="delar_customer">Delar/Customer</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="from_godown"
+                                                placeholder="">
+                                            <label for="from_godown">Godown</label>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="part_name" placeholder="">
-                            <label for="part_name">Part Name
-                            </label>
-                        </div>
 
-                        <!-- <div class="d-flex">
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="quantity" placeholder="">
-                                <label for="quantity">Quantity
-                                </label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="uom">
-                                    <option selected disabled value="">Choose...</option>
-                                    <option value="Nos">Nos</option>
-                                    <option value="No">No</option>
-                                    <option value="NUM">NUM</option>
-                                    <option value="Pcs">Pcs</option>
-                                    <option value="Sets">Sets</option>
-                                    <option value="Sheet">Sheet</option>
-                                    <option value="kgs">kgs</option>
-                                    <option value="Ltr">Ltr</option>
-                                    <option value="mls">mls</option>
-                                    <option value="Mts">Mts</option>
-                                    <option value="mtrs">mtrs</option>
-                                    <option value="mm">mm</option>
-                                    <option value="CUM">CUM</option>
-                                </select>
-                                <label for="uom">UOM</label>
-                            </div>
-                        </div> -->
-
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="gst_per" placeholder="">
-                            <label for="gst_per">GST %</label>
-                        </div>
-
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="rate" placeholder="">
-                            <label for="rate">Rate
-                            </label>
-                        </div>
-
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="discount" placeholder="">
-                            <label for="discount">Discount
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary " id="">ADD</button>
+                        <button type="submit" class="btn btn-primary " id="add_quotation">ADD</button>
 
                     </form>
                 </div>
                 <div class="col-md-9">
 
-                            <h6 class="d-flex justify-content-between">Materials Details <button type="button" class="btn btn-primary " id="">+</button></h6>
+                    <h6 class="">Materials Details</h6>
                     <div class="table-responsive">
-                        <table class="table caption-top table-bordered table-striped ">
+                        <table class="table caption-top table-bordered table-striped" id="quotation_table">
                             <thead>
 
                                 <tr>
@@ -196,53 +217,7 @@
 
                                 </tr>
                             </thead>
-                            <tbody id="">
-                                <tr>
-
-                                    <td>1</td>
-                                    <td contenteditable="true">BRP 1927 32X3 Angle</td>
-                                    <td contenteditable="true">20</td>
-                                    <td contenteditable="true">Nos</td>
-                                    <td contenteditable="true">5</td>
-                                    <td contenteditable="true">1</td>
-                                    <td contenteditable="true">20</td>
-                                    <td>300</td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>2</td>
-                                    <td contenteditable="true">BR 1052 Main Roller30 Dia 3F</td>
-                                    <td contenteditable="true">15</td>
-                                    <td contenteditable="true">Nos</td>
-                                    <td contenteditable="true">5</td>
-                                    <td contenteditable="true">4</td>
-                                    <td contenteditable="true">7</td>
-                                    <td>500</td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>3</td>
-                                    <td contenteditable="true">BRP 5006 A Travelling Motorbox</td>
-                                    <td contenteditable="true">25</td>
-                                    <td contenteditable="true">Nos</td>
-                                    <td contenteditable="true">5</td>
-                                    <td contenteditable="true">42</td>
-                                    <td contenteditable="true">15</td>
-                                    <td>3400</td>
-
-                                </tr>
-
-                                <tr>
-                                    <td colspan="2">Total</td>
-                                    <td>60</td>
-                                    <td>Nos</td>
-                                    <td colspan="3"></td>
-                                    <td>4200</td>
-
-                                </tr>
-
+                            <tbody id="quotation_body">
                             </tbody>
 
 
@@ -350,55 +325,15 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table caption-top table-bordered table-striped ">
-                                <caption></caption>
-                                <thead>
-
-                                    <tr>
-                                        <th scope="col">Stock Place</th>
-                                        <th scope="col">Available Quantity</th>
-                                        <th scope="col">Required Quantity</th>
-                                        <th scope="col">UOM</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="">
-                                    <tr>
-
-                                        <td>Store</td>
-                                        <td>300</td>
-                                        <td contenteditable="true"></td>
-                                        <td>Nos</td>
-
-                                    </tr>
-                                    <tr>
-
-                                        <td>Roller</td>
-                                        <td>453</td>
-                                        <td contenteditable="true"></td>
-                                        <td>Nos</td>
-
-                                    </tr>
-                                    <tr>
-
-                                        <td>Hydraulic</td>
-                                        <td>269</td>
-                                        <td contenteditable="true"></td>
-                                        <td>Nos</td>
-
-                                    </tr>
-
-
-                                </tbody>
-
-
-                            </table>
-                        </div>
+                        <ul class="list-group" id="godownList">
+                            <li class="list-group-item" tabindex="0">Store - 200 Qty</li>
+                            <li class="list-group-item" tabindex="0">Roller - 20 Qty</li>
+                            <li class="list-group-item" tabindex="0">Jasyan Fabrication - 460 Qty</li>
+                            <li class="list-group-item" tabindex="0">Assembly - 100 Qty</li>
+                            <li class="list-group-item" tabindex="0">Door - 6070 Qty</li>
+                        </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Add</button>
                     </div>
                 </div>
             </div>
