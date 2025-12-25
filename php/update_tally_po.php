@@ -185,6 +185,7 @@ $tally_json = [
 $sql_insert_json = "INSERT INTO tally_transactions ( json_data, sts, response_json, transactions_details_id, trasaction_type) VALUES ( '" . json_encode($tally_json) . "', 'created', '{}', '2', 'insert');";
     $last_id_work =0;
   if ($conn->query($sql_insert_json) === TRUE) {
+   echo "ok";
    
   } else {
     echo "Error: " . $sql_insert_json . "<br>" . $conn->error;

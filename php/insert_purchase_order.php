@@ -172,7 +172,7 @@ if ($result->num_rows > 0) {
 
 
 
-  echo "ok";
+  echo $po_id;
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
