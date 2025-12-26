@@ -18,7 +18,7 @@ return $data;
 
 
 
-$sql = "UPDATE stock_allocation SET allocation_qty = $allocation_qty, allocated_by = $allocated_by, allocation_remark = $allocation_remark ,allocation_status = 'allocated' WHERE allocation_id = $allocation_id";
+$sql = "UPDATE stock_allocation SET allocation_qty = $allocation_qty, allocated_by = $allocated_by, allocation_remark = $allocation_remark ,allocation_status = 'delivered' WHERE allocation_id = $allocation_id";
   
   if ($conn->query($sql) === TRUE) {
     $sql_get_allocation = "SELECT  req_no FROM stock_allocation WHERE allocation_id = $allocation_id";
