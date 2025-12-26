@@ -24,7 +24,7 @@ $from_place_type = test_input($allocate['from_place_type']);
 $to_palce_id = test_input($allocate['to_palce_id']);
 $to_place_type = test_input($allocate['to_place_type']);
 $qty = test_input($allocate['qty']);
-$req_no = test_input($allocate['req_no']);
+$req_no = ($allocate['req_no']);
 $allocation_cat = test_input($allocate['allocation_cat']);
 $created_by = test_input($allocate['created_by']);
 
