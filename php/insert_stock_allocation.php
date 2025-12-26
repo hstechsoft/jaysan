@@ -34,7 +34,7 @@ $req_no = sql_nullable($req_no);
   if ($conn->query($sql) === TRUE) {
   if($req_no != 'NULL')
   {
-    $sql_update_req = "UPDATE emp_material_request SET allocation_status = 'allocated' WHERE emp_material_request_id = $req_no";
+    $sql_update_req = "UPDATE emp_material_request SET req_status = 'allocated' WHERE emp_material_request_id = $req_no";
     if ($conn->query($sql_update_req) === TRUE) {
     }
     else {
