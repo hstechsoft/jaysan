@@ -84,7 +84,7 @@ return array($godown, $dep, $sec);
 
 }
 
-$sql_get_allocation = "SELECT SELECT  part_id, from_place_id, from_place_type, to_palce_id, to_place_type, qty, req_no, allocation_status, allocation_cat, allocation_qty, received_qty, created_by, allocated_by, received_by, allocation_remark, receive_remark FROM stock_allocation WHERE allocation_id = $allocation_id";
+$sql_get_allocation = "SELECT   part_id, from_place_id, from_place_type, to_palce_id, to_place_type, qty, req_no, allocation_status, allocation_cat, allocation_qty, received_qty, created_by, allocated_by, received_by, allocation_remark, receive_remark FROM stock_allocation WHERE allocation_id = $allocation_id";
 $result = $conn->query($sql_get_allocation);
 if ($result->num_rows > 0) {
   // output data of each row
