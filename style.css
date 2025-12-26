@@ -422,7 +422,7 @@
 
 :root {
   --sidebar-collapsed-w: 50px;
-  --sidebar-expanded-w: 270px;
+  --sidebar-expanded-w: 250px;
 
   --sidebar-bg: #ffffff;
   --sidebar-hover: #eaf3ff;
@@ -751,7 +751,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 /* LOGOUT SPACING */
 .logout-wrapper {
-  margin-top: 48%;
+  margin-top: 35%;
   padding-bottom: 20px;
 }
 
@@ -780,6 +780,8 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 #page_start {
   gap: 32rem;
+  background-color: #ff953d;
+  padding: 5px;
 }
 
 /* MOBILE */
@@ -820,6 +822,9 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 @media (max-width: 575px) {
 
   /* offcanvas width */
+  #menu_bar{
+    display: block !important;
+  }
   .mobile-menu {
     width: 25vw;
     max-width: 150px;

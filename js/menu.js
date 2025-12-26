@@ -13,7 +13,7 @@ $(document).ready(function () {
   if (phone_id && phone_id !== "null") {
 
     console.log("Phone ID:", phone_id);
-    get_app_menu1(phone_id);
+    get_app_menu(phone_id);
 
 
   } else {
@@ -26,24 +26,24 @@ $(document).ready(function () {
   }
 
 
-  $("#fa-bars").on("click", function () {
 
-    $("#menu_bar").toggleClass("d-none");
-
-    if (!$("#menu_bar").hasClass("d-none")) {
-
-      $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
-      $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
-    }
-    else {
-      $(".page-wrapper").css("margin-left", "0px");
-      $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
-    }
-  });
 
 
   $("#menu_bar").load('menu.html',
     function () {
+      $("#fa_bars, #close_sidebar").on("click", function () {
+        $("#normal_view").toggleClass("d-none");
+
+        if (!$("#normal_view").hasClass("d-none")) {
+
+          $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
+          $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
+        }
+        else {
+          $(".page-wrapper").css("margin-left", "0px");
+          $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
+        }
+      });
       $('#topbar_logout_btn').on('click', function () {
         //salert("Logout","are you sure" , "warning")
         // localStorage.clear();
@@ -68,8 +68,10 @@ $(document).ready(function () {
           }
         })
       });
-      $("#role_name_txt").text(role)
-      $("#unamed").text(cun)
+      console.log(role, cun);
+
+      $("#role_name_txt, #role_name_txtt ").text(role)
+      $("#uname, #unamee").text(cun)
       var lo = (window.location.pathname.split("/").pop());
       var web_addr = "#" + (lo.substring(0, lo.indexOf(".")))
 
@@ -126,10 +128,10 @@ $(document).ready(function () {
 
 
 
-function get_app_menu1(phone_id) {
+function get_app_menu(phone_id) {
 
   $.ajax({
-    url: "php/get_app_menu1.php",
+    url: "php/get_app_menu.php",
     type: "GET",
     data: { phone_id: phone_id, },
     dataType: "json",
@@ -143,21 +145,19 @@ function get_app_menu1(phone_id) {
       $("#mobile_menu").empty();
 
       let startUrl = "";
+      console.log(response);
 
       response.forEach(item => {
 
         if (item.iswebview === "true") {
 
-          let url = item.menu_url.replace(
-            "your_phone_id",
-            phone_id
-          );
+          let url = item.menu_name1 + ".html?phone_id=" + phone_id;
 
           if (item.menu_id === "1") {
             startUrl = url;
           }
 
-          $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><img class='me-2' src="${item.menu_icon}" width="18" height="18" />${item.menu_name}</a></li>`);
+          $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><span class='pe-2'>${item.menu_icon_web}</span>${item.menu_name}</a></li>`);
         }
       });
 

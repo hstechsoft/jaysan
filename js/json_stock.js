@@ -187,9 +187,7 @@ $(document).ready(function () {
 
     $("#unit_add_btn").on("click", function () {
         var unit = $("#stock_godown").val();
-        alert(unit)
         if (unit !== '') {
-            alert("F")
             insert_creditors(unit);
         }
     })
@@ -367,6 +365,7 @@ $(document).ready(function () {
         var department = $("#stock_department").data('dept_id') || '';
         var section = $("#stock_section").data('sec_id') || '';
         var qty = $("#stock_qty").val() || 0;
+        var material_type = $("#material_type").val();
 
         var u_min = $("#stock_unit_min_qty").val() || 0;
         var u_max = $("#stock_unit_max_qty").val() || 0;
@@ -410,7 +409,7 @@ $(document).ready(function () {
 
         console.log("Sending:", stock_master_json);
 
-        if (!part || !godown || qty == '') {
+        if (!part || !godown || qty == '' || material_type == "null") {
             salert('Warning', "Please fill all fields", 'warning');
             return;
         }
@@ -828,6 +827,15 @@ $(document).ready(function () {
         $("#requestModal").modal("show");
     });
 
+    $("#stock_allocate_btn").on("click", function () {
+        $("#requestModal").modal("hide");
+
+        window.open(
+            'http://localhost/jaysan/store_stock_allocate.html?part_id=' + part_idddd + '&req=1',
+            '_blank'
+        );
+    });
+
 
     $("#req_detai").on("click", function () {
 
@@ -1017,8 +1025,8 @@ function fetchStock() {
 
 
 
-function insert_jaysan_stock(part, godown, department, section, qty, stock_master_json) {
-    console.log("part" + part, "godown" + godown, "department" + department, "section" + section, qty, "stock_master " + stock_master_json);
+function insert_jaysan_stock(part, godown, department, section, qty, stock_master_json, material_type) {
+    console.log("part" + part, "godown" + godown, "department" + department, "section" + section, qty, "stock_master " + stock_master_json, "material_type" + material_type);
 
 
     $.ajax({
@@ -1146,7 +1154,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                         if (itemRowSpan === 0) {
                             var trEmpty = "<tr>";
                             trEmpty += `<td>${count}</td>`;
-                            trEmpty += `<td>${item.part_name || ""} - ${item.total_stock} <span class='badge bg-danger'>${item.total_stock}</span> </td>`;
+                            trEmpty += `<td>${item.part_name || ""} - ${item.total_stock} <span class='badge bg-danger'>${item.total_stock}</span>`;
                             trEmpty += `<td colspan="4">No unit/department/section data</td>`;
                             trEmpty += "</tr>";
                             $("#stock_tbady").append(trEmpty);
@@ -1191,12 +1199,12 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         }
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
                                         if ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0) {
-                                            // alert()
                                             p_min_max = `<span class='badge bg-danger ${blink}'>${item.min_order_qty}</span>`;
                                             re = `<button type="button" id='req_details_btn'  data-part_id='${item.part_id}' ${p_req} class="btn p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell text-success"></i></button>`
                                         }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
                                         tr += `<td rowspan="${itemRowSpan}">${re} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
+                                        tr += `<td rowspan="${itemRowSpan}">Purchase</td>`;
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
@@ -1206,11 +1214,11 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var g_min_max = '';
                                         let godown_min = unitObj.godown_min ?? 0;
                                         let godown_max = unitObj.godown_max ?? 0;
-                                        let final_unit_qty = unitObj.godown_qty;
+                                        let final_unit_qty = 0;
 
                                         // if no-department exists, override
                                         unitObj.department_details.forEach(depObj => {
-                                            if (depObj.dep_name === 'no-department') {
+                                            if (depObj.department === 'no-department') {
                                                 final_unit_qty = depObj.department_qty;
                                             }
                                         });
@@ -1246,7 +1254,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var editt_span = '';
                                         let dep_min = depObj.dep_min ?? 0;
                                         let dep_max = depObj.dep_max ?? 0;
-                                        let final_dep_qty = depObj.department_qty;
+                                        let final_dep_qty = 0;
 
                                         // if no-section exists, override
                                         depObj.section_details.forEach(secObj => {
@@ -1277,11 +1285,11 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             d_min_max = ` <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span>`;
                                         }
                                         if (depName != 'no-department') {
-                                            editt_span = `(${depObj.department_qty}) - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${final_dep_qty}</span>${d_min_max} `
+                                            editt_span = `(${depObj.department_qty}) -  <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${final_dep_qty}</span>`
                                         } else {
                                             unit_stock_qty = depObj.department_qty;
                                         }
-                                        tr += `<td rowspan="${sections.length}">${dd_req}  ${depName != 'no-department' ? depName : ""}</td>`;
+                                        tr += `<td rowspan="${sections.length}">${dd_req}  ${depName != 'no-department' ? depName : ""}${editt_span}${d_min_max}</td>`;
                                     }
 
                                     // Section and Section_qty
@@ -1352,7 +1360,6 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
 
 function insert_creditors(unit) {
-    alert()
 
     $.ajax({
         url: "php/insert_creditors.php",
@@ -1368,7 +1375,6 @@ function insert_creditors(unit) {
 
 
             if (response.trim() > 0) {
-                alert()
                 $("#stock_godown").data("godown_id", response);
                 $("#unit_add_btn").addClass("d-none");
                 $("#dep_add_btn").removeClass("d-none")

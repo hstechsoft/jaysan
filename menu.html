@@ -18,469 +18,549 @@
 
     </div>
 
-    <div class=" d-flex justify-content-between align-items-center bgu d-none d-lg-block">
 
+</section>
 
+<div class="offcanvas offcanvas-start d-sm-none mobile-menu" tabindex="-1" id="mobileOffcanvas"  style="background-color: #ff8826;">
 
+    <div class="offcanvas-header py-2 px-3 border-bottom d-flex align-items-center justify-content-between">
 
-        <div>
-            <p class="m-0 p-0 ">Welcome <span id="role_name_txt"></span></p>
-        </div>
-
-        <div class=" m-0 p-0">
-
-            <div class="dropdown m-0 p-0">
-                <button class="btn   text-white dropdown-toggle border-0 " type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-
-                    <p class="d-inline text-center  me-3 m-0 p-0" id="unamed"> </p>
-                    <i class="fa-regular fa-circle-user h6 me-2"></i>
-                </button>
-                <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1 ">
-                    <li><a class="dropdown-item" href="reset_pass.html"><i class="fa-solid fa-key me-2"></i>Modify
-                            Password</a>
-                    </li>
-                    <li><button id="topbar_logout_btn" class="dropdown-item"><i
-                                class="fa-solid fa-right-from-bracket me-2"></i>
-                            Logout</button></li>
-                </ul>
+        <!-- User Info -->
+        <div class="d-flex align-items-center gap-2">
+            <i class="fa-regular fa-circle-user text-primary fs-5"></i>
+            <div class="lh-sm">
+                <span class="fw-semibold small d-block" id="uname"></span>
+                <span class="text-muted small" id="role_name_txt"></span>
             </div>
         </div>
 
-    </div>
-</section>
-<nav class="navbar py-1 navbar-expand-sm shadow rounded rounded-3 d-none d-lg-block small position-sticky"
-    style="top: 0; z-index: 1020;">
-    <div class="container-fluid">
-
-
-        <div>
-            <ul class="navbar-nav  ">
-                <li class="nav-item visually-hidden" id="admin_index1">
-                    <a class="nav-link " href=""></a>
-                </li>
-
-                <li class="nav-item visually-hidden" id="admin_index">
-                    <a class="nav-link " href="admin_index.html">Admin</a>
-                </li>
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Master </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="add_company_master" class="visually-hidden">
-                            <a class="dropdown-item" href="add_company_master.html">Add Company</a>
-                        </li>
-
-                        <li id="add_work_master" class="visually-hidden">
-                            <a class="dropdown-item" href="add_work_master.html">Work-master</a>
-                        </li>
-
-
-                        <li class="visually-hidden">
-                            <a class="dropdown-item dropdown-toggle">Employee</a>
-                            <ul class="submenu dropdown-menu">
-                                <li id="employee" class="visually-hidden">
-                                    <a class="dropdown-item" href="employee.html">Modify</a>
-                                </li>
-                                <li id="role" class="visually-hidden">
-                                    <a class="dropdown-item" href="role.html">Role</a>
-                                </li>
-                                <li id="organization" class="visually-hidden">
-                                    <a class="dropdown-item" href="organization.html">organization</a>
-                                </li>
-                                <li id="att_approval_chart" class="visually-hidden">
-                                    <a class="dropdown-item" href="att_approval_chart.html">Attendance Rule</a>
-                                </li>
-                            </ul>
-                        </li>
-
-
-                        <li class="visually-hidden">
-                            <a class="dropdown-item dropdown-toggle">Product</a>
-                            <ul class="submenu dropdown-menu">
-                                <li id="product_entry" class="visually-hidden">
-                                    <a class="dropdown-item" href="product_entry.html"> Add Product</a>
-                                </li>
-                                <li id="products" class="visually-hidden">
-                                    <a class="dropdown-item" href="products.html">Product List</a>
-                                </li>
-                                <li id="add_reminder_master" class="visually-hidden">
-                                    <a class="dropdown-item" href="add_reminder_master.html">Add Reminder</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li id="admin_upload" class="visually-hidden">
-                            <a class="dropdown-item" href="admin_upload.html">Upload</a>
-                        </li>
-
-
-                    </ul>
-                </li>
-
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Report </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="emp_single_detail" class="visually-hidden">
-                            <a class="dropdown-item" href="emp_single_detail.html">User Report</a>
-                        </li>
-                        <li id="admin_employee_report" class="visually-hidden">
-                            <a class="dropdown-item" href="admin_employee_report.html">Detailed Report</a>
-                        </li>
-
-                        <li id="admin_employee_report_self" class="visually-hidden">
-                            <a class="dropdown-item" href="admin_employee_report_self.html">Detailed Report Self</a>
-                        </li>
-                        <li id="attendance_report" class="visually-hidden">
-                            <a class="dropdown-item" href="attendance_report.html">Attendance report</a>
-                        </li>
-
-                        <li id="work_summary_report" class="visually-hidden">
-                            <a class="dropdown-item" href="work_summary_report.html">Summary report</a>
-                        </li>
-
-                        <li id="work_summary_report_self" class="visually-hidden">
-                            <a class="dropdown-item" href="work_summary_report_self.html">Summary report Self</a>
-                        </li>
-
-                        <li id="work_search" class="visually-hidden">
-                            <a class="dropdown-item" href="work_search.html"> Work Report</a>
-                        </li>
-                        <li id="work_search_self" class="visually-hidden">
-                            <a class="dropdown-item" href="work_search_self.html"> Work Report Self</a>
-                        </li>
-
-                        <li id="site_visit_report" class="visually-hidden">
-                            <a class="dropdown-item" href="site_visit_report.html">Site Survey Report</a>
-                        </li>
-
-
-                        <li class="visually-hidden">
-                            <a class="dropdown-item dropdown-toggle">Accounts</a>
-                            <ul class="submenu dropdown-menu">
-                                <li id="invoice_list" class="visually-hidden">
-                                    <a class="dropdown-item" href="invoice_list.html"> Sales Report</a>
-                                </li>
-                                <li id="quotation_list" class="visually-hidden">
-                                    <a class="dropdown-item" href="quotation_list.html">Quotation Report</a>
-                                </li>
-
-                                <li id="estimation_list" class="visually-hidden">
-                                    <a class="dropdown-item" href="estimation_list.html"> Estimation Report</a>
-                                </li>
-
-                                <li id="service_report" class="visually-hidden">
-                                    <a class="dropdown-item" href="service_report.html">Service Report</a>
-                                </li>
-
-                                <li id="Restamping_report" class="visually-hidden">
-                                    <a class="dropdown-item" href="Restamping_report.html">Restamping Report</a>
-                                </li>
-
-                                <li id="payment_report" class="visually-hidden">
-                                    <a class="dropdown-item" href="payment_report.html">Payment Report</a>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li id="Reminder_report" class="visually-hidden">
-                            <a class="dropdown-item" href="Reminder_report.html"> Reminder</a>
-                        </li>
-
-                        <li class="visually-hidden">
-                            <a class="dropdown-item dropdown-toggle">Lead report</a>
-                            <ul class="submenu dropdown-menu">
-                                <li id="lead_report" class="visually-hidden">
-                                    <a class="dropdown-item" href="lead_report.html"> Detailed</a>
-                                </li>
-                                <li id="lead_report_summary" class="visually-hidden">
-                                    <a class="dropdown-item" href="lead_report_summary.html">Summary</a>
-                                </li>
-
-
-                            </ul>
-                        </li>
-
-                        <li id="emp_report" class="visually-hidden">
-                            <a class="dropdown-item" href="emp_report.html"> Report</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-
-
-                <li class="nav-item visually-hidden" id="user_index">
-                    <a class="nav-link " href="user_index.html">Home</a>
-                </li>
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Task </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="user_call" class="visually-hidden">
-                            <a class="dropdown-item" href="user_call.html"> Dashboard</a>
-                        </li>
-
-                        <li id="create_work" class="visually-hidden">
-                            <a class="dropdown-item" href="create_work.html"> Add New</a>
-                        </li>
-
-                        <li id="task_list">
-                            <a class="dropdown-item" href="task_list.html"> Work list</a>
-                        </li>
-
-
-                        <li id="assigned_work">
-                            <a class="dropdown-item" href="assigned_work.html">Assigned Work</a>
-                        </li>
-
-
-                    </ul>
-                </li>
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Customer </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="create_customer" class="visually-hidden">
-                            <a class="dropdown-item" href="create_customer.html"> Add New</a>
-                        </li>
-
-                        <li id="customer_list" class="visually-hidden">
-                            <a class="dropdown-item" href="customer_list.html"> List</a>
-                        </li>
-
-
-
-
-                    </ul>
-                </li>
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Leads </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="lead_list" class="visually-hidden">
-                            <a class="dropdown-item" href="lead_list.html"> marketing Leads</a>
-                        </li>
-
-                        <li id="lead_list_web" class="visually-hidden">
-                            <a class="dropdown-item" href="lead_list_web.html"> Web Leads</a>
-                        </li>
-
-
-
-                    </ul>
-                </li>
-
-                <li class="nav-item visually-hidden" id="dashboard">
-                    <a class="nav-link " href="dashboard.html">Today Work</a>
-                </li>
-
-
-                <li class="nav-item visually-hidden" id="pending_work">
-                    <a class="nav-link " href="pending_work.html">Pending Works</a>
-                </li>
-
-                <li class="nav-item visually-hidden" id="payslip_upload">
-                    <a class="nav-link " href="payslip_upload.html">payslip_upload</a>
-                </li>
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Expenses </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="emp_expense_single">
-                            <a class="dropdown-item" href="emp_expense_single.html"> Expense Entry</a>
-                        </li>
-
-                        <li id="admin_expense">
-                            <a class="dropdown-item" href="admin_expense.html"> Expense List</a>
-                        </li>
-
-                        <li id="admin_expense_single">
-                            <a class="dropdown-item" href="admin_expense_single.html"> Approve Expense</a>
-                        </li>
-
-                        <li id="exp_report_single">
-                            <a class="dropdown-item" href="exp_report_single.html"> View Expense</a>
-                        </li>
-
-                        <li id="exp_report">
-                            <a class="dropdown-item" href="exp_report.html"> Expense Report</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Dealer </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="create_dealer" class="visually-hidden">
-                            <a class="dropdown-item  " href="create_dealer.html"> Dealer Entry</a>
-                        </li>
-
-                        <li id="create_warranty_terms" class="visually-hidden">
-                            <a class="dropdown-item  " href="create_warranty_terms.html"> create Warranty Terms</a>
-                        </li>
-
-                        <li id="check_warranty" class="visually-hidden">
-                            <a class="dropdown-item  " href="check_warranty.html"> Dealer Report</a>
-                        </li>
-
-                        <li id="service_requset" class="visually-hidden">
-                            <a class="dropdown-item  " href="service_requset.html"> Service Requset </a>
-                        </li>
-
-                        <li id="extended_warranty" class="visually-hidden">
-                            <a class="dropdown-item  " href="extended_warranty.html"> Extended Warranty Requset</a>
-                        </li>
-
-                        <li id="service_feedback" class="visually-hidden">
-                            <a class="dropdown-item  " href="service_feedback.html"> Service Feedback Requset</a>
-                        </li>
-
-
-
-
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Parts </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="unassigned_parts" class="visually-hidden">
-                            <a class="dropdown-item  " href="unassigned_parts.html"> Unassigned Parts</a>
-                        </li>
-
-                        <li id="add_process" class="visually-hidden">
-                            <a class="dropdown-item  " href="add_process.html"> Add Process</a>
-                        </li>
-
-                        <li id="bom_entry" class="visually-hidden">
-                            <a class="dropdown-item  " href="bom_entry.html"> Add BOM</a>
-                        </li>
-
-
-                        <li id="welding_process" class="visually-hidden">
-                            <a class="dropdown-item  " href="welding_process.html"> Add Process BOM</a>
-                        </li>
-
-
-                        <li id="machine_entry" class="visually-hidden">
-                            <a class="dropdown-item  " href="machine_entry.html"> Process Time Entry</a>
-                        </li>
-
-                        <li id="work_entry" class="visually-hidden">
-                            <a class="dropdown-item  " href="work_entry.html"> Work Entry </a>
-                        </li>
-
-                        <li id="sub_assembly_bom_entry" class="visually-hidden">
-                            <a class="dropdown-item  " href="sub_assembly_bom_entry.html"> Sub BOM</a>
-                        </li>
-
-
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Quotation </a>
-                    <ul class="dropdown-menu">
-                        <li id="quotation_enquiry" class="visually-hidden">
-                            <a class="dropdown-item  " href="quotation_enquiry.html"> Quotation Enquiry</a>
-                        </li>
-
-                        <li id="quotation_enquiry_master" class="visually-hidden">
-                            <a class="dropdown-item  " href="quotation_enquiry_master.html"> Quotation Master</a>
-                        </li>
-
-                    </ul>
-
-                </li>
-
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown"> Sales Order </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="sales_order_form" class="visually-hidden">
-                            <a class="dropdown-item  " href="sales_order_form.html"> Sales Order Form</a>
-                        </li>
-
-                        <li id="dcf_report_all" class="visually-hidden">
-                            <a class="dropdown-item  " href="dcf_report_all.html"> DCF Report</a>
-                        </li>
-
-
-                        <li id="dcf_invoice" class="visually-hidden">
-                            <a class="dropdown-item  " href="dcf_invoice.html"> DCF Invoice</a>
-                        </li>
-
-
-                        <li id="sales_order_report" class="visually-hidden">
-                            <a class="dropdown-item  " href="sales_order_report.html"> Sales Order Report</a>
-                        </li>
-
-
-                        <li id="sales_order_approval" class="visually-hidden">
-                            <a class="dropdown-item  " href="sales_order_approval.html"> Machine Production</a>
-                        </li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item dropdown visually-hidden">
-                    <a class="nav-link dropdown-toggle " href="#" data-bs-toggle="dropdown">MRF </a>
-
-                    <ul class="dropdown-menu">
-                        <li id="material_request_form" class="visually-hidden">
-                            <a class="dropdown-item  " href="material_request_form.html"> Material Request Form</a>
-                        </li>
-
-                        <li id="material_request_form_tally" class="visually-hidden">
-                            <a class="dropdown-item  " href="material_request_form_tally.html"> MRF Tally</a>
-                        </li>
-
-
-                        <li id="material_request_form_purchase" class="visually-hidden">
-                            <a class="dropdown-item  " href="material_request_form_purchase.html"> MRF Purchase</a>
-                        </li>
-
-
-                        <li id="material_request_form_md" class="visually-hidden">
-                            <a class="dropdown-item  " href="material_request_form_md.html"> MRF MD</a>
-                        </li>
-                    </ul>
-                </li>
-
-            </ul>
-
-        </div>
-    </div>
-</nav>
-
-<div class="offcanvas offcanvas-start d-sm-none mobile-menu" tabindex="-1" id="mobileOffcanvas">
-
-    <div class="offcanvas-header py-2 px-3 border-bottom">
-        <span class="fw-semibold small" id="unamed"></span>
+        <!-- Close Button -->
         <button type="button" class="btn-close btn-sm" data-bs-dismiss="offcanvas"></button>
+
     </div>
+
 
     <div class="offcanvas-body p-0">
-        <ul class="list-group list-group-flush mobile-menu-list" id="mobile_menu">
+        <ul class="list-group list-group-flush mobile-menu-list" id="mobile_menu" >
         </ul>
     </div>
+</div>
+
+
+
+<!-- Sidebar -->
+<div class="d-none d-sm-flex justify-content-between align-items-center " id="page_start">
+    <button id="fa_bars" class="btn btn-light">
+        <i class="fa fa-bars fs-0"></i>
+    </button>
+
+    <h4 class="m-0">
+        <span class="fw-bold">Jasyan App</span>
+    </h4>
+    <div></div>
+</div>
+<div class="d-none " id="normal_view">
+
+    <aside class="sidebar d-none d-lg-block" id="sidebar" aria-label="Main sidebar">
+
+        <button id="close_sidebar" class="btn mx-3 p-0">
+            <i class="fa fa-times fs-0"></i>
+        </button>
+        <div class="sidebar-user ">
+            <div class="sidebar-user-info">
+                <i class="fa-regular fa-circle-user user-icon"></i>
+
+                <div class="user-text">
+                    <p class="welcome-text">Hey <span id="role_name_txtt"></span></p>
+                    <p class="username" id="unamee"></p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Menu list -->
+        <nav class="nav-list " role="navigation">
+
+            <!-- Admin -->
+            <div class="menu-wrapper">
+                <a id="admin_index1" class="menu-item visually-hidden" href="">
+                    <i class="bi bi-house-fill"></i><span class="menu-text">Hidden</span>
+                </a>
+
+                <a id="admin_index" class="menu-item" href="admin_index.html">
+                    <i class="bi bi-people-fill"></i><span class="menu-text">Admin</span>
+                </a>
+            </div>
+
+
+            <!-- MASTER -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-folder-fill"></i><span class="menu-text">Master</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <!-- Collapsed Flyout -->
+                <div class="flyout">
+                    <a id="add_company_master" class="submenu-item" href="add_company_master.html">
+                        <i class="bi bi-building me-1"></i> Add Company
+                    </a>
+
+                    <a id="add_work_master" class="submenu-item" href="add_work_master.html">
+                        <i class="bi bi-kanban me-1"></i> Work-master
+                    </a>
+
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            <i class="bi bi-person-lines-fill me-1"></i> Employee
+                            <i class="bi bi-chevron-right arrow"></i>
+                        </div>
+
+                        <div class="sub-flyout">
+                            <a id="employee" class="d-block mb-1" href="employee.html">Modify</a>
+                            <a id="role" class="d-block mb-1" href="role.html">Role</a>
+                            <a id="organization" class="d-block mb-1" href="organization.html">Organization</a>
+                            <a id="att_approval_chart" class="d-block" href="att_approval_chart.html">Attendance
+                                Rule</a>
+                        </div>
+                    </div>
+
+                    <a id="product_entry" class="submenu-item" href="product_entry.html">
+                        <i class="bi bi-box-seam me-1"></i> Add Product
+                    </a>
+
+                    <a id="products" class="submenu-item" href="products.html">
+                        <i class="bi bi-card-list me-1"></i> Product List
+                    </a>
+
+                    <a id="add_reminder_master" class="submenu-item" href="add_reminder_master.html">
+                        <i class="bi bi-bell me-1"></i> Add Reminder
+                    </a>
+
+                    <a id="admin_upload" class="submenu-item" href="admin_upload.html">
+                        <i class="bi bi-cloud-upload me-1"></i> Upload
+                    </a>
+                </div>
+
+                <!-- Expanded on Hover -->
+                <div class="collapse">
+                    <a id="add_company_master" class="list-group-item" href="add_company_master.html">Add Company</a>
+                    <a id="add_work_master" class="list-group-item" href="add_work_master.html">Work-master</a>
+
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            <i class="bi bi-person-lines-fill me-2"></i> Employee
+                            <i class="bi bi-chevron-right arrow"></i>
+                        </div>
+
+                        <div class="submenu">
+                            <a id="employee" class="submenu-item" href="employee.html">Modify</a>
+                            <a id="role" class="submenu-item" href="role.html">Role</a>
+                            <a id="organization" class="submenu-item" href="organization.html">Organization</a>
+                            <a id="att_approval_chart" class="submenu-item" href="att_approval_chart.html">Attendance
+                                Rule</a>
+                        </div>
+                    </div>
+
+                    <a id="product_entry" class="list-group-item" href="product_entry.html">Add Product</a>
+                    <a id="products" class="list-group-item" href="products.html">Product List</a>
+                    <a id="add_reminder_master" class="list-group-item" href="add_reminder_master.html">Add Reminder</a>
+                    <a id="admin_upload" class="list-group-item" href="admin_upload.html">Upload</a>
+                </div>
+            </div>
+
+
+            <!-- REPORT -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-bar-chart-line-fill"></i><span class="menu-text">Report</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="emp_single_detail" class="submenu-item" href="emp_single_detail.html">User Report</a>
+                    <a id="admin_employee_report" class="submenu-item" href="admin_employee_report.html">Detailed
+                        Report</a>
+                    <a id="admin_employee_report_self" class="submenu-item"
+                        href="admin_employee_report_self.html">Detailed
+                        Report
+                        Self</a>
+                    <a id="attendance_report" class="submenu-item" href="attendance_report.html">Attendance report</a>
+
+                    <a id="work_summary_report" class="submenu-item" href="work_summary_report.html">Summary report</a>
+                    <a id="work_summary_report_self" class="submenu-item" href="work_summary_report_self.html">Summary
+                        report
+                        Self</a>
+
+                    <a id="work_search" class="submenu-item" href="work_search.html">Work Report</a>
+                    <a id="work_search_self" class="submenu-item" href="work_search_self.html">Work Report Self</a>
+                    <a id="site_visit_report" class="submenu-item" href="site_visit_report.html">Site Survey Report</a>
+
+                    <!-- Accounts submenu -->
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            Accounts <i class="bi bi-chevron-right arrow ms-auto"></i>
+                        </div>
+
+                        <div class="sub-flyout">
+                            <a id="invoice_list" class="d-block mb-1" href="invoice_list.html">Sales Report</a>
+                            <a id="quotation_list" class="d-block mb-1" href="quotation_list.html">Quotation Report</a>
+                            <a id="estimation_list" class="d-block mb-1" href="estimation_list.html">Estimation
+                                Report</a>
+                            <a id="service_report" class="d-block mb-1" href="service_report.html">Service Report</a>
+                            <a id="Restamping_report" class="d-block mb-1" href="Restamping_report.html">Restamping
+                                Report</a>
+                            <a id="payment_report" class="d-block" href="payment_report.html">Payment Report</a>
+                        </div>
+                    </div>
+
+                    <a id="Reminder_report" class="submenu-item" href="Reminder_report.html">Reminder</a>
+
+                    <!-- Lead report submenu -->
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            Lead report <i class="bi bi-chevron-right arrow"></i>
+                        </div>
+
+                        <div class="sub-flyout">
+                            <a id="lead_report" class="d-block mb-1" href="lead_report.html">Detailed</a>
+                            <a id="lead_report_summary" class="d-block mb-1" href="lead_report_summary.html">Summary</a>
+                        </div>
+                    </div>
+
+                    <a id="emp_report" class="submenu-item" href="emp_report.html">Report</a>
+                </div>
+
+                <!-- Expanded mode hover -->
+                <div class="collapse">
+                    <a id="emp_single_detail" class="list-group-item" href="emp_single_detail.html">User Report</a>
+                    <a id="admin_employee_report" class="list-group-item" href="admin_employee_report.html">Detailed
+                        Report</a>
+                    <a id="admin_employee_report_self" class="list-group-item"
+                        href="admin_employee_report_self.html">Detailed
+                        Report Self</a>
+                    <a id="attendance_report" class="list-group-item" href="attendance_report.html">Attendance
+                        report</a>
+
+                    <a id="work_summary_report" class="list-group-item" href="work_summary_report.html">Summary
+                        report</a>
+                    <a id="work_summary_report_self" class="list-group-item"
+                        href="work_summary_report_self.html">Summary
+                        report
+                        Self</a>
+
+                    <a id="work_search" class="list-group-item" href="work_search.html">Work Report</a>
+                    <a id="work_search_self" class="list-group-item" href="work_search_self.html">Work Report Self</a>
+                    <a id="site_visit_report" class="list-group-item" href="site_visit_report.html">Site Survey
+                        Report</a>
+
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            Accounts <i class="bi bi-chevron-right arrow"></i>
+                        </div>
+
+                        <div class="submenu">
+                            <a id="invoice_list" class="submenu-item" href="invoice_list.html">Sales Report</a>
+                            <a id="quotation_list" class="submenu-item" href="quotation_list.html">Quotation Report</a>
+                            <a id="estimation_list" class="submenu-item" href="estimation_list.html">Estimation
+                                Report</a>
+                            <a id="service_report" class="submenu-item" href="service_report.html">Service Report</a>
+                            <a id="Restamping_report" class="submenu-item" href="Restamping_report.html">Restamping
+                                Report</a>
+                            <a id="payment_report" class="submenu-item" href="payment_report.html">Payment Report</a>
+                        </div>
+                    </div>
+
+                    <a id="Reminder_report" class="list-group-item" href="Reminder_report.html">Reminder</a>
+
+                    <div class="sub-wrapper">
+                        <div class="submenu-item">
+                            Lead report <i class="bi bi-chevron-right arrow"></i>
+                        </div>
+
+                        <div class="submenu">
+                            <a id="lead_report" class="submenu-item" href="lead_report.html">Detailed</a>
+                            <a id="lead_report_summary" class="submenu-item" href="lead_report_summary.html">Summary</a>
+                        </div>
+                    </div>
+
+                    <a id="emp_report" class="list-group-item" href="emp_report.html">Report</a>
+                </div>
+            </div>
+
+
+            <!-- TASK -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-list-task"></i><span class="menu-text">Task</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="user_call" class="submenu-item" href="user_call.html">Dashboard</a>
+                    <a id="create_work" class="submenu-item" href="create_work.html">Add New</a>
+                    <a id="task_list" class="submenu-item" href="task_list.html">Work list</a>
+                    <a id="assigned_work" class="submenu-item" href="assigned_work.html">Assigned Work</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="user_call" class="list-group-item" href="user_call.html">Dashboard</a>
+                    <a id="create_work" class="list-group-item" href="create_work.html">Add New</a>
+                    <a id="task_list" class="list-group-item" href="task_list.html">Work list</a>
+                    <a id="assigned_work" class="list-group-item" href="assigned_work.html">Assigned Work</a>
+                </div>
+            </div>
+
+
+            <!-- CUSTOMER -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-people-fill"></i><span class="menu-text">Customer</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="create_customer" class="submenu-item" href="create_customer.html">Add New</a>
+                    <a id="customer_list" class="submenu-item" href="customer_list.html">List</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="create_customer" class="list-group-item" href="create_customer.html">Add New</a>
+                    <a id="customer_list" class="list-group-item" href="customer_list.html">List</a>
+                </div>
+            </div>
+
+
+            <!-- LEADS -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-megaphone-fill"></i><span class="menu-text">Leads</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="lead_list" class="submenu-item" href="lead_list.html">marketing Leads</a>
+                    <a id="lead_list_web" class="submenu-item" href="lead_list_web.html">Web Leads</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="lead_list" class="list-group-item" href="lead_list.html">marketing Leads</a>
+                    <a id="lead_list_web" class="list-group-item" href="lead_list_web.html">Web Leads</a>
+                </div>
+            </div>
+
+
+            <!-- TODAY WORK -->
+            <a id="dashboard" class="menu-item" href="dashboard.html">
+                <i class="bi bi-calendar-check-fill"></i><span class="menu-text">Today Work</span>
+            </a>
+
+            <a id="pending_work" class="menu-item" href="pending_work.html">
+                <i class="bi bi-clock-fill"></i><span class="menu-text">Pending Works</span>
+            </a>
+
+            <a id="payslip_upload" class="menu-item" href="payslip_upload.html">
+                <i class="bi bi-file-earmark-person-fill"></i>
+                <span class="menu-text">Payslip Upload</span>
+            </a>
+
+
+            <!-- EXPENSES -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-receipt-cutoff"></i><span class="menu-text">Expenses</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="emp_expense_single" class="submenu-item" href="emp_expense_single.html">Expense Entry</a>
+                    <a id="admin_expense" class="submenu-item" href="admin_expense.html">Expense List</a>
+                    <a id="admin_expense_single" class="submenu-item" href="admin_expense_single.html">Approve
+                        Expense</a>
+                    <a id="exp_report_single" class="submenu-item" href="exp_report_single.html">View Expense</a>
+                    <a id="exp_report" class="submenu-item" href="exp_report.html">Expense Report</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="emp_expense_single" class="list-group-item" href="emp_expense_single.html">Expense Entry</a>
+                    <a id="admin_expense" class="list-group-item" href="admin_expense.html">Expense List</a>
+                    <a id="admin_expense_single" class="list-group-item" href="admin_expense_single.html">Approve
+                        Expense</a>
+                    <a id="exp_report_single" class="list-group-item" href="exp_report_single.html">View Expense</a>
+                    <a id="exp_report" class="list-group-item" href="exp_report.html">Expense Report</a>
+                </div>
+            </div>
+
+
+            <!-- DEALER -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-shop-window"></i><span class="menu-text">Dealer</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="create_dealer" class="submenu-item" href="create_dealer.html">Dealer Entry</a>
+                    <a id="create_warranty_terms" class="submenu-item" href="create_warranty_terms.html">Create Warranty
+                        Terms</a>
+                    <a id="check_warranty" class="submenu-item" href="check_warranty.html">Dealer Report</a>
+                    <a id="service_requset" class="submenu-item" href="service_requset.html">Service Request</a>
+                    <a id="extended_warranty" class="submenu-item" href="extended_warranty.html">Extended Warranty
+                        Request</a>
+                    <a id="service_feedback" class="submenu-item" href="service_feedback.html">Service Feedback</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="create_dealer" class="list-group-item" href="create_dealer.html">Dealer Entry</a>
+                    <a id="create_warranty_terms" class="list-group-item" href="create_warranty_terms.html">Create
+                        Warranty
+                        Terms</a>
+                    <a id="check_warranty" class="list-group-item" href="check_warranty.html">Dealer Report</a>
+                    <a id="service_requset" class="list-group-item" href="service_requset.html">Service Request</a>
+                    <a id="extended_warranty" class="list-group-item" href="extended_warranty.html">Extended Warranty
+                        Request</a>
+                    <a id="service_feedback" class="list-group-item" href="service_feedback.html">Service Feedback</a>
+                </div>
+            </div>
+
+
+            <!-- PARTS -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-gear-fill"></i><span class="menu-text">Parts</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="unassigned_parts" class="submenu-item" href="unassigned_parts.html">Unassigned Parts</a>
+                    <a id="add_process" class="submenu-item" href="add_process.html">Add Process</a>
+                    <a id="bom_entry" class="submenu-item" href="bom_entry.html">Add BOM</a>
+                    <a id="welding_process" class="submenu-item" href="welding_process.html">Add Process BOM</a>
+                    <a id="machine_entry" class="submenu-item" href="machine_entry.html">Process Time Entry</a>
+                    <a id="work_entry" class="submenu-item" href="work_entry.html">Work Entry</a>
+                    <a id="sub_assembly_bom_entry" class="submenu-item" href="sub_assembly_bom_entry.html">Sub BOM</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="unassigned_parts" class="list-group-item" href="unassigned_parts.html">Unassigned Parts</a>
+                    <a id="add_process" class="list-group-item" href="add_process.html">Add Process</a>
+                    <a id="bom_entry" class="list-group-item" href="bom_entry.html">Add BOM</a>
+                    <a id="welding_process" class="list-group-item" href="welding_process.html">Add Process BOM</a>
+                    <a id="machine_entry" class="list-group-item" href="machine_entry.html">Process Time Entry</a>
+                    <a id="work_entry" class="list-group-item" href="work_entry.html">Work Entry</a>
+                    <a id="sub_assembly_bom_entry" class="list-group-item" href="sub_assembly_bom_entry.html">Sub
+                        BOM</a>
+                </div>
+            </div>
+
+
+            <!-- QUOTATION -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-file-text-fill"></i><span class="menu-text">Quotation</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="quotation_enquiry" class="submenu-item" href="quotation_enquiry.html">Quotation Enquiry</a>
+                    <a id="quotation_enquiry_master" class="submenu-item" href="quotation_enquiry_master.html">Quotation
+                        Master</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="quotation_enquiry" class="list-group-item" href="quotation_enquiry.html">Quotation
+                        Enquiry</a>
+                    <a id="quotation_enquiry_master" class="list-group-item"
+                        href="quotation_enquiry_master.html">Quotation
+                        Master</a>
+                </div>
+            </div>
+
+
+            <!-- SALES ORDER -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-cart-fill"></i><span class="menu-text">Sales Order</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="sales_order_form" class="submenu-item" href="sales_order_form.html">Sales Order Form</a>
+                    <a id="dcf_report_all" class="submenu-item" href="dcf_report_all.html">DCF Report</a>
+                    <a id="dcf_invoice" class="submenu-item" href="dcf_invoice.html">DCF Invoice</a>
+                    <a id="sales_order_report" class="submenu-item" href="sales_order_report.html">Sales Order
+                        Report</a>
+                    <a id="sales_order_approval" class="submenu-item" href="sales_order_approval.html">Machine
+                        Production</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="sales_order_form" class="list-group-item" href="sales_order_form.html">Sales Order Form</a>
+                    <a id="dcf_report_all" class="list-group-item" href="dcf_report_all.html">DCF Report</a>
+                    <a id="dcf_invoice" class="list-group-item" href="dcf_invoice.html">DCF Invoice</a>
+                    <a id="sales_order_report" class="list-group-item" href="sales_order_report.html">Sales Order
+                        Report</a>
+                    <a id="sales_order_approval" class="list-group-item" href="sales_order_approval.html">Machine
+                        Production</a>
+                </div>
+            </div>
+
+
+            <!-- MRF -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-file-earmark-medical-fill"></i><span class="menu-text">MRF</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="material_request_form" class="submenu-item" href="material_request_form.html">Material
+                        Request
+                        Form</a>
+                    <a id="material_request_form_tally" class="submenu-item" href="material_request_form_tally.html">MRF
+                        Tally</a>
+                    <a id="material_request_form_purchase" class="submenu-item"
+                        href="material_request_form_purchase.html">MRF
+                        Purchase</a>
+                    <a id="material_request_form_md" class="submenu-item" href="material_request_form_md.html">MRF
+                        MD</a>
+                </div>
+
+                <div class="collapse">
+                    <a id="material_request_form" class="list-group-item" href="material_request_form.html">Material
+                        Request
+                        Form</a>
+                    <a id="material_request_form_tally" class="list-group-item"
+                        href="material_request_form_tally.html">MRF
+                        Tally</a>
+                    <a id="material_request_form_purchase" class="list-group-item"
+                        href="material_request_form_purchase.html">MRF
+                        Purchase</a>
+                    <a id="material_request_form_md" class="list-group-item" href="material_request_form_md.html">MRF
+                        MD</a>
+                </div>
+            </div>
+
+
+            <!-- Spacer -->
+            <div class="menu-spacer"></div>
+
+            <!-- Logout -->
+            <div class="logout-wrapper">
+                <a class="dropdown-item menu-item" href="reset_pass.html"><i class="fa-solid fa-key"></i><span
+                        class="menu-text">Modify Password</span></a>
+
+                <a id="topbar_logout_btn" class="menu-item" href="#">
+                    <i class="bi bi-box-arrow-right" style="color:#d9534f;"></i>
+                    <span class="menu-text">Logout</span>
+                </a>
+            </div>
+
+        </nav>
+
+
+
+    </aside>
 </div>

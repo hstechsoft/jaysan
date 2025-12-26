@@ -1,10 +1,18 @@
+// const { jsx } = require("react/jsx-runtime");
 
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+
+const part_id = urlParams.get("part_id");
+const req = urlParams.get("req");
+
+console.log(part_id, req);
+
 $(document).ready(function () {
+
 
 
 
@@ -27,6 +35,8 @@ $(document).ready(function () {
     );
 
 
+    get_jaysan_stock_request()
+    get_jaysan_stock_available()
 
     check_login();
 
@@ -247,11 +257,448 @@ $(document).ready(function () {
 
     })
 
+    $("#material_requested_details").on("click", '.req-check', function () {
+        if ($(this).is(":checked")) {
+            console.log($(this).val());
+
+        }
+    })
+
+    $("#store_stock_allocate_tbody").on("input", "td:eq(3)", function () {
+
+        let cell = $(this);
+        let row = cell.closest("tr");
+
+        let available_qty = Number(row.find("td").eq(2).text().trim());
+        let entered_text = cell.text().trim();
+        let entered_qty = Number(entered_text);
+
+        if (entered_text === "") {
+            row.find("td").eq(4).text(available_qty);
+            return;
+        }
+
+        if (isNaN(entered_qty) || entered_qty < 0) {
+            cell.text(0);
+            entered_qty = 0;
+        }
+
+
+        if (entered_qty > available_qty) {
+            cell.text(available_qty);
+            entered_qty = available_qty;
+        }
+
+
+        let balance = available_qty - entered_qty;
+        row.find("td").eq(4).text(balance);
+    });
+
+
+
+    $("#allocate_button").on("click", function () {
+
+        // ------------------ RESET ------------------
+        $("#allocation_summary_tbody").empty();
+
+        let selectedRequests = [];
+        let selectedFromPlaces = [];
+
+        // ------------------ COLLECT REQUESTS ------------------
+        $("#material_requested_details tr").each(function () {
+
+            let qtyText = $(this).find("td").eq(3).text().trim();
+            let qty = Number(qtyText);
+
+            if (!isNaN(qty) && qty > 0) {
+                selectedRequests.push({
+                    req_id: $(this).find("td").eq(3).data("req_id"),
+                    t_place_id: $(this).find("td").eq(3).data("t_place_id"),
+                    t_place_type: $(this).find("td").eq(3).data("t_place_type"),
+                    place: $(this).find("td").eq(1).text().trim(),
+                    qty: qty
+                });
+            }
+        });
+
+        // ------------------ COLLECT FROM PLACES ------------------
+        $("#store_stock_allocate_tbody tr").each(function () {
+
+            let qtyText = $(this).find("td").eq(3).text().trim();
+            let qty = Number(qtyText);
+
+            if (!isNaN(qty) && qty > 0) {
+                selectedFromPlaces.push({
+                    f_place_id: $(this).find("td").eq(3).data("f_place_id"),
+                    f_place_type: $(this).find("td").eq(3).data("f_place_type"),
+                    place: $(this).find("td").eq(1).text().trim(),
+                    qty: qty
+                });
+            }
+        });
+
+        // ------------------ BASIC VALIDATION ------------------
+        if (selectedRequests.length === 0 || selectedFromPlaces.length === 0) {
+            salert("Warning", "Please enter allocation quantities", "warning");
+            return;
+        }
+
+        // ------------------ TOTAL QTY VALIDATION ------------------
+        let totalReqQty = selectedRequests.reduce((sum, r) => sum + r.qty, 0);
+        let totalFromQty = selectedFromPlaces.reduce((sum, f) => sum + f.qty, 0);
+
+        if (totalFromQty != totalReqQty) {
+            salert("Warning", "Requested quantity and available stock Quantity has to be same", "warning");
+            return;
+        }
+
+        // ------------------ SCENARIO DETECTION ------------------
+        let isOneToMany = selectedRequests.length === 1 && selectedFromPlaces.length > 1;
+        let isManyToOne = selectedRequests.length > 1 && selectedFromPlaces.length === 1;
+        let isOneToOne = selectedRequests.length === 1 && selectedFromPlaces.length === 1;
+
+        if (!isOneToMany && !isManyToOne && !isOneToOne) {
+            salert("Warning", "Invalid allocation selection", "warning");
+            return;
+        }
+
+
+        let count = 1;
+
+        // ------------------ ONE → ONE ------------------
+        if (isOneToOne) {
+            $("#stock_summary_table").removeClass("d-none");
+
+            let req = selectedRequests[0];
+            let fp = selectedFromPlaces[0];
+
+            $("#allocation_summary_tbody").append(`
+            <tr>
+                <td>${count}</td>
+                <td>${$("#part_name_as_title").text()}</td>
+
+                <td data-req_id="${req.req_id}"
+                    data-t_place_id="${req.t_place_id}"
+                    data-t_place_type="${req.t_place_type}">
+                    ${req.place}
+                </td>
+
+                <td class="from_data"
+                    data-f_place_id="${fp.f_place_id}"
+                    data-f_place_type="${fp.f_place_type}">
+                    ${fp.place}
+                </td>
+
+                <td>${req.qty}</td>
+            </tr>
+        `);
+        }
+
+
+        // ------------------ ONE REQUEST → MANY FROM PLACES ------------------
+        if (isOneToMany) {
+            $("#stock_summary_table").removeClass("d-none");
+            // let count = 1;
+            let req = selectedRequests[0];
+
+            selectedFromPlaces.forEach(fp => {
+                $("#allocation_summary_tbody").append(`
+                <tr>
+                    <td>${count++}</td>
+                    <td>${$("#part_name_as_title").text()}</td>
+
+                    <td data-req_id="${req.req_id}"
+                        data-t_place_id="${req.t_place_id}"
+                        data-t_place_type="${req.t_place_type}">
+                        ${req.place}
+                    </td>
+
+                    <td class="from_data"
+                        data-f_place_id="${fp.f_place_id}"
+                        data-f_place_type="${fp.f_place_type}">
+                        ${fp.place}
+                    </td>
+
+                    <td>${fp.qty}</td>
+                </tr>
+            `);
+            });
+        }
+
+        // ------------------ MANY FROM PLACES → ONE REQUEST ------------------
+        if (isManyToOne) {
+            $("#stock_summary_table").removeClass("d-none");
+            // let count = 1;
+            let fp = selectedFromPlaces[0];
+
+            selectedRequests.forEach(req => {
+                $("#allocation_summary_tbody").append(`
+                <tr>
+                    <td>${count++}</td>
+                    <td>${$("#part_name_as_title").text()}</td>
+
+                    <td data-req_id="${req.req_id}"
+                        data-t_place_id="${req.t_place_id}"
+                        data-t_place_type="${req.t_place_type}">
+                        ${req.place}
+                    </td>
+
+                    <td class="from_data"
+                        data-f_place_id="${fp.f_place_id}"
+                        data-f_place_type="${fp.f_place_type}">
+                        ${fp.place}
+                    </td>
+
+                    <td>${req.qty}</td>
+                </tr>
+            `);
+            });
+        }
+
+        // $("#stock_summary_table").addClass("d-none");
+    });
+
+    $("#confirm_allocation_btn").on("click", function () {
+        var allocation_json = ''
+        $("#allocation_summary_tbody tr").each(function () {
+            var req_id = $(this).find("td").eq(2).data("req_id");
+            var t_place_id = $(this).find("td").eq(2).data("t_place_id");
+            var t_place_type = $(this).find("td").eq(2).data("t_place_type");
+            var f_place_id = $(this).find("td").eq(3).data("f_place_id");
+            var f_place_type = $(this).find("td").eq(3).data("f_place_type");
+            var qty = $(this).find("td").eq(4).text();
+
+            allocation_json.push({"part_id": part_id, "from_place_id": f_place_id, "from_place_type": f_place_type, "to_palce_id":t_place_id, "to_place_type": t_place_type, "qty": qty, "req_no": req_id, "allocation_cat":"", "created_by": current_user_id})
+        })
+        if(allocation_json.length != 0){
+            insert_stock_allocation(allocation_json)
+        }
+
+    })
+
+
 });
 
 
 
 
+
+
+function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+
+    $.ajax({
+        url: "php/get_jaysan_stock.php",
+        type: "get", //send it through get method
+        data: {
+
+
+            from_date: from_date,
+            to_date: to_date,
+            creditor_query: creditor_query,
+            dep_query: dep_query,
+            sec_query: sec_query,
+            part_query: part_id,
+            qty_query: qty_query,
+            min_order_query: min_order_query,
+            requst_query: req,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() !== "error") {
+
+                if (response.trim() !== "ok") {
+
+                    var obj = JSON.parse(response);
+
+                    $("#material_requested_details").empty();
+
+                    var count = 0;
+                    var s_count = 0;
+
+                    obj.forEach(function (item) {
+
+                        $("#part_name_as_title").text(item.part_name);
+
+
+
+
+                        // ---------- REQUEST DETAILS ----------
+                        if (item.req_details) {
+
+                            var reqWrapper = JSON.parse(item.req_details);
+
+                            reqWrapper.forEach(function (wrapper) {
+
+                                if (wrapper.req_details) {
+
+                                    wrapper.req_details.forEach(function (req) {
+
+                                        count++;
+
+                                        $("#material_requested_details").append(`
+                                            <tr>
+                                                <td>${count}</td>
+                                                <td>${req.store}</td>
+                                                <td>${req.qty}</td>
+                                                <td contenteditable='true' data-req_id='${req.req_id}' data-t_place_id='${req.store_id}' data-t_place_type='${req.store_type}'>0</td>
+                                                <td>${req.dated}</td>
+                                            </tr>
+                                        `);
+                                    });
+                                }
+                            });
+                        }
+                    });
+
+                } else {
+                    $("#material_requested_details").append(
+                        "<tr><td colspan='5'>No request found</td></tr>"
+                    );
+                }
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_jaysan_stock_available(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+
+    $.ajax({
+        url: "php/get_jaysan_stock.php",
+        type: "get", //send it through get method
+        data: {
+
+
+            from_date: from_date,
+            to_date: to_date,
+            creditor_query: creditor_query,
+            dep_query: dep_query,
+            sec_query: sec_query,
+            part_query: part_id,
+            qty_query: qty_query,
+            min_order_query: min_order_query,
+            requst_query: "",
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() !== "error") {
+
+                if (response.trim() !== "ok") {
+
+                    var obj = JSON.parse(response);
+
+                    $("#store_stock_allocate_tbody").empty();
+
+                    var count = 0;
+                    var s_count = 0;
+
+                    obj.forEach(function (item) {
+
+                        $("#part_name_as_title").text(item.part_name);
+
+                        // ---------- STOCK DETAILS ----------
+                        var unitList = typeof item.unit_total === "string"
+                            ? JSON.parse(item.unit_total)
+                            : item.unit_total;
+
+                        var tbody = "";
+
+                        unitList.forEach(function (u) {
+
+                            var departments = u.department_details || [];
+
+                            departments.forEach(function (d) {
+
+                                if (d.department === "no-department") {
+
+                                    s_count++;
+                                    tbody += `
+                                            <tr>
+                                                <td>${s_count}</td>
+                                                <td>${u.unit}</td>
+                                                <td>${u.godown_qty}</td>
+                                                <td contenteditable='true' class="allocated_qty" data-f_place_id='${u.godown_id}' data-f_place_type='${u.store_type}'>${u.godown_qty}</td>
+                                                <td class="balance_qty">${u.godown_qty}</td>
+                                            </tr>`;
+
+                                } else {
+
+                                    var sections = d.section_details || [];
+
+                                    sections.forEach(function (s) {
+
+                                        s_count++;
+
+                                        if (s.section === "no-section") {
+
+                                            tbody += `
+                                                    <tr>
+                                                        <td>${s_count}</td>
+                                                        <td>${d.department}</td>
+                                                        <td>${d.department_qty}</td>
+                                                        <td contenteditable='true' class="allocated_qty" data-f_place_id='${d.dep_id}' data-f_place_type='${d.store_type}'>0</td>
+                                                        <td class="balance_qty">${d.department_qty}</td>
+                                                    </tr>`;
+
+                                        } else {
+
+                                            tbody += `
+                                                    <tr>
+                                                        <td>${s_count}</td>
+                                                        <td>${s.section}</td>
+                                                        <td>${s.Section_qty}</td>
+                                                        <td contenteditable='true' class="allocated_qty" data-f_place_id='${s.sec_id}' data-f_place_type='${s.store_type}'>0</td>
+                                                        <td class="balance_qty">${s.Section_qty}</td>
+                                                    </tr>`;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                        $("#store_stock_allocate_tbody").append(tbody);
+
+                    });
+
+                } else {
+                    $("#store_stock_allocate_tbody").append(
+                        "<tr><td colspan='5'>Stock Not Available</td></tr>"
+                    );
+                }
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 

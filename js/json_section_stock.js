@@ -19,6 +19,14 @@ $(document).ready(function () {
         });
     });
 
+    $("#section_stock_receive_entry_tabel_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#section_stock_receive_entry_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
 
 
     $("#menu_bar").load('menu.html',
@@ -280,48 +288,48 @@ $(document).ready(function () {
 
 
 
-$("#section_stock_tbody").on("focus", ".part", function () {
+    $("#section_stock_tbody").on("focus", ".part", function () {
 
-    let $partCell = $(this);
+        let $partCell = $(this);
 
-    if ($partCell.data("autocomplete")) return;
+        if ($partCell.data("autocomplete")) return;
 
-    $partCell.autocomplete({
-        minLength: 2,
-        source: function (request, response) {
-            $.ajax({
-                url: "php/get_part_name_auto1.php",
-                type: "get",
-                dataType: "json",
-                data: {
-                    part: request.term,
-                    term: "part"
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.part_name,
-                            value: item.part_name,
-                            id: item.part_id
-                        };
-                    }));
-                }
-            });
-        },
-        select: function (event, ui) {
-            event.preventDefault();
+        $partCell.autocomplete({
+            minLength: 2,
+            source: function (request, response) {
+                $.ajax({
+                    url: "php/get_part_name_auto1.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        part: request.term,
+                        term: "part"
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.part_name,
+                                value: item.part_name,
+                                id: item.part_id
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                event.preventDefault();
 
-            // set part
-            $partCell.text(ui.item.label);
-            $partCell.data("part_id", ui.item.id);
+                // set part
+                $partCell.text(ui.item.label);
+                $partCell.data("part_id", ui.item.id);
 
-            // 👉 MOVE TO QTY
-            $partCell.closest("tr").find(".qty").focus();
-        }
+                // 👉 MOVE TO QTY
+                $partCell.closest("tr").find(".qty").focus();
+            }
+        });
+
+        $partCell.data("autocomplete", true);
     });
-
-    $partCell.data("autocomplete", true);
-});
 
 
     $("#section_stock_tbody").on("keydown", ".qty", function (e) {
@@ -347,7 +355,13 @@ $("#section_stock_tbody").on("focus", ".part", function () {
         }
     });
 
+    $("#success_btn").on("click", function () {
+        $("#successModal").modal("show");
+    })
 
+    $("#correction_btn").on("click", function () {
+        $("#correctionModal").modal("show");
+    })
 
 
 });
@@ -499,6 +513,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
                                         tr += `<td rowspan="${itemRowSpan}"> ${item.part_name || ""}</td>`;
+                                        tr += `<td rowspan="${itemRowSpan}"> Purchase</td>`;
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
@@ -538,6 +553,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     // Section and Section_qty
                                     var blink = '';
                                     var s_min_max = '';
+                                    var req_btn_ctrl = '<td></td>';
                                     var remaining_qut = 0;
                                     let sec_min = secObj.sec_min ?? 0;
                                     let sec_max = secObj.sec_max ?? 0;
@@ -548,10 +564,14 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     if ($("#section_min_max_view").is(":checked")) {
                                         s_min_max = `<span class=' ms-2 badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
+
+                                    if (secObj.Section_qty <= secObj.sec_min || secObj.Section_qty <= secObj.sec_max) {
+
+                                        req_btn_ctrl = `<td><button class='btn' data-bs-toggle="modal" data-bs-target="#requestModal" data-part_id='${item.part_id}' data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'  id='fa-bell'><i class="fa-regular fa-bell text-success"></i>  </button> <button class='text-light bg-danger'><i class="fa-solid fa-clock-rotate-left"></i></button></td>`
+                                    }
                                     // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
                                     tr += `<td style='width: 40%'><span class="border border-primary px-3 py-1  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span>${s_min_max}</td>
-                                    
-                                    <td><button class='btn' data-bs-toggle="modal" data-bs-target="#requestModal" data-part_id='${item.part_id}' data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'  id='fa-bell'><i class="fa-regular fa-bell text-success"></i>  </button> <button class='text-danger bg-danger'><i class="fa-solid fa-clock-rotate-left"></i></button></td>`;
+                                    <td>15932</td>${req_btn_ctrl}`;
 
                                     tr += "</tr>";
                                     $("#section_stock_tbody").append(tr);
@@ -675,7 +695,7 @@ function get_dep_section() {
         url: "php/get_dep_section.php",
         type: "get", //send it through get method
         data: {
-            dep_id: 27,
+            dep_id: 29,
 
         },
         success: function (response) {
