@@ -6,7 +6,7 @@
  $received_qty =test_input($_GET['received_qty']);
  $received_by =test_input($_GET['received_by']);
  $receive_remark =test_input($_GET['receive_remark']);
-
+$req_no = null;
 
 
 $from_place_id = null;
@@ -94,6 +94,7 @@ $from_place_id = $row['from_place_id'];
 $from_place_type = $row['from_place_type'];
 $to_place_id = $row['to_palce_id'];
 $to_place_type = $row['to_place_type'];
+$req_no = $row['req_no'];
 
   }
 }
