@@ -130,7 +130,7 @@ if ($result->num_rows > 0) {
   // Record exists, update it
   $qty_stock = $result->fetch_assoc()['qty'];
 
-  $qty_stock = floatval($received_qty) +   floatval($qty_stock);
+  $qty_stock = floatval($received_qty) +   ($qty_stock);
 echo $qty_stock;
   $remark = "stock updated by store allocation-inward <br>".$receive_remark ;
   $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
