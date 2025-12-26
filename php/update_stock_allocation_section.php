@@ -125,7 +125,8 @@ $result = $conn->query($check_sql_receive);
 
 if ($result->num_rows > 0) {
   // Record exists, update it
-  $qty_stock = $received_qty + $result->fetch_assoc()['qty'];
+  $qty_stock = $result->fetch_assoc()['qty'];
+  $qty_stock = $received_qty + $qty_stock;
   $remark = "stock updated by store allocation-inward <br>".$receive_remark . " " ;
   $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =  $part_id )";
@@ -160,7 +161,8 @@ $result = $conn->query($check_sql_receive);
 
 if ($result->num_rows > 0) {
   // Record exists, update it
-  $qty_stock =   $result->fetch_assoc()['qty'] - $received_qty;
+  $qty_stock =   $result->fetch_assoc()['qty'];
+  $qty_stock = $qty_stock - $received_qty;
   $remark = "stock updated by store allocation-outward <br>".$receive_remark . " " ;
   $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =  $part_id )";
