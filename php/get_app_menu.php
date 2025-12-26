@@ -11,8 +11,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-
-$sql = "SELECT app_menu_master.iswebview,app_menu_master.menu_name,app_menu_master.menu_url,app_menu_master.menu_icon,app_menu_master.menu_id FROM app_menu INNER join app_menu_master on app_menu.app_menu_id = app_menu_master.id WHERE role = (SELECT employee.emp_role FROM employee WHERE employee.emp_phone_id = $phone_id) ORDER by app_menu_master.menu_id ASC";
+$sql = "SELECT app_menu_master.iswebview,app_menu_master.menu_name,app_menu_master.menu_url,app_menu_master.menu_icon,app_menu_master.menu_id,app_menu_master.menu_icon_web FROM app_menu INNER join app_menu_master on app_menu.app_menu_id = app_menu_master.id WHERE role = (SELECT employee.emp_role FROM employee WHERE employee.emp_phone_id = $phone_id) ORDER by app_menu_master.menu_id ASC";
 
 
 
