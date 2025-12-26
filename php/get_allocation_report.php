@@ -21,7 +21,7 @@ $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT stock_allocation.*,
          parts_tbl.part_name,
         IF(stock_allocation.from_place_type = 'unit',(select creditors.creditor_name from creditors where creditors.creditor_id = stock_allocation.from_place_id),if(stock_allocation.from_place_type = 'dep',(SELECT department.dep_name FROM department WHERE department.dep_id = stock_allocation.from_place_id),(SELECT dep_section.sec_name FROM dep_section WHERE dep_section.dep_sec_id = stock_allocation.from_place_id))) AS from_place_name,
-        IF(stock_allocation.to_place_type = 'unit',(select creditors.creditor_name from creditors where creditors.creditor_id = stock_allocation.to_place_id),if(stock_allocation.to_place_type = 'dep',(SELECT department.dep_name FROM department WHERE department.dep_id = stock_allocation.to_place_id),(SELECT dep_section.sec_name FROM dep_section WHERE dep_section.dep_sec_id = stock_allocation.to_place_id))) AS to_place_name
+        IF(stock_allocation.to_place_type = 'unit',(select creditors.creditor_name from creditors where creditors.creditor_id = stock_allocation.to_palce_id),if(stock_allocation.to_place_type = 'dep',(SELECT department.dep_name FROM department WHERE department.dep_id = stock_allocation.to_palce_id),(SELECT dep_section.sec_name FROM dep_section WHERE dep_section.dep_sec_id = stock_allocation.to_palce_id))) AS to_place_name
 FROM `stock_allocation`
     inner join parts_tbl on stock_allocation.part_id = parts_tbl.part_id
 WHERE
