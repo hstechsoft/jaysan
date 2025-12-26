@@ -145,7 +145,7 @@ if ($result->num_rows > 0) {
   // Record doesn't exist, insert it
   $remark = "stock inserted by store allocation-inward <br>".$receive_remark . " " ;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark,emp_id) 
-      VALUES ($godown,$dep,$sec, $part_id,$qty,'$remark',$received_by)";
+      VALUES ($godown,$dep,$sec, $part_id,$qty,$remark,$received_by)";
 
         if ($conn->query($sql_stock) === TRUE) {
         }
@@ -169,7 +169,7 @@ if ($result->num_rows > 0) {
   $qty_stock = floatval($qty_stock) -floatval($received_qty);
 ;
   $remark = "stock updated by store allocation-outward <br>".$receive_remark . " " ;
-  $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
+  $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= $remark ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =  $part_id )";
 
        if ($conn->query($sql_stock) === TRUE) {
@@ -182,7 +182,7 @@ if ($result->num_rows > 0) {
   // Record doesn't exist, insert it
   $remark = "stock taken by store allocation-outward <br>".$receive_remark . " " ;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark,emp_id) 
-      VALUES ($godown,$dep,$sec, $part_id,$qty,'$remark',$received_by)";
+      VALUES ($godown,$dep,$sec, $part_id,$qty,$remark,$received_by)";
 
         if ($conn->query($sql_stock) === TRUE) {
         }
