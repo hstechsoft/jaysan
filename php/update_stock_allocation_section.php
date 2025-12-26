@@ -132,7 +132,7 @@ if ($result->num_rows > 0) {
   $qty_stock = floatval($received_qty) +   floatval($qty_stock);
 
   $remark = "stock updated by store allocation-inward <br>".$receive_remark . " " ;
-  $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
+  $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= $remark ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =  $part_id )";
 
        if ($conn->query($sql_stock) === TRUE) {
