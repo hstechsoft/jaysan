@@ -37,7 +37,7 @@ $data = "'".$data."'";
 return $data;
 }
 $sql = "with request as(SELECT emr.part_id,store_type,store_id,sum(qty) as total_qty , JSON_ARRAYAGG(
-        JSON_OBJECT('emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty,emr.req_status)) as req_details  FROM `emp_material_request` emr INNER join employee emp  on emp.emp_id = emr.`emp_id` WHERE 1 GROUP by part_id,store_type,store_id),
+        JSON_OBJECT('emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty,'status',emr.req_status)) as req_details  FROM `emp_material_request` emr INNER join employee emp  on emp.emp_id = emr.`emp_id` WHERE 1 GROUP by part_id,store_type,store_id),
   stock_wo as(SELECT js.stock_id,js.part_id,qty,godown,dep,sec,
 cre.creditor_name as unit,cre_master.min_qty as godown_min,cre_master.max_qty as godown_max,dep_master.min_qty as dep_min,dep_master.max_qty as dep_max,sec_master.min_qty as sec_min,sec_master.max_qty as sec_max,
 sec_requset.req_details as sec_req,
