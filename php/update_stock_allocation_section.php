@@ -121,9 +121,7 @@ $sql_update_req = "UPDATE emp_material_request SET req_status = 'received' WHERE
 
 list($godown, $dep, $sec) = get_store_details($to_place_id, $to_place_type, $conn);
 
-echo $godown;
-echo $dep;
-echo $sec;
+
     $check_sql_receive = "SELECT qty FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = $part_id )";
 
 $result = $conn->query($check_sql_receive);
@@ -133,7 +131,7 @@ if ($result->num_rows > 0) {
   $qty_stock = $result->fetch_assoc()['qty'];
 
   $qty_stock = floatval($received_qty) +   ($qty_stock);
-echo $qty_stock;
+
   $remark = "stock updated by store allocation-inward <br>".$receive_remark ;
   $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty = $qty_stock,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =  $part_id )";
