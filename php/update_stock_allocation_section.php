@@ -8,7 +8,7 @@ use BcMath\Number;
  $allocation_id =test_input($_GET['allocation_id']);
  $received_qty =test_input($_GET['received_qty']);
  $received_by =test_input($_GET['received_by']);
- $receive_remark =test_input($_GET['receive_remark']);
+ $receive_remark = ($_GET['receive_remark']);
 $req_no = null;
 
 
