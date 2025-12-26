@@ -99,7 +99,7 @@ $to_place_type = $row['to_place_type'];
 }
 
 
-$sql = "UPDATE stock_allocation SET received_qty = $received_qty, received_by = $received_by, receive_remark = $receive_remark WHERE id = $allocation_id";
+$sql = "UPDATE stock_allocation SET received_qty = $received_qty, received_by = $received_by, receive_remark = $receive_remark WHERE allocation_id = $allocation_id";
   
   if ($conn->query($sql) === TRUE) {
 
