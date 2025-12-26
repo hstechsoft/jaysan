@@ -107,7 +107,7 @@ $sql = "UPDATE stock_allocation SET received_qty = $received_qty, received_by = 
 
 
     
-$sql_update_req = "UPDATE emp_material_request SET allocation_status = 'received' WHERE emp_material_request_id = $req_no";
+$sql_update_req = "UPDATE emp_material_request SET req_status = 'received' WHERE emp_material_request_id = $req_no";
     if ($conn->query($sql_update_req) === TRUE) {
     }
     else {
