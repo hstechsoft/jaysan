@@ -5,8 +5,8 @@
 
  include 'db_head.php';
 
- $store_id = test_input($_GET['$store_id']);
- $store_type = test_input($_GET['$store_type']);
+ $store_id = test_input($_GET['store_id']);
+ $store_type = test_input($_GET['store_type']);
 
  
 
