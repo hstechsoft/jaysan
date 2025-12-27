@@ -37,7 +37,7 @@ $data = "'".$data."'";
 return $data;
 }
 $sql = "with request as(SELECT emr.part_id,store_type,store_id,sum(qty) as total_qty , JSON_ARRAYAGG(
-        JSON_OBJECT('emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty,'status',emr.req_status)) as req_details  FROM `emp_material_request` emr INNER join employee emp  on emp.emp_id = emr.`emp_id` WHERE 1 GROUP by part_id,store_type,store_id),
+        JSON_OBJECT('emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty,'status',emr.req_status)) as req_details  FROM `emp_material_request` emr INNER join employee emp  on emp.emp_id = emr.`emp_id` WHERE emr.req_status != 'received' GROUP by part_id,store_type,store_id),
   stock_wo as(SELECT js.stock_id,js.part_id,qty,godown,dep,sec,
 cre.creditor_name as unit,cre_master.min_qty as godown_min,cre_master.max_qty as godown_max,dep_master.min_qty as dep_min,dep_master.max_qty as dep_max,sec_master.min_qty as sec_min,sec_master.max_qty as sec_max,
 sec_requset.req_details as sec_req,
@@ -70,7 +70,7 @@ dep_stock as(SELECT sec_req,dep_req,godown_req,godown_min,godown_max,dep_min,dep
         req_detials as (SELECT part_id, JSON_ARRAYAGG(
         JSON_OBJECT('req_status',req_status,'emp',emp.emp_name,'req_id',emp_material_request_id,'dated' ,dated,'qty',qty,'store_type',store_type,'store_id',store_id,'store',
                    if(store_type = 'godown',(SELECT creditor_name from creditors WHERE creditor_id = store_id),(if(store_type = 'dep',(SELECT dep_name from department WHERE dep_id = store_id),(SELECT sec_name   FROM `dep_section` WHERE dep_sec_id = store_id))))
-                   )) as req_details FROM `emp_material_request` emr1 INNER join employee emp  on emp.emp_id = emr1.emp_id   WHERE  1  GROUP by store_type,store_id,part_id)
+                   )) as req_details FROM `emp_material_request` emr1 INNER join employee emp  on emp.emp_id = emr1.emp_id   WHERE  emr1.req_status != 'received'  GROUP by store_type,store_id,part_id)
        SELECT (select  JSON_ARRAYAGG(JSON_OBJECT('req_details',req_details)) as req_details from req_detials rd where rd.part_id = unit_stock.part_id GROUP by part_id) as req_details, sec_req,dep_req,godown_req,stock_id,godown_min,godown_max,dep_min,dep_max,sec_min,sec_max,(select part_name from parts_tbl where part_id = unit_stock.part_id) as part_name ,(select min_order_qty from parts_tbl where part_id = unit_stock.part_id) as min_order_qty, part_id,qty,godown,dep,sec,unit,department,section,total_stock,total_stock_godown,total_stock_dep,total_stock_sec,JSON_ARRAYAGG(
         JSON_OBJECT('store_type','unit','godown_req',godown_req,'godown_min',godown_min,'godown_max',godown_max,'unit',unit,'godown_qty',total_stock_godown,'godown_id',godown,'department_details',dep_total)) as unit_total,(SELECT JSON_ARRAYAGG(
         JSON_OBJECT('cat',prs_title.prs_name,'id',prs_title.prs_id)) as de FROM `part_assign_tbl` inner join prs_title on part_assign_tbl.title_id = prs_title.prs_id WHERE part_id = part_id) from unit_stock GROUP by part_id";
