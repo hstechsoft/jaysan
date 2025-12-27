@@ -157,7 +157,7 @@ function get_allocated_details() {
                         $("#allocated_list_tbody").append(`<tr><td>${count}</td><td>${item.part_name}</td><td>${item.to_place_name}</td><td>${item.allocation_qty}</td></tr>`);
                     })
                 } else {
-                    $("#allocated_list_tbody").append(`<tr><td colspan='7' class='text-center'>Nothing Allocated. Enjoy Your day 😁!</td></tr>`)
+                    $("#allocated_list_tbody").append(`<tr><td colspan='7' class='text-center'>Nothing pending. Enjoy Your day 😁!</td></tr>`)
                 }
             }
 
