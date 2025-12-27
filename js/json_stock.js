@@ -1359,6 +1359,9 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                         });
                     });
 
+                    if(top_req_count > 0 ){
+                        $("#span_req_count").addClass("blink")
+                    }
                     $("#span_req_count").text(top_req_count)
 
                 }
