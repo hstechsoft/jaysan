@@ -367,15 +367,17 @@ $(document).ready(function () {
 
         // ------------------ ONE → ONE ------------------
         if (isOneToOne) {
-            $("#stock_summary_table").removeClass("d-none");
 
             let req = selectedRequests[0];
             let fp = selectedFromPlaces[0];
 
-            if (req.req_id === fp.f_place_id) {
+            console.log(req.t_place_id, fp.f_place_id);
+
+            if (req.t_place_id === fp.f_place_id) {
                 salert("Warning", "You cannot exchange the stock from the same place!", "warning");
                 return;
             }
+            $("#stock_summary_table").removeClass("d-none");
             $("#allocation_summary_tbody").append(`
             <tr>
                 <td>${count}</td>
@@ -401,16 +403,16 @@ $(document).ready(function () {
 
         // ------------------ ONE REQUEST → MANY FROM PLACES ------------------
         if (isOneToMany) {
-            $("#stock_summary_table").removeClass("d-none");
             // let count = 1;
             let req = selectedRequests[0];
 
             // Validate first
-            const invalid = selectedFromPlaces.some(fp => fp.f_place_id === req.req_id);
+            const invalid = selectedFromPlaces.some(fp => fp.f_place_id === req.t_place_id);
             if (invalid) {
                 salert("Warning", "You cannot exchange the stock from the same place!", "warning");
                 return;
             }
+            $("#stock_summary_table").removeClass("d-none");
 
             selectedFromPlaces.forEach(fp => {
 
@@ -439,16 +441,15 @@ $(document).ready(function () {
 
         // ------------------ MANY FROM PLACES → ONE REQUEST ------------------
         if (isManyToOne) {
-            $("#stock_summary_table").removeClass("d-none");
             // let count = 1;
             let fp = selectedFromPlaces[0];
-            
-            const invalid = selectedRequests.some(req => req.req_id === fp.f_place_id);
+
+            const invalid = selectedRequests.some(req => req.t_place_id === fp.f_place_id);
             if (invalid) {
                 salert("Warning", "You cannot exchange the stock from the same place!", "warning");
                 return;
             }
-
+            $("#stock_summary_table").removeClass("d-none");
             selectedRequests.forEach(req => {
                 $("#allocation_summary_tbody").append(`
                 <tr>
