@@ -372,6 +372,10 @@ $(document).ready(function () {
             let req = selectedRequests[0];
             let fp = selectedFromPlaces[0];
 
+            if (req.req_id === fp.f_place_id) {
+                salert("Warning", "You cannot exchange the stock from the same place!", "warning");
+                return;
+            }
             $("#allocation_summary_tbody").append(`
             <tr>
                 <td>${count}</td>
@@ -401,7 +405,15 @@ $(document).ready(function () {
             // let count = 1;
             let req = selectedRequests[0];
 
+            // Validate first
+            const invalid = selectedFromPlaces.some(fp => fp.f_place_id === req.req_id);
+            if (invalid) {
+                salert("Warning", "You cannot exchange the stock from the same place!", "warning");
+                return;
+            }
+
             selectedFromPlaces.forEach(fp => {
+
                 $("#allocation_summary_tbody").append(`
                 <tr>
                     <td>${count++}</td>
@@ -430,6 +442,12 @@ $(document).ready(function () {
             $("#stock_summary_table").removeClass("d-none");
             // let count = 1;
             let fp = selectedFromPlaces[0];
+            
+            const invalid = selectedRequests.some(req => req.req_id === fp.f_place_id);
+            if (invalid) {
+                salert("Warning", "You cannot exchange the stock from the same place!", "warning");
+                return;
+            }
 
             selectedRequests.forEach(req => {
                 $("#allocation_summary_tbody").append(`
@@ -459,22 +477,43 @@ $(document).ready(function () {
     });
 
     $("#confirm_allocation_btn").on("click", function () {
-        var allocation_json = ''
-        $("#allocation_summary_tbody tr").each(function () {
-            var req_id = $(this).find("td").eq(2).data("req_id");
-            var t_place_id = $(this).find("td").eq(2).data("t_place_id");
-            var t_place_type = $(this).find("td").eq(2).data("t_place_type");
-            var f_place_id = $(this).find("td").eq(3).data("f_place_id");
-            var f_place_type = $(this).find("td").eq(3).data("f_place_type");
-            var qty = $(this).find("td").eq(4).text();
 
-            allocation_json.push({"part_id": part_id, "from_place_id": f_place_id, "from_place_type": f_place_type, "to_palce_id":t_place_id, "to_place_type": t_place_type, "qty": qty, "req_no": req_id, "allocation_cat":"", "created_by": current_user_id})
-        })
-        if(allocation_json.length != 0){
-            insert_stock_allocation(allocation_json)
+        let allocation_json = [];
+
+        $("#allocation_summary_tbody tr").each(function () {
+
+            let req_id = $(this).find("td").eq(2).data("req_id");
+            let t_place_id = $(this).find("td").eq(2).data("t_place_id");
+            let t_place_type = $(this).find("td").eq(2).data("t_place_type");
+
+            let f_place_id = $(this).find("td").eq(3).data("f_place_id");
+            let f_place_type = $(this).find("td").eq(3).data("f_place_type");
+
+            let qty = Number($(this).find("td").eq(4).text().trim());
+
+            if (isNaN(qty) || qty <= 0) return;
+
+            allocation_json.push({
+                part_id: part_id,
+                from_place_id: f_place_id,
+                from_place_type: f_place_type,
+                to_palce_id: t_place_id,
+                to_place_type: t_place_type,
+                qty: qty,
+                req_no: req_id,
+                allocation_cat: "internal_request",
+                created_by: current_user_id
+            });
+        });
+
+        if (allocation_json.length === 0) {
+            alert("No allocation data found");
+            return;
         }
 
-    })
+        insert_stock_allocation(allocation_json);
+    });
+
 
 
 });
@@ -700,6 +739,43 @@ function get_jaysan_stock_available(min_order_query, from_date, to_date, credito
 
 }
 
+function insert_stock_allocation(allocation_json) {
+    console.log(allocation_json);
+
+    $.ajax({
+        url: "php/insert_stock_allocation.php",
+        type: "post", //send it through get method
+        data: {
+
+            allocation_json: JSON.stringify(allocation_json)
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                if (response.trim() === "ok") {
+                    window.location.href = "http://localhost/jaysan/json_stock.html";
+                } else {
+                    console.log(response);
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function insert_new_process(processId) {

@@ -1226,10 +1226,20 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
                                                 g_req_count++;
+                                                if (greq.status === 'create') {
+                                                    req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
+                                                }
+                                                else if (greq.status === 'allocated') {
+                                                    req = `<span class='badge bg-secondary'>Allocated</span>`
+                                                }
+                                                else if (greq.status === 'delivered') {
+                                                    req = `<span class='badge bg-success'>Delivered</span>`
+                                                }
+                                                else {
+                                                }
                                             })
                                             top_req_count += g_req_count;
                                             console.log(top_req_count);
-                                            req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
                                         } else if (unitObj.godown_req !== null) {
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
@@ -1266,10 +1276,20 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             var d_req_count = 0;
                                             depObj.dep_req.forEach(function (greq) {
                                                 d_req_count++;
+                                                if (greq.status === 'create') {
+                                                    dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
+                                                }
+                                                else if (greq.status === 'allocated') {
+                                                    dd_req = `<span class='badge bg-secondary'>Allocated</span>`
+                                                }
+                                                else if (greq.status === 'delivered') {
+                                                    dd_req = `<span class='badge bg-success'>Delivered</span>`
+                                                }
+                                                else {
+                                                }
 
                                             })
                                             top_req_count += d_req_count;
-                                            dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
                                         }
                                         else if (depObj.dep_req !== null) {
                                             var d_req_count = 0;
@@ -1302,9 +1322,19 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var s_req_count = 0;
                                         secObj.sec_req.forEach(function (greq) {
                                             s_req_count++;
+                                            if (greq.status === 'create') {
+                                                ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`;
+                                            }
+                                            else if (greq.status === 'allocated') {
+                                                ss_req = `<span class='badge bg-secondary'>Allocated</span>`
+                                            }
+                                            else if (greq.status === 'delivered') {
+                                                ss_req = `<span class='badge bg-success'>Delivered</span>`
+                                            }
+                                            else {
+                                            }
                                         })
                                         top_req_count += s_req_count;
-                                        ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`
                                     } else if (secObj.sec_req !== null) {
                                         var s_req_count = 0;
                                         secObj.sec_req.forEach(function (greq) {
@@ -1355,6 +1385,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
 
 }
+
+
 
 
 

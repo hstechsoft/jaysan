@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-        <section id="menu_bar"></section>
+    <section id="menu_bar"></section>
     <div class="container-fluid " style="height: 100%; overflow-y: auto;">
         <!-- top bar -->
 
@@ -77,48 +77,33 @@
                             <th scope="col">From</th>
                             <th scope="col">To</th>
                             <th scope="col">Quantity</th>
-                            <th scope="col">Approved By</th>
                             <th scope="col">Action</th>
 
                         </tr>
                     </thead>
-                    <tbody id="">
-                        <tr>
+                    <tbody id="internal_allocation_tbody">
 
-                            <td>1</td>
-                            <td>BRP 1927 32X3 Angle</td>
-                            <td>Store</td>
-                            <td>Hydraulic</td>
-                            <td>220</td>
-                            <td>Swondarya</td>
-                            <td><button type="button" class="btn btn-success " id=""><i class="fa fa-check-circle"></i>
-                                </button></td>
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped " style="font-size: 8px;">
+                    <caption>Allocated list</caption>
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Part Name</th>
+                            <th scope="col">Place Name</th>
+                            <th scope="col">Qty</th>
 
                         </tr>
-                        <tr>
+                    </thead>
+                    <tbody id="allocated_list_tbody">
 
-                            <td>2</td>
-                            <td>BRP 5006 A Travelling Motorbox</td>
-                            <td>Store</td>
-                            <td>Traveling motor</td>
-                            <td>30</td>
-                            <td>Swondarya</td>
-                            <td><button type="button" class="btn btn-primary " id=""><i class="fa fa-check-circle"></i>
-                                </button></td>
-
-                        </tr>
-                        <tr>
-
-                            <td>3</td>
-                            <td>BR 1052 Main Roller30 Dia 3F</td>
-                            <td>Store</td>
-                            <td>Roller</td>
-                            <td>430</td>
-                            <td>Swondarya</td>
-                            <td><button type="button" class="btn btn-success " id="" data-bs-toggle="modal" data-bs-target="#exampleModal"  ><i class="fa fa-check-circle"></i>
-                                </button></td>
-
-                        </tr>
 
 
                     </tbody>
@@ -191,28 +176,29 @@
         </div>
 
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">BR 1052 Main Roller30 Dia 3F</h1>
+                        <h1 class="modal-title fs-5" id="confirmationModalLabel"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="i" placeholder="">
+                            <input type="number" class="form-control rounded-3" id="confirm_qty" placeholder="">
                             <label for="i">Quantity
                             </label>
                         </div>
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="" placeholder="">
+                            <input type="text" class="form-control rounded-3" id="remarks" placeholder="">
                             <label for="">Remarks
                             </label>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-primary" id="stock_confirm_btn">Confirm</button>
                     </div>
                 </div>
             </div>
