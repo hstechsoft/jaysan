@@ -1214,7 +1214,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
                                         tr += `<td rowspan="${itemRowSpan}">${re} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
-                                        tr += `<td rowspan="${itemRowSpan}">Purchase</td>`;
+                                        
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
