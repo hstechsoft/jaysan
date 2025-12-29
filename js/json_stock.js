@@ -48,6 +48,7 @@ $(document).ready(function () {
 
     $('#stock_part').on('input', function () {
         //check the value not empty
+        $("#search_stock_part").data('process_id', "");
         $("#unit_add_btn").addClass('d-none');
         $('#stock_godown').val('').data('godown_id', '');
         $('#stock_department').val('').data('dept_id', '');
@@ -97,6 +98,15 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
                     $("#unit_add_btn").removeClass('d-none');
+                    $("#search_stock_part").data('process_id', ui.item.id);
+                    $("#stock_table input").first().trigger(
+                        $.Event("keydown", {
+                            key: "Enter",
+                            keyCode: 13,
+                            which: 13
+                        })
+                    );
+
 
 
                 },
@@ -643,7 +653,7 @@ $(document).ready(function () {
 
             console.log("Enter pressed in:", this.id);
 
-            var part_query = $("#search_stock_part").data('process_id') || $("#search_stock_part").attr('data-process_id') || '';
+            var part_query = $("#search_stock_part").data('process_id') || $("#search_stock_part").attr('data-process_id') || $("#stock_part").data('process_id') || $("#stock_part").attr('data-process_id') || '';
             var creditor_query = $("#search_stock_unit").data('godown_id') || $("#search_stock_unit").attr('data-godown_id') || '';
             var dep_query = $("#search_stock_dep").data('dept_id') || $("#search_stock_dep").attr('data-dept_id') || '';
             var sec_query = $("#search_stock_sec").data('sec_id') || $("#search_stock_sec").attr('data-sec_id') || '';
@@ -1359,7 +1369,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                         });
                     });
 
-                    if(top_req_count > 0 ){
+                    if (top_req_count > 0) {
                         $("#span_req_count").addClass("blink")
                     }
                     $("#span_req_count").text(top_req_count)
