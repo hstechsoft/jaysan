@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+<div class="container-fluid ">
+    <!-- top bar -->
+  
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header ">
+      <strong class="me-auto toast-title">Toast Title</strong>
+      <small class="text-muted">Just now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body toast-description">
+      Hello, this is a Bootstrap toast message!
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addNewProcessModal" tabindex="-1" aria-labelledby="addNewProcessModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="addNewProcessModalLabel">Add New Process</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="addNewProcessForm">
+                  <div class="mb-3">
+                      <label for="processName" class="form-label">Process Name</label>
+                      <input type="text" class="form-control" id="processName" name="process_name" required>
+                  </div>
+                  <div class="mb-3">
+                      <label for="processDes" class="form-label">Process Description</label>
+                      <textarea class="form-control" id="processDes" name="process_des" rows="3" ></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add Process</button>
+                  
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Add New Part Modal -->
+<div class="modal fade" id="addNewPartModal" tabindex="-1" aria-labelledby="addNewPartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addNewPartModalLabel">Add New Part</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addNewPartForm">
+            <div class="mb-3">
+              <label for="newPartName" class="form-label">Part Name</label>
+              <input type="text" class="form-control" id="newPartName" name="part_name" required>
+            </div>
+            <div class="mb-3">
+              <label for="newPartNo" class="form-label">Part No</label>
+              <input type="text" class="form-control" id="newPartNo" name="part_no" required>
+            </div>
+            <div class="mb-3">
+              <label for="newPartDes" class="form-label">Description</label>
+              <textarea class="form-control" id="newPartDes" name="des" rows="3" ></textarea>
+            </div>
+            <!-- <div class="mb-3">
+              <label for="newPartImage" class="form-label">Part Image</label>
+              <input type="file" class="form-control" id="newPartImage" name="part_image" accept="image/*" >
+            </div> -->
+            <button type="button" id="add_new_part_mbtn" class="btn btn-primary">Add Part</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  class="d-flex mt-2">
+
+   
+  </div>
+  <div id="ap">
+    <div class="row ">
+      <div class="col-8  pe-0">
+        <div>
+          <div class='input-group'>
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+          Type </span>
+            
+            </div> 
+            <select class='custom-select form-control' id='prs_title'>
+           <option value='0' selected>Choose Options...</option>
+           
+          
+           
+            </select>
+            </div>
+        </div>
+        <div class="">
+            <div class="card" >
+             <div class="card-header">Input Parts</div>
+              <div class="card-body d-flex">
+               <div>
+                <div class='input-group '> 
+                  
+                    <input id='part_name' type='text' class='form-control'  placeholder="Part Name">
+                    </div>
+                    <p class=" p-0 m-0">(or)</p>
+                    <div class='input-group p-0 m-0'> 
+                     
+                        <input id='part_no' type='text' class='form-control'  placeholder="part No">
+                        </div>
+               </div>
+    
+                <div class=" my-auto mx-3">
+                  <div class='input-group mb-2 w-75'> 
+             
+                    <input id='qty' type='number' class='form-control' placeholder="Qty"  >
+                    </div>
+        </div>
+        <div class=" my-auto ">
+            <button class='btn btn-sm btn-primary '  id='add_part_btn' >Add</button>
+            </div>
+       
+            <div class=" my-auto mx-2">
+              <button class='btn btn-sm btn-primary cancel_btn' id="cancel_part_btn"  >Cancel</button>
+              </div>
+        <!--  -->
+        <div class=" my-auto mx-2 flex-fill  w-75">
+        
+            <div  class="my-auto">
+           <p id="finished_process"></p>
+            </div>
+        </div>
+        
+        <div class=" my-auto ">
+           
+                    <button class='btn  btn-sm btn-primary' id='add_new_part_btn' type=''> <i class="fa fa-plus" aria-hidden="true"></i></button>
+        </div>
+              
+              </div>
+            </div>
+    
+            <div class="card" >
+                <div class="card-header">Process</div>
+                 <div class="card-body d-flex">
+                  <div>
+                   <div class='input-group '> 
+                     
+                       <input id='process_name' type='text' class='form-control'  placeholder="Process Name">
+                       </div>
+                      
+                  </div>
+           <div class=" my-auto mx-3">
+               
+               <button class='btn btn-sm btn-primary' id='add_process_btn' type=''>Add</button>
+           </div>
+           <div class="flex-fill my-auto mx-2">
+            <button class='btn btn-sm btn-primary cancel_btn' id="cancel_process_btn"  >Cancel</button>
+            </div>
+       
+           
+           <div class="">
+            <button class='btn btn-sm btn-primary ' data-toggle="tooltip" data-placement="top" title="Add New Process" id='add_new_process_btn' type=''> <i class="fa fa-plus" aria-hidden="true"></i></button>
+           </div>
+                 
+                 </div>
+               </div>
+                
+          <div class="card" >
+             <div class="card-header">Output Part</div>
+              <div class="card-body d-flex">
+               <div>
+                <div class='input-group '> 
+                  
+                    <input id='part_name_out' type='text' class='form-control'  placeholder="Part Name">
+                    </div>
+                    <p class=" p-0 m-0">(or)</p>
+                    <div class='input-group p-0 m-0'> 
+                     
+                        <input id='part_no_out' type='text' class='form-control'  placeholder="part No">
+                        </div>
+               </div>
+        <div class=" my-auto mx-3 ">
+             <button class='btn btn-sm btn-primary ' id='add_out_part_btn' type=''>Add</button>
+        </div>
+        
+        <div class=" my-auto mx-2 flex-fill">
+          <button class='btn btn-sm btn-primary cancel_btn' id="cancel_out_part_btn"   >Cancel</button>
+          </div>
+         
+        <div class=" my-auto ">
+          <button class='btn  btn-sm btn-primary' id='add_new_out_part_btn' type=''> <i class="fa fa-plus" aria-hidden="true"></i></button>
+         
+        </div>
+              
+              </div>
+              <div class="card-footer d-flex justify-content-center">
+              
+                <button class="btn btn-primary btn" id="submit_btn" role="button">Submit</button>
+                <button class="btn btn-warning" id="update_btn" role="button">Update</button>
+              </div>
+              
+            </div>
+          <div id="tbl" class="my-2">
+        
+        <div class="d-flex mt-2 gap-2">
+        
+                <!-- <table  id='input_part_tbl1' class='table table-bordered border-dark border-opacity-50 text-center small ' >
+                    <thead >
+                    <tr>
+                    
+                    <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Input Parts</th>
+                    
+                    </tr>
+                    
+                    <tr>
+                    
+                     <th scope='col'>#</th>
+                   <th scope='col'>Parts</th>
+                   <th scope='col'>Delete</th>
+                   
+                    
+                    </tr>
+                    </thead>
+                    <tbody class='align-middle ' id='input_part_tbl'>
+                   
+                    </tbody>
+                    </table> -->
+    
+    
+                       
+        
+        <div class="card w-50" >
+          <div class="card-header bg-info bg-opacity-25 h6">
+            <div class="d-flex justify-content-between">
+              <p class="my-auto h6">Input Table</p>
+    
+              <button class="btn btn-outline-danger btn-sm border-0" id="edit_input_btn"><i class="fa-solid fa-pen-to-square"></i> </button>
+    
+              <button class="btn btn-outline-danger btn-sm border-0" id="delete_input_btn"><i class="fa fa-trash" aria-hidden="true"></i> </button>
+    
+           
+            </div>
+        
+          </div>
+          <div class="card-body" id="input_part_tbl">
+    
+       
+          </div>
+        </div>
+    
+    
+                    <div class="my-auto">
+                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                    </div>
+       
+        
+        <div class="card w-75" >
+          <div class="card-header bg-info bg-opacity-25 h6">
+            <div class="d-flex justify-content-between">
+              <p class="my-auto h6">Process Table</p>
+              <button class="btn btn-outline-danger btn-sm border-0" id="edit_prs_btn"><i class="fa-solid fa-pen-to-square"></i> </button>
+              <button class="btn btn-outline-danger btn-sm border-0" id="delete_prs_btn"><i class="fa fa-trash" aria-hidden="true"></i> </button>
+            </div>
+        
+          </div>
+          <div class="card-body" id="process_tbl">
+       
+       
+          </div>
+        </div>
+                   
+        </div>
+    
+    
+         <div class="d-flex justify-content-center">
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+         </div>                 
+       
+        
+        <div class=" d-flex justify-content-center mt-2">
+           <div class="card  " >
+          <div class="card-header text-bg-info fw-bold bg-opacity-25 d-flex justify-content-between">
+         <div>
+          <h6 class="mx-2"> Output Part</h6>
+         </div>  
+    <div>
+      <button class="btn btn-outline-danger btn-sm border-0" id="edit_output_btn"><i class="fa-solid fa-pen-to-square"></i> </button>
+    </div>
+           
+          </div>
+             <div class="card-body">
+               <h6 class="card-title " id="output_part_txt"></h6>
+             
+             </div>
+           </div>
+        </div>
+        
+      </div>
+        <!--  -->
+        </div>
+    </div>
+    
+    <div class="col-4 ps-0">
+    <div class="card">
+    <div class="card-header h6">
+     Parts  Availble for Next Process
+    </div>
+    <div class="card-body  " id="pa_nxt_prs">
+    
+    
+    
+    </div>
+    </div>
+    </div>
+    
+    
+     </div> 
+    
+    <div class="card mt-2 " >
+     
+      <div class="card-header d-flex justify-content-between h6">
+       <div class="my-auto">
+        <p>Machine Inmplementation</p>
+       </div>
+     <div>
+      <button class="btn btn-outline-primary border-0" type="button" id="imp_home_btn"><i class="fa fa-home" aria-hidden="true"></i></button>
+     </div>
+    <div>
+      <div class='input-group'>
+        <div class='input-group-prepend '>
+        <span class='input-group-text ' id='basic-addon1'>
+     Select Parts </span>
+        
+        </div> 
+        <select class="form-select" aria-label="Default select example"  id='output_part_sel'>
+          <option value="0" selected>Choose Options</option>
+          
+        </select>
+        </div>
+    </div>
+      </div>
+    
+    
+     <div class="card-body ">
+      <div id="breadcrumb1" class="m-0 p-0">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb"  id="out_breadcrumb">
+            
+             
+          </ol>
+      </nav>
+    </div>
+    <div class="d-flex justify-content-around mb-2" id="final_output_btn_grp">
+     
+    
+      <button class="btn btn-outline-primary border-0 h4" id="edit_imp_btn"><i class="fa-solid fa-pen-to-square"></i></button>
+      <button class="btn btn-outline-danger border-0 h4" id="delete_imp_btn"><i class="fa-solid fa-trash-can"></i></button>
+     
+    </div>
+    
+         <div id="imp_output" >
+        
+      
+       <div  class="d-flex gap-4 justify-content-center mt-2 mx-auto w-100">
+      <div class="card my-auto">
+        <div class="card-header d-flex justify-content-between h6">
+      Input Parts
+        </div>
+       <div class="card-body small" id="imp_input_part">
+         
+        </div>
+      </div>
+      
+      <!-- arrow  -->
+      <div class="my-auto">
+        <i class="fa-solid fa-right-long"></i>
+      </div>
+      
+      <div class="card my-auto">
+        <div class="card-header d-flex justify-content-between h6">
+      Process
+        </div>
+       <div class="card-body" id="imp_process">
+         
+        </div>
+      </div>
+      
+      <!-- arrow  -->
+      <div class="my-auto">
+        <i class="fa-solid fa-right-long"></i>
+      </div>
+      
+      
+      <div class="card my-auto">
+        <div class="card-header d-flex justify-content-between h6">
+      Output Parts
+        </div>
+       <div class="card-body " id="imp_output_part">
+        <div class="card">
+          <div class="card-header ">  <h6 class="card-title" id="imp_output_part_txt"></h6></div>
+        </div>
+      
+      
+        </div>
+      </div>
+      
+        </div>
+      </div>
+       
+       <div class="d-flex gap-4 justify-content-center" id="imp_final_output">
+    
+       </div>
+    
+      </div>
+    </div>
+  </div>
+
+
+
+
+  
+</div>
+       
+    
+
+
+<!-- content -->
+
+
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/add_process.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+<script src="js/get_all_id.js" type="module"></script>
+
+</body>
+</html>

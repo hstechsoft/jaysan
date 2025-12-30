@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+   <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+</head>
+<body onload=" ">
+    <section>
+   
+      </section>
+<div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+   
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+ 
+</section>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+<h5 class="card-text text-center">Employee Work Report - Detailed</h5>
+        </div>
+        
+        <div class=" card-header text-bg-light ">
+          <div class="d-flex justify-content-between">
+          
+          
+          <div class="mx-3">
+            <select class="form-select" id="sel_usr_in">
+                  
+              <option selected value="0">Select Employee...</option>
+            
+          </select>
+          
+          </div>
+  
+          
+                    <div class="py-2" >
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" checked type="radio" name="inlineRadioOptions" id="today_radio">
+                      <label class="form-check-label" for="today_radio">Today</label>
+                    </div>
+          
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="thisweek_radio" >
+                      <label class="form-check-label" for="thisweek_radio">ThisWeek</label>
+                    </div>
+          
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="thismonth_radio" >
+                      <label class="form-check-label" for="thismonth_radio">ThisMonth</label>
+                    </div>
+          
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" disabled type="radio" name="inlineRadioOptions" id="l3months_radio" >
+                      <label class="form-check-label"   for="l3months_radio">3 Months</label>
+                    </div>
+          
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" disabled type="radio" name="inlineRadioOptions" id="thisyear_radio" >
+                      <label class="form-check-label" for="thisyear_radio">Thisyear</label>
+                    </div>
+                  </div>
+          
+                </div>
+                <form id="search_form"  onsubmit="return false">
+                <div class="d-flex justify-content-between gap-3 mt-3 border border-2 border-danger p-3 m-0">
+                 
+                  <input type="date" id="search_start_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+          
+                  <input type="date" id="search_end_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+          
+                    <button id="report_search_btn" type="submit"  class="btn btn-primary">
+                      <i class="fa-solid fa-magnifying-glass pe-1"></i>
+                        </button>
+          
+                    
+                </div>
+              </form>
+                  </div>
+
+       
+
+        
+    </div>
+
+
+
+    <div class="card mt-3 ">
+<div class="card-header">
+  <h5 class="text-center">Report</h5>
+</div>
+<div class="card-body table_report">
+  <table id="history_table" class="table   table-bordered border-dark border-opacity-50 text-center " >
+    <thead >
+      <tr>
+      
+        <th  colspan="7" scope="col" class="bg-info bg-opacity-25">Work  History</th>
+      
+      </tr>
+
+      <tr>
+      
+        <th scope="col">#</th>
+        <th scope="col">Date</th>
+        <th scope="col">Work</th>
+        <th scope="col">Status</th>
+        <th scope="col">Comments</th>
+        <th scope="col">Work Type</th>
+        <th scope="col">View</th>
+      
+      </tr>
+    </thead>
+    <tbody class="align-middle " id="detailed_work_report_table">
+      
+     
+
+      
+     
+    </tbody>
+  </table>
+</div>
+    </div>
+    
+   
+
+    <div class="card mt-3 ">
+      <div class="card-header">
+        <h5 class="text-center">Direct Marketing</h5>
+      </div>
+      <div class="card-body d-flex gap-3 justify-content-center">
+        <table id="history_table" class="table   table-bordered border-dark border-opacity-50 text-center " >
+          <thead >
+            <tr>
+            
+              <th  colspan="10" scope="col" class="bg-info bg-opacity-25">Marketing Leads</th>
+            
+            </tr>
+      
+            <tr>
+            
+              <th scope='col'>#</th>
+              <th scope='col'>cus_name</th>
+              <th scope='col'>work_des</th>
+              <th scope='col'>cur_work</th>
+              <th scope='col'>comments</th>
+              <th scope='col'>generated_date</th>
+              <th scope='col'>report</th>
+             
+             <th scope='col'>View</th>
+              
+            
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="detailed_work_table">
+            
+           
+      
+            
+           
+          </tbody>
+        </table>
+      </div>
+          </div>
+          
+
+
+   <div class="card">
+    <div class="card-header d-flex justify-content-center h6">
+      Attendance Report -Detailed
+    </div>
+    <div class="card-body"  style="max-height: 65vh; overflow-y: auto;">
+      <table id='atten_report_tbl1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+        <thead >
+        <tr>
+        
+        <th colspan='5' scope='col' class='bg-info bg-opacity-25'> Attendance Report</th>
+        
+        </tr>
+        
+        <tr>
+        
+         <th scope='col'>#</th>
+       <th scope='col'>Date</th>
+       <th scope='col'>Attendance</th>
+       <th scope='col'>Status</th>
+       <th scope='col'>Time</th>
+       
+        
+        </tr>
+        </thead>
+        <tbody class='align-middle ' id='atten_report_tbl'>
+        
+        </tbody>
+        </table>
+    </div>
+   </div>
+
+   <div class="card mt-2">
+    <div class="card-header d-flex justify-content-center h6">
+      Attendance Report -Summary
+    </div>
+    <div class="card-body"  >
+      <table id='atten_report_sum_tbl' class='table table-bordered border-dark border-opacity-50 text-center ' >
+        <thead >
+        <tr>
+        
+        <th colspan='5' scope='col' class='bg-info bg-opacity-25'> Attendance Summary</th>
+        
+        </tr>
+        
+        <tr>
+        
+         <th scope='col'>#</th>
+       <th scope='col'>Description</th>
+       <th scope='col'>Days</th>
+       
+       
+        
+        </tr>
+        </thead>
+        <tbody class='align-middle ' id='atten_report_tbl'>
+          <tr>
+            <td>1</td>
+            <td>Total Present</td>
+            <td id="tp_txt"></td>
+          </tr>
+            <tr>
+                          <td>2</td>
+                       <td>Total Abscent</td>
+                       <td id="ta_txt"></td>
+              </tr>
+           <tr>
+          <td>3</td>
+          <td>Total Partial</td>
+          <td id="tpa_txt"></td>
+        </tr>
+       <tr class="text-bg-warning h6">
+        <td>4</td>
+        <td>Total Days</td>
+        <td id="to_txt"></td>
+       </tr>
+       <tr>
+        <td>5</td>
+        <td>Summary</td>
+        <td id="sum_txt"></td>
+       </tr>
+       
+        </tbody>
+        </table>
+    </div>
+   </div>
+</div>
+
+<!-- content -->
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/admin_employee_report.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+[
+  {
+    "js": "att_req.js",
+    "apis": [
+      { "name": "insert_leave_req.php", "lines": [46] },
+      { "name": "get_current_employee_id_byphoneid.php", "lines": [90] }
+    ]
+  },
+  {
+    "js": "login.js",
+    "apis": [
+      { "name": "get_employee_id.php", "lines": [82] }
+    ]
+  },
+  {
+    "js": "admin_index_phone.js",
+    "apis": [
+      { "name": "insert_attendance_verify.php", "lines": [96] },
+      { "name": "get_current_employee_id_byphoneid.php", "lines": [151] },
+      { "name": "get_employee_cur_sts_phone.php", "lines": [193] },
+      { "name": "get_employee_notification.php", "lines": [268] }
+    ]
+  },
+  {
+    "js": "assembly.js",
+    "apis": [
+      { "name": "get_android_id.php", "lines": [24] },
+      { "name": "get_current_employee_id_byphoneid.php", "lines": [111] },
+      { "name": "insert_listner.php", "lines": [289] },
+      { "name": "check_listner.php", "lines": [318] }
+    ]
+  },
+  {
+    "js": "correction.js",
+    "apis": [
+      { "name": "update_correction.php", "lines": [56] },
+      { "name": "delete_customer.php", "lines": [96] },
+      { "name": "get_all_correction.php", "lines": [140] },
+      { "name": "get_current_employee_id_byphoneid.php", "lines": [206] }
+    ]
+  },
+  {
+    "js": "create_customer_p.js",
+    "apis": [
+      { "name": "get_customer_autocomplete.php", "lines": [231] },
+      { "name": "get_phone_autocomplete.php", "lines": [315] },
+      { "name": "check_customer_phone.php", "lines": [396] },
+      { "name": "insert_customer.php", "lines": [431] },
+      { "name": "insert_work.php", "lines": [481] },
+      { "name": "get_employee.php", "lines": [525, 568] },
+      { "name": "get_current_employee_id_byphoneid.php", "lines": [615] },
+      { "name": "get_work_type.php", "lines": [654] }
+    ]
+  }
+]

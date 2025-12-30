@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS-PHP Line Number Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+        }
+        .instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        #output {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .progress {
+            margin: 20px 0;
+            color: #666;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 JavaScript to PHP Line Number Scanner</h1>
+        
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Click "Select JS Folder" and choose your <code>js/</code> directory</li>
+                <li>Click "Scan Files" to analyze all JavaScript files</li>
+                <li>Click "Copy JSON" to copy the result</li>
+                <li>Replace the <code>apiData</code> array in your dashboard with the generated data</li>
+            </ol>
+            <p><strong>Note:</strong> This tool scans for patterns like <code>url: "php/filename.php"</code> and records the line numbers.</p>
+        </div>
+        
+        <input type="file" id="folderInput" webkitdirectory directory multiple>
+        <br>
+        <button onclick="scanFiles()">🔍 Scan Files</button>
+        <button onclick="copyToClipboard()">📋 Copy JSON</button>
+        <button onclick="downloadJSON()">💾 Download JSON</button>
+        
+        <div class="progress" id="progress"></div>
+        <div id="output"></div>
+    </div>
+    
+    <script>
+        let scannedData = [];
+        
+        async function scanFiles() {
+            const files = document.getElementById('folderInput').files;
+            if (!files || files.length === 0) {
+                alert('Please select a folder first!');
+                return;
+            }
+            
+            const jsFiles = Array.from(files).filter(f => f.name.endsWith('.js'));
+            document.getElementById('progress').textContent = `Scanning ${jsFiles.length} JavaScript files...`;
+            
+            scannedData = [];
+            let processed = 0;
+            
+            for (const file of jsFiles) {
+                const apis = await scanFile(file);
+                if (apis.length > 0) {
+                    scannedData.push({
+                        js: file.name,
+                        apis: apis
+                    });
+                }
+                processed++;
+                document.getElementById('progress').textContent = 
+                    `Processed ${processed}/${jsFiles.length} files... Found ${scannedData.length} files with API calls`;
+            }
+            
+            displayResults();
+        }
+        
+        async function scanFile(file) {
+            const content = await file.text();
+            const lines = content.split('\\n');
+            const apis = {};
+            
+            // Regex patterns to match PHP file references
+            const patterns = [
+                /url\s*:\s*["'](?:\.\.\/)?php\/([^"']+\.php)["']/gi,
+                /\$\.(?:post|get|ajax)\s*\(\s*["'](?:\.\.\/)?php\/([^"']+\.php)["']/gi,
+                /fetch\s*\(\s*["'](?:\.\.\/)?php\/([^"']+\.php)["']/gi
+            ];
+            
+            lines.forEach((line, index) => {
+                const lineNum = index + 1;
+                
+                patterns.forEach(pattern => {
+                    pattern.lastIndex = 0; // Reset regex
+                    let match;
+                    while ((match = pattern.exec(line)) !== null) {
+                        const phpFile = match[1];
+                        if (!apis[phpFile]) {
+                            apis[phpFile] = [];
+                        }
+                        if (!apis[phpFile].includes(lineNum)) {
+                            apis[phpFile].push(lineNum);
+                        }
+                    }
+                });
+            });
+            
+            // Convert to array format
+            return Object.keys(apis).map(phpFile => ({
+                name: phpFile,
+                lines: apis[phpFile].sort((a, b) => a - b)
+            }));
+        }
+        
+        function displayResults() {
+            const output = document.getElementById('output');
+            output.textContent = JSON.stringify(scannedData, null, 2);
+            document.getElementById('progress').innerHTML = 
+                `<strong>✅ Complete!</strong> Found ${scannedData.length} JavaScript files with API calls. 
+                Total APIs: ${scannedData.reduce((sum, item) => sum + item.apis.length, 0)}`;
+        }
+        
+        function copyToClipboard() {
+            if (scannedData.length === 0) {
+                alert('No data to copy. Please scan files first!');
+                return;
+            }
+            
+            const jsonText = JSON.stringify(scannedData, null, 2);
+            navigator.clipboard.writeText(jsonText).then(() => {
+                alert('✅ JSON copied to clipboard!');
+            });
+        }
+        
+        function downloadJSON() {
+            if (scannedData.length === 0) {
+                alert('No data to download. Please scan files first!');
+                return;
+            }
+            
+            const jsonText = JSON.stringify(scannedData, null, 2);
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'js_php_api_with_lines.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

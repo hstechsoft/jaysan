@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  <style>
+     .custom-fixed-table {
+        height: 400px; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .custom-fixed-table table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .custom-fixed-table th, 
+    .custom-fixed-table td {
+        width: 10vw; /* Fixed width for all cells */
+        word-wrap: break-word;
+    }
+    .custom-fixed-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    .custom-fixed-table tbody tr.fixed-row td {
+        position: sticky;
+        top: 38px;
+        background-color: #ffffff;
+        z-index: 5;
+    }
+</style>
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+<div class="container-fluid ">
+    <!-- top bar -->
+
+    <div class="modal fade" id="machine_modal" tabindex="-1" aria-labelledby="addNewProcessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewProcessModalLabel">Add New Laser Machine</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="">
+                        <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='machine'><span>
+                            machine 
+                            </span>
+                            </label>
+                            <input id='machine' type='text' class='form-control'  >
+                            </div>
+                        <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='Running cost'><span>
+                            Running cost /Hour
+                            </span>
+                            </label>
+                            <input id='Running cost' type='text' class='form-control'  >
+                            </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <table id='machine_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+                            <thead >
+                            <tr>
+                            
+                            <th colspan='4' scope='col' class='bg-info bg-opacity-25'>Laser Machine</th>
+                            
+                            </tr>
+                            
+                            <tr>
+                            
+                             <th scope='col'># </th>
+                           <th scope='col'>Machine</th>
+                           <th scope='col'>Cost</th>
+                           <th scope='col'>Update</th>
+                           
+                            
+                            </tr>
+                            </thead>
+                            <tbody class='align-middle ' id='machine_table'>
+                            <td>1</td>
+                            <td>laser</td>
+                            <td contenteditable="true">1500</td>
+                            <td><button class="btn btn-primary">ok</button></td>
+                            </tbody>
+                            </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    <div class="modal fade" id="sample_modal" tabindex="-1" aria-labelledby="addNewProcessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewProcessModalLabel">Add New Process</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNewProcessForm">
+                        <div class='input-group mb-2'>
+                            <div class='input-group-prepend '>
+                            <span class='input-group-text ' id='basic-addon1'>
+                            sample </span>
+                            
+                            </div> 
+                            <select class='custom-select form-control' id='sample'>
+                           <option value='0' selected>Choose Options...</option>
+                           <option value='Updated Sample'>Updated Sample</option>
+                           <option value=' Production Sample'> Production Sample</option>
+                           <option value='Sample'>Sample</option>
+                           
+                            
+                            </select>
+                            </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal fade" id="group_modal" tabindex="-1" aria-labelledby="addNewProcessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewProcessModalLabel">Add New group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNewProcessForm">
+                        <div class="d-flex justify-content-center  ">
+                            <div class='input-group mb-2'> 
+                                <label class='input-group-text' for='process part'><span>
+                           Group  Name
+                                </span>
+                                </label>
+                                <input id='process part' type='text' class='form-control'  >
+                                </div>
+                    
+                               
+                        </div>
+                        <button class="btn btn-success ">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+   
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+<div class="card">
+    <div class="card-header">
+        Welding Creation
+    </div>
+<div class="card-body">
+<div class="row row-cols-2">
+    <div class="col">
+        <div class='input-group mb-2'> 
+        <label class='input-group-text' for='product'><span>
+        product 
+        </span>
+        </label>
+        <input id='product' type='text' class='form-control' value="baler"  >
+        </div>
+        </div>
+
+        <div class="col">
+            <div class='input-group mb-2'> 
+            <label class='input-group-text' for='modal'><span>
+            modal 
+            </span>
+            </label>
+            <input id='modal' type='text' class='form-control' value="jrb312" >
+            </div>
+            </div>
+
+         
+            <div class="col">
+            <div class='input-group mb-2'> 
+            <label class='input-group-text' for='modal'><span>
+        Work Department
+            </span>
+            </label>
+            <input id='modal' type='text' class='form-control' >
+            </div>
+            </div>
+
+  
+
+
+
+        </div>
+<div class="card">
+<div class="card-header">
+Group
+</div>
+<div class="card-body">
+  <div class="col">
+                <div class='input-group mb-2'> 
+                <label class='input-group-text' for='modal'><span>
+       Group Name
+                </span>
+                </label>
+                <input id='modal' type='text' class='form-control' >
+                </div>
+                </div>
+
+             
+        <div class="card border-warning  ">
+            <div class="card-header">
+      Output Part
+        </div>
+         <div class="card-body">
+         <div class="d-flex justify-content-center gap-2">
+          <div class="col">
+                <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='sub-category'><span>
+                        Output Part
+                            </span>
+                            </label>
+                            <input id='sub-category' type='text' class='form-control'  >
+                            </div>
+                </div>
+
+                <div class="col">
+                <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='sub-category'><span>
+                        Output Process name
+                            </span>
+                            </label>
+                            <input id='sub-category' type='text' class='form-control'  >
+                            </div>
+                </div>
+                <div class="col">
+                    <div class='input-group mb-2'> 
+                                <label class='input-group-text' for='sub-category'><span>
+                        Qty
+                                </span>
+                                </label>
+                                <input id='sub-category' type='text' class='form-control'  >
+                                </div>
+                    </div>
+         </div>
+            
+<div class="card border-dark  ">
+    <div class="card-header">
+      Sub group
+        </div>
+         <div class="card-body">
+            <div class=" ">
+    <div class="d-flex justify-content-between gap-2">
+     <div class="col">
+            <div class='input-group mb-2'> 
+            <label class='input-group-text' for='modal'><span>
+    Sub Group
+            </span>
+            </label>
+            <input id='modal' type='text' class='form-control' >
+            </div>
+            </div>
+            <div class="my-auto">
+                <button type="button" name="" id="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
+            
+                        </div>
+            
+            <div class="d-flex gap-1"> 
+
+   <div class='input-group mb-2'>
+                            <div class='input-group-prepend '>
+                            <span class='input-group-text ' id='basic-addon1'>
+                            Machine  </span>
+                            
+                            </div> 
+                            <select class='custom-select form-control' id='sample'>
+                           <option value='0' selected>Choose Options...</option>
+                           <option value='Updated Sample'>Welding 1</option>
+                           <option value=' Production Sample'> Welding 2</option>
+                           <option value='Sample'>Welding 3</option>
+                           
+                            
+                            </select>
+                            </div>
+            
+            <div class="my-auto">
+    <button type="button" name="" id="" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+            </div>
+
+            </div>
+    </div>
+
+ 
+       <p class="mark small ">may be its in machine page</p>
+    <div class="d-flex justify-content-center">
+ 
+     <div class="col">
+            <div class='input-group mb-2'> 
+            <label class='input-group-text' for='modal'><span>
+Min Time
+            </span>
+            </label>
+            <input id='modal' type='text' class='form-control' >
+            </div>
+            </div>
+
+               <div class="col">
+            <div class='input-group mb-2'> 
+            <label class='input-group-text' for='modal'><span>
+Max Time
+            </span>
+            </label>
+            <input id='modal' type='text' class='form-control' >
+            </div>
+            </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2">
+        <div class='input-group mb-2'> 
+        <label class='input-group-text' for='part'><span>
+        part 
+        </span>
+        </label>
+        <input id='part' type='text' class='form-control'  >
+        </div> 
+
+        <div class='input-group mb-2'> 
+            <label class='input-group-text' for='qty'><span>
+            qty 
+            </span>
+            </label>
+            <input id='qty' type='text' class='form-control'  >
+            </div>
+<div>
+
+    <button type="button" name="" id="" class="btn btn-primary btn-sm">Add</button>
+</div>
+        </div>
+<div class="d-flex justify-content-center gap-2">
+    <div class="col">
+        <div class='input-group mb-2'>
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' id='basic-addon1'>
+            work type </span>
+            
+            </div> 
+            <select class='custom-select form-control' id='work type'>
+           <option value='0' selected>Choose Options...</option>
+           <option value='welding'>welding</option>
+           <option value='assembly'>assembly</option>
+           <option value='grinding'>grinding</option>
+           
+            
+            </select>
+            </div>
+       </div>
+
+       <div>
+
+        <button type="button" name="" id="" class="btn btn-primary btn-sm">Add</button>
+    </div>
+</div>
+  
+ 
+<div class="d-flex justify-content-center gap-2">
+     <table id='parts_tbl1' class='table table-bordered border-dark border-opacity-50 text-center table-sm w-25' >
+ <thead >
+ <tr class="small">
+ 
+ <th colspan='5' scope='col' class='bg-info bg-opacity-25'>Parts</th>
+ 
+ </tr>
+ 
+ <tr class="small">
+ 
+  <th scope='col'>#</th>
+<th scope='col'>part</th>
+<th scope='col'>qty</th>
+<th scope='col'>Edit</th>
+<th scope='col'>Delete</th>
+
+ 
+ </tr>
+ </thead>
+ <tbody class='align-middle small' id='parts_tbl'>
+ <tr>
+    <td>1</td>
+    <td>4mm Roller Cup</td>
+    <td>2</td>
+ 
+    <td><button class="btn btn-outline-danger border-0"> <i class="bi bi-pencil-square"></i></button></td>
+    <td> <button class="btn btn-outline-danger border-0"> <i class="bi bi-trash"></i></button></td>
+   
+    </tr>
+ </tbody>
+ </table>
+
+ <table id='parts_tbl1' class='table table-bordered border-dark border-opacity-50 text-center table-sm w-25' >
+    <thead >
+    <tr class="small">
+    
+    <th colspan='5' scope='col' class='bg-info bg-opacity-25'>Process</th>
+    
+    </tr>
+    
+    <tr class="small">
+    
+     <th scope='col'>#</th>
+   <th scope='col'>Process</th>
+  
+   <th scope='col'>Edit</th>
+   <th scope='col'>Delete</th>
+   
+    
+    </tr>
+    </thead>
+    <tbody class='align-middle small' id='parts_tbl'>
+    <tr>
+       <td>1</td>
+       <td>Welding</td>
+ 
+    
+       <td><button class="btn btn-outline-danger border-0"> <i class="bi bi-pencil-square"></i></button></td>
+       <td> <button class="btn btn-outline-danger border-0"> <i class="bi bi-trash"></i></button></td>
+      
+       </tr>
+       <tr>
+        <td>2</td>
+        <td>grinding</td>
+  
+     
+        <td><button class="btn btn-outline-danger border-0"> <i class="bi bi-pencil-square"></i></button></td>
+        <td> <button class="btn btn-outline-danger border-0"> <i class="bi bi-trash"></i></button></td>
+       
+        </tr>
+    </tbody>
+    </table>
+</div>
+   
+                  
+</div>
+            </div>
+            <div class="card-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+
+        
+             <table id='output_table1' class='table table-bordered border-dark border-opacity-50 text-center small table-sm ' >
+ <thead >
+ <tr>
+ 
+ <th colspan='6' scope='col' class='bg-info bg-opacity-25 small'>Output Part</th>
+ 
+ </tr>
+ 
+ <tr class="small">
+ 
+  <th scope='col'>#</th>
+<th scope='col'>part</th>
+<th scope='col'>qty</th>
+<th scope='col'>subgroup</th>
+<th scope='col'>edit</th>
+<th scope='col'>delete</th>
+
+ 
+ </tr>
+ </thead>
+ <tbody class='align-middle small' id='output_table'>
+ 
+   <tr>
+   <td>1</td>
+    <td>4mm Roller Cup</td>
+    <td>2</td>
+    <td rowspan="3">cup group</td>
+   <td  rowspan="3"><button class="btn btn-outline-danger border-0"> <i class="bi bi-pencil-square"></i></button></td>
+    <td  rowspan="3"> <button class="btn btn-outline-danger border-0"> <i class="bi bi-trash"></i></button></td>
+  
+ </tr>
+   <tr>
+   <td>2</td>
+    <td>Rod</td>
+    <td>1</td>
+  
+ 
+ </tr>
+   <tr>
+   <td>3</td>
+    <td>Pipe</td>
+    <td>10</td>
+  
+  
+ </tr>
+ </tbody>
+ </table>
+            </div>
+
+
+  <div class="card-footer d-flex justify-content-center">
+      <button type="button" class="btn btn-success">Submit</button>
+    </div>
+            </div>
+
+         <table id='output_table1' class='table table-bordered border-dark border-opacity-50 text-center small table-sm ' >
+ <thead >
+ <tr>
+ 
+ <th colspan='8' scope='col' class='bg-info bg-opacity-25 small'>Group </th>
+ 
+ </tr>
+ 
+ <tr class="small">
+ 
+  <th scope='col'>#</th>
+   
+  <th scope='col'>Output Part</th>
+   
+  <th scope='col'>Output Process</th>
+<th scope='col'>part</th>
+<th scope='col'>qty</th>
+<th scope='col'>subgroup</th>
+<th scope='col'>edit</th>
+<th scope='col'>delete</th>
+
+ 
+ </tr>
+ </thead>
+ <tbody class='align-middle small' id='output_table'>
+ 
+   <tr>
+   <td>1</td>
+   <td  rowspan="15">Main roller</td>
+     <td  rowspan="15">Welding Main</td>
+    <td>4mm Roller Cup</td>
+    <td>2</td>
+    <td rowspan="3">cup group</td>
+   <td rowspan="15"><button class="btn btn-outline-danger border-0"> <i class="bi bi-pencil-square"></i></button></td>
+    <td rowspan="15"> <button class="btn btn-outline-danger border-0"> <i class="bi bi-trash"></i></button></td>
+  
+ </tr>
+   <tr>
+   <td>2</td>
+    <td>Rod</td>
+    <td>1</td>
+  
+   
+ </tr>
+   <tr>
+   <td>3</td>
+    <td>Pipe</td>
+    <td>10</td>
+ 
+ </tr>
+
+  <tr>
+   <td>4</td>
+  
+    <td>gujet</td>
+    <td>2</td>
+    <td rowspan="3">Rod group</td>
+   
+ </tr>
+   <tr>
+   <td>5</td>
+    <td>stippner</td>
+    <td>1</td>
+ 
+ </tr>
+   <tr>
+   <td>6</td>
+    <td>scale</td>
+    <td>10</td>
+ 
+ </tr>
+ </tbody>
+ </table>
+
+</div>
+  <div class="card-footer d-flex justify-content-center">
+      <button type="button" class="btn btn-danger">Submit</button>
+    </div>
+</div>
+
+
+
+ <table id='welding_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+    <thead >
+    <tr>
+    
+   
+    <tr> <td colspan="10" class="text-bg-warning">Final Output </td></tr>
+    </tr>
+    
+    <tr class="small">
+    
+     <th scope='col'>#</th>
+   <th scope='col'>Output Part</th>
+   <th scope='col'>Tally Process Name</th>
+   <th scope='col'>part</th>
+   <th scope='col'>Qty</th>
+   
+   <th scope='col'> tracking</th>
+   <th scope='col'>Group</th>
+   <th scope='col'>Department</th>
+    
+    </tr>
+    </thead>
+    <tbody class='align-middle small' id='welding_table'>
+        
+        <tr>
+            <td>1</td>
+            <td rowspan="5">Main roller -6</td>
+            <td rowspan="5">Main roller welding</td>
+            <td>4mm Roller Cup</td>
+            <td>2</td>
+            <td rowspan="3">cup group</td>
+       
+         <td rowspan="15">Roller</td>
+         <td rowspan="15">Welding</td>
+            <tr><td>2</td>
+                <td>rod</td>
+                <td>1</td>
+               </tr>
+               <tr><td>3</td>
+                <td>gujet</td>
+                <td>6</td>
+              
+               </tr>
+               <tr><td>4</td>
+                <td>pipe</td>
+                <td>1</td>
+                <td rowspan="1">Pipe group</td>
+               </tr>
+               <tr><td>5</td>
+                <td>stippner</td>
+                <td>6</td>
+                <td rowspan="1">Stippner Group</td>
+               </tr>
+
+               <tr><td>1</td>
+                
+                <td rowspan="5">Medium Roller -12</td>
+                <td rowspan="5">Medium Roller -weldiong</td>
+                <td>4mm Roller Cup</td>
+                <td>2</td>
+                <td rowspan="3">cup group</td>
+            
+           
+                <tr><td>2</td>
+                    <td>rod</td>
+                    <td>1</td>
+                   </tr>
+                   <tr><td>3</td>
+                    <td>gujet</td>
+                    <td>6</td>
+                  
+                   </tr>
+                   <tr><td>4</td>
+                    <td>pipe</td>
+                    <td>1</td>
+                    <td rowspan="1">Pipe group</td>
+                   </tr>
+                   <tr><td>5</td>
+                    <td>stippner</td>
+                    <td>6</td>
+                    <td rowspan="1">Stippner Group</td>
+                   </tr>
+                   <tr><td>1</td>
+                    <td rowspan="5">Motta Roller -6</td>
+                    <td rowspan="5">Motta Roller welding</td>
+                    <td>4mm Roller Cup</td>
+                    <td>2</td>
+                    <td rowspan="3">cup group</td>
+                 
+               
+                    <tr><td>2</td>
+                        <td>rod</td>
+                        <td>1</td>
+                       </tr>
+                       <tr><td>3</td>
+                        <td>gujet</td>
+                        <td>6</td>
+                      
+                       </tr>
+                       <tr><td>4</td>
+                        <td>pipe</td>
+                        <td>1</td>
+                        <td rowspan="1">Pipe group</td>
+                       </tr>
+                       <tr><td>5</td>
+                        <td>stippner</td>
+                        <td>6</td>
+                        <td rowspan="1">Stippner Group</td>
+                       </tr>
+  
+               
+    </tbody>
+    </table>  
+
+       
+    </div>
+   
+                </div>
+    </div>
+    
+
+      
+          
+         
+
+
+
+
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+</div>
+
+
+       
+    
+
+
+<!-- content -->
+
+
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+<l
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/welding_master.js" type="module"></script>
+<!-- <script src="js/menu.js" type="module"></script> -->
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

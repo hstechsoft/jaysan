@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update glusr_crm_key</title>
+</head>
+<body>
+
+<?php
+// Define the path to the key file
+$key_file = 'php/glusr_crm_key.txt';
+
+// Initialize the variable to hold the current key
+$current_key = '';
+
+// Check if the key file exists and read its contents
+if (file_exists($key_file)) {
+    $current_key = trim(file_get_contents($key_file));
+}
+?>
+
+<h2>Update glusr_crm_key</h2>
+<form action="php/update_key.php" method="post">
+    <label for="glusr_crm_key">glusr_crm_key:</label><br><br>
+    <input type="text" id="glusr_crm_key" name="glusr_crm_key" value="<?php echo htmlspecialchars($current_key); ?>"><br><br>
+    <input type="submit" value="Update Key">
+</form>
+
+</body>
+</html>

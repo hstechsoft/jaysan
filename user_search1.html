@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+ 
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+</head>
+<body>
+ 
+ 
+ 
+<div class="container-fluid p-0 m-0 d-none d-sm-block ">
+    <!-- top bar -->
+    <section id="top_bar">
+        <div class=" d-flex justify-content-between align-items-center bgu p-1" >
+
+            <div>
+                <h5>Welcome User</h5>
+            </div>
+
+            <div>
+             
+              <div class="dropdown">
+                <button class="btn   text-white dropdown-toggle border-0 " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">  
+                  
+                  <h5 class="d-inline text-center  me-3" id="unamed"> Harishkumar</h5>
+                    <i class="fa-regular fa-circle-user h2 me-2"></i>
+                </button>
+                <ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1 ">
+                  <li><a class="dropdown-item " href="#"> <i class="fa-regular fa-id-badge me-2"></i> Profile</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fa-solid fa-key me-2"></i>Modify Password</a></li>
+                  <li><a class="dropdown-item" href="login.html"><i class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+                </ul>
+              </div>
+            </div>
+           
+        </div>
+    </section>
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+    <nav class="navbar py-3 navbar-expand-sm shadow rounded rounded-3 ">
+        <div class="container-fluid">
+  
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+  
+                <a class="nav-link " aria-current="page" href="user_index.html">
+                  <span class="ms-2">
+                    <i class='fa-solid fa-home '></i>
+                  </span>
+                  Home</a>
+              </li>
+
+              <li class="nav-item">
+  
+                <a class="nav-link active" aria-current="page" href="#">
+                  <span class="ms-2">
+                    <i class="fa-solid fa-headset"></i>
+                  </span>
+                  Calls</a>
+              </li>
+
+  
+              <li class="nav-item">
+  
+                <a class="nav-link " aria-current="page" href="create_customer.html">
+                  <span class="ms-2">
+                    <i class="fa-solid fa-user"></i>
+                  </span>
+                  Customer</a>
+              </li>
+
+              <li class="nav-item">
+  
+                <a class="nav-link " aria-current="page" href="create_work.html">
+                  <span class="ms-2">
+                    <i class="fa-solid fa-briefcase"></i>
+                  </span>
+                  Work</a>
+              </li>
+             
+
+              <li class="nav-item">
+  
+                <a class="nav-link" aria-current="page" href="user_report.html">
+                  <span class="ms-2">
+                    <i class="fa-regular fa-clipboard"></i>
+                  </span>
+                  Report</a>
+              </li>
+
+            
+           
+              
+  
+  
+  
+  
+  
+  
+           
+            </ul>
+  
+          </div>
+        </div>
+      </nav>
+</section>
+
+<div class="modal" id="cus_info_model">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Customer Info</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-header text-center text-bg-success ">
+            Update Customer
+          </div>
+
+      
+          <div class="card-body" >
+              <div class="input-group mb-3">
+                
+                    <label class="input-group-text" for="new_cus_text"><span>
+                      <i class="fa-solid fa-user h6"></i>
+                    </span>
+              </label>
+               
+                  
+                  <input id="new_cus_text" type="text" class="form-control" placeholder="customer Name" aria-label="Username" aria-describedby="basic-addon1" >
+                  
+                </div>
+
+                <div class="input-group mb-3 ">
+                
+                   
+                  <label class="input-group-text" for="new_cus_phone_text"><span>
+                    <i class="fa-solid fa-phone h6"></i>
+                  </span>
+                  
+                </label>
+               
+                <input id="new_cus_phone_text" type="text" class="form-control" placeholder="Phone No" aria-label="Username" aria-describedby="basic-addon1" >
+               
+                
+               
+              </div>
+            
+              <div class="input-group mb-3">
+                
+                   
+                  <label class="input-group-text" for="new_cus_addr_text"><span>
+                    <i class="fa-solid fa-envelope h6"></i>
+                  </span>
+                  
+                </label>
+             
+                
+                <input id="new_cus_addr_text" type="text" class="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1" >
+                
+              </div>
+              <div class="input-group mb-3">
+                
+                   
+                  <label class="input-group-text" for="new_cus_seg_text"><span>
+                    <i class="fa-solid fa-edit h6"></i>
+                  </span>
+                  
+                </label>
+             
+                
+                <input id="new_cus_seg_text" type="text" class="form-control" placeholder="Segment" aria-label="Username" aria-describedby="basic-addon1" >
+                
+              </div>
+                
+
+              
+
+              
+
+
+
+              <div class="input-group mt-3">
+             
+
+                <label class="input-group-text" for="new_cus_location_text"><span>
+                  <i class="fa-solid fa-location-dot h6"></i>
+                </span></label>
+
+
+                <input id="new_cus_location_text" type="text" class="form-control" placeholder="customer map location" aria-label="Username" aria-describedby="basic-addon1" > 
+                
+                <button class="btn btn-outline-primary" type="button"  ><span>
+                  
+                  <a href="https://www.google.com/maps" class="stretched-link" target="_blank">map</a>
+                </span></button>
+              </div>
+             
+               
+          </div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-between align-content-center">
+
+               
+      
+
+        <div>
+          <button class="btn btn-primary" id="cus_submit_btn" type="button">Update</button>
+        
+        </div>
+      </div>
+
+    </div>
+         
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container w-25" id="no_work_show">
+  <img src="img/nowork.avif" class="img-thumbnail" alt="Responsive image">
+
+  <h6 class="text-center">All Work Finished</h6>
+</div>
+
+
+
+<div class="modal" id="sv_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Site Visit Report</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="d-flex align-items-center justify-content-center">
+          <div class="col-12 ">
+           
+              <div class="card">
+                  <div class="card-header text-center text-bg-primary ">
+                   Site Visit
+                  </div>
+      
+              
+                  <div class="card-body">
+      
+                      <div class="input-group mb-3">
+                            <label class="input-group-text" for="industry_type_txt"><span>
+                              <i class="fa-solid fa-industry h6"></i>
+                            </span>
+                          </label>
+                          <input id="industry_type_txt" type="text" class="form-control" placeholder="Type of Industry" aria-label="Username" aria-describedby="basic-addon1" >
+                        </div>
+                        
+      
+                        <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_no_txt"><span>
+                              <i class="fa-solid fa-clipboard h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_no_txt" type="text" class="form-control" placeholder="EB Number" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_reg_no_txt"><span>
+                              <i class="fa-solid fa-phone h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_reg_no_txt" type="text" class="form-control" placeholder="EB Reg Number" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_amount_txt"><span>
+                              <i class="fa-solid fa-wallet h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_amount_txt" type="text" class="form-control" placeholder="EB Billing Amount" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_tariff_txt"><span>
+                              <i class="fa-solid fa-clipboard h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_tariff_txt" type="text" class="form-control" placeholder="EB Tariff Details" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_san_load_txt"><span>
+                              <i class="fa-solid fa-clipboard h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_san_load_txt" type="text" class="form-control" placeholder="EB Sanctioned Load" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="eb_tri_load_txt"><span>
+                              <i class="fa-solid fa-clipboard h6"></i>
+                          </span>
+                        </label>
+                        <input id="eb_tri_load_txt" type="text" class="form-control" placeholder="Triples Recommend Load" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="type_ins_txt"><span>
+                              <i class="fa-solid fa-clipboard h6"></i>
+                          </span>
+                        </label>
+                        <input id="type_ins_txt" type="text" class="form-control" placeholder="Type of Installtion" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="p2p_dis_txt"><span>
+                              <i class="fa-solid fa-tape h6"></i>
+                          </span>
+                        </label>
+                        <input id="p2p_dis_txt" type="text" class="form-control" placeholder="Purling to Purling Distance" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="total_mea_txt"><span>
+                              <i class="fa-solid fa-tape h6"></i>
+                          </span>
+                        </label>
+                        <input id="total_mea_txt" type="text" class="form-control" placeholder="Total Area Measurement" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="shift_txt"><span>
+                              <i class="fa-regular fa-clock h6"></i>
+                          </span>
+                        </label>
+                        <input id="shift_txt" type="text" class="form-control" placeholder="Shift Operation Timing" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                      
+                      <div class="input-group mb-3">
+                          <label class="input-group-text" for="fund_txt"><span>
+                              <i class="fa-solid fa-briefcase h6"></i>
+                          </span>
+                        </label>
+                        <input id="fund_txt" type="text" class="form-control" placeholder="Funding Details" aria-label="Username" aria-describedby="basic-addon1" >
+                      </div>
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="company_photo_up">
+                              <label class="input-group-text" for="company_photo_up">Company</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="company_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="vc_photo_up">
+                              <label class="input-group-text" for="vc_photo_up">Visiting card</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="vc_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="roof_photo_up">
+                              <label class="input-group-text" for="roof_photo_up">Roof</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="roof_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="ge_photo_up">
+                              <label class="input-group-text" for="ge_photo_up">Google Earth</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="ge_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="hs_photo_up">
+                              <label class="input-group-text" for="hs_photo_up">Hand Sketch</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="hs_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="site_photo_up">
+                              <label class="input-group-text" for="site_photo_up">site</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="site_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+      
+                  <div class="card my-2">
+                      <div class="card-header m-0 p-0">
+                          <div class="input-group">
+                              <input type="file" class="form-control" id="ep_photo_up">
+                              <label class="input-group-text" for="ep_photo_up">Evocation Point</label>
+                            </div>
+                      </div>
+      
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="ep_photo_preview" class="img-fluid"  style="width: 10rem;" src="" alt>
+                      </div>
+                  </div>
+      
+                     
+      
+                  <div class="input-group mb-3">
+                      <label class="input-group-text" for="cus_rating_txt"><span>
+                          <i class="fa-solid fa-star h6"></i>
+                      </span>
+                    </label>
+                    <input id="cus_rating_txt" type="text" class="form-control" placeholder="Customer  Rating" aria-label="Username" aria-describedby="basic-addon1" >
+                  </div>
+      
+                      
+                  <div class="input-group mb-3">
+                      <label class="input-group-text" for="remark_txt"><span>
+                          <i class="fa-solid fa-edit h6"></i>
+                      </span>
+                    </label>
+                    <input id="remark_txt" type="text" class="form-control" placeholder="Remarks" aria-label="Username" aria-describedby="basic-addon1" >
+                  </div>
+                     
+      
+      
+                        
+      
+      
+      
+      <div class="d-flex justify-content-center mt-3">
+        <button type="button" id="create_sv_btn" class="btn btn-primary" type="submit">Submit</button>
+      </div>
+                       
+                  </div>
+            
+                 
+                </div>
+            
+          </div>
+      </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="pwork_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Create Task</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="card">
+        
+
+      
+          <div class="card-body">
+            
+                
+
+              
+                <div class="input-group my-3 ">
+                  
+                  <label class="input-group-text" for="pwork_date"><span>
+                    <i class="fa-solid fa-calendar-days h6"></i>
+                  </span></label>
+                  
+                  <input type="datetime-local" id="pwork_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+                  <div class="invalid-feedback "><h6 class="small">Please Enter date</h6></div>
+               
+                </div>
+                <select class="form-select" id="sel_usr_in">
+                  <option selected value="0">Select User</option>
+                
+                </select>
+
+                <div class="input-group mt-3 ">
+                
+
+                  <textarea class="form-control" id="work_textbox" placeholder="Work Description"  rows="2" ></textarea>
+  
+                 
+                 
+                
+                </div>
+
+
+                <div class="mt-3">
+                  
+                  <input class="form-control" type="file" id="work_attachment" multiple  accept="image/*;capture=camera">
+                </div>
+
+                <div class="input-group mt-3">
+                 
+
+                  <label class="input-group-text" for="work_location_textbox"><span>
+                    <i class="fa-solid fa-location-dot h6"></i>
+                  </span></label>
+
+
+                  <input id="work_location_textbox" type="text" class="form-control" placeholder="place link" aria-label="Username" aria-describedby="basic-addon1" > 
+                  
+                  <button class="btn btn-outline-primary" type="button" target="_blank" ><span>
+                    
+                    <a href="https://www.google.com/maps" target="_blank">map</a>
+                  </span></button>
+                </div>
+
+<div class="d-flex justify-content-center mt-3">
+<button type="button" id="create_work_btn" class="btn btn-primary" type="submit">Submit</button>
+</div>
+               
+          </div>
+    
+         
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- content -->
+
+
+<section id="work_show">
+ <div class="container-fluid justify-content-between d-flex border border-1 shadow">
+  
+  <button type="button" id="call_sv_report"  class="btn btn-outline-success border-0 " >
+    <i class="fa-regular fa-clipboard h4"></i>
+    </button>
+
+    <button type="button" id="call_wat_btn"  class="btn btn-outline-success border-0 " >
+   <i class="fa-brands fa-whatsapp h4"></i>
+      </button>
+  
+ 
+ </div>
+<div class="container-fluid mt-3 px-5 bg-success bg-opacity-10 " >
+  <div class="row d-flex justify-content-around align-items-center  ">
+
+    <div class="col-4 ">
+  
+      <table class="table table-responsive table-borderless text-start  table-sm">
+     
+        <tbody>
+          <tr>
+           
+            <td class="h4 text-danger" id=""> <span><i class="fa-regular fa-user me-1"></i>   <span id="cus_name"></span>  </span><span><button id="cus_update_btn" class="btn btn-outline-secondary btn-sm border-0"><i class="fa fa-pencil"></i></button></span>  </span></td>
+        
+          </tr>
+          <tr>
+           
+            <td class="h4 text-danger" id=""> <span><i class="fa-solid fa-phone me-1"></i>   <span id="cus_phone"></span>  </span></td>
+        
+          </tr>
+         
+        </tbody>
+      </table>
+      
+</div>
+
+
+<div class="col-4  border-dark  p-3 text-center ">
+ <h6 id="tstatus"></h6>
+</div>
+
+
+<div class="col-4 ">
+  
+  <table class="table table-responsive table-borderless text-end  table-sm">
+     
+    <tbody>
+      <tr>
+       
+        <td class="h5 text-danger"><span id="tsegment"> </span> </td>
+    
+      </tr>
+      <tr>
+       
+        <td class="h6 text-danger ps-3">  <span id="cus_address"> </span> </td>
+    
+    
+    
+      </tr>
+     
+    </tbody>
+  </table>
+  
+</div>
+  </div>
+</div>
+
+
+<!-- <div class="border-bottom border-dark  border-opacity-75 mx-4 my-2"></div> -->
+
+<div class="container-fluid mt-3 mx-0 ">
+  
+  <div class="row  d-flex justify-content-between">
+
+    <div class="col-4 ">
+    <div class="card m-0 p-0">
+      <div class="card-body m-0 p-0 work_class">
+        <table class="table table-responsive table-bordered  border-dark  table-hover border-opacity-50 work_class">
+          <thead class="text-center bg-info bg-opacity-25" id="lead_header">
+            <tr>
+            
+              <th  colspan="2" scope="col">Info</th>
+            
+            </tr>
+          </thead>
+          
+          <tbody id="lead_table_body">
+           
+
+            <tr >
+              <td >Lead  On </td>
+          
+              <td class="h6" id="tlead_att_on"></td>
+          
+            </tr>
+            <tr>
+              <td>Lead Source</td>
+              
+              <td class="h6" id="tlead_source"></td>
+          
+          
+            </tr>
+  
+            <tr>
+              <td>Lead  by</td>
+              
+              <td class="h6" id="tlead_att_by"></td>
+          
+          
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div> 
+     
+
+      <div class="card border-0 overflow-hidden">
+        <div class="card-header  py-2 d-flex  justify-content-between align-items-center bg-info bg-opacity-75" id="work_table_header">
+         
+            <h6 class="fw-bold m-0 p-0">Works</h6>
+           <p class="bg-danger rounded rounded-pill m-0 p-0">
+            <span class="badge" id="total_works">
+              0</span>
+            </p>
+           
+          
+         
+
+
+        </div>
+<div class="card-body m-0 p-0 work_class">
+   <table id="work_table1" class="  table table-bordered table-hover border-dark border-opacity-50 text-center" >
+        
+          <tbody  id="work_table" class="">
+
+           
+          </tbody>
+        </table>
+      
+</div>
+      </div>
+    
+    
+</div>
+
+
+<div class="col-4">
+  <div class="card  rounded rounded-4 bg-info bg-opacity-75 p-2 text-dark ">
+   
+    <div class="card-body ">
+      
+        
+        <form  id="login_register" class="needs-validation "  novalidate>
+            
+          <div class="d-flex justify-content-between ">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend  ">
+                <span class="input-group-text " id="basic-addon1">
+                <i class="fa-solid fa-clipboard-check h5"></i> </span>
+                  
+              </div>   
+              <select class="custom-select  form-control" id="status_in">
+                
+            
+              </select>
+            </div>
+<div>
+  <button type="button" id="call_new_work_btn"  class="btn btn-primary border-0" >
+    <i class="fa-solid fa-plus h6"></i>
+    </button>
+</div>
+           
+          </div>
+        
+          <div class="d-flex justify-content-between gap-1">
+            <div class="mb-3">
+          
+              <input class="form-control" type="file" id="status_upload">
+
+            </div>
+<div class="mb-3">
+  
+  <input type="text" class="form-control" id="status_upload_name" placeholder="File name">
+</div>
+          </div>
+
+              <div class="input-group mb-2 ">
+                  
+
+                <textarea class="form-control" id="remarks_in" placeholder="Remarks"  rows="2" ></textarea>
+
+               
+               
+              
+              </div>
+
+
+              <div class="input-group mb-2 " id="sdate_in_full">
+                <div class="input-group-prepend  ">
+                  <span class="input-group-text " id="basic-addon1">
+                    <i class="fa-solid fa-calendar-days h5"></i> </span>
+                    
+                </div>   
+                <input type="datetime-local" id="sdate_in"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+                <div class="invalid-feedback "><h6 class="small">Please Enter date</h6></div>
+             
+              </div>
+
+
+              
+         
+
+           
+
+
+          
+
+          <div class="container d-flex justify-content-between mt-4 mb-2 ">
+           
+
+                <button id="web_call_btn" type="button"  class="btn btn-outline-danger  rounded-circle btn-lg">
+                  <i class="fa-solid fa-phone"></i>
+                  </button>
+
+            <button id="call_btn" type="button"  class="btn btn-primary">
+              <i class="fa-regular fa-paper-plane pe-1"></i>
+                Submit</button>
+
+               
+          </div>
+
+        </form>
+
+
+        
+    </div>
+  </div>
+</div>
+
+
+<div class="col-4 table-responsive " id="his_table">
+  <div>
+    <table id="history_table" class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">Work  History</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Comments</th>
+        
+        </tr>
+      </thead>
+      <tbody class="align-middle" id="thist">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+  
+  <div class=" table-responsive" id="work_schdule_table" >
+    
+    <table class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">SIte Visit Work</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Location</th>
+        
+        </tr>
+      </thead>
+      <tbody class="" id="site_work_table">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+  
+
+  <div class=" table-responsive" id="work_schdule_table_all" >
+    
+    <table class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">Site Visit Work - All</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Employee</th>
+          <th scope="col">Location</th>
+        
+        </tr>
+      </thead>
+      <tbody class="" id="site_work_table_all">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+</div>
+  </div>
+</div>
+
+
+
+</section>
+
+
+
+
+</div>
+
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/user_search1.js" type="module"></script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header ">
+            <strong class="me-auto toast-title">Toast Title</strong>
+            <small class="text-muted">Just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body toast-description">
+            Hello, this is a Bootstrap toast message!
+          </div>
+        </div>
+      </div>
+<div class="container-fluid ">
+    <!-- top bar -->
+   
+   
+    
+<section id="menu_bar">
+   
+</section>
+
+<!-- content -->
+
+<div class="p-2 rounded-4 shadow-sm bg-light " style="max-height: 60vh; overflow-y: auto;">
+  <div class="table-responsive">
+  <table class="table caption-top table-bordered  text-center">
+      <caption>Material Request Form - MD Approval</caption>
+    <thead>
+  
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Part</th>
+        <th scope="col">Requirement Date</th>
+        <th scope="col">Created By</th>
+        <th scope="col">Created On</th>
+        
+             <th scope="col">Print</th>
+  
+      </tr>
+    </thead>
+    <tbody id="material_requset_form_md_table">
+   
+    </tbody>
+  
+  
+  </table>
+  </div>
+</div>
+<form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="material_request_form_md" novalidate onsubmit="return false">
+
+
+ <div class="container">
+  <div class="row">
+    <div class="col-md-12">
+<div class="form-floating mb-3">
+  <select class="form-select" id="md_approve_option" required>
+    <option selected disabled value="">Choose...</option>
+    <option value="approved">approved</option>
+    <option value="declined">declined</option>
+    <option value="need change">need change</option>
+  </select>
+ <label for="md_approve_option">Approval</label>
+   <div class="invalid-feedback">
+      Kindly Select  Vaild
+    </div>
+</div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+<div class="d-flex   justify-content-center  align-content-center mt-2">
+<button type="submit" class="btn btn-primary " id="material_request_form_md_btn">Insert</button>
+<button type="submit" class="btn btn-primary d-none" id="material_request_form_md_update_btn">Update</button>
+</div>
+</form>
+
+
+
+<div class="p-2 rounded-4 shadow-sm bg-light ">
+  <div class="table-responsive">
+  <table class="table caption-top table-bordered  text-center">
+      <caption>Material Request Form</caption>
+    <thead>
+  
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Part</th>
+        <th scope="col">Requirement Date</th>
+        <th scope="col">Created By</th>
+        <th scope="col">Created On</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+        <th scope="col">Print</th>
+  
+      </tr>
+    </thead>
+    <tbody id="material_requset_form_table">
+   
+    </tbody>
+  
+  
+  </table>
+  </div>
+</div>
+
+
+
+<div class="p-1 borer border-2" id="print_container">
+
+</div>
+
+
+
+</div>
+
+<div class="table-responsive">
+<table class="table caption-top table-bordered table-striped ">
+    <caption></caption>
+  <thead>
+
+    <tr>
+      <th scope="col">Demo</th>
+
+    </tr>
+  </thead>
+  <tbody id="demo">
+ 
+
+
+  </tbody>
+
+
+</table>
+
+
+<div class="accordion" id="accordion_235">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="acc_head_235">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse_235" data-bs-target="#collapse_235" aria-expanded="false" aria-controls="collapseThree">
+       235
+      </button>
+    </h2>
+    <div id="collapse_235" class="accordion-collapse collapse" aria-labelledby="acc_head_"235 data-bs-parent="#accordion_235">
+      <div class="accordion-body">
+       <ul class="list-group " ><li class="list-group-item ">scale,with door</li>,<li class="list-group-item ">scale,with door</li>,<li class="list-group-item ">scale,with door</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="d-flex,justify-content-between">
+<p class="">
+scale,with door
+       </p>
+       <button type="button" class="btn btn-outline-primary  " value="235" ><i class=" fa-solid fa-trash "></i></button>
+       </div>
+
+</div>
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="js/printThis.js" type="module"></script>
+<!-- external js -->
+  <script src="js/material_request_form_report.js" type="module"></script>
+<script src="js/material_request_form_md.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

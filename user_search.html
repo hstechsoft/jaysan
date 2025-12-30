@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+ 
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+</head>
+<body >
+ 
+ 
+  
+<div class="container-fluid p-0 m-0 d-none d-sm-block ">
+    <!-- top bar -->
+    
+
+    <div class="container w-25" id="no_work_show">
+      <img src="img/nodata.jpg" class="img-thumbnail" alt="Responsive image">
+    
+      <h6 class="text-center">No Data Found </h6>
+
+      <a id="create_cus_link" href="" class="btn btn-primary d-block mx-auto mt-3" role="button">Create Customer</a>
+      
+    </div>
+<!-- navbar -->
+    
+
+
+
+<!-- content -->
+<section id="work_show">
+<div class="container-fluid mt-3 px-5 bg-success bg-opacity-10 ">
+  
+  <div class="row d-flex justify-content-around align-items-center  ">
+
+    <div class="col-4 ">
+  
+      <table class="table table-responsive table-borderless text-start  table-sm">
+     
+        <tbody>
+          <tr>
+           
+            <td class="h4 text-danger" id=""> <span><i class="fa-regular fa-user me-1"></i>   <span id="tname"></span>  </span></td>
+        
+          </tr>
+          <tr>
+           
+            <td class="h4 text-danger" id="tname"> <span><i class="fa-solid fa-phone me-1"></i>   <span id="tphone"></span>  </span></td>
+        
+        
+        
+          </tr>
+         
+        </tbody>
+      </table>
+      
+</div>
+
+
+<div class="col-4  border-dark  p-3 text-center ">
+ <h6 id="tstatus"></h6>
+</div>
+
+
+<div class="col-4 ">
+  
+  <table class="table table-responsive table-borderless text-end  table-sm">
+     
+    <tbody>
+      <tr>
+       
+        <td class="h5 text-danger"><span id="tsegment"> </span> </td>
+    
+      </tr>
+      <tr>
+       
+        <td class="h6 text-danger ps-3">  <span id="tlocation"> </span> </td>
+    
+    
+    
+      </tr>
+     
+    </tbody>
+  </table>
+  
+</div>
+  </div>
+</div>
+
+
+<!-- <div class="border-bottom border-dark  border-opacity-75 mx-4 my-2"></div> -->
+
+<div class="container-fluid mt-3 mx-0 ">
+  
+  <div class="row  d-flex justify-content-between">
+
+    <div class="col-4 ">
+     
+      <table class="table table-responsive table-bordered  border-dark  table-hover border-opacity-50 ">
+        <thead class="text-center bg-info bg-opacity-25" id="lead_header">
+          <tr>
+          
+            <th  colspan="2" scope="col">Lead</th>
+          
+          </tr>
+        </thead>
+        <tbody id="lead_table_body">
+          <tr >
+            <td >Lead  On </td>
+        
+            <td class="h6" id="tlead_att_on"></td>
+        
+          </tr>
+          <tr>
+            <td>Lead Source</td>
+            
+            <td class="h6" id="tlead_source"></td>
+        
+        
+          </tr>
+
+          <tr>
+            <td>Lead  by</td>
+            
+            <td class="h6" id="tlead_att_by"></td>
+        
+        
+          </tr>
+         
+        </tbody>
+      </table>
+
+      <div class="card border-0 overflow-hidden">
+        <div class="card-header  py-2 d-flex  justify-content-between align-items-center bg-info bg-opacity-75" id="work_table_header">
+         
+            <h6 class="fw-bold m-0 p-0">Works</h6>
+           <p class="bg-danger rounded rounded-pill m-0 p-0">
+            <span class="badge" id="total_works">
+              0</span>
+            </p>
+           
+          
+         
+
+
+        </div>
+<div class="card-body m-0 p-0 work_class">
+   <table id="work_table1" class="  table table-bordered table-hover border-dark border-opacity-50 text-center" >
+        
+          <tbody  id="work_table" class="">
+
+           
+          </tbody>
+        </table>
+      
+</div>
+      </div>
+    
+    
+</div>
+
+
+<div class="col-4">
+  <div class="card  rounded rounded-4 bg-info bg-opacity-75 p-2 text-dark ">
+   
+    <div class="card-body ">
+      
+        
+        <form  id="login_register" class="needs-validation "  novalidate>
+            
+          
+          <div class="input-group mb-3">
+            <div class="input-group-prepend  ">
+              <span class="input-group-text " id="basic-addon1">
+              <i class="fa-solid fa-clipboard-check h5"></i> </span>
+                
+            </div>   
+            <select class="custom-select  form-control" id="status_in">
+              <option value="0" selected>Status...</option>
+              <option value="1">not interested</option>
+              <option value="2">call later</option>
+              <option value="3">Site Survey</option>
+              <option value="4">not attended</option>
+              <option value="5">not reachable</option>
+            </select>
+          </div>
+
+              <div class="input-group mb-2 ">
+                  
+
+                <textarea class="form-control" id="remarks_in" placeholder="Remarks"  rows="2" ></textarea>
+
+               
+               
+              
+              </div>
+
+
+              <div class="input-group mb-2 ">
+                <div class="input-group-prepend  ">
+                  <span class="input-group-text " id="basic-addon1">
+                    <i class="fa-solid fa-calendar-days h5"></i> </span>
+                    
+                </div>   
+                <input type="datetime-local" id="sdate_in"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+                <div class="invalid-feedback "><h6 class="small">Please Enter date</h6></div>
+             
+              </div>
+
+
+              <div class="input-group mb-3 mt-3">
+                <label class="input-group-text" for="inputGroupSelect01">Employee</label>
+                <select class="form-select" id="sel_usr_in">
+                  
+                    <option selected value="0">Select User...</option>
+                  
+                   
+                
+                </select>
+            </div>
+         
+
+       
+
+            <div class="input-group mt-1">
+                   
+
+              <label class="input-group-text" for="work_location_textbox"><span>
+                <i class="fa-solid fa-location-dot h6"></i>
+              </span></label>
+
+
+              <input id="work_location_textbox" type="text" class="form-control" placeholder="site visit Location" aria-label="Username" aria-describedby="basic-addon1" > 
+              
+              
+            </div>
+          
+
+          <div class="container d-flex justify-content-between mt-4 mb-2 ">
+            
+          
+
+                <button id="web_call_btn" type="button"  class="btn btn-outline-danger  rounded-circle btn-lg">
+                  <i class="fa-solid fa-phone"></i>
+                  </button>
+
+            <button id="call_btn" type="button"  class="btn btn-primary">
+              <i class="fa-regular fa-paper-plane pe-1"></i>
+                Submit</button>
+
+               
+          </div>
+
+        </form>
+
+
+        
+    </div>
+  </div>
+</div>
+
+
+<div class="col-4 table-responsive " id="his_table">
+  <div>
+    <table id="history_table" class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">Work  History</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Comments</th>
+        
+        </tr>
+      </thead>
+      <tbody class="align-middle" id="thist">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+  
+  <div class=" table-responsive" id="work_schdule_table" >
+    
+    <table class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">SIte Visit Work</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Location</th>
+        
+        </tr>
+      </thead>
+      <tbody class="" id="site_work_table">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+  
+
+  <div class=" table-responsive" id="work_schdule_table_all" >
+    
+    <table class="table   table-bordered border-dark border-opacity-50 text-center p" >
+      <thead >
+        <tr>
+        
+          <th  colspan="3" scope="col" class="bg-info bg-opacity-25">Site Visit Work - All</th>
+        
+        </tr>
+  
+        <tr>
+        
+          <th scope="col">#</th>
+          <th scope="col">Employee</th>
+          <th scope="col">Location</th>
+        
+        </tr>
+      </thead>
+      <tbody class="" id="site_work_table_all">
+        
+        
+  
+  
+        
+       
+      </tbody>
+    </table>
+  
+  </div>
+</div>
+  </div>
+</div>
+
+
+
+</section>
+
+
+
+
+</div>
+
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/user_search.js" type="module"></script>
+
+</body>
+</html>

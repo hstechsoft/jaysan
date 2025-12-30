@@ -1,0 +1,12 @@
+# Files to exclude
+config.php
+settings.json
+debug.log
+*.log
+*.tmp
+
+# Folders to exclude
+node_modules
+temp
+cache
+vendor

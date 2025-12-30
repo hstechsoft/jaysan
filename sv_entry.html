@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+</head>
+<body >
+ 
+ <div class="container-fluid p-0">
+ <div class="card">
+<div class="card-header">
+    <h4 class="modal-title">Site Visit Entry</h4>
+</div>
+<div class="card-body">
+      
+    <div class="input-group mb-3">
+          <label class="input-group-text" for="industry_type_txt"><span>
+            <i class="fa-solid fa-industry h6"></i>
+          </span>
+        </label>
+        <input id="industry_type_txt" type="text" class="form-control" placeholder="Type of Industry" aria-label="Username" aria-describedby="basic-addon1" >
+      </div>
+      
+
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_no_txt"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+        </span>
+      </label>
+      <input id="eb_no_txt" type="text" class="form-control" placeholder="EB Number" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_reg_no_txt"><span>
+            <i class="fa-solid fa-phone h6"></i>
+        </span>
+      </label>
+      <input id="eb_reg_no_txt" type="text" class="form-control" placeholder="EB Reg Number" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_amount_txt"><span>
+            <i class="fa-solid fa-wallet h6"></i>
+        </span>
+      </label>
+      <input id="eb_amount_txt" type="text" class="form-control" placeholder="EB Billing Amount" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_tariff_txt"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+        </span>
+      </label>
+      <input id="eb_tariff_txt" type="text" class="form-control" placeholder="EB Tariff Details" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_san_load_txt"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+        </span>
+      </label>
+      <input id="eb_san_load_txt" type="text" class="form-control" placeholder="EB Sanctioned Load" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="eb_tri_load_txt"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+        </span>
+      </label>
+      <input id="eb_tri_load_txt" type="text" class="form-control" placeholder="Triples Recommend Load" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="type_ins_txt"><span>
+            <i class="fa-solid fa-clipboard h6"></i>
+        </span>
+      </label>
+      <input id="type_ins_txt" type="text" class="form-control" placeholder="Type of Installtion" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="p2p_dis_txt"><span>
+            <i class="fa-solid fa-tape h6"></i>
+        </span>
+      </label>
+      <input id="p2p_dis_txt" type="text" class="form-control" placeholder="Purling to Purling Distance" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="total_mea_txt"><span>
+            <i class="fa-solid fa-tape h6"></i>
+        </span>
+      </label>
+      <input id="total_mea_txt" type="text" class="form-control" placeholder="Total Area Measurement" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="shift_txt"><span>
+            <i class="fa-regular fa-clock h6"></i>
+        </span>
+      </label>
+      <input id="shift_txt" type="text" class="form-control" placeholder="Shift Operation Timing" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+    
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="fund_txt"><span>
+            <i class="fa-solid fa-briefcase h6"></i>
+        </span>
+      </label>
+      <input id="fund_txt" type="text" class="form-control" placeholder="Funding Details" aria-label="Username" aria-describedby="basic-addon1" >
+    </div>
+
+
+
+    
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Company Photo</h6>
+        <div class="input-group visually-hidden">
+            <input type="file"  class="form-control" id="company_photo_up" >
+            <label class="input-group-text" for="company_photo_up">Company</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="company_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="company_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+      
+        <img id="company_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+      <h6>Visiting Card Photo</h6>
+      <div class="input-group visually-hidden">
+          <input type="file" class="form-control" id="vc_photo_up" >
+          <label class="input-group-text" for="vc_photo_up">Visiting card</label>
+        </div>
+  </div>
+  <div class="progress mb-2" id="vc_photo_bar1">
+    <div class="progress-bar progress-bar-striped" id="vc_photo_bar" ></div>
+</div>
+  <div class="card-body m-0 p-0 mx-auto">
+      <img id="vc_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+  </div>
+</div>
+
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Roof Photo</h6>
+    <div class="input-group visually-hidden">
+            <input type="file" class="form-control" id="roof_photo_up">
+            <label class="input-group-text" for="roof_photo_up">Roof</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="roof_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="roof_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+        <img id="roof_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Google Earth Photo</h6>
+    <div class="input-group visually-hidden">
+            <input type="file" class="form-control" id="ge_photo_up">
+            <label class="input-group-text" for="ge_photo_up">Google Earth</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="ge_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="ge_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+        <img id="ge_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Hand Sketch Photo</h6>
+    <div class="input-group visually-hidden">
+            <input type="file" class="form-control" id="hs_photo_up">
+            <label class="input-group-text" for="hs_photo_up">Hand Sketch</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="hs_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="hs_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+        <img id="hs_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Site Photo</h6>
+    <div class="input-group visually-hidden">
+            <input type="file" class="form-control" id="site_photo_up">
+            <label class="input-group-text" for="site_photo_up">site</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="site_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="site_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+        <img id="site_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+
+<div class="card my-2">
+  <div class="card-header text-bg-danger text-center">
+    <h6>Evocation Point Photo</h6>
+    <div class="input-group visually-hidden">
+            <input type="file" class="form-control" id="ep_photo_up">
+            <label class="input-group-text" for="ep_photo_up">Evocation Point</label>
+          </div>
+    </div>
+    <div class="progress mb-2" id="ep_photo_bar1">
+      <div class="progress-bar progress-bar-striped" id="ep_photo_bar" ></div>
+  </div>
+    <div class="card-body m-0 p-0 mx-auto">
+        <img id="ep_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/upload.png" alt>
+    </div>
+</div>
+
+   
+
+<div class="input-group mb-3">
+    <label class="input-group-text" for="cus_rating_txt"><span>
+        <i class="fa-solid fa-star h6"></i>
+    </span>
+  </label>
+  <input id="cus_rating_txt" type="text" class="form-control" placeholder="Customer  Rating" aria-label="Username" aria-describedby="basic-addon1" >
+</div>
+
+    
+<div class="input-group mb-3">
+    <label class="input-group-text" for="remark_txt"><span>
+        <i class="fa-solid fa-edit h6"></i>
+    </span>
+  </label>
+  <input id="remark_txt" type="text" class="form-control" placeholder="Remarks" aria-label="Username" aria-describedby="basic-addon1" >
+</div>
+   
+
+
+      
+
+
+
+<div class="d-flex justify-content-center mt-3">
+<button type="button" id="create_sv_btn" class="btn btn-primary" type="submit">Submit</button>
+</div>
+     
+</div>
+
+
+ </div>
+   
+
+</div>
+
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/sv_entry.js" type="module"></script>
+
+</body>
+</html>

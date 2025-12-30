@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header ">
+            <strong class="me-auto toast-title">Toast Title</strong>
+            <small class="text-muted">Just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body toast-description">
+            Hello, this is a Bootstrap toast message!
+          </div>
+        </div>
+      </div>
+<div class="container-fluid ">
+    <!-- top bar -->
+   
+   
+    
+<section id="menu_bar">
+   
+</section>
+
+<!-- content -->
+
+    
+<!-- 
+    <div class="form-floating mb-2">
+      <input type="text" class="form-control rounded-3" id="part_no" placeholder="Part No / Name" required>
+      <label for="part_no">Part No / Name
+      <span class="text-danger">*</span> </label>
+    
+      <div class="invalid-feedback">
+        Kindly Enter  Vaild Data
+      </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label d-block mb-1"><strong>BOM Production  <span class="text-danger">*</span> </strong></label>
+        <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="bom_production" id="bom_production_yes" value="Yes" required>
+              <label class="form-check-label" for="bom_production_yes">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="bom_production" id="bom_production_no" value="NO" required>
+              <label class="form-check-label" for="bom_production_no">NO</label>
+        </div>
+      </div>
+
+
+      <div class="form-floating mb-3">
+        <select class="form-select" id="order_type" required>
+          <option selected disabled value="">Choose...</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Regular">Regular</option>
+          <option value="Requirement">Requirement</option>
+          <option value="Spares">Spares</option>
+        </select>
+       <label for="order_type">order_type</label>
+         <div class="invalid-feedback">
+            Kindly Select  Vaild
+          </div>
+      </div>
+
+        <div class="form-floating mb-2">
+        <input type="number" class="form-control rounded-3" id="minimum_order_qty" placeholder="Minimum order Quantity" required>
+        <label for="minimum_order_qty">Minimum Order Quamtity
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+
+
+          <div class="form-floating mb-2">
+        <input type="number" class="form-control rounded-3" id="reorder_quantity" placeholder="Reorder Quantity" required>
+        <label for="reorder_quantity">Reorder Quantity
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+
+          <div class="form-floating mb-2">
+        <input type="number" class="form-control rounded-3" id="shortfall_quantity" placeholder="" required>
+        <label for="shortfall_quantity">Shortfall Quantity
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+
+          <div class="form-floating mb-2">
+        <input type="text" class="form-control rounded-3" id="stock_for_sufficient_days" placeholder="Stock for Sufficient days" required>
+        <label for="stock_for_sufficient_days">Stock for Sufficient days
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+
+
+          <div class="form-floating mb-2">
+        <input type="text" class="form-control rounded-3" id="requirement_quantity" placeholder="Requirement Quantity" required>
+        <label for="requirement_quantity">Requirement Quantity
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+
+
+     <div class="form-floating mb-2">
+        <input type="date" class="form-control rounded-3" id="requirement_date" placeholder="Requirement date" required>
+        <label for="requirement_date">Requirement date
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div> -->
+
+
+
+      <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="material_request_form" novalidate onsubmit="return false">
+<div class="row">
+  <div class="col-md-6">
+  <div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="text" class="form-control rounded-3" id="part_no" placeholder="Part No / Name" required>
+        <label for="part_no">Part No / Name <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-1">
+        <label class="form-label d-block mb-1"><strong>BOM Production <span class="text-danger">*</span></strong></label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="bom_production" id="bom_production_yes" value="Yes" required>
+          <label class="form-check-label" for="bom_production_yes">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="bom_production" id="bom_production_no" value="NO" required>
+          <label class="form-check-label" for="bom_production_no">NO</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <select class="form-select" id="order_type" required>
+          <option selected disabled value="">Choose...</option>
+          <option value="Emergency">Emergency</option>
+          <option value="Regular">Regular</option>
+          <option value="Requirement">Requirement</option>
+          <option value="Spares">Spares</option>
+        </select>
+        <label for="order_type">Order Type</label>
+        <div class="invalid-feedback">Kindly Select Valid Option</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="number" class="form-control rounded-3" id="minimum_order_qty" placeholder="Minimum order Quantity" required>
+        <label for="minimum_order_qty">Minimum Order Quantity <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="number" class="form-control rounded-3" id="reorder_quantity" placeholder="Reorder Quantity" required>
+        <label for="reorder_quantity">Reorder Quantity <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="number" class="form-control rounded-3" id="shortfall_quantity" placeholder="" required>
+        <label for="shortfall_quantity">Shortfall Quantity <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="text" class="form-control rounded-3" id="stock_for_sufficient_days" placeholder="Stock for Sufficient days" required>
+        <label for="stock_for_sufficient_days">Stock for Sufficient Days <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-flex">
+      <div class="form-floating mb-1">
+        <input type="text" class="form-control rounded-3" id="requirement_quantity" placeholder="Requirement Quantity" required>
+        <label for="requirement_quantity">Qty <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+
+           <div class="form-floating mb-3">
+        <select class="form-select" id="uom" required>
+          <option selected disabled value="">Choose...</option>
+          <option value="Nos">Nos</option>
+      <option value="No">No</option>
+      <option value="NUM">NUM</option>
+      <option value="Pcs">Pcs</option>
+      <option value="Sets">Sets</option>
+      <option value="Sheet">Sheet</option>
+      <option value="kgs">kgs</option>
+      <option value="Ltr">Ltr</option>
+      <option value="mls">mls</option>
+      <option value="Mts">Mts</option>
+      <option value="mtrs">mtrs</option>
+      <option value="mm">mm</option>
+      <option value="CUM">CUM</option>
+        </select>
+       <label for="uom">UOM <span class="text-danger">*</span></label>
+         <div class="invalid-feedback">
+            Kindly Select  Vaild
+          </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-1">
+        <input type="date" class="form-control rounded-3" id="requirement_date" placeholder="Requirement date" required>
+        <label for="requirement_date">Requirement Date <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+     <div class="form-floating mb-2">
+    <input type="date" class="form-control rounded-3" id="last_purchase_date" placeholder="Enter date" required>
+    <label for="last_purchase_date">Last Purchase Date
+    <span class="text-danger">*</span> </label>
+  
+    <div class="invalid-feedback">
+      Kindly Enter  Vaild Data
+    </div>
+  </div>
+    </div>
+
+    <div class="col-md-6">
+     <div class="form-floating mb-2">
+        <input type="number" class="form-control rounded-3" id="last_purchase_qty" placeholder="Enter Last Purchase Quantity" required>
+        <label for="last_purchase_qty">Last Purchase Quantity
+        <span class="text-danger">*</span> </label>
+      
+        <div class="invalid-feedback">
+          Kindly Enter  Vaild Data
+        </div>
+      </div>
+    </div>
+
+        <div class="col-md-6">
+      <div class="mb-1">
+        <label class="form-label d-block mb-1"><strong>Material Receipt Status <span class="text-danger">*</span></strong></label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="matrial_receipt_status" id="matrial_receipt_status_yes" value="Yes" required>
+          <label class="form-check-label" for="matrial_receipt_status_yes">Yes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="matrial_receipt_status" id="matrial_receipt_status_no" value="NO" required>
+          <label class="form-check-label" for="matrial_receipt_status_no">NO</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="card " id="">
+<div class="card-header" >
+<p class="card-title"> Physical Stock Deails</p>
+  </div>
+  <div class="card-body small">
+    <div class="d-sm-flex   justify-content-center  align-content-center gap-4">
+      <div class="w-100">
+<div class="form-floating ">
+  <select class="form-select" id="godown_select" >
+    <option selected disabled value="">Choose...</option>
+  </select>
+ <label for="godown_select">godown_select</label>
+   
+</div>
+
+      </div>
+<div class="w-50">
+    <div class="form-floating ">
+  <input type="number" class="form-control rounded-3" id="physical_stock_input" placeholder="" >
+  <label for="physical_stock_input">physical_stock_input
+  
+
+ 
+</div>
+</div>
+
+<div class="my-auto">
+<button type="button " class="btn btn-primary my-auto btn-sm" id="add_btn">Add</button>
+
+</div>
+</div>
+  </div>
+  <div class="card-footer">
+<div class="table-responsive w-90">
+  <table class="table caption-top table-bordered table-striped align-middle" >
+    <caption class="text-center fw-bold">Enter Physical Stock Details</caption>
+    <thead class="table-light">
+      <tr>
+        <th scope="col">Godown</th>
+        <th scope="col">Physical Stock</th>
+        <th scope="col">Action</th>
+      </tr>
+ 
+
+    </thead>
+    <tbody id="stock_table_body">
+  
+    </tbody>
+  </table>
+</div>
+  </div>  
+  </div>
+
+
+     
+
+      </div>
+
+  </div>
+  <div class="col-md-6 border border-1">
+<div style="max-height: 85vh; overflow-y: auto;">
+  <div class="table-responsive">
+  <table class="table caption-top table-bordered  text-center">
+  
+    <thead>
+  <tr>
+      <th colspan="4" class="table-light">
+       <div class="d-flex   justify-content-between  align-content-around">
+        <span class="fw-bold">Material Request Form Details</span>
+        <span>
+         
+          <button type="button" class="btn btn-sm btn-secondary border-0" id="clear_btn"><i class="fa-solid fa-rotate-right"></i></button>
+        </span>
+       </div>
+      </th>
+  </tr>
+      <tr class="small">
+        <th scope="col">#</th>
+        <th scope="col">Part</th>
+       
+     
+        <th scope="col">Action</th>
+       
+  
+      </tr>
+    </thead>
+    <tbody id="material_requset_form_table" class="text-center">
+   
+    </tbody>
+  
+  
+  </table>
+  </div>
+</div>
+
+
+<div style="max-height: 85vh; overflow-y: auto;">
+<div class="p-1 borer border-2" id="print_container">
+
+</div>
+</div>
+
+  </div>
+</div>
+    
+
+
+
+
+
+
+<div class="d-flex   justify-content-center  align-content-center mt-2">
+<button type="submit" class="btn btn-primary " id="material_request_form_btn">Insert</button>
+<button type="submit" class="btn btn-primary d-none" id="material_request_form_update_btn">Update</button>
+</div>
+
+      </form>
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-6">
+
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="js/printThis.js" type="module"></script>
+<!-- external js -->
+<script src="js/material_request_form_report.js" type="module"></script>
+<script src="js/material_request_form.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+<script src="js/mrf_popover.js" type="module"></script>
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

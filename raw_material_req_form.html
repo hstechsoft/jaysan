@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  <style>
+     .custom-fixed-table {
+        height: 400px; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .custom-fixed-table table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .custom-fixed-table th, 
+    .custom-fixed-table td {
+        width: 10vw; /* Fixed width for all cells */
+        word-wrap: break-word;
+    }
+    .custom-fixed-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    .custom-fixed-table tbody tr.fixed-row td {
+        position: sticky;
+        top: 38px;
+        background-color: #ffffff;
+        z-index: 5;
+    }
+</style>
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+<div class="container-fluid ">
+    <!-- top bar -->
+  
+   
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+<div class="card">
+    <div class="card-header d-flex justify-content-center">
+        Raw Material Requset Form (laser-purchase)
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-2">
+          
+       
+            <div class="col">
+                <div class="d-flex gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="order" id="requirement_order">
+                        <label class="form-check-label" for="requirement_order">
+                            requirement order
+                        </label>
+                      </div>
+            
+            <div class="d-flex" id='requirement_type'>
+                <div>
+                    <div class='input-group '>
+                        <select class='custom-select form-control' >
+                <option value='0' selected>Choose Options...</option>
+                <option value='Marketing'>Marketing</option>
+                <option value='Management'>Management</option>
+                
+                
+                </select>
+                </div>
+                </div>
+                
+            <div>
+                <div class='input-group mb-2'> 
+                    <label class='input-group-text' for='Condition'><span>
+                    Condition 
+                    </span>
+                    </label>
+                    <input id='Condition' type='text' class='form-control' disabled >
+                    </div>
+            </div>
+            
+            
+            </div>
+            
+                 
+            
+                </div>
+            
+                
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="order"  id="sale_order" >
+                    <label class="form-check-label" for="flexRadioDefault2">
+              Sale Order
+                    </label>
+                  </div>
+            </div>
+
+<div class="col">
+    <div class='input-group mb-2'>
+        <div class='input-group-prepend '>
+        <span class='input-group-text ' id='basic-addon1'>
+        Order No </span>
+        
+        </div> 
+        <select class='custom-select form-control' id='order_no'>
+     
+        </select>
+        </div> 
+</div>
+</div>
+<div class="card">
+<div class="card-header">
+Process Qty Details
+</div>
+<div class="card-body">
+    <table id='qty_table1' class=' mt-2 table table-sm table-bordered border-dark border-opacity-50 text-center ' >
+        <thead >
+        <tr>
+        
+        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Process Qty</th>
+        
+        </tr>
+        
+     
+        </thead>
+        <tbody class='align-middle small' id='qty_table'>
+        <tr>
+            <th scope="col">Product</th>
+            <td>Baler</td>
+            <th scope="col">Model</th>
+            <td >JRB 312</td>
+            <th scope="col">Order Qty</th>
+            <td >5</td>
+           
+        </tr>
+        <tr>
+            <th scope="col">Process Qty</th>
+            <td >24</td>
+            <th scope="col">Designed by</th>
+            <td >Murugan</td>
+            <th scope="col">Sanctioned by</th>
+            <td ><span class="mark ps-2">Puvesh</span</td>
+           
+        </tr>
+      
+       
+      <tr>
+        <th >Sample Sts</th>
+        <td colspan="3">sample ok</td>
+        <th>SF zero Emergency</th>
+        <td>Yes</td>
+      </tr>
+  
+       
+        </tbody>
+        </table>   
+    
+</div>
+<div>
+
+</div>
+</div>
+<table id='qty_table1' class=' mt-2 table table-sm table-bordered border-dark border-opacity-50 text-center ' >
+    <thead >
+    <tr>
+    
+    <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Material Requset Form</th>
+    
+    </tr>
+    
+ 
+    </thead>
+    <tbody class='align-middle small' id='qty_table'>
+    <tr>
+        <th scope="col">From</th>
+        <td >Welding</td>
+        <th scope="col">Name</th>
+        <td >Vishnu</td>
+        <th scope="col">Order No</th>
+        <td >123</td>
+       
+    </tr>
+    <tr>
+        <th scope="col">Document Date</th>
+        <td >12-09-2024</td>
+        <th scope="col">Order Type</th>
+        <td >Emergency</td>
+        <th scope="col">Order Catergory</th>
+        <td >Requirement Order <span class="mark ps-2">(OE)</span</td>
+       
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>Management</td>
+        <th>Limitation</th>
+        <td>Proceed Until chasis welding</td>
+        <th>Product</th>
+        <td>Baler</td>
+    </tr>
+    <tr>
+        <th>Color</th>
+        <td>Customize</td>
+        <th> color des</th>
+        <td colspan="3">add some vibrant color to it</td>
+    </tr>
+    <tr>
+        <th>chasis no</th>
+        <td>Customize</td>
+        <th> chasis des</th>
+        <td colspan="3">need TJ12/34/567 - TJ12/34/580</td>
+    </tr>
+    <tr>
+        <th>Others</th>
+        <td colspan="5"></td>
+    </tr>
+   
+    </tbody>
+    </table>   
+
+
+
+
+    <table id='sheet requirement1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+        <thead >
+        <tr>
+        
+        <th colspan='15' scope='col' class='bg-info bg-opacity-25'>Sheet Requirement</th>
+        
+        </tr>
+        
+        <tr>
+        
+         <th scope='col'>#</th>
+       <th scope='col'>Material</th>
+       <th scope='col'>Thk in mm</th>
+       <th scope='col'>Length</th>
+       <th scope='col'>Width</th>
+       <th scope='col'>Weight/No</th>
+       <th scope='col'>Nesting Qty</th>
+       <th scope='col'>Stock Qty</th>
+     
+       <th scope='col'>Process Qty</th>
+       <th scope='col'>Req Qty</th>
+       
+       <th scope='col'>Total Weight</th>
+       <th scope='col'>Remarks</th>
+       
+        
+        </tr>
+        </thead>
+        <tbody class='align-middle ' id='sheet requirement'>
+         
+            <td >1</td>
+            <td >HR Sheet</td>
+            <td >3</td>
+            <td >2500</td>
+            <td >1250</td>
+            <td >73.59</td>
+            <td >15</td>
+            <td >10</td>
+            <td >2</td>
+            <td  contenteditable="true"></td>
+            
+            <td >Total Weight</td>
+            <td >Remarks</td>
+        </tbody>
+        </table> 
+    
+    
+        <table id='pipe requirement1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+            <thead >
+            <tr>
+            
+            <th colspan='15' scope='col' class='bg-info bg-opacity-25'>Pipe Requirement</th>
+            
+            </tr>
+            
+            <tr>
+            
+             <th scope='col'>#</th>
+           <th scope='col'>Material</th>
+           <th scope='col'>type</th>
+           <th scope='col'>Thk in mm</th>
+           <th scope='col'>Length</th>
+           <th scope='col'>OD</th>
+           <th scope='col'>ID</th>
+           <th scope='col'>Weight/No</th>
+           <th scope='col'>Total Length</th>
+           <th scope='col'>Weight/No</th>
+       <th scope='col'>Stock Qty</th>
+       <th scope='col'>Actual Qty</th>
+           <th scope='col'>Remarks</th>
+           
+            
+            </tr>
+            </thead>
+            <tbody class='align-middle ' id='pipe requirement'>
+            
+            </tbody>
+            </table>
+   
+
+
+  
+           
+          
+            
+   
+
+        
+               
+<div class="d-flex justify-content-between gap-2">
+   <div class="d-flex justify-content-start">
+    <div>
+        <div class='input-group mb-2 ' >
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+           Material Required Date</span>
+            
+            </div> 
+            <input type='datetime-local' id='complete date' class='form-control' placeholder='Date'  >
+            
+            </div>
+    </div>
+  
+       
+
+   </div>
+
+   <div class="d-flex justify-content-start gap-1">
+  
+    <div>
+        <div class='input-group mb-2 ' >
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+            complete  date </span>
+            
+            </div> 
+            <input type='datetime-local' id='complete date' class='form-control' placeholder='Date'>
+            
+            </div>
+    </div>
+    <div>
+        <div class='input-group mb-2 ' >
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+            Delivery  date </span>
+            
+            </div> 
+            <input type='datetime-local' id='complete date' class='form-control' placeholder='Date'>
+            
+            </div>
+    </div>
+       
+<div> <button class="btn btn-primary">Submit</button></div>
+   </div>
+
+</div>
+    </div>
+</div>
+
+
+ 
+</div>
+
+
+       
+    
+
+
+<!-- content -->
+
+
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+<l
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/laser_req_form.js" type="module"></script>
+<!-- <script src="js/menu.js" type="module"></script> -->
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

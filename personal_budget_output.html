@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+ 
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="/swen/style.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+
+
+</head>
+<body >
+ 
+
+<div class="container-fluid ">
+    <!-- top bar -->
+ 
+   
+<!-- navbar -->
+  
+<!-- <section id="menu_bar">
+ 
+</section> -->
+
+<!-- content -->
+<div class="d-flex justify-content-center py-2 card-header">
+  <button type="button" class="btn btn-danger text-center" id="print_btn"> <span><i class="fa-solid fa-print"></i></span> print</button>
+</div>
+
+<div class="container-fluid border border-2 border-danger p-2" >
+
+
+
+<div class="print_font" id="print">
+ 
+  <div class="card m-0 p-0">
+    <div class="card-header bg-transparent m-0 p-0 d-flex  justify-content-between">
+      <img  class="img-fluid m-2"  style="width: 110px;" src="/swen/attachment/logo.png" alt>
+     
+  
+      <div class=" d-flex align-items-center me-3">
+        <h6>performa of a  Budget </h6>
+       </div>
+     <div class=" d-flex align-items-center me-3">
+      <h6><a href="https://www.vbabundance.com">www.vbabundance.com</a></h6>
+     </div> 
+    </div>
+    <div class="card-header d-flex justify-content-center m-0 p-0 mb-1">
+     <table class="table  m-0 p-0">
+      <tbody class="shadow">
+        <tr>
+          <td class="col-4">Customer Name : <span  id="print_cus_name"></span></td>
+          <td class="col-4 text-center">Phone : <span id="print_cus_phone"> </span></td>
+          <td class="col-4 text-end">Dated : <span id="print_dated"></span></td>
+        </tr>
+      </tbody>
+     </table>
+          </div>
+    <div class="card-body m-0 p-0 d-flex ">
+     
+      <div class="col-6">
+        <div class="card-header border border-1 border-dark">
+          Income (IN FlOW)	
+        </div>
+        <table id="" class="table table-sm table-sm table-bordered border-dark border-opacity-50 text-center m-0 p-0 " >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-primary">INFLOW</th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_income_table">
+         
+          </tbody>
+        </table>
+
+
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0 " >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-success">Savings</th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_savings_table">
+         
+          </tbody>
+        </table>
+
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Loans(EMI)		
+      
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_loan_table">
+         
+          </tbody>
+        </table>
+
+      
+
+        
+
+       
+
+      
+
+       
+      </div>
+
+
+      <div class=" col-6">
+        <div class="card-header border border-1 border-dark">
+          EXPENSES (OUT FLOW)	
+
+        </div>
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">General Home Expenses
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_home_exp_table">
+         
+          </tbody>
+        </table>
+
+       
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Childrens Expenses		
+
+
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_child_exp_table">
+         
+          </tbody>
+        </table>
+        
+
+    
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Health Expenses		
+      
+      
+      
+      
+      
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_health_exp_table">
+         
+          </tbody>
+        </table>
+
+       
+      </div>
+      
+    </div>
+    <div class="card-footer d-flex p-1  justify-content-between border-top-0 border-bottom border-end border-start border-1 border-dark">
+
+      <div class=" d-flex align-items-center me-3">
+        <h6>9943018682</h6>
+       </div>
+     <div class=" d-flex align-items-center me-3">
+      <h6> contact@vbabundance.com</h6>
+     </div> 
+    </div>
+
+  </div>
+
+
+  <div class="card border-0 ">
+    
+    <div class="card-header d-flex justify-content-center m-0 p-0 mb-1">
+      <table class="table  m-0 p-0">
+       <tbody class="shadow">
+         <tr>
+           <td class="col-4">Customer Name : <span  id="print_cus_name1"></span></td>
+           <td class="col-4 text-center">Phone : <span id="print_cus_phone1"> </span></td>
+           <td class="col-4 text-end">Dated : <span id="print_dated1"></span></td>
+         </tr>
+       </tbody>
+      </table>
+           </div>
+  
+    <div class="card-body m-0 p-0 d-flex ">
+     
+      <div class="col-6">
+        <div class="card-header border border-1 border-dark">
+          EXPENSES (OUT FLOW)	
+        </div>
+      
+
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Insurance		
+      
+      
+      
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_insurance_table">
+         
+          </tbody>
+        </table>
+
+      
+
+       
+      
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Festival Expenses		
+      
+      
+      
+      
+      
+      
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_festival_exp_table">
+         
+          </tbody>
+        </table>
+      
+      
+      
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Holiday Expenses Total
+      
+      
+      
+      
+      
+      
+      
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_holiday_exp_table">
+         
+          </tbody>
+        </table>
+        
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Movies and Recreation		
+
+
+
+
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_movies_exp_table">
+         
+          </tbody>
+        </table>
+       
+       
+
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">Miscellaneous		
+
+
+		
+
+
+
+
+
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_misc_table">
+         
+          </tbody>
+        </table>
+        <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+          <thead >
+            <tr>
+              <th  colspan="7" scope="col" class="text-bg-warning">TAX		
+
+
+		
+
+
+
+
+
+              </th>
+            </tr>
+      
+            <tr>
+            
+              <th scope="col">Heads</th>
+              <th scope="col">Monthly</th>
+              <th scope="col">Yearly</th>
+             
+            </tr>
+          </thead>
+          <tbody class="align-middle " id="print_tax_table">
+         
+          </tbody>
+        </table>
+
+       
+      </div>
+
+
+      <div class=" col-6  m-0 p-0 border border-1 border-dark" >
+
+        <div class="card-header border border-1 border-dark">
+          SUMMARY 
+
+        </div>
+        <div class="card-body m-0 p-0 ">
+          <table id="" class="table table-sm  table-bordered border-dark border-opacity-50 text-center m-0 p-0" >
+            <thead >
+              <tr>
+                <th  colspan="7" scope="col" class="text-bg-warning">SUMMARY	
+  
+  
+      
+  
+  
+  
+  
+  
+                </th>
+              </tr>
+        
+              <tr>
+              
+                <th scope="col">SUMMARY</th>
+                <th scope="col">Monthly</th>
+                <th scope="col">Yearly</th>
+               
+              </tr>
+            </thead>
+            <tbody class="align-middle " id="print_summary_table">
+           <tr>
+            <th class='text-start col-6'> Total Income </th>
+            <th><span id="sum_income_month"></span></th>
+            <th><span id="sum_income_yearly"></span></th>
+           </tr>
+  
+           <tr>
+            <th class='text-start col-6'>Total Savings </th>
+            <th><span id="sum_savings_month"></span></th>
+            <th><span id="sum_savings_yearly"></span></th>
+           </tr>
+  
+           <tr>
+            <th class='text-start col-6'>Total Expenses    </th>
+            <th><span id="sum_expenses_month"></span></th>
+            <th><span id="sum_expenses_yearly"></span></th>
+           </tr>
+            </tbody>
+          </table>
+        
+        </div>
+
+      
+        
+   <div class="  border-bottom  border-1 border-dark p-1">
+    <div  id="chart_budget_bar"  style="height: 300px; max-width: 350px;"></div>
+    
+   </div>
+
+   <div class="  border-bottom border-1 border-dark p-1">
+    <div  style="height: 250px; max-width:350px;"  id="chart_budget_pie"></div>
+  </div>
+  <div class="d-flex justify-content-center flex-column-reverse"  style="height: 160px;">
+    <p class="p text-decoration-underline fw-bold mb-auto p-2">Note </p>
+  </div>
+  <div class="d-flex justify-content-center m-0 p-0">
+    <p class="p m-0 p-0 px-2">Networth = Asset - liabilities  </p>
+  </div>
+   
+  </div>
+
+
+   </div>
+      
+       
+     
+       
+
+       
+      </div>
+
+      
+
+    <div class="card-footer d-flex p-1  justify-content-between border-top-0 border-bottom border-end border-start border-1 border-dark">
+      <div class=" d-flex align-items-center me-3">
+        <h6>9943018682</h6>
+       </div>
+     <div class=" d-flex align-items-center me-3">
+      <h6>contact@vbabundance.com</h6>
+     </div> 
+    </div>
+
+  </div>
+
+
+</div>
+
+  
+</div>
+
+</div>
+
+   <tr>
+    <td>
+      
+    </td>
+   </tr>
+
+
+
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="js/printThis.js" type="module"></script>
+
+<!-- google chart -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- external js -->
+<script src="js/personal_budget_output.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+</body>
+</html>

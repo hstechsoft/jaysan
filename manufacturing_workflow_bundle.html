@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<title>Manufacturing Workflow – Standard Operating Process | HSTechSoft → Jaysan Agri Industrial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Bootstrap & Font Awesome -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+  :root{ --brand:#0ea5e9; --ink:#0f172a; --muted:#64748b;}
+  html,body{background:#eef2f7; color:var(--ink);}
+  .cover{min-height:100vh; display:grid; place-items:center; background:linear-gradient(135deg,#e0f2fe, #f1f5f9);}
+  .cover-card{background:#fff;border:1px solid #e5e7eb; border-radius:20px; padding:48px; box-shadow:0 10px 30px rgba(2,6,23,.08)}
+  .title{font-weight:800; letter-spacing:.2px}
+  .subtitle{color:var(--muted)}
+  .chip{display:inline-flex;gap:.5rem;align-items:center;padding:.25rem .6rem;border-radius:999px;background:#eff6ff;border:1px solid #dbeafe;color:#1d4ed8}
+  .section{background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:24px; box-shadow:0 6px 18px rgba(2,6,23,.05)}
+  .diagram{background:#fff; border:1px dashed #d1d5db; border-radius:14px; padding:16px}
+  .pagebreak{page-break-before:always}
+  .printbar{position:sticky; top:0; z-index:99; backdrop-filter: blur(6px); background:#ffffffcc; border-bottom:1px solid #e5e7eb}
+  footer{color:#64748b}
+  @media print{
+    .printbar{display:none}
+    .pagebreak{break-before:page}
+    .cover{min-height:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- Sticky Print Bar -->
+<div class="printbar py-2">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="d-flex gap-2 align-items-center">
+      <i class="fa-solid fa-file-pdf text-danger"></i>
+      <span class="small text-secondary">After diagrams render, use Print → Save as PDF</span>
+    </div>
+    <button class="btn btn-sm btn-primary" id="btnPrint"><i class="fa-solid fa-print me-1"></i>Print / Save as PDF</button>
+  </div>
+</div>
+
+<!-- Cover Page — English only -->
+<section class="cover">
+  <div class="container">
+    <div class="cover-card text-center">
+      <div class="mb-3">
+        <span class="chip"><i class="fa-solid fa-industry"></i> HSTechSoft</span>
+      </div>
+      <h1 class="display-6 title">Manufacturing Workflow – Standard Operating Process</h1>
+      <p class="subtitle mb-4">
+        Developed by <b>HSTechSoft</b> for <b>Jaysan Agri Industrial</b><br/>
+        Supporting agriculture equipment manufacturing like <b>Baler</b>, <b>Rotavator</b> and more
+      </p>
+      <div class="row g-3 justify-content-center">
+        <div class="col-auto"><i class="fa-solid fa-diagram-project me-2 text-primary"></i>Flowchart</div>
+        <div class="col-auto"><i class="fa-solid fa-people-group me-2 text-primary"></i>Swimlane</div>
+        <div class="col-auto"><i class="fa-solid fa-table-list me-2 text-primary"></i>Masters & Reports</div>
+      </div>
+      <div class="text-secondary mt-4">Prepared by HSTechSoft • August 18, 2025</div>
+    </div>
+  </div>
+</section>
+
+<div class="container my-4">
+
+  <!-- TOC -->
+  <section class="section mb-4">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-list-check me-2 text-primary"></i>Table of Contents</h2>
+    <ol class="mb-0">
+      <li><a href="#intro" class="link-dark">Introduction</a></li>
+      <li><a href="#steps" class="link-dark">Tamil + English Detailed Steps</a></li>
+      <li><a href="#flowchart" class="link-dark">Detailed Flowchart</a></li>
+      <li><a href="#swimlane" class="link-dark">Swimlane Diagram by Department</a></li>
+      <li><a href="#masters" class="link-dark">Masters Setup</a></li>
+      <li><a href="#reports" class="link-dark">Reports and Dashboards</a></li>
+    </ol>
+  </section>
+
+  <!-- Intro -->
+  <section id="intro" class="section mb-4">
+    <h2 class="h5 mb-2"><i class="fa-solid fa-circle-info me-2 text-primary"></i>Introduction</h2>
+    <p>
+      இந்த ஆவணம் manufacturing வேலைப்பாட்டை எளிய மொழியில் விளக்குகிறது. Customer enquiry முதல் payment check, production,
+      quality, dispatch, delivery, records, masters, dashboards வரை முழு வழிக்காட்டி தரப்படுகிறது.
+      கீழே diagrams மூலம் visual-ஆகவும் புரியும்படி எழுதியுள்ளோம்.
+    </p>
+  </section>
+
+  <!-- Steps Tamil Mix -->
+  <section id="steps" class="section mb-4">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-shoe-prints me-2 text-primary"></i>Tamil + English Detailed Steps</h2>
+
+    <h6 class="mt-3">படி 1: Customer Enquiry → Sales</h6>
+    <ul>
+      <li>Customer எங்களை தொடர்பு கொண்டு machine பற்றிக் கேட்பார்.</li>
+      <li>Marketing team customer details எழுதுவார்கள் பெயர் phone company எந்த machine வேண்டும்.</li>
+      <li>விலை OK என்றால் <b>Sales Order</b> உருவாக்கப்படும்.</li>
+      <li>Sales Orderல் customer info product details advance amount delivery date இருக்கும்.</li>
+      <li><i>Restaurant order போல முதலில் slip எழுதுகிறார்கள் பிறகு cooking.</i></li>
+    </ul>
+
+    <h6 class="mt-3">படி 2: Accounts Checks Payment</h6>
+    <ul>
+      <li>Accounts team advance payment வந்ததா என verify செய்வார்கள்.</li>
+      <li>Confirmed என்றால் ✅ green signal. இல்லையெனில் order On Hold. Production start only after approval.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 3: Production Planning</h6>
+    <ul>
+      <li>Production Head stock check செய்வார். இருப்பின் reserve. இல்லை என்றால் <b>Material Request Form</b> raise.</li>
+      <li>வேலை மூன்று unitsக்கு split: <b>Laser</b> cut, <b>Welding</b> join, <b>Assembly</b> final build.</li>
+      <li>ஒவ்வொரு unitக்கும் job card மற்றும் target date கொடுக்கப்படும்.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 4: Purchase Process</h6>
+    <ul>
+      <li>Vendors கிட்ட enquiry அனுப்பு. Quotations collect செய்.</li>
+      <li>Top three compare செய்து best vendor select. <b>Purchase Order</b> issue.</li>
+      <li>Material inward → <b>Incoming Quality Check</b> → store bin allocate → productionக்கு issue.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 5: Actual Manufacturing</h6>
+    <ul>
+      <li><b>Laser Unit</b> nesting design பயன்படுத்தி sheets rods pipes cut. Time shift scrap record. Parts batch label.</li>
+      <li><b>Welding Unit</b> batch verify செய்து weld. In process QC. Reject இருந்தால் rework reason note.</li>
+      <li><b>Assembly Unit</b> welded plus purchased parts கொண்டு sections ஆக build. Section report who time output issues. Final QCக்கு அனுப்பு.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 6: Quality Control</h6>
+    <ul>
+      <li>Section QC during process மற்றும் Final QC assemblyக்குப் பின்.</li>
+      <li>Pass என்றால் dispatchக்கு போகும். Fail என்றால் rework loop reasons capture.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 7: Machine Tracking</h6>
+    <ul>
+      <li>ஒவ்வொரு machineக்கும் unique ID.</li>
+      <li>System batch wise materials workers machine hours cost of making save செய்கிறது.</li>
+      <li>Warranty service காலத்தில் இந்த history உதவும்.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 8: Dispatch & Delivery</h6>
+    <ul>
+      <li><b>Dispatch Clearance Form</b> create. Accounts payment clear. Marketing Head customer ready confirm.</li>
+      <li><b>Invoice</b> மற்றும் <b>Delivery Challan</b> generate. Transport assign. Loading confirm.</li>
+      <li>Customer godown inward confirm செய்ததும் order close.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 9: Inventory & Material Movement</h6>
+    <ul>
+      <li>System எந்த godownல் என்ன இருக்கிறது என map வைத்திருக்கிறது.</li>
+      <li>Movement ஒன்று நடந்தாலுமே auto transfer entry மற்றும் batch tracking.</li>
+      <li>Low stock alerts purchase teamக்கு.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 10: Employee Work Reporting</h6>
+    <ul>
+      <li>Daily வேலை entry: task start end time output.</li>
+      <li>Reports: productivity delays best performer. Attendance link for accuracy.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 11: Auto Program</h6>
+    <ul>
+      <li>Godown to godown stock auto move. Transfer challan auto generate.</li>
+      <li>Vehicle driver auto assign. Stock instant update. Manual errors குறைவு.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 12: Masters Setup</h6>
+    <ul>
+      <li><b>Product Master</b> codes specs. Agri machines like <b>Baler</b> <b>Rotavator</b> etc.</li>
+      <li><b>BOM Master</b> per product item list quantities alternates.</li>
+      <li><b>Process Master</b> standard steps cut weld assemble test QC.</li>
+      <li><b>Machine Master</b> which machine handles which process maintenance log.</li>
+      <li><b>Godown Master</b> raw semi finished finished goods locations.</li>
+    </ul>
+
+    <h6 class="mt-3">படி 13: Reports & Dashboards</h6>
+    <ul>
+      <li>Accounts pending cleared status.</li>
+      <li>Production board pending in progress completed cycle time.</li>
+      <li>Quality pass rate rework scrap trend.</li>
+      <li>Employee productivity and vendor rating.</li>
+      <li>KPIs on time delivery cost of making nesting utilization.</li>
+    </ul>
+  </section>
+
+  <!-- Flowchart -->
+  <section id="flowchart" class="section mb-4 pagebreak">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-diagram-project me-2 text-primary"></i>Detailed Flowchart</h2>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart TD
+
+    A[Customer Enquiry] --> B[Sales Order Created]
+    B --> C[Accounts Verification]
+    C --> C1{Payment Status}
+    C1 -->|Confirmed| D[Production Planning]
+    C1 -->|Pending| H1[Order On Hold]
+
+    D --> D1[Check Stock]
+    D1 -->|Available| D2[Reserve Stock and Create Job Cards]
+    D1 -->|Not Available| P1[Material Request Form]
+
+    P1 --> P2[Send Enquiry to Vendors]
+    P2 --> P3[Collect and Compare Quotations]
+    P3 --> P4[Admin Selects Best Vendor]
+    P4 --> P5[Purchase Order Issued]
+    P5 --> P6[Material Inward]
+    P6 --> P7[Incoming Quality Check]
+    P7 --> P8[Store Update]
+    P8 --> D2
+
+    D2 --> M{Manufacturing Process}
+    M --> L1[Laser Unit Cutting]
+    L1 --> L2[Nesting Design and Cutting Report]
+    M --> W1[Welding Unit]
+    W1 --> W2[Welding Operation and QC]
+    M --> A1[Assembly Unit]
+    A1 --> A2[Section Assembly Reports]
+
+    L2 --> Q1[Quality Control]
+    W2 --> Q1
+    A2 --> Q1
+
+    Q1 --> Q2{QC Result}
+    Q2 -->|Pass| DCF[Dispatch Clearance Form Approved]
+    Q2 -->|Fail| R1[Rework Loop]
+    R1 --> A1
+
+    DCF --> I1[Invoice Generated]
+    I1 --> I2[Delivery Challan Prepared]
+    I2 --> I3[Transport and Driver Assigned]
+    I3 --> I4[Customer Godown Confirmation]
+    I4 --> MH[Machine History Saved]
+
+    MH --> AUTO[Auto Program Updates Stock Transfers and Challans]
+    AUTO --> MS[Masters Setup]
+    MS --> MS1[Product Master]
+    MS --> MS2[BOM Master]
+    MS --> MS3[Process Master]
+    MS --> MS4[Machine Master]
+    MS --> MS5[Godown Master]
+
+    MS --> REP[Reports and Dashboards]
+    REP --> R2[Accounts Reports]
+    REP --> R3[Production Reports]
+    REP --> R4[Quality Reports]
+    REP --> R5[Employee Reports]
+    REP --> R6[Vendor Rating]
+    REP --> R7[KPI Dashboards]
+</pre>
+    </div>
+    <p class="mt-3 mb-0">
+      விளக்கம்: மேலுள்ள flowchart customer enquiry முதல் masters மற்றும் dashboards வரை முழு பாதையை காட்டுகிறது.
+      QC result pass ஆனால் dispatchக்கு செல்கிறது. Fail ஆனால் rework loop. Auto Program stock மற்றும் challan update செய்கிறது.
+    </p>
+  </section>
+
+  <!-- Swimlane -->
+  <section id="swimlane" class="section mb-4 pagebreak">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-people-arrows me-2 text-primary"></i>Swimlane Diagram by Department</h2>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+
+    subgraph M[Marketing and Sales]
+        A1[Customer Enquiry]
+        A2[Quotation]
+        A3[Sales Order Created]
+    end
+
+    subgraph ACC[Accounts]
+        B1[Advance Payment Check]
+        B2{Payment Status}
+        B3[On Hold if not paid]
+    end
+
+    subgraph PUR[Purchase]
+        C1[Material Request Form]
+        C2[Send Enquiry to Vendors]
+        C3[Compare Quotations]
+        C4[Admin Selects Vendor]
+        C5[Purchase Order Issued]
+        C6[Material Inward]
+        C7[Incoming Quality Check]
+        C8[Store Update]
+    end
+
+    subgraph PRO[Production]
+        D1[Production Planning]
+        D2[Job Cards Created]
+        D3[Laser Cutting]
+        D4[Welding Operation]
+        D5[Assembly Operation]
+        D6[Section Reports]
+    end
+
+    subgraph QC[Quality Control]
+        E1[Section QC]
+        E2[Final QC]
+        E3{QC Result}
+        E4[Rework if Failed]
+    end
+
+    subgraph DIS[Dispatch]
+        F1[Dispatch Clearance Form]
+        F2[Invoice Generated]
+        F3[Delivery Challan Prepared]
+        F4[Transport and Driver Assigned]
+        F5[Customer Godown Confirmation]
+    end
+
+    subgraph SYS[System and Masters]
+        G1[Machine History Saved]
+        G2[Auto Program Updates Stock and Challans]
+        G3[Product Master]
+        G4[BOM Master]
+        G5[Process Master]
+        G6[Machine Master]
+        G7[Godown Master]
+        G8[Reports and Dashboards]
+    end
+
+    A1 --> A2 --> A3 --> B1 --> B2
+    B2 -->|Confirmed| D1
+    B2 -->|Pending| B3
+    D1 --> D2 --> D3 --> E1
+    D2 --> D4 --> E1
+    D2 --> D5 --> D6 --> E1
+    E1 --> E2 --> E3
+    E3 -->|Pass| F1
+    E3 -->|Fail| E4 --> D5
+    F1 --> F2 --> F3 --> F4 --> F5 --> G1 --> G2
+    C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> C7 --> C8 --> D2
+    G2 --> G3 --> G4 --> G5 --> G6 --> G7 --> G8
+</pre>
+    </div>
+    <p class="mt-3 mb-0">
+      விளக்கம்: இந்த swimlane diagramல் Marketing Accounts Purchase Production QC Dispatch System ஆகிய துறைகள்
+      தங்களது பொறுப்புகளை side by side காட்டுகிறது. இதனால் யார் என்ன செய்ய வேண்டும் என்பது நேரடியாகப் புரியும்.
+    </p>
+  </section>
+
+  <!-- Masters -->
+  <section id="masters" class="section mb-4">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-database me-2 text-primary"></i>Masters Setup</h2>
+    <ul>
+      <li><b>Product Master</b> agri machines list with codes example Baler Rotavator etc link to BOM and pricing.</li>
+      <li><b>BOM Master</b> per product item wise quantity and alternates batch track enabled.</li>
+      <li><b>Process Master</b> route steps cut weld assemble test qc standardize for repeat orders.</li>
+      <li><b>Machine Master</b> capability mapping downtime and maintenance schedule.</li>
+      <li><b>Godown Master</b> raw semi finished finished goods locations with movement rules.</li>
+    </ul>
+  </section>
+
+  <!-- Reports -->
+  <section id="reports" class="section mb-5">
+    <h2 class="h5 mb-3"><i class="fa-solid fa-chart-line me-2 text-primary"></i>Reports and Dashboards</h2>
+    <ul>
+      <li>Accounts outstanding and cleared invoices.</li>
+      <li>Production status board and cycle time by order.</li>
+      <li>Quality pass rate rework scrap percentage trends.</li>
+      <li>Employee productivity and attendance linked performance.</li>
+      <li>Vendor rating by quality delivery time rejection percentage.</li>
+      <li>KPIs on time delivery cost of making nesting utilization.</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer class="py-4">
+  <div class="container small text-center">
+    HSTechSoft © 2025 — Solution Partner for Jaysan Agri Industrial • Agricultural manufacturing focus Baler Rotavator and more
+  </div>
+</footer>
+
+<!-- Mermaid render + Print -->
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "default", fontFamily: "Inter, Segoe UI, system-ui, sans-serif" });
+  document.getElementById('btnPrint')?.addEventListener('click', () => window.print());
+</script>
+</body>
+</html>

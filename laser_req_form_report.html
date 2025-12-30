@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  <style>
+     .custom-fixed-table {
+        height: 400px; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .custom-fixed-table table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .custom-fixed-table th, 
+    .custom-fixed-table td {
+        width: 10vw; /* Fixed width for all cells */
+        word-wrap: break-word;
+    }
+    .custom-fixed-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    .custom-fixed-table tbody tr.fixed-row td {
+        position: sticky;
+        top: 38px;
+        background-color: #ffffff;
+        z-index: 5;
+    }
+</style>
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+<div class="container-fluid ">
+    <!-- top bar -->
+  
+   
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+<div class="card">
+    <div class="card-header d-flex justify-content-center">
+        laser request form Report
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-2">
+          
+       
+<div class="col">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="order" id="requirement_order">
+        <label class="form-check-label" for="requirement_order">
+            requirement order
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="order"  id="sale_order" >
+        <label class="form-check-label" for="flexRadioDefault2">
+  Sale Order
+        </label>
+      </div>
+</div>
+
+
+<div class="col">
+    <div class='input-group mb-2'>
+        <div class='input-group-prepend '>
+        <span class='input-group-text ' id='basic-addon1'>
+        Order No </span>
+        
+        </div> 
+        <select class='custom-select form-control' id='order_no'>
+     
+        </select>
+        </div> 
+</div>
+<table id='qty_table1' class=' mt-2 table table-sm table-bordered border-dark border-opacity-50 text-center ' >
+    <thead >
+    <tr>
+    
+    <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Material Requset Form</th>
+    
+    </tr>
+    
+ 
+    </thead>
+    <tbody class='align-middle small' id='qty_table'>
+    <tr>
+        <th scope="col">From</th>
+        <td >Welding</td>
+        <th scope="col">Name</th>
+        <td >Vishnu</td>
+        <th scope="col">Order No</th>
+        <td >123</td>
+       
+    </tr>
+    <tr>
+        <th scope="col">Document Date</th>
+        <td >12-09-2024</td>
+        <th scope="col">Order Type</th>
+        <td >Emergency</td>
+        <th scope="col">Order Catergory</th>
+        <td >Requirement Order <span class="mark ps-2">(OE)</span</td>
+       
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>Management</td>
+        <th>Limitation</th>
+        <td>Proceed Until chasis welding</td>
+        <th>Product</th>
+        <td>Baler</td>
+    </tr>
+    <tr>
+        <th>Color</th>
+        <td>Customize</td>
+        <th> color des</th>
+        <td colspan="3">add some vibrant color to it</td>
+    </tr>
+    <tr>
+        <th>chasis no</th>
+        <td>Customize</td>
+        <th> chasis des</th>
+        <td colspan="3">need TJ12/34/567 - TJ12/34/580</td>
+    </tr>
+    <tr>
+        <th>Others</th>
+        <td colspan="5"></td>
+    </tr>
+    <tr>
+        <th colspan="2">Totatl Item Qty</th>
+        <td colspan="1">1500</td>
+        <th colspan="2">Percentage</th>
+        <td colspan="2">10%</td>
+    </tr>
+    <tr class="  text-dark" style="background-color:#9a9fa3">
+  <th>#</th>
+  <th colspan="2">Description</th>
+  <th>UOM</th>
+  <th>Order Qty</th>
+  <th>Urgent Qty</th>
+    </tr>
+    <tr >
+        <td>1</td>
+        <td colspan="2">aari kampi</td>
+        <td>NO</td>
+        <td>500</td>
+        <td>150</td>
+          </tr>
+          <tr >
+            <td>2</td>
+            <td colspan="2">door</td>
+            <td>NO</td>
+            <td>24</td>
+            <td>12</td>
+              </tr>
+    </tbody>
+    </table>   
+
+
+
+
+       
+   
+
+
+  
+           
+          
+            
+   
+
+        </div>
+               
+<div class="d-flex justify-content-between gap-2">
+   <div class="d-flex justify-content-start">
+    <div>
+        <div class='input-group mb-2 ' >
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+            complete date </span>
+            
+            </div> 
+            <input type='datetime-local' id='complete date' class='form-control' placeholder='Date'  disabled>
+            
+            </div>
+    </div>
+  
+       
+<div> <button class="btn btn-primary">Estimate Complete Time</button></div>
+   </div>
+
+   <div class="d-flex justify-content-start">
+    <div>
+        <div class='input-group mb-2 ' >
+            <div class='input-group-prepend '>
+            <span class='input-group-text ' >
+            Delivery date </span>
+            
+            </div> 
+            <input type='datetime-local' id='complete date' class='form-control' placeholder='Date'>
+            
+            </div>
+    </div>
+  
+       
+<div> <button class="btn btn-primary">Submit</button></div>
+   </div>
+
+</div>
+    </div>
+</div>
+
+
+ 
+</div>
+
+
+       
+    
+
+
+<!-- content -->
+
+
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+<l
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/laser_req_form.js" type="module"></script>
+<!-- <script src="js/menu.js" type="module"></script> -->
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

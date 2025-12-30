@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="http://103.224.34.72//swen/style.css">
+
+
+
+
+</head>
+<body >
+ 
+   <div class="container-fluid" id="print">
+
+    <div class="card " id="nodata">
+      <div class="card-header text-bg-primary">
+        <div class="d-flex justify-content-between ">
+          <p id="cus_name">harishkumar</p>
+          <h6 class="text-decoration-underline">Site Visit Report</h6>
+        </div>
+       
+        <div class="d-flex  justify-content-between gap-2  text-bg-primary">
+          <p  id="emp_name"></p> 
+           <p  id="date"></p>
+          
+         </div>
+      </div>
+      
+      <div class="card-body p-0 m-0 ">
+        <table class="table table-bordered p-0 m-0 border-secondary">
+          <thead class="text-center text-bg-light" id="lead_header ">
+            <tr>
+            
+              <th  colspan="4" scope="col"> Customer Info</th>
+            
+            </tr>
+            <tbody class="">
+              <tr>
+
+                <td class="text-bg-secondary bg-opacity-50 text-dark">Customer Name</td>
+                <td><p id="cus_name1" class="m-0 p-0">harishkumar</p> </td>
+                <td class="text-bg-secondary bg-opacity-50 text-dark">Phone</td>
+                <td><p id="cus_phone" class="m-0 p-0">harishkumar</p> </td>
+                
+              </tr>
+              <tr>
+                <td class="text-bg-secondary bg-opacity-50 text-dark">Address</td>
+                <td><p id="cus_addr" class="m-0 p-0">harishkumar</p> </td>
+                <td class="text-bg-secondary bg-opacity-50 text-dark">Location</td>
+                <td><a href="#" target="_blank" id="cus_location" class="link-primary">Map Location</a>
+                   </td>
+              </tr>
+            </tbody>
+          </thead>
+        </table>
+     
+
+        <table class="table m-0 p-0 table-bordered border border-1 border-secondary small">
+          <thead class="text-center text-decoration-underline" id="lead_header ">
+            <tr>
+            
+              <th  colspan="6" scope="col"> Site Survey Data</th>
+            
+            </tr>
+            <tbody class="">
+              <tr class="">
+
+                <td class="text-bg-secondary bg-opacity-50 text-dark" >Industry Type</td>
+                <td> <p class = "p-0 m-0" id="industry_type_txt">harishkumar</p> </td>
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">EB Number</td>
+                <td><p class = "p-0 m-0" id="eb_no_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">EB Reg Number</td>
+                <td><p class = "p-0 m-0" id="eb_reg_no_txt">harishkumar</p></td>
+              </tr>
+              
+              <tr>
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">EB Billing Amount</td>
+                <td><p class = "p-0 m-0" id="eb_amount_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">EB Tariff Details</td>
+                <td><p class = "p-0 m-0" id="eb_tariff_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">EB Sanctioned Load</td>
+                <td><p class = "p-0 m-0" id="eb_san_load_txt">harishkumar</p></td>
+              </tr>
+
+              <tr>
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Triples Recommend Load</td>
+                <td><p class = "p-0 m-0" id="eb_tri_load_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Type of Installation</td>
+                <td><p class = "p-0 m-0" id="type_ins_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Purling to Purling Distance</td>
+                <td><p class = "p-0 m-0" id="p2p_dis_txt">harishkumar</p></td>
+              </tr>
+              <tr>
+              
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Total Measurement</td>
+                <td><p class = "p-0 m-0" id="total_mea_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Shift Operation</td>
+                 <td><p class = "p-0 m-0" id="shift_txt">harishkumar</p></td>
+                
+                 <td class=" text-bg-secondary bg-opacity-50 text-dark">Funding Details</td>
+                <td><p class = "p-0 m-0" id="fund_txt">harishkumar</p></td>
+              </tr>
+              <tr>
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Customer Rating</td>
+                <td><p class = "p-0 m-0" id="cus_rating_txt">harishkumar</p></td>
+                
+                <td class=" text-bg-secondary bg-opacity-50 text-dark">Remark</td>
+                <td class="p-3" colspan="4"><p class = "p-0 m-0" id="remark_txt">harishkumar</p></td>
+               
+              </tr>
+            </tbody>
+          </thead>
+        </table>
+
+        <table class="table table-bordered border-secondary p-0 m-0 ">
+          <thead class="text-center text-bg-light " >
+            <tr>
+            
+              <th  colspan="2" scope="col">Upload Date</th>
+            
+            </tr>
+          </thead>
+            <tbody class="m-0 p-0">
+              <tr>
+
+                <td class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>company Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/upload.png"> <img id='company_photo_preview' class='img-fluid' style='width: 10rem;' src="img/upload.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+
+                <td class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Visiting Card Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/attachment.png"> <img id='vc_photo_preview' class='img-fluid' style='width: 10rem;'src="img/attachment.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+              
+               
+                
+              </tr>
+           
+              <tr>
+
+                <td class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Roof Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/upload.png"> <img id='roof_photo_preview' class='img-fluid' style='width: 10rem;' src="img/upload.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+
+                <td class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Google Earth Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/attachment.png"> <img id='ge_photo_preview' class='img-fluid' style='width: 10rem;'src="img/attachment.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+              
+               
+                
+              </tr>
+         
+              <tr >
+
+                <td class="p-0 m-0">
+                 
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Hand Sketch Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/upload.png"> <img id='hs_photo_preview' class='img-fluid' style='width: 10rem;' src="img/upload.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+
+                <td class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Site Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/attachment.png"> <img id='site_photo_preview' class='img-fluid' style='width: 10rem;'src="img/attachment.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+              
+               
+                
+              </tr>
+
+              <tr>
+               
+                <td rowspan="2" class="p-0 m-0">
+                  <div class="card ">
+                    <div class="card-header text-bg-danger text-center">
+                        <h6>Evocation Photo</h6> 
+                    </div>
+    
+                    <div class="card-body m-0 p-0 mx-auto">
+                      <a href="img/upload.png"> <img id='ep_photo_preview' class='img-fluid' style='width: 10rem;' src="img/upload.png" alt></a> 
+                       
+                    </div>
+                </div>
+                </td>
+<td></td>
+                
+               
+                
+              </tr>
+            </tbody>
+          </thead>
+        </table>
+      </div>
+    </div>
+
+   
+    </div>
+
+    <div class="d-flex justify-content-center mt-2">
+      <button type="button" class="btn btn-danger text-center" id="print_btn">print</button>
+    </div>
+ <div class="container-fluid  d-flex flex-wrap gap-2 mt-2" id="attch">
+
+   
+
+     
+
+    
+ </div>
+
+  
+ 
+   
+
+
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="js/printThis.js" type="module"></script>
+
+
+
+<!-- external js -->
+<script src="js/site_visit_report.js" type="module"></script>
+
+
+</body>
+</html>

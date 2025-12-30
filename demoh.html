@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice PDF Generator</title>
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- html2canvas for capturing HTML content -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- jsPDF for generating PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <!-- Button to generate the PDF -->
+    <button id="generatePDF" class="btn btn-success mt-3">
+        <i class="fa fa-file-pdf"></i> Generate PDF
+    </button>
+
+    <!-- Content of the invoice that will be captured -->
+    <div id="invoiceContent" class="mt-4">
+        <h2>Invoice #12345</h2>
+        <p>Date: 2024-09-14</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product 1</td>
+                    <td>2</td>
+                    <td>$50</td>
+                    <td>$100</td>
+                </tr>
+                <tr>
+                    <td>Product 2</td>
+                    <td>1</td>
+                    <td>$150</td>
+                    <td>$150</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+        <p><strong>Total Amount: $250</strong></p>
+    </div>
+</div>
+
+<!-- Script to generate PDF using jsPDF and html2canvas -->
+<script>
+    document.getElementById('generatePDF').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Capture the content of the invoice
+        html2canvas(document.getElementById('invoiceContent'), {
+            scale: 2, // Increase scale for better quality
+        }).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 190; // Width of the image in the PDF (mm)
+            const pageHeight = 290; // Height of the PDF page (mm)
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 10; // Starting position from the top (mm)
+
+            // Add the captured image to the PDF
+            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // Add additional pages if content is longer than one page
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                doc.addPage();
+                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // Save the generated PDF
+            doc.save('invoice.pdf');
+        }).catch(error => console.error('Error capturing the content:', error));
+    });
+</script>
+
+</body>
+</html>

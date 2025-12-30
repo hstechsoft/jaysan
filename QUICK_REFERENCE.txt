@@ -1,0 +1,146 @@
+╔══════════════════════════════════════════════════════════════╗
+║     API ANALYTICS DASHBOARD - QUICK REFERENCE CARD           ║
+╚══════════════════════════════════════════════════════════════╝
+
+📊 DASHBOARD FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🔹 Line Number Tracking - See exact lines where APIs are called
+  🔹 VS Code Integration - Click to open files at specific lines
+  🔹 Three View Modes - JS Files / PHP APIs / Categories
+  🔹 Dark Mode - Toggle with button in top-right
+  🔹 Search & Filter - Find files and APIs quickly
+  🔹 Export - CSV/JSON download options
+
+🎨 COLOR GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🟦 Blue Tags   = PHP API files (clickable)
+  🟩 Green Badge = Line numbers (clickable - opens JS file)
+  🟥 Red Badge   = Unused PHP files (warning)
+  ⚪ White Text  = File names (clickable)
+
+🖱️  CLICK ACTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📄 JS File Name  → Opens JS file in VS Code
+  🔧 PHP API Name  → Opens PHP file in VS Code
+  L## Badge        → Opens JS file at line ## in VS Code
+  🌙 Dark Mode Btn → Toggles dark/light theme
+
+📑 VIEW MODES (TABS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📄 JS Files View
+     • Shows: JavaScript files → PHP APIs used
+     • With: Line numbers where APIs are called
+     • Use: Find what APIs a JS file uses
+
+  🔧 PHP APIs View (Reverse Lookup)
+     • Shows: PHP APIs → JavaScript files using them
+     • With: Line numbers of each usage
+     • Use: Find where an API is called
+
+  📁 Category View
+     • Shows: Files grouped by type (Admin, Employee, etc.)
+     • With: Collapsible sections
+     • Use: Explore by feature area
+
+🔍 SCANNER TOOL (js_php_line_scanner.html)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Step 1: Open js_php_line_scanner.html
+  Step 2: Click "Select JS Folder" → Choose js/ directory
+  Step 3: Click "Scan Files" → Wait for completion
+  Step 4: Click "Copy JSON" or "Download JSON"
+  Step 5: Paste into dashboard's apiData array
+
+💾 DATA FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  With Line Numbers:
+  { 
+    js: 'login.js', 
+    apis: [
+      { name: 'get_employee_id.php', lines: [82] },
+      { name: 'get_user_data.php', lines: [125, 234] }
+    ]
+  }
+
+  Simple Format (backward compatible):
+  { 
+    js: 'login.js', 
+    apis: ['get_employee_id.php', 'get_user_data.php'] 
+  }
+
+🎯 COMMON TASKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Find where an API is called:
+    1. Go to "PHP APIs View" tab
+    2. Search for API name
+    3. Click line number badge
+
+  See all APIs used by a JS file:
+    1. Go to "JS Files View" tab
+    2. Search for JS file name
+    3. View all APIs with line numbers
+
+  Find unused PHP files:
+    1. Go to "PHP APIs View" tab
+    2. Look for ⚠️ "Unused" badges
+    3. Consider removing these files
+
+  Debug an API call:
+    1. Find the API in any view
+    2. Click the line number badge
+    3. VS Code opens at exact line
+    4. Debug the code
+
+  Export data:
+    1. Use filter buttons (All/High/Medium/Low)
+    2. Click "Export CSV" or "Export JSON"
+    3. Open in Excel or other tools
+
+⌨️  KEYBOARD SHORTCUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Ctrl+F      → Focus search box
+  Tab         → Switch between view modes
+  Ctrl+Click  → Open link in new VS Code window
+
+📁 FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  api_analytics_dashboard.html  → Main dashboard
+  js_php_line_scanner.html       → Scanner tool
+  README_LINE_NUMBERS.md         → Full documentation
+  SUMMARY.md                     → Feature overview
+  QUICK_REFERENCE.txt            → This file
+
+🐛 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Links not working?
+    → Make sure VS Code is installed
+    → Check file paths are correct
+
+  No line numbers showing?
+    → Use scanner tool to generate line data
+    → Replace apiData array in dashboard
+
+  Scanner not working?
+    → Enable directory selection in browser
+    → Try Chrome/Edge (best support)
+
+  Dark mode not saving?
+    → Check browser localStorage is enabled
+    → Clear cache and try again
+
+📞 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. Read: README_LINE_NUMBERS.md
+  2. Check: SUMMARY.md for examples
+  3. Review: Scanner tool instructions
+
+╔══════════════════════════════════════════════════════════════╗
+║                    QUICK START                               ║
+╠══════════════════════════════════════════════════════════════╣
+║  1. Open api_analytics_dashboard.html                        ║
+║  2. Click any green L## badge                                ║
+║  3. VS Code opens at that line!                              ║
+║  4. Use scanner to get full line data for all files          ║
+╚══════════════════════════════════════════════════════════════╝
+
+Last Updated: December 2025
+Version: 2.0 (Line Number Edition)

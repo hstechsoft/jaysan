@@ -1,0 +1,2955 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript to PHP API Analytics Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            transition: background 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        body.dark-mode .container {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .stat-card,
+        body.dark-mode .api-card,
+        body.dark-mode table,
+        body.dark-mode th {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode tr:hover {
+            background: #1a1a2e;
+        }
+        
+        body.dark-mode td {
+            border-bottom: 1px solid #2a2a3e;
+        }
+        
+        body.dark-mode .stats {
+            background: #0f3460;
+        }
+        
+        body.dark-mode .controls {
+            background: #16213e;
+            border-bottom: 2px solid #2a2a3e;
+        }
+        
+        body.dark-mode .search-box {
+            background: #0f3460;
+            color: #e0e0e0;
+            border-color: #667eea;
+        }
+        
+        body.dark-mode .top-apis {
+            background: #0f3460;
+        }
+        
+        body.dark-mode .category-header {
+            background: linear-gradient(90deg, #0f3460 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .js-file {
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .js-file:hover {
+            text-decoration: underline;
+            color: #764ba2;
+        }
+        
+        .php-list {
+            font-size: 0.9em;
+            color: #495057;
+        }
+        
+        .php-api {
+            display: inline-block;
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .php-api:hover {
+            background: #0066cc;
+            color: white;
+            transform: translateY(-1px);        
+        .line-number {
+            background: #28a745;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+        
+        .api-with-line {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .count-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .filter-buttons {
+            margin-bottom: 15px;
+        }
+        
+        .filter-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .filter-btn:hover {
+            background: #764ba2;
+        }
+        
+        .filter-btn.active {
+            background: #28a745;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        .sort-header {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 20px;
+        }
+        
+        .sort-header:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .sort-header::after {
+            content: 'â‡…';
+            position: absolute;
+            right: 8px;
+            opacity: 0.5;
+        }
+        
+        .sort-header.asc::after {
+            content: 'â–²';
+            opacity: 1;
+        }
+        
+        .sort-header.desc::after {
+            content: 'â–¼';
+            opacity: 1;
+        }
+        
+        .top-apis {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .top-apis h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .api-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .api-name {
+            font-weight: 600;
+            color: #0066cc;
+        }
+        
+        .api-usage {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .export-btn:hover {
+            background: #218838;
+        }
+        
+        .category-section {
+            margin-bottom: 30px;
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 15px 0 10px 0;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .category-header:hover {
+            opacity: 0.9;
+        }
+        
+        .toggle-view {
+            margin-left: 10px;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .dark-mode-toggle:hover {
+            background: #764ba2;
+        }
+        
+        .reverse-lookup-section {
+            padding: 30px;
+            background: white;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .reverse-lookup-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .php-usage-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .php-usage-card.unused {
+            border-left-color: #dc3545;
+            background: #fff3f3;
+        }
+        
+        .unused-badge {
+            background: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .used-by-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1> JavaScript to PHP API Analytics</h1>
+            <p>JaysanERP Project - API Endpoint Mapping</p>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                 Click on <span class="line-number" style="display: inline-block;">L##</span> to jump to exact line in JS file where API is called
+            </p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="totalJsFiles">0</h3>
+                <p>JavaScript Files</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalPhpApis">0</h3>
+                <p>Unique PHP APIs</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalConnections">0</h3>
+                <p>Total API Calls</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="avgCalls">0</h3>
+                <p>Avg APIs per File</p>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <h3 id="unusedPhpCount">0</h3>
+                <p>⚠️ Unused PHP Files</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('js-view')">JS Files View</button>
+                <button class="tab-btn" onclick="switchTab('php-view')"> PHP APIs View</button>
+                <button class="tab-btn" onclick="switchTab('category-view')">Category View</button>
+                <button class="tab-btn" onclick="switchTab('security-view')"> Security Scan</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByCount('all')">All Files</button>
+                <button class="filter-btn" onclick="filterByCount('high')">High Usage (10+)</button>
+                <button class="filter-btn" onclick="filterByCount('medium')">Medium (5-9)</button>
+                <button class="filter-btn" onclick="filterByCount('low')">Low (1-4)</button>
+                <button class="export-btn" onclick="exportToCSV()"> Export CSV</button>
+                <button class="export-btn" onclick="exportToJSON()"> Export JSON</button>
+                <button class="filter-btn toggle-view" onclick="toggleTopAPIs()">Toggle Top APIs</button>
+            </div>
+            <input type="text" id="searchBox" class="search-box" placeholder=" Search for JS file or PHP API..." onkeyup="filterTable()">
+        </div>
+        
+        <div id="topAPIsSection" class="top-apis" style="display: none;">
+            <h2> Most Used PHP APIs</h2>
+            <div id="topAPIsList"></div>
+        </div>
+        
+        <div id="js-view" class="tab-content active">
+            <div class="table-container">
+                <table id="apiTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th style="width: 250px;" class="sort-header" onclick="sortTable('js')">JS File Name</th>
+                            <th>PHP API Files</th>
+                            <th style="width: 100px; text-align: center;" class="sort-header" onclick="sortTable('count')">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                <div id="noResults" class="no-results" style="display: none;">
+                    No results found
+                </div>
+            </div>
+        </div>
+        
+        <div id="php-view" class="tab-content">
+            <div class="reverse-lookup-section">
+                <h2> PHP API Reverse Lookup</h2>
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+                    <input type="text" id="phpSearchBox" class="search-box" placeholder="Search PHP API..." onkeyup="filterPHPLookup()" style="margin: 0; flex: 1;">
+                    <button class="filter-btn" id="showAllPhpBtn" onclick="showAllPHP()" style="white-space: nowrap;"> Show All</button>
+                    <button class="export-btn" id="showUnusedBtn" onclick="showUnusedPHP()" style="white-space: nowrap; background: #dc3545;"> Show Unused Only</button>
+                </div>
+                <div id="unusedCount" style="padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; margin-bottom: 15px; display: none;">
+                    <strong>⚠️ <span id="unusedCountText">0</span> unused PHP files found</strong> - These files are not referenced by any JavaScript file in the current data.
+                    <br><small style="color: #856404;">Note: Only JS files with line number data are fully tracked. Use js_php_line_scanner.html to scan all 182 JS files for complete accuracy.</small>
+                </div>
+                <div id="phpLookupContainer"></div>
+            </div>
+        </div>
+        
+        <div id="category-view" class="tab-content">
+            <div class="table-container">
+                <div id="categoryContainer"></div>
+            </div>
+        </div>
+        
+        <div id="security-view" class="tab-content">
+            <div class="security-section">
+                <h2 style="color: #dc3545; margin-bottom: 20px;"> Security Vulnerabilities & Dangerous Operations</h2>
+                
+                <div class="security-summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <h3 style="color: #856404; margin-bottom: 5px;">⚠️ Total Files</h3>
+                        <div style="font-size: 2em; font-weight: bold; color: #856404;" id="secFilesCount">0</div>
+                    </div>
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                        <h3 style="color: #721c24; margin-bottom: 5px;">� Critical</h3>
+                        <div style="font-size: 2em; font-weight: bold; color: #721c24;" id="secCriticalCount">0</div>
+                    </div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <h3 style="color: #856404; margin-bottom: 5px;">⚠️ High</h3>
+                        <div style="font-size: 2em; font-weight: bold; color: #856404;" id="secHighCount">0</div>
+                    </div>
+                    <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                        <h3 style="color: #0c5460; margin-bottom: 5px;">Medium</h3>
+                        <div style="font-size: 2em; font-weight: bold; color: #0c5460;" id="secMediumCount">0</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="securitySearchBox" class="search-box" placeholder="Search file, operation type, or code..." onkeyup="filterSecurity()" style="margin-bottom: 10px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="filter-btn active" onclick="filterSecurityByRisk('all')">All Issues</button>
+                        <button class="filter-btn" onclick="filterSecurityByRisk('CRITICAL')">Critical</button>
+                        <button class="filter-btn" onclick="filterSecurityByRisk('HIGH')">High Risk</button>
+                        <button class="filter-btn" onclick="filterSecurityByRisk('MEDIUM')">Medium Risk</button>
+                        <button class="export-btn" onclick="exportSecurityToCSV()"> Export Security Report</button>
+                    </div>
+                </div>
+                
+                <div id="securityIssuesContainer"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // API Mapping Data (supports both formats: strings or objects with line numbers)
+        // Format with line numbers: { name: 'api.php', lines: [10, 25, 30] }
+        // Simple format: 'api.php' (for backward compatibility)
+        // To update: Replace this entire apiData array with generated JSON from js_php_line_scanner.html
+        
+        // All PHP files in the php/ directory (for unused detection) - 691 total files
+        const allPhpFilesInDirectory = [
+            'add_process_title.php', 'all_tables.php', 'api_lead_generation.php', 'approve_dcf_hod.php', 'approve_dcf_pay.php',
+            'assign_product_customer_autocomplete.php', 'assign_product_get_model_list.php', 'assign_product_get_product_list.php', 'assign_product_get_sub_type_list.php', 'assign_product_get_type_list.php',
+            'att_report.php', 'att_report_sum.php', 'budget_summary_chart.php', 'change_employee.php', 'check_candidate_phone.php',
+            'check_chasis_no.php', 'check_coupen.php', 'check_customer_phone.php', 'check_listner.php', 'check_time_exists.php',
+            'check_utr_no.php', 'db_back.php', 'db_backup.php', 'db_head.php', 'dcf_graph.php',
+            'delete_app_all.php', 'delete_app_menu.php', 'delete_customer.php', 'delete_dealer.php', 'delete_employee_process.php',
+            'delete_emp_exp.php', 'delete_estimation.php', 'delete_expenses.php', 'delete_extra_time.php', 'delete_godown.php',
+            'delete_implement.php', 'delete_input_part.php', 'delete_invoice.php', 'delete_jaysan_machine.php', 'delete_lead.php',
+            'delete_lead_web.php', 'delete_model_subtype.php', 'delete_model_type.php', 'delete_nesting_output.php', 'delete_organization.php',
+            'delete_payment.php', 'delete_policy_single.php', 'delete_process.php', 'delete_product.php', 'delete_product_reminder.php',
+            'delete_proforma.php', 'delete_quotation.php', 'delete_reminder.php', 'delete_sales_order.php', 'delete_sales_pay.php',
+            'delete_sales_product.php', 'delete_sujith.php', 'delete_title.php', 'delete_tour_req.php', 'delete_unapprove_exp.php',
+            'delete_warranty.php', 'delete_work.php', 'delete_work_entry.php', 'delete_work_report.php', 'delete_work_time_master.php',
+            'delete_work_type.php', 'del_wel_process1.php', 'demo.php', 'demo1.php', 'demo2.php',
+            'democsv.php', 'demoh.php', 'demoh1.php', 'emp_lead_out_summary_chart.php', 'emp_lead_summary_chart.php',
+            'emp_tour_sum_phone.php', 'event_mapper.php', 'fetch_title.php', 'generate_and_email_pdf.php', 'get_admin_emp_att_report.php',
+            'get_admin_emp_att_report_cal.php', 'get_admin_emp_exp_report_cal.php', 'get_admin_tour.php', 'get_admin_tour_requset.php', 'get_advance_payment.php',
+            'get_alarm_phone.php', 'get_alarm_work.php', 'get_all_app_role.php', 'get_all_correction.php', 'get_all_customer.php',
+            'get_all_dealer.php', 'get_all_emp_hi.php', 'get_all_emp_role.php', 'get_all_emp_role_based.php', 'get_all_extra_time.php',
+            'get_all_internal_godown.php', 'get_all_machine_list.php', 'get_all_policy_cat.php', 'get_all_reminder.php', 'get_all_report_type.php',
+            'get_all_role.php', 'get_all_warranty.php', 'get_all_work.php', 'get_all_work_type.php', 'get_android_id.php',
+            'get_appmenu_auto.php', 'get_app_menu.php', 'get_app_menu_all.php', 'get_app_menu_master.php', 'get_assigned_accept.php',
+            'get_assigned_processes.php', 'get_assigned_processes_raw.php', 'get_assigned_role_list.php', 'get_assign_cal_details.php', 'get_assign_no.php',
+            'get_assign_order.php', 'get_assign_report.php', 'get_assign_work.php', 'get_att.php', 'get_att_rules.php',
+            'get_bal_payment.php', 'get_batch_parts.php', 'get_bom.php', 'get_bom_list.php', 'get_bom_list_comp.php',
+            'get_bom_output.php', 'get_bom_process_all.php', 'get_bom_process_count.php', 'get_bom_process_details.php', 'get_bom_process_recent.php',
+            'get_bom_recent.php', 'get_budget.php', 'get_budget_details.php', 'get_caller_info.php', 'get_call_cus_id.php',
+            'get_call_log.php', 'get_cal_assign_report.php', 'get_candidate_report.php', 'get_chk_warranty.php', 'get_company.php',
+            'get_company_print.php', 'get_coupen_cus.php', 'get_creditors_auto.php', 'get_creditors_auto1.php', 'get_credit_note_report.php',
+            'get_credit_note_sts.php', 'get_current_date.php', 'get_current_employee_id_byphoneid.php', 'get_cur_work.php', 'get_customer_autocomplete.php',
+            'get_customer_edit.php', 'get_customer_history.php', 'get_customer_phone.php', 'get_custom_spec.php', 'get_cus_info.php',
+            'get_cus_info_all.php', 'get_cus_info_service.php', 'get_cus_payment_history.php', 'get_dcf.php', 'get_dcf_details.php',
+            'get_dcf_report.php', 'get_dealer.php', 'get_dealer_autocomplete.php', 'get_dealer_login.php', 'get_dealer_report.php',
+            'get_delivery_cus.php', 'get_delivery_report.php', 'get_demo.php', 'get_department.php', 'get_departments_auto.php',
+            'get_departments_auto1.php', 'get_departments_auto2.php', 'get_dep_section.php', 'get_dep_sec_machine.php', 'get_dispatch_count.php',
+            'get_empf_work.php', 'get_employee.php', 'get_employee_all.php', 'get_employee_auto.php', 'get_employee_autocomplete.php',
+            'get_employee_autocomplete1.php', 'get_employee_cur_sts.php', 'get_employee_cur_sts_phone.php', 'get_employee_id.php', 'get_employee_info.php',
+            'get_employee_notification.php', 'get_employee_phone.php', 'get_employee_single.php', 'get_empmenu_auto.php', 'get_emp_att_report.php',
+            'get_emp_att_sum_phone.php', 'get_emp_auto.php', 'get_emp_break.php', 'get_emp_feature.php', 'get_emp_fea_app.php',
+            'get_emp_login.php', 'get_emp_task_detail.php', 'get_emp_task_report_cal.php', 'get_emp_task_sum_phone.php', 'get_emp_tour.php',
+            'get_emp_tour_sum_phone.php', 'get_emp_wel_work.php', 'get_emp_work.php', 'get_estimate_all.php', 'get_estimate_details.php',
+            'get_estimate_details_single.php', 'get_estimation_single.php', 'get_existing_work_data.php', 'get_expenses_single.php', 'get_expense_all.php',
+            'get_expense_approve_sts.php', 'get_expense_decline_single.php', 'get_expense_single.php', 'get_expense_summary_single.php', 'get_expense_unapprove_single.php',
+            'get_exp_cat.php', 'get_exp_cat_all.php', 'get_exp_report.php', 'get_exp_report_cat.php', 'get_exp_report_single.php',
+            'get_extra_time_within_range.php', 'get_extw_request_cus.php', 'get_ext_warranty_request.php', 'get_feedback_request.php', 'get_field_data.php',
+            'get_godown.php', 'get_godown_name.php', 'get_godown_report.php', 'get_helper_emp.php', 'get_history.php',
+            'get_implement_input.php', 'get_implement_output.php', 'get_implement_process.php', 'get_input_work.php', 'get_internal_godown_stock_physical.php',
+            'get_internal_godown_stock_tally.php', 'get_invoice_all.php', 'get_invoice_details.php', 'get_invoice_details_single.php', 'get_invoice_single.php',
+            'get_jaysan_final_product.php', 'get_jaysan_final_productmodel.php', 'get_jaysan_final_producttype.php', 'get_jaysan_final_product_all.php', 'get_jaysan_machine.php',
+            'get_jaysan_model_subtype.php', 'get_jaysan_model_subtype1.php', 'get_jaysan_nesting.php', 'get_jaysan_payment.php', 'get_jaysan_po_material.php',
+            'get_jaysan_product_autocomplete.php', 'get_jaysan_product_details.php', 'get_jaysan_res.php', 'get_jaysan_stock.php', 'get_lead.php',
+            'get_lead_report.php', 'get_lead_source.php', 'get_lead_web.php', 'get_location.php', 'get_login_check _details.php',
+            'get_login_employee_details.php', 'get_machine.php', 'get_machines_by_process.php', 'get_machine_auto.php', 'get_machine_report.php',
+            'get_material_chart.php', 'get_material_frequency_chart.php', 'get_material_request_form_all.php', 'get_material_request_form_details.php', 'get_material_request_form_details_md.php',
+            'get_material_request_form_details_purchase.php', 'get_material_request_form_list.php', 'get_material_request_form_list_purchase.php', 'get_material_request_form_list_tally.php', 'get_material_request_form_parts_search.php',
+            'get_material_request_form_physical_stock.php', 'get_material_request_form_purchase_single.php', 'get_material_request_form_report.php', 'get_material_request_form_single.php', 'get_material_request_form_tally_stock.php',
+            'get_mcall_customer.php', 'get_mf_company_chart.php', 'get_model.php', 'get_mrf_details.php', 'get_mrf_po_basic_details.php',
+            'get_mrf_po_company_wise.php', 'get_mrf_po_details.php', 'get_mrf_purchase_details.php', 'get_name_autocomplete.php', 'get_na_work.php',
+            'get_nesting_output.php', 'get_next_work_time.php', 'get_organization.php', 'get_output_work.php', 'get_part.php',
+            'get_parts.php', 'get_parts_tbl.php', 'get_part_details.php', 'get_part_name_auto.php', 'get_part_name_auto1.php',
+            'get_part_name_auto_sub.php', 'get_part_name_auto_wel.php', 'get_part_qsts.php', 'get_part_rules.php', 'get_part_spec.php',
+            'get_part_sts.php', 'get_payment_history.php', 'get_payment_report.php', 'get_payslip_month.php', 'get_payslip_report.php',
+            'get_pending_work.php', 'get_pending_work_all.php', 'get_phone_autocomplete.php', 'get_phone_fea.php', 'get_phy_stock_details.php',
+            'get_pipeline_work.php', 'get_place_autocomplete.php', 'get_policy.php', 'get_policy_head.php', 'get_policy_no_autocomplete.php',
+            'get_policy_single.php', 'get_po_dashboard.php', 'get_po_list.php', 'get_po_receive_sts.php', 'get_po_report.php',
+            'get_po_report_search_auto.php', 'get_processes.php', 'get_process_auto.php', 'get_process_graph.php', 'get_process_group.php',
+            'get_process_group_all.php', 'get_process_part_auto.php', 'get_process_summary.php', 'get_product.php', 'get_production_sts.php',
+            'get_product_all.php', 'get_product_autocomplete.php', 'get_product_invoice.php', 'get_product_reminder.php', 'get_proforma_details.php',
+            'get_proforma_details_single.php', 'get_proforma_single.php', 'get_pro_assign_sts.php', 'get_qcount.php', 'get_quotaion_list.php',
+            'get_quotation_list.php', 'get_quotation_report.php', 'get_quotation_single.php', 'get_quote_all.php', 'get_quote_details.php',
+            'get_quote_details_single.php', 'get_rate_quotation_details.php', 'get_rate_quotation_part.php', 'get_recursive_processes.php', 'get_ref.php',
+            'get_refname_autocomplete.php', 'get_refphone_autocomplete.php', 'get_reminder.php', 'get_reminder_all.php', 'get_reminder_invoice.php',
+            'get_restamping_all.php', 'get_restamp_details.php', 'get_role.php', 'get_role_name.php', 'get_role_type.php',
+            'get_role_type_app.php', 'get_sales_cus.php', 'get_sales_demo.php', 'get_sales_order.php', 'get_sales_order_details.php',
+            'get_sales_order_details_approved.php', 'get_sales_order_id.php', 'get_sales_order_id_md.php', 'get_sales_order_report.php', 'get_sales_order_single.php',
+            'get_sales_order_subtype.php', 'get_sales_order_summary.php', 'get_sales_payment.php', 'get_sales_payment1.php', 'get_sales_payment_m.php',
+            'get_sales_product.php', 'get_sales_product1.php', 'get_sales_report.php', 'get_sales_report1.php', 'get_sales_report_approved.php',
+            'get_sales_report_emp.php', 'get_sales_report_emp1.php', 'get_sale_order_mreport.php', 'get_sale_order_report.php', 'get_sample_sts.php',
+            'get_sa_work.php', 'get_sa_work_all.php', 'get_sections_auto.php', 'get_sections_auto1.php', 'get_sections_auto2.php',
+            'get_sections_full_auto.php', 'get_sec_machine_auto.php', 'get_sel_imp.php', 'get_sel_process.php', 'get_service_all.php',
+            'get_service_details.php', 'get_service_request.php', 'get_service_request_cus.php', 'get_site_visit.php', 'get_site_visit_work.php',
+            'get_site_visit_work_all.php', 'get_spec_auto.php', 'get_spec_details.php', 'get_std_spec.php', 'get_subtype_auto.php',
+            'get_sub_assembly_bom_recent.php', 'get_sub_ass_process_count.php', 'get_sub_bom_process_recent.php', 'get_sujith.php', 'get_sujith1.php',
+            'get_summary.php', 'get_sv_all.php', 'get_tcall_customer.php', 'get_titles.php', 'get_today_assigned_work.php',
+            'get_today_call.php', 'get_today_call_all.php', 'get_today_call_incoming.php', 'get_today_call_user.php', 'get_today_cstatus.php',
+            'get_today_delivery.php', 'get_today_finished_call.php', 'get_today_lead.php', 'get_today_review.php', 'get_today_service.php',
+            'get_total_call_all.php', 'get_tour_approval_sts.php', 'get_unassigned_parts.php', 'get_unique_parts.php', 'get_un_role_name.php',
+            'get_user_budget.php', 'get_user_estimate.php', 'get_user_invoice.php', 'get_user_proforma_invoice.php', 'get_user_quotation.php',
+            'get_user_reminder.php', 'get_user_restamping.php', 'get_user_service.php', 'get_vendor.php', 'get_vendor_auto.php',
+            'get_vno_autocomplete.php', 'get_warranty.php', 'get_warranty_chk.php', 'get_warranty_terms.php', 'get_work.php',
+            'get_work_attachment.php', 'get_work_done_recent.php', 'get_work_history.php', 'get_work_info_full.php', 'get_work_mcall.php',
+            'get_work_status.php', 'get_work_time.php', 'get_work_time_master.php', 'get_work_time_master_id.php', 'get_work_time_master_single.php',
+            'get_work_time_summary.php', 'get_work_type.php', 'get_work_type_ac.php', 'get_wstatus.php', 'hari.php',
+            'insert_app_menu.php', 'insert_app_role.php', 'insert_assign_product.php', 'insert_ass_process.php', 'insert_ass_process1.php',
+            'insert_att.php', 'insert_attendance_verify.php', 'insert_bale.php', 'insert_bom.php', 'insert_break.php',
+            'insert_break_end.php', 'insert_budget.php', 'insert_call_log.php', 'insert_candidate.php', 'insert_company.php',
+            'insert_coupen.php', 'insert_creditors.php', 'insert_customer.php', 'insert_custom_field_master.php', 'insert_dcf.php',
+            'insert_dealer.php', 'insert_delivery.php', 'insert_department.php', 'insert_dep_section.php', 'insert_dep_sec_machine.php',
+            'insert_dservice.php', 'insert_employee.php', 'insert_employee_process.php', 'insert_emp_expenses.php', 'insert_emp_fearture.php',
+            'insert_emp_feature.php', 'insert_emp_material_request.php', 'insert_emp_work.php', 'insert_estimation.php', 'insert_estimation_product.php',
+            'insert_expense_pay.php', 'insert_extra_time.php', 'insert_godown.php', 'insert_grn.php', 'insert_helper_work.php',
+            'insert_innvoice.php', 'insert_input_work.php', 'insert_internal_godown.php', 'insert_internal_godown_stock_tally.php', 'insert_invoice_product.php',
+            'insert_invoice_reminder.php', 'insert_jaysan_final_product.php', 'insert_jaysan_machine.php', 'insert_jaysan_model_subtype.php', 'insert_jaysan_po_material.php',
+            'insert_jaysan_process.php', 'insert_jaysan_stock.php', 'insert_leave_req.php', 'insert_listner.php', 'insert_material_request_form.php',
+            'insert_material_request_form_md.php', 'insert_material_request_form_purchase.php', 'insert_mlead.php', 'insert_mrf_purchase.php', 'insert_nesting_output_part.php',
+            'insert_nesting_output_part_single.php', 'insert_new_input.php', 'insert_new_part.php', 'insert_new_part1.php', 'insert_new_process.php',
+            'insert_new_sub_part.php', 'insert_nprocess.php', 'insert_organization.php', 'insert_output_work.php', 'insert_part_spec.php',
+            'insert_payment.php', 'insert_payslip.php', 'insert_personal_budget.php', 'insert_phone_location.php', 'insert_policy.php',
+            'insert_process.php', 'insert_process_group.php', 'insert_product.php', 'insert_product_reminder.php', 'insert_proforma.php',
+            'insert_proforma_product.php', 'insert_purchase_order.php', 'insert_pwork.php', 'insert_quotation.php', 'insert_quotation_product.php',
+            'insert_reminder.php', 'insert_reminder_policy.php', 'insert_restamp.php', 'insert_review.php', 'insert_role.php',
+            'insert_rwork.php', 'insert_sales_order_form.php', 'insert_sales_payment.php', 'insert_service.php', 'insert_std_field_master.php',
+            'insert_sub_assembly_bom.php', 'insert_sujith.php', 'insert_sv.php', 'insert_vendor.php', 'insert_warranty.php',
+            'insert_wel_process.php', 'insert_wel_process1.php', 'insert_wel_process1_ref.php', 'insert_work.php', 'insert_work_att.php',
+            'insert_work_data.php', 'insert_work_history.php', 'insert_work_time_master.php', 'insert_work_type.php', 'json_parse.php',
+            'json_parse1.php', 'json_stockitem.php', 'json_stockitem1.php', 'json_stockitem5.php', 'lead_cat_chart.php',
+            'lead_ref_report.php', 'lead_report.php', 'lead_summary_chart.php', 'list_php_files.php', 'modify_assign_product.php',
+            'modify_assign_product_approve.php', 'mrf_graph.php', 'mrf_partname_autocomplete.php', 'parts.php', 'phpinfo.php',
+            'policy_report.php', 'policy_search.php', 'policy_search_report.php', 'policy_sum_report.php', 'reaarange_process.php',
+            'rearrange_process.php', 'ref.php', 'ref_delete.php', 'sale_order_graph.php', 'search_custome.php',
+            'search_employee_ac.php', 'search_parts.php', 'select_all_internal_godown.php', 'site_visit_report.php', 'store_att_rules.php',
+            'store_parts.php', 'store_parts1.php', 'store_rules.php', 'sujith.php', 'tally.php',
+            'tally_demo.php', 'tally_reponse.php', 'tally_transactions.php', 'update_admin_emp_exp.php', 'update_app_menu.php',
+            'update_assign_product.php', 'update_att.php', 'update_att_req.php', 'update_bom.php', 'update_company.php',
+            'update_correction.php', 'update_correction1.php', 'update_coupen.php', 'update_customer.php', 'update_custom_field_master.php',
+            'update_dcf_credit_note.php', 'update_dcf_invoice.php', 'update_dealer.php', 'update_employee.php', 'update_emp_helper.php',
+            'update_emp_work.php', 'update_expense.php', 'update_expenses.php', 'update_extra_time.php', 'update_ext_warranty.php',
+            'update_fedback.php', 'update_hold_work.php', 'update_input_part.php', 'update_jaysan_machine.php', 'update_jaysan_payment.php',
+            'update_jaysan_po_material_sts.php', 'update_jaysan_stock.php', 'update_key.php', 'update_lead.php', 'update_lead_web.php',
+            'update_listner.php', 'update_machine_production.php', 'update_material_request_form.php', 'update_material_request_form_md.php', 'update_material_request_form_md_sts.php',
+            'update_material_request_form_po.php', 'update_material_request_form_purchase.php', 'update_material_request_form_status.php', 'update_material_request_form_tally.php', 'update_nesting.php',
+            'update_output_part.php', 'update_part.php', 'update_policy.php', 'update_process.php', 'update_process_group.php',
+            'update_product.php', 'update_purchase_order.php', 'update_quotation_rating.php', 'update_rate_quotation.php', 'update_role.php',
+            'update_sales_order_form.php', 'update_sales_order_sts.php', 'update_sales_pay_date.php', 'update_service.php', 'update_site_visit.php',
+            'update_spec_details.php', 'update_sub_assembly_bom.php', 'update_sujith.php', 'update_warranty.php', 'update_wel_process1.php',
+            'update_wel_process1_ref.php', 'update_wel_work.php', 'update_work.php', 'update_work_mcall.php', 'update_work_na.php',
+            'update_work_time_master.php', 'upload_canditate.php', 'upload_cus.php', 'upload_cus1.php', 'websocket.php',
+            'work_report_detailed.php', 'work_report_detailed_phone.php', 'work_search.php', 'work_summary_chart.php', 'work_summary_report.php',
+            'xdebug_test.php'
+        ];
+        
+        const apiData = [
+  { js: 'add_candidate.js', apis: [
+    { name: 'check_candidate_phone.php', lines: [57] },
+    { name: 'insert_candidate.php', lines: [91] },
+    { name: 'upload_canditate.php', lines: [146] },
+  ]},
+  { js: 'add_company_master.js', apis: [
+    { name: 'update_company.php', lines: [103] },
+    { name: 'get_company.php', lines: [141] },
+    { name: 'insert_company.php', lines: [217] },
+    { name: 'get_product_autocomplete.php', lines: [260] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [419] },
+  ]},
+  { js: 'add_process.js', apis: [
+    { name: 'insert_ass_process.php', lines: [230] },
+    { name: 'insert_wel_process.php', lines: [236] },
+    { name: 'get_part_name_auto.php', lines: [272, 325, 378, 431] },
+    { name: 'get_process_auto.php', lines: [485] },
+    { name: 'insert_new_process.php', lines: [580] },
+    { name: 'rearrange_process.php', lines: [758] },
+    { name: 'get_titles.php', lines: [1170] },
+    { name: 'delete_implement.php', lines: [1209] },
+    { name: 'insert_nprocess.php', lines: [1244] },
+    { name: 'delete_process.php', lines: [1284] },
+    { name: 'insert_new_input.php', lines: [1326] },
+    { name: 'delete_input_part.php', lines: [1365] },
+    { name: 'update_output_part.php', lines: [1405] },
+    { name: 'update_process.php', lines: [1445] },
+    { name: 'update_input_part.php', lines: [1484] },
+    { name: 'insert_new_part.php', lines: [1525] },
+    { name: 'get_implement_process.php', lines: [1567] },
+    { name: 'get_implement_input.php', lines: [1617] },
+    { name: 'get_implement_output.php', lines: [1666] },
+    { name: 'get_part_sts.php', lines: [1720] },
+    { name: 'get_sel_imp.php', lines: [1789] },
+    { name: 'get_sel_process.php', lines: [1846, 1905] },
+    { name: 'get_all_work.php', lines: [1959] },
+    { name: 'delete_work_report.php', lines: [2000] },
+    { name: 'delete_work.php', lines: [2039] },
+    { name: 'delete_work_type.php', lines: [2078] },
+    { name: 'get_wstatus.php', lines: [2115, 2162] },
+    { name: 'insert_work_type.php', lines: [2207] },
+    { name: 'insert_rwork.php', lines: [2241] },
+    { name: 'insert_pwork.php', lines: [2274] },
+    { name: 'get_all_work_type.php', lines: [2306] },
+    { name: 'get_all_report_type.php', lines: [2344] },
+    { name: 'get_work_type.php', lines: [2383] },
+  ]},
+  { js: 'add_process_ref.js', apis: [
+    { name: 'insert_ass_process.php', lines: [134] },
+    { name: 'insert_wel_process.php', lines: [140] },
+    { name: 'get_part_name_auto.php', lines: [173, 225, 277, 329] },
+    { name: 'get_process_auto.php', lines: [382] },
+    { name: 'insert_new_process.php', lines: [432] },
+    { name: 'insert_new_part.php', lines: [725] },
+    { name: 'get_implement_process.php', lines: [767] },
+    { name: 'get_implement_input.php', lines: [814] },
+    { name: 'get_implement_output.php', lines: [863] },
+    { name: 'get_part_sts.php', lines: [917] },
+    { name: 'get_sel_imp.php', lines: [986] },
+    { name: 'get_sel_process.php', lines: [1043, 1102] },
+    { name: 'get_all_work.php', lines: [1156] },
+    { name: 'delete_work_report.php', lines: [1197] },
+    { name: 'delete_work.php', lines: [1236] },
+    { name: 'delete_work_type.php', lines: [1275] },
+    { name: 'get_wstatus.php', lines: [1312, 1359] },
+    { name: 'insert_work_type.php', lines: [1404] },
+    { name: 'insert_rwork.php', lines: [1438] },
+    { name: 'insert_pwork.php', lines: [1471] },
+    { name: 'get_all_work_type.php', lines: [1503] },
+    { name: 'get_all_report_type.php', lines: [1541] },
+    { name: 'get_work_type.php', lines: [1580] },
+  ]},
+  { js: 'add_process_title.js', apis: [
+    { name: 'fetch_title.php', lines: [10] },
+    { name: 'delete_title.php', lines: [47] },
+    { name: 'add_process_title.php', lines: [67, 142] },
+  ]},
+  { js: 'add_reminder_master.js', apis: [
+    { name: 'delete_reminder.php', lines: [92] },
+    { name: 'insert_reminder.php', lines: [134] },
+    { name: 'get_all_reminder.php', lines: [162] },
+    { name: 'get_work_type.php', lines: [200] },
+  ]},
+  { js: 'add_work_master.js', apis: [
+    { name: 'get_all_work.php', lines: [266] },
+    { name: 'delete_work_report.php', lines: [307] },
+    { name: 'delete_work.php', lines: [346] },
+    { name: 'delete_work_type.php', lines: [385] },
+    { name: 'get_wstatus.php', lines: [422, 469] },
+    { name: 'insert_work_type.php', lines: [514] },
+    { name: 'insert_rwork.php', lines: [548] },
+    { name: 'insert_pwork.php', lines: [581] },
+    { name: 'get_all_work_type.php', lines: [613] },
+    { name: 'get_all_report_type.php', lines: [651] },
+    { name: 'get_work_type.php', lines: [690] },
+  ]},
+  { js: 'admin_employee_report.js', apis: [
+    { name: 'get_emp_att_report.php', lines: [151] },
+    { name: 'lead_report.php', lines: [245] },
+    { name: 'work_report_detailed.php', lines: [301] },
+    { name: 'get_work_type.php', lines: [348] },
+    { name: 'get_all_emp_hi.php', lines: [393] },
+  ]},
+  { js: 'admin_employee_report_self.js', apis: [
+    { name: 'get_emp_att_report.php', lines: [151] },
+    { name: 'lead_report.php', lines: [245] },
+    { name: 'work_report_detailed.php', lines: [301] },
+    { name: 'get_work_type.php', lines: [348] },
+    { name: 'get_all_emp_hi.php', lines: [393] },
+  ]},
+  { js: 'admin_emp_single.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [93] },
+    { name: 'get_employee_cur_sts.php', lines: [137] },
+  ]},
+  { js: 'admin_emp_single_att.js', apis: [
+    { name: 'get_admin_emp_att_report_cal.php', lines: [210] },
+    { name: 'get_all_emp_hi.php', lines: [373] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [423] },
+    { name: 'get_employee_cur_sts.php', lines: [467] },
+    { name: 'get_admin_emp_att_report.php', lines: [518] },
+  ]},
+  { js: 'admin_emp_single_detail.js', apis: [
+    { name: 'get_expense_summary_single.php', lines: [54] },
+    { name: 'get_emp_tour_sum_phone.php', lines: [103, 155] },
+    { name: 'get_emp_task_sum_phone.php', lines: [207] },
+    { name: 'get_emp_att_report.php', lines: [258] },
+    { name: 'get_all_emp_hi.php', lines: [319] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [383] },
+    { name: 'get_employee_cur_sts.php', lines: [429] },
+  ]},
+  { js: 'admin_emp_single_phone.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [93] },
+    { name: 'get_employee_cur_sts.php', lines: [137] },
+  ]},
+  { js: 'admin_emp_single_task.js', apis: [
+    { name: 'get_emp_task_report_cal.php', lines: [203] },
+    { name: 'get_all_emp_hi.php', lines: [348] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [398] },
+    { name: 'get_employee_cur_sts.php', lines: [442] },
+    { name: 'get_emp_task_detail.php', lines: [492] },
+  ]},
+  { js: 'admin_expense.js', apis: [
+    { name: 'get_expense_all.php', lines: [55] },
+  ]},
+  { js: 'admin_expense_single.js', apis: [
+    { name: 'insert_expense_pay.php', lines: [167] },
+    { name: 'update_expense.php', lines: [196] },
+    { name: 'get_employee.php', lines: [225] },
+    { name: 'get_expense_single.php', lines: [282, 341] },
+  ]},
+  { js: 'admin_expense_single_phone.js', apis: [
+    { name: 'update_admin_emp_exp.php', lines: [372] },
+    { name: 'get_admin_emp_exp_report_cal.php', lines: [409] },
+    { name: 'insert_expense_pay.php', lines: [541] },
+    { name: 'update_expense.php', lines: [570] },
+    { name: 'get_all_emp_hi.php', lines: [599] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [666] },
+    { name: 'get_expense_single.php', lines: [710, 774] },
+  ]},
+  { js: 'admin_index.js', apis: [
+    { name: 'get_customer_autocomplete.php', lines: [73] },
+    { name: 'get_employee_cur_sts.php', lines: [166] },
+  ]},
+  { js: 'admin_index_phone.js', apis: [
+    { name: 'insert_attendance_verify.php', lines: [96] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [151] },
+    { name: 'get_employee_cur_sts_phone.php', lines: [193] },
+    { name: 'get_employee_notification.php', lines: [268] },
+  ]},
+  { js: 'admin_tour.js', apis: [
+    { name: 'update_att_req.php', lines: [260] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [289] },
+    { name: 'get_emp_task_detail.php', lines: [334] },
+    { name: 'get_all_emp_hi.php', lines: [417] },
+    { name: 'get_admin_tour.php', lines: [470] },
+    { name: 'get_admin_tour_requset.php', lines: [528] },
+  ]},
+  { js: 'admin_upload.js', apis: [
+    { name: 'get_employee.php', lines: [77] },
+    { name: 'upload_cus.php', lines: [132] },
+  ]},
+  { js: 'assembly.js', apis: [
+    { name: 'get_android_id.php', lines: [24] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [111] },
+    { name: 'insert_listner.php', lines: [289] },
+    { name: 'check_listner.php', lines: [318] },
+  ]},
+  { js: 'attachment.js', apis: [
+    { name: 'get_work_attachment.php', lines: [64] },
+  ]},
+  { js: 'att_approval_chart.js', apis: [
+    { name: 'store_att_rules.php', lines: [209] },
+    { name: 'get_assigned_role_list.php', lines: [259] },
+    { name: 'get_unassigned_parts.php', lines: [309] },
+    { name: 'get_role_name.php', lines: [383] },
+    { name: 'get_un_role_name.php', lines: [436] },
+    { name: 'get_att_rules.php', lines: [486] },
+    { name: 'get_assign_no.php', lines: [530] },
+  ]},
+  { js: 'att_req.js', apis: [
+    { name: 'insert_leave_req.php', lines: [46] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [90] },
+  ]},
+  { js: 'bom_entry.js', apis: [
+    { name: 'get_part_name_auto_wel.php', lines: [96, 151, 204, 259, 633, 692, 773] },
+    { name: 'insert_bom.php', lines: [492] },
+    { name: 'update_bom.php', lines: [539] },
+    { name: 'get_bom_list.php', lines: [812] },
+    { name: 'get_bom_recent.php', lines: [877] },
+    { name: 'get_bom.php', lines: [941] },
+    { name: 'get_titles.php', lines: [1030] },
+    { name: 'insert_new_part.php', lines: [1086] },
+  ]},
+  { js: 'bom_map.js', apis: [
+    { name: 'get_part_name_auto_wel.php', lines: [52] },
+    { name: 'get_process_summary.php', lines: [171] },
+    { name: 'get_process_graph.php', lines: [300] },
+    { name: 'get_bom.php', lines: [429] },
+    { name: 'get_bom_list.php', lines: [484] },
+    { name: 'insert_nprocess.php', lines: [548] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [614] },
+  ]},
+  { js: 'candidate_report.js', apis: [
+    { name: 'get_candidate_report.php', lines: [249] },
+  ]},
+  { js: 'check_warranty.js', apis: [
+    { name: 'get_delivery_report.php', lines: [124] },
+    { name: 'get_dealer_report.php', lines: [178] },
+    { name: 'get_warranty_chk.php', lines: [237] },
+  ]},
+  { js: 'correction.js', apis: [
+    { name: 'update_correction.php', lines: [56] },
+    { name: 'delete_customer.php', lines: [96] },
+    { name: 'get_all_correction.php', lines: [140] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [206] },
+  ]},
+  { js: 'correction1.js', apis: [
+    { name: 'update_correction1.php', lines: [59] },
+    { name: 'delete_customer.php', lines: [99] },
+    { name: 'get_all_policy_cat.php', lines: [143] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [209] },
+  ]},
+  { js: 'coupen_entry.js', apis: [
+    { name: 'insert_coupen.php', lines: [86] },
+    { name: 'check_coupen.php', lines: [117] },
+    { name: 'get_product_all.php', lines: [154] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [205] },
+  ]},
+  { js: 'create_customer.js', apis: [
+    { name: 'get_customer_edit.php', lines: [224] },
+    { name: 'get_customer_autocomplete.php', lines: [285] },
+    { name: 'get_phone_autocomplete.php', lines: [369] },
+    { name: 'check_customer_phone.php', lines: [450, 483] },
+    { name: 'insert_customer.php', lines: [540] },
+    { name: 'update_customer.php', lines: [608] },
+    { name: 'insert_work.php', lines: [656] },
+    { name: 'get_employee.php', lines: [700, 743] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [790] },
+    { name: 'get_work_type.php', lines: [829] },
+  ]},
+  { js: 'create_customer_p.js', apis: [
+    { name: 'get_customer_autocomplete.php', lines: [231] },
+    { name: 'get_phone_autocomplete.php', lines: [315] },
+    { name: 'check_customer_phone.php', lines: [396] },
+    { name: 'insert_customer.php', lines: [431] },
+    { name: 'insert_work.php', lines: [481] },
+    { name: 'get_employee.php', lines: [525, 568] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [615] },
+    { name: 'get_work_type.php', lines: [654] },
+  ]},
+  { js: 'create_dealer.js', apis: [
+    { name: 'update_dealer.php', lines: [144] },
+    { name: 'delete_dealer.php', lines: [185] },
+    { name: 'get_dealer.php', lines: [225] },
+    { name: 'get_all_dealer.php', lines: [285] },
+    { name: 'insert_dealer.php', lines: [340] },
+    { name: 'get_customer_edit.php', lines: [381] },
+  ]},
+  { js: 'create_policy.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [182] },
+    { name: 'get_policy_single.php', lines: [223] },
+    { name: 'delete_policy_single.php', lines: [293] },
+    { name: 'get_policy.php', lines: [332] },
+    { name: 'update_policy.php', lines: [398] },
+    { name: 'insert_policy.php', lines: [458] },
+  ]},
+  { js: 'create_warranty_terms.js', apis: [
+    { name: 'update_warranty.php', lines: [117] },
+    { name: 'delete_warranty.php', lines: [156] },
+    { name: 'get_warranty.php', lines: [196] },
+    { name: 'get_all_warranty.php', lines: [253] },
+    { name: 'insert_warranty.php', lines: [306] },
+  ]},
+  { js: 'create_work.js', apis: [
+    { name: 'insert_work.php', lines: [247] },
+    { name: 'get_android_id.php', lines: [291] },
+    { name: 'get_employee.php', lines: [336, 379] },
+    { name: 'get_customer_autocomplete.php', lines: [427] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [508] },
+    { name: 'get_work_type.php', lines: [547] },
+  ]},
+  { js: 'credit_note_accounts.js', apis: [
+    { name: 'update_dcf_credit_note.php', lines: [148] },
+    { name: 'get_all_emp_hi.php', lines: [189] },
+    { name: 'get_credit_note_report.php', lines: [239] },
+    { name: 'get_credit_note_sts.php', lines: [292] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [370] },
+  ]},
+  { js: 'credit_note_marketing.js', apis: [
+    { name: 'update_dcf_credit_note.php', lines: [148] },
+    { name: 'get_all_emp_hi.php', lines: [189] },
+    { name: 'get_credit_note_report.php', lines: [239] },
+    { name: 'get_credit_note_sts.php', lines: [292] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [370] },
+  ]},
+  { js: 'credit_note_tracker.js', apis: [
+    { name: 'get_all_emp_hi.php', lines: [108] },
+    { name: 'get_credit_note_report.php', lines: [158] },
+    { name: 'get_credit_note_sts.php', lines: [212] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [290] },
+  ]},
+  { js: 'customer_list.js', apis: [
+    { name: 'delete_customer.php', lines: [99] },
+    { name: 'get_all_customer.php', lines: [143] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [194] },
+  ]},
+  { js: 'dashboard.js', apis: [
+    { name: 'get_employee.php', lines: [456] },
+    { name: 'insert_work.php', lines: [502] },
+    { name: 'get_android_id.php', lines: [566] },
+    { name: 'get_pipeline_work.php', lines: [623] },
+    { name: 'insert_sv.php', lines: [685] },
+    { name: 'get_work_type_ac.php', lines: [773] },
+    { name: 'get_cus_info.php', lines: [827] },
+    { name: 'get_history.php', lines: [886] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [961] },
+    { name: 'get_assign_work.php', lines: [1009] },
+    { name: 'get_work.php', lines: [1104] },
+    { name: 'update_work.php', lines: [1224, 1286] },
+    { name: 'insert_listner.php', lines: [1449] },
+    { name: 'check_listner.php', lines: [1478] },
+  ]},
+  { js: 'dashboard_p.js', apis: [
+    { name: 'get_work_info_full.php', lines: [474] },
+    { name: 'get_employee.php', lines: [534] },
+    { name: 'insert_work.php', lines: [581] },
+    { name: 'get_android_id.php', lines: [645] },
+    { name: 'get_pipeline_work.php', lines: [702] },
+    { name: 'insert_sv.php', lines: [764] },
+    { name: 'get_work_type_ac.php', lines: [852] },
+    { name: 'get_cus_info.php', lines: [915] },
+    { name: 'get_history.php', lines: [974] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1047] },
+    { name: 'get_assign_work.php', lines: [1095] },
+    { name: 'get_work.php', lines: [1190] },
+    { name: 'update_work.php', lines: [1310, 1372] },
+    { name: 'insert_listner.php', lines: [1535] },
+    { name: 'check_listner.php', lines: [1564] },
+  ]},
+  { js: 'dcf_hod_approve.js', apis: [
+    { name: 'approve_dcf_hod.php', lines: [62] },
+    { name: 'get_dcf_details.php', lines: [107] },
+    { name: 'get_dcf.php', lines: [167] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [259] },
+  ]},
+  { js: 'dcf_invoice.js', apis: [
+    { name: 'update_dcf_invoice.php', lines: [66] },
+    { name: 'get_dcf_details.php', lines: [122] },
+    { name: 'get_dcf.php', lines: [176] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [268] },
+  ]},
+  { js: 'dcf_payment_approve.js', apis: [
+    { name: 'approve_dcf_pay.php', lines: [63] },
+    { name: 'get_dcf_details.php', lines: [108] },
+    { name: 'get_dcf.php', lines: [162] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [254] },
+  ]},
+  { js: 'dcf_report.js', apis: [
+    { name: 'update_dcf_invoice.php', lines: [66] },
+    { name: 'get_dcf_details.php', lines: [122] },
+    { name: 'get_dcf_report.php', lines: [176] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [268] },
+  ]},
+  { js: 'dcf_report_all.js', apis: [
+    { name: 'get_customer_autocomplete.php', lines: [105] },
+    { name: 'update_dcf_invoice.php', lines: [192] },
+    { name: 'get_dcf_details.php', lines: [248] },
+    { name: 'get_dcf_report.php', lines: [302] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [414] },
+  ]},
+  { js: 'dealer_delivery.js', apis: [
+    { name: 'get_today_delivery.php', lines: [116] },
+    { name: 'insert_delivery.php', lines: [169] },
+    { name: 'check_chasis_no.php', lines: [270] },
+    { name: 'get_all_warranty.php', lines: [304] },
+    { name: 'get_model.php', lines: [353] },
+    { name: 'get_warranty_terms.php', lines: [401] },
+  ]},
+  { js: 'dealer_delivery_ref.js', apis: [
+    { name: 'get_today_delivery.php', lines: [113] },
+    { name: 'insert_delivery.php', lines: [166] },
+    { name: 'check_chasis_no.php', lines: [252] },
+    { name: 'get_all_warranty.php', lines: [286] },
+    { name: 'get_model.php', lines: [335] },
+    { name: 'get_warranty_terms.php', lines: [383] },
+  ]},
+  { js: 'dealer_login.js', apis: [
+    { name: 'get_dealer_login.php', lines: [23] },
+  ]},
+  { js: 'dealer_service.js', apis: [
+    { name: 'get_today_review.php', lines: [175] },
+    { name: 'get_dealer_autocomplete.php', lines: [229] },
+    { name: 'get_employee_autocomplete.php', lines: [289] },
+    { name: 'get_place_autocomplete.php', lines: [347] },
+    { name: 'insert_review.php', lines: [410] },
+    { name: 'get_product_autocomplete.php', lines: [473] },
+  ]},
+  { js: 'dealer_warranty.js', apis: [
+    { name: 'get_chk_warranty.php', lines: [120] },
+    { name: 'get_today_service.php', lines: [185] },
+    { name: 'insert_dservice.php', lines: [238] },
+    { name: 'get_all_warranty.php', lines: [332] },
+    { name: 'get_model.php', lines: [381] },
+    { name: 'get_warranty_terms.php', lines: [429] },
+  ]},
+  { js: 'demonew.js', apis: [
+    { name: 'get_parts_tbl.php', lines: [60] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [151] },
+  ]},
+  { js: 'dispatch_clearance_form.js', apis: [
+    { name: 'insert_dcf.php', lines: [315] },
+    { name: 'get_sales_payment.php', lines: [368] },
+    { name: 'get_bal_payment.php', lines: [424] },
+    { name: 'get_sales_cus.php', lines: [496] },
+    { name: 'get_sales_product.php', lines: [550] },
+    { name: 'get_godown_name.php', lines: [603] },
+    { name: 'delete_godown.php', lines: [655] },
+    { name: 'get_godown.php', lines: [699] },
+    { name: 'insert_godown.php', lines: [751] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [819] },
+  ]},
+  { js: 'employee.js', apis: [
+    { name: 'get_all_emp_hi.php', lines: [52] },
+  ]},
+  { js: 'employee_phone_info.js', apis: [
+    { name: 'get_employee_info.php', lines: [54] },
+  ]},
+  { js: 'employee_single.js', apis: [
+    { name: 'get_emp_feature.php', lines: [133] },
+    { name: 'insert_emp_fearture.php', lines: [189] },
+    { name: 'get_all_role.php', lines: [233] },
+    { name: 'change_employee.php', lines: [285] },
+    { name: 'update_employee.php', lines: [331] },
+    { name: 'get_employee.php', lines: [387] },
+    { name: 'get_employee_single.php', lines: [434] },
+  ]},
+  { js: 'emp_expense_single.js', apis: [
+    { name: 'get_expense_summary_single.php', lines: [159] },
+    { name: 'insert_emp_expenses.php', lines: [210] },
+    { name: 'get_exp_cat_all.php', lines: [258] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [332] },
+  ]},
+  { js: 'emp_expense_single1.js', apis: [
+    { name: 'insert_expense_pay.php', lines: [286] },
+    { name: 'update_expense.php', lines: [315] },
+    { name: 'get_employee.php', lines: [344] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [407] },
+    { name: 'get_expense_single.php', lines: [451, 510] },
+  ]},
+  { js: 'emp_report.js', apis: [
+    { name: 'get_sales_report_emp1.php', lines: [192] },
+    { name: 'get_exp_cat.php', lines: [243] },
+    { name: 'get_emp_tour_sum_phone.php', lines: [323, 375] },
+    { name: 'get_emp_task_sum_phone.php', lines: [428] },
+    { name: 'emp_lead_out_summary_chart.php', lines: [479] },
+    { name: 'emp_lead_summary_chart.php', lines: [533] },
+    { name: 'work_summary_report.php', lines: [587] },
+    { name: 'work_summary_chart.php', lines: [640] },
+    { name: 'get_emp_att_report.php', lines: [697] },
+    { name: 'get_all_emp_role.php', lines: [791] },
+    { name: 'get_all_emp_role_based.php', lines: [843] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [918] },
+  ]},
+  { js: 'emp_single_att.js', apis: [
+    { name: 'get_admin_emp_att_report_cal.php', lines: [203] },
+    { name: 'get_all_emp_hi.php', lines: [366] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [416] },
+    { name: 'get_employee_cur_sts.php', lines: [460] },
+    { name: 'get_admin_emp_att_report.php', lines: [512] },
+  ]},
+  { js: 'emp_single_detail.js', apis: [
+    { name: 'get_expense_summary_single.php', lines: [46] },
+    { name: 'emp_tour_sum_phone.php', lines: [95, 147] },
+    { name: 'get_emp_task_sum_phone.php', lines: [199] },
+    { name: 'get_emp_att_report.php', lines: [250] },
+    { name: 'get_all_emp_hi.php', lines: [311] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [379] },
+    { name: 'get_employee_cur_sts.php', lines: [425] },
+  ]},
+  { js: 'emp_single_details.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [93] },
+    { name: 'get_employee_cur_sts.php', lines: [137] },
+  ]},
+  { js: 'emp_single_task.js', apis: [
+    { name: 'get_emp_task_report_cal.php', lines: [201] },
+    { name: 'get_all_emp_hi.php', lines: [346] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [396] },
+    { name: 'get_employee_cur_sts.php', lines: [440] },
+    { name: 'get_emp_task_detail.php', lines: [490] },
+  ]},
+  { js: 'emp_tour.js', apis: [
+    { name: 'insert_leave_req.php', lines: [218] },
+    { name: 'delete_tour_req.php', lines: [344] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [371] },
+    { name: 'get_emp_task_detail.php', lines: [416] },
+    { name: 'get_tour_approval_sts.php', lines: [501] },
+    { name: 'get_emp_tour.php', lines: [568] },
+  ]},
+  { js: 'emp_tour1.js', apis: [
+    { name: 'insert_leave_req.php', lines: [218] },
+    { name: 'delete_tour_req.php', lines: [330] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [357] },
+    { name: 'get_emp_task_detail.php', lines: [402] },
+    { name: 'get_tour_approval_sts.php', lines: [487] },
+    { name: 'get_emp_tour.php', lines: [554] },
+  ]},
+  { js: 'emp_work.js', apis: [
+    { name: 'get_process_auto.php', lines: [181] },
+    { name: 'get_part_name_auto1.php', lines: [228, 283, 338, 392] },
+    { name: 'get_batch_parts.php', lines: [477] },
+    { name: 'update_emp_work.php', lines: [527] },
+    { name: 'update_emp_helper.php', lines: [567] },
+    { name: 'get_employee_autocomplete1.php', lines: [610] },
+    { name: 'get_emp_wel_work.php', lines: [709] },
+    { name: 'get_emp_break.php', lines: [780] },
+    { name: 'insert_helper_work.php', lines: [853] },
+    { name: 'insert_output_work.php', lines: [891] },
+    { name: 'insert_input_work.php', lines: [931] },
+    { name: 'get_input_work.php', lines: [972] },
+    { name: 'get_output_work.php', lines: [1022] },
+    { name: 'get_helper_emp.php', lines: [1071] },
+    { name: 'insert_emp_work.php', lines: [1121] },
+    { name: 'insert_break.php', lines: [1159] },
+    { name: 'insert_break_end.php', lines: [1199] },
+    { name: 'update_hold_work.php', lines: [1237, 1277] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1332] },
+    { name: 'get_employee_cur_sts_phone.php', lines: [1377] },
+    { name: 'get_employee_notification.php', lines: [1445] },
+  ]},
+  { js: 'estimation.js', apis: [
+    { name: 'get_cus_info_all.php', lines: [321] },
+    { name: 'insert_estimation.php', lines: [367] },
+    { name: 'insert_estimation_product.php', lines: [434] },
+    { name: 'get_estimate_details.php', lines: [477] },
+    { name: 'get_customer_autocomplete.php', lines: [570] },
+    { name: 'get_product_autocomplete.php', lines: [655] },
+    { name: 'get_product.php', lines: [737] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [818] },
+  ]},
+  { js: 'estimation_list.js', apis: [
+    { name: 'get_estimate_all.php', lines: [56] },
+  ]},
+  { js: 'estimation_single.js', apis: [
+    { name: 'get_estimate_details_single.php', lines: [98] },
+    { name: 'get_estimation_single.php', lines: [193] },
+    { name: 'get_customer_autocomplete.php', lines: [315] },
+    { name: 'get_product_autocomplete.php', lines: [400] },
+    { name: 'get_product.php', lines: [482] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [560] },
+  ]},
+  { js: 'event_mapper.js', apis: [
+    { name: 'analyze_event.php', lines: [5] },
+  ]},
+  { js: 'expense_list.js', apis: [
+    { name: 'get_expense_all.php', lines: [55] },
+  ]},
+  { js: 'expense_single_phone.js', apis: [
+    { name: 'delete_emp_exp.php', lines: [339] },
+    { name: 'get_admin_emp_exp_report_cal.php', lines: [376] },
+    { name: 'update_expense.php', lines: [494] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [553] },
+    { name: 'get_expense_single.php', lines: [600, 664] },
+  ]},
+  { js: 'exp_decline_single.js', apis: [
+    { name: 'get_expense_decline_single.php', lines: [127] },
+    { name: 'delete_unapprove_exp.php', lines: [182] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [245] },
+  ]},
+  { js: 'exp_report.js', apis: [
+    { name: 'get_employee.php', lines: [132] },
+    { name: 'get_exp_report.php', lines: [177] },
+    { name: 'get_exp_cat.php', lines: [233] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [324] },
+  ]},
+  { js: 'exp_report_single.js', apis: [
+    { name: 'get_exp_report_single.php', lines: [114] },
+    { name: 'get_exp_report_cat.php', lines: [169] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [260] },
+  ]},
+  { js: 'exp_unapprove_single.js', apis: [
+    { name: 'get_expense_unapprove_single.php', lines: [128] },
+    { name: 'delete_unapprove_exp.php', lines: [183] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [246] },
+  ]},
+  { js: 'extended_warranty.js', apis: [
+    { name: 'update_ext_warranty.php', lines: [127] },
+    { name: 'get_ext_warranty_request.php', lines: [156] },
+    { name: 'get_customer_autocomplete.php', lines: [218] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [298] },
+    { name: 'insert_listner.php', lines: [503] },
+    { name: 'check_listner.php', lines: [532] },
+  ]},
+  { js: 'extra_time_master.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [78] },
+  ]},
+  { js: 'invoice.js', apis: [
+    { name: 'site_visit_report.php', lines: [77] },
+  ]},
+  { js: 'invoice_list.js', apis: [
+    { name: 'get_invoice_all.php', lines: [56] },
+  ]},
+  { js: 'invoice_single.js', apis: [
+    { name: 'insert_quotation.php', lines: [94] },
+    { name: 'insert_quotation_product.php', lines: [157] },
+    { name: 'get_invoice_details_single.php', lines: [197] },
+    { name: 'get_invoice_single.php', lines: [305] },
+    { name: 'get_customer_autocomplete.php', lines: [427] },
+    { name: 'get_product_autocomplete.php', lines: [512] },
+    { name: 'get_product.php', lines: [594] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [672] },
+  ]},
+  { js: 'jaysan_production.js', apis: [
+    { name: 'get_sales_order_details.php', lines: [90] },
+    { name: 'get_assign_order.php', lines: [202] },
+    { name: 'get_sales_order_id.php', lines: [257] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [336] },
+  ]},
+  { js: 'jaysan_product_entry.js', apis: [
+    { name: 'get_jaysan_product_details.php', lines: [234] },
+    { name: 'get_jaysan_final_product_all.php', lines: [288] },
+    { name: 'delete_model_type.php', lines: [341] },
+    { name: 'delete_model_subtype.php', lines: [377] },
+    { name: 'get_jaysan_model_subtype.php', lines: [420] },
+    { name: 'insert_jaysan_model_subtype.php', lines: [475] },
+    { name: 'insert_jaysan_final_product.php', lines: [518] },
+    { name: 'get_jaysan_product_autocomplete.php', lines: [574] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [653] },
+  ]},
+  { js: 'jaysan_roles.js', apis: [
+    { name: 'get_jaysan_res.php', lines: [42] },
+    { name: 'get_all_app_role.php', lines: [79] },
+    { name: 'delete_app_menu.php', lines: [119] },
+    { name: 'delete_app_all.php', lines: [152] },
+  ]},
+  { js: 'json_section_stock.js', apis: [
+    { name: 'get_sections_full_auto.php', lines: [54] },
+    { name: 'get_part_name_auto1.php', lines: [110] },
+    { name: 'insert_jaysan_stock.php', lines: [226] },
+    { name: 'get_jaysan_stock.php', lines: [273] },
+    { name: 'insert_emp_material_request.php', lines: [446] },
+    { name: 'insert_nprocess.php', lines: [488] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [554] },
+  ]},
+  { js: 'json_stock.js', apis: [
+    { name: 'get_part_name_auto1.php', lines: [62] },
+    { name: 'get_creditors_auto1.php', lines: [126] },
+    { name: 'get_departments_auto1.php', lines: [198] },
+    { name: 'get_sections_auto1.php', lines: [266] },
+    { name: 'mrf_partname_autocomplete.php', lines: [389] },
+    { name: 'get_creditors_auto.php', lines: [447] },
+    { name: 'get_departments_auto2.php', lines: [501] },
+    { name: 'get_sections_auto2.php', lines: [550] },
+    { name: 'insert_jaysan_stock.php', lines: [802] },
+    { name: 'get_jaysan_stock.php', lines: [863] },
+    { name: 'insert_nprocess.php', lines: [1054] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1120] },
+  ]},
+  { js: 'laser_job_create.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [215] },
+  ]},
+  { js: 'laser_opertion_job_card.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [168] },
+  ]},
+  { js: 'laser_req_form.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [132] },
+  ]},
+  { js: 'lead_list.js', apis: [
+    { name: 'delete_lead.php', lines: [158] },
+    { name: 'update_lead.php', lines: [199] },
+    { name: 'get_lead.php', lines: [228] },
+    { name: 'get_customer_autocomplete.php', lines: [290] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [370] },
+    { name: 'insert_listner.php', lines: [575] },
+    { name: 'check_listner.php', lines: [604] },
+  ]},
+  { js: 'lead_list_web.js', apis: [
+    { name: 'delete_lead_web.php', lines: [128] },
+    { name: 'update_lead_web.php', lines: [169] },
+    { name: 'get_lead_web.php', lines: [198] },
+    { name: 'get_customer_autocomplete.php', lines: [258] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [338] },
+    { name: 'insert_listner.php', lines: [543] },
+    { name: 'check_listner.php', lines: [572] },
+  ]},
+  { js: 'lead_report.js', apis: [
+    { name: 'get_lead_source.php', lines: [130] },
+    { name: 'get_lead_report.php', lines: [181] },
+    { name: 'get_customer_autocomplete.php', lines: [242] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [322] },
+    { name: 'insert_listner.php', lines: [527] },
+    { name: 'check_listner.php', lines: [556] },
+  ]},
+  { js: 'lead_report_summary.js', apis: [
+    { name: 'lead_cat_chart.php', lines: [165] },
+    { name: 'lead_summary_chart.php', lines: [220] },
+    { name: 'get_lead_source.php', lines: [313] },
+    { name: 'get_lead_report.php', lines: [364] },
+    { name: 'get_customer_autocomplete.php', lines: [425] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [505] },
+    { name: 'insert_listner.php', lines: [710] },
+    { name: 'check_listner.php', lines: [739] },
+  ]},
+  { js: 'login.js', apis: [
+    { name: 'get_employee_id.php', lines: [82] },
+  ]},
+  { js: 'machine_production_modification.js', apis: [
+    { name: 'assign_product_customer_autocomplete.php', lines: [127] },
+    { name: 'get_godown_name.php', lines: [346] },
+    { name: 'get_assign_cal_details.php', lines: [398] },
+    { name: 'assign_product_get_product_list.php', lines: [488] },
+    { name: 'assign_product_get_model_list.php', lines: [542] },
+    { name: 'assign_product_get_type_list.php', lines: [595] },
+    { name: 'assign_product_get_sub_type_list.php', lines: [649] },
+    { name: 'get_cal_assign_report.php', lines: [702] },
+    { name: 'update_assign_product.php', lines: [768] },
+    { name: 'get_sale_order_mreport.php', lines: [818] },
+    { name: 'get_employee_auto.php', lines: [936] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1005] },
+  ]},
+  { js: 'map_ref1.js', apis: [
+    { name: 'get_location.php', lines: [43] },
+  ]},
+  { js: 'marketing_lead.js', apis: [
+    { name: 'insert_mlead.php', lines: [102] },
+    { name: 'get_today_lead.php', lines: [141] },
+    { name: 'get_customer_autocomplete.php', lines: [203] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [283] },
+  ]},
+  { js: 'material_request_form.js', apis: [
+    { name: 'mrf_partname_autocomplete.php', lines: [128] },
+    { name: 'get_material_request_form_parts_search.php', lines: [307] },
+    { name: 'update_material_request_form.php', lines: [492] },
+    { name: 'get_material_request_form_single.php', lines: [533] },
+    { name: 'get_internal_godown_stock_physical.php', lines: [600] },
+    { name: 'get_material_request_form_list.php', lines: [654] },
+    { name: 'get_part.php', lines: [759] },
+    { name: 'select_all_internal_godown.php', lines: [814] },
+    { name: 'insert_material_request_form.php', lines: [892] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [970] },
+  ]},
+  { js: 'material_request_form_accounts.js', apis: [
+    { name: 'insert_material_request_form.php', lines: [70] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [144] },
+  ]},
+  { js: 'material_request_form_md.js', apis: [
+    { name: 'get_demo.php', lines: [163] },
+    { name: 'get_material_request_form_details_md.php', lines: [225] },
+    { name: 'get_material_request_form_list.php', lines: [278] },
+    { name: 'insert_material_request_form_md.php', lines: [376] },
+    { name: 'update_material_request_form_md.php', lines: [417] },
+    { name: 'get_material_request_form_list_purchase.php', lines: [460] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [564] },
+  ]},
+  { js: 'material_request_form_md1.js', apis: [
+    { name: 'get_creditors_auto.php', lines: [425, 477] },
+    { name: 'mrf_partname_autocomplete.php', lines: [530] },
+    { name: 'update_material_request_form_md_sts.php', lines: [650] },
+    { name: 'get_mrf_purchase_details.php', lines: [693] },
+    { name: 'get_mrf_details.php', lines: [810] },
+    { name: 'insert_creditors.php', lines: [885] },
+    { name: 'get_material_request_form_details_purchase.php', lines: [923] },
+    { name: 'get_material_request_form_list.php', lines: [976] },
+    { name: 'insert_material_request_form_purchase.php', lines: [1113] },
+    { name: 'update_material_request_form_purchase.php', lines: [1190] },
+    { name: 'get_material_request_form_list_purchase.php', lines: [1249] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1380] },
+  ]},
+  { js: 'material_request_form_purchase.js', apis: [
+    { name: 'get_creditors_auto.php', lines: [424, 476] },
+    { name: 'mrf_partname_autocomplete.php', lines: [529] },
+    { name: 'update_material_request_form_status.php', lines: [623] },
+    { name: 'get_mrf_purchase_details.php', lines: [664] },
+    { name: 'get_mrf_details.php', lines: [782] },
+    { name: 'insert_creditors.php', lines: [852] },
+    { name: 'get_material_request_form_details_purchase.php', lines: [890] },
+    { name: 'get_material_request_form_list.php', lines: [944] },
+    { name: 'insert_material_request_form_purchase.php', lines: [1144] },
+    { name: 'update_material_request_form_purchase.php', lines: [1222] },
+    { name: 'get_material_request_form_list_purchase.php', lines: [1281] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1412] },
+  ]},
+  { js: 'material_request_form_report.js', apis: [
+    { name: 'get_material_request_form_report.php', lines: [17] },
+  ]},
+  { js: 'material_request_form_tally.js', apis: [
+    { name: 'mrf_partname_autocomplete.php', lines: [73] },
+    { name: 'update_material_request_form_tally.php', lines: [302] },
+    { name: 'get_phy_stock_details.php', lines: [336] },
+    { name: 'get_internal_godown_stock_tally.php', lines: [406] },
+    { name: 'get_material_request_form_list_tally.php', lines: [459] },
+    { name: 'get_material_request_form_list.php', lines: [567] },
+    { name: 'select_all_internal_godown.php', lines: [742] },
+    { name: 'insert_internal_godown_stock_tally.php', lines: [810] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [879] },
+  ]},
+  { js: 'menu.js', apis: [
+    { name: 'get_role.php', lines: [61] },
+    { name: 'get_current_date.php', lines: [149] },
+  ]},
+  { js: 'order_approval.js', apis: [
+    { name: 'modify_assign_product.php', lines: [416] },
+    { name: 'modify_assign_product_approve.php', lines: [483] },
+    { name: 'get_godown_name.php', lines: [552] },
+    { name: 'get_cal_assign_report.php', lines: [604] },
+    { name: 'get_assign_cal_details.php', lines: [675] },
+    { name: 'insert_assign_product.php', lines: [753] },
+    { name: 'update_sales_order_sts.php', lines: [804] },
+    { name: 'get_sales_order_details.php', lines: [841] },
+    { name: 'get_sales_order_subtype.php', lines: [936] },
+    { name: 'get_sales_order_summary.php', lines: [994] },
+    { name: 'get_sales_order_id.php', lines: [1049] },
+    { name: 'get_jaysan_model_subtype1.php', lines: [1108] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1181] },
+  ]},
+  { js: 'order_approval_md.js', apis: [
+    { name: 'update_sales_order_sts.php', lines: [67] },
+    { name: 'get_sales_order_details.php', lines: [104] },
+    { name: 'get_sales_order_subtype.php', lines: [199] },
+    { name: 'get_sales_order_id.php', lines: [256] },
+    { name: 'get_jaysan_model_subtype1.php', lines: [315] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [388] },
+  ]},
+  { js: 'organization.js', apis: [
+    { name: 'get_organization.php', lines: [84] },
+    { name: 'get_all_role.php', lines: [146] },
+    { name: 'update_role.php', lines: [206] },
+    { name: 'insert_organization.php', lines: [239] },
+    { name: 'delete_organization.php', lines: [279] },
+    { name: 'delete_app_all.php', lines: [312] },
+  ]},
+  { js: 'payment_report.js', apis: [
+    { name: 'get_payment_report.php', lines: [52] },
+  ]},
+  { js: 'payslip_report.js', apis: [
+    { name: 'get_payslip_report.php', lines: [18] },
+    { name: 'get_payslip_month.php', lines: [112] },
+  ]},
+  { js: 'payslip_upload.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [28] },
+    { name: 'insert_payslip.php', lines: [238] },
+  ]},
+  { js: 'pending_work.js', apis: [
+    { name: 'get_pending_work_all.php', lines: [52] },
+  ]},
+  { js: 'personal_budget_output.js', apis: [
+    { name: 'budget_summary_chart.php', lines: [66] },
+    { name: 'get_budget.php', lines: [183] },
+    { name: 'get_budget_details.php', lines: [286] },
+    { name: 'insert_personal_budget.php', lines: [339] },
+  ]},
+  { js: 'personal_budget_tool.js', apis: [
+    { name: 'insert_budget.php', lines: [227] },
+    { name: 'insert_personal_budget.php', lines: [269] },
+    { name: 'get_payment_report.php', lines: [302] },
+  ]},
+  { js: 'policy.js', apis: [
+    { name: 'get_customer_autocomplete.php', lines: [218] },
+    { name: 'get_phone_autocomplete.php', lines: [301] },
+    { name: 'get_policy_no_autocomplete.php', lines: [386] },
+    { name: 'get_name_autocomplete.php', lines: [467] },
+    { name: 'get_vno_autocomplete.php', lines: [550] },
+    { name: 'policy_search_report.php', lines: [639] },
+  ]},
+  { js: 'policy_report.js', apis: [
+    { name: 'policy_search.php', lines: [265] },
+    { name: 'get_policy_head.php', lines: [333] },
+  ]},
+  { js: 'po_approve.js', apis: [
+    { name: 'update_jaysan_po_material_sts.php', lines: [65] },
+    { name: 'get_jaysan_po_material.php', lines: [98] },
+    { name: 'get_po_list.php', lines: [174] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [237] },
+  ]},
+  { js: 'po_dashboard.js', apis: [
+    { name: 'get_material_chart.php', lines: [117] },
+    { name: 'get_mf_company_chart.php', lines: [166] },
+    { name: 'get_material_frequency_chart.php', lines: [214] },
+    { name: 'mrf_graph.php', lines: [266] },
+    { name: 'get_po_report_search_auto.php', lines: [353, 405, 503] },
+    { name: 'get_emp_auto.php', lines: [452] },
+    { name: 'get_po_dashboard.php', lines: [614] },
+    { name: 'get_jaysan_po_material.php', lines: [724] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [807] },
+  ]},
+  { js: 'po_inward.js', apis: [
+    { name: 'get_po_report_search_auto.php', lines: [44, 96] },
+    { name: 'get_creditors_auto.php', lines: [229] },
+    { name: 'mrf_partname_autocomplete.php', lines: [283] },
+    { name: 'insert_purchase_order.php', lines: [572] },
+    { name: 'insert_grn.php', lines: [616] },
+    { name: 'get_po_receive_sts.php', lines: [652] },
+    { name: 'get_po_report.php', lines: [750] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [834] },
+  ]},
+  { js: 'process_qty_master.js', apis: [
+    { name: 'get_part_name_auto1.php', lines: [228, 295] },
+    { name: 'get_jaysan_nesting.php', lines: [527] },
+    { name: 'update_nesting.php', lines: [595] },
+    { name: 'insert_nesting_output_part_single.php', lines: [675] },
+    { name: 'delete_nesting_output.php', lines: [718] },
+    { name: 'get_nesting_output.php', lines: [764] },
+    { name: 'get_process_group_all.php', lines: [822] },
+    { name: 'update_process_group.php', lines: [902] },
+    { name: 'get_sample_sts.php', lines: [943] },
+    { name: 'get_process_group.php', lines: [999] },
+    { name: 'insert_process_group.php', lines: [1057] },
+    { name: 'insert_nesting_output_part.php', lines: [1101] },
+    { name: 'delete_jaysan_machine.php', lines: [1281] },
+    { name: 'update_jaysan_machine.php', lines: [1317] },
+    { name: 'get_jaysan_machine.php', lines: [1359] },
+    { name: 'insert_jaysan_machine.php', lines: [1413] },
+    { name: 'get_jaysan_final_producttype.php', lines: [1451] },
+    { name: 'get_jaysan_final_productmodel.php', lines: [1509] },
+    { name: 'get_jaysan_final_product.php', lines: [1567] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1642] },
+  ]},
+  { js: 'products.js', apis: [
+    { name: 'delete_product.php', lines: [102] },
+    { name: 'get_product_all.php', lines: [144] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [202] },
+  ]},
+  { js: 'product_entry.js', apis: [
+    { name: 'delete_product_reminder.php', lines: [199] },
+    { name: 'get_reminder.php', lines: [219] },
+    { name: 'get_product_reminder.php', lines: [267] },
+    { name: 'update_product.php', lines: [321] },
+    { name: 'get_product.php', lines: [388] },
+    { name: 'insert_product_reminder.php', lines: [460] },
+    { name: 'insert_product.php', lines: [491] },
+    { name: 'get_product_autocomplete.php', lines: [561] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [716] },
+  ]},
+  { js: 'proforma_invoice.js', apis: [
+    { name: 'get_cus_info_all.php', lines: [385] },
+    { name: 'insert_proforma.php', lines: [431] },
+    { name: 'insert_proforma_product.php', lines: [511] },
+    { name: 'get_proforma_details.php', lines: [551] },
+    { name: 'get_customer_autocomplete.php', lines: [728] },
+    { name: 'get_product_autocomplete.php', lines: [813] },
+    { name: 'get_product.php', lines: [895] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [973] },
+  ]},
+  { js: 'proforma_single.js', apis: [
+    { name: 'insert_quotation.php', lines: [96] },
+    { name: 'insert_quotation_product.php', lines: [159] },
+    { name: 'get_proforma_details_single.php', lines: [199] },
+    { name: 'get_proforma_single.php', lines: [304] },
+    { name: 'get_customer_autocomplete.php', lines: [426] },
+    { name: 'get_product_autocomplete.php', lines: [511] },
+    { name: 'get_product.php', lines: [593] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [671] },
+  ]},
+  { js: 'purchase_order_form.js', apis: [
+    { name: 'mrf_partname_autocomplete.php', lines: [625] },
+    { name: 'get_jaysan_po_material.php', lines: [698] },
+    { name: 'get_mrf_po_details.php', lines: [968] },
+    { name: 'get_mrf_po_company_wise.php', lines: [1038] },
+    { name: 'get_mrf_po_basic_details.php', lines: [1100] },
+    { name: 'update_purchase_order.php', lines: [1149] },
+    { name: 'insert_purchase_order.php', lines: [1201] },
+    { name: 'get_po_list.php', lines: [1244] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1320] },
+  ]},
+  { js: 'quotation.js', apis: [
+    { name: 'get_cus_info_all.php', lines: [415] },
+    { name: 'insert_quotation.php', lines: [462] },
+    { name: 'insert_quotation_product.php', lines: [542] },
+    { name: 'get_quote_details.php', lines: [582] },
+    { name: 'get_customer_autocomplete.php', lines: [757] },
+    { name: 'get_product_autocomplete.php', lines: [842] },
+    { name: 'get_product.php', lines: [924] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1001] },
+  ]},
+  { js: 'quotation_demo.js', apis: [
+    { name: 'get_cus_info_all.php', lines: [322] },
+    { name: 'insert_quotation.php', lines: [368] },
+    { name: 'insert_quotation_product.php', lines: [438] },
+    { name: 'get_quote_details.php', lines: [478] },
+    { name: 'get_customer_autocomplete.php', lines: [614] },
+    { name: 'get_product_autocomplete.php', lines: [699] },
+    { name: 'get_product.php', lines: [781] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [859] },
+  ]},
+  { js: 'quotation_enquiry.js', apis: [
+    { name: 'get_process_auto.php', lines: [53] },
+    { name: 'get_part_name_auto1.php', lines: [208, 274] },
+    { name: 'get_vendor_auto.php', lines: [337, 392] },
+    { name: 'get_spec_auto.php', lines: [626] },
+    { name: 'get_rate_quotation_details.php', lines: [744] },
+    { name: 'update_spec_details.php', lines: [829] },
+    { name: 'get_custom_spec.php', lines: [870] },
+    { name: 'get_spec_details.php', lines: [922] },
+    { name: 'update_quotation_rating.php', lines: [1038] },
+    { name: 'get_rate_quotation_part.php', lines: [1075] },
+    { name: 'get_quotation_report.php', lines: [1188] },
+    { name: 'get_quotation_list.php', lines: [1245] },
+    { name: 'get_qcount.php', lines: [1303] },
+    { name: 'get_part_qsts.php', lines: [1360] },
+    { name: 'get_vendor.php', lines: [1477] },
+    { name: 'insert_vendor.php', lines: [1536] },
+    { name: 'update_rate_quotation.php', lines: [1583] },
+    { name: 'insert_part_spec.php', lines: [1627] },
+    { name: 'get_std_spec.php', lines: [1711] },
+    { name: 'get_part_spec.php', lines: [1768] },
+    { name: 'insert_new_part1.php', lines: [1826] },
+    { name: 'insert_custom_field_master.php', lines: [1915] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [2003] },
+  ]},
+  { js: 'quotation_enquiry_master.js', apis: [
+    { name: 'get_std_spec.php', lines: [129] },
+    { name: 'insert_std_field_master.php', lines: [192] },
+    { name: 'update_custom_field_master.php', lines: [232] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [317] },
+  ]},
+  { js: 'quotation_list.js', apis: [
+    { name: 'get_quote_all.php', lines: [57] },
+  ]},
+  { js: 'quotation_single.js', apis: [
+    { name: 'insert_quotation.php', lines: [96] },
+    { name: 'insert_quotation_product.php', lines: [159] },
+    { name: 'get_quote_details_single.php', lines: [199] },
+    { name: 'get_quotation_single.php', lines: [305] },
+    { name: 'get_customer_autocomplete.php', lines: [427] },
+    { name: 'get_product_autocomplete.php', lines: [512] },
+    { name: 'get_product.php', lines: [594] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [672] },
+  ]},
+  { js: 'reference_js.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [126] },
+  ]},
+  { js: 'referral_report.js', apis: [
+    { name: 'get_refphone_autocomplete.php', lines: [310] },
+    { name: 'get_refname_autocomplete.php', lines: [395] },
+    { name: 'get_lead_source.php', lines: [475] },
+    { name: 'get_employee.php', lines: [525] },
+    { name: 'lead_ref_report.php', lines: [571] },
+    { name: 'get_customer_autocomplete.php', lines: [632] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [712] },
+    { name: 'insert_listner.php', lines: [917] },
+    { name: 'check_listner.php', lines: [946] },
+  ]},
+  { js: 'reminder_list.js', apis: [
+    { name: 'get_reminder_all.php', lines: [52] },
+  ]},
+  { js: 'restamping_entry.js', apis: [
+    { name: 'insert_restamp.php', lines: [158, 199] },
+    { name: 'get_restamp_details.php', lines: [242] },
+    { name: 'get_cus_info_service.php', lines: [311] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [469] },
+    { name: 'update_listner.php', lines: [599] },
+  ]},
+  { js: 'restamping_report.js', apis: [
+    { name: 'get_restamping_all.php', lines: [57] },
+  ]},
+  { js: 'role.js', apis: [
+    { name: 'get_empmenu_auto.php', lines: [130] },
+    { name: 'get_appmenu_auto.php', lines: [248] },
+    { name: 'insert_app_menu.php', lines: [359] },
+    { name: 'update_app_menu.php', lines: [394] },
+    { name: 'get_app_menu_all.php', lines: [430] },
+    { name: 'get_app_menu_master.php', lines: [488, 600] },
+    { name: 'get_role_type.php', lines: [535] },
+    { name: 'update_role.php', lines: [667] },
+    { name: 'insert_role.php', lines: [699] },
+    { name: 'get_all_role.php', lines: [734] },
+  ]},
+  { js: 'sales.js', apis: [
+    { name: 'insert_coupen.php', lines: [368] },
+    { name: 'get_advance_payment.php', lines: [403] },
+    { name: 'check_coupen.php', lines: [441] },
+    { name: 'update_coupen.php', lines: [510] },
+    { name: 'get_cus_info_all.php', lines: [605] },
+    { name: 'insert_invoice_reminder.php', lines: [644] },
+    { name: 'insert_innvoice.php', lines: [683] },
+    { name: 'insert_invoice_product.php', lines: [770] },
+    { name: 'get_invoice_details.php', lines: [810] },
+    { name: 'get_customer_autocomplete.php', lines: [994] },
+    { name: 'get_product_autocomplete.php', lines: [1079] },
+    { name: 'get_product.php', lines: [1161] },
+    { name: 'get_reminder_invoice.php', lines: [1228] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1342] },
+  ]},
+  { js: 'sales_order_form.js', apis: [
+    { name: 'get_dispatch_count.php', lines: [680] },
+    { name: 'delete_sales_pay.php', lines: [748] },
+    { name: 'insert_sales_payment.php', lines: [787] },
+    { name: 'update_sales_pay_date.php', lines: [839] },
+    { name: 'get_sales_order_details_approved.php', lines: [881] },
+    { name: 'get_pro_assign_sts.php', lines: [1025] },
+    { name: 'get_jaysan_model_subtype1.php', lines: [1105] },
+    { name: 'delete_sales_product.php', lines: [1158] },
+    { name: 'delete_sales_order.php', lines: [1200] },
+    { name: 'get_sales_report_emp.php', lines: [1242, 1306, 1365] },
+    { name: 'get_sales_order_single.php', lines: [1423, 1524] },
+    { name: 'get_sales_payment1.php', lines: [1626] },
+    { name: 'get_sales_payment_m.php', lines: [1680] },
+    { name: 'get_sales_product1.php', lines: [1744] },
+    { name: 'get_sales_order_subtype.php', lines: [1797] },
+    { name: 'insert_sales_order_form.php', lines: [1895] },
+    { name: 'update_sales_order_form.php', lines: [1993] },
+    { name: 'get_customer_autocomplete.php', lines: [2062] },
+    { name: 'get_phone_autocomplete.php', lines: [2148] },
+    { name: 'get_jaysan_final_productmodel.php', lines: [2233] },
+    { name: 'get_jaysan_final_producttype.php', lines: [2288] },
+    { name: 'get_jaysan_final_product.php', lines: [2345] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [2470] },
+  ]},
+  { js: 'sales_order_report.js', apis: [
+    { name: 'get_employee_auto.php', lines: [40] },
+    { name: 'assign_product_customer_autocomplete.php', lines: [98] },
+    { name: 'get_phone_autocomplete.php', lines: [159] },
+    { name: 'get_subtype_auto.php', lines: [252] },
+    { name: 'get_production_sts.php', lines: [443] },
+    { name: 'assign_product_get_product_list.php', lines: [498] },
+    { name: 'assign_product_get_model_list.php', lines: [553] },
+    { name: 'assign_product_get_type_list.php', lines: [608] },
+    { name: 'get_godown_name.php', lines: [667] },
+    { name: 'get_dispatch_count.php', lines: [717] },
+    { name: 'get_sales_order_details_approved.php', lines: [783] },
+    { name: 'get_pro_assign_sts.php', lines: [924] },
+    { name: 'get_sale_order_report.php', lines: [1006] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1236] },
+  ]},
+  { js: 'sales_payment_approval.js', apis: [
+    { name: 'check_utr_no.php', lines: [92] },
+    { name: 'get_jaysan_payment.php', lines: [161] },
+    { name: 'update_jaysan_payment.php', lines: [225] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [300] },
+  ]},
+  { js: 'service_entry.js', apis: [
+    { name: 'insert_service.php', lines: [93, 136] },
+    { name: 'get_invoice_details.php', lines: [176] },
+    { name: 'get_cus_info_service.php', lines: [245] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [403] },
+    { name: 'update_listner.php', lines: [533] },
+  ]},
+  { js: 'service_feedback.js', apis: [
+    { name: 'update_fedback.php', lines: [98] },
+    { name: 'get_feedback_request.php', lines: [127] },
+    { name: 'get_customer_autocomplete.php', lines: [184] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [264] },
+    { name: 'insert_listner.php', lines: [469] },
+    { name: 'check_listner.php', lines: [498] },
+  ]},
+  { js: 'service_report.js', apis: [
+    { name: 'get_service_all.php', lines: [56] },
+  ]},
+  { js: 'service_requset.js', apis: [
+    { name: 'update_service.php', lines: [127] },
+    { name: 'get_service_request.php', lines: [156] },
+    { name: 'get_customer_autocomplete.php', lines: [218] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [298] },
+    { name: 'insert_listner.php', lines: [503] },
+    { name: 'check_listner.php', lines: [532] },
+  ]},
+  { js: 'site_visit_report.js', apis: [
+    { name: 'site_visit_report.php', lines: [78] },
+  ]},
+  { js: 'site_visit_report_all.js', apis: [
+    { name: 'get_sv_all.php', lines: [56] },
+  ]},
+  { js: 'sub_assembly.js', apis: [
+    { name: 'insert_ass_process1.php', lines: [141] },
+    { name: 'insert_wel_process1.php', lines: [147, 232] },
+    { name: 'update_wel_process1.php', lines: [326] },
+    { name: 'get_part_name_auto_wel.php', lines: [367, 421, 472, 520, 1416] },
+    { name: 'get_process_auto.php', lines: [574] },
+    { name: 'insert_new_process.php', lines: [629] },
+    { name: 'get_part_name_auto_sub.php', lines: [1120, 1170] },
+    { name: 'get_bom_output.php', lines: [1240] },
+    { name: 'insert_new_sub_part.php', lines: [1303] },
+    { name: 'del_wel_process1.php', lines: [1382] },
+    { name: 'get_machine.php', lines: [1457, 1518] },
+    { name: 'get_bom_process_details.php', lines: [1580] },
+    { name: 'get_bom_process_count.php', lines: [1657] },
+    { name: 'get_sub_bom_process_recent.php', lines: [1712] },
+    { name: 'get_bom_list.php', lines: [1768] },
+    { name: 'get_bom_list_comp.php', lines: [1834] },
+    { name: 'get_bom.php', lines: [1897] },
+    { name: 'get_titles.php', lines: [1968] },
+    { name: 'delete_implement.php', lines: [2007] },
+    { name: 'insert_nprocess.php', lines: [2042] },
+    { name: 'delete_process.php', lines: [2082] },
+    { name: 'insert_new_input.php', lines: [2124] },
+    { name: 'delete_input_part.php', lines: [2163] },
+    { name: 'update_output_part.php', lines: [2203] },
+    { name: 'update_process.php', lines: [2243] },
+    { name: 'update_input_part.php', lines: [2282] },
+    { name: 'insert_new_part.php', lines: [2323] },
+    { name: 'get_implement_process.php', lines: [2365] },
+    { name: 'get_implement_input.php', lines: [2415] },
+    { name: 'get_implement_output.php', lines: [2464] },
+    { name: 'get_sel_imp.php', lines: [2538] },
+    { name: 'get_sel_process.php', lines: [2595, 2654] },
+    { name: 'get_all_work.php', lines: [2708] },
+    { name: 'delete_work_report.php', lines: [2749] },
+    { name: 'delete_work.php', lines: [2788] },
+    { name: 'delete_work_type.php', lines: [2827] },
+    { name: 'get_wstatus.php', lines: [2864, 2911] },
+    { name: 'insert_work_type.php', lines: [2956] },
+    { name: 'insert_rwork.php', lines: [2990] },
+    { name: 'insert_pwork.php', lines: [3023] },
+    { name: 'get_all_work_type.php', lines: [3055] },
+    { name: 'get_all_report_type.php', lines: [3093] },
+    { name: 'get_work_type.php', lines: [3132] },
+  ]},
+  { js: 'sub_assembly_bom_entry.js', apis: [
+    { name: 'get_part_name_auto_wel.php', lines: [96, 151, 204, 259, 635, 694, 775] },
+    { name: 'insert_sub_assembly_bom.php', lines: [492] },
+    { name: 'update_sub_assembly_bom.php', lines: [541] },
+    { name: 'get_bom_list.php', lines: [814] },
+    { name: 'get_sub_assembly_bom_recent.php', lines: [879] },
+    { name: 'get_bom.php', lines: [934] },
+    { name: 'get_titles.php', lines: [1014] },
+    { name: 'insert_new_part.php', lines: [1070] },
+  ]},
+  { js: 'sujith_ref.js', apis: [
+    { name: 'sujith.php', lines: [13] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [128] },
+  ]},
+  { js: 'sv_entry.js', apis: [
+    { name: 'get_employee.php', lines: [212] },
+    { name: 'insert_sv.php', lines: [263] },
+    { name: 'get_cus_info.php', lines: [420] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [506] },
+    { name: 'get_assign_work.php', lines: [554] },
+    { name: 'get_work.php', lines: [649] },
+    { name: 'update_work.php', lines: [769, 831] },
+    { name: 'insert_listner.php', lines: [994] },
+    { name: 'check_listner.php', lines: [1023] },
+    { name: 'update_listner.php', lines: [1069] },
+  ]},
+  { js: 'task.js', apis: [
+    { name: 'update_work_na.php', lines: [1034, 1083] },
+    { name: 'get_cus_info.php', lines: [1130] },
+    { name: 'get_history.php', lines: [1189] },
+    { name: 'get_na_work.php', lines: [1237] },
+    { name: 'get_sa_work.php', lines: [1317] },
+    { name: 'get_assigned_accept.php', lines: [1396] },
+    { name: 'get_emp_work.php', lines: [1475] },
+    { name: 'insert_work.php', lines: [1556] },
+    { name: 'get_android_id.php', lines: [1631] },
+    { name: 'get_employee.php', lines: [1689, 1732] },
+    { name: 'get_customer_autocomplete.php', lines: [1781] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1862] },
+    { name: 'get_work_type.php', lines: [1901] },
+    { name: 'update_listner.php', lines: [2146] },
+  ]},
+  { js: 'task_list.js', apis: [
+    { name: 'demo1.php', lines: [1068] },
+    { name: 'update_work_na.php', lines: [1132, 1181] },
+    { name: 'get_cus_info.php', lines: [1228] },
+    { name: 'get_history.php', lines: [1287] },
+    { name: 'get_na_work.php', lines: [1335] },
+    { name: 'get_sa_work_all.php', lines: [1413] },
+    { name: 'get_sa_work.php', lines: [1492] },
+    { name: 'get_assigned_accept.php', lines: [1571] },
+    { name: 'get_emp_work.php', lines: [1650] },
+    { name: 'insert_work.php', lines: [1731] },
+    { name: 'get_android_id.php', lines: [1805] },
+    { name: 'get_employee.php', lines: [1863, 1906] },
+    { name: 'get_customer_autocomplete.php', lines: [1955] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [2036] },
+    { name: 'get_work_type.php', lines: [2076] },
+    { name: 'update_listner.php', lines: [2297] },
+  ]},
+  { js: 'unassigned_parts.js', apis: [
+    { name: 'get_parts.php', lines: [66, 118] },
+    { name: 'get_titles.php', lines: [168] },
+    { name: 'store_rules.php', lines: [394] },
+    { name: 'store_parts1.php', lines: [424] },
+    { name: 'get_unique_parts.php', lines: [472] },
+    { name: 'get_unassigned_parts.php', lines: [522] },
+    { name: 'get_part_rules.php', lines: [594] },
+    { name: 'get_assign_no.php', lines: [638] },
+  ]},
+  { js: 'upload_candidate.js', apis: [
+    { name: 'get_employee.php', lines: [117] },
+    { name: 'upload_canditate.php', lines: [172] },
+  ]},
+  { js: 'upload_ref.js', apis: [
+    { name: 'get_employee.php', lines: [274] },
+    { name: 'get_work_type.php', lines: [326] },
+    { name: 'upload_cus1.php', lines: [374] },
+  ]},
+  { js: 'user_call.js', apis: [
+    { name: 'get_cus_payment_history.php', lines: [538] },
+    { name: 'get_work_info_full.php', lines: [595] },
+    { name: 'get_service_request_cus.php', lines: [653] },
+    { name: 'get_delivery_cus.php', lines: [708] },
+    { name: 'get_extw_request_cus.php', lines: [763] },
+    { name: 'delete_payment.php', lines: [858] },
+    { name: 'insert_payment.php', lines: [897] },
+    { name: 'get_user_quotation.php', lines: [945] },
+    { name: 'get_user_estimate.php', lines: [992] },
+    { name: 'get_payment_history.php', lines: [1040] },
+    { name: 'get_user_proforma_invoice.php', lines: [1087] },
+    { name: 'get_user_invoice.php', lines: [1139] },
+    { name: 'get_user_reminder.php', lines: [1199] },
+    { name: 'get_next_work_time.php', lines: [1251] },
+    { name: 'get_android_id.php', lines: [1314, 1652] },
+    { name: 'insert_work.php', lines: [1371] },
+    { name: 'get_call_cus_id.php', lines: [1465] },
+    { name: 'get_pipeline_work.php', lines: [1524] },
+    { name: 'get_employee.php', lines: [1589] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1702] },
+    { name: 'get_today_call.php', lines: [1745] },
+    { name: 'get_cus_info_all.php', lines: [1849] },
+    { name: 'get_work_type_ac.php', lines: [1940] },
+    { name: 'get_cur_work.php', lines: [1996] },
+    { name: 'get_work_mcall.php', lines: [2078] },
+    { name: 'get_history.php', lines: [2162] },
+    { name: 'update_work_mcall.php', lines: [2233] },
+    { name: 'insert_listner.php', lines: [2406] },
+    { name: 'check_listner.php', lines: [2435] },
+  ]},
+  { js: 'user_call_incoming.js', apis: [
+    { name: 'get_employee.php', lines: [145] },
+    { name: 'get_android_id.php', lines: [205, 251] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [298] },
+    { name: 'get_today_call_incoming.php', lines: [341] },
+    { name: 'get_site_visit_work_all.php', lines: [423] },
+    { name: 'get_site_visit_work.php', lines: [480] },
+    { name: 'get_work_mcall.php', lines: [541] },
+    { name: 'get_history.php', lines: [616] },
+    { name: 'insert_work.php', lines: [667] },
+    { name: 'update_work_mcall.php', lines: [733] },
+  ]},
+  { js: 'user_call_incoming_ref.js', apis: [
+    { name: 'get_employee.php', lines: [172] },
+    { name: 'get_android_id.php', lines: [232, 278] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [325] },
+    { name: 'get_today_call_incoming.php', lines: [368] },
+    { name: 'get_site_visit_work.php', lines: [451] },
+    { name: 'get_work_mcall.php', lines: [511] },
+    { name: 'get_history.php', lines: [586] },
+    { name: 'insert_work.php', lines: [637] },
+    { name: 'update_work_mcall.php', lines: [696] },
+  ]},
+  { js: 'user_index.js', apis: [
+    { name: 'get_call_log.php', lines: [109] },
+    { name: 'work_summary_report.php', lines: [158] },
+    { name: 'get_today_call_all.php', lines: [220] },
+    { name: 'get_today_finished_call.php', lines: [263] },
+  ]},
+  { js: 'user_report.js', apis: [
+    { name: 'get_total_call_all.php', lines: [95] },
+    { name: 'get_customer_autocomplete.php', lines: [145] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [225] },
+  ]},
+  { js: 'user_search.js', apis: [
+    { name: 'get_employee.php', lines: [147] },
+    { name: 'get_android_id.php', lines: [207, 253] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [300] },
+    { name: 'get_today_call_user.php', lines: [343] },
+    { name: 'get_site_visit_work_all.php', lines: [425] },
+    { name: 'get_site_visit_work.php', lines: [482] },
+    { name: 'get_work_mcall.php', lines: [543] },
+    { name: 'get_history.php', lines: [618] },
+    { name: 'insert_work.php', lines: [669] },
+    { name: 'update_work_mcall.php', lines: [735] },
+  ]},
+  { js: 'user_search1.js', apis: [
+    { name: 'update_customer.php', lines: [371] },
+    { name: 'get_android_id.php', lines: [412, 766] },
+    { name: 'insert_work.php', lines: [469] },
+    { name: 'insert_sv.php', lines: [531] },
+    { name: 'get_pipeline_work.php', lines: [641] },
+    { name: 'get_employee.php', lines: [703] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [815] },
+    { name: 'get_today_call_user.php', lines: [858] },
+    { name: 'get_work_type_ac.php', lines: [940] },
+    { name: 'get_work_mcall.php', lines: [1001] },
+    { name: 'get_history.php', lines: [1082] },
+    { name: 'update_work_mcall.php', lines: [1153] },
+  ]},
+  { js: 'websocket.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [143] },
+  ]},
+  { js: 'welding_entry.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [78] },
+  ]},
+  { js: 'welding_master.js', apis: [
+    { name: 'get_current_employee_id_byphoneid.php', lines: [132] },
+  ]},
+  { js: 'welding_process.js', apis: [
+    { name: 'insert_ass_process1.php', lines: [140] },
+    { name: 'insert_wel_process1.php', lines: [146, 231] },
+    { name: 'update_wel_process1.php', lines: [326] },
+    { name: 'get_part_name_auto_wel.php', lines: [365, 418, 469, 516, 1959] },
+    { name: 'get_process_auto.php', lines: [569] },
+    { name: 'insert_new_process.php', lines: [624] },
+    { name: 'get_creditors_auto.php', lines: [1164] },
+    { name: 'get_departments_auto.php', lines: [1232] },
+    { name: 'get_sections_auto.php', lines: [1322] },
+    { name: 'get_sec_machine_auto.php', lines: [1410] },
+    { name: 'get_dep_sec_machine.php', lines: [1641] },
+    { name: 'insert_dep_sec_machine.php', lines: [1685] },
+    { name: 'get_dep_section.php', lines: [1715] },
+    { name: 'insert_dep_section.php', lines: [1771] },
+    { name: 'get_department.php', lines: [1801] },
+    { name: 'insert_department.php', lines: [1857] },
+    { name: 'del_wel_process1.php', lines: [1926] },
+    { name: 'get_machine.php', lines: [1999, 2058] },
+    { name: 'get_bom_process_details.php', lines: [2118] },
+    { name: 'get_bom_process_count.php', lines: [2212] },
+    { name: 'get_bom_process_recent.php', lines: [2265] },
+    { name: 'get_bom_list.php', lines: [2319] },
+    { name: 'get_bom_list_comp.php', lines: [2383] },
+    { name: 'get_bom.php', lines: [2444] },
+    { name: 'get_titles.php', lines: [2511] },
+    { name: 'delete_implement.php', lines: [2549] },
+    { name: 'insert_nprocess.php', lines: [2583] },
+    { name: 'delete_process.php', lines: [2622] },
+    { name: 'insert_new_input.php', lines: [2663] },
+    { name: 'delete_input_part.php', lines: [2701] },
+    { name: 'update_output_part.php', lines: [2740] },
+    { name: 'update_process.php', lines: [2779] },
+    { name: 'update_input_part.php', lines: [2817] },
+    { name: 'insert_new_part.php', lines: [2857] },
+    { name: 'get_implement_process.php', lines: [2899] },
+    { name: 'get_implement_input.php', lines: [2948] },
+    { name: 'get_implement_output.php', lines: [2996] },
+    { name: 'get_sel_imp.php', lines: [3067] },
+    { name: 'get_sel_process.php', lines: [3122, 3179] },
+    { name: 'get_all_work.php', lines: [3232] },
+    { name: 'delete_work_report.php', lines: [3271] },
+    { name: 'delete_work.php', lines: [3309] },
+    { name: 'delete_work_type.php', lines: [3347] },
+    { name: 'get_wstatus.php', lines: [3383, 3429] },
+    { name: 'insert_work_type.php', lines: [3473] },
+    { name: 'insert_rwork.php', lines: [3505] },
+    { name: 'insert_pwork.php', lines: [3537] },
+    { name: 'get_all_work_type.php', lines: [3569] },
+    { name: 'get_all_report_type.php', lines: [3606] },
+    { name: 'get_work_type.php', lines: [3643] },
+  ]},
+  { js: 'work_entry.js', apis: [
+    { name: 'get_processes.php', lines: [52] },
+    { name: 'get_assigned_processes.php', lines: [60] },
+    { name: 'insert_employee_process.php', lines: [77] },
+    { name: 'delete_employee_process.php', lines: [98] },
+    { name: 'get_assigned_processes_raw.php', lines: [117, 635] },
+    { name: 'insert_extra_time.php', lines: [240] },
+    { name: 'check_time_exists.php', lines: [284] },
+    { name: 'delete_work_entry.php', lines: [324] },
+    { name: 'get_existing_work_data.php', lines: [342] },
+    { name: 'delete_extra_time.php', lines: [508] },
+    { name: 'update_extra_time.php', lines: [557] },
+    { name: 'get_machines_by_process.php', lines: [682, 976] },
+    { name: 'get_work_time.php', lines: [714] },
+    { name: 'insert_work_data.php', lines: [944] },
+    { name: 'search_parts.php', lines: [995] },
+    { name: 'get_recursive_processes.php', lines: [1024] },
+    { name: 'get_work_done_recent.php', lines: [1072] },
+    { name: 'get_extra_time_within_range.php', lines: [1242] },
+    { name: 'get_all_extra_time.php', lines: [1269, 1287] },
+    { name: 'get_all_emp_hi.php', lines: [1328] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1403] },
+  ]},
+  { js: 'work_entry_emp.js', apis: [
+    { name: 'insert_extra_time.php', lines: [152] },
+    { name: 'check_time_exists.php', lines: [196] },
+    { name: 'delete_work_entry.php', lines: [236] },
+    { name: 'get_existing_work_data.php', lines: [254] },
+    { name: 'delete_extra_time.php', lines: [420] },
+    { name: 'update_extra_time.php', lines: [469] },
+    { name: 'get_machines_by_process.php', lines: [549, 843] },
+    { name: 'get_work_time.php', lines: [581] },
+    { name: 'insert_work_data.php', lines: [811] },
+    { name: 'search_parts.php', lines: [862] },
+    { name: 'get_recursive_processes.php', lines: [891] },
+    { name: 'get_work_done_recent.php', lines: [938] },
+    { name: 'get_extra_time_within_range.php', lines: [1100] },
+    { name: 'get_all_extra_time.php', lines: [1127, 1145] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [1215] },
+  ]},
+  { js: 'work_search.js', apis: [
+    { name: 'work_search.php', lines: [157] },
+    { name: 'get_work_type.php', lines: [205] },
+    { name: 'get_wstatus.php', lines: [247] },
+    { name: 'get_all_emp_hi.php', lines: [291] },
+  ]},
+  { js: 'work_search_self.js', apis: [
+    { name: 'work_search.php', lines: [157] },
+    { name: 'get_work_type.php', lines: [205] },
+    { name: 'get_wstatus.php', lines: [247] },
+    { name: 'get_all_emp_hi.php', lines: [291] },
+  ]},
+  { js: 'work_summary_report.js', apis: [
+    { name: 'get_summary.php', lines: [267] },
+    { name: 'get_call_log.php', lines: [319] },
+    { name: 'work_summary_chart.php', lines: [373] },
+    { name: 'emp_lead_summary_chart.php', lines: [428] },
+    { name: 'emp_lead_out_summary_chart.php', lines: [483] },
+    { name: 'work_summary_report.php', lines: [538] },
+    { name: 'get_work_type.php', lines: [591] },
+    { name: 'get_all_emp_hi.php', lines: [636] },
+  ]},
+  { js: 'work_summary_report_self.js', apis: [
+    { name: 'get_summary.php', lines: [267] },
+    { name: 'get_call_log.php', lines: [319] },
+    { name: 'work_summary_chart.php', lines: [373] },
+    { name: 'emp_lead_summary_chart.php', lines: [428] },
+    { name: 'emp_lead_out_summary_chart.php', lines: [483] },
+    { name: 'work_summary_report.php', lines: [538] },
+    { name: 'get_work_type.php', lines: [591] },
+    { name: 'get_all_emp_hi.php', lines: [636] },
+  ]},
+  { js: 'work_time_master.js', apis: [
+    { name: 'delete_work_time_master.php', lines: [98] },
+    { name: 'update_work_time_master.php', lines: [137] },
+    { name: 'get_work_time_master_single.php', lines: [183] },
+    { name: 'get_work_time_master.php', lines: [247] },
+    { name: 'insert_work_time_master.php', lines: [299] },
+    { name: 'get_current_employee_id_byphoneid.php', lines: [364] },
+  ]},
+];
+        
+        let currentFilter = 'all';
+        let currentSort = { column: null, direction: 'asc' };
+        let displayData = [...apiData];
+        let phpLookupData = {};
+        let allPHPFiles = [];
+        
+        // Category definitions
+        const categories = {
+            'Admin': ['admin_', 'Admin'],
+            'Employee': ['emp_', 'employee_', 'Employee'],
+            'Customer': ['customer_', 'create_customer', 'cus_'],
+            'Work/Task': ['work_', 'create_work', 'assigned_work', 'pending_work'],
+            'Expense': ['expense_', 'Expense'],
+            'Reports': ['report_', 'Report', 'dashboard'],
+            'Process/Production': ['process_', 'bom_', 'assembly', 'welding'],
+            'Sales/Invoice': ['invoice', 'quotation', 'estimation'],
+            'Login/Auth': ['login', 'Login'],
+            'Attendance': ['att_', 'attendance_'],
+            'Tour': ['tour_'],
+            'Other': []
+        };
+        
+        // Security Vulnerabilities Data (from scan_php_security.ps1)
+        const securityFindings = [
+            {file: 'change_employee.php', issues: [{type: 'DELETE', line: 43, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_d = \"DELETE from  employee  WHERE emp_id = $old_emp_id\";", test: 'emp_id=1 OR 1=1'}]},
+            {file: 'db_back.php', issues: [{type: 'DROP_TABLE', line: 40, risk: 'CRITICAL', desc: 'DROP TABLE operation - destroys data permanently', code: "$sql .= \"DROP TABLE IF EXISTS `$table`;\n\";", test: 'N/A - Structural change'}]},
+            {file: 'db_backup.php', issues: [{type: 'EXEC', line: 41, risk: 'HIGH', desc: 'System exec() call - command injection risk', code: "exec($cmd, $output, $return_var);", test: 'cmd=; rm -rf /'}]},
+            {file: 'delete_app_all.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from app_menu WHERE role = $app_menu\" ;", test: 'role=admin OR 1=1'}]},
+            {file: 'delete_app_menu.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from app_menu WHERE app_menu_id = $app_menu_id and role =  $role\" ;", test: 'app_menu_id=1 OR 1=1'}]},
+            {file: 'delete_customer.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from customer WHERE cus_id = $cus_id\" ;", test: 'cus_id=1 OR 1=1'}]},
+            {file: 'delete_dealer.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from dealer WHERE did = $did\" ;", test: 'did=1 OR 1=1'}]},
+            {file: 'delete_employee_process.php', issues: [{type: 'DELETE', line: 19, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE FROM employee_process WHERE id = $id\";", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_emp_exp.php', issues: [{type: 'DELETE', line: 12, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from expense WHERE exp_id = '$exp_id'\" ;", test: 'exp_id=1\' OR \'1\'=\'1'}]},
+            {file: 'delete_estimation.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from estimation WHERE eno = $id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_expenses.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql =  \"DELETE  FROM  expense WHERE exp_id =  $exp_id\";", test: 'exp_id=1 OR 1=1'}]},
+            {file: 'delete_extra_time.php', issues: [{type: 'DELETE', line: 11, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE FROM extra_time_master WHERE ext_id = $id\";", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_godown.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql =  \"DELETE  FROM godown WHERE gid =  $gid\";", test: 'gid=1 OR 1=1'}]},
+            {file: 'delete_implement.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'Multiple DELETE operations', code: "$sql_delete_input = \"DELETE from input_parts WHERE input_parts.process_id in (...)\";", test: 'process_id=1 OR 1=1'}]},
+            {file: 'delete_input_part.php', issues: [{type: 'DELETE', line: 23, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE FROM input_parts WHERE input_parts.id = $change_input_id\";", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_invoice.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from invoice WHERE ino = $id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_jaysan_machine.php', issues: [{type: 'DELETE', line: 19, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql =  \"DELETE FROM jaysan_machine  WHERE jmid =  $jmid\";", test: 'jmid=1 OR 1=1'}]},
+            {file: 'delete_lead.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from marketing_lead WHERE lead_id = $lead_id\" ;", test: 'lead_id=1 OR 1=1'}]},
+            {file: 'delete_lead_web.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from api WHERE lead_id = $lead_id\" ;", test: 'lead_id=1 OR 1=1'}]},
+            {file: 'delete_model_subtype.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from jaysan_model_subtype WHERE msid = $msid\" ;", test: 'msid=1 OR 1=1'}]},
+            {file: 'delete_model_type.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from jaysan_model_type WHERE mtid = $mtid\" ;", test: 'mtid=1 OR 1=1'}]},
+            {file: 'delete_nesting_output.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from nesting_output_part WHERE nopid = $nopid\" ;", test: 'nopid=1 OR 1=1'}]},
+            {file: 'delete_organization.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from role_assign WHERE id = $org_id\" ;", test: 'org_id=1 OR 1=1'}]},
+            {file: 'delete_payment.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from payment WHERE pid = $pid\" ;", test: 'pid=1 OR 1=1'}]},
+            {file: 'delete_policy_single.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from policy WHERE policy.policy_no = $policy_id\" ;", test: 'policy_id=1 OR 1=1'}]},
+            {file: 'delete_process.php', issues: [{type: 'DELETE', line: 75, risk: 'HIGH', desc: 'Multiple DELETE operations', code: "$sql_delete_input = \"DELETE FROM input_parts WHERE process_id = $delete_process_id\";", test: 'process_id=1 OR 1=1'}]},
+            {file: 'delete_product.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from product WHERE pid = $pid\" ;", test: 'pid=1 OR 1=1'}]},
+            {file: 'delete_product_reminder.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE  from product_reminder_master WHERE id = $id \";", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_proforma.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from proforma_invoice WHERE pino = $id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_quotation.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from quotation WHERE qno = $id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_reminder.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from reminder_master WHERE remind_id = $remind_id\" ;", test: 'remind_id=1 OR 1=1'}]},
+            {file: 'delete_sales_order.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from sales_order_form WHERE oid = $oid\" ;", test: 'oid=1 OR 1=1'}]},
+            {file: 'delete_sales_pay.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from jaysan_payment WHERE payment_id = $payment_id\" ;", test: 'payment_id=1 OR 1=1'}]},
+            {file: 'delete_sales_product.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from sales_order_product WHERE opid = $opid\" ;", test: 'opid=1 OR 1=1'}]},
+            {file: 'delete_sujith.php', issues: [{type: 'DELETE', line: 19, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql =  \"DELETE  FROM sujith WHERE suith_id =  $su_id\";", test: 'su_id=1 OR 1=1'}]},
+            {file: 'delete_title.php', issues: [{type: 'DELETE', line: 6, risk: 'MEDIUM', desc: 'Prepared statement DELETE (safer)', code: "$stmt = $conn->prepare(\"DELETE FROM prs_title WHERE prs_id = ?\");", test: 'prs_id=1 (prepared, safer)'}]},
+            {file: 'delete_tour_req.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from att_req WHERE id = $id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_unapprove_exp.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from expense WHERE exp_id = $exp_id\" ;", test: 'exp_id=1 OR 1=1'}]},
+            {file: 'delete_warranty.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from wterms WHERE wid = $wid\" ;", test: 'wid=1 OR 1=1'}]},
+            {file: 'delete_work.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from work_type WHERE work_type_id = $work_type_id\" ;", test: 'work_type_id=1 OR 1=1'}]},
+            {file: 'delete_work_entry.php', issues: [{type: 'DELETE', line: 24, risk: 'CRITICAL', desc: 'Multiple DELETEs with string interpolation', code: "$conn->query(\"DELETE FROM work_process WHERE work_id = '$work_id'\");", test: 'work_id=1\' OR \'1\'=\'1'}]},
+            {file: 'delete_work_report.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from report_master WHERE id = $work_type_id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'delete_work_time_master.php', issues: [{type: 'DELETE', line: 18, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql =  \"DELETE  FROM work_time_master WHERE wtid =  $wtid\";", test: 'wtid=1 OR 1=1'}]},
+            {file: 'delete_work_type.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from work_type_status WHERE id = $work_type_id\" ;", test: 'id=1 OR 1=1'}]},
+            {file: 'del_wel_process1.php', issues: [{type: 'DELETE', line: 16, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from process_wel_tbl WHERE process_id = $row\" ;", test: 'process_id=1 OR 1=1'}]},
+            {file: 'insert_work_data.php', issues: [{type: 'DELETE', line: 38, risk: 'CRITICAL', desc: 'DELETE with string interpolation - SQL injection risk', code: "$conn->query(\"DELETE FROM work_process WHERE work_id = '$work_id'\");", test: 'work_id=1\' OR \'1\'=\'1'}]},
+            {file: 'modify_assign_product.php', issues: [{type: 'DELETE', line: 49, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_delete =  \"DELETE  FROM assign_product WHERE ass_id =   $del_id\";", test: 'ass_id=1 OR 1=1'}]},
+            {file: 'store_att_rules.php', issues: [{type: 'DELETE', line: 14, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_rule_delete = \"DELETE FROM att_approval_chart WHERE role_id =  $role_id \";", test: 'role_id=1 OR 1=1'}]},
+            {file: 'store_parts1.php', issues: [{type: 'DELETE', line: 12, risk: 'HIGH', desc: 'Multiple DELETE operations', code: "$sql_part_delete = \"DELETE FROM part_assign_tbl WHERE part_id =  $part_id \";", test: 'part_id=1 OR 1=1'}]},
+            {file: 'update_app_menu.php', issues: [{type: 'DELETE', line: 17, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_del = \"DELETE from app_menu WHERE role = $role\" ;", test: 'role=admin OR 1=1'}]},
+            {file: 'update_bom.php', issues: [{type: 'DELETE', line: 11, risk: 'CRITICAL', desc: 'DELETE with string interpolation - SQL injection risk', code: "$sql_delete = \"DELETE from bom_output WHERE bom_id = '$bom_id '\" ;", test: 'bom_id=1\' OR \'1\'=\'1'}]},
+            {file: 'update_material_request_form.php', issues: [{type: 'DELETE', line: 40, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_delete_physical_stock = \"DELETE FROM internal_godown_stock_physical WHERE mrf_id=$mrf_id\";", test: 'mrf_id=1 OR 1=1'}]},
+            {file: 'update_material_request_form_purchase.php', issues: [{type: 'DELETE', line: 54, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_delete =  \"DELETE  FROM mrf_batch WHERE mrf_id =  $mrf_id\";", test: 'mrf_id=1 OR 1=1'}]},
+            {file: 'update_material_request_form_tally.php', issues: [{type: 'DELETE', line: 29, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_delete_physical_stock = \"DELETE FROM internal_godown_stock_tally WHERE mrf_id=$mrf_id\";", test: 'mrf_id=1 OR 1=1'}]},
+            {file: 'update_part.php', issues: [{type: 'DELETE', line: 20, risk: 'MEDIUM', desc: 'Prepared statement DELETE (safer)', code: "$query = \"DELETE FROM part_assign_tbl WHERE part_id = ?\";", test: 'part_id=1 (prepared, safer)'}]},
+            {file: 'update_purchase_order.php', issues: [{type: 'DELETE', line: 36, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql_delete =  \"DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  $po_id\";", test: 'po_id=1 OR 1=1'}]},
+            {file: 'update_rate_quotation.php', issues: [{type: 'DELETE', line: 10, risk: 'CRITICAL', desc: 'DELETE with string interpolation - SQL injection risk', code: "$sql_delete = \"DELETE from rate_quotation_spec WHERE rqid = '$rqid '\" ;", test: 'rqid=1\' OR \'1\'=\'1'}]},
+            {file: 'update_sales_order_form.php', issues: [{type: 'DELETE', line: 47, risk: 'HIGH', desc: 'Multiple DELETE operations', code: "$sql_delete_product = \"DELETE FROM sales_order_product WHERE sales_order_product.oid = $sales_oid\";", test: 'oid=1 OR 1=1'}]},
+            {file: 'update_sub_assembly_bom.php', issues: [{type: 'DELETE', line: 11, risk: 'CRITICAL', desc: 'DELETE with string interpolation - SQL injection risk', code: "$sql_delete = \"DELETE from bom_output WHERE bom_id = '$bom_id '\" ;", test: 'bom_id=1\' OR \'1\'=\'1'}]},
+            {file: 'update_wel_process1.php', issues: [{type: 'DELETE', line: 20, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from process_wel_tbl WHERE process_id = $row\" ;", test: 'process_id=1 OR 1=1'}]},
+            {file: 'update_wel_process1_ref.php', issues: [{type: 'DELETE', line: 20, risk: 'HIGH', desc: 'DELETE operation - verify WHERE clause', code: "$sql = \"DELETE from process_wel_tbl WHERE process_id = $row\" ;", test: 'process_id=1 OR 1=1'}]}
+        ];
+        
+        // Helper function to get API name from either string or object format
+        function getAPIName(api) {
+            return typeof api === 'string' ? api : api.name;
+        }
+        
+        // Helper function to get API lines
+        function getAPILines(api) {
+            return typeof api === 'object' && api.lines ? api.lines : [];
+        }
+        
+        function initializeDashboard() {
+            calculateStats();
+            calculateTopAPIs();
+            buildPHPLookup();
+            buildCategoryView();
+            buildSecurityView();
+            populateTable(displayData);
+            loadDarkModePreference();
+        }
+        
+        function calculateStats() {
+            const totalJs = apiData.length;
+            const allApis = new Set();
+            let totalCalls = 0;
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => {
+                    const apiName = getAPIName(api);
+                    allApis.add(apiName);
+                });
+                totalCalls += item.apis.length;
+            });
+            
+            document.getElementById('totalJsFiles').textContent = totalJs;
+            document.getElementById('totalPhpApis').textContent = allApis.size;
+            document.getElementById('totalConnections').textContent = totalCalls;
+            document.getElementById('avgCalls').textContent = Math.round(totalCalls / totalJs);
+            
+            // Calculate unused PHP files (will be updated after buildPHPLookup runs)
+            updateUnusedCount();
+        }
+        
+        function updateUnusedCount() {
+            if (allPHPFiles.length === 0) return;
+            
+            const unused = allPHPFiles.filter(api => {
+                const usedBy = phpLookupData[api] || [];
+                return usedBy.length === 0;
+            });
+            
+            document.getElementById('unusedPhpCount').textContent = unused.length;
+        }
+        
+        function populateTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('noResults').style.display = 'none';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                // Determine JS file path
+                const jsPath = item.js.startsWith('js/') ? item.js : 'js/' + item.js;
+                const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                
+                const phpTags = item.apis.map(api => {
+                    const apiName = getAPIName(api);
+                    const lines = getAPILines(api);
+                    const phpFullPath = `e:/web/htdocs/jaysanERP/php/${apiName}`;
+                    
+                    if (lines.length > 0) {
+                        const lineLinks = lines.map(lineNum => {
+                            const jsLineLink = `${jsFullPath}:${lineNum}`;
+                            return `<a href="vscode://file/${jsLineLink}" class="line-number" title="Jump to line ${lineNum} in ${item.js}">L${lineNum}</a>`;
+                        }).join(' ');
+                        
+                        return `<div class="api-with-line">
+                            <a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>
+                            ${lineLinks}
+                        </div>`;
+                    } else {
+                        return `<a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>`;
+                    }
+                }).join(' ');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><a href="vscode://file/${jsFullPath}" class="js-file" title="Open ${item.js} in VS Code">${item.js}</a></td>
+                    <td class="php-list">${phpTags}</td>
+                    <td style="text-align: center;"><span class="count-badge">${item.apis.length}</span></td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            let filtered = apiData;
+            
+            // Apply count filter
+            if (currentFilter === 'high') {
+                filtered = filtered.filter(item => item.apis.length >= 10);
+            } else if (currentFilter === 'medium') {
+                filtered = filtered.filter(item => item.apis.length >= 5 && item.apis.length <= 9);
+            } else if (currentFilter === 'low') {
+                filtered = filtered.filter(item => item.apis.length >= 1 && item.apis.length <= 4);
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filtered = filtered.filter(item => {
+                    return item.js.toLowerCase().includes(searchTerm) ||
+                           item.apis.some(api => api.toLowerCase().includes(searchTerm));
+                });
+            }
+            
+            displayData = filtered;
+            applySorting();
+            populateTable(displayData);
+        }
+        
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            // Update UI
+            document.querySelectorAll('.sort-header').forEach(th => {
+                th.classList.remove('asc', 'desc');
+            });
+            event.target.classList.add(currentSort.direction);
+            
+            applySorting();
+            populateTable(displayData);
+        }
+        
+        function applySorting() {
+            if (!currentSort.column) return;
+            
+            displayData.sort((a, b) => {
+                let valA, valB;
+                
+                if (currentSort.column === 'js') {
+                    valA = a.js.toLowerCase();
+                    valB = b.js.toLowerCase();
+                } else if (currentSort.column === 'count') {
+                    valA = a.apis.length;
+                    valB = b.apis.length;
+                }
+                
+                if (currentSort.direction === 'asc') {
+                    return valA > valB ? 1 : -1;
+                } else {
+                    return valA < valB ? 1 : -1;
+                }
+            });
+        }
+        
+        function calculateTopAPIs() {
+            const apiCount = {};
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => {
+                    const apiName = getAPIName(api);
+                    apiCount[apiName] = (apiCount[apiName] || 0) + 1;
+                });
+            });
+            
+            const sortedAPIs = Object.entries(apiCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+            
+            const container = document.getElementById('topAPIsList');
+            container.innerHTML = sortedAPIs.map(([api, count]) => {
+                const phpFullPath = `e:/web/htdocs/jaysanERP/php/${api}`;
+                return `
+                    <div class="api-card">
+                        <a href="vscode://file/${phpFullPath}" class="api-name" title="Open in VS Code">${api}</a>
+                        <span class="api-usage">Used by ${count} file${count > 1 ? 's' : ''}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleTopAPIs() {
+            const section = document.getElementById('topAPIsSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function exportToCSV() {
+            let csv = 'JavaScript File,PHP APIs,Count\n';
+            
+            displayData.forEach(item => {
+                const apis = item.apis.map(api => getAPIName(api)).join('; ');
+                csv += `"${item.js}","${apis}",${item.apis.length}\n`;
+            });
+            
+            downloadFile(csv, 'js_php_api_mapping.csv', 'text/csv');
+        }
+        
+        function exportToJSON() {
+            const json = JSON.stringify(displayData, null, 2);
+            downloadFile(json, 'js_php_api_mapping.json', 'application/json');
+        }
+        
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function filterByCount(type) {
+            currentFilter = type;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            filterTable();
+        }
+        
+        function buildPHPLookup() {
+            // Build reverse lookup: PHP API -> JS files that use it with line numbers
+            phpLookupData = {};
+            const allPHPSet = new Set();
+            
+            // Add all PHP files from directory first
+            allPhpFilesInDirectory.forEach(file => allPHPSet.add(file));
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => {
+                    const apiName = getAPIName(api);
+                    const lines = getAPILines(api);
+                    
+                    allPHPSet.add(apiName);
+                    if (!phpLookupData[apiName]) {
+                        phpLookupData[apiName] = [];
+                    }
+                    phpLookupData[apiName].push({ js: item.js, lines: lines });
+                });
+            });
+            
+            allPHPFiles = Array.from(allPHPSet).sort();
+            displayPHPLookup(allPHPFiles);
+            updateUnusedCount();
+        }
+        
+        function displayPHPLookup(phpFiles) {
+            const container = document.getElementById('phpLookupContainer');
+            
+            container.innerHTML = phpFiles.map(api => {
+                const usedBy = phpLookupData[api] || [];
+                const isUnused = usedBy.length === 0;
+                const phpFullPath = `e:/web/htdocs/jaysanERP/php/${api}`;
+                
+                return `
+                    <div class="php-usage-card ${isUnused ? 'unused' : ''}">
+                        <div>
+                            <a href="vscode://file/${phpFullPath}" class="api-name" style="text-decoration: none; color: #667eea; font-weight: 600;">
+                                ${api}
+                            </a>
+                            ${isUnused ? '<span class="unused-badge">⚠️ Unused</span>' : '<span class="api-usage">Used by ' + usedBy.length + ' file' + (usedBy.length > 1 ? 's' : '') + '</span>'}
+                        </div>
+                        ${usedBy.length > 0 ? `
+                            <div class="used-by-list">
+                                ${usedBy.map(usage => {
+                                    const jsPath = usage.js.startsWith('js/') ? usage.js : 'js/' + usage.js;
+                                    const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                                    
+                                    if (usage.lines && usage.lines.length > 0) {
+                                        const lineLinks = usage.lines.map(lineNum => {
+                                            const lineLink = `${jsFullPath}:${lineNum}`;
+                                            return `<a href="vscode://file/${lineLink}" class="line-number" title="Jump to line ${lineNum}">L${lineNum}</a>`;
+                                        }).join(' ');
+                                        return `<div style="display: inline-flex; align-items: center; margin-right: 15px; margin-bottom: 5px;">
+                                            <a href="vscode://file/${jsFullPath}" style="color: #0066cc; text-decoration: none; margin-right: 5px;">📄Ÿ“„ ${usage.js}</a>
+                                            ${lineLinks}
+                                        </div>`;
+                                    } else {
+                                        return `<a href="vscode://file/${jsFullPath}" style="color: #0066cc; text-decoration: none; margin-right: 10px;">📄Ÿ“„ ${usage.js}</a>`;
+                                    }
+                                }).join(' ')}
+                            </div>
+                        ` : '<div class="used-by-list" style="color: #dc3545;">Not referenced by any JavaScript file</div>'}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function filterPHPLookup() {
+            const searchTerm = document.getElementById('phpSearchBox').value.toLowerCase();
+            const filtered = allPHPFiles.filter(api => api.toLowerCase().includes(searchTerm));
+            displayPHPLookup(filtered);
+        }
+        
+        function showUnusedPHP() {
+            const unused = allPHPFiles.filter(api => {
+                const usedBy = phpLookupData[api] || [];
+                return usedBy.length === 0;
+            });
+            
+            document.getElementById('unusedCount').style.display = 'block';
+            document.getElementById('unusedCountText').textContent = unused.length;
+            document.getElementById('phpSearchBox').value = '';
+            displayPHPLookup(unused);
+            
+            // Update button states
+            document.getElementById('showUnusedBtn').classList.add('active');
+            document.getElementById('showAllPhpBtn').classList.remove('active');
+        }
+        
+        function showAllPHP() {
+            document.getElementById('unusedCount').style.display = 'none';
+            document.getElementById('phpSearchBox').value = '';
+            displayPHPLookup(allPHPFiles);
+            
+            // Update button states
+            document.getElementById('showAllPhpBtn').classList.add('active');
+            document.getElementById('showUnusedBtn').classList.remove('active');
+        }
+        
+        function categorizeFile(filename) {
+            for (const [category, patterns] of Object.entries(categories)) {
+                if (category === 'Other') continue;
+                for (const pattern of patterns) {
+                    if (filename.includes(pattern)) {
+                        return category;
+                    }
+                }
+            }
+            return 'Other';
+        }
+        
+        function buildCategoryView() {
+            const categorized = {};
+            
+            apiData.forEach(item => {
+                const category = categorizeFile(item.js);
+                if (!categorized[category]) {
+                    categorized[category] = [];
+                }
+                categorized[category].push(item);
+            });
+            
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = Object.keys(categorized).sort().map(category => {
+                const files = categorized[category];
+                return `
+                    <div class="category-section">
+                        <div class="category-header" onclick="toggleCategory('${category}')">
+                            📄Ÿ“ ${category} (${files.length} files)
+                        </div>
+                        <div id="cat-${category}" style="display: block;">
+                            ${files.map((item, index) => {
+                                const jsPath = item.js.startsWith('js/') ? item.js : 'js/' + item.js;
+                                const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                                const phpTags = item.apis.map(api => {
+                                    const apiName = getAPIName(api);
+                                    const lines = getAPILines(api);
+                                    const phpFullPath = `e:/web/htdocs/jaysanERP/php/${apiName}`;
+                                    
+                                    if (lines.length > 0) {
+                                        const lineLinks = lines.map(lineNum => {
+                                            const jsLineLink = `${jsFullPath}:${lineNum}`;
+                                            return `<a href="vscode://file/${jsLineLink}" class="line-number" title="Jump to line ${lineNum}">L${lineNum}</a>`;
+                                        }).join(' ');
+                                        return `<div class="api-with-line">
+                                            <a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName}">${apiName}</a>
+                                            ${lineLinks}
+                                        </div>`;
+                                    } else {
+                                        return `<a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>`;
+                                    }
+                                }).join(' ');
+                                
+                                return `
+                                    <div style="padding: 15px; border-bottom: 1px solid #e9ecef;">
+                                        <a href="vscode://file/${jsFullPath}" class="js-file" style="text-decoration: none;">${item.js}</a>
+                                        <span class="count-badge">${item.apis.length}</span>
+                                        <div class="php-list" style="margin-top: 8px;">${phpTags}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleCategory(category) {
+            const element = document.getElementById(`cat-${category}`);
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update button states
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            
+            // Update toggle button
+            const btn = document.querySelector('.dark-mode-toggle');
+            btn.textContent = isDark ? 'â˜€ï¸' : '📄ŸŒ™';
+        }
+        
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle').textContent = 'â˜€ï¸';
+            }
+        }
+        
+        // Security View Functions
+        let currentSecurityFilter = 'all';
+        
+        function buildSecurityView() {
+            const criticalCount = securityFindings.reduce((sum, f) => sum + f.issues.filter(i => i.risk === 'CRITICAL').length, 0);
+            const highCount = securityFindings.reduce((sum, f) => sum + f.issues.filter(i => i.risk === 'HIGH').length, 0);
+            const mediumCount = securityFindings.reduce((sum, f) => sum + f.issues.filter(i => i.risk === 'MEDIUM').length, 0);
+            
+            document.getElementById('secFilesCount').textContent = securityFindings.length;
+            document.getElementById('secCriticalCount').textContent = criticalCount;
+            document.getElementById('secHighCount').textContent = highCount;
+            document.getElementById('secMediumCount').textContent = mediumCount;
+            
+            displaySecurityIssues(securityFindings);
+        }
+        
+        function displaySecurityIssues(findings) {
+            const container = document.getElementById('securityIssuesContainer');
+            if (findings.length === 0) {
+                container.innerHTML = '<div class="no-results" style="display: block;">No security issues found</div>';
+                return;
+            }
+            
+            let html = '';
+            findings.forEach(file => {
+                file.issues.forEach(issue => {
+                    const riskColor = issue.risk === 'CRITICAL' ? '#dc3545' : (issue.risk === 'HIGH' ? '#ffc107' : '#17a2b8');
+                    const riskBg = issue.risk === 'CRITICAL' ? '#f8d7da' : (issue.risk === 'HIGH' ? '#fff3cd' : '#d1ecf1');
+                    
+                    html += `
+                        <div class="api-card" style="border-left: 4px solid ${riskColor}; margin-bottom: 15px;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <a href="vscode://file/e:/web/htdocs/jaysanERP/php/${file.file}:${issue.line}" 
+                                       style="font-weight: 600; color: #667eea; text-decoration: none; font-size: 1.1em;">
+                                        📄Ÿ“„ ${file.file}
+                                    </a>
+                                    <span style="background: ${riskBg}; color: ${riskColor}; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">
+                                        ${issue.risk}
+                                    </span>
+                                    <span style="background: #e9ecef; padding: 3px 8px; border-radius: 4px; font-size: 0.85em;">
+                                        Line ${issue.line}
+                                    </span>
+                                    <span style="background: #f1f3f5; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; font-family: monospace;">
+                                        ${issue.type}
+                                    </span>
+                                </div>
+                                <div style="color: #495057; margin-bottom: 8px; font-size: 0.95em;">
+                                    <strong>Issue:</strong> ${issue.desc}
+                                </div>
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; color: #212529; overflow-x: auto; margin-bottom: 8px;">
+                                    ${escapeHtml(issue.code)}
+                                </div>
+                                <div style="background: #fff3cd; padding: 8px; border-radius: 4px; border-left: 3px solid #ffc107;">
+                                    <strong style="color: #856404;">📄Ÿ’‰ Test Input:</strong> 
+                                    <code style="background: #fff; padding: 2px 6px; border-radius: 3px; color: #d63384; font-family: monospace;">${escapeHtml(issue.test)}</code>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function filterSecurityByRisk(risk) {
+            currentSecurityFilter = risk;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (risk === 'all') {
+                displaySecurityIssues(securityFindings);
+            } else {
+                const filtered = securityFindings.map(file => ({
+                    ...file,
+                    issues: file.issues.filter(issue => issue.risk === risk)
+                })).filter(file => file.issues.length > 0);
+                
+                displaySecurityIssues(filtered);
+            }
+        }
+        
+        function filterSecurity() {
+            const search = document.getElementById('securitySearchBox').value.toLowerCase();
+            
+            const filtered = securityFindings.map(file => {
+                const matchesFile = file.file.toLowerCase().includes(search);
+                const matchingIssues = file.issues.filter(issue => 
+                    issue.type.toLowerCase().includes(search) ||
+                    issue.desc.toLowerCase().includes(search) ||
+                    issue.code.toLowerCase().includes(search) ||
+                    issue.test.toLowerCase().includes(search)
+                );
+                
+                if (matchesFile) {
+                    return { ...file, issues: currentSecurityFilter === 'all' ? file.issues : file.issues.filter(i => i.risk === currentSecurityFilter) };
+                } else if (matchingIssues.length > 0) {
+                    const filteredIssues = currentSecurityFilter === 'all' ? matchingIssues : matchingIssues.filter(i => i.risk === currentSecurityFilter);
+                    return { ...file, issues: filteredIssues };
+                }
+                return null;
+            }).filter(file => file && file.issues.length > 0);
+            
+            displaySecurityIssues(filtered);
+        }
+        
+        function exportSecurityToCSV() {
+            let csv = 'File,Line,Risk Level,Operation Type,Description,Code,Test Input\n';
+            
+            securityFindings.forEach(file => {
+                file.issues.forEach(issue => {
+                    const code = issue.code.replace(/"/g, '""');
+                    const test = issue.test.replace(/"/g, '""');
+                    const desc = issue.desc.replace(/"/g, '""');
+                    csv += `"${file.file}",${issue.line},"${issue.risk}","${issue.type}","${desc}","${code}","${test}"\n`;
+                });
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'security_vulnerabilities_report.csv';
+            a.click();
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Initialize on page load
+        window.onload = initializeDashboard;
+    </script>
+</body>
+</html>
+
+

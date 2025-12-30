@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  <style>
+     .custom-fixed-table {
+        height: 400px; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .custom-fixed-table table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .custom-fixed-table th, 
+    .custom-fixed-table td {
+        width: 10vw; /* Fixed width for all cells */
+        word-wrap: break-word;
+    }
+    .custom-fixed-table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+    .custom-fixed-table tbody tr.fixed-row td {
+        position: sticky;
+        top: 38px;
+        background-color: #ffffff;
+        z-index: 5;
+    }
+</style>
+
+
+
+</head>
+<body>
+    <section>
+   
+      </section>
+<div class="container-fluid ">
+    <!-- top bar -->
+  
+   
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+
+
+ 
+
+
+
+ 
+    
+ 
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-center d-flex  justify-content-between">
+            <p class="p-0 m-0 my-auto">LaserJob Card List</p>
+           
+        </div>
+        <div class="card-body m-0 p-0">
+            <table id='process group1' class='table table-bordered border-dark border-opacity-50 text-center small' >
+      
+                <tbody class='align-middle small' >
+                    <tr>
+                        <th>Design</th>
+                        <td>Murugan</td>
+                        <th>Modal</th>
+                        <td>Baler JRB 310</td>
+                        <th>Date</th>
+                        <td>12-11-2024</td>
+                    </tr>
+                    <tr>
+                        <th>Sheet Size</th>
+                        <td>8 x 4</td>
+                        <th>Thickness</th>
+                        <td>2MM</td>
+                        <th> Document Date</th>
+                        <td>08-11-2024</td> 
+                    </tr>
+                 <tr>
+    
+                    <th> Run Time</th>
+                    <td>00:33hrs</td>  
+                    <th>Sheet Qty</th>
+                    <td>35</td>  
+                    <th> Start Date</th>
+                    <td>12-11-2024</td>  
+                 </tr>
+                 
+                   <th>Order Type</th>
+                   <td>Requirement</td>  
+                   <th>Doc No</th>
+                   <td>7</td> 
+                   <th>Finish Date</th>
+                   <td>01-01-2025</td> 
+                    
+
+
+                </tbody>
+                </table>
+            
+
+                <div class=" mt-2 d-flex justify-content-center">
+            <h6>Nesting Details</h6>
+                </div>
+            </div>
+            <div class="accordion my-2" id="accordionExample">
+               
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        PDF File
+                    </button>
+                  </h2>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div id="pdfViewer" class="border" style="height: 600px;">
+                            <iframe id="pdfFrame" src="sample.pdf#toolbar=0" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+               
+
+                <table id='nesting_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+                    <thead >
+                    <tr>
+                    
+                    <th colspan='5' scope='col' class='small text-bg-secondary'>(3.5F - 2MM -S2)(8 x 4)(6 Qty)</th>
+                    
+                    </tr>
+                    
+                    <tr class="small">
+                    
+                     <th scope='col'>#</th>
+                   <th scope='col'>Part</th>
+                   <th scope='col'>Rack</th>
+                   <th scope='col'>Bin</th>
+                   <th scope='col'>Qty</th>
+                   
+                    
+                    </tr>
+                    </thead>
+                    <tbody class='align-middle small' id='nesting_table'>
+                        <tr class="small"> 
+                            <td>1</td>
+                            <td>BR x 8508</td>
+                            <td>Rack-1</td>
+                            <td>Bin-1</td>
+                            <td>10</td>
+                        </tr>
+                  <tr class="small">
+                    <td>2</td>
+                    <td>BR x 8507</td>
+                    <td>Rack-1</td>
+                    <td>Bin-2</td>
+                    <td>25</td>
+                  </tr>
+                   
+                    </tbody>
+                    </table>
+
+                    <div class="card">
+                        <div class="card-header">
+                            Add Laser Output
+                        </div>
+                        <div class="card-body">
+                            <div class="row row-cols-2">
+
+                            <div class="col">
+                                <div class='input-group mb-2 ' >
+                                    <div class='input-group-prepend '>
+                                    <span class='input-group-text ' >
+                                    Start time </span>
+                                    
+                                    </div> 
+                                    <input type='datetime-local' id='Start time' class='form-control' placeholder='Date' >
+                                    
+                                    </div>
+                            </div> 
+                            <div class="col">
+                                <div class='input-group mb-2 ' >
+                                    <div class='input-group-prepend '>
+                                    <span class='input-group-text ' >
+                                    End time </span>
+                                    
+                                    </div> 
+                                    <input type='datetime-local' id='End time' class='form-control' placeholder='Date' >
+                                    
+                                    </div>
+                            </div>
+                            <div class="col">
+                                <div class='input-group mb-2'> 
+                                    <label class='input-group-text' for='Scrap'><span>
+                                    Scrap 
+                                    </span>
+                                    </label>
+                                    <input id='Scrap' type='text' class='form-control'  >
+                                    </div>
+                            </div>
+                            <div class="col">
+                                <div class='input-group mb-2'> 
+                                    <label class='input-group-text' for='Scrap Qty'><span>
+                                    Scrap Qty 
+                                    </span>
+                                    </label>
+                                    <input id='Scrap Qty' type='number' class='form-control'  >
+                                    </div>
+                            </div>
+                            <div class="col">
+                                <div class='input-group mb-2'> 
+                                    <label class='input-group-text' for='Total Time'><span>
+                                    Total Time 
+                                    </span>
+                                    </label>
+                                    <input id='Total Time' type='text' class='form-control'  >
+                                    </div>
+                            </div>
+                        </div>
+                           
+                        </div>
+                        <div class="card-footer d-flex justify-content-center">
+<button class="btn btn-primary"> Add </button>
+                        </div>
+                    </div>
+
+                    <table id='laser_output1' class='table table-sm table-bordered border-dark border-opacity-50 text-center ' >
+                        <thead >
+                        <tr>
+                        
+                        <th colspan='8' scope='col' class='bg-info bg-opacity-25 small'>Laser Output</th>
+                        
+                        </tr>
+                        
+                        <tr class="small">
+                        
+                         <th scope='col'>#</th>
+                       <th scope='col'>Start Time</th>
+                       <th scope='col'>End Time</th>
+                       <th scope='col'>Scarp</th>
+                       <th scope='col'>Scarp Qty</th>
+                       <th scope='col'>Total Time</th>
+                       <th scope='col'>Edit</th>
+                       <th scope='col'>Delete</th>
+                       
+                        
+                        </tr>
+                        </thead>
+                        <tbody class='align-middle small' id='laser_output'>
+                        <td>1</td>
+                        <td>20-12-2024 01:25 PM</td>
+                        <td>21-12-2024 10:25 PM</td>
+                        <td>scarp</td>
+                        <td>2</td>
+                        <td>02:50 Hrs</td>
+                        <td><button class="btn btn-outline-secondary border-0"><i class="fa-solid fa-pen-to-square"></i></button></td>
+                        <td><button class="btn btn-outline-danger border-0"><i class="fa-solid fa-trash-can"></i></button></td>
+                        
+                        </tbody>
+                        </table>
+
+                        <div class=" d-flex justify-content-center">
+                            <button class="btn btn-primary"> Submit </button>
+                                                    </div>
+        </div>
+    
+    </div>
+</div>
+
+
+       
+    
+
+
+<!-- content -->
+
+
+
+   
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+<!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/laser_opertion_job_card.js" type="module"></script>
+<!-- <script src="js/menu.js" type="module"></script> -->
+<!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+</html>

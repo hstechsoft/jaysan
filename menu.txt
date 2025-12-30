@@ -1,0 +1,140 @@
+<nav class="navbar py-3 navbar-expand-sm shadow rounded rounded-3 ">
+      <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+
+              <a class="nav-link " aria-current="page" href="admin_index.html">
+                <span class="ms-2">
+                  <i class='fa-solid fa-home '></i>
+                </span>
+                Home</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="ms-2">
+                      <i class="fa-solid fa-clipboard"></i>
+                    </span>
+                Master
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="add_work_master.html">
+                  <span class="ms-2">
+                      <i class="fa-solid fa-plus"></i>
+                    </span> Add work Type</a></li>
+            
+                    <li><a class="dropdown-item " href="employee.html">
+                      <span class="ms-2">
+                        <i class="fa-solid fa-user"></i>
+                        </span>Employee</a></li>
+
+                        <li><a class="dropdown-item " href="add_reminder_master.html">
+                          <span class="ms-2">
+                            <i class="fa-solid fa-plus"></i>
+                            </span>Add Reminder</a></li>
+
+                            <li><a class="dropdown-item " href="add_company_master.html">
+                              <span class="ms-2">
+                                <i class="fa-solid fa-plus"></i>
+                                </span>Add Company</a></li>
+               
+                
+              </ul>
+            </li>
+
+            <li class="nav-item">
+
+              <a class="nav-link " aria-current="page" href="admin_upload.html">
+                <span class="ms-2">
+                  <i class="fa-solid fa-upload "></i>
+                </span>
+                upload</a>
+            </li>
+
+
+        
+          
+           
+
+
+
+            <li class="nav-item" id="work_summary_report">
+
+              <a class="nav-link  " aria-current="page" href="work_summary_report.html">
+                <span class="ms-2">
+                  <i class="fa-solid fa-clipboard-list"></i>
+                </span>
+                Summary report</a>
+            </li>
+
+
+            <li class="nav-item">
+
+              <a class="nav-link " aria-current="page" href="admin_employee_report.html">
+                <span class="ms-2">
+                  <i class="fa-solid fa-clipboard"></i>
+                </span>
+                Detailed Report</a>
+            </li>
+
+            <li class="nav-item" id="work_search">
+  
+              <a class="nav-link " aria-current="page" href="work_search.html">
+                <span class="ms-2">
+                  <i class="fa-solid fa-clipboard"></i>
+                </span>
+                Work Report</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="ms-2">
+                      <i class="fa-solid fa-clipboard"></i>
+                    </span>
+                Report
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="invoice_list.html">
+                  <span class="ms-2">
+                    <i class="fa-solid fa-clipboard"></i>
+                    </span> Sales Report</a></li>
+
+                    <li><a class="dropdown-item" href="quotation_list.html">
+                      <span class="ms-2">
+                        <i class="fa-solid fa-clipboard"></i>
+                        </span> Quotation Report</a></li>
+            
+                        <li><a class="dropdown-item" href="estimation_list.html">
+                          <span class="ms-2">
+                            <i class="fa-solid fa-clipboard"></i>
+                            </span> Estimation Report</a></li>
+                            
+                            <li><a class="dropdown-item" href="service_report.html">
+                              <span class="ms-2">
+                                <i class="fa-solid fa-clipboard"></i>
+                                </span> Service Report</a></li>
+
+                                <li><a class="dropdown-item" href="Restamping_report.html">
+                                  <span class="ms-2">
+                                    <i class="fa-solid fa-clipboard"></i>
+                                    </span> Restamping Report</a></li>
+
+                                    <li><a class="dropdown-item" href="Reminder_report.html">
+                                      <span class="ms-2">
+                                        <i class="fa-solid fa-clipboard"></i>
+                                        </span> Reminder Report</a></li>
+
+              </ul>
+            </li>
+         
+          </ul>
+
+        </div>
+      </div>
+    </nav>
