@@ -131,7 +131,7 @@ $(document).ready(function () {
 function get_app_menu(phone_id) {
 
   $.ajax({
-    url: "php/get_app_menu.php",
+    url: "php/get_app_menu1.php",
     type: "GET",
     data: { phone_id: phone_id, },
     dataType: "json",

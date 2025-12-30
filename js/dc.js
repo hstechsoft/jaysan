@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+let count = 1;
 $(document).ready(function () {
 
 
@@ -31,9 +32,96 @@ $(document).ready(function () {
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-$("#dc_preview_btn").on("click", function(){
-    $("#dcModal").modal("show")
-})
+    $("#common_dc_details :input:visible:first").focus();
+
+    $(document).on("keydown", "#common_dc_details :input:visible", function (e) {
+
+        const inputs = $("#common_dc_details :input:visible:not([disabled]):not([readonly])");
+        const index = inputs.index(this);
+        const el = $(this);
+
+
+        if (e.key === "Enter" && !el.hasClass("pincode") && !el.hasClass("rate")) {
+            e.preventDefault();
+
+            if (el.hasClass("godown_type")) {
+                const selectedValue = el.val
+            }
+
+            if (index + 1 < inputs.length) {
+                inputs.eq(index + 1).focus();
+            }
+        }
+
+        else if (e.key === "Escape") {
+            e.preventDefault();
+
+            if (index - 1 >= 0) {
+                inputs.eq(index - 1).focus();
+            }
+        }
+
+        else if (el.hasClass("pincode") && e.key === "Enter") {
+            e.preventDefault();
+
+            if ($("#quotation_body tr").length === 0) {
+                addQuotationRow();
+            } else if (index + 1 < inputs.length) {
+                inputs.eq(index + 1).focus();
+            }
+        }
+
+
+
+        else if (el.hasClass("rate") && e.key === "Enter") {
+            e.preventDefault();
+
+            const row = el.closest("tr");
+
+            const part = row.find(".part_name").val();
+            const qty = row.find(".qty").val();
+            const uom = row.find(".uom").val();
+            const material = row.find(".material_from").val();
+            const deliver = row.find(".deliver_to").val();
+            const rate = row.find(".rate").val();
+            console.log(part, qty, uom, material, deliver, rate);
+
+            if (part && qty && uom && material && deliver && rate && row.is(":last-child")) {
+                addQuotationRow();
+            }
+            else if (part && qty && uom && material && deliver && rate && row.is(":not(:last-child)")) {
+                inputs.eq(index + 1).focus();
+            }
+            else {
+                salert("Warning", "Fill the fields", "warning");
+                $(".swal-button").on("click", function () {
+                    el.focus();
+                })
+            }
+        }
+    });
+
+    function addQuotationRow() {
+        $("#quotation_body").append(`
+        <tr>
+            <td>${count++}</td>
+            <td><input type="text" class="form-control rounded-3 part_name" placeholder="Part"></td>
+            <td><input type="number" class="form-control rounded-3 qty" placeholder="Qty"></td>
+            <td><input type="text" class="form-control rounded-3 uom" placeholder="UOM"></td>
+            <td><input type="text" class="form-control rounded-3 material_from" placeholder="Material From"></td>
+            <td><input type="text" class="form-control rounded-3 deliver_to" placeholder="Deliver to"></td>
+            <td><input type="number" class="form-control rounded-3 rate" placeholder="Rate"></td>
+            <td class="total_amount"></td>
+        </tr>
+    `);
+
+        $("#quotation_body tr:last .part_name").focus();
+    }
+
+
+    $("#dc_preview_btn").on("click", function () {
+        $("#dcModal").modal("show")
+    })
 
 
 

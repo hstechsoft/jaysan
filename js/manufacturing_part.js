@@ -36,13 +36,14 @@ $(document).ready(function () {
         const el = $(this);
 
 
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !el.is("button")) {
             e.preventDefault();
 
             if (index + 1 < inputs.length) {
                 inputs.eq(index + 1).focus();
             }
         }
+
 
         else if (e.key === "Escape") {
             e.preventDefault();
@@ -53,6 +54,7 @@ $(document).ready(function () {
         }
 
         else if (el.is("select")) {
+
             const options = el.find("option");
             let selectedIndex = el.prop("selectedIndex");
 
@@ -75,12 +77,47 @@ $(document).ready(function () {
 
         else if (el.is("button")) {
 
-            if (e.altKey && e.key.toLowerCase() === "a") {
+            if (e.ctrlKey && e.key.toLowerCase() === "a") {
                 e.preventDefault();
 
-                if (index + 1 < inputs.length) {
+                if (index + 1 < inputs.length && el.hasClass("default_btn")) {
+                    console.log($("#product").val(), $("#bom_list").val());
+
+                    if ($("#product").val() == "" || $("#product").val() === undefined || $("#bom_list").val() === null) {
+                        salert("Warning", "Fill the fields", "warning");
+                        $(".swal-button").on("click", function () {
+                            inputs.eq(index - 1).focus();
+                        })
+                        return;
+                    }
                     inputs.eq(index + 1).focus();
                 }
+                else if (el.hasClass("default_btn")) {
+
+                    let firstEmptySelect = null;
+                    let isValid = true;
+
+                    $("#process_tbody tr select").each(function () {
+
+                        if (!$(this).val() || $(this).val() === "null") {
+                            firstEmptySelect = this;
+                            isValid = false;
+                            return false;
+                        }
+                    });
+
+                    if (isValid) {
+                        insert();
+                    }
+                    else {
+                        salert("Warning", "Fill the fields", "warning");
+
+                        $(".swal-button").one("click", function () {
+                            firstEmptySelect.focus();
+                        });
+                    }
+                }
+
             }
         }
 
@@ -109,6 +146,9 @@ $(document).ready(function () {
 
 
 
+function insert() {
+    alert("success");
+}
 
 function insert_new_process(processId) {
 

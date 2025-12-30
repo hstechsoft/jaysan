@@ -27,7 +27,7 @@
 
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body class="">
     <section>
 
     </section>
@@ -77,95 +77,100 @@
                 </div>
 
                 <div>
-                    <button type="submit" class="btn btn-primary " id="">Set As Default</button>
+                    <button type="submit" class="btn btn-primary default_btn" id="">Set As Default</button>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped ">
-                    <caption id="stage">Stage-1</caption>
-                    <thead>
+            <form class="py-1 px-2 my-2 border rounded-4 shadow-sm bg-light needs-validation" id="form_process" novalidate
+                onsubmit="return false">
 
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Part</th>
-                            <th scope="col">BOM Name</th>
-                            <th scope="col">BOM List</th>
-                            <th scope="col">Action</th>
+                <div class="table-responsive">
+                    <table class="table caption-top table-bordered table-striped ">
+                        <caption id="stage">Stage-1</caption>
+                        <thead>
 
-                        </tr>
-                    </thead>
-                    <tbody id="">
-                        <tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Part</th>
+                                <th scope="col">BOM Name</th>
+                                <th scope="col">BOM List</th>
+                                <th scope="col">Action</th>
 
-                            <td>1</td>
-                            <td>Baler 312</td>
-                            <td>Roller Ass</td>
-                            <td>
-                                <div>
-                                    <select class="form-select" id="bom_list" required>
-                                        <option selected disabled value="null">Choose BOM List...</option>
-                                        <option value="jrb_25">JRB 312 2025v</option>
-                                        <option value="jrb_24">JRB 312 2024v</option>
-                                        <option value="jrb_23">JRB 312 2023v</option>
-                                        <option value="jrb_22">JRB 312 2022v</option>
-                                        <option value="jrb_21">JRB 312 2021v</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>Assigned</td>
+                            </tr>
+                        </thead>
+                        <tbody id="process_tbody">
+                            <tr>
 
-                        </tr>
-
-                        <tr>
-
-                            <td>2</td>
-                            <td>Baler 312</td>
-                            <td>Gearbox Ass</td>
-                            <td>
-                                <div>
-                                    <select class="form-select" id="bom_list" required>
-                                        <option selected disabled value="null">Choose BOM List...</option>
-                                        <option value="jrb_25">JRB 312 2025v</option>
-                                        <option value="jrb_24">JRB 312 2024v</option>
-                                        <option value="jrb_23">JRB 312 2023v</option>
-                                        <option value="jrb_22">JRB 312 2022v</option>
-                                        <option value="jrb_21">JRB 312 2021v</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td>Assigned</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>3</td>
-                            <td>Baler 312</td>
-                            <td>Hydraulic</td>
-                            <td>
-                                <div>
-                                    <select class="form-select" id="bom_list" required>
-                                        <option selected disabled value="null">Choose BOM List...</option>
-                                        <option value="jrb_25">JRB 312 2025v</option>
-                                        <option value="jrb_24">JRB 312 2024v</option>
-                                        <option value="jrb_23">JRB 312 2023v</option>
-                                        <option value="jrb_22">JRB 312 2022v</option>
-                                        <option value="jrb_21">JRB 312 2021v</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td></td>
-
-                        </tr>
-
-                    </tbody>
+                                <td>1</td>
+                                <td>Baler 312</td>
+                                <td>Roller Ass</td>
+                                <td>
+                                    <div>
+                                        <select class="form-select" id="bom_list" required>
+                                            <option selected disabled value="null">Choose BOM List...</option>
+                                            <option value="jrb_25">JRB 312 2025v</option>
+                                            <option value="jrb_24">JRB 312 2024v</option>
+                                            <option value="jrb_23">JRB 312 2023v</option>
+                                            <option value="jrb_22">JRB 312 2022v</option>
+                                            <option value="jrb_21">JRB 312 2021v</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td><i class="fa fa-check-circle text-success"></i></td>
 
 
-                </table>
-                <button type="submit" class="btn btn-primary float-end" id="">Set As Default</button>
+                            </tr>
 
-            </div>
+                            <tr>
+
+                                <td>2</td>
+                                <td>Baler 312</td>
+                                <td>Gearbox Ass</td>
+                                <td>
+                                    <div>
+                                        <select class="form-select" id="bom_list" required>
+                                            <option selected disabled value="null">Choose BOM List...</option>
+                                            <option value="jrb_25">JRB 312 2025v</option>
+                                            <option value="jrb_24">JRB 312 2024v</option>
+                                            <option value="jrb_23">JRB 312 2023v</option>
+                                            <option value="jrb_22">JRB 312 2022v</option>
+                                            <option value="jrb_21">JRB 312 2021v</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td><i class="fa fa-check-circle text-success"></i></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>3</td>
+                                <td>Baler 312</td>
+                                <td>Hydraulic</td>
+                                <td>
+                                    <div>
+                                        <select class="form-select" id="bom_list" required>
+                                            <option selected disabled value="null">Choose BOM List...</option>
+                                            <option value="jrb_25">JRB 312 2025v</option>
+                                            <option value="jrb_24">JRB 312 2024v</option>
+                                            <option value="jrb_23">JRB 312 2023v</option>
+                                            <option value="jrb_22">JRB 312 2022v</option>
+                                            <option value="jrb_21">JRB 312 2021v</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td></td>
+
+                            </tr>
+
+                        </tbody>
+
+
+                    </table>
+                    <button type="submit" class="btn btn-primary float-end default_btn" id="">Set As Default</button>
+
+                </div>
+            </form>
 
         </div>
     </div>
