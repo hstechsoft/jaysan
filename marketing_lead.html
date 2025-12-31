@@ -27,21 +27,26 @@
 
 <body>
 
+
+  <section id="menu_bar">
+
+  </section>
   <div id="uploadOverlay" class="upload-overlay d-none">
     <div class="progress-container">
-        <div class="progress">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" id="uploadProgressBar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <p class="text-center mt-3">Uploading, please wait...</p>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;"
+          id="uploadProgressBar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <p class="text-center mt-3">Uploading, please wait...</p>
     </div>
-</div>
-  <div class="container-fluid">
+  </div>
+  <div class="container-fluid mb-2">
 
 
     <!-- content -->
 
 
-    <div>
+    <div class="page-wrapper  mt-5 mt-md-0">
 
       <div class="card mt-2">
         <div class="card-header text-center text-bg-primary ">
@@ -86,7 +91,7 @@
               <!-- <input class='form-control' type='file' id='lead_attachment'> -->
               <input class="form-control" type="file" id="lead_attachment" accept="image/*" capture="camera">
 
-              
+
             </div>
 
 
@@ -133,6 +138,29 @@
 
 
   </div>
+  <footer class=" text-light mt-auto" style="background-color: #ff953d;">
+    <div class=" py-1 mx-5">
+      <div class="row align-items-center text-center text-md-start">
+
+        <!-- Copyright -->
+        <div class="col-md-6 mb-2 mb-md-0">
+          <p class="mb-0 small">
+            © 2025 <strong class="fw-semibold text-primary">Jaysan Agri Industrial</strong>. All Rights
+            Reserved.
+          </p>
+        </div>
+
+        <!-- Developer Credit -->
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0 small">
+            Developed by
+            <strong class="fw-semibold text-primary">HS Techsoft</strong>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </footer>
 
 
 
@@ -158,6 +186,7 @@
 
 
   <!-- external js -->
+  <script src="js/menu.js" type="module"></script>
   <script src="js/marketing_lead.js" type="module"></script>
 
 </body>

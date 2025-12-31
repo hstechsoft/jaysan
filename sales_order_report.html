@@ -177,8 +177,8 @@
 
         </div>
     </div>
-        <section id="menu_bar"></section>
-    <div class="container-fluid ">
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
         <!-- top bar -->
 
 
@@ -192,108 +192,12 @@
 
             <!-- content -->
 
-            <div class="row">
+            <div class="row  mt-5 mt-md-0">
 
 
 
 
-                <div class="col-md-10">
-                    <div class="table-responsive " style="max-height: 90vh; overflow-y: auto;">
-
-                        <table id='order_table1'
-                            class='table table-bordered border-dark border-opacity-50 text-center small'>
-                            <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
-                                <tr>
-
-                                    <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
-
-                                </tr>
-
-                                <tr>
-
-                                    <th scope='col'>#</th>
-                                    <th scope='col' style="width: 10%;">
-                                        <div id="compactFilterBar">
-                                            <div class="filter-box " style="background-color: #f6f4f4;">
-                                                <i class="fa fa-hashtag"></i>
-                                                <input type="number" id="order_no" class="filter-input text-dark"
-                                                    placeholder="Order No">
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th scope='col'>
-                                        <div id="compactFilterBar">
-                                            <div class="filterr-box text-center" style="background-color: #f6f4f4;">
-                                                Dated</div>
-                                        </div>
-                                    </th>
-                                    <th scope='col'>
-                                        <div id="compactFilterBar">
-                                            <div class="filter-box " style="background-color: #f6f4f4;">
-                                                <i class="fa fa-user"></i>
-                                                <input type="text" id="emp_auto" class="filter-input text-dark"
-                                                    placeholder="Employee">
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th scope='col'>
-                                        <div id="compactFilterBar">
-                                            <div class="filter-box " style="background-color: #f6f4f4;">
-                                                <i class="fa fa-money"></i>
-                                                <select id="payment" class="filter-input text-dark">
-                                                    <option disabled selected value="null">Payment</option>
-                                                    <option value="1">Pending</option>
-                                                    <option value="">All</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th scope='col'>
-                                        <div id="compactFilterBar" class="d-flex">
-                                            <div class="filter-box " style="background-color: #f6f4f4;">
-                                                <i class="fa fa-users"></i>
-                                                <input type="text" id="cust_auto" class="filter-input text-dark"
-                                                    placeholder="Customer">
-                                            </div>
-
-                                            <!-- Customer No -->
-                                            <div class="filter-box " style="background-color: #f6f4f4;">
-                                                <i class="fa fa-phone"></i>
-                                                <input type="number" id="cust_phone_auto" class="filter-input text-dark"
-                                                    placeholder="Mobile">
-                                            </div>
-                                        </div>
-                                    </th>
-                                    <th scope='col'>
-
-                                        <div id="compactFilterBar">
-                                            <div class="filterr-box" style="background-color: #f6f4f4;">Product
-                                            </div>
-                                        </div>
-                                    </th>
-
-                                    <!-- <th scope='col'>Download</th> -->
-                                    <th scope='col' style="width: 10%;">
-
-                                        <div id="compactFilterBar">
-                                            <div class="filterr-box " style="background-color: #f6f4f4;">DCF
-                                            </div>
-                                        </div>
-                                    </th>
-
-
-                                </tr>
-                            </thead>
-
-                            <tbody class='align-middle ' id='order_table'>
-
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
+                <div class="col-md-2 order-sm-0">
                     <div id="compactFilterBar">
 
                         <h6 class="text-center">Sale Order</h6>
@@ -486,6 +390,103 @@
 
                     </div>
                 </div>
+                
+                <div class="col-md-10 order-sm-1">
+                    <div class="table-responsive " style="max-height: 90vh; overflow-y: auto;">
+
+                        <table id='order_table1'
+                            class='table table-bordered border-dark border-opacity-50 text-center small'>
+                            <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
+                                <tr>
+
+                                    <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th scope='col'>#</th>
+                                    <th scope='col' style="width: 10%;">
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-hashtag"></i>
+                                                <input type="number" id="order_no" class="filter-input text-dark"
+                                                    placeholder="Order No">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box text-center" style="background-color: #f6f4f4;">
+                                                Dated</div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-user"></i>
+                                                <input type="text" id="emp_auto" class="filter-input text-dark"
+                                                    placeholder="Employee">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-money"></i>
+                                                <select id="payment" class="filter-input text-dark">
+                                                    <option disabled selected value="null">Payment</option>
+                                                    <option value="1">Pending</option>
+                                                    <option value="">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+                                        <div id="compactFilterBar" class="d-flex">
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-users"></i>
+                                                <input type="text" id="cust_auto" class="filter-input text-dark"
+                                                    placeholder="Customer">
+                                            </div>
+
+                                            <!-- Customer No -->
+                                            <div class="filter-box " style="background-color: #f6f4f4;">
+                                                <i class="fa fa-phone"></i>
+                                                <input type="number" id="cust_phone_auto" class="filter-input text-dark"
+                                                    placeholder="Mobile">
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th scope='col'>
+
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box" style="background-color: #f6f4f4;">Product
+                                            </div>
+                                        </div>
+                                    </th>
+
+                                    <!-- <th scope='col'>Download</th> -->
+                                    <th scope='col' style="width: 10%;">
+
+                                        <div id="compactFilterBar">
+                                            <div class="filterr-box " style="background-color: #f6f4f4;">DCF
+                                            </div>
+                                        </div>
+                                    </th>
+
+
+                                </tr>
+                            </thead>
+
+                            <tbody class='align-middle ' id='order_table'>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -850,7 +851,29 @@
             </div>
         </div>
     </div>
+    <footer class=" text-light mt-auto" style="background-color: #ff953d;">
+        <div class=" py-1 mx-5">
+            <div class="row align-items-center text-center text-md-start">
 
+                <!-- Copyright -->
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="mb-0 small">
+                        © 2025 <strong class="fw-semibold text-primary">Jaysan Agri Industrial</strong>. All Rights
+                        Reserved.
+                    </p>
+                </div>
+
+                <!-- Developer Credit -->
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 small">
+                        Developed by
+                        <strong class="fw-semibold text-primary">HS Techsoft</strong>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        /* Background */
+        .auth-wrapper {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.55),
+                    rgba(0, 0, 0, 0.55)),
+                url("bg.jpg") center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Glass card */
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 25px;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Section spacing */
+        .auth-section {
+            padding: 10px 0;
+        }
+
+        /* Inputs with icons */
+        .form-group {
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .form-control {
+            padding-left: 40px;
+            border-radius: 10px;
+            height: 45px;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 30px;
+            font-size: 14px;
+        }
+
+        /* Links */
+        .small-link {
+            font-size: 13px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .small-link:hover {
+            text-decoration: underline;
+        }
+
+        .small-text {
+            font-size: 13px;
+        }
+
+        .switch-link {
+            color: #0d6efd;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 45px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .toggle-password:hover {
+            color: #0d6efd;
+        }
+
+        /* extra padding for input */
+        .password-input {
+            padding-right: 40px;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 576px) {
+            .auth-card {
+                padding: 20px;
+            }
+
+            h4 {
+                font-size: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <body>
+
+        <div class="auth-wrapper">
+            <div class="auth-card">
+
+                <!-- LOGIN -->
+                <div class="auth-section " id="login_section">
+                    <h4 class="text-center mb-4">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Login
+                    </h4>
+
+                    <form novalidate onsubmit="return false">
+                        <div class="form-group mb-3">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" class="form-control" placeholder="Email Address">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" class="form-control password-input" placeholder="Password">
+                            <span class="toggle-password">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </div>
+
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <a href="reset_pass.html" class="small-link">Forgot Password?</a>
+                            <button class="btn btn-primary px-4">Login</button>
+                        </div>
+
+                        <p class="text-center small-text">
+                            Don’t have an account?
+                            <span class="switch-link">Register</span>
+                        </p>
+                    </form>
+                </div>
+
+                <!-- REGISTER -->
+                <div class="auth-section d-none" id="register_section">
+                    <h4 class="text-center mb-4">
+                        <i class="fa-solid fa-user-plus me-2"></i>Register
+                    </h4>
+
+                    <form novalidate onsubmit="return false">
+                        <div class="form-group mb-3">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" class="form-control" placeholder="Full Name">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="number" class="form-control" placeholder="Phone Number">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <i class="fa-solid fa-envelope"></i>
+                            <input type="email" class="form-control" placeholder="Email Address">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" class="form-control password-input" placeholder="Password">
+                            <span class="toggle-password">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                        </div>
+
+
+                        <div class="text-center">
+                            <button class="btn btn-success px-5">Register</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        
+    </body>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <!-- external js -->
+    <script src="js/register_login_page.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>

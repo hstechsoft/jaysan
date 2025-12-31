@@ -751,9 +751,9 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
 
                                     // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
                                     tr += `<td style='width: 40%'><span class="border border-primary px-3 py-1  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span>${s_min_max}</td>
-                                    <td>15932</td>${req_btn_ctrl}`;
+                                    ${req_btn_ctrl}`;
 
-                                    tr += `<td rowspan="${itemRowSpan}"> Purchase</td>`;
+                                    //tr += `<td rowspan="${itemRowSpan}"> Purchase</td>`;
                                     tr += "</tr>";
                                     $("#section_stock_tbody").append(tr);
                                 });

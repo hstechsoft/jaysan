@@ -790,7 +790,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 #page_start {
   gap: 32rem;
   background-color: #ff953d;
-  padding: 5px;
+  /* padding: 5px; */
 }
 #page_start {
     display: flex;
@@ -870,6 +870,11 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
   #page_start {
     gap: 2rem;
   }
+
+  footer{
+    font-size: 12px;
+    line-height: 1;
+  }
 }
 
 
@@ -920,9 +925,10 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
     background-color: #ff953d;
     height: 52px;
     padding: 0 12px;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 1030;
+    width: 100%;
   }
 
   .mobile-header button {

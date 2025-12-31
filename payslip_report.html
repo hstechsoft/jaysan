@@ -1,181 +1,226 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-    <title></title>
-	
- <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<title></title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<!-- bootsttrap icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+
 </head>
+
 <body>
-  
-	<div class="container-fluid">
-		<center>
-		<h2>JAYSAN AGRI INDUSTRIAL</h2>
-			 </center>  
-	  <br>	
-		<div class="input-group">
-							  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							  <input id="cname" type="text" class="form-control" name="text" placeholder="Choose Month">
-						  </div>
-						   <br />
-	  
-			  <center>
-				 <button id="view_report_btn"  type="button" class="btn btn-primary">View</button>
-			  </center>
-						  <br>
-	  <table class="table table-bordered table-responsive" id="basic">
-		  
-		  <tbody>
-			<tr>
-			  <td>Month & Year</td>
-			  <td>Employee Name</td>
-			  <td><center><strong>PAYSLIP</strong></center></td>
-			</tr>
-			
-			<tr>
-			  <td>Reg No</td>
-			  <td>Father Name</td>
-			  <td>Bank</td>
-			</tr>
-			
-			<tr>
-			  <td>Date of Join</td>
-			  <td>Department</td>
-			  <td>PF No</td>
-			</tr>
-			
-			
-			
-			<tr>
-			  <td>Date of Birth</td>
-			  <td>Designation</td>
-			  <td>Esi No</td>
-			</tr>
-	  
-		  
-		  </tbody>
-		</table>   
 
-		
-		<table class="table table-bordered table-responsive" id="earning">
-		  <thead>
-			<tr>
-			  <th rowspan="2">EARNINGS</th>
-			  <th>EARN AMT</th>
-			  <th>DEDUCTIONS</th>
-			  <th>DEDU AMT</th>
-			</tr>
-		  </thead>
-		  <tbody>
-		   
-			 <tr>
-			  <td>BASIC</td>
-			  <td></td>
-			  <td>P.F</td>
-			  <td></td>
-			</tr>
-			
-			 <tr>
-			  <td>FDA</td>
-			  <td></td>
-			  <td>PROFESSIONAL TAX</td>
-			  <td></td>
-			</tr>
-			
-			 <tr>
-			  <td>VDA</td>
-			  <td></td>
-			  <td>E.S.I</td>
-			  <td></td>
-			</tr>
-			
-			 <tr>
-			  <td>HRA</td>
-			  <td></td>
-			  <td>SALARY ADVANCE</td>
-			  <td></td>
-			</tr>
-			
-			
-			 <tr>
-			  <td>OTHER ALLOWANCE</td>
-			  <td></td>
-			  <td></td>
-			  <td></td>
-			</tr>
-			<tr>
-			 
-			 <td>O.T Amount</td>
-			 <td>Gross Pay : </td>
-			 <td>Round Off</td>
-			 <td>Total Deduction</td>
-			 
-			 
-			</tr>
-			
-			<tr>
-			 
-			 <td colspan=3></td>
-			 
-			 <td rowspan=3>Net Pay</td>
-			 
-			 
-			</tr>
-		   
-		  </tbody>
-		</table>
-		
-		
-		
-		 <table class="table table-bordered table-responsive" id="summary">
-		 
-		  <tbody>
-		   
-			 <tr>
-			  <td>No of Working Days</td>
-			  <td></td>
-			  <td>Total Leave</td>
-			  <td></td>
-			  
-			   <td>Salary Days</td>
-			  <td></td>
-			</tr>
-			
-			  <tr>
-			  <td>Attendance Days</td>
-			  <td></td>
-			  <td>Salary Leave</td>
-			  <td></td>
-			  
-			   <td>O.T Days</td>
-			  <td></td>
-			</tr>
-			
-			 <tr>
-			  <td>N.F.H. Days</td>
-			  <td></td>
-			  <td>Loss of Pay</td>
-			  <td></td>
-			</tr>
-			
-			 <
-		  </tbody>
-		</table>
-		
-		
-		
-		
+	<section id="menu_bar">
+
+	</section>
+	<div class="container-fluid mb-2 page-wrapper">
+		<!-- <center>
+			<h2>JAYSAN AGRI INDUSTRIAL</h2>
+		</center> -->
 		<br>
-	  </div>
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-		  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-		  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+		<div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+			<input id="cname" type="text" class="form-control" name="text" placeholder="Choose Month">
+		</div>
+		<br />
 
+		<center>
+			<button id="view_report_btn" type="button" class="btn btn-primary">View</button>
+		</center>
+		<br>
+		<table class="table table-bordered table-responsive" id="basic">
+
+			<tbody>
+				<tr>
+					<td>Month & Year</td>
+					<td>Employee Name</td>
+					<td>
+						<center><strong>PAYSLIP</strong></center>
+					</td>
+				</tr>
+
+				<tr>
+					<td>Reg No</td>
+					<td>Father Name</td>
+					<td>Bank</td>
+				</tr>
+
+				<tr>
+					<td>Date of Join</td>
+					<td>Department</td>
+					<td>PF No</td>
+				</tr>
+
+
+
+				<tr>
+					<td>Date of Birth</td>
+					<td>Designation</td>
+					<td>Esi No</td>
+				</tr>
+
+
+			</tbody>
+		</table>
+
+
+		<table class="table table-bordered table-responsive" id="earning">
+			<thead>
+				<tr>
+					<th rowspan="2">EARNINGS</th>
+					<th>EARN AMT</th>
+					<th>DEDUCTIONS</th>
+					<th>DEDU AMT</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr>
+					<td>BASIC</td>
+					<td></td>
+					<td>P.F</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>FDA</td>
+					<td></td>
+					<td>PROFESSIONAL TAX</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>VDA</td>
+					<td></td>
+					<td>E.S.I</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>HRA</td>
+					<td></td>
+					<td>SALARY ADVANCE</td>
+					<td></td>
+				</tr>
+
+
+				<tr>
+					<td>OTHER ALLOWANCE</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+
+					<td>O.T Amount</td>
+					<td>Gross Pay : </td>
+					<td>Round Off</td>
+					<td>Total Deduction</td>
+
+
+				</tr>
+
+				<tr>
+
+					<td colspan=3></td>
+
+					<td rowspan=3>Net Pay</td>
+
+
+				</tr>
+
+			</tbody>
+		</table>
+
+
+
+		<table class="table table-bordered table-responsive" id="summary">
+
+			<tbody>
+
+				<tr>
+					<td>No of Working Days</td>
+					<td></td>
+					<td>Total Leave</td>
+					<td></td>
+
+					<td>Salary Days</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>Attendance Days</td>
+					<td></td>
+					<td>Salary Leave</td>
+					<td></td>
+
+					<td>O.T Days</td>
+					<td></td>
+				</tr>
+
+				<tr>
+					<td>N.F.H. Days</td>
+					<td></td>
+					<td>Loss of Pay</td>
+					<td></td>
+				</tr>
+
+				< </tbody>
+		</table>
+
+
+
+
+		<br>
+	</div>
+	<footer class=" text-light mt-auto" style="background-color: #ff953d;">
+		<div class=" py-1 mx-5">
+			<div class="row align-items-center text-center text-md-start">
+
+				<!-- Copyright -->
+				<div class="col-md-6 mb-2 mb-md-0">
+					<p class="mb-0 small">
+						© 2025 <strong class="fw-semibold text-primary">Jaysan Agri Industrial</strong>. All Rights
+						Reserved.
+					</p>
+				</div>
+
+				<!-- Developer Credit -->
+				<div class="col-md-6 text-md-end">
+					<p class="mb-0 small">
+						Developed by
+						<strong class="fw-semibold text-primary">HS Techsoft</strong>
+					</p>
+				</div>
+
+			</div>
+		</div>
+	</footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+		integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+
+	<script src="js/menu.js"></script>
 	<script src="js/payslip_report.js"></script>
 </body>
+
 </html>

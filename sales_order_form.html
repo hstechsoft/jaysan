@@ -50,6 +50,16 @@
             background-color: #ffffff;
             z-index: 5;
         }
+
+        @media (max-width: 766px) {
+
+            .table-bordered td,
+            .table-bordered th {
+                padding: 2px 4px;
+                font-size: 8px;
+                white-space: nowrap;
+            }
+        }
     </style>
 
 
@@ -57,9 +67,6 @@
 </head>
 
 <body>
-    <section>
-
-    </section>
 
     <div class="modal fade" id="sales_pay" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="sales_payLabel" aria-hidden="true">
@@ -205,8 +212,8 @@
             </div>
         </div>
     </div>
-        <section id="menu_bar"></section>
-    <div class="container-fluid ">
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
         <!-- top bar -->
 
 
@@ -216,7 +223,7 @@
 
 
 
-        <div class="page-wrapper">
+        <div class="page-wrapper   mt-5 mt-md-0">
             <!-- Add New Process Modal -->
             <form id="sales_order_form1" onsubmit="return false">
                 <div class="card ">
@@ -1152,7 +1159,29 @@
 
     </div>
 
+    <footer class=" text-light mt-auto" style="background-color: #ff953d;">
+        <div class=" py-1 mx-5">
+            <div class="row align-items-center text-center text-md-start">
 
+                <!-- Copyright -->
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="mb-0 small">
+                        © 2025 <strong class="fw-semibold text-primary">Jaysan Agri Industrial</strong>. All Rights
+                        Reserved.
+                    </p>
+                </div>
+
+                <!-- Developer Credit -->
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 small">
+                        Developed by
+                        <strong class="fw-semibold text-primary">HS Techsoft</strong>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
