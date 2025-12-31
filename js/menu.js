@@ -8,6 +8,10 @@ var start = ''
 // console.log(role)
 // CLICK TO EXPAND SIDEBAR
 
+
+
+
+
 $(document).ready(function () {
 
   if (phone_id && phone_id !== "null") {
@@ -31,15 +35,30 @@ $(document).ready(function () {
 
   $("#menu_bar").load('menu.html',
     function () {
+
+      const sidebarState = localStorage.getItem("sidebar_state");
+
+      if (sidebarState == "1") {
+        $("#normal_view").removeClass("d-none");
+        $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
+        $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
+      } else {
+        $("#normal_view").addClass("d-none");
+        $(".page-wrapper").css("margin-left", "0px");
+        $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
+      }
+
       $("#fa_bars, #close_sidebar").on("click", function () {
         $("#normal_view").toggleClass("d-none");
 
         if (!$("#normal_view").hasClass("d-none")) {
 
+          localStorage.setItem("sidebar_state", "1");
           $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
           $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
         }
         else {
+          localStorage.setItem("sidebar_state", "0");
           $(".page-wrapper").css("margin-left", "0px");
           $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
         }
@@ -99,7 +118,7 @@ $(document).ready(function () {
     }
   );
 
-
+  $("#footer").load("footer.html");
 
   $("#mobile_menu a").each(function () {
     if (this.href === window.location.href) {
