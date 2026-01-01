@@ -459,7 +459,7 @@ body {
   height: 100%;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
-  padding-top: 5px;
+  padding-top: 8px;
   display: flex;
   flex-direction: column;
   transition: width var(--transition);
@@ -653,7 +653,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 /* MAIN FLYOUT */
 .flyout {
   position: absolute;
-  top: 0;
+  top: -30px;
   left: 100%;
   margin-left: 0px;
   width: 240px;
@@ -677,7 +677,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 /* SUBMENU ITEMS */
 .submenu-item {
-  padding: 8px 10px;
+  padding: 4px 10px;
   display: flex;
   gap: 8px;
   align-items: center;
