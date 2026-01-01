@@ -921,10 +921,10 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
   .mobile-menu {
     width: 25vw;
-    max-width: 150px;
-    min-width: 120px;
+    max-width: 230px;
+    min-width: 170px;
     border-right: 1px solid #eee;
-    font-size: 10px;
+    font-size: 13px;
   }
 
   /* menu list */
@@ -937,7 +937,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
   .mobile-menu-list a {
     display: block;
     padding: 10px 14px;
-    font-size: 10px;
+    font-size: 13px;
     color: #333;
     text-decoration: none;
   }

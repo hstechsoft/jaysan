@@ -105,7 +105,7 @@ $(document).ready(function () {
         }
 
         if ($(menu_id).is(".submenu-item, .dropdown-item")) {
-          $(menu_id).closest(".flyout, #collapse, .submenu, .sub-flyout")
+          $(menu_id).closest(".flyout, #collape_exchange, .submenu, .sub-flyout")
             .prev(".menu-item, .submenu-item")
             .removeClass("visually-hidden");
 
@@ -127,7 +127,7 @@ $(document).ready(function () {
       function hideEmptyMenus() {
 
         
-        $(".flyout, #collapse, .submenu, .sub-flyout").each(function () {
+        $(".flyout, #collape_exchange, .submenu, .sub-flyout").each(function () {
           if ($(this).find("a:not(.visually-hidden)").length === 0) {
             $(this).addClass("visually-hidden");
           }
