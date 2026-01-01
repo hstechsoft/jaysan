@@ -701,7 +701,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
   width: 210px;
   background: #fff;
   border-radius: 8px;
-  padding: 10px;
+  /* padding: 10px; */
   display: none;
   box-shadow: var(--flyout-shadow);
   z-index: 3000;
