@@ -713,7 +713,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 }
 
 .sub-flyout a {
-  padding: 8px 10px;
+  padding: 5px 10px;
 }
 
 .submenu-item:hover>.sub-flyout {

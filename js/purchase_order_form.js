@@ -1215,7 +1215,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
 
             console.log(response);
-            if (response.trim() == "ok") {
+            if (response.trim() > 0) {
                 location.reload();
 
             }
