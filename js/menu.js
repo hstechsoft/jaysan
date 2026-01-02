@@ -1,8 +1,8 @@
 
 var role = localStorage.getItem("ls_emp_role")
 var cun = localStorage.getItem("ls_uname")
-// var phone_id = localStorage.getItem("app_phone_id")
-var phone_id = "cbbfc05f5d5a3abe";
+ var phone_id = localStorage.getItem("app_phone_id")
+// var phone_id = "cbbfc05f5d5a3abe";
 var start = ''
 
 // console.log(role)
@@ -16,7 +16,7 @@ $(document).ready(function () {
 
   if (phone_id && phone_id !== "null") {
 
-    console.log("Phone ID:", phone_id);
+    console.log("Phone ID1:", phone_id);
     get_app_menu(phone_id);
 
 
@@ -189,6 +189,7 @@ $(document).ready(function () {
 
 function get_app_menu(phone_id) {
 
+
   $.ajax({
     url: "php/get_app_menu1.php",
     type: "GET",
@@ -202,9 +203,9 @@ function get_app_menu(phone_id) {
       }
 
       $("#mobile_menu").empty();
-
+    // $("#mobile_menu").append(`<li class="list-group-item">no menu</li>`);
       let startUrl = "";
-      console.log(response);
+     
 
       response.forEach(item => {
 
@@ -212,15 +213,15 @@ function get_app_menu(phone_id) {
 
           let url = item.menu_name1 + ".html?phone_id=" + phone_id;
 
-          if (item.menu_id === "1") {
-            startUrl = url;
-          }
+          // if (item.menu_id === "1") {
+          //   startUrl = url;
+          // }
 
           $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><span class='pe-2'>${item.menu_icon_web}</span>${item.menu_name}</a></li>`);
         }
       });
 
-      window.APP_START_URL = startUrl;
+      // window.APP_START_URL = startUrl;
 
     },
     error: function (xhr, status, error) {
