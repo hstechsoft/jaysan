@@ -17,3 +17,5 @@
 [2025-12-29 12:22:11] | USER:NA | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '10563 '
 [2025-12-29 12:45:53] | USER:NA | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '10564 '
 [2026-01-01 10:14:15] | USER:NA | IP:::1 | FILE:/jaysan/php/update_purchase_order.php | SQL:DELETE  FROM jaysan_po_material WHERE jaysan_po_id =  63
+[2026-01-02 06:29:09] | USER:NA | IP:::1 | FILE:/jaysan/php/delete_organization.php | SQL:DELETE from role_assign WHERE id = '102'
+[2026-01-02 06:49:36] | USER:NA | IP:::1 | FILE:/jaysan/php/delete_organization.php | SQL:DELETE from role_assign WHERE id = '106'
