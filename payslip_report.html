@@ -23,165 +23,167 @@
 	<section id="menu_bar">
 
 	</section>
-	<div class="container-fluid mb-2 page-wrapper">
-		<!-- <center>
+	<div class="container-fluid mb-2 ">
+		<div class="page-wrapper mt-5 mt-md-0">
+			<!-- <center>
 			<h2>JAYSAN AGRI INDUSTRIAL</h2>
 		</center> -->
-		<br>
-		<div class="input-group">
-			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-			<input id="cname" type="text" class="form-control" name="text" placeholder="Choose Month">
+			<br>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+				<input id="cname" type="text" class="form-control" name="text" placeholder="Choose Month">
+			</div>
+			<br />
+
+			<center>
+				<button id="view_report_btn" type="button" class="btn btn-primary">View</button>
+			</center>
+			<br>
+			<table class="table table-bordered table-responsive" id="basic">
+
+				<tbody>
+					<tr>
+						<td>Month & Year</td>
+						<td>Employee Name</td>
+						<td>
+							<center><strong>PAYSLIP</strong></center>
+						</td>
+					</tr>
+
+					<tr>
+						<td>Reg No</td>
+						<td>Father Name</td>
+						<td>Bank</td>
+					</tr>
+
+					<tr>
+						<td>Date of Join</td>
+						<td>Department</td>
+						<td>PF No</td>
+					</tr>
+
+
+
+					<tr>
+						<td>Date of Birth</td>
+						<td>Designation</td>
+						<td>Esi No</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<table class="table table-bordered table-responsive" id="earning">
+				<thead>
+					<tr>
+						<th rowspan="2">EARNINGS</th>
+						<th>EARN AMT</th>
+						<th>DEDUCTIONS</th>
+						<th>DEDU AMT</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr>
+						<td>BASIC</td>
+						<td></td>
+						<td>P.F</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td>FDA</td>
+						<td></td>
+						<td>PROFESSIONAL TAX</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td>VDA</td>
+						<td></td>
+						<td>E.S.I</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td>HRA</td>
+						<td></td>
+						<td>SALARY ADVANCE</td>
+						<td></td>
+					</tr>
+
+
+					<tr>
+						<td>OTHER ALLOWANCE</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+
+						<td>O.T Amount</td>
+						<td>Gross Pay : </td>
+						<td>Round Off</td>
+						<td>Total Deduction</td>
+
+
+					</tr>
+
+					<tr>
+
+						<td colspan=3></td>
+
+						<td rowspan=3>Net Pay</td>
+
+
+					</tr>
+
+				</tbody>
+			</table>
+
+
+
+			<table class="table table-bordered table-responsive" id="summary">
+
+				<tbody>
+
+					<tr>
+						<td>No of Working Days</td>
+						<td></td>
+						<td>Total Leave</td>
+						<td></td>
+
+						<td>Salary Days</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td>Attendance Days</td>
+						<td></td>
+						<td>Salary Leave</td>
+						<td></td>
+
+						<td>O.T Days</td>
+						<td></td>
+					</tr>
+
+					<tr>
+						<td>N.F.H. Days</td>
+						<td></td>
+						<td>Loss of Pay</td>
+						<td></td>
+					</tr>
+
+					< </tbody>
+			</table>
+
+
+
+
+			<br>
 		</div>
-		<br />
-
-		<center>
-			<button id="view_report_btn" type="button" class="btn btn-primary">View</button>
-		</center>
-		<br>
-		<table class="table table-bordered table-responsive" id="basic">
-
-			<tbody>
-				<tr>
-					<td>Month & Year</td>
-					<td>Employee Name</td>
-					<td>
-						<center><strong>PAYSLIP</strong></center>
-					</td>
-				</tr>
-
-				<tr>
-					<td>Reg No</td>
-					<td>Father Name</td>
-					<td>Bank</td>
-				</tr>
-
-				<tr>
-					<td>Date of Join</td>
-					<td>Department</td>
-					<td>PF No</td>
-				</tr>
-
-
-
-				<tr>
-					<td>Date of Birth</td>
-					<td>Designation</td>
-					<td>Esi No</td>
-				</tr>
-
-
-			</tbody>
-		</table>
-
-
-		<table class="table table-bordered table-responsive" id="earning">
-			<thead>
-				<tr>
-					<th rowspan="2">EARNINGS</th>
-					<th>EARN AMT</th>
-					<th>DEDUCTIONS</th>
-					<th>DEDU AMT</th>
-				</tr>
-			</thead>
-			<tbody>
-
-				<tr>
-					<td>BASIC</td>
-					<td></td>
-					<td>P.F</td>
-					<td></td>
-				</tr>
-
-				<tr>
-					<td>FDA</td>
-					<td></td>
-					<td>PROFESSIONAL TAX</td>
-					<td></td>
-				</tr>
-
-				<tr>
-					<td>VDA</td>
-					<td></td>
-					<td>E.S.I</td>
-					<td></td>
-				</tr>
-
-				<tr>
-					<td>HRA</td>
-					<td></td>
-					<td>SALARY ADVANCE</td>
-					<td></td>
-				</tr>
-
-
-				<tr>
-					<td>OTHER ALLOWANCE</td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr>
-
-					<td>O.T Amount</td>
-					<td>Gross Pay : </td>
-					<td>Round Off</td>
-					<td>Total Deduction</td>
-
-
-				</tr>
-
-				<tr>
-
-					<td colspan=3></td>
-
-					<td rowspan=3>Net Pay</td>
-
-
-				</tr>
-
-			</tbody>
-		</table>
-
-
-
-		<table class="table table-bordered table-responsive" id="summary">
-
-			<tbody>
-
-				<tr>
-					<td>No of Working Days</td>
-					<td></td>
-					<td>Total Leave</td>
-					<td></td>
-
-					<td>Salary Days</td>
-					<td></td>
-				</tr>
-
-				<tr>
-					<td>Attendance Days</td>
-					<td></td>
-					<td>Salary Leave</td>
-					<td></td>
-
-					<td>O.T Days</td>
-					<td></td>
-				</tr>
-
-				<tr>
-					<td>N.F.H. Days</td>
-					<td></td>
-					<td>Loss of Pay</td>
-					<td></td>
-				</tr>
-
-				< </tbody>
-		</table>
-
-
-
-
-		<br>
 	</div>
 	<div id='footer' class="mt-auto"></div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
