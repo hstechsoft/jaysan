@@ -653,7 +653,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 /* MAIN FLYOUT */
 .flyout {
   position: absolute;
-  top: -30px;
+  top: -15px;
   left: 100%;
   margin-left: 0px;
   width: 240px;
