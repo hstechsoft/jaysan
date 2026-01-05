@@ -456,7 +456,7 @@ body {
   left: 0;
   /* width: var(--sidebar-collapsed-w); */
   width: 52px;
-  height: 100%;
+  height: 100vh;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
   padding-top: 8px;
@@ -866,10 +866,8 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
   font-weight: 600;
 }
 
-/* Small devices */
-@media (max-width: 576px) {
 
-}
+
 
 /* MOBILE */
 @media (max-width: 768px) {
@@ -973,4 +971,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
     letter-spacing: 0.5px;
   }
 
+  .page-wrapper{
+    margin-left: 0px !important;
+  }
 }
