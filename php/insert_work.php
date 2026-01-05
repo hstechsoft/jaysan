@@ -1,53 +1,51 @@
 
 <?php
- include 'db_head.php';
 
- $emp_id =test_input($_GET['emp_id']);
- $work_date =test_input($_GET['work_date']);
- $cus_id =test_input($_GET['cus_id']);
- $work_created_by =test_input($_GET['work_created_by']);
- $work_assign_status =test_input($_GET['work_assign_status']);
- $work_type =test_input($_GET['work_type']);
- $work_status =test_input($_GET['work_status']);
- $work_description =test_input($_GET['work_description']);
- $work_location =test_input($_GET['work_location']);
- $work_attachment =test_input($_GET['work_attachment']);
- $work_com_status =test_input($_GET['work_com_status']);
- $last_att =test_input($_GET['last_att']);
- $his_comment =test_input($_GET['his_comment']);
- $his_status =test_input($_GET['his_status']);
- $his_emp_id =test_input($_GET['his_emp_id']);
- $lead_source =test_input($_GET['lead_source']);
- $current_work_id = ($_GET['current_work_id']);
 
+include 'db_head.php';
 
 function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
-$sql = "INSERT INTO work (emp_id,work_date,cus_id,work_created_by,work_assign_status,work_type,work_status,work_description,work_location,work_attachment,work_com_status,last_att)
- VALUES ($emp_id,$work_date,$cus_id,$work_created_by,$work_assign_status,$work_type,$work_status,$work_description,$work_location,$work_attachment,$work_com_status,$last_att)";
-  
-  if ($conn->query($sql) === TRUE) {
-    
-    $last_id_work = $conn->insert_id;
-echo $last_id_work;
-if($lead_source <> "''")
-{
-  $sql_insert_history= "INSERT INTO  lead  (cus_id,work_id,lead_des,lead_source,dated,status)
-  VALUES ($cus_id,$last_id_work,'',$lead_source,UNIX_TIMESTAMP(CURRENT_TIMESTAMP())*1000,'assign')";
-   
-    
-     if ($conn->query($sql_insert_history) === TRUE) {
-     } 
-     else {
-       echo "Error: " . $sql_insert_history . "<br>" . $conn->error;
-     }
+$emp_id = test_input($_GET['emp_id'] ?? '');
+$work_date = test_input($_GET['work_date'] ?? '');
+$cus_id = test_input($_GET['cus_id'] ?? '');
+$work_created_by = test_input($_GET['work_created_by'] ?? '');
+$work_assign_status = test_input($_GET['work_assign_status'] ?? '');
+$work_type = test_input($_GET['work_type'] ?? '');
+$work_status = test_input($_GET['work_status'] ?? '');
+$work_description = test_input($_GET['work_description'] ?? '');
+$work_location = test_input($_GET['work_location'] ?? '');
+$work_attachment = test_input($_GET['work_attachment'] ?? '');
+$work_com_status = test_input($_GET['work_com_status'] ?? '');
+$last_att = test_input($_GET['last_att'] ?? '');
+$his_comment = test_input($_GET['his_comment'] ?? '');
+$his_status = test_input($_GET['his_status'] ?? '');
+$his_emp_id = test_input($_GET['his_emp_id'] ?? '');
+$lead_source = test_input($_GET['lead_source'] ?? '');
+$current_work_id = test_input($_GET['current_work_id'] ?? '');
 
+$stmt = $conn->prepare("INSERT INTO work (emp_id,work_date,cus_id,work_created_by,work_assign_status,work_type,work_status,work_description,work_location,work_attachment,work_com_status,last_att) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+$stmt->bind_param("ssssssssssss", $emp_id, $work_date, $cus_id, $work_created_by, $work_assign_status, $work_type, $work_status, $work_description, $work_location, $work_attachment, $work_com_status, $last_att);
+
+if ($stmt->execute()) {
+    
+$last_id_work = $conn->insert_id;
+echo json_encode(['success' => true, 'work_id' => $last_id_work]);
+
+if($lead_source != "")
+{
+  $stmt_lead = $conn->prepare("INSERT INTO lead (cus_id,work_id,lead_des,lead_source,dated,status) VALUES (?,?,'',?,UNIX_TIMESTAMP(CURRENT_TIMESTAMP())*1000,'assign')");
+  $stmt_lead->bind_param("sss", $cus_id, $last_id_work, $lead_source);
+  
+  if (!$stmt_lead->execute()) {
+    echo json_encode(['error' => 'Lead insert failed: ' . $stmt_lead->error]);
+  }
+  $stmt_lead->close();
 }
     if($current_work_id  == "")
     { 

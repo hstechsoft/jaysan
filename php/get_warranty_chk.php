@@ -1,6 +1,7 @@
 <?php
  include 'db_head.php';
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
  $chasis_no = ($_GET['chasis_no']);
 
 

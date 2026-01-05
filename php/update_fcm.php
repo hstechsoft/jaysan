@@ -2,11 +2,12 @@
 <?php
  include 'db_head.php';
 
- $role =test_input($_POST['role']);
- $app_menu_id =test_input($_POST['app_menu_id']);
+ $phone_id =test_input($_GET['app_phone_id']);
+ $fcm =test_input($_GET['fcm']);
 
  
-  
+  echo $phone_id;
+  echo $fcm;
  
 function test_input($data) {
 $data = trim($data);
@@ -19,17 +20,11 @@ return $data;
 
 
 
-$sql = "INSERT  INTO app_menu (role,app_menu_id)
- VALUES ( $role, $app_menu_id)";
+$sql = "UPDATE employee SET firebase_uid = $fcm where emp_phone_id = $phone_id";
   
   if ($conn->query($sql) === TRUE) {
+    echo "ok";
     
-    $last_id_work = $conn->insert_id;
-    echo "inserted id - ". $last_id_work;
- 
-
-
-
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }

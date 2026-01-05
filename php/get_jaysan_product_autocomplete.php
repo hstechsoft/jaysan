@@ -15,13 +15,13 @@ return $data;
 }
 
 if($term == "'pname'"){
-    $sql = "SELECT product_name FROM `jaysan_final_product` WHERE product_name LIKE $product";
+    $sql = "SELECT product_name,product_id FROM `jaysan_final_product` WHERE product_name LIKE $product";
 }
 else if($term == "'pmodel'"){
-    $sql = "SELECT model_name as product_name FROM jaysan_product_model WHERE model_name LIKE $product";
+    $sql = "SELECT model_name as product_name,model_id FROM jaysan_product_model WHERE model_name LIKE $product";
 }
 else if($term == "'ptype'"){
-    $sql = "SELECT type_name as product_name FROM  jaysan_model_type WHERE type_name LIKE $product";
+    $sql = "SELECT type_name as product_name,mtid FROM  jaysan_model_type WHERE type_name LIKE $product";
 };
 
 

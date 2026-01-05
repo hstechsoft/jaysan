@@ -1,21 +1,58 @@
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+
+}
+
+
+
+$current_file = basename($_SERVER['PHP_SELF']);
+
+/* Public files (no session required) */
+$public_files = [
+    'login.php',
+    'logout.php',
+    'csrf.js.php',
+    'update_fcm.php',
+    'get_email_by_phoneid.php',
+    'get_dealer_login.php',
+    'store_registration.php',
+'get_app_version.php',
+'get_employee_id.php',
+'check_user_approval.php'
+];
+
+if (!in_array($current_file, $public_files)) {
+    if (!isset($_SESSION['user_id'])) {
+        http_response_code(401);
+        exit;
+    }
+
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     if (
+//         empty($_POST['csrf_token']) ||
+//         $_POST['csrf_token'] !== $_SESSION['csrf_token']
+//     ) {
+//         http_response_code(403);
+//         exit;
+//     }
+// }
+
+}
+
+
+
+
 $servername = "srv1002.hstgr.io";
 $username = "u333142350_db_user";
 $password = ":wi9x57Ci2";
 $dbname = "u333142350_jaysan";
 
-
-// $servername = "localhost";
-// $username = "u211327498_jaysan_user";
-// $password = "Admin@123";
-// $dbname = "u211327498_jaysan";
-
-
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $dbname = "u211327498_jaysan";
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);

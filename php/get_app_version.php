@@ -4,11 +4,13 @@ include 'db_head.php';
 header('Content-Type: application/json');
 
 // Read raw JSON input
-$input = json_decode(file_get_contents("php://input"), true);
+
 
 // Safe read
-$phone_id = $input['phone_id'] ?? '';
-$version  = $input['version'] ?? '';
+
+
+
+
 
 // Fetch latest version (only one row needed)
 $sql = "SELECT latest_version, force_update, apk_url 
@@ -24,7 +26,8 @@ if ($result && $row = $result->fetch_assoc()) {
         "latest_version" => $row['latest_version'],
         "force_update"   => (int)$row['force_update'],
         "apk_url"        => $row['apk_url'],
-        "server_time"    => date('Y-m-d H:i:s')
+        "server_time"    => date('Y-m-d H:i:s'),
+       
     ]);
 
 } else {

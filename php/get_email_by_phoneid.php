@@ -1,10 +1,7 @@
 <?php
  include 'db_head.php';
 
- $dphone = test_input($_GET['dphone']);
-$dpass = test_input($_GET['dpass']);
-
-
+ $phone_id = test_input($_GET['phone_id']);
  
  
 function test_input($data) {
@@ -16,7 +13,7 @@ return $data;
 }
 
 
- $sql = "SELECT dname,did FROM dealer WHERE dphone =  $dphone AND dpass =  $dpass";
+$sql = "SELECT emp_email,emp_approve FROM employee where emp_phone_id = $phone_id";
 
 $result = $conn->query($sql);
 
@@ -24,8 +21,7 @@ if ($result->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result)) {
         $rows[] = $r;
-           $_SESSION['user_id'] = $r['did'];
-$_SESSION['role']    = 'dealer';
+     
     }
     print json_encode($rows);
 } else {

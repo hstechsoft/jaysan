@@ -1,6 +1,7 @@
 <?php
  include 'db_head.php';
 
+
  $date_query_start = ($_GET['date_query_start']);
  $date_query_end = ($_GET['date_query_end']);
 
