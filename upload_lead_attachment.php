@@ -17,7 +17,7 @@ if ($_FILES['file']['name'] != '') {
     $target_path = "attachment/mlead/" . $dirname . "/";
   
     if (!file_exists($target_path)) {
-        mkdir($target_path, 0777, true);
+        mkdir($target_path, 0755, true);
     }
 
     $FileType = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));    
