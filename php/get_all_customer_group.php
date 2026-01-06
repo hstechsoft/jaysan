@@ -1,11 +1,6 @@
 <?php
  include 'db_head.php';
 
- $mtid = test_input($_GET['mtid']);
-
-
- 
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -15,7 +10,9 @@ return $data;
 }
 
 
- $sql = "SELECT jaysan_model_subtype.*,(select json_object('mrp',mrp,'min_price',min_price,'max_price',max_price)   from jaysan_model_type where mtid = $mtid limit 1) as master FROM jaysan_model_subtype WHERE mtid =  $mtid";
+$sql = "SELECT * from customer_group_master ";
+
+
 
 $result = $conn->query($sql);
 

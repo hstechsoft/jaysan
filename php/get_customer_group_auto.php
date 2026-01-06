@@ -1,11 +1,10 @@
 <?php
  include 'db_head.php';
 
- $mtid = test_input($_GET['mtid']);
+
+ $group_name = ($_GET['group_name']);
 
 
- 
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -15,7 +14,13 @@ return $data;
 }
 
 
- $sql = "SELECT jaysan_model_subtype.*,(select json_object('mrp',mrp,'min_price',min_price,'max_price',max_price)   from jaysan_model_type where mtid = $mtid limit 1) as master FROM jaysan_model_subtype WHERE mtid =  $mtid";
+$group_name  = "%" .  $group_name ."%";
+
+
+
+
+$sql = "SELECT * FROM   customer_group_master  WHERE group_name LIKE  '$group_name'";
+
 
 $result = $conn->query($sql);
 

@@ -15,7 +15,7 @@ return $data;
 }
 
 
-$sql = "SELECT cus_name,cus_id,cus_address,cus_phone FROM `customer` WHERE cus_phone LIKE $cus_phone";
+$sql = "SELECT cus_name,cus_id,cus_address,cus_phone,cus_type_id FROM `customer` WHERE cus_phone LIKE $cus_phone";
 
 
 $result = $conn->query($sql);

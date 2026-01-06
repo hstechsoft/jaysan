@@ -5,6 +5,7 @@
 $mrp = test_input($_POST['mrp']);
 $min_price = test_input($_POST['min_price']);
 $max_price = test_input($_POST['max_price']);
+$sub_type_price_json = $_POST['sub_type_price'];
 
 
 
@@ -19,7 +20,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  jaysan_model_type SET  =  $,mrp =  $mrp,min_price =  $min_price,max_price =  $max_price WHERE mtid =  $mtid";
+ $sql =  "UPDATE  jaysan_model_type SET  mrp =  $mrp,min_price =  $min_price,max_price =  $max_price WHERE mtid =  $mtid";
 
   if ($conn->query($sql) === TRUE) {
    
@@ -30,7 +31,7 @@ return $data;
 
 
   
-   foreach ($work_break as $row) {
+   foreach ($sub_type_price as $row) {
         $msid = $row['msid'];
         $price = $row['price'];
         $is_reduce = $row['is_reduce'];
