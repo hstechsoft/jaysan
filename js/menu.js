@@ -76,7 +76,7 @@ $(document).ready(function () {
           $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
         }
       });
-      $('#topbar_logout_btn, #topbar_logout_btnn').on('click', function () {
+      $('#topbar_logout_btn').on('click', function () {
         //salert("Logout","are you sure" , "warning")
         // localStorage.clear();
         // location.reload()
