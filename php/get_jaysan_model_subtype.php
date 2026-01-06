@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM jaysan_model_subtype WHERE mtid =  $mtid";
+ $sql = "SELECT jaysan_model_subtype.*,(select json_object('mrp',mrp,'min_price',min_price,'max_price',max_price)   from jaysan_model_type where mtid = $mtid limit 1) as master FROM jaysan_model_subtype WHERE mtid =  $mtid";
 
 $result = $conn->query($sql);
 
