@@ -5,6 +5,7 @@
 $mrp = test_input($_POST['mrp']);
 $min_price = test_input($_POST['min_price']);
 $max_price = test_input($_POST['max_price']);
+$sub_type_price_json = $_POST['sub_type_price'];
 
 
 
