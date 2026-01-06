@@ -30,7 +30,7 @@ return $data;
 
 
   
-   foreach ($work_break as $row) {
+   foreach ($sub_type_price as $row) {
         $msid = $row['msid'];
         $price = $row['price'];
         $is_reduce = $row['is_reduce'];
