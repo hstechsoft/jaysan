@@ -10,6 +10,19 @@ var start = ''
 
 
 
+$(document).ajaxError(function (event, xhr) {
+
+    if (xhr.status === 401) {
+        // alert("Session expired. Please login again.");
+        window.location.href = "login.html";
+    }
+
+    if (xhr.status === 403) {
+        // alert("Security validation failed. Please refresh the page.");
+    }
+
+});
+
 
 
 $(document).ready(function () {
@@ -192,9 +205,13 @@ function get_app_menu(phone_id) {
   $.ajax({
     url: "php/get_app_menu1.php",
     type: "GET",
-    data: { phone_id: phone_id, },
+    data: { 
+      phone_id: phone_id,
+       email: localStorage.getItem("logemail")
+     },
     dataType: "json",
     success: function (response) {
+
 
       if (!Array.isArray(response) || response.length === 0) {
         console.warn("No menu data");
@@ -203,24 +220,26 @@ function get_app_menu(phone_id) {
 
       $("#mobile_menu").empty();
 
-      let startUrl = "";
-      console.log(response);
+      // let startUrl = "";
+      
 
       response.forEach(item => {
+        console.log(item);
+        
 
-        if (item.iswebview === "true") {
+        if (item.iswebview == "true") {
 
           let url = item.menu_name1 + ".html?phone_id=" + phone_id;
 
-          if (item.menu_id === "1") {
-            startUrl = url;
-          }
+          // if (item.menu_id === "1") {
+          //   startUrl = url;
+          // }
 
           $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><span class='pe-2'>${item.menu_icon_web}</span>${item.menu_name}</a></li>`);
         }
       });
 
-      window.APP_START_URL = startUrl;
+      // window.APP_START_URL = startUrl;
 
     },
     error: function (xhr, status, error) {
