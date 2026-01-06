@@ -43,8 +43,8 @@
             </div>
         </div>
     </div>
-        <section id="menu_bar"></section>
-    <div class="container-fluid ">
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
         <!-- top bar -->
 
 
@@ -54,12 +54,12 @@
 
 
 
-        <div class="page-wrapper">
+        <div class="page-wrapper mt-5 mt-md-0">
             <!-- content -->
             <div class="container mt-5">
                 <section id="work_form" class="">
-                    <h2 class="text-center text-white bg-dark p-3">WORK ENTRY FORM</h2>
-                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="WorkEntryForm" novalidate
+                    <h4 class="text-center text-white bg-dark p-1">WORK ENTRY FORM</h4>
+                    <form class="p-2 border rounded-4 shadow-sm bg-light needs-validation" id="WorkEntryForm" novalidate
                         onsubmit="return false">
                         <div class="form-group">
                             <div class="row">
@@ -113,109 +113,111 @@
 
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn btn-success d-none" id="add_employee">+</button>
-                                <button type="submit" class="btn btn-primary " id="work_entry_btn">Start Work</button>
+                                <button type="button" class="btn btn-success d-none" id="add_employee">+<i class="ms-1 fa-solid fa-people-line"></i></button>
+                                <button type="submit" class="btn btn-primary " id="work_entry_btn">Start<i class="ms-1 fa-solid fa-building-circle-check"></i></button>
                             </div>
                         </div>
                     </form>
 
                 </section>
 
-                <section class="d-none" id="work_update">
-                    <!-- <h2 class="text-center text-white bg-dark p-3">WORK UPDATE FORM</h2>
-                <div class="table-responsive"> -->
-                    <!-- <table class="table caption-top table-bordered table-striped ">
-                        <thead>
+                <section class="d-none mt-2" id="work_update">
+                    <h4 class="text-center text-white bg-dark p-1 mb-0">WORK UPDATE FORM</h4>
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <thead>
 
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Work</th>
-                                <th scope="col">Done By</th>
-                            </tr>
-                        </thead>
-                        <tbody id="">
-                            <tr>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Work</th>
+                                    <th scope="col">Done By</th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                                <tr>
 
-                                <td>1</td>
-                                <td>welding</td>
-                                <td>
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select employee-select" id="employee" required>
-                                            <option selected disabled value="">Choose...</option>
-                                            <option value="john">john</option>
-                                            <option value="vicky">vicky</option>
-                                            <option value="babu">babu</option>
-                                        </select>
-                                        <label for="employee">Employee</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                                    <td>1</td>
+                                    <td>welding</td>
+                                    <td>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select employee-select" id="employee" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="john">john</option>
+                                                <option value="vicky">vicky</option>
+                                                <option value="babu">babu</option>
+                                            </select>
+                                            <label for="employee">Employee</label>
+                                            <div class="invalid-feedback">
+                                                Kindly Select Vaild
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
 
-                            </tr>
-                            <tr>
+                                </tr>
+                                <tr>
 
-                                <td>2</td>
-                                <td>coating</td>
-                                <td>
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select employee-select" id="employee" required>
-                                            <option selected disabled value="">Choose...</option>
-                                            <option value="john">john</option>
-                                            <option value="vicky">vicky</option>
-                                            <option value="babu">babu</option>
-                                        </select>
-                                        <label for="employee">Employee</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                                    <td>2</td>
+                                    <td>coating</td>
+                                    <td>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select employee-select" id="employee" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="john">john</option>
+                                                <option value="vicky">vicky</option>
+                                                <option value="babu">babu</option>
+                                            </select>
+                                            <label for="employee">Employee</label>
+                                            <div class="invalid-feedback">
+                                                Kindly Select Vaild
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
 
-                            </tr>
-                            <tr>
+                                </tr>
+                                <tr>
 
-                                <td>3</td>
-                                <td>setting</td>
-                                <td>
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select employee-select" id="employee" required>
-                                            <option selected disabled value="">Choose...</option>
-                                            <option value="john">john</option>
-                                            <option value="vicky">vicky</option>
-                                            <option value="babu">babu</option>
-                                        </select>
-                                        <label for="employee">Employee</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                                    <td>3</td>
+                                    <td>setting</td>
+                                    <td>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select employee-select" id="employee" required>
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value="john">john</option>
+                                                <option value="vicky">vicky</option>
+                                                <option value="babu">babu</option>
+                                            </select>
+                                            <label for="employee">Employee</label>
+                                            <div class="invalid-feedback">
+                                                Kindly Select Vaild
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
 
-                            </tr>
-
-
-                        </tbody>
+                                </tr>
 
 
-                    </table> -->
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-success " id="work_update_btn">End Work</button>
-                        <button type="button" class="btn btn-warning " id="pause_btn" data-bs-toggle="modal"
-                            data-bs-target="#pauseModal">Pause Work</button>
-                        <button type="button" class="btn btn-info d-none" id="resume_btn"> Resume</button>
-                        <button type="button" class="btn btn-primary " id="rework_btn" data-bs-toggle="modal"
-                            data-bs-target="#reworkModal"> Rework</button>
-                        <button type="button" class="btn btn-info d-none" id="rework_end_btn"> Resume</button>
+                            </tbody>
+
+
+                        </table>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-success " id="work_update_btn">End Work</button>
+                            <button type="button" class="btn btn-warning " id="pause_btn" data-bs-toggle="modal"
+                                data-bs-target="#pauseModal">Pause Work</button>
+                            <button type="button" class="btn btn-info d-none" id="resume_btn"> Resume</button>
+                            <button type="button" class="btn btn-primary " id="rework_btn" data-bs-toggle="modal"
+                                data-bs-target="#reworkModal"> Rework</button>
+                            <button type="button" class="btn btn-info d-none" id="rework_end_btn"> Resume</button>
+                        </div>
+                        <!-- </div> -->
                     </div>
-                    <!-- </div> -->
-
                 </section>
             </div>
         </div>
 
     </div>
+
+    <div id='footer' class="mt-auto"></div>
 
 
     <!-- Modal -->

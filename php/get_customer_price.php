@@ -18,7 +18,6 @@ $sql = "SELECT JSON_OBJECT(
             'max_price', subgroup_type_price.max_price,
             'min_price', subgroup_type_price.min_price,
             'mrp', subgroup_type_price.mrp
-            'mtid', $mtid 
         ))
         FROM customer_subgroup_master cus_sub
         LEFT JOIN subgroup_type_price ON cus_sub.sub_group_id = subgroup_type_price.sub_group_id 
@@ -44,9 +43,7 @@ $sql = "SELECT JSON_OBJECT(
             'main_price', sub.price,
             'is_reduce', sub.is_reduce,
             'gsp_id', gstp.gsp_id,
-            'price', gstp.price,
-            'sub_group_id', gstp.sub_group_id,
-            'sub_group_name', (SELECT sub_mas.sub_group_name FROM customer_subgroup_master sub_mas WHERE sub_mas.sub_group_id = gstp.sub_group_id)
+            'price', gstp.price
         ))
         FROM jaysan_model_subtype sub 
         LEFT JOIN group_subtype_price gstp ON sub.msid = gstp.msid AND gstp.group_id = $group_id  

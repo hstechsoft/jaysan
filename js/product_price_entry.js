@@ -121,16 +121,213 @@ $(document).ready(function () {
 
     get_jaysan_final_product();
 
+    $('#product_auto').on('input', function () {
+
+        $('#product_model').prop('disabled', true)
+        $('#product_sub_model').prop('disabled', true)
+        $('#model_auto').val("")
+        $('#sub_model_auto').val("")
+        $('#product').val('0')
+        $('#product_model').val('0')
+        $('#product_sub_model').val('0')
+        //check the value not empty
+        if ($('#product_auto').val() != "") {
+            $('#product_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_jaysan_product_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            product: "%" + $('#product_auto').val() + "%",
+                            term: 'pname',
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.product_name,
+                                    // value: item.part_no,
+                                    id: item.product_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+                    console.log(ui.item.id);
+
+                    $("#product").val(ui.item.id).trigger("change")
+                    //   $(this).data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
     $("#product").on("change", function () {
+        $('#product_model').prop('disabled', true)
+        $('#product_sub_model').prop('disabled', true)
+        $('#model_auto').val("")
+        $('#sub_model_auto').val("")
+        $('#product_model').val('0')
+        $('#product_sub_model').val('0')
+        $('#product_auto').val($("#product").find(":selected").text()).trigger("change")
         get_jaysan_final_productmodel();
     })
+    $('#model_auto').on('input', function () {
+
+        $('#product_sub_model').prop('disabled', true)
+        $('#sub_model_auto').val("")
+        $('#product_model').val('0')
+        $('#product_sub_model').val('0')
+        //check the value not empty
+        if ($('#model_auto').val() != "") {
+            $('#model_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_jaysan_product_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            product: "%" + $('#model_auto').val() + "%",
+                            term: 'pmodel',
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.product_name,
+                                    // value: item.part_no,
+                                    id: item.model_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $("#product_model").val(ui.item.id).trigger("change")
+                    //   $(this).data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     $("#product_model").on("change", function () {
+        $('#product_sub_model').prop('disabled', true)
+        $('#sub_model_auto').val("")
+        $('#product_sub_model').val("0")
+        $("#model_auto").val($("#product_model").find(":selected").text())
         get_jaysan_final_producttype();
     })
+    $('#sub_model_auto').on('input', function () {
+
+
+        $('#product_sub_model').val('0')
+        //check the value not empty
+        if ($('#sub_model_auto').val() != "") {
+
+            $("#add_new_product_btn").removeClass("d-none");
+            $('#sub_model_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_jaysan_product_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            product: "%" + $('#sub_model_auto').val() + "%",
+                            term: 'ptype',
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                $("#add_new_product_btn").addClass("d-none");
+
+                                return {
+                                    label: item.product_name,
+                                    // value: item.part_no,
+                                    id: item.mtid,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $("#product_sub_model").val(ui.item.id).trigger("change")
+                    $("#add_new_product_btn").addClass("d-none");
+
+                    //   $(this).data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     $("#product_sub_model").on("change", function () {
-
+        $("#add_new_product_btn").addClass("d-none");
+        $("#sub_model_auto").val($("#product_sub_model").find(":selected").text())
         get_jaysan_model_subtype();
     })
 
@@ -178,6 +375,20 @@ $(document).ready(function () {
         icon.toggleClass("fa-chevron-down fa-chevron-up");
     });
 
+    $("#add_new_product_btn").on("click", function () {
+
+        var product = $("#product_auto").val();
+        var model = $("#model_auto").val();
+        var sub_model = $("#sub_model_auto").val();
+        console.log(product, model, sub_model);
+
+        if (!product || !model || !sub_model || product === undefined || model === undefined || sub_model === undefined) {
+            salert("Warning", "Data missing", "warning");
+        }
+        else {
+            insert_jaysan_final_product(product, model, sub_model)
+        }
+    })
 });
 
 
@@ -202,7 +413,7 @@ function get_jaysan_final_product() {
         success: function (response) {
 
             $('#product').empty()
-            $('#product').append("<option value='null' selected disabled>Choose Options...</option>")
+            $('#product').append("<option value='0' selected disabled>Choose Options...</option>")
             if (response.trim() != "error") {
                 console.log(response);
 
@@ -256,7 +467,7 @@ function get_jaysan_final_productmodel() {
         success: function (response) {
             $('#product_model').removeAttr('disabled')
             $('#product_model').empty()
-            $('#product_model').append("<option value='null' selected disabled>Choose Options...</option>")
+            $('#product_model').append("<option value='0' selected disabled>Choose Options...</option>")
             console.log(response);
 
             if (response.trim() != "error") {
@@ -309,7 +520,7 @@ function get_jaysan_final_producttype() {
         success: function (response) {
             $('#product_sub_model').removeAttr('disabled')
             $('#product_sub_model').empty()
-            $('#product_sub_model').append("<option value='null' selected disabled>Choose Options...</option>")
+            $('#product_sub_model').append("<option value='0' selected disabled>Choose Options...</option>")
             console.log(response);
 
             if (response.trim() != "error") {
@@ -436,6 +647,46 @@ function get_jaysan_model_subtype() {
 
 
 }
+
+function insert_jaysan_final_product(product_name, product_model, product_type) {
+
+    $.ajax({
+        url: "php/insert_jaysan_final_product.php",
+        type: "get", //send it through get method
+        data: {
+
+            product_name: product_name,
+            product_model: product_model,
+            product_type: product_type,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() > 0) {
+                // sessionStorage.setItem('editProcessId', response.trim());
+                // sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
+                // Reload the page
+                // location.reload();
+                alert("ok")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 
 
