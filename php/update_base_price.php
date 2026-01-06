@@ -19,7 +19,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  jaysan_model_type SET  =  $,mrp =  $mrp,min_price =  $min_price,max_price =  $max_price WHERE mtid =  $mtid";
+ $sql =  "UPDATE  jaysan_model_type SET  mrp =  $mrp,min_price =  $min_price,max_price =  $max_price WHERE mtid =  $mtid";
 
   if ($conn->query($sql) === TRUE) {
    
