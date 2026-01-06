@@ -20,8 +20,9 @@
 
 
     <style>
-        #purchase_order_table tr {
-            font-size: 12px;
+        .ui-autocomplete {
+            z-index: 1056 !important;
+            /* higher than Bootstrap modal (1055) */
         }
     </style>
 
@@ -145,9 +146,6 @@
                             <div class="d-none form-floating mb-3" id="customer_type_view">
                                 <select class="form-select" id="customer_type">
                                     <option selected disabled value="null">Choose...</option>
-                                    <option value="Customer">Customer</option>
-                                    <option value="Dealer">Dealer</option>
-                                    <option value="Distributer">Distributer</option>
                                 </select>
                                 <label for="customer_type">Customer Type</label>
                             </div>
@@ -209,7 +207,16 @@
 
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-2">
+                    <div class="d-none d-flex justify-content-between" id="sub_type_section">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="type_add_field" placeholder="">
+                            <label for="type_add_field">Type </label>
+                        </div>
+                        <div class="text-center align-middle">
+                            <button type="submit" class="btn btn-primary " id="type_add_btn">ADD</button>
+                        </div>
+                    </div>
                     <div class="table-responsive d-none" id="product_type_table">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
@@ -230,7 +237,7 @@
 
                         </table>
                         <button type="submit" class="btn btn-primary float-end"
-                            id="product_price_submit_btn">Submit</button>
+                            id="product_base_price_submit_btn">Submit</button>
                     </div>
 
                     <div class="table-responsive d-none" id="customer_type_table_next">
@@ -247,71 +254,8 @@
 
                                 </tr>
                             </thead>
-                            <tbody id="demo">
-                                <tr class="accordion-head" style="cursor:pointer;">
+                            <tbody id="customer_type_tbody">
 
-                                    <td>1</td>
-                                    <td>customer <i class="fa fa-chevron-down float-end"></i></td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-                                    <td><input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="270000"></td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-
-                                </tr>
-                                <tr class="accordion-body d-none">
-
-                                    <td>1</td>
-                                    <td>Telangana customer</td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-                                    <td><input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="270000"></td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-
-                                </tr>
-                                <tr class="accordion-body d-none">
-
-                                    <td>1</td>
-                                    <td>Tamil nadu customer</td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-                                    <td><input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="270000"></td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-
-                                </tr>
-                                <tr class="accordion-body d-none">
-
-                                    <td>1</td>
-                                    <td>Karnataka customer</td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-                                    <td><input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="270000"></td>
-                                    <td>
-                                        <input type="number" class="form-control rounded-3" id="mrp_price"
-                                            placeholder="" value="280000">
-                                    </td>
-
-                                </tr>
 
 
                             </tbody>
@@ -327,18 +271,8 @@
                     <div class="table-responsive d-none" id="product_type_table_next">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
-                            <thead>
+                            <thead id="product_type_thead">
 
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col" class="accordion-head" style="cursor:pointer;">Base price</th>
-                                    <th scope="col" class="accordion-body d-none">tamil nadu Customer</th>
-                                    <th scope="col" class="accordion-body d-none">karnataka customer</th>
-                                    <th scope="col" class="accordion-body d-none">Telangana customer</th>
-                                    <!-- <th scope="col">+/-</th> -->
-
-                                </tr>
                             </thead>
                             <tbody id="product_type_ttbody">
 
@@ -376,54 +310,39 @@
                         <input type="text" class="form-control rounded-3" id="add_custome_type" placeholder="">
                         <label for="add_custome_type">Customer Type</label>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary " id="customer_type_create_btn">Create</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary " id="customer_type_create_btn">Create</button>
+
 
                     <div class="d-none" id="customer_Sub_type">
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="customer_sub_type" placeholder="">
-                            <label for="customer_sub_type">Sub Type</label>
+                            <input type="text" class="form-control rounded-3" id="customer_sub_type_f" placeholder="">
+                            <label for="customer_sub_type_f">Sub Type</label>
                         </div>
                         <button type="button" class="btn btn-primary " id="add_to_table">Add</button>
 
 
-                        <div class="table-responsive">
-                            <table class="table caption-top table-bordered table-striped ">
-                                <caption></caption>
-                                <thead>
+                    </div>
 
-                                    <tr>
+                    <div class="table-responsive" id="customer_modal_table">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead>
 
-                                        <th scope="col">Customer Type</th>
-                                        <th scope="col">Sub Type</th>
-                                        <th scope="col">Action</th>
+                                <tr>
 
-                                    </tr>
-                                </thead>
-                                <tbody id="">
-                                    <tr>
+                                    <th scope="col">Customer Type</th>
+                                    <th scope="col">Sub Type</th>
+                                    <th scope="col">Action</th>
 
-
-                                        <td rowspan="2">Customer</td>
-                                        <td>Tamil Nadu Customer</td>
-                                        <td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
-
-                                    </tr>
-
-                                    <tr>
-
-                                        <td>Telangana Customer</td>
-                                        <td><button class="btn btn-danger"><i class="fa fa-trash"></i></button></td>
-
-                                    </tr>
+                                </tr>
+                            </thead>
+                            <tbody id="customer_modal_tbody">
 
 
-                                </tbody>
+                            </tbody>
 
 
-                            </table>
-                        </div>
+                        </table>
                     </div>
 
 
@@ -431,6 +350,30 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary float-end d-none" id="submit_btn">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Customer Type</h1> -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    Are you sure! Do you want to delete?
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary float-end " id="delete_btn">Delete</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

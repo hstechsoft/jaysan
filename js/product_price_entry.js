@@ -6,7 +6,6 @@ var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 $(document).ready(function () {
 
-
     $(".page-wrapper :input:visible:not([disabled]):not([readonly]):first").focus();
     $(document).on("keydown", ".page-wrapper :input:visible:not([disabled]):not([readonly])", function (e) {
 
@@ -21,7 +20,6 @@ $(document).ready(function () {
             const current = inputs.eq(index);
             if (current.is("button")) {
                 current.click();
-                alert("BUtton clicked")
             }
             return;
         }
@@ -48,23 +46,6 @@ $(document).ready(function () {
 
             }
 
-
-            if (next.is("button")) {
-
-                if (next.attr("id") === "cus_type_modal") {
-                    next.trigger("click");
-
-
-                    setTimeout(() => {
-                        $("#staticBackdrop")
-                            .find(":input:visible:not([disabled]):not([readonly]):first")
-                            .focus();
-                    }, 200);
-                }
-                else {
-                    next.trigger("click");
-                }
-            }
         }
 
 
@@ -120,6 +101,7 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
     get_jaysan_final_product();
+    get_all_customer_group();
 
     $('#product_auto').on('input', function () {
 
@@ -331,23 +313,42 @@ $(document).ready(function () {
         get_jaysan_model_subtype();
     })
 
-    $("#product_price_submit_btn").on("click", function () {
-        $("#product_type_table_next").removeClass("d-none");
-        $("#customer_type_table_next").removeClass("d-none");
-        $("#customer_type_view").removeClass("d-none");
-        $("#product_type_table").addClass("d-none");
-        $("#product_base_price").prop("disabled", true);
-        $("#product_base_min_price").prop("disabled", true);
-        $("#product_base_max_price").prop("disabled", true);
-    })
+    $("#product_base_price_submit_btn").on("click", function () {
 
-    $("#customer_type_create_btn").on("click", function () {
-        $(this).prop('disabled', true).addClass("d-none");
-        $("#customer_Sub_type").removeClass("d-none");
-        $("#customer_type_table_next").removeClass("d-none");
-        $("#product_type_table").addClass("d-none");
-        $("#submit_btn").removeClass("d-none");
-    })
+
+
+        const mtid = $("#product_sub_model").val() || $("#sub_model_auto").data("mtid");
+        const mrp = $("#product_base_price").val();
+        const min_price = $("#product_base_min_price").val();
+        const max_price = $("#product_base_max_price").val();
+
+        let sub_type_price = [];
+        let hasError = false;
+
+        $("#product_type_tbody tr").each(function () {
+
+            const row = $(this);
+            const msid = row.data("msid");
+            const price = row.find("#price_variation").val();
+            const is_reduce = row.find("#product_price_type").val();
+
+            if (!msid || !price || !is_reduce) {
+                hasError = true;
+                return false;
+            }
+
+            sub_type_price.push({ msid, price, is_reduce });
+        });
+
+        if (!mtid || !mrp || !min_price || !max_price || sub_type_price.length === 0 || hasError) {
+            salert("Warning", "Fill all required fields", "warning");
+            return;
+        }
+
+        console.log(mtid, mrp, min_price, max_price, sub_type_price);
+
+        update_base_price(mtid, mrp, min_price, max_price, sub_type_price);
+    });
 
     $("#demo").on("click", "tr td", function (event) {
         event.preventDefault();
@@ -389,6 +390,224 @@ $(document).ready(function () {
             insert_jaysan_final_product(product, model, sub_model)
         }
     })
+
+    $("#type_add_btn").on("click", function () {
+        console.log($("#type_add_field").val());
+
+        if ($("#type_add_field").val() === undefined || $("#type_add_field").val() == '') {
+            salert("Warning", "Fill the type", "warning");
+            return;
+        }
+        insert_jaysan_model_subtype($("#type_add_field").val());
+    })
+
+
+
+    // customer type
+
+
+    $('#add_custome_type').on('input', function () {
+        $("#customer_type_create_btn").prop("disabled", false);
+        //check the value not empty
+        $(this).removeData("cus_type_id");
+        if ($('#add_custome_type').val() != "") {
+            $('#add_custome_type').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_customer_group_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            group_name: $('#add_custome_type').val(),
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.group_name,
+                                    value: item.group_name,
+                                    id: item.group_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("cus_type_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+                    if (ui.item.id) {
+
+                        $("#customer_type_create_btn").prop("disabled", true);
+                        $("#customer_Sub_type").removeClass("d-none");
+                        get_customer_subgroup(ui.item.id)
+                    }
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#customer_sub_type_f').on('input', function () {
+        //check the value not empty
+        if ($('#customer_sub_type_f').val() != "") {
+            $('#customer_sub_type_f').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_customer_subgroup_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            sub_group_name: $('#customer_sub_type_f').val()
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sub_group_name,
+                                    value: item.sub_group_name,
+                                    id: item.sub_group_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sub_group_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#customer_type_create_btn").on("click", function () {
+
+        const groupName = $("#add_custome_type").val().trim();
+        if (!groupName) {
+            salert("Warning", "Fill the field", "warning");
+            return;
+        }
+
+        insert_customer_group_master(groupName);
+    });
+
+
+    $("#add_to_table").on("click", function () {
+
+        const sub_group_name = $("#customer_sub_type_f").val().trim();
+        const group_id = $("#add_custome_type").data("cus_type_id");
+        console.log(group_id);
+
+        if (!sub_group_name || !group_id) {
+            salert("Warning", "Fill the field", "warning");
+            return;
+        }
+
+        let dataObj = [];
+
+        dataObj.push({
+            sub_group_name,
+            group_id
+        });
+
+        insert_customer_subgroup_master(dataObj);
+    });
+
+
+
+    $("#customer_modal_tbody").on("click", "button", function () {
+        const subGroupId = $(this).data("sub_group_id");
+
+        $("#delete_btn").data("sub_group_id", subGroupId);
+        $("#deleteModal").modal("show");
+    });
+
+
+    $("#delete_btn").on("click", function () {
+        const subGroupId = $(this).data("sub_group_id");
+
+        if (!subGroupId) return;
+
+        delete_customer_subgroup_master(subGroupId);
+    });
+
+    $("#customer_type").on("change", function () {
+        console.log($(this).data("mtid"));
+
+        get_customer_price($(this).data("mtid"), $(this).val())
+    })
+
+
+    $("#product_price_submit_btn").on("click", function () {
+
+        var product_price = [];
+        var features_price = [];
+
+        $("#customer_type_tbody tr").forEach(function (item) {
+            var group_id = $(this).data("group_id") ||'';
+            var mtid = $("#sub_model_auto").data("mtid") || $('#product_sub_model').val() ||''
+            var mrp = $(this).find("td").eq(2).text() ||''
+            var min_price = $(this).find("td").eq(3).text() ||''
+            var max_price = $(this).find("td").eq(4).text() ||''
+
+            if(group_id == '' || mtid == '' || mrp == '' || min_price == '' || max_price == ''){
+                salert("Warning", "Fill the fields", "warning");
+                return;
+            }
+            product_price.push({group_id, mtid, mrp, min_price, max_price});
+            
+        })
+
+        $("#product_type_ttbody tr").forEach(function (item) {
+            var group_id = ''
+            var msid = $(this).data("msid") || '';
+            var price = ''
+        })
+    })
+
+
 });
 
 
@@ -399,6 +618,112 @@ $(document).ready(function () {
 
 
 
+
+
+function get_customer_price(mtid, group_id) {
+    console.log(mtid, group_id);
+
+
+    $.ajax({
+        url: "php/get_customer_price.php",
+        type: "get", //send it through get method
+        data: {
+            group_id: group_id,
+            mtid: mtid,
+        },
+        success: function (response) {
+
+            if (response.trim() !== "error") {
+
+                console.log(response);
+
+                if (response.trim() !== "0 result") {
+
+                    var obj = JSON.parse(response);
+
+                    var cus = Array.isArray(obj.subgroups) ? obj.subgroups : [];
+                    var type = Array.isArray(obj.group_subtypes) ? obj.group_subtypes : [];
+                    var base_price = obj.group_price || {};
+                    console.log(obj.subgroups);
+
+                    $("#customer_type_tbody").empty();
+                    $("#product_type_ttbody").empty();
+                    // $("#product_type_thead").empty();
+
+                    let ccount = 0;
+                    let tcount = 0;
+
+                    var thead = `<tr><td>#</td><td>Type</td><td>Base Price</td>`;
+
+                    cus.forEach(item => {
+                        ccount++;
+
+                        $("#customer_type_tbody").append(`
+                            <tr data-group_id="${item.sub_group_id}">
+                                <td>${ccount}</td>
+                                <td>${item.sub_group_name}</td>
+                                <td contenteditable="true">${item.mrp ?? base_price.mrp ?? ""}</td>
+                                <td contenteditable="true">${item.min_price ?? base_price.min_price ?? ""}</td>
+                                <td contenteditable="true">${item.max_price ?? base_price.max_price ?? ""}</td>
+                            </tr>
+                        `);
+
+                        thead += `<td>${item.sub_group_name}</td>`;
+                    });
+
+                    thead += `<td>Action</td>`
+
+                    $("#product_type_thead").append(thead);
+                    type.forEach(item => {
+                        tcount++;
+
+                        let custom_td = "";
+                        for (let i = 0; i < ccount; i++) {
+                            custom_td += `<td contenteditable="true">${item.main_price ?? 0}</td>`;
+                        }
+
+                        $("#product_type_ttbody").append(`
+                            <tr data-msid="${item.msid}">
+                                <td>${tcount}</td>
+                                <td>${item.subtype_name}</td>
+                                <td>${item.main_price ?? 0}</td>
+                                ${custom_td}
+                                <td>
+                                    <select class="form-select product_type_price_type">
+                                        <option disabled value="">Choose...</option>
+                                        <option value="+" ${item.is_reduce == 0 ? "selected" : ""}>+</option>
+                                        <option value="-" ${item.is_reduce == 1 ? "selected" : ""}>-</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                } else {
+                    $("#customer_type_tbody").append(`
+                        <tr>
+                            <td colspan="5" class="text-center text-danger">Nothing Added</td>
+                        </tr>
+                    `);
+                }
+
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function get_jaysan_final_product() {
@@ -561,13 +886,15 @@ function get_jaysan_final_producttype() {
 }
 
 function get_jaysan_model_subtype() {
+    console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+    $("#sub_type_section").removeClass("d-none");
 
 
     $.ajax({
         url: "php/get_jaysan_model_subtype1.php",
         type: "get", //send it through get method
         data: {
-            mtid: $('#product_sub_model').val()
+            mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
 
         },
         success: function (response) {
@@ -583,7 +910,7 @@ function get_jaysan_model_subtype() {
 
                     obj.forEach(function (obj) {
                         count = count + 1;
-                        $('#product_type_tbody').append(`<tr data-mtid='${obj.mtid}'>
+                        $('#product_type_tbody').append(`<tr data-msid='${obj.msid}'>
 
                                     <td>${count}</td>
                                     <td>${obj.subtype_name}</td>
@@ -592,7 +919,7 @@ function get_jaysan_model_subtype() {
                                         placeholder="Base Price">
                                     </td>
                                     <td>
-                                        <select class="form-select" id="product_type">
+                                        <select class="form-select" id="product_price_type">
                                             <option selected disabled value="null">Choose...</option>
                                             <option value="+">+</option>
                                             <option value="-">-</option>
@@ -601,28 +928,6 @@ function get_jaysan_model_subtype() {
 
                                 </tr>`)
 
-                        $("#product_type_ttbody").append(`<tr data-mtid='${obj.mtid}'>
-
-                                    <td>${count}</td>
-                                    <td>${obj.subtype_name}</td>
-                                    <td class="accordion-head" style="cursor:pointer;">
-                                        <input type="number" class="form-control rounded-3" id="price_variation"
-                                        placeholder="Base Price">
-                                    </td>
-                                    <td  class="accordion-body d-none">
-                                        <input type="number" class="form-control rounded-3" id="price_variation"
-                                        placeholder=" Price">
-                                    </td>
-                                    <td  class="accordion-body d-none">
-                                        <input type="number" class="form-control rounded-3" id="price_variation"
-                                        placeholder=" Price">
-                                    </td>
-                                    <td  class="accordion-body d-none">
-                                        <input type="number" class="form-control rounded-3" id="price_variation"
-                                        placeholder=" Price">
-                                    </td>
-
-                                </tr>`)
                     });
 
 
@@ -663,13 +968,322 @@ function insert_jaysan_final_product(product_name, product_model, product_type) 
             console.log(response);
 
 
+            if (response.trim() > 0) {
+                $("#sub_type_section").removeClass("d-none");
+                $("#add_new_product_btn").addClass("d-none");
+                $('#sub_model_auto').data("mtid", response);
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function insert_jaysan_model_subtype(subtype_name) {
+
+    console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+
+    $.ajax({
+        url: "php/insert_jaysan_model_subtype.php",
+        type: "get", //send it through get method
+        data: {
+
+            mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
+            subtype_name: subtype_name,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                get_jaysan_model_subtype();
+                $("#type_add_field").val("")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function update_base_price(mtid, mrp, min_price, max_price, sub_type_price) {
+    console.log(mtid, mrp, min_price, max_price, sub_type_price);
+
+
+    $.ajax({
+        url: "php/update_base_price.php",
+        type: "post", //send it through get method
+        data: {
+
+            mtid: mtid,
+            mrp: mrp,
+            min_price: min_price,
+            max_price: max_price,
+            sub_type_price: JSON.stringify(sub_type_price),
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
+                    .removeClass("d-none");
+
+                $("#product_type_table").addClass("d-none");
+
+                $("#product_base_price, #product_base_min_price, #product_base_max_price")
+                    .prop("disabled", true);
+
+                $("#customer_type").data("mtid", mtid);
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+// customer type
+
+function insert_customer_group_master(group_name) {
+
+    $.ajax({
+        url: "php/insert_customer_group_master.php",
+        type: "post", //send it through get method
+        data: {
+
+            group_name: group_name,
+        },
+        success: function (response) {
+            console.log(response);
+
+
 
             if (response.trim() > 0) {
-                // sessionStorage.setItem('editProcessId', response.trim());
-                // sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
-                // Reload the page
-                // location.reload();
-                alert("ok")
+                $("#customer_type_create_btn").prop("disabled", true);
+                $("#customer_Sub_type").removeClass("d-none");
+                $("#add_custome_type").data("cus_type_id", response);
+
+                get_all_customer_group();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function insert_customer_subgroup_master(dataObj) {
+
+    console.log(dataObj);
+
+    $.ajax({
+        url: "php/insert_customer_subgroup_master.php",
+        type: "post", //send it through get method
+        data: {
+
+            sub_group_json: JSON.stringify(dataObj),
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+
+                $("#customer_sub_type_f").val("");
+                get_customer_subgroup($("#add_custome_type").data("cus_type_id"));
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_all_customer_group() {
+
+
+
+    $.ajax({
+        url: "php/get_all_customer_group.php",
+        type: "get", //send it through get method
+        data: {
+
+
+        },
+        success: function (response) {
+            console.log(response);
+            $('#customer_modal_tbody').empty()
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+                    $('#customer_type').empty();
+                    var obj = JSON.parse(response);
+                    var count = 0
+                    $('#customer_type').append(`<option selected disabled value="null">Choose...</option>`)
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        $('#customer_modal_tbody').append(`<tr>
+
+                                    <td>${count}</td>
+                                    <td>${obj.group_name}</td><td></td>
+
+                                </tr>`)
+
+                        $('#customer_type').append(`<option  value='${obj.group_id}'>${obj.group_name}</option>`)
+
+                    });
+
+
+                }
+                else {
+                    $('#customer_modal_tbody').append(`<tr>
+
+                                    <td colspan='3' class='text-center text-danger'>No Data Available</td>
+
+                                </tr>`)
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_customer_subgroup(group_id) {
+
+
+    $.ajax({
+        url: "php/get_customer_subgroup.php",
+        type: "get", //send it through get method
+        data: {
+            group_id: group_id
+
+        },
+        success: function (response) {
+            console.log(response);
+            $('#customer_modal_tbody').empty()
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        $('#customer_modal_tbody').append(`<tr>
+
+                                    <td>${count}</td>
+                                    <td>${obj.sub_group_name}</td>
+                                    <td><button class="btn btn-danger" data-sub_group_id='${obj.sub_group_id}'><i class="fa fa-trash"></i></button></td>
+                                </tr>`)
+
+                    });
+
+
+                }
+                else {
+                    $('#customer_modal_tbody').append(`<tr>
+                                    <td colspan='3' class='text-center text-danger'>No Data Available</td>
+                                </tr>`)
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function delete_customer_subgroup_master(sub_group_id) {
+
+
+    $.ajax({
+        url: "php/delete_customer_subgroup_master.php",
+        type: "get", //send it through get method
+        data: {
+            sub_group_id: sub_group_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                $("#deleteModal").modal("hide");
+                get_customer_subgroup($("#add_custome_type").data("cus_type_id"))
             }
 
 
