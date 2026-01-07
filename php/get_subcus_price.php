@@ -38,7 +38,7 @@ $sql = "SELECT
             FROM jaysan_model_subtype 
             WHERE mtid = $mtid
         )
-    ) as result;";
+    ) as json_data;";
 
 $result = $conn->query($sql);
 
