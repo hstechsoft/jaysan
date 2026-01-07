@@ -18,6 +18,7 @@ return $data;
 
 $sql = "UPDATE customer SET cus_type_id = $cus_type_id WHERE cus_id= $cus_id";
   if ( $conn->query($sql) === TRUE) {
+    echo "ok";
   } 
    else {
     echo "Error: " . $sql . "<br>" . $conn->error;
