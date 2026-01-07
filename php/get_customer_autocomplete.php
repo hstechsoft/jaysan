@@ -16,7 +16,7 @@ return $data;
 
 
 $sql = "SELECT cus_name,cus_id,cus_address,cus_phone,cus_type_id,sub_group_name FROM `customer`
-left join customer_subgroup_master on customer.cus_type_id = customer_subgroup_master.cus_type_id
+left join customer_subgroup_master on customer.cus_type_id = customer_subgroup_master.sub_group_id
  WHERE cus_name LIKE $cus_name";
 
 
