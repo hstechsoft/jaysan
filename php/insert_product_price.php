@@ -19,7 +19,7 @@ return $data;
 }
 
 
-foreach ($product_price_json as $row) {
+foreach ($product_price as $row) {
       if($row['price_type']== 'main_group_price'){
        $sql_group_type_price = "insert INTO group_type_price SET group_id = {$row['group_id']}, mtid = {$row['mtid']}, mrp = {$row['mrp']}, min_price = {$row['min_price']}, max_price = {$row['max_price']} ON DUPLICATE KEY UPDATE mrp = {$row['mrp']}, min_price = {$row['min_price']}, max_price = {$row['max_price']}";
        if($conn->query($sql_group_type_price)){
