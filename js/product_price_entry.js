@@ -350,12 +350,7 @@ $(document).ready(function () {
         update_base_price(mtid, mrp, min_price, max_price, sub_type_price);
     });
 
-    $("#demo").on("click", "tr td", function (event) {
-        event.preventDefault();
-        // TODO: handle click here
 
-        $(this).addClass("border border-1 border-danger")
-    });
 
     $("#customer_type_table_next").on("click", ".accordion-head", function () {
         const bodyRows = $(this).siblings(".accordion-body");
@@ -582,30 +577,179 @@ $(document).ready(function () {
 
     $("#product_price_submit_btn").on("click", function () {
 
-        var product_price = [];
-        var features_price = [];
+        let product_price = [];
+        let features_price = [];
 
-        $("#customer_type_tbody tr").forEach(function (item) {
-            var group_id = $(this).data("group_id") ||'';
-            var mtid = $("#sub_model_auto").data("mtid") || $('#product_sub_model').val() ||''
-            var mrp = $(this).find("td").eq(2).text() ||''
-            var min_price = $(this).find("td").eq(3).text() ||''
-            var max_price = $(this).find("td").eq(4).text() ||''
+        let group_id = $("#customer_type").val();
+        let mtid = $("#product_sub_model").val() || $("#sub_model_auto").data("mtid");
+        let mrp = $("#cus_grp_mrp").val();
+        let min_price = $("#cus_grp_min_price").val();
+        let max_price = $("#cus_grp_max_price").val();
 
-            if(group_id == '' || mtid == '' || mrp == '' || min_price == '' || max_price == ''){
-                salert("Warning", "Fill the fields", "warning");
-                return;
+        const price_type = "main_group_price";
+
+        if (!group_id || !mtid || !mrp || !min_price || !max_price) {
+            salert("Warning", "Fill the fields", "warning");
+            return;
+        }
+
+
+        product_price.push({
+            price_type,
+            group_id,
+            mtid,
+            mrp,
+            min_price,
+            max_price
+        });
+
+
+        $("#customer_type_tbody tr").each(function () {
+
+            const row = $(this);
+
+            const sub_group_id = row.data("sub_group_id");
+            const row_mtid = row.data("mtid");
+
+            const row_mrp = row.find("td").eq(2).text().trim();
+            const row_min = row.find("td").eq(3).text().trim();
+            const row_max = row.find("td").eq(4).text().trim();
+
+            if (!sub_group_id || !row_mtid || !row_mrp || !row_min || !row_max) {
+                salert("Warning", "Fill all customer price fields", "warning");
+                return false;
             }
-            product_price.push({group_id, mtid, mrp, min_price, max_price});
-            
-        })
 
-        $("#product_type_ttbody tr").forEach(function (item) {
-            var group_id = ''
-            var msid = $(this).data("msid") || '';
-            var price = ''
-        })
-    })
+            product_price.push({
+                price_type: "",
+                group_id: sub_group_id,
+                mtid: row_mtid,
+                mrp: row_mrp,
+                min_price: row_min,
+                max_price: row_max
+            });
+        });
+
+
+
+        $("#product_type_ttbody tr").each(function () {
+
+            const row = $(this);
+            const msid = row.data("msid");
+
+            row.find("td[data-sub_group_id]").each(function () {
+
+                const td = $(this);
+                const sub_group_id = td.data("sub_group_id");
+                const price = td.text().trim();
+                var f_price_type = td.data("price_type");
+
+                if (!sub_group_id) return;
+
+                features_price.push({
+                    price_type: f_price_type,
+                    group_id: sub_group_id,
+                    msid: msid,
+                    price: price || 0
+                });
+            });
+        });
+
+        console.log(product_price, features_price);
+
+
+        if (product_price.length && features_price.length) {
+            insert_product_price(
+                JSON.stringify(product_price),
+                JSON.stringify(features_price)
+            );
+        } else {
+            salert("Warning", "No price data found", "warning");
+        }
+    });
+
+
+    let selectedCells = new Set();
+    $("#customer_type_tbody").on("dblclick", "td", function () {
+
+        const $td = $(this);
+        const colIndex = $td.index();
+
+        if (colIndex < 2) return;
+
+        const cellKey = this;
+
+        if (selectedCells.has(cellKey)) {
+            selectedCells.delete(cellKey);
+            $td.removeClass("border border-2 border-danger");
+        } else {
+            selectedCells.add(cellKey);
+            $td.addClass("border border-2 border-danger");
+        }
+    });
+
+
+    $("#cus_grp_mrp, #cus_grp_min_price, #cus_grp_max_price").on("input", function () {
+
+        const price = $(this).val();
+
+        if (!selectedCells.size) return;
+
+        selectedCells.forEach(cell => {
+            $(cell).text(price);
+        });
+
+
+    });
+
+
+    let f_selectedCells = new Set();
+
+    $("#product_type_ttbody").on("dblclick", "td", function () {
+
+        const colIndex = $(this).index();
+
+        if (colIndex < 3) return;
+
+        const cell = this;
+
+        if (f_selectedCells.has(cell)) {
+            f_selectedCells.delete(cell);
+            $(cell).removeClass("border border-2 border-danger");
+        } else {
+            f_selectedCells.add(cell);
+            $(cell).addClass("border border-2 border-danger");
+        }
+    });
+
+    $("#product_type_ttbody").on("input", "td", function () {
+
+        const colIndex = $(this).index();
+
+        if (colIndex !== 2) return;
+
+        const price = $(this).text().trim();
+
+        if (!f_selectedCells.size) return;
+
+        f_selectedCells.forEach(cell => {
+            $(cell).text(price);
+        });
+    });
+
+
+
+    $(document).on("keydown", function (e) {
+        if (e.key === "Escape") {
+            selectedCells.clear();
+            f_selectedCells.clear();
+            $("#customer_type_tbody td").removeClass("border border-2 border-danger");
+            $("#product_type_ttbody td").removeClass("border border-2 border-danger");
+        }
+    });
+    // $("#feature_load_btn").on("click", function () {
+    //     get_jaysan_model_subtype_feature();
+    // })
 
 
 });
@@ -619,6 +763,65 @@ $(document).ready(function () {
 
 
 
+// function get_jaysan_model_subtype_feature() {
+//     console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+
+
+//     $.ajax({
+//         url: "php/get_jaysan_model_subtype.php",
+//         type: "get", //send it through get method
+//         data: {
+//             mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
+
+//         },
+//         success: function (response) {
+//             console.log(response);
+//             if (response.trim() != "error") {
+
+//                 if (response.trim() !== "0 result") {
+
+//                     const apiData = JSON.parse(response);
+
+//                     apiData.forEach(function (item) {
+
+//                         const base_p = JSON.parse(item.master);
+
+//                         $("#product_type_ttbody tr").each(function () {
+
+//                             const row = $(this);
+//                             const table_msid = row.data("msid");
+//                             var td = row.find("td").eq(2).text();
+
+//                             if (table_msid == base_p.msid && td == 0) {
+
+
+//                                 td.text(base_p.price);
+
+//                             }
+//                         });
+//                     });
+//                 }
+
+//                 else {
+//                     // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+//                 }
+//             }
+
+
+
+
+
+//         },
+//         error: function (xhr) {
+//             //Do Something to handle error
+//         }
+//     });
+
+
+
+
+// }
 
 function get_customer_price(mtid, group_id) {
     console.log(mtid, group_id);
@@ -639,61 +842,89 @@ function get_customer_price(mtid, group_id) {
 
                 if (response.trim() !== "0 result") {
 
-                    var obj = JSON.parse(response);
+                    const data = JSON.parse(response);
 
-                    var cus = Array.isArray(obj.subgroups) ? obj.subgroups : [];
-                    var type = Array.isArray(obj.group_subtypes) ? obj.group_subtypes : [];
-                    var base_price = obj.group_price || {};
-                    console.log(obj.subgroups);
+                    const subgroups = data.subgroups || [];
+                    const groupPrice = data.group_price || {};
+                    const groupSubtypes = data.group_subtypes || [];
+                    const subgroupSubtypes = data.subgroup_subtypes || [];
+
+                    var fixed_mrp = $("#product_base_price").val();
+                    var fixed_min = $("#product_base_min_price").val();
+                    var fixed_max = $("#product_base_max_price").val();
+
+                    $("#cus_grp_mrp").val(groupPrice?.mrp !== null && groupPrice?.mrp !== undefined && groupPrice?.mrp !== "" ? groupPrice.mrp : fixed_mrp);
+                    $("#cus_grp_min_price").val(groupPrice?.min_price !== null && groupPrice?.min_price !== undefined && groupPrice?.min_price !== "" ? groupPrice.min_price : fixed_min);
+                    $("#cus_grp_max_price").val(groupPrice?.max_price !== null && groupPrice?.max_price !== undefined && groupPrice?.max_price !== "" ? groupPrice.max_price : fixed_max);
 
                     $("#customer_type_tbody").empty();
-                    $("#product_type_ttbody").empty();
-                    // $("#product_type_thead").empty();
 
-                    let ccount = 0;
-                    let tcount = 0;
-
-                    var thead = `<tr><td>#</td><td>Type</td><td>Base Price</td>`;
-
-                    cus.forEach(item => {
-                        ccount++;
-
+                    subgroups.forEach((sg, index) => {
                         $("#customer_type_tbody").append(`
-                            <tr data-group_id="${item.sub_group_id}">
-                                <td>${ccount}</td>
-                                <td>${item.sub_group_name}</td>
-                                <td contenteditable="true">${item.mrp ?? base_price.mrp ?? ""}</td>
-                                <td contenteditable="true">${item.min_price ?? base_price.min_price ?? ""}</td>
-                                <td contenteditable="true">${item.max_price ?? base_price.max_price ?? ""}</td>
+                            <tr data-sub_group_id="${sg.sub_group_id}" data-mtid="${sg.mtid}">
+                                <td>${index + 1}</td>
+                                <td>${sg.sub_group_name}</td>
+                                <td contenteditable="true" id='mrp'>${sg.mrp ?? groupPrice.mrp ?? fixed_mrp}</td>
+                                <td contenteditable="true" id='min_p'>${sg.min_price ?? groupPrice.min_price ?? fixed_min}</td>
+                                <td contenteditable="true" id='max_p'>${sg.max_price ?? groupPrice.max_price ?? fixed_max}</td>
                             </tr>
                         `);
-
-                        thead += `<td>${item.sub_group_name}</td>`;
                     });
 
-                    thead += `<td>Action</td>`
 
-                    $("#product_type_thead").append(thead);
-                    type.forEach(item => {
-                        tcount++;
 
-                        let custom_td = "";
-                        for (let i = 0; i < ccount; i++) {
-                            custom_td += `<td contenteditable="true">${item.main_price ?? 0}</td>`;
-                        }
+                    $("#product_type_thead").empty();
+
+                    let theadHtml = `
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Type</th>
+                                        <th>Base Price</th>
+                                `;
+
+                    subgroups.forEach(sg => {
+                        theadHtml += `<th data-sub_group_id="${sg.sub_group_id}" style='width:5%'>
+                            ${sg.sub_group_name}
+                        </th>`;
+                    });
+
+                    theadHtml += `<th>Action</th></tr>`;
+
+                    $("#product_type_thead").append(theadHtml);
+
+
+                    $("#product_type_ttbody").empty();
+
+                    groupSubtypes.forEach((gt, index) => {
+
+
+                        const matchedSubtype = subgroupSubtypes.find(st => st.msid === gt.msid);
+                        const priceDetails = matchedSubtype ? matchedSubtype.price_details : [];
+
+                        let customerTds = "";
+
+                        subgroups.forEach(sg => {
+                            const priceObj = priceDetails.find(p => p.sub_group_id === sg.sub_group_id);
+
+                            customerTds += `
+                                <td contenteditable="true"
+                                    data-msid="${gt.msid}"
+                                    data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
+                                    ${priceObj?.price ?? gt.main_price}
+                                </td>
+                            `;
+                        });
 
                         $("#product_type_ttbody").append(`
-                            <tr data-msid="${item.msid}">
-                                <td>${tcount}</td>
-                                <td>${item.subtype_name}</td>
-                                <td>${item.main_price ?? 0}</td>
-                                ${custom_td}
+                            <tr data-msid="${gt.msid}" data-mtid="${gt.mtid}">
+                                <td>${index + 1}</td>
+                                <td>${gt.subtype_name}</td>
+                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td>
+
+                                ${customerTds}
+
                                 <td>
-                                    <select class="form-select product_type_price_type">
-                                        <option disabled value="">Choose...</option>
-                                        <option value="+" ${item.is_reduce == 0 ? "selected" : ""}>+</option>
-                                        <option value="-" ${item.is_reduce == 1 ? "selected" : ""}>-</option>
-                                    </select>
+                                ${gt.is_reduce == 0 ? "+" : "-"}
                                 </td>
                             </tr>
                         `);
@@ -891,7 +1122,7 @@ function get_jaysan_model_subtype() {
 
 
     $.ajax({
-        url: "php/get_jaysan_model_subtype1.php",
+        url: "php/get_jaysan_model_subtype.php",
         type: "get", //send it through get method
         data: {
             mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
@@ -910,19 +1141,25 @@ function get_jaysan_model_subtype() {
 
                     obj.forEach(function (obj) {
                         count = count + 1;
+                        const base_p = JSON.parse(obj.master);
+
+
+                        $("#product_base_price").val(base_p.mrp)
+                        $("#product_base_min_price").val(base_p.min_price)
+                        $("#product_base_max_price").val(base_p.max_price)
                         $('#product_type_tbody').append(`<tr data-msid='${obj.msid}'>
 
                                     <td>${count}</td>
                                     <td>${obj.subtype_name}</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" id="price_variation"
+                                        <input type="number" class="form-control rounded-3" value='${obj.price}' id="price_variation"
                                         placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
-                                            <option selected disabled value="null">Choose...</option>
-                                            <option value="+">+</option>
-                                            <option value="-">-</option>
+                                            <option disabled value="null">Choose...</option>
+                                            <option ${obj.is_reduce === 0 ? "selected" : ''} value="+">+</option>
+                                            <option ${obj.is_reduce === 1 ? "selected" : ''} value="-">-</option>
                                         </select>
                                     </td>
 
@@ -1050,9 +1287,9 @@ function update_base_price(mtid, mrp, min_price, max_price, sub_type_price) {
                 $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
                     .removeClass("d-none");
 
-                $("#product_type_table").addClass("d-none");
+                $("#product_type_table, #sub_type_section").addClass("d-none");
 
-                $("#product_base_price, #product_base_min_price, #product_base_max_price")
+                $("#product, #product_auto, #product_model, #model_auto, #product_sub_model, #sub_model_auto, #product_base_price, #product_base_min_price, #product_base_max_price")
                     .prop("disabled", true);
 
                 $("#customer_type").data("mtid", mtid);
@@ -1284,6 +1521,45 @@ function delete_customer_subgroup_master(sub_group_id) {
             if (response.trim() == "ok") {
                 $("#deleteModal").modal("hide");
                 get_customer_subgroup($("#add_custome_type").data("cus_type_id"))
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+// final
+
+function insert_product_price(product_price, features_price) {
+
+    console.log(product_price, features_price);
+
+
+    $.ajax({
+        url: "php/insert_product_price.php",
+        type: "post", //send it through get method
+        data: {
+
+            product_price: product_price,
+            features_price: features_price,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                window.location.reload();
             }
 
 
