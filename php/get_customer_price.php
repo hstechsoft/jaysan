@@ -54,19 +54,14 @@ $sql = "SELECT JSON_OBJECT(
     ),
     'subgroup_subtypes', (
         SELECT JSON_ARRAYAGG(JSON_OBJECT(
-            'msid', sub.msid,
-            'subtype_name', sub.subtype_name,
-            'main_price', sub.price,
-            'price', sstp.price,
-            'sgst_id', sstp.sgst_id,
-            'sub_group_id', sstp.sub_group_id,
-            'sub_group_name', (SELECT sub_mas.sub_group_name FROM customer_subgroup_master sub_mas WHERE sub_mas.sub_group_id = sstp.sub_group_id)
+            'msid', jaysan_model_subtype.msid,
+            'subtype_name', jaysan_model_subtype.subtype_name,
+            
+            'price_details', (SELECT JSON_ARRAYAGG(JSON_OBJECT('sub_group_name', customer_subgroup_master.sub_group_name,'sub_group_id', customer_subgroup_master.sub_group_id,'price', subgroup_subtype_price.price)) FROM customer_subgroup_master
+ left join subgroup_subtype_price on customer_subgroup_master.sub_group_id = subgroup_subtype_price.sub_group_id and  subgroup_subtype_price.msid = jaysan_model_subtype.msid
+    WHERE customer_subgroup_master.group_id = $group_id)
         ))
-        FROM jaysan_model_subtype sub 
-        LEFT JOIN subgroup_subtype_price sstp ON sub.msid = sstp.msid AND sstp.sub_group_id IN(
-            SELECT cus_sub.sub_group_id FROM customer_subgroup_master cus_sub WHERE cus_sub.group_id = $group_id
-        ) 
-        WHERE sub.mtid = $mtid
+        FROM jaysan_model_subtype WHERE mtid = $mtid
     )
 ) as json_data";
 
