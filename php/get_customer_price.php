@@ -45,8 +45,8 @@ $sql = "SELECT JSON_OBJECT(
             'is_reduce', sub.is_reduce,
             'gsp_id', gstp.gsp_id,
             'price', gstp.price,
-            'group_id', gstp.group_id,
-            'group_name', (SELECT gmas.group_name FROM customer_group_master gmas WHERE gmas.group_id = gstp.group_id)
+            'group_id', $group_id
+           
         ))
         FROM jaysan_model_subtype sub 
         LEFT JOIN group_subtype_price gstp ON sub.msid = gstp.msid AND gstp.group_id = $group_id  
