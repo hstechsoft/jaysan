@@ -34,7 +34,7 @@ $sql = "SELECT
                         SELECT price 
                         FROM subgroup_subtype_price 
                         WHERE subgroup_subtype_price.msid = jaysan_model_subtype.msid 
-                        AND subgroup_subtype_price.sub_group_id = 1
+                        AND subgroup_subtype_price.sub_group_id = $subgroup_id
                     )
                 )
             )
