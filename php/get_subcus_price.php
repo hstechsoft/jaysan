@@ -15,7 +15,10 @@ $sql = "SELECT
             SELECT JSON_ARRAYAGG(
                 JSON_OBJECT(
                     'sub_group_id', sub_group_id,
-                    'mtid', mtid
+                    'mtid', mtid,
+                     'min_price', min_price,
+                    'max_price', max_price,
+                    'mrp', mrp
                 )
             )
             FROM subgroup_type_price 
