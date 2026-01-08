@@ -386,6 +386,10 @@ $(document).ready(function () {
         }
     })
 
+    $("#type_add_select").on("change", function () {
+        $("#type_add_field").val($(this).val());
+    })
+
     $("#type_add_btn").on("click", function () {
         console.log($("#type_add_field").val());
 
@@ -712,10 +716,10 @@ $(document).ready(function () {
         const $row = $cell.closest("tr");
         const lastIndex = $row.children("td").length - 1;
 
-        
-        if (colIndex < 2  || colIndex === lastIndex) return;
 
-        
+        if (colIndex < 2 || colIndex === lastIndex) return;
+
+
         if (colIndex === 2) {
 
             $row.children("td").each(function (i) {
@@ -728,12 +732,12 @@ $(document).ready(function () {
             return;
         }
 
-        
+
         toggleCellSelection(this);
     });
 
 
-    
+
     function toggleCellSelection(cell) {
 
         if (f_selectedCells.has(cell)) {
@@ -907,7 +911,7 @@ function get_customer_price(mtid, group_id) {
                                 `;
 
                     subgroups.forEach(sg => {
-                        theadHtml += `<th data-sub_group_id="${sg.sub_group_id}" style='width:5%'>
+                        theadHtml += `<th colspan='2' data-sub_group_id="${sg.sub_group_id}" style='width:5%'>
                             ${sg.sub_group_name}
                         </th>`;
                     });
@@ -935,7 +939,7 @@ function get_customer_price(mtid, group_id) {
                                     data-msid="${gt.msid}"
                                     data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
                                     ${priceObj?.price ?? gt.main_price}
-                                </td>
+                                </td><td id='discount_cell' contenteditable='true'></td>
                             `;
                         });
 
@@ -1174,7 +1178,7 @@ function get_jaysan_model_subtype() {
                         $('#product_type_tbody').append(`<tr data-msid='${obj.msid}'>
 
                                     <td>${count}</td>
-                                    <td>${obj.subtype_name}</td>
+                                    <td>${obj.subtype_name} <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#bomModal" style='font-size:10px'><i class="fa-solid fa-link text-danger"></i></button><span>312 4G+</span></td>
                                     <td>
                                         <input type="number" class="form-control rounded-3" value='${obj.price}' id="price_variation"
                                         placeholder="Base Price">
@@ -1185,6 +1189,10 @@ function get_jaysan_model_subtype() {
                                             <option ${obj.is_reduce == "0" ? "selected" : ''} value="0">+</option>
                                             <option ${obj.is_reduce == "1" ? "selected" : ''} value="1">-</option>
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control rounded-3" value='0' id="price_discount"
+                                        placeholder="Base Price Discount">
                                     </td>
 
                                 </tr>`)

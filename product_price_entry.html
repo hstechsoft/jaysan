@@ -24,6 +24,19 @@
             z-index: 1056 !important;
             /* higher than Bootstrap modal (1055) */
         }
+
+        table,
+        tr {
+            font-size: 13px;
+        }
+
+        .table>:not(caption)>*>* {
+            padding: 5px;
+        }
+
+        #product_type_tbody .form-control .form-select{
+            width: 15px !important;
+        }
     </style>
 
 </head>
@@ -175,7 +188,11 @@
 
                 <div class="col-md-6">
 
+
+
                     <div class="table-responsive">
+                        <a href="jaysan_product_entry.html" class="float-end">Edit Products <i
+                                class="fa fa-edit text-danger"></i></a>
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
                             <thead>
@@ -232,6 +249,21 @@
                             <input type="text" class="form-control rounded-3" id="type_add_field" placeholder="">
                             <label for="type_add_field">Type </label>
                         </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="type_add_select" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option value="fff">fff</option>
+                            </select>
+                            <label for="type_add_select">Type</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="section_alice_name" placeholder="">
+                            <label for="section_alice_name">Alice</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="section_map" placeholder="">
+                            <label for="section_map">Section</label>
+                        </div>
                         <div class="text-center align-middle">
                             <button type="submit" class="btn btn-primary " id="type_add_btn">ADD</button>
                         </div>
@@ -246,6 +278,7 @@
                                     <th scope="col">Type</th>
                                     <th scope="col">Base Price</th>
                                     <th scope="col">+/-</th>
+                                    <th scope="col">Discount</th>
 
                                 </tr>
                             </thead>
@@ -398,6 +431,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="bomModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="bomModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bomModalLabel">BOM MAP</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="">Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
