@@ -876,6 +876,8 @@ $(document).ready(function () {
       $("#billing_price").val(max);
     }
 
+    $("#credit_amount").text(Number($("#billing_price").val()) - Number($("#machine_price").val()));
+
   })
 
 });

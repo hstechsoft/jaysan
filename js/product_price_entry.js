@@ -707,11 +707,34 @@ $(document).ready(function () {
 
     $("#product_type_ttbody").on("dblclick", "td", function () {
 
-        const colIndex = $(this).index();
+        const $cell = $(this);
+        const colIndex = $cell.index();
+        const $row = $cell.closest("tr");
+        const lastIndex = $row.children("td").length - 1;
 
-        if (colIndex < 3) return;
+        
+        if (colIndex < 2  || colIndex === lastIndex) return;
 
-        const cell = this;
+        
+        if (colIndex === 2) {
+
+            $row.children("td").each(function (i) {
+
+                if (i < 3 || i === lastIndex) return;
+
+                toggleCellSelection(this);
+            });
+
+            return;
+        }
+
+        
+        toggleCellSelection(this);
+    });
+
+
+    
+    function toggleCellSelection(cell) {
 
         if (f_selectedCells.has(cell)) {
             f_selectedCells.delete(cell);
@@ -720,7 +743,8 @@ $(document).ready(function () {
             f_selectedCells.add(cell);
             $(cell).addClass("border border-2 border-danger");
         }
-    });
+    }
+
 
     $("#product_type_ttbody").on("input", "td", function () {
 
