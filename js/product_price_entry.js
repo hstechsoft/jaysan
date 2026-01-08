@@ -1182,8 +1182,8 @@ function get_jaysan_model_subtype() {
                                     <td>
                                         <select class="form-select" id="product_price_type">
                                             <option disabled value="null">Choose...</option>
-                                            <option ${obj.is_reduce === 0 ? "selected" : ''} value="+">+</option>
-                                            <option ${obj.is_reduce === 1 ? "selected" : ''} value="-">-</option>
+                                            <option ${obj.is_reduce === 0 ? "selected" : ''} value="0">+</option>
+                                            <option ${obj.is_reduce === 1 ? "selected" : ''} value="1">-</option>
                                         </select>
                                     </td>
 
