@@ -2,7 +2,12 @@
  include 'db_head.php';
 
  
-
+if (isset($_GET['product_id'])) {
+    $product_id = test_input($_GET['product_id']);
+} else {
+    echo "Missing product_id";
+    exit;
+}
  
  
 function test_input($data) {
@@ -14,7 +19,7 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM jaysan_model_subtype group by subtype_name ORDER BY subtype_name ASC";
+ $sql = "SELECT jaysan_model_subtype.* FROM jaysan_model_subtype inner join jaysan_model_type on jaysan_model_subtype.mtid = jaysan_model_type.mtid WHERE jaysan_model_type.pid in (SELECT jaysan_product_model.model_id from jaysan_product_model WHERE jaysan_product_model.product_id = $product_id) GROUP by subtype_name ORDER BY `mtid`  DESC";
 
 $result = $conn->query($sql);
 
