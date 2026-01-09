@@ -45,7 +45,8 @@ $sql = "SELECT JSON_OBJECT(
             'is_reduce', sub.is_reduce,
             'gsp_id', gstp.gsp_id,
             'price', gstp.price,
-            'group_id', $group_id
+            'group_id', $group_id,
+            'discount', gstp.discount
            
         ))
         FROM jaysan_model_subtype sub 
@@ -57,7 +58,7 @@ $sql = "SELECT JSON_OBJECT(
             'msid', jaysan_model_subtype.msid,
             'subtype_name', jaysan_model_subtype.subtype_name,
             
-            'price_details', (SELECT JSON_ARRAYAGG(JSON_OBJECT('sub_group_name', customer_subgroup_master.sub_group_name,'sub_group_id', customer_subgroup_master.sub_group_id,'price', subgroup_subtype_price.price)) FROM customer_subgroup_master
+            'price_details', (SELECT JSON_ARRAYAGG(JSON_OBJECT('sub_group_name', customer_subgroup_master.sub_group_name,'sub_group_id', customer_subgroup_master.sub_group_id,'price', subgroup_subtype_price.price,'discount', subgroup_subtype_price.discount)) FROM customer_subgroup_master
  left join subgroup_subtype_price on customer_subgroup_master.sub_group_id = subgroup_subtype_price.sub_group_id and  subgroup_subtype_price.msid = jaysan_model_subtype.msid
     WHERE customer_subgroup_master.group_id = $group_id)
         ))

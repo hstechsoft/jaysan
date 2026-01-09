@@ -53,7 +53,7 @@ echo "Error: " . $sql_subgroup_type_price . "<br>" . $conn->error;
     foreach ($features_price as $row) {
         if($row['price_type']== 'main_subtype_price'){
             
-            $sql_group_subtype = "insert into group_subtype_price set group_id = {$row['group_id']},msid = {$row['msid']},price = {$row['price']} on DUPLICATE key update price = {$row['price']}";
+            $sql_group_subtype = "insert into group_subtype_price set group_id = {$row['group_id']},msid = {$row['msid']},price = {$row['price']},discount = {$row['discount']}  on DUPLICATE key update price = {$row['price']}, discount = {$row['discount']}";
        if($conn->query($sql_group_subtype)){
         }
      
@@ -64,7 +64,7 @@ echo "Error: " . $sql_group_subtype . "<br>" . $conn->error;
     }
     else
     {
-        $sql_subgroup_subtype = "insert into subgroup_subtype_price set sub_group_id = {$row['group_id']},msid = {$row['msid']},price = {$row['price']} on DUPLICATE key update price = {$row['price']}";
+        $sql_subgroup_subtype = "insert into subgroup_subtype_price set sub_group_id = {$row['group_id']},msid = {$row['msid']},price = {$row['price']},discount = {$row['discount']} on DUPLICATE key update price = {$row['price']}, discount = {$row['discount']}";
        if($conn->query($sql_subgroup_subtype)){
         }
      
