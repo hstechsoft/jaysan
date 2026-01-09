@@ -1,7 +1,8 @@
 
 <?php
  include 'db_head.php';
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
  $emp_name = test_input($_GET['emp_name']);
  $fathername = test_input($_GET['fathername']);
  $bank_acno = test_input($_GET['bank_acno']);
@@ -52,23 +53,50 @@ return $data;
 
 
 
-$sql = "IF NOT EXISTS (
-    SELECT * FROM payslip 
-    WHERE emp_name = $emp_name AND pay_month = $pay_month
-)
-THEN
-    INSERT INTO payslip (emp_name, fathername, bank_acno, bank, doj, dept, pfno, dob, des, esino, otamt, grosspay, roundoff, total_dec, no_working_days, total_leave, netpay, attendance_days, salary_leave, ot_days, nfh_days, lop, basic, pf, fda, ptax, vda, esi, hra, otherallow, advance, sal_days, emp_id, pay_month) 
-    VALUES ($emp_name, $fathername, $bank_acno, $bank, $doj, $dept, $pfno, $dob, $des, $esino, $otamt, $grosspay, $roundoff, $total_dec, $no_working_days, $total_leave, $netpay, $attendance_days, $salary_leave, $ot_days, $nfh_days, $lop, $basic, $pf, $fda, $ptax, $vda, $esi, $hra, $otherallow, $advance, $sal_days, $emp_id, $pay_month);
-END IF;";
-  
+$sql = "INSERT INTO payslip (emp_name, fathername, bank_acno, bank, doj, dept, pfno, dob, des, esino, otamt, grosspay, roundoff, total_dec, no_working_days, total_leave, netpay, attendance_days, salary_leave, ot_days, nfh_days, lop, basic, pf, fda, ptax, vda, esi, hra, otherallow, advance, sal_days, emp_id, pay_month) 
+VALUES ($emp_name, $fathername, $bank_acno, $bank, $doj, $dept, $pfno, $dob, $des, $esino, $otamt, $grosspay, $roundoff, $total_dec, $no_working_days, $total_leave, $netpay, $attendance_days, $salary_leave, $ot_days, $nfh_days, $lop, $basic, $pf, $fda, $ptax, $vda, $esi, $hra, $otherallow, $advance, $sal_days, $emp_id, $pay_month)
+ON DUPLICATE KEY UPDATE 
+  fathername = $fathername,
+  bank_acno = $bank_acno,
+  bank = $bank,
+  doj = $doj,
+  dept = $dept,
+  pfno = $pfno,
+  dob = $dob,
+  des = $des,
+  esino = $esino,
+  otamt = $otamt,
+  grosspay = $grosspay,
+  roundoff = $roundoff,
+  total_dec = $total_dec,
+  no_working_days = $no_working_days,
+  total_leave = $total_leave,
+  netpay = $netpay,
+  attendance_days = $attendance_days,
+  salary_leave = $salary_leave,
+  ot_days = $ot_days,
+  nfh_days = $nfh_days,
+  lop = $lop,
+  basic = $basic,
+  pf = $pf,
+  fda = $fda,
+  ptax = $ptax,
+  vda = $vda,
+  esi = $esi,
+  hra = $hra,
+  otherallow = $otherallow,
+  advance = $advance,
+  sal_days = $sal_days,
+  emp_id = $emp_id,
+  pay_month = $pay_month";
+ 
   if ($conn->query($sql) === TRUE) {
    
     echo $emp_name ." - ok";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
-  
- 
+
  
 
 
