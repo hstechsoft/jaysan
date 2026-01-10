@@ -32,6 +32,7 @@ return $data;
 
   
    foreach ($sub_type_price as $row) {
+
         $msid = $row['msid'];
         $subtype_name = $row['subtype_name'];
         $subtype_group_id = $row['subtype_group_id'];
@@ -42,8 +43,12 @@ return $data;
 
         $price = $row['price'];
         $is_reduce = $row['is_reduce'];
+
       $sql_up = "UPDATE  jaysan_model_subtype SET mtid =  '$mtid',subtype_name =  '$subtype_name',price =  '$price',is_reduce =  '$is_reduce',subtype_group_id =  '$subtype_group_id',is_default =  '$is_default',bom_id =  '$bom_id',discount =  '$discount',alias_name =  '$alias_name' WHERE msid =  '$msid'";
     
+
+      echo $sql_up;
+      echo "\n";
     if ($conn->query($sql_up) === TRUE) {
    
   } else {
