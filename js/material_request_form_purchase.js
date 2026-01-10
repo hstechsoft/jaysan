@@ -770,7 +770,6 @@ function get_mrf_details(mrf_id) {
           obj.forEach(function (obj) {
             count = count + 1;
             var uom1 = " Nos"
-            alert(obj.mrf_uom)
             if (obj.mrf_uom != "" && obj.mrf_uom != null) {
               uom1 = " " + obj.mrf_uom;
             }
