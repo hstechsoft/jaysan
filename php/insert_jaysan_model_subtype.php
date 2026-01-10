@@ -27,7 +27,11 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+if($is_default and $subtype_group_id != 'NULL')
+  {
+    $sql_update = "UPDATE jaysan_model_subtype SET is_default = NULL WHERE subtype_group_id = $subtype_group_id";
+    $conn->query($sql_update);
+  }
  $sql = "INSERT INTO jaysan_model_subtype ( mtid,subtype_name,price,is_reduce,subtype_group_id,is_default,bom_id,discount,alias_name) VALUES ($mtid,$subtype_name,$price,$is_reduce,$subtype_group_id,$is_default,$bom_id,$discount,$alias_name)";
 
   if ($conn->query($sql) === TRUE) {
