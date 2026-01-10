@@ -71,7 +71,7 @@ function sql_nullable($value) {
     if (
     is_null($value) ||
     $value === '' ||
-    strtolower((string)$value) === 'null'
+    strtolower((string)trim($value)) === 'null'
 ) {
     return 'NULL';
 }
