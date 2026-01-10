@@ -42,8 +42,15 @@ return $data;
 
         $price = $row['price'];
         $is_reduce = $row['is_reduce'];
-        $conn->query("UPDATE  jaysan_model_subtype SET mtid =  '$mtid',subtype_name =  '$subtype_name',price =  '$price',is_reduce =  '$is_reduce',subtype_group_id =  '$subtype_group_id',is_default =  '$is_default',bom_id =  '$bom_id',discount =  '$discount',alias_name =  '$alias_name' WHERE msid =  '$msid'");
-    }
+      $sql_up = "UPDATE  jaysan_model_subtype SET mtid =  '$mtid',subtype_name =  '$subtype_name',price =  '$price',is_reduce =  '$is_reduce',subtype_group_id =  '$subtype_group_id',is_default =  '$is_default',bom_id =  '$bom_id',discount =  '$discount',alias_name =  '$alias_name' WHERE msid =  '$msid'";
+    
+    if ($conn->query($sql_up) === TRUE) {
+   
+  } else {
+    echo "Error: " . $sql_up . "<br>" . $conn->error;
+  }
+        }
+
 
 echo "ok";
 
