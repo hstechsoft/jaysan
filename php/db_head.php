@@ -65,9 +65,17 @@ if ($conn->connect_error) {
 // ✅ Add this function once — it works for all your PHP files
 function sql_nullable($value) {
     // If value is null, 'null', or empty, return SQL NULL (unquoted)
-    if ($value === 'null' || $value === '' || is_null($value)) {
-        return "NULL";
-    }
+    // if ($value === 'null' || $value === '' || is_null($value) || $value === NULL || strtolower($value) === 'null' || strcmp($value,'null') == 0) {
+    //     return "NULL";
+    // }
+    if (
+    is_null($value) ||
+    $value === '' ||
+    strtolower((string)$value) === 'null'
+) {
+    return 'NULL';
+}
+
 
     // Detect numeric (int or float) and return as-is (unquoted)
     if (is_numeric($value)) {
