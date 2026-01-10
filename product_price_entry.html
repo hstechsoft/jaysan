@@ -34,7 +34,7 @@
             padding: 5px;
         }
 
-        #product_type_tbody .form-control .form-select{
+        #product_type_tbody .form-control .form-select {
             width: 15px !important;
         }
     </style>
@@ -215,7 +215,7 @@
                                     <td>4G+</td>
                                     <td>Dealer</td>
                                     <td><i class="fa fa-circle-check text-success"></i>
-                                        <button type="submit" class="btn btn-warning text-light" id=""><i
+                                        <button type="submit" class="border-0 border-transparent bg-transparent" id=""><i
                                                 class="fa fa-edit"></i></button>
                                     </td>
 
@@ -228,7 +228,7 @@
                                     <td>4G+</td>
                                     <td>Dealer</td>
                                     <td><i class="fa fa-circle-check text-success"></i>
-                                        <button type="submit" class="btn btn-warning text-light" id=""><i
+                                        <button type="submit" class="border-0 border-transparent bg-transparent" id=""><i
                                                 class="fa fa-edit"></i></button>
                                     </td>
 
@@ -241,80 +241,111 @@
                         </table>
                     </div>
 
-                  <div class="table-responsive">
-                  <table class="table caption-top table-bordered table-striped ">
-                      <caption>Bom Selection table</caption>
-                    <thead>
-                  
-                      <tr>
-                        <th scope="col">#</th>
-                        <th>Alias Name</th>
-                        <th>Bom</th>
-                        <th>action</th>
-                  
-                      </tr>
-                    </thead>
-                    <tbody id="">
-                      <tr>
-                  
-                        <td>1</td>
-                        <td>baler jrb312 4g+ SCALE</td>
-                        <td>finished</td>
-                        <td><i class="fa-solid fa-pen-to-square"></i></td>
-                  
-                      </tr>
-                   <tr>
-                  
-                        <td>1</td>
-                        <td>baler jrb312 4g+ WITH DOOR</td>
-                        <td>NA</td>
-                        <td><i class="fa-solid fa-pen-to-square"></i></td>
-                  
-                      </tr> <tr>
-                  
-                        <td>1</td>
-                        <td>baler jrb312 4g+ bearing type</td>
-                        <td>NA</td>
-                        <td><i class="fa-solid fa-pen-to-square"></i></td>
-                  
-                      </tr>
-                  
-                    </tbody>
-                  
-                  
-                  </table>
-                  </div>
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption>Bom Selection table</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>Alias Name</th>
+                                    <th>Bom</th>
+                                    <th>action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                                <tr>
+
+                                    <td>1</td>
+                                    <td>baler jrb312 4g+ SCALE</td>
+                                    <td>finished</td>
+                                    <td><i class="fa-solid fa-pen-to-square"></i></td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>1</td>
+                                    <td>baler jrb312 4g+ WITH DOOR</td>
+                                    <td>NA</td>
+                                    <td><i class="fa-solid fa-pen-to-square"></i></td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>1</td>
+                                    <td>baler jrb312 4g+ bearing type</td>
+                                    <td>NA</td>
+                                    <td><i class="fa-solid fa-pen-to-square"></i></td>
+
+                                </tr>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
 
                 </div>
 
 
 
                 <div class="col-md-6 mt-2">
-            
-                    <div class="d-none d-flex justify-content-between" id="sub_type_section">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="type_add_field" placeholder="">
-                            <label for="type_add_field">Type </label>
+
+                    <div class="d-none" id="sub_type_section">
+                        <div class="d-flex justify-content-between">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="type_add_field" placeholder="">
+                                <label for="type_add_field">Type </label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="type_add_select" >
+                                    <option selected disabled value="">Choose...</option>
+                                </select>
+                                <label for="type_add_select">Type</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="section_alice_name"
+                                    placeholder="">
+                                <label for="section_alice_name">Alice</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="section_map" placeholder="">
+                                <label for="section_map">Section</label>
+                            </div>
+
                         </div>
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="type_add_select" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option value="fff">fff</option>
-                            </select>
-                            <label for="type_add_select">Type</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="section_alice_name" placeholder="">
-                            <label for="section_alice_name">Alice</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="section_map" placeholder="">
-                            <label for="section_map">Section</label>
-                        </div>
-                        <div class="text-center align-middle">
-                            <button type="submit" class="btn btn-primary " id="type_add_btn">ADD</button>
+
+                        <div class="d-flex justify-content-between">
+
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control rounded-3" id="price_field" placeholder="">
+                                <label for="price_field">Price </label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="is_reduce">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="0">+</option>
+                                    <option value="1">-</option>
+                                </select>
+                                <label for="is_reduce">+/-</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="discount_field" placeholder="">
+                                <label for="discount_field">Discount</label>
+                            </div>
+                            <!-- <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" value="" id="is_default" >
+                                <label class="form-check-label" for="is_default">Is Default?
+                                </label>
+                            </div> -->
+                            <div class="text-center align-middle">
+                                <button type="submit" class="btn btn-primary " id="type_add_btn">ADD</button>
+                                <button type="submit" class="btn btn-primary d-none" id="type_update_btn">UPDATE</button>
+                            </div>
                         </div>
                     </div>
+
                     <div class="table-responsive" id="product_type_table">
                         <table class="table caption-top table-bordered text-center m-auto">
                             <caption></caption>
@@ -322,7 +353,7 @@
 
                                 <tr>
                                     <th scope="col">#</th>
-                                        <th scope="col">group</th>
+                                    <th scope="col">group</th>
 
                                     <th scope="col">Type</th>
                                     <th scope="col">Base Price</th>
@@ -332,15 +363,19 @@
                                 </tr>
                             </thead>
                             <tbody id="product_type_tbody">
-               <td>1</td>
-               <td rowspan="2">roller</td>
+                                <tr>
+                                    <td>1</td>
+                                    <td rowspan="2">roller</td>
                                     <td>
                                         <p>bearing</p>
-                                        <p class="small text-danger">baler jrb312 4g+ bearing type <span class="text-dark"> <i class="fa-solid fa-rocket"></i></span></p>
-                                        
+                                        <p class="small text-danger">baler jrb312 4g+ bearing type <span
+                                                class="text-dark">
+                                                <i class="fa-solid fa-rocket"></i></span></p>
+
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="0" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="0"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -350,13 +385,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="60">
+                                </tr>
+                                <tr data-msid="60">
 
                                     <td>2</td>
-                                     
+
                                     <td>BEARING TYPE LOADER</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="7000" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="7000"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -366,13 +403,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="79">
+                                </tr>
+                                <tr data-msid="79">
 
                                     <td>3</td>
-                                     <td rowspan="2">Gearbox</td>
+                                    <td rowspan="2">Gearbox</td>
                                     <td>regular</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="0" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="0"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -382,13 +421,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="56">
+                                </tr>
+                                <tr data-msid="56">
 
                                     <td>4</td>
-                                    
+
                                     <td>SCALE</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="10000" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="10000"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -398,13 +439,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="57">
+                                </tr>
+                                <tr data-msid="57">
 
                                     <td>5</td>
-                                     <td rowspan="2">hydraulic</td>
+                                    <td rowspan="2">hydraulic</td>
                                     <td>SCALE LESS</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="12000" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="12000"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -414,13 +457,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="104">
+                                </tr>
+                                <tr data-msid="104">
 
                                     <td>6</td>
-                                    
+
                                     <td>test</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="0" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="0"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -430,13 +475,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="58">
+                                </tr>
+                                <tr data-msid="58">
 
                                     <td>7</td>
-                                     <td rowspan="2">scale</td>
+                                    <td rowspan="2">scale</td>
                                     <td>WITH DOOR</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="30" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="30"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -446,13 +493,15 @@
                                         </select>
                                     </td>
 
-                                </tr><tr data-msid="59">
+                                </tr>
+                                <tr data-msid="59">
 
                                     <td>8</td>
-                                    
+
                                     <td>WITHOUT DOOR</td>
                                     <td>
-                                        <input type="number" class="form-control rounded-3" value="5000" id="price_variation" placeholder="Base Price">
+                                        <input type="number" class="form-control rounded-3" value="5000"
+                                            id="price_variation" placeholder="Base Price">
                                     </td>
                                     <td>
                                         <select class="form-select" id="product_price_type">
@@ -461,6 +510,7 @@
                                             <option selected="" value="1">-</option>
                                         </select>
                                     </td>
+                                </tr>
                             </tbody>
 
 
@@ -628,7 +678,7 @@
         </div>
     </div>
 
-    
+
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

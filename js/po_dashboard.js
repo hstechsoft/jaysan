@@ -701,14 +701,14 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             batch += "<li class='list-group-item'><div class='row'><div class='col-6 border' style='font-size:12px'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + "(" + item.po_id + ")" + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
 
                         })
-                        purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + "-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
+                        purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + obj.uom+"-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
                     }
                     else {
                         batch = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
                         purchase = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
                     }
 
-                    $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.req_date + "  <span class='text-danger ps-5'>" + obj.req_qty + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
+                    $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.req_date + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
                 });
 
                 //    get_sales_order()
