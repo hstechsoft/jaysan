@@ -318,7 +318,6 @@ $(document).ready(function () {
     $("#product_base_price_submit_btn").on("click", function () {
 
 
-
         const mtid = $("#product_sub_model").val() || $("#sub_model_auto").data("mtid");
         const mrp = $("#product_base_price").val();
         const min_price = $("#product_base_min_price").val();
@@ -334,17 +333,18 @@ $(document).ready(function () {
             const price = row.find("#price_variation").val();
             const is_reduce = row.find("#product_price_type").val();
             const subtype_name = row.find(".features_cell").find("p").eq(0).text().trim();
-            const subtype_group_id = row.find(".features_cell").data("g_id");
+            const subtype_group_id = row.find(".features_cell").data("g_id").trim();
             const is_default = row.find(".features_cell").find("p").eq(0).find(".form-check-input").is(":checked") === true ? 1 : null;
             const alias_name = row.find(".features_cell").find("p").eq(1).text().trim();
             const bom_id = null;
             const discount = row.find("#base_discount").val();
 
 
-            if (!msid || !price || !is_reduce) {
-                hasError = true;
-                return false;
-            }
+
+            // if (!msid || !price || !is_reduce || !subtype_group_id || !subtype_name || !sub_type_price || !alias_name || !discount) {
+            //     hasError = true;
+            //     return false;
+            // }
 
             sub_type_price.push({ msid, price, is_reduce, subtype_name, subtype_group_id, is_default, alias_name, bom_id, discount });
         });
@@ -356,6 +356,7 @@ $(document).ready(function () {
 
         console.log(mtid, mrp, min_price, max_price, sub_type_price);
 
+        $(this).prop("disabled", true).text("Submitting...");
         update_base_price(mtid, mrp, min_price, max_price, sub_type_price);
     });
 
@@ -691,6 +692,7 @@ $(document).ready(function () {
                 JSON.stringify(product_price),
                 JSON.stringify(features_price)
             );
+            $("#product_price_submit_btn").prop("disabled", true).text("Submitting....");
         } else {
             salert("Warning", "No price data found", "warning");
         }
@@ -824,9 +826,11 @@ $(document).ready(function () {
         event.preventDefault();
 
         $("#type_add_field").val($(this).find(":selected").text());
+        
         $("#section_alice_name").val($("#product_auto").val() + " " + $("#model_auto").val() + " " + $("#sub_model_auto").val() + " " + $("#type_add_field").val())
 
     });
+
 
 
     $('#section_map').on('input', function () {
@@ -886,8 +890,11 @@ $(document).ready(function () {
     $("#product_type_tbody").on("dblclick", "td", function () {
 
 
-        $("#type_add_field").val($(this).find("p").eq(0).text().trim());
+        // $("#type_add_field").val($(this).find("p").eq(0).text().trim());
+        $("#type_add_field").data("msid", $(this).data("msid"));
+        $("#type_add_field").data("is_default", $(this).find("p").eq(0).find('.form-check-input').is(":checked") === true ? 1 : null);
         $("#section_alice_name").val($(this).find("p").eq(1).text().trim());
+        $("#type_add_select").val($(this).data("msid")).trigger("change");
         $("#section_map").val($(this).data("g_name")).data("sec_id", $(this).data("g_id"));
         $("#price_field").val($(this).next("td").find("input").val());
         var next_1 = $(this).next("td");
@@ -900,6 +907,39 @@ $(document).ready(function () {
 
 
     })
+
+    $("#type_update_btn").on("click", function () {
+        console.log($("#type_add_field").val());
+
+        var subtype_name = $("#type_add_field").val();
+        var alias_name = $("#section_alice_name").val();
+        var subtype_group_id = $("#section_map").data("sec_id");
+        var price = $("#price_field").val();
+        var is_reduce = $("#is_reduce").val();
+        var discount = $("#discount_field").val();
+        var is_default = $("#type_add_field").data("is_default");
+        var bom_id = null;
+        var msid = $("#type_add_field").data("msid") || '';
+
+        console.log("s: " + subtype_name, "p: " + price, "is: " + is_reduce, "sb: " + subtype_group_id, "isd: " + is_default, "b: " + bom_id, "d: " + discount, "a: " + alias_name, "msid : " + msid);
+
+
+        if (subtype_name === undefined || subtype_name == '' || alias_name == '' || subtype_group_id == undefined || price == '' || is_reduce === null || discount == '' || msid == '') {
+            salert("Warning", "Fill the type", "warning");
+            console.log(subtype_name, alias_name, subtype_group_id, price, is_reduce, discount, msid,);
+
+            return;
+        }
+        update_model_subtype(subtype_name, price, msid, is_reduce, subtype_group_id, is_default, bom_id, discount, alias_name);
+
+
+    })
+
+
+    $("#bom_id_table").on("click", function(){
+        $("#bom_table").toggleClass("d-none")
+    })
+
 
 });
 
@@ -995,6 +1035,8 @@ function get_customer_price(mtid, group_id) {
 
                 if (response.trim() !== "0 result") {
 
+                    $("#product_price_submit_btn").removeClass("d-none");
+
                     const data = JSON.parse(response);
 
                     const subgroups = data.subgroups || [];
@@ -1064,7 +1106,7 @@ function get_customer_price(mtid, group_id) {
                                     data-msid="${gt.msid}"
                                     data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
                                     ${priceObj?.price ?? gt.main_price}
-                                </td><td contenteditable="true" id='discount_cell'>0</td>
+                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount !== 0 ? priceObj.discount : 0}</td>
                             `;
                         });
 
@@ -1072,7 +1114,7 @@ function get_customer_price(mtid, group_id) {
                             <tr data-msid="${gt.msid}" data-mtid="${gt.mtid}">
                                 <td>${index + 1}</td>
                                 <td>${gt.subtype_name}</td>
-                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>0</td>
+                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${gt.discount !== 0 ? gt.discount : 0}</td>
 
                                 ${customerTds}
 
@@ -1340,7 +1382,7 @@ function get_jaysan_model_subtype() {
                                 <tr data-msid="${item.msid}">
                                     <td>${count}</td>
                                     ${groupTd}
-                                    <td data-g_name=' ${item.subype_group_name}' data-g_id=' ${item.subtype_group_id}' class='features_cell'>
+                                    <td data-g_name=' ${item.subype_group_name}' data-g_id=' ${item.subtype_group_id}' class='features_cell' data-msid="${item.msid}">
                                         <p class="mb-0">${item.subtype_name}
                                             <input class="form-check-input" type="radio" name="${item.subtype_group_id !== null ? item.subtype_group_id : item.msid}" ${item.subtype_group_id === null || item.is_default == 1 ? "checked" : ''} value="" id="is_default" >
                                         </p>
@@ -1449,6 +1491,63 @@ function insert_jaysan_model_subtype(subtype_name, price, is_reduce, subtype_gro
             bom_id: bom_id,
             discount: discount,
             alias_name: alias_name
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                get_jaysan_model_subtype();
+                $("#type_add_field").val("")
+                $("#type_add_select").val("")
+                $("#section_alice_name").val("")
+                $("#section_map").val("")
+                $("#section_map").data("sec_id")
+                $("#price_field").val("")
+                $("#is_reduce").val("")
+                $("#discount_field").val("")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_group_id, is_default, bom_id, discount, alias_name) {
+
+    console.log("s: " + subtype_name, "p: " + price, "is: " + is_reduce, "sb: " + subtype_group_id, "isd: " + is_default, "b: " + bom_id, "d: " + discount, "a: " + alias_name);
+    console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+
+    $.ajax({
+        url: "php/update_model_subtype.php",
+        type: "post", //send it through get method
+        data: {
+
+            mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
+            mrp: '',
+            min_price: '',
+            max_price: '',
+            subtype_name: subtype_name,
+            sub_type_price: price,
+            msid: msid,
+            is_reduce: is_reduce,
+            subtype_group_id: subtype_group_id,
+            is_default: is_default,
+            bom_id: bom_id,
+            discount: discount,
+            alias_name: alias_name,
+            price: '',
         },
         success: function (response) {
             console.log(response);
@@ -1633,7 +1732,7 @@ function get_all_customer_group() {
                         $('#customer_modal_tbody').append(`<tr>
 
                                     <td>${count}</td>
-                                    <td>${obj.group_name}</td><td></td>
+                                    <td>${obj.group_name}</td><td><button class="text-warning border-0 border-transparent bg-transparent" ><i class="fa fa-edit"></i></button</td>
 
                                 </tr>`)
 
@@ -1694,7 +1793,7 @@ function get_customer_subgroup(group_id) {
 
                                     <td>${count}</td>
                                     <td>${obj.sub_group_name}</td>
-                                    <td><button class="btn btn-danger" data-sub_group_id='${obj.sub_group_id}'><i class="fa fa-trash"></i></button></td>
+                                    <td><button class="text-danger border-0 border-transparent bg-transparent" data-sub_group_id='${obj.sub_group_id}'><i class="fa fa-trash"></i></button><button class="text-warning border-0 border-transparent bg-transparent" ><i class="fa fa-edit"></i></button></td>
                                 </tr>`)
 
                     });
