@@ -51,8 +51,7 @@ echo "Error: " . $sql_subgroup_type_price . "<br>" . $conn->error;
 
 
     foreach ($features_price as $row) {
-       echo "\n";
-       echo $row['discount'];
+      
         if($row['price_type']== 'main_subtype_price'){
             
             $sql_group_subtype = "insert into group_subtype_price set group_id = {$row['group_id']},msid = {$row['msid']},price = {$row['price']},discount = {$row['discount']}  on DUPLICATE key update price = {$row['price']}, discount = {$row['discount']}";

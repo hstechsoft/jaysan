@@ -2,21 +2,30 @@
  include 'db_head.php';
 
  $mtid = test_input($_POST['mtid']);
-$mrp = test_input($_POST['mrp']);
-$min_price = test_input($_POST['min_price']);
-$max_price = test_input($_POST['max_price']);
-$sub_type_price_json = $_POST['sub_type_price'];
+
+
+
 
 $msid = test_input($_POST['msid']);
 $subtype_name = test_input($_POST['subtype_name']);
-$subtype_group_id = test_input($_POST['subtype_group_id']);
+$subtype_group_id = ($_POST['subtype_group_id']);
 $is_default = test_input($_POST['is_default']);
-$bom_id = test_input($_POST['bom_id']);
+$bom_id = ($_POST['bom_id']);
 $discount = test_input($_POST['discount']);
 $alias_name = test_input($_POST['alias_name']);
 $price = test_input($_POST['price']);
 $is_reduce = test_input($_POST['is_reduce']);
 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+$data = "'".$data."'";
+return $data;
+}
+
+$bom_id = sql_nullable($bom_id);
+$subtype_group_id = sql_nullable($subtype_group_id);
 
 
 

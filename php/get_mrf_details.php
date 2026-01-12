@@ -93,7 +93,7 @@ SELECT
         INNER JOIN employee ON mrf.prepared_by = employee.emp_id
         left join mrf_purchase on mrf.mrf_id = mrf_purchase.mrf_id
         
-    WHERE mrf.mrf_id =  1079 ORDER BY part_name, dated DESC;
+    WHERE mrf.mrf_id =   $mrf_id ORDER BY part_name, dated DESC;
 SQL;
 
 
