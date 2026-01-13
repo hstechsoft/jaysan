@@ -294,6 +294,23 @@ body {
   }
 }
 
+
+.boxborder {
+  width: 350px;
+  padding: 15px;
+  border: 0.5px solid #333;
+  min-inline-size: min-content; /* IMPORTANT */
+}
+
+.boxborder legend {
+  float: unset;                 /* Bootstrap override */
+  width: auto;                  /* Bootstrap override */
+  padding: 0 8px;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+
 .selected {
   border-color: #007bff;
   /* Change border color */

@@ -1,9 +1,26 @@
-
+  
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+let chainStep = 0;
+let selectedrow = null;
+
+$(document).ajaxComplete(function (e, xhr, settings) {
+console.log(settings.url);
+
+    if (chainStep === 1 && settings.url.includes("php/get_jaysan_final_product.php")) {
+        chainStep = 2;
+
+        $("#product_model").val(selectedrow.find("td").eq(2).data("model_id")).trigger("change");
+    }
+
+    else if (chainStep === 2 && settings.url.includes("get_select3.php")) {
+        chainStep = 0;
+        $("#select3").trigger("change");
+    }
+});
 $(document).ready(function () {
 
     $(".page-wrapper :input:visible:not([disabled]):not([readonly]):first").focus();
@@ -75,7 +92,15 @@ $(document).ready(function () {
 
 
 
+$("#finished_price_tbody").on("click", "tr td button", function(event) {
+  event.preventDefault();
+  selectedrow = $(this).closest("tr");
+  console.log(selectedrow.html());
+    chainStep = 1;
 
+    $("#product").trigger("change").val;
+  
+});
 
     $("#menu_bar").load('menu.html',
         function () {
@@ -939,6 +964,10 @@ $(document).ready(function () {
     $("#bom_id_table").on("click", function(){
         $("#bom_table").toggleClass("d-none")
     })
+get_finished_price_report();
+
+
+
 
 
 });
@@ -949,7 +978,56 @@ $(document).ready(function () {
 
 
 
+  function get_finished_price_report()
+   {
+    
+   
+   $.ajax({
+     url: "php/get_finished_price_report.php",
+     type: "get", //send it through get method
+     data: {
+     
+     },
+     success: function (response) {
+   
+   
+   if (response.trim() != "error") {
 
+    if (response.trim() != "0 result")
+    {
+   
+     var obj = JSON.parse(response);
+   var count =0 
+   
+   
+     obj.forEach(function (obj) {
+        count = count +1;
+$('#finished_price_tbody').append("<tr><td>"+count+"</td><td data-product_id='"+obj.product_id+"'>"+obj.product_name+"</td><td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td><td data-mtid='"+obj.mtid+"'>"+obj.type_name+"</td><td data-group_id='"+obj.group_id+"'>"+obj.group_name+"</td><td data-sub_group_id='"+obj.sub_group_id+"'>"+obj.sub_group_name+"</td><td>"+"<button type='button' class='btn btn-outline-primary  border-0 small'><i class='fa fa-pencil'></i></button>"+"</td></tr>")
+
+     });
+   
+    
+   }
+   else{
+   // $("#@id@") .append("<td colspan='7' scope='col'>No Data</td>");
+ 
+   }
+  }
+   
+  
+   
+   
+       
+     },
+     error: function (xhr) {
+         //Do Something to handle error
+     }
+   });
+   
+   
+   
+      
+   }
 
 
 
@@ -1207,7 +1285,7 @@ function get_jaysan_final_productmodel() {
 
     console.log($('#product').val());
 
-    $.ajax({
+   return $.ajax({
         url: "php/get_jaysan_final_productmodel.php",
         type: "get", //send it through get method
         data: {
@@ -1535,11 +1613,8 @@ function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_grou
         data: {
 
             mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
-            mrp: '',
-            min_price: '',
-            max_price: '',
+           
             subtype_name: subtype_name,
-            sub_type_price: price,
             msid: msid,
             is_reduce: is_reduce,
             subtype_group_id: subtype_group_id,
@@ -1547,7 +1622,7 @@ function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_grou
             bom_id: bom_id,
             discount: discount,
             alias_name: alias_name,
-            price: '',
+            price: price,
         },
         success: function (response) {
             console.log(response);
@@ -1564,6 +1639,12 @@ function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_grou
                 $("#price_field").val("")
                 $("#is_reduce").val("")
                 $("#discount_field").val("")
+
+                shw_toast("Success", "Updated Successfully", "bg-success");
+        $("#type_add_btn").removeClass("d-none");
+        $("#type_update_btn").addClass("d-none");
+
+        
             }
 
 
@@ -1602,6 +1683,7 @@ function update_base_price(mtid, mrp, min_price, max_price, sub_type_price) {
 
 
             if (response.trim() == "ok") {
+                 $("#product_type_table_next").removeClass("d-none");
                 $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
                     .removeClass("d-none");
 
