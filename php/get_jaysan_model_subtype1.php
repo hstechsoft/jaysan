@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM jaysan_model_subtype WHERE mtid =  $mtid";
+ $sql = "SELECT * FROM jaysan_model_subtype WHERE mtid =  $mtid ";
 
 $result = $conn->query($sql);
 
