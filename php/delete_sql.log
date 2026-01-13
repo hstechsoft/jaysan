@@ -24,3 +24,4 @@
 [2026-01-08 08:34:09] | USER:141 | IP:::1 | FILE:/jaysanERP/php/delete_model_subtype.php | SQL:DELETE from jaysan_model_subtype WHERE msid = '77'
 [2026-01-08 08:34:35] | USER:141 | IP:::1 | FILE:/jaysanERP/php/delete_model_type.php | SQL:DELETE from jaysan_model_type WHERE mtid = '46'
 [2026-01-08 08:34:41] | USER:141 | IP:::1 | FILE:/jaysanERP/php/delete_model_type.php | SQL:DELETE from jaysan_model_type WHERE mtid = '47'
+[2026-01-13 03:37:57] | USER:141 | IP:::1 | FILE:/jaysanERP/php/delete_model_subtype.php | SQL:DELETE from jaysan_model_subtype WHERE msid = '147'
