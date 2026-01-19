@@ -35,8 +35,11 @@ if($is_default and $subtype_group_id != 'NULL')
  $sql = "INSERT INTO jaysan_model_subtype ( mtid,subtype_name,price,is_reduce,subtype_group_id,is_default,bom_id,discount,alias_name) VALUES ($mtid,$subtype_name,$price,$is_reduce,$subtype_group_id,$is_default,$bom_id,$discount,$alias_name)";
 
   if ($conn->query($sql) === TRUE) {
+    http_response_code(200);
    echo "ok";
+
   } else {
+    http_response_code(500);
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
 $conn->close();
