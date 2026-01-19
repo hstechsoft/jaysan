@@ -995,13 +995,27 @@ get_finished_price_report();
 
     if (response.trim() != "0 result")
     {
+   console.log(response);
    
      var obj = JSON.parse(response);
    var count =0 
    
    
      obj.forEach(function (obj) {
-        count = count +1;
+        ścount = count +1;
+        var sgt_tr = ""
+        var sgt_count =0
+        var group_count =0
+        var group_details = JSON.parse(obj.group_details);
+        group_details.forEach(function (gd) {
+            group_count = group_count +1;
+        var sub_group_details = gd.sub_group_details;
+        sub_group_details.forEach(function (sgd) {
+            console.log(sgd.sub_group_name);
+            sgt_count = sgt_count +1;
+            sgt_tr = sgt_tr + "<td data-sub_group_id='"+obj.sub_group_id+"'>"+obj.sub_group_name+"</td><td>"+"<button type='button' class='btn btn-outline-primary  border-0 small'><i class='fa fa-pencil'></i></button>"+"</td>"
+        });
+        });
 $('#finished_price_tbody').append("<tr><td>"+count+"</td><td data-product_id='"+obj.product_id+"'>"+obj.product_name+"</td><td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td><td data-mtid='"+obj.mtid+"'>"+obj.type_name+"</td><td data-group_id='"+obj.group_id+"'>"+obj.group_name+"</td><td data-sub_group_id='"+obj.sub_group_id+"'>"+obj.sub_group_name+"</td><td>"+"<button type='button' class='btn btn-outline-primary  border-0 small'><i class='fa fa-pencil'></i></button>"+"</td></tr>")
 
      });
@@ -1586,6 +1600,10 @@ function insert_jaysan_model_subtype(subtype_name, price, is_reduce, subtype_gro
                 $("#is_reduce").val("")
                 $("#discount_field").val("")
             }
+            else
+            {
+                salert("Warning", response, "warning");
+            }
 
 
 
@@ -1594,6 +1612,8 @@ function insert_jaysan_model_subtype(subtype_name, price, is_reduce, subtype_gro
         },
         error: function (xhr) {
             //Do Something to handle error
+            console.log(xhr);
+            
         }
     });
 
