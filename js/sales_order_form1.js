@@ -28,10 +28,7 @@ $(document).ready(function () {
   // Format the date and time for 'datetime-local' input (YYYY-MM-DDTHH:mm)
   let formattedDateTime = now.toISOString().slice(0, 16);
   $("#dated").val(formattedDateTime);
-  // disable all input inside product details card
-$('#product_details_card')
-  .find('input, select, textarea, button')
-  .prop('disabled', true);
+
 
   $("#menu_bar").load('menu.html',
     function () {
@@ -164,8 +161,6 @@ $('#product_details_card')
             $("#cusTypeModal").modal("show");
           }
           else {
-               $("#cus_type_update_btn").data("cus_id", ui.item.cus_id)
-            show_product_details_card();
             $("#customer_type").val(ui.item.sub_group_name)
             $("#ptype").data("cus_type_id", ui.item.cus_type_id)
           }
@@ -210,7 +205,6 @@ $('#product_details_card')
           }
           else {
             $("#customer_type").val(ui.item.sub_group_name)
-            show_product_details_card();
             $("#ptype").data("cus_type_id", ui.item.cus_type_id)
           }
         },
@@ -809,43 +803,40 @@ $('#product_details_card')
 
   })
 
+
   $("#sub_type_div").on("change", ".sub_type_chk", function () {
-change_price()
+
+    const price = parseFloat($(this).data("price")) || 0;
+    const isReduce = parseInt($(this).data("is_reduce"), 10) || 0;
+
+    let billingAmount = parseFloat($("#billing_price").val()) || 0;
+    let machineAmount = parseFloat($("#machine_price").val()) || 0;
+
+    const isChecked = $(this).is(":checked");
+
+
+
+    let delta;
+
+    if (isReduce === 0) {
+      delta = isChecked ? price : -price;
+    } else {
+      delta = isChecked ? -price : price;
+    }
+
+    billingAmount += delta;
+    machineAmount += delta;
+
+    $("#billing_price").val(billingAmount);
+    $("#machine_price").val(machineAmount);
+
+    console.log(
+      "MSID:", $(this).val(),
+      "PRICE:", $(this).data("price"),
+      "REDUCE:", isReduce,
+      "DELTA:", delta
+    );
   });
-
-  // $("#sub_type_div").on("change", ".sub_type_chk", function () {
-
-  //   const price = parseFloat($(this).data("price")) || 0;
-  //   const isReduce = parseInt($(this).data("is_reduce"), 10) || 0;
-
-  //   let billingAmount = parseFloat($("#billing_price").val()) || 0;
-  //   let machineAmount = parseFloat($("#machine_price").val()) || 0;
-
-  //   const isChecked = $(this).is(":checked");
-
-
-
-  //   let delta;
-
-  //   if (isReduce === 0) {
-  //     delta = isChecked ? price : -price;
-  //   } else {
-  //     delta = isChecked ? -price : price;
-  //   }
-
-  //   billingAmount += delta;
-  //   machineAmount += delta;
-
-  //   $("#billing_price").val(billingAmount);
-  //   $("#machine_price").val(machineAmount);
-
-  //   console.log(
-  //     "MSID:", $(this).val(),
-  //     "PRICE:", $(this).data("price"),
-  //     "REDUCE:", isReduce,
-  //     "DELTA:", delta
-  //   );
-  // });
 
   $("#machine_price").on("input", function () {
 
@@ -880,28 +871,20 @@ change_price()
 
   $("#mrp_amount").on("change", function () {
 
-    var mrp = $(this).data("max");
-   
+    var max = $(this).data("max");
+    var mrp = $(this).val();
 
-  
+    console.log(max, mrp);
 
     if ($(this).is(":checked")) {
       $("#billing_price").val(mrp);
-      $("#machine_price").val(mrp);
     } else {
-      change_price()
+      $("#billing_price").val(max);
     }
 
     $("#credit_amount").text(Number($("#billing_price").val()) - Number($("#machine_price").val()));
 
   })
-
-  $("#custype_btn").on("click", function(event) {
-    event.preventDefault();
-    // TODO: handle click here
-
-     $("#cusTypeModal").modal("show");
-  });
 
 });
 
@@ -910,13 +893,10 @@ change_price()
 
 
 
-function show_product_details_card() {
 
 
-  $('#product_details_card')
-  .find('input, select, textarea, button')
-  .prop('disabled', false);
-}
+
+
 
 function update_customer_type(cus_sub_group_id, cus_id) {
 
@@ -947,11 +927,6 @@ function update_customer_type(cus_sub_group_id, cus_id) {
 
          
             $("#ptype").data("cus_type_id", cus_sub_group_id);
-
-            show_product_details_card();
-          
-
-        shw_toast("Success", "Customer Type Updated", "success")
 
       }
 
@@ -1394,13 +1369,10 @@ function get_jaysan_model_subtype() {
     url: "php/get_jaysan_model_subtype_sale.php",
     type: "get", //send it through get method
     data: {
-      mtid: $('#ptype').val(),
-      subgroup_id: $('#ptype').data("cus_type_id") || '0'
-
+      mtid: $('#ptype').val()
 
     },
     success: function (response) {
-     console.log(response);
      
       $('#sub_type_div').empty()
       $('#product_sub_type_card').removeClass('d-none')
@@ -1410,26 +1382,18 @@ function get_jaysan_model_subtype() {
 
           var obj = JSON.parse(response);
        
-    //    price: item.sub_price_final,
-                  // is_reduce: item.is_reduce
+     
 var app_html = ""
 var app_nhtml = ""
           obj.forEach(function (obj) {
                var price_details = JSON.parse(obj.price_details) || [];
-               
-          
-
-
-            $("#mrp_amount").data("max", obj.mrp);
-            
-            $("#billing_price").data("max", obj.max_price);
-            $("#billing_price").data("min", obj.min_price);
-                    
+               console.log(price_details);
+                      console.log(obj.sec_name);
           if(obj.sec_name === null){
                  price_details.forEach(function (item) {
             // console.log(item);
             {
-              app_nhtml =   app_nhtml + "  <div class='form-check small'> <input data-is_reduce='" + item.is_reduce + "' data-price='" + item.price + "' data-discount='" + item.discount + "' class='form-check-input sub_type_chk' " + (item.is_default == 1 ? "checked" : "")  + " type='checkbox' value='" + item.msid + "' id='chk_"+item.msid+"'> <label class='form-check-label' for='chk_"+item.msid+"'> " + item.subtype_name + "  " + (Number(item.discount) > 0 ? "<span style = 'font-size: 10px' class='text-danger  small'>" + item.discount + " /- Offer</span>" : "") + "</label> </div> "
+              app_nhtml =   app_nhtml + "  <div class='form-check'> <input class='form-check-input sub_type_chk' " + (item.is_default == 1 ? "checked" : "")  + " type='checkbox' value='" + item.msid + "' id='chk_"+item.msid+"'> <label class='form-check-label' for='chk_"+item.msid+"'> " + item.subtype_name + "  </label> </div> "
             }
           });
           app_html = app_html + "<div class='col'><fieldset class='boxborder bg-light'><legend>Additional Features</legend>" + app_nhtml + "</fieldset></div>"
@@ -1440,7 +1404,7 @@ var chk = ""
             price_details.forEach(function (item) {
 
               // chk = chk + "<div class='form-check'> <input class='form-check-input sub_type_chk' " + (item.is_default == 1 ? "checked" : "")  + " type='checkbox'  name='"+obj.sec_name+"' value='" + item.msid + "' id='chk_"+item.msid+"'> <label class='form-check-label' for='chk_"+item.msid+"'> " + item.subtype_name + " </label> </div> "
-               chk = chk +"<div class='mb-1'> <label class='form-label d-block mb-1'><div class='small form-check form-check-inline'> <input data-is_reduce='" + item.is_reduce + "' data-price='" + item.price + "' data-discount='" + item.discount + "' class='form-check-input sub_type_chk' id='chk_"+item.msid+"' type='radio' name='"+obj.sec_name+"'   value='" + item.msid + "' " + (item.is_default == 1 ? "checked" : "") + "> <label class='form-check-label' for='chk_"+item.msid+"'> " + item.subtype_name + "</label> </div> " + (Number(item.discount) > 0 ? "<span style = 'font-size: 10px' class='text-danger  small'>" + item.discount + " /- Offer</span>" : "") + "</label> </div>"
+               chk = chk +"<div class='mb-1'> <label class='form-label d-block mb-1'><div class='form-check form-check-inline'> <input class='form-check-input sub_type_chk' id='chk_"+item.msid+"' type='radio' name='"+obj.sec_name+"'   value='" + item.msid + "' " + (item.is_default == 1 ? "checked" : "") + "> <label class='form-check-label' for='chk_"+item.msid+"'> " + item.subtype_name + "</label> </div></label> </div>"
                 // chk = chk + "<div class='col'> <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' name='"+item.sec_name+"' value='" + item.msid + "' " + (item.is_default == 1 ? "checked" : "") + "> <label class='form-check-label' for='option2'> " + item.subtype_name + " </label> </div> </div>"
             });
 
@@ -1453,14 +1417,13 @@ var chk = ""
           });
                  $('#sub_type_div input[type="checkbox"]').prop('disabled', false);
             $('#sub_type_div').append(app_html);
-            
+            console.log($('#sub_type_div').html());
             
             $('#qty').focus()
-          //  //get_subcus_price();
-change_price();
-        }
+          get_subcus_price();
 
-     
+
+        }
         else {
           // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
 
@@ -1480,35 +1443,6 @@ change_price();
 
 
 
-}
-
-function change_price()
-{
-   let min_price = parseFloat($("#billing_price").data("min")) || 0;
-    let max_price = parseFloat($("#billing_price").data("max")) || 0;
-   $(".sub_type_chk").each(function(index, el) {
-   
-          if($(this).is(":checked")) {
-            if($(this).data("is_reduce") == 0) {
-              min_price = min_price + parseFloat($(this).data("price"));
-              max_price = max_price + parseFloat($(this).data("price"));
-            }
-            else {
-              min_price = min_price - parseFloat($(this).data("price"));
-              max_price = max_price - parseFloat($(this).data("price"));
-            }
-           
-          }
-          
-        });
-         $("#billing_price").val(max_price);
-            $("#machine_price").val(max_price);
-
-            $("#machine_price").data("max", max_price);
-            $("#machine_price").data("min", min_price);
-
-              $("#spl_checkbox_hide").addClass("d-none")
-      $(this).css("color", "#000")
 }
 
 function get_subcus_price() {
@@ -2483,7 +2417,6 @@ function get_customer_autocomplete(request, response) {
 
     },
     success: function (data) {
-
 
 
       if (data.trim() != "0 result") {
