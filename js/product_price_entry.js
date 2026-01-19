@@ -1,4 +1,4 @@
-  
+
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
@@ -8,15 +8,26 @@ let chainStep = 0;
 let selectedrow = null;
 
 $(document).ajaxComplete(function (e, xhr, settings) {
-console.log(settings.url);
+    console.log(settings.url);
 
-    if (chainStep === 1 && settings.url.includes("php/get_jaysan_final_product.php")) {
+    if (chainStep === 1) {
         chainStep = 2;
 
-        $("#product_model").val(selectedrow.find("td").eq(2).data("model_id")).trigger("change");
+        $("#product_model").val(selectedrow.data("model_id")).trigger("change");
     }
 
-    else if (chainStep === 2 && settings.url.includes("get_select3.php")) {
+    else if (chainStep === 2) {
+        chainStep = 3;
+
+        $("#product_sub_model").val(selectedrow.data("mtid")).trigger("change");
+    }
+
+    else if (chainStep === 3) {
+        chainStep = 4;
+        $("#customer_type").val(selectedrow.data("group_id")).trigger("change");
+    }
+
+    else if (chainStep === 4 && settings.url.includes("get_select3.php")) {
         chainStep = 0;
         $("#select3").trigger("change");
     }
@@ -92,15 +103,32 @@ $(document).ready(function () {
 
 
 
-$("#finished_price_tbody").on("click", "tr td button", function(event) {
-  event.preventDefault();
-  selectedrow = $(this).closest("tr");
-  console.log(selectedrow.html());
-    chainStep = 1;
 
-    $("#product").trigger("change").val;
-  
-});
+    $("#finished_price_tbody").on("click", "tr td", function (event) {
+        if ($(this).data("mtid") !== undefined) {
+            get_jaysan_alice_name($(this).data("mtid"));
+        }
+
+    });
+
+    $("#finished_price_tbody").on("click", "tr td button", function (event) {
+        event.preventDefault();
+        selectedrow = $(this).closest("td").find("button").eq(0);
+        console.log(selectedrow.html());
+        chainStep = 1;
+        $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
+            .addClass("d-none");
+
+        $("#product_type_table, #sub_type_section").removeClass("d-none");
+
+        $("#product, #product_auto, #product_model, #model_auto, #product_sub_model, #sub_model_auto, #product_base_price, #product_base_min_price, #product_base_max_price")
+            .prop("disabled", false);
+
+        $("#customer_type").data("mtid", '');
+        $("#product_base_price_submit_btn").prop("disabled", false).text("Submit");
+        $("#product").val(selectedrow.data("product_id")).trigger("change");
+
+    });
 
     $("#menu_bar").load('menu.html',
         function () {
@@ -351,6 +379,7 @@ $("#finished_price_tbody").on("click", "tr td button", function(event) {
         let sub_type_price = [];
         let hasError = false;
 
+        chainStep = 3;
         $("#product_type_tbody tr").each(function () {
 
             const row = $(this);
@@ -851,7 +880,7 @@ $("#finished_price_tbody").on("click", "tr td button", function(event) {
         event.preventDefault();
 
         $("#type_add_field").val($(this).find(":selected").text());
-        
+
         $("#section_alice_name").val($("#product_auto").val() + " " + $("#model_auto").val() + " " + $("#sub_model_auto").val() + " " + $("#type_add_field").val())
 
     });
@@ -961,13 +990,16 @@ $("#finished_price_tbody").on("click", "tr td button", function(event) {
     })
 
 
-    $("#bom_id_table").on("click", function(){
+    $("#bom_id_table").on("click", function () {
         $("#bom_table").toggleClass("d-none")
     })
-get_finished_price_report();
+    get_finished_price_report();
 
 
 
+    $("#hide_alice_name_table").on("click", function(){
+        $("#alice_name_table").addClass("d-none");
+    })
 
 
 });
@@ -978,70 +1010,240 @@ get_finished_price_report();
 
 
 
-  function get_finished_price_report()
-   {
-    
-   
-   $.ajax({
-     url: "php/get_finished_price_report.php",
-     type: "get", //send it through get method
-     data: {
-     
-     },
-     success: function (response) {
-   
-   
-   if (response.trim() != "error") {
+function get_finished_price_report() {
 
-    if (response.trim() != "0 result")
-    {
-   console.log(response);
-   
-     var obj = JSON.parse(response);
-   var count =0 
-   
-   
-     obj.forEach(function (obj) {
-        ścount = count +1;
-        var sgt_tr = ""
-        var sgt_count =0
-        var group_count =0
-        var group_details = JSON.parse(obj.group_details);
-        group_details.forEach(function (gd) {
-            group_count = group_count +1;
-        var sub_group_details = gd.sub_group_details;
-        sub_group_details.forEach(function (sgd) {
-            console.log(sgd.sub_group_name);
-            sgt_count = sgt_count +1;
-            sgt_tr = sgt_tr + "<td data-sub_group_id='"+obj.sub_group_id+"'>"+obj.sub_group_name+"</td><td>"+"<button type='button' class='btn btn-outline-primary  border-0 small'><i class='fa fa-pencil'></i></button>"+"</td>"
-        });
-        });
-$('#finished_price_tbody').append("<tr><td>"+count+"</td><td data-product_id='"+obj.product_id+"'>"+obj.product_name+"</td><td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td><td data-mtid='"+obj.mtid+"'>"+obj.type_name+"</td><td data-group_id='"+obj.group_id+"'>"+obj.group_name+"</td><td data-sub_group_id='"+obj.sub_group_id+"'>"+obj.sub_group_name+"</td><td>"+"<button type='button' class='btn btn-outline-primary  border-0 small'><i class='fa fa-pencil'></i></button>"+"</td></tr>")
 
-     });
-   
-    
-   }
-   else{
-   // $("#@id@") .append("<td colspan='7' scope='col'>No Data</td>");
- 
-   }
-  }
-   
-  
-   
-   
-       
-     },
-     error: function (xhr) {
-         //Do Something to handle error
-     }
-   });
-   
-   
-   
-      
-   }
+    $.ajax({
+        url: "php/get_finished_price_report.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+                    console.log(response);
+
+                    // var data = JSON.parse(response);
+                    // var count = 0;
+
+                    // $("#finished_price_tbody").empty();
+
+                    // data.forEach(item => {
+
+                    //     const groupDetails = JSON.parse(item.group_details);
+                    //     const productRowSpan = groupDetails.reduce((sum, g) => {
+                    //         return sum + g.sub_group_details.length;
+                    //     }, 0);
+
+                    //     let isFirstProductRow = true;
+
+                    //     groupDetails.forEach(group => {
+
+                    //         const groupRowSpan = group.sub_group_details.length;
+                    //         let isFirstGroupRow = true;
+
+                    //         group.sub_group_details.forEach(sub => {
+
+                    //             let tr = $("<tr></tr>");
+
+                    //             if (isFirstProductRow) {
+                    //                 count++;
+
+                    //                 tr.append(`<td rowspan="${productRowSpan}">${count}</td>`);
+                    //                 tr.append(`<td rowspan="${productRowSpan}">${item.product_name}</td>`);
+                    //                 tr.append(`<td rowspan="${productRowSpan}">${item.model_name}</td>`);
+                    //                 tr.append(`<td rowspan="${productRowSpan}">${item.type_name}</td>`);
+
+                    //                 isFirstProductRow = false;
+                    //             }
+
+                    //             if (isFirstGroupRow) {
+                    //                 tr.append(`<td rowspan="${groupRowSpan}">${group.group_name}</td>`);
+                    //                 isFirstGroupRow = false;
+                    //             }
+
+                    //             tr.append(`<td>${sub.sub_group_name.replace("_", " ")}</td>`);
+
+                    //             tr.append(`
+                    //                     <td>
+                    //                         <button class="btn btn-warning btn-sm"
+                    //                             data-product_id="${item.product_id}"
+                    //                             data-model_id="${item.model_id}"
+                    //                             data-mtid="${item.mtid}"
+                    //                             data-group_id="${group.group_id}"
+                    //                             data-sub_group_id="${sub.sub_group_id}">
+                    //                             <i class='fa fa-edit text-dark'></i>
+                    //                         </button>
+                    //                         <button class="btn btn-primary btn-sm"
+                    //                             data-product_id="${item.product_id}"
+                    //                             data-model_id="${item.model_id}"
+                    //                             data-mtid="${item.mtid}"
+                    //                             data-group_id="${group.group_id}"
+                    //                             data-sub_group_id="${sub.sub_group_id}">
+                    //                             <i class="fa-solid fa-puzzle-piece"></i>
+
+                    //                         </button>
+                    //                     </td>
+                    //                 `);
+
+                    //             $("#finished_price_tbody").append(tr);
+                    //         });
+                    //     });
+                    // });
+
+
+                    var raw = JSON.parse(response);
+
+                    const grouped = {};
+
+                    raw.forEach(item => {
+
+                        if (!grouped[item.product_id]) {
+                            grouped[item.product_id] = {
+                                product_id: item.product_id,
+                                product_name: item.product_name,
+                                models: {}
+                            };
+                        }
+
+                        if (!grouped[item.product_id].models[item.model_id]) {
+                            grouped[item.product_id].models[item.model_id] = {
+                                model_id: item.model_id,
+                                model_name: item.model_name,
+                                types: {}
+                            };
+                        }
+
+                        if (!grouped[item.product_id].models[item.model_id].types[item.mtid]) {
+                            grouped[item.product_id].models[item.model_id].types[item.mtid] = {
+                                mtid: item.mtid,
+                                type_name: item.type_name,
+                                group_details: JSON.parse(item.group_details)
+                            };
+                        }
+
+                    });
+
+                    let count = 0;
+                    $("#finished_price_tbody").empty();
+
+                    Object.values(grouped).forEach(product => {
+
+                        const productRowSpan = Object.values(product.models)
+                            .reduce((pSum, m) => {
+                                return pSum + Object.values(m.types)
+                                    .reduce((tSum, t) => {
+                                        return tSum + t.group_details
+                                            .reduce((gSum, g) => gSum + g.sub_group_details.length, 0);
+                                    }, 0);
+                            }, 0);
+
+                        let productPrinted = false;
+
+                        Object.values(product.models).forEach(model => {
+
+                            const modelRowSpan = Object.values(model.types)
+                                .reduce((tSum, t) => {
+                                    return tSum + t.group_details
+                                        .reduce((gSum, g) => gSum + g.sub_group_details.length, 0);
+                                }, 0);
+
+                            let modelPrinted = false;
+
+                            Object.values(model.types).forEach(type => {
+
+                                const typeRowSpan = type.group_details
+                                    .reduce((gSum, g) => gSum + g.sub_group_details.length, 0);
+
+                                let typePrinted = false;
+
+                                type.group_details.forEach(group => {
+
+                                    const groupRowSpan = group.sub_group_details.length;
+                                    let groupPrinted = false;
+
+                                    group.sub_group_details.forEach(sub => {
+
+                                        const tr = $("<tr></tr>");
+
+                                        if (!productPrinted) {
+                                            count++;
+                                            tr.append(`<td rowspan="${productRowSpan}">${count}</td>`);
+                                            tr.append(`<td rowspan="${productRowSpan}">${product.product_name}</td>`);
+                                            productPrinted = true;
+                                        }
+
+                                        if (!modelPrinted) {
+                                            tr.append(`<td rowspan="${modelRowSpan}">${model.model_name}</td>`);
+                                            modelPrinted = true;
+                                        }
+
+                                        if (!typePrinted) {
+                                            tr.append(`<td data-mtid="${type.mtid}" id='alice_name' rowspan="${typeRowSpan}">${type.type_name}</td>`);
+                                            typePrinted = true;
+                                        }
+
+                                        if (!groupPrinted) {
+                                            tr.append(`<td rowspan="${groupRowSpan}">${group.group_name}</td>`);
+                                            groupPrinted = true;
+                                        }
+
+                                        tr.append(`<td>${sub.sub_group_name.replaceAll("_", " ")}</td>`);
+
+                                        tr.append(`
+                                                    <td>
+                                                        <button class="btn btn-warning btn-sm"
+                                                            data-product_id="${product.product_id}"
+                                                            data-model_id="${model.model_id}"
+                                                            data-mtid="${type.mtid}"
+                                                            data-group_id="${group.group_id}"
+                                                            data-sub_group_id="${sub.sub_group_id}">
+                                                            <i class='fa fa-edit text-dark'></i>
+                                                        </button>
+                                                        <a href='bom_entry.html?id=${type.mtid}' class="btn btn-primary btn-sm"
+                                                            data-product_id="${product.product_id}"
+                                                            data-model_id="${model.model_id}"
+                                                            data-mtid="${type.mtid}"
+                                                            data-group_id="${group.group_id}"
+                                                            data-sub_group_id="${sub.sub_group_id}">
+                                                            <i class="fa-solid fa-gears"></i>
+                                                        </a>
+                                                    </td>
+                                                `);
+
+                                        $("#finished_price_tbody").append(tr);
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='7' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
@@ -1299,7 +1501,7 @@ function get_jaysan_final_productmodel() {
 
     console.log($('#product').val());
 
-   return $.ajax({
+    return $.ajax({
         url: "php/get_jaysan_final_productmodel.php",
         type: "get", //send it through get method
         data: {
@@ -1423,6 +1625,20 @@ function get_jaysan_model_subtype() {
 
                 if (response.trim() != "0 result") {
 
+                    const groupColors = [
+                        "#e3f2fd", // light blue
+                        "#fce4ec", // light pink
+                        "#e8f5e9", // light green
+                        "#e0f2f1",  // teal
+                        "#fff3e0", // light orange
+                        "#ede7f6", // light purple
+                        "#ffd7d2",
+                        "#f3e5f5", // lavender
+                        "#ffbaba",
+                        "#d9d2ff",
+                    ];
+
+
                     var obj = JSON.parse(response);
 
 
@@ -1439,15 +1655,17 @@ function get_jaysan_model_subtype() {
 
 
                     let count = 0;
+                    let colorIndex = 0;
                     $("#product_type_tbody").empty();
                     console.log(grouped);
 
                     Object.values(grouped).forEach(group => {
 
                         const rowspan = group.length;
+                        const bgColor = groupColors[colorIndex % groupColors.length];
+                        colorIndex++;
 
                         group.forEach((item, index) => {
-                            count++;
 
                             const base_p = JSON.parse(item.master);
 
@@ -1460,19 +1678,23 @@ function get_jaysan_model_subtype() {
 
 
                             if (index === 0 && item.subtype_group_id !== null) {
-                                groupTd = `<td rowspan="${rowspan}" class="align-middle fw-semibold" data-sec_id='${item.subtype_group_id}'>
+                                count++;
+
+                                groupTd = `<td rowspan="${rowspan}" style="background:${bgColor}">${count}</td><td rowspan="${rowspan}" style="background:${bgColor}" class="align-middle fw-semibold" data-sec_id='${item.subtype_group_id}'>
                                             ${item.subype_group_name}
                                         </td>`;
                             }
 
 
                             if (item.subtype_group_id === null) {
-                                groupTd = `<td></td>`;
+                                count++;
+
+                                groupTd = `<td style="background:${bgColor}">${count}</td><td style="background:${bgColor}"></td>`;
                             }
 
                             $("#product_type_tbody").append(`
-                                <tr data-msid="${item.msid}">
-                                    <td>${count}</td>
+                                <tr data-msid="${item.msid}" style="background:${bgColor}">
+                                    
                                     ${groupTd}
                                     <td data-g_name=' ${item.subype_group_name}' data-g_id=' ${item.subtype_group_id}' class='features_cell' data-msid="${item.msid}">
                                         <p class="mb-0">${item.subtype_name}
@@ -1527,6 +1749,67 @@ function get_jaysan_model_subtype() {
 
 
 }
+
+
+function get_jaysan_alice_name(mtid) {
+    console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+    // $("#sub_type_section").removeClass("d-none");
+
+
+    $.ajax({
+        url: "php/get_jaysan_model_subtype.php",
+        type: "get", //send it through get method
+        data: {
+            mtid: mtid,
+
+        },
+        success: function (response) {
+            console.log(response);
+            $('#alice_name_tbody').empty()
+            $('#alice_name_table').removeClass('d-none')
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+
+
+
+                    var obj = JSON.parse(response);
+
+                    var count = 0;
+
+                    obj.forEach(item => {
+
+                        count += 1;
+                        $("#alice_name_tbody").append(`<tr><td>${count}</td><td>${item.alias_name}</td><td>${item.subtype_name}</td><td><a href='bom_entry.html?id=${item.mtid}' class="btn btn-primary btn-sm"><i class="fa-solid fa-gears"></i></a></td></tr>`)
+
+                    });
+
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+
 
 function insert_jaysan_final_product(product_name, product_model, product_type) {
 
@@ -1600,8 +1883,7 @@ function insert_jaysan_model_subtype(subtype_name, price, is_reduce, subtype_gro
                 $("#is_reduce").val("")
                 $("#discount_field").val("")
             }
-            else
-            {
+            else {
                 salert("Warning", response, "warning");
             }
 
@@ -1613,7 +1895,7 @@ function insert_jaysan_model_subtype(subtype_name, price, is_reduce, subtype_gro
         error: function (xhr) {
             //Do Something to handle error
             console.log(xhr);
-            
+
         }
     });
 
@@ -1633,7 +1915,7 @@ function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_grou
         data: {
 
             mtid: $('#product_sub_model').val() || $("#sub_model_auto").data("mtid"),
-           
+
             subtype_name: subtype_name,
             msid: msid,
             is_reduce: is_reduce,
@@ -1661,10 +1943,10 @@ function update_model_subtype(subtype_name, price, msid, is_reduce, subtype_grou
                 $("#discount_field").val("")
 
                 shw_toast("Success", "Updated Successfully", "bg-success");
-        $("#type_add_btn").removeClass("d-none");
-        $("#type_update_btn").addClass("d-none");
+                $("#type_add_btn").removeClass("d-none");
+                $("#type_update_btn").addClass("d-none");
 
-        
+
             }
 
 
@@ -1703,7 +1985,6 @@ function update_base_price(mtid, mrp, min_price, max_price, sub_type_price) {
 
 
             if (response.trim() == "ok") {
-                 $("#product_type_table_next").removeClass("d-none");
                 $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
                     .removeClass("d-none");
 
@@ -1713,6 +1994,7 @@ function update_base_price(mtid, mrp, min_price, max_price, sub_type_price) {
                     .prop("disabled", true);
 
                 $("#customer_type").data("mtid", mtid);
+
             }
 
 

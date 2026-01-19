@@ -37,6 +37,11 @@
         #product_type_tbody .form-control .form-select {
             width: 15px !important;
         }
+
+
+        #product_type_tbody tr:hover {
+            filter: brightness(0.96);
+        }
     </style>
 
 </head>
@@ -184,111 +189,6 @@
                         </div>
                     </form>
 
-                </div>
-
-                <div class="col-md-6">
-
-
-
-                    <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
-                        <a href="jaysan_product_entry.html" class="float-end">Edit Products <i
-                                class="fa fa-edit text-danger"></i></a>
-                        <table class="table caption-top table-bordered  align-middle text-center">
-                            <caption></caption>
-                            <thead>
-
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Model</th>
-                                    <th scope="col">Sub Model</th>
-                                    <th scope="col">Customer Group</th>
-                                    <th scope="col">Customer Sub Group</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="finished_price_tbody">
-                              
-<tr>
-
-    <td rowspan="5">baler</td>
-    <td rowspan="5">jrb 312</td>
-    <td rowspan="5">4g+</td>
-    <td rowspan="3">customer</td>
-    <td>customer tamilnadu</td>
-    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal" data-bs-target="#bomModal">BOM</button></td>
-</tr>
-<tr>
-   
-    <!-- <td>baler</td> -->
-    <!-- <td>jrb 312</td> -->
-    <!-- <td>4g+</td> -->
-    <!-- <td>customer</td> -->
-    <td>customer delhi</td>
-    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal" data-bs-target="#bomModal">BOM</button></td>
-</tr>
-<tr>
-   
-    <!-- <td>baler</td> -->
-    <!-- <td>jrb 312</td> -->
-    <!-- <td>4g+</td> -->
-    <!-- <td>customer</td> -->
-    <td>customer rajasthan</td>
-    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal" data-bs-target="#bomModal">BOM</button></td>
-</tr>
-<tr>
-   
-    <!-- <td>baler</td> -->
-    <!-- <td>jrb 312</td> -->
-    <!-- <td>4g+</td> -->
-    <td rowspan="2">dealer</td>
-    <td>dealer tamilnadu</td>
-    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal" data-bs-target="#bomModal">BOM</button></td>
-</tr>
-
-<tr>
-   
-    <!-- <td>baler</td> -->
-    <!-- <td>jrb 312</td> -->
-    <!-- <td>4g+</td> -->
-    
-    <td>dealer general</td>
-    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal" data-bs-target="#bomModal">BOM</button></td>
-</tr>
-
-                            </tbody>
-
-
-                        </table>
-                    </div>
-
-                    <div class="table-responsive d-none" id="bom_table" style="max-height: 50vh; overflow-y: auto;">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption>Bom Selection table</caption>
-                            <thead>
-
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th>Alias Name</th>
-                                    <th>Bom</th>
-                                    <th>action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="">
-                          
-
-                            </tbody>
-
-
-                        </table>
-                    </div>
-
-                </div>
-
-
-
-                <div class="col-md-6 mt-2">
 
                     <div class="d-none" id="sub_type_section">
                         <div class="d-flex justify-content-between">
@@ -297,7 +197,7 @@
                                 <label for="type_add_field">Type </label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="type_add_select" >
+                                <select class="form-select" id="type_add_select">
                                     <option selected disabled value="">Choose...</option>
                                 </select>
                                 <label for="type_add_select">Type</label>
@@ -339,12 +239,13 @@
                             </div> -->
                             <div class="text-center align-middle">
                                 <button type="submit" class="btn btn-primary " id="type_add_btn">ADD</button>
-                                <button type="submit" class="btn btn-primary d-none" id="type_update_btn">UPDATE</button>
+                                <button type="submit" class="btn btn-primary d-none"
+                                    id="type_update_btn">UPDATE</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="table-responsive" id="product_type_table">
+                    <div class="table-responsive d-none" id="product_type_table">
                         <table class="table caption-top table-bordered text-center m-auto">
                             <caption></caption>
                             <thead>
@@ -361,7 +262,7 @@
                                 </tr>
                             </thead>
                             <tbody id="product_type_tbody">
-                                
+
                             </tbody>
 
 
@@ -394,10 +295,113 @@
                         </table>
                     </div>
 
+
                 </div>
 
-
                 <div class="col-md-6">
+
+
+
+                    <div class="table-responsive" style="max-height: 60vh; overflow-y: auto;">
+                        <a href="jaysan_product_entry.html" class="float-end">Edit Products <i
+                                class="fa fa-edit text-danger"></i></a>
+                        <table class="table caption-top table-bordered  align-middle text-center">
+                            <caption></caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Model</th>
+                                    <th scope="col">Sub Model</th>
+                                    <th scope="col">Customer Group</th>
+                                    <th scope="col">Customer Sub Group</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finished_price_tbody">
+
+                                <tr>
+
+                                    <td rowspan="5">1</td>
+                                    <td rowspan="5">baler</td>
+                                    <td rowspan="5">jrb 312</td>
+                                    <td rowspan="5">4g+</td>
+                                    <td rowspan="3">customer</td>
+                                    <td>customer tamilnadu</td>
+                                    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal"
+                                            data-bs-target="#bomModal">BOM</button></td>
+                                </tr>
+                                <tr>
+
+                                    <!-- <td>baler</td> -->
+                                    <!-- <td>jrb 312</td> -->
+                                    <!-- <td>4g+</td> -->
+                                    <!-- <td>customer</td> -->
+                                    <td>customer delhi</td>
+                                    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal"
+                                            data-bs-target="#bomModal">BOM</button></td>
+                                </tr>
+                                <tr>
+
+                                    <!-- <td>baler</td> -->
+                                    <!-- <td>jrb 312</td> -->
+                                    <!-- <td>4g+</td> -->
+                                    <!-- <td>customer</td> -->
+                                    <td>customer rajasthan</td>
+                                    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal"
+                                            data-bs-target="#bomModal">BOM</button></td>
+                                </tr>
+                                <tr>
+
+                                    <!-- <td>baler</td> -->
+                                    <!-- <td>jrb 312</td> -->
+                                    <!-- <td>4g+</td> -->
+                                    <td rowspan="2">dealer</td>
+                                    <td>dealer tamilnadu</td>
+                                    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal"
+                                            data-bs-target="#bomModal">BOM</button></td>
+                                </tr>
+
+                                <tr>
+
+                                    <!-- <td>baler</td> -->
+                                    <!-- <td>jrb 312</td> -->
+                                    <!-- <td>4g+</td> -->
+
+                                    <td>dealer general</td>
+                                    <td><button class="btn btn-sm btn-primary bom_id_table" data-bs-toggle="modal"
+                                            data-bs-target="#bomModal">BOM</button></td>
+                                </tr>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <div class="table-responsive d-none" id="alice_name_table"
+                        style="max-height: 50vh; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption>Bom Selection table</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>Alias Name</th>
+                                    <th>Bom</th>
+                                    <th>action <button type="button" class=" btn-secondary border-0 border-bg-transparent " id="hide_alice_name_table"><i class="fa-solid fa-eye-slash"></i></button></th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="alice_name_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
 
 
                     <div class="table-responsive d-none" id="product_type_table_next">
@@ -415,7 +419,11 @@
                         <button type="submit" class="btn btn-primary float-end d-none"
                             id="product_price_submit_btn">Submit</button>
                     </div>
+
                 </div>
+
+
+
 
             </div>
 
@@ -564,6 +572,3 @@
 </body>
 
 </html>
-
-
-
