@@ -962,6 +962,17 @@ $(document).ready(function () {
 
     })
 
+    $("#product_type_tbody").on("click", ".bom_map", function () {
+        // alert($(this).closest("button").data("alice_name"))
+        if ($(this).closest("button").data("msid")) {
+            const href = 'bom_entry.html?id=' + $(this).closest("button").data("msid") + '&name=' + $(this).closest("button").data("alice_name");
+            window.location.href = href;
+        }
+
+
+    })
+
+
     $("#type_update_btn").on("click", function () {
         console.log($("#type_add_field").val());
 
@@ -997,7 +1008,7 @@ $(document).ready(function () {
 
 
 
-    $("#hide_alice_name_table").on("click", function(){
+    $("#hide_alice_name_table").on("click", function () {
         $("#alice_name_table").addClass("d-none");
     })
 
@@ -1204,14 +1215,6 @@ function get_finished_price_report() {
                                                             data-sub_group_id="${sub.sub_group_id}">
                                                             <i class='fa fa-edit text-dark'></i>
                                                         </button>
-                                                        <a href='bom_entry.html?id=${type.mtid}' class="btn btn-primary btn-sm"
-                                                            data-product_id="${product.product_id}"
-                                                            data-model_id="${model.model_id}"
-                                                            data-mtid="${type.mtid}"
-                                                            data-group_id="${group.group_id}"
-                                                            data-sub_group_id="${sub.sub_group_id}">
-                                                            <i class="fa-solid fa-gears"></i>
-                                                        </a>
                                                     </td>
                                                 `);
 
@@ -1400,7 +1403,7 @@ function get_customer_price(mtid, group_id) {
                                     data-msid="${gt.msid}"
                                     data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
                                     ${priceObj?.price ?? gt.main_price}
-                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount !== 0 ? priceObj.discount : 0}</td>
+                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount ?? gt.discount ?? 0 }</td>
                             `;
                         });
 
@@ -1408,7 +1411,7 @@ function get_customer_price(mtid, group_id) {
                             <tr data-msid="${gt.msid}" data-mtid="${gt.mtid}">
                                 <td>${index + 1}</td>
                                 <td>${gt.subtype_name}</td>
-                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${gt.discount !== 0 ? gt.discount : 0}</td>
+                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${ gt.discount !== null ? gt.discount : 0}</td>
 
                                 ${customerTds}
 
@@ -1702,7 +1705,7 @@ function get_jaysan_model_subtype() {
                                         </p>
                                         ${item.alias_name
                                     ? `<p class="small text-danger mb-0">${item.alias_name}
-                                            <button class='bom_map border-0 border-transparent bg-transparent' data-msid="${item.msid}"><i class="fa-solid fa-rocket text-dark"></i></button></p>`
+                                            <button class='bom_map border-0 border-transparent bg-transparent' data-alice_name="${item.alias_name}" data-msid="${item.msid}" data-bom_id='${item.bom_id}'><i class="fa-solid fa-rocket text-dark"></i></button></p>`
                                     : ""}
                                     </td>
                                     <td>
@@ -1781,7 +1784,7 @@ function get_jaysan_alice_name(mtid) {
                     obj.forEach(item => {
 
                         count += 1;
-                        $("#alice_name_tbody").append(`<tr><td>${count}</td><td>${item.alias_name}</td><td>${item.subtype_name}</td><td><a href='bom_entry.html?id=${item.mtid}' class="btn btn-primary btn-sm"><i class="fa-solid fa-gears"></i></a></td></tr>`)
+                        $("#alice_name_tbody").append(`<tr><td>${count}</td><td>${item.alias_name}</td><td>${item.subtype_name}</td><td><a href='bom_entry.html?id=${item.msid}&name=${item.alias_name}' class="btn btn-primary btn-sm"><i class="fa-solid fa-gears"></i></a></td></tr>`)
 
                     });
 

@@ -1,5 +1,6 @@
 const params = new URLSearchParams(window.location.search);
-const partId = params.get("id");
+var partId = params.get("id");
+var alice_name = params.get("name");
 
 
 var cus_id = '0';
@@ -53,9 +54,11 @@ $(document).ready(function () {
 
 
 
-  if(partId !== null){
-    selectAutocompleteByPartId(partId)
+  if(alice_name !== '' || alice_name !== null || alice_name !== undefined){
+    // alert(alice_name)
+    $("#alice_name_heading").text(alice_name)
   }
+
 
 
 
@@ -322,78 +325,6 @@ $(document).ready(function () {
 
 
 
-
-
-  // $('#add_part_btn').on('click', function() {
-
-
-  // var input_count =  $('#input_part_tbl .card').length;
-  // var process_count =  $('#process_tbl .card').length;
-
-  // if(input_count >=1 && process_count>1)
-  // {
-  // shw_toast("invalid","multiple input not allowed for multiple process")
-  // }
-  // else{
-
-  //   if($('#part_no').val() && $('#part_name').val()  && $('#qty').val() &&  $('#part_name').data('selected-part_id') )
-  //     {
-  //       issaved = 'no'
-  //       var partId = $('#part_no').data('selected-part_id');
-  //      var qty = $('#qty').val()
-  //       var processId = 0
-  //         var pre_process = "<span class='text-danger h6'> No Previous process</span>"
-
-  //   if($('#finished_process').text().trim()!== '')
-  //   {
-  //      pre_process = $('#finished_process').html()
-  //     processId = $('#finished_process').data('process-id');
-  //   }
-
-
-
-  //     if(mode == 'in_change')
-  //       {
-  //         update_input(partId,processId,change_input_id,qty)
-  //       }
-  //       else if(mode == 'edit')
-  //         {
-  //           insert_new_input(partId,processId,qty)
-  //         }
-  //     else
-  //     {
-  //       $('#input_part_tbl').append(" <div class='card mt-1' data-part-id="+partId+" data-part-qty="+qty+"  data-pre-process-id="+processId+ "> <div class='card-header '> <p class='my-auto'>"+$('#part_no').val()+"-"+  $('#part_name').val()+ " ("+  pre_process +")<br> Qty : "+ qty+ "</p> </div> </div>")
-  //     }
-
-
-
-  //   $('#process_name').val('')
-  //   $('#part_no').val('');
-  //   $('#part_name').val('');
-  //   $('#finished_process').val('');
-  //   $('#qty').val('');
-  //   $('#finished_process').html('');
-
-  //   $('#part_no').removeData('part-id');
-  //   $('#finished_process').removeData('process-id');
-
-
-  //   $('#pa_nxt_prs .card').each(function() {
-  //     if ($(this).data('part-id') === partId && $(this).data('process-id') === processId ) {
-  //         $(this).fadeOut(500);
-  //     }
-  //   });
-
-
-  //   }
-  //   else{
-  //     shw_toast("Insert","Kindly insert qty or select part from autocomplete")
-  //   }
-  // }
-
-  // });
-
-
   $('#add_part_btn').on('click', function () {
 
     {
@@ -584,11 +515,23 @@ $(document).ready(function () {
 
   $('#bom_list_select').change(function () {
 
-
+    if (partId !== null) {
+      $("#default_bom").removeClass("d-none");
+    }
     get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
 
 
+
   });
+
+  $("#default_bom").click(function () {
+    if ($('#bom_list_select').find(':selected').data('part_id') !== null || $('#bom_list_select').find(':selected').data('bom_id') !== null) {
+      update_jaysan_model_subtype_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').data('bom_id'));
+    }
+    else {
+      salert("Warning", "Data missing! Try again later", "warning");
+    }
+  })
 
   $("#search_list").on("keyup", function () {
     var value = $(this).val().toLowerCase();
@@ -748,9 +691,121 @@ $(document).ready(function () {
     }
   });
 
+  get_jaysan_model_subtype_list()
 
 
+  $("#alice_name_tbody").on("click", "td button#gear", function(){
+    alert($(this).data("msid"))
+    partId = $(this).data("msid");
+    alice_name = $(this).data("alice_name");
+    $("#alice_name_heading").text($(this).data("alice_name"));
+  })
 });
+
+
+
+
+
+function get_jaysan_model_subtype_list() {
+  console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+  // $("#sub_type_section").removeClass("d-none");
+
+
+  $.ajax({
+    url: "php/get_jaysan_model_subtype_list.php",
+    type: "get", //send it through get method
+    data: {
+
+    },
+    success: function (response) {
+      console.log(response);
+      $('#alice_name_tbody').empty()
+      $('#alice_name_table').removeClass('d-none')
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+
+
+
+
+          var obj = JSON.parse(response);
+
+          var count = 0;
+
+          obj.forEach(item => {
+
+            count += 1;
+            $("#alice_name_tbody").append(`<tr style='font-size: 13px'><td>${count}</td><td>${item.alias_name}</td><td>${item.subtype_name}</td><td><button data-msid=${item.msid} data-alice_name='${item.alias_name}' class="btn btn-primary btn-sm" id='gear'><i class="fa-solid fa-gears" ></i></button></td></tr>`)
+
+          });
+
+
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+
+function update_jaysan_model_subtype_bom(part_id, bom_id) {
+
+  console.log(part_id, bom_id);
+
+
+  $.ajax({
+    url: "php/update_jaysan_model_subtype_bom.php",
+    type: "post", //send it through get method
+    data: {
+      msid: part_id,
+      bom_id: bom_id
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        swal("Success", "BOM Linked Successfully", "success", {
+          button: "OK"
+        }).then(() => {
+          window.location.href = 'product_price_entry.html';
+        });
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+
 
 function selectAutocompleteByPartId(partId) {
   let input = $('#part_name_out');
@@ -825,7 +880,7 @@ function get_bom_list(part_id) {
           obj.forEach(function (obj) {
             count = count + 1;
             //  $("#bom_list_item").append("<li  data-bom_id='"+ obj.bom_id+"' data-part_id='"+obj.part_id+" ' class=' list-group-item'>"+obj.component_cat + "</li>")
-            $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "'>" + obj.component_cat + "</option>")
+            $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "' data-bom_id='" + obj.bom_id + "'>" + obj.component_cat + "</option>")
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
 

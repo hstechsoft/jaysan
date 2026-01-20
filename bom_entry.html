@@ -217,7 +217,7 @@
         <div class="row ">
           <div class="col-8  pe-0">
             <div class="card">
-              <div class="card-header">Production Part</div>
+              <div class="card-header d-flex justify-content-between">Production Part <p class="ms-2 text-primary" id="alice_name_heading"></p><p></p></div>
               <div class="card-body d-flex justify-content-between">
                 <div>
 
@@ -242,7 +242,12 @@
                         aria-hidden="true"></i></button>
 
                   </div>
+                  <div>
+                    <button type="button" class="btn btn-primary d-none ms-2" id="default_bom"><i
+                        class="fa-solid fa-link"></i>BOM</button>
+                  </div>
                 </div>
+
 
                 <div class=" my-auto ">
                   <button class='btn  btn-sm btn-primary' id='add_new_out_part_btn' type=''> <i class="fa fa-plus"
@@ -347,6 +352,35 @@
           </div>
 
           <div class="col-4 ps-0">
+            <div class="card" id="alice_name_table">
+              <div class="card-header h6">
+                Alice Name
+              </div>
+              <div class="card-body"  style="height: 60vh; overflow-y: auto;">
+
+                <table class="table caption-top table-bordered table-striped ">
+                  <caption>Bom Selection table</caption>
+                  <thead
+                    style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
+
+                    <tr  style='font-size: 13px'>
+                      <th scope="col">#</th>
+                      <th>Alias Name</th>
+                      <th>Bom</th>
+                      <th>action </th>
+
+                    </tr>
+                  </thead>
+                  <tbody id="alice_name_tbody">
+
+
+                  </tbody>
+
+
+                </table>
+
+              </div>
+            </div>
             <div class="card">
               <div class="card-header h6">
                 Recently Added Parts
@@ -396,7 +430,7 @@
   </div>
 
 
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
   <!-- content -->
 
