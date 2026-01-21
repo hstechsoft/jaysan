@@ -103,13 +103,14 @@ $(document).ready(function () {
     );
 
 
-    $(".close").click(function(){
+    $(".close").click(function () {
         $("#add_custome_type").val("");
         $("#customer_sub_type_f").val("");
     })
 
 
     $("#finished_price_tbody").on("click", "tr td p", function (event) {
+        // alert($(this).data("mtid"))fs
         if ($(this).data("mtid") !== undefined) {
             get_jaysan_alice_name($(this).data("mtid"));
         }
@@ -565,7 +566,7 @@ $(document).ready(function () {
                         $("#customer_type_create_btn, #customer_type_update_btn").prop("disabled", true);
                         $("#customer_Sub_type").removeClass("d-none");
                         get_customer_subgroup(ui.item.id)
-                        
+
                     }
 
 
@@ -1288,7 +1289,7 @@ function get_finished_price_report() {
                                         }
 
                                         if (!typePrinted) {
-                                            tr.append(`<td data-mtid="${type.mtid}" id='alice_name' rowspan="${typeRowSpan}"><p>${type.type_name}</p><button class="btn btn-warning btn-sm type_edit_btn"
+                                            tr.append(`<td data-mtid="${type.mtid}" id='alice_name' rowspan="${typeRowSpan}"><p data-mtid="${type.mtid}">${type.type_name}</p><button class="btn btn-warning btn-sm type_edit_btn"
                                                             data-product_id="${product.product_id}"
                                                             data-model_id="${model.model_id}"
                                                             data-mtid="${type.mtid}"
@@ -1300,7 +1301,16 @@ function get_finished_price_report() {
                                         }
 
                                         if (!groupPrinted) {
-                                            tr.append(`<td rowspan="${groupRowSpan}">${group.group_name}</td>`);
+                                            tr.append(`<td rowspan="${groupRowSpan}">${group.group_name}
+                                                 <button class="btn btn-warning btn-sm features_btn"
+                                                            data-product_id="${product.product_id}"
+                                                            data-model_id="${model.model_id}"
+                                                            data-mtid="${type.mtid}"
+                                                            data-group_id="${group.group_id}"
+                                                            data-sub_group_id="${sub.sub_group_id}">
+                                                            <i class='fa fa-edit'></i>
+                                                        </button>
+                                                </td>`);
                                             groupPrinted = true;
                                         }
 
@@ -1308,7 +1318,7 @@ function get_finished_price_report() {
 
                                         tr.append(`
                                                     <td>
-                                                        <button class="btn btn-warning btn-sm features_btn"
+                                                        <button class="btn btn-warning btn-sm disabled"
                                                             data-product_id="${product.product_id}"
                                                             data-model_id="${model.model_id}"
                                                             data-mtid="${type.mtid}"
