@@ -24,7 +24,7 @@ $(document).ajaxComplete(function (e, xhr, settings) {
 
     else if (chainStep === 3) {
         chainStep = 4;
-        alert(selectedrow.data("group_id"))
+        // alert(selectedrow.data("group_id"))
         $("#customer_type").val(selectedrow.data("group_id")).data("mtid", selectedrow.data("mtid")).trigger("change");
     }
 
@@ -691,8 +691,8 @@ $(document).ready(function () {
     $("#update_to_table").click(function () {
 
         console.log($("#customer_sub_type_f").data("sub_group_id"));
-        alert($("#customer_sub_type_f").data("group_id"));
-        alert($("#customer_sub_type_f").val());
+        // alert($("#customer_sub_type_f").data("group_id"));
+        // alert($("#customer_sub_type_f").val());
 
         if (!$("#customer_sub_type_f").data("sub_group_id") || !$("#customer_sub_type_f").val()) {
             salert("Warning", "Data missing try later", "warning");
@@ -715,8 +715,8 @@ $(document).ready(function () {
     $("#customer_type_update_btn").click(function () {
 
         console.log($("#add_custome_type").data("group_id"));
-        alert($("#add_custome_type").data("group_id"));
-        alert($("#add_custome_type").val());
+        // alert($("#add_custome_type").data("group_id"));
+        // alert($("#add_custome_type").val());
 
         if (!$("#add_custome_type").data("group_id") || !$("#add_custome_type").val()) {
             salert("Warning", "Data missing try later", "warning");
