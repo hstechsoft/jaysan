@@ -887,7 +887,7 @@ $(document).ready(function () {
 
     if ($(this).is(":checked")) {
       $("#billing_price").val(mrp);
-      $("#machine_price").val(mrp);
+      // $("#machine_price").val(mrp);
     } else {
       change_price()
     }
