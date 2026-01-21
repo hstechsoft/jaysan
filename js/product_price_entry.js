@@ -6,25 +6,26 @@ var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 let chainStep = 0;
 let selectedrow = null;
+let sub_btn = 0;
+
 
 $(document).ajaxComplete(function (e, xhr, settings) {
     console.log(settings.url);
 
     if (chainStep === 1) {
         chainStep = 2;
-
         $("#product_model").val(selectedrow.data("model_id")).trigger("change");
     }
 
     else if (chainStep === 2) {
         chainStep = 3;
-
         $("#product_sub_model").val(selectedrow.data("mtid")).trigger("change");
     }
 
     else if (chainStep === 3) {
         chainStep = 4;
-        $("#customer_type").val(selectedrow.data("group_id")).trigger("change");
+        alert(selectedrow.data("group_id"))
+        $("#customer_type").val(selectedrow.data("group_id")).data("mtid", selectedrow.data("mtid")).trigger("change");
     }
 
     else if (chainStep === 4 && settings.url.includes("get_select3.php")) {
@@ -102,18 +103,22 @@ $(document).ready(function () {
     );
 
 
+    $(".close").click(function(){
+        $("#add_custome_type").val("");
+        $("#customer_sub_type_f").val("");
+    })
 
 
-    $("#finished_price_tbody").on("click", "tr td", function (event) {
+    $("#finished_price_tbody").on("click", "tr td p", function (event) {
         if ($(this).data("mtid") !== undefined) {
             get_jaysan_alice_name($(this).data("mtid"));
         }
 
     });
 
-    $("#finished_price_tbody").on("click", "tr td button", function (event) {
+    $("#finished_price_tbody").on("click", "tr td button.type_edit_btn", function (event) {
         event.preventDefault();
-        selectedrow = $(this).closest("td").find("button").eq(0);
+        selectedrow = $(this).closest("td").find("button");
         console.log(selectedrow.html());
         chainStep = 1;
         $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
@@ -127,6 +132,27 @@ $(document).ready(function () {
         $("#customer_type").data("mtid", '');
         $("#product_base_price_submit_btn").prop("disabled", false).text("Submit");
         $("#product").val(selectedrow.data("product_id")).trigger("change");
+        sub_btn = 0;
+
+    });
+
+    $("#finished_price_tbody").on("click", "tr td button.features_btn", function (event) {
+        event.preventDefault();
+        selectedrow = $(this).closest("td").find("button");
+        console.log(selectedrow.html());
+        chainStep = 1;
+        $("#product_type_table_next, #customer_type_table_next, #customer_type_view")
+            .addClass("d-none");
+
+        $("#product_type_table, #sub_type_section").removeClass("d-none");
+
+        $("#product, #product_auto, #product_model, #model_auto, #product_sub_model, #sub_model_auto, #product_base_price, #product_base_min_price, #product_base_max_price")
+            .prop("disabled", false);
+
+        $("#customer_type").data("mtid", '');
+        $("#product_base_price_submit_btn").prop("disabled", false).text("Submit");
+        $("#product").val(selectedrow.data("product_id")).trigger("change");
+        sub_btn = 1;
 
     });
 
@@ -403,8 +429,11 @@ $(document).ready(function () {
             sub_type_price.push({ msid, price, is_reduce, subtype_name, subtype_group_id, is_default, alias_name, bom_id, discount });
         });
 
+        console.log(mtid, mrp, min_price, max_price, sub_type_price);
+
+
         if (!mtid || !mrp || !min_price || !max_price || sub_type_price.length === 0 || hasError) {
-            salert("Warning", "Fill all required fields", "warning");
+            salert("Warning", "Fill all required fields 1", "warning");
             return;
         }
 
@@ -482,7 +511,11 @@ $(document).ready(function () {
 
 
     $('#add_custome_type').on('input', function () {
-        $("#customer_type_create_btn").prop("disabled", false);
+        $("#customer_type_create_btn, #customer_type_update_btn").prop("disabled", false);
+        $("#customer_sub_type_f").val('');
+        $("#add_to_table").removeClass("d-none");
+        $("#update_to_table").addClass("d-none");
+
         //check the value not empty
         $(this).removeData("cus_type_id");
         if ($('#add_custome_type').val() != "") {
@@ -521,14 +554,18 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("cus_type_id", ui.item.id);
+
+                    $("#customer_type_update_btn").removeClass("d-none");
+                    $("#customer_type_create_btn").addClass("d-none");
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
                     if (ui.item.id) {
 
-                        $("#customer_type_create_btn").prop("disabled", true);
+                        $("#customer_type_create_btn, #customer_type_update_btn").prop("disabled", true);
                         $("#customer_Sub_type").removeClass("d-none");
                         get_customer_subgroup(ui.item.id)
+                        
                     }
 
 
@@ -545,6 +582,9 @@ $(document).ready(function () {
 
     $('#customer_sub_type_f').on('input', function () {
         //check the value not empty
+
+        // $("#add_to_table").removeClass("d-none");
+        // $("#update_to_table").addClass("d-none");
         if ($('#customer_sub_type_f').val() != "") {
             $('#customer_sub_type_f').autocomplete({
                 //get data from databse return as array of object which contain label,value
@@ -580,6 +620,9 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("sub_group_id", ui.item.id);
+
+                    $("#add_to_table").addClass("d-none");
+                    $("#update_to_table").removeClass("d-none");
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
@@ -632,13 +675,64 @@ $(document).ready(function () {
 
 
 
-    $("#customer_modal_tbody").on("click", "button", function () {
+    $("#customer_modal_tbody").on("click", "button.edit", function () {
+        $("#add_to_table").addClass("d-none");
+        $("#update_to_table").removeClass("d-none");
         const subGroupId = $(this).data("sub_group_id");
+        const GroupId = $(this).data("group_id");
 
-        $("#delete_btn").data("sub_group_id", subGroupId);
-        $("#deleteModal").modal("show");
+        $("#customer_sub_type_f").data("sub_group_id", subGroupId);
+        $("#customer_sub_type_f").data("group_id", GroupId);
+        $("#customer_sub_type_f").val($(this).val());
     });
 
+
+
+    $("#update_to_table").click(function () {
+
+        console.log($("#customer_sub_type_f").data("sub_group_id"));
+        alert($("#customer_sub_type_f").data("group_id"));
+        alert($("#customer_sub_type_f").val());
+
+        if (!$("#customer_sub_type_f").data("sub_group_id") || !$("#customer_sub_type_f").val()) {
+            salert("Warning", "Data missing try later", "warning");
+            return;
+        }
+        update_customer_subgroup_master($("#customer_sub_type_f").data("sub_group_id"), $("#customer_sub_type_f").val())
+
+    })
+
+    $("#customer_modal_tbody").on("click", "button.grp_edit", function () {
+        $("#customer_type_create_btn").addClass("d-none");
+        $("#customer_type_update_btn").removeClass("d-none");
+        const grp_id = $(this).data("grp_id");
+        const grp_name = $(this).data("grp_name");
+
+        $("#add_custome_type").data("group_id", grp_id);
+        $("#add_custome_type").val(grp_name);
+    });
+
+    $("#customer_type_update_btn").click(function () {
+
+        console.log($("#add_custome_type").data("group_id"));
+        alert($("#add_custome_type").data("group_id"));
+        alert($("#add_custome_type").val());
+
+        if (!$("#add_custome_type").data("group_id") || !$("#add_custome_type").val()) {
+            salert("Warning", "Data missing try later", "warning");
+            return;
+        }
+        update_customer_group_master($("#add_custome_type").data("group_id"), $("#add_custome_type").val())
+
+    })
+    // $("#customer_modal_tbody").on("click", "button.edit", function () {
+    //     const subGroupId = $(this).data("sub_group_id");
+    //     const GroupId = $(this).data("group_id");
+
+    //     $("#delete_btn").data("sub_group_id", subGroupId);
+    //     $("#delete_btn").data("group_id", GroupId);
+    //     $("#deleteModal").modal("show");
+    // });
 
     $("#delete_btn").on("click", function () {
         const subGroupId = $(this).data("sub_group_id");
@@ -1194,7 +1288,14 @@ function get_finished_price_report() {
                                         }
 
                                         if (!typePrinted) {
-                                            tr.append(`<td data-mtid="${type.mtid}" id='alice_name' rowspan="${typeRowSpan}">${type.type_name}</td>`);
+                                            tr.append(`<td data-mtid="${type.mtid}" id='alice_name' rowspan="${typeRowSpan}"><p>${type.type_name}</p><button class="btn btn-warning btn-sm type_edit_btn"
+                                                            data-product_id="${product.product_id}"
+                                                            data-model_id="${model.model_id}"
+                                                            data-mtid="${type.mtid}"
+                                                            data-group_id="${group.group_id}"
+                                                            data-sub_group_id="${sub.sub_group_id}">
+                                                            <i class='fa fa-edit text-dark'></i>
+                                                        </button></td>`);
                                             typePrinted = true;
                                         }
 
@@ -1207,7 +1308,7 @@ function get_finished_price_report() {
 
                                         tr.append(`
                                                     <td>
-                                                        <button class="btn btn-warning btn-sm"
+                                                        <button class="btn btn-warning btn-sm features_btn"
                                                             data-product_id="${product.product_id}"
                                                             data-model_id="${model.model_id}"
                                                             data-mtid="${type.mtid}"
@@ -1258,7 +1359,78 @@ function get_finished_price_report() {
 
 
 
+function update_customer_group_master(group_id, group_name) {
 
+    console.log(group_id, group_name)
+
+    $.ajax({
+        url: "php/update_customer_group_master.php",
+        type: "post", //send it through get method
+        data: {
+            group_id: group_id,
+            group_name: group_name
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+
+
+                $("#add_custome_type").val("");
+                get_all_customer_group();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+
+function update_customer_subgroup_master(sub_group_id, sub_group_name) {
+
+    console.log(sub_group_id, sub_group_name)
+
+    $.ajax({
+        url: "php/update_customer_subgroup_master.php",
+        type: "post", //send it through get method
+        data: {
+            sub_group_id: sub_group_id,
+            sub_group_name: sub_group_name
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+
+
+                $("#customer_sub_type_f").val("");
+                get_customer_subgroup($("#add_custome_type").data("cus_type_id"));
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function get_all_subtypename() {
@@ -1403,7 +1575,7 @@ function get_customer_price(mtid, group_id) {
                                     data-msid="${gt.msid}"
                                     data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
                                     ${priceObj?.price ?? gt.main_price}
-                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount ?? gt.discount ?? 0 }</td>
+                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount ?? gt.discount ?? 0}</td>
                             `;
                         });
 
@@ -1411,7 +1583,7 @@ function get_customer_price(mtid, group_id) {
                             <tr data-msid="${gt.msid}" data-mtid="${gt.mtid}">
                                 <td>${index + 1}</td>
                                 <td>${gt.subtype_name}</td>
-                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${ gt.discount !== null ? gt.discount : 0}</td>
+                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${gt.discount !== null ? gt.discount : 0}</td>
 
                                 ${customerTds}
 
@@ -1729,6 +1901,9 @@ function get_jaysan_model_subtype() {
 
                     });
 
+                    if (sub_btn != 0) {
+                        $("#product_base_price_submit_btn").trigger("click")
+                    }
 
 
                 }
@@ -1755,7 +1930,7 @@ function get_jaysan_model_subtype() {
 
 
 function get_jaysan_alice_name(mtid) {
-    console.log($('#product_sub_model').val() || $("#sub_model_auto").data("mtid"));
+    console.log(mtid);
     // $("#sub_type_section").removeClass("d-none");
 
 
@@ -2032,7 +2207,7 @@ function insert_customer_group_master(group_name) {
 
 
             if (response.trim() > 0) {
-                $("#customer_type_create_btn").prop("disabled", true);
+                $("#customer_type_create_btn, #customer_type_update_btn").prop("disabled", true);
                 $("#customer_Sub_type").removeClass("d-none");
                 $("#add_custome_type").data("cus_type_id", response);
 
@@ -2119,7 +2294,7 @@ function get_all_customer_group() {
                         $('#customer_modal_tbody').append(`<tr>
 
                                     <td>${count}</td>
-                                    <td>${obj.group_name}</td><td><button class="text-warning border-0 border-transparent bg-transparent" ><i class="fa fa-edit"></i></button</td>
+                                    <td>${obj.group_name}</td><td><button data-grp_name='${obj.group_name}' data-grp_id='${obj.group_id}' class="text-warning disabled border-0 border-transparent bg-transparent grp_edit" ><i class="fa fa-edit"></i></button</td>
 
                                 </tr>`)
 
@@ -2180,7 +2355,7 @@ function get_customer_subgroup(group_id) {
 
                                     <td>${count}</td>
                                     <td>${obj.sub_group_name}</td>
-                                    <td><button class="text-danger border-0 border-transparent bg-transparent" data-sub_group_id='${obj.sub_group_id}'><i class="fa fa-trash"></i></button><button class="text-warning border-0 border-transparent bg-transparent" ><i class="fa fa-edit"></i></button></td>
+                                    <td><button class="text-warning border-0 border-transparent bg-transparent edit" data-sub_group_id='${obj.sub_group_id}' value='${obj.sub_group_name}' data-group_id='${obj.group_id}'><i class="fa fa-edit"></i></button></td>
                                 </tr>`)
 
                     });

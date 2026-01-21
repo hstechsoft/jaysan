@@ -61,28 +61,74 @@
             <div class="d-flex justify-content-between">
 
                 <div>
-                    <input type="text" class="form-control rounded-3" id="product" placeholder="Product">
+                    <select class="form-select" id="product">
+                        <option selected disabled value="null">Choose product...</option>
+                        <option value="Baler">Baler</option>
+                        <option value="jrb_24">FORAGE CROP CUTTER</option>
+                        <option value="jrb_23">Hay Rake</option>
+                        <option value="jrb_22">mulcher</option>
+                        <option value="jrb_21">rice transplanter</option>
+                    </select>
                 </div>
 
 
                 <div>
-                    <select class="form-select" id="bom_list" required>
-                        <option selected disabled value="null">Choose BOM List...</option>
-                        <option value="jrb_25">JRB 312 2025v</option>
-                        <option value="jrb_24">JRB 312 2024v</option>
-                        <option value="jrb_23">JRB 312 2023v</option>
-                        <option value="jrb_22">JRB 312 2022v</option>
-                        <option value="jrb_21">JRB 312 2021v</option>
+                    <select class="form-select" id="model">
+                        <option selected disabled value="null">Choose model...</option>
+                        <option value="jrb310">JRB 310</option>
+                        <option value="jrb312">JRB 312</option>
                     </select>
                 </div>
 
                 <div>
-                    <button type="submit" class="btn btn-primary default_btn" id="">Set As Default</button>
+                    <select class="form-select" id="sub_model">
+                        <option selected disabled value="null">Choose sub model...</option>
+                        <option value="3g">3G</option>
+                        <option value="4g">4G</option>
+                        <option value="4g+">4G+</option>
+                    </select>
                 </div>
+
+                <!-- <div>
+                    <button type="submit" class="btn btn-primary default_btn" id="">Set As Default</button>
+                </div> -->
             </div>
 
-            <form class="py-1 px-2 my-2 border rounded-4 shadow-sm bg-light needs-validation" id="form_process" novalidate
-                onsubmit="return false">
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption></caption>
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Alice Name</th>
+                            <th scope="col">Section</th>
+                            <th scope="col">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                        <tr>
+
+                            <td>1</td>
+                            <td>Scale</td>
+                            <td>Baler jrb312 4G+ scale</td>
+                            <td>Traveling Motor</td>
+                            <td><button type="button" class="btn btn-secondary " id=""><i
+                                        class="fa-solid fa-magnifying-glass"></i></button></td>
+
+                        </tr>
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <form class="py-1 px-2 my-2 border rounded-4 shadow-sm bg-light needs-validation" id="form_process"
+                novalidate onsubmit="return false">
 
                 <div class="table-responsive">
                     <table class="table caption-top table-bordered table-striped ">

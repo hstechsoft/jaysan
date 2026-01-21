@@ -307,7 +307,8 @@
                                 class="fa fa-edit text-danger"></i></a>
                         <table class="table caption-top table-bordered  align-middle text-center">
                             <caption></caption>
-                            <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
+                            <thead
+                                style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
 
                                 <tr>
                                     <th scope="col">#</th>
@@ -331,13 +332,17 @@
                         style="max-height: 50vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption>Bom Selection table</caption>
-                            <thead style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
+                            <thead
+                                style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
 
                                 <tr>
                                     <th scope="col">#</th>
                                     <th>Alias Name</th>
                                     <th>Bom</th>
-                                    <th>action <button type="button" class=" btn-secondary border-0 border-bg-transparent " id="hide_alice_name_table"><i class="fa-solid fa-eye-slash"></i></button></th>
+                                    <th>action <button type="button"
+                                            class=" btn-secondary border-0 border-bg-transparent "
+                                            id="hide_alice_name_table"><i class="fa-solid fa-eye-slash"></i></button>
+                                    </th>
 
                                 </tr>
                             </thead>
@@ -389,7 +394,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Customer Type</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -398,6 +403,7 @@
                         <label for="add_custome_type">Customer Type</label>
                     </div>
                     <button type="submit" class="btn btn-primary " id="customer_type_create_btn">Create</button>
+                    <button type="submit" class="btn btn-primary d-none" id="customer_type_update_btn">Update</button>
 
 
                     <div class="d-none" id="customer_Sub_type">
@@ -406,6 +412,7 @@
                             <label for="customer_sub_type_f">Sub Type</label>
                         </div>
                         <button type="button" class="btn btn-primary " id="add_to_table">Add</button>
+                        <button type="button" class="btn btn-primary d-none" id="update_to_table">Update</button>
 
 
                     </div>
@@ -437,7 +444,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary float-end d-none" id="submit_btn">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -515,6 +522,51 @@
     <script src="js/product_price_entry.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+    <script>
+        function sentenceCaseText(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent.trim();
+                if (text.length > 0) {
+                    node.textContent =
+                        text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+                }
+            }
+        }
+
+        function processElement(el) {
+            if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") return;
+            if (el.classList?.contains("no-case")) return;
+
+            el.childNodes.forEach(child => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    sentenceCaseText(child);
+                } else {
+                    processElement(child);
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            processElement(document.body);
+        });
+
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        processElement(node);
+                    }
+                });
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    </script>
+
 
 </body>
 
