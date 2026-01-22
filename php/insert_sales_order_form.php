@@ -110,6 +110,7 @@ if($paymentDetails != 0)
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           $payment_id = $conn->insert_id;
+          echo "New payment record created successfully. Last inserted ID is: " . $payment_id;
       } else {
           echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
       }
