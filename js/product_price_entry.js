@@ -980,6 +980,15 @@ $(document).ready(function () {
 
     });
 
+    $("#type_add_field").on("input", function (event) {
+        event.preventDefault();
+
+        $("#type_add_select").val("");
+
+        $("#section_alice_name").val($("#product_auto").val() + " " + $("#model_auto").val() + " " + $("#sub_model_auto").val() + " " + $("#type_add_field").val())
+
+    });
+
 
 
     $('#section_map').on('input', function () {
