@@ -29,6 +29,7 @@ $production_untill = test_input($_GET['production_untill']);
 
 $productDetails = ($_GET['productDetails']);
 $paymentDetails = isset($_GET['paymentDetails']) ? $_GET['paymentDetails'] : 0;
+$paymentadvanceDetails = isset($_GET['paymentadvanceDetails']) ? $_GET['paymentadvanceDetails'] : 0;
  
 function test_input($data) {
 $data = trim($data);
@@ -110,6 +111,39 @@ if($paymentDetails != 0)
           
       } else {
           echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
+      }
+    }
+
+    if($paymentadvanceDetails != 0)
+    foreach ($paymentadvanceDetails as $payment)
+    {
+     
+     $payment_id = ($payment['payment_id']);
+     $payment_id = sql_nullable($payment_id);
+$amount = test_input($payment['amount']);
+$advance_ref_id = sql_nullable($payment['advance_ref_id']);
+
+
+
+
+  
+      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$amount,$oid,$customer_id,$advance_ref_id)";
+
+      if ($conn->query($sql_insert_advance) === TRUE) {
+          
+      } else {
+          echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
+      }
+
+
+      if($advance_ref_id <> null){
+        // update sale_payment_advance set oid = $oid where advance_ref_id = $advance_ref_id
+        $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount-$amount WHERE advance_id = $advance_ref_id";
+        if ($conn->query($sql_update_advance) === TRUE) {
+          
+        } else {
+            echo "Error: " . $sql_update_advance . "<br>" . $conn->error;
+        }
       }
     }
 
