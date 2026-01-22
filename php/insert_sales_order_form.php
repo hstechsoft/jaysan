@@ -108,7 +108,7 @@ if($paymentDetails != 0)
       $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts,utr_no) VALUES ( '$amount','$payment_date','$oid', '$ref_no', 'not_approve','$utr_no');";
 
       if ($conn->query($sql_insert_payment) === TRUE) {
-          
+          $payment_id = $conn->insert_id;
       } else {
           echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
       }
@@ -118,16 +118,15 @@ if($paymentDetails != 0)
     foreach ($paymentadvanceDetails as $payment)
     {
      
-     $payment_id = ($payment['payment_id']);
-     $payment_id = sql_nullable($payment_id);
+   
 $amount = test_input($payment['amount']);
-$advance_ref_id = sql_nullable($payment['advance_ref_id']);
-
-
-
+$advance_ref_id = sql_nullable($payment['advance_id']);
+$payment_id_advance = null;
+if($advance_ref_id = null)
+$payment_id_advance = $payment_id;
 
   
-      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$amount,$oid,$customer_id,$advance_ref_id)";
+      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id_advance,$amount,$oid,$customer_id,$advance_ref_id)";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
           
