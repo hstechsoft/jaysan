@@ -122,7 +122,9 @@ if($paymentDetails != 0)
      
    
 $amount = test_input($payment['amount']);
+echo 'advance'. $payment['advance_id'];
 $advance_ref_id = sql_nullable($payment['advance_id']);
+echo 'advance1-'. $payment['advance_id'];
 $payment_id_advance = null;
 if($advance_ref_id === null)
 $payment_id_advance = $payment_id;
