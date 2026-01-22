@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql = "SELECT spa.*,jp.payment_date,jp.ref_no,jp.utr_no  FROM `sale_payment_advance`  spa inner join jaysan_payment jp on spa.payment_id = jp.payment_id WHERE spa.amount > 0 and spa.advance_ref_id = null and spa.cus_id = $cus_id";
+ $sql = "SELECT spa.*,jp.payment_date,jp.ref_no,jp.utr_no  FROM `sale_payment_advance`  spa inner join jaysan_payment jp on spa.payment_id = jp.payment_id WHERE spa.amount > 0 and spa.advance_ref_id is null and spa.cus_id = $cus_id";
 
 $result = $conn->query($sql);
 
