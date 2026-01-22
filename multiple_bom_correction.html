@@ -24,12 +24,13 @@
             font-size: 13px;
         }
 
-.list-group-item {
-    padding: 5px;
-}
-.list-group-item:first-child {
-    padding: 5px;
-}
+        .list-group-item {
+            padding: 5px;
+        }
+
+        .list-group-item:first-child {
+            padding: 5px;
+        }
     </style>
 
 
@@ -52,7 +53,7 @@
             </div>
         </div>
     </div>
-    <section id="menu_bar" ></section>
+    <section id="menu_bar"></section>
     <div class="container-fluid mb-2">
         <!-- top bar -->
 
@@ -62,8 +63,21 @@
             <div class="table-responsive">
                 <h6 class="d-flex justify-content-between">
                     <div><i class="fa-solid fa-link"></i>BOM</div>
+                    <div>
+                        <input type="text" class="form-control rounded-3" id="i" placeholder="Search">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label for="">Multiple <span class="badge bg-info">2</span></label>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label for="">Single <span class="badge bg-info">72</span></label>
+                    </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="bom_finished_list">
+                        <label for=""> <span class="badge bg-info">12</span></label>
+
                     </div>
                 </h6>
                 <table class="table caption-top table-bordered table-striped ">

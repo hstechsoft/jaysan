@@ -447,7 +447,7 @@ $(document).ready(function () {
         $('#pmodel').attr('disabled', true)
         $('#ptype').val("")
         $('#ptype').attr('disabled', true)
-        $('#qty').val("")
+        $('#qty').val("1")
         $('#product_sub_type_card').addClass('d-none')
         $('#sub_type_div').empty()
         $('#required_qty').val("")
@@ -535,9 +535,21 @@ $(document).ready(function () {
             $(this).closest('tr').remove();
             $('#sales_product tr').each(function (i) {
               console.log($(this).find('td:first').html());
-
               $(this).find('td:first').html(i + 1);
             })
+            var qty = 0;
+            var amount = 0;
+            var total_amount = 0;
+            var total_qty = 0;
+            $('#sales_product').find('tr').each(function () {
+              qty = parseFloat($(this).find("td").eq(5).html())
+              amount = parseFloat($(this).find("td").eq(6).html())
+              total_amount = total_amount + (parseFloat(qty * amount))
+              total_qty = total_qty + parseFloat(qty)
+            });
+
+            $('#required_qty').val(total_qty)
+            $('#total_payment').val(total_amount)
           }
 
         }
@@ -902,6 +914,16 @@ $(document).ready(function () {
 
     $("#cusTypeModal").modal("show");
   });
+
+  $("#quotation_fields_check").on("change", function () {
+    if ($(this).is(":checked")) {
+      $("#spareModal").modal("show")
+    }
+    // else {
+    //   $("#quotation_fields").addClass("d-none")
+    //   $("#product_fields").removeClass("d-none")
+    // }
+  })
 
 });
 
