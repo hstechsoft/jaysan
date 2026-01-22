@@ -95,6 +95,7 @@ if ($conn->multi_query($sql)) {
     // Now insert the payment data
     $oid = $conn->insert_id;  // Get the ID of the inserted sales order
 //  insert payment details 
+$payment_id = null;
 if($paymentDetails != 0)
     foreach ($paymentDetails as $payment)
     {
