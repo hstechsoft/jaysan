@@ -124,12 +124,12 @@ if($paymentDetails != 0)
 $amount = test_input($payment['amount']);
 $advance_ref_id = sql_nullable($payment['advance_id']);
 $payment_id_advance = null;
-if($advance_ref_id = null)
+if($advance_ref_id === null)
 $payment_id_advance = $payment_id;
 
 echo "payment_id_advance: ".$payment_id_advance;
 
-echo "advance_ref_id: ".$advance_ref_id;
+echo "advance_ref_id: ".$payment_id;
   
       $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id_advance,$amount,$oid,$customer_id,$advance_ref_id)";
 echo $sql_insert_advance;
