@@ -598,19 +598,28 @@ $(document).ready(function () {
 
   });
 
+  $("#amount").on("input", function () {
+    var t_amount = parseFloat($("#total_payment").val() || 0);
+    var amnt = parseFloat($(this).val() || 0);
+    if (t_amount < amnt) {
+      $("#extra_payment").val(amnt - t_amount);
+    }
+  })
+
 
   $('#payment_add_btn').on('click', function () {
     if ($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "" && $('#utr_no').val() != "") {
       var len = $('#payment_table tr').length + 1
-      $('#payment_table').append("<tr class='small'> <td>" + len + "</td> <td>" + $('#ref_no').val() + "</td> <td>" + $('#utr_no').val() + "</td> <td>" + $('#amount').val() + "</td> <td>" + $('#payment_date').val() + "</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+      $('#payment_table').append("<tr class='small'> <td>" + len + "</td> <td>" + $('#ref_no').val() + "</td> <td>" + $('#utr_no').val() + "</td> <td>" + $('#amount').val() + "</td> <td data-advance_id="+$('#extra_payment').data("advance_id")+">" + $('#extra_payment').val() + "</td> <td>" + $('#payment_date').val() + "</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 
       $('#ref_no').val("")
       $('#utr_no').val("")
       $('#amount').val("")
       $('#payment_date').val("")
+      $("#extra_payment").val("");
       var total_amount = 0
       $('#payment_table').find('tr').each(function () {
-        total_amount = total_amount + Number($(this).find("td").eq(2).html())
+        total_amount = total_amount + Number($(this).find("td").eq(3).html())
       });
       $('#total_amount').text(total_amount)
     }
@@ -2311,12 +2320,22 @@ function insert_sales_order_form() {
     var ref_no = $(this).find('td:eq(1)').text();
     var utr_no = $(this).find('td:eq(2)').text();
     var amount = $(this).find('td:eq(3)').text();
-    var payment_date = $(this).find('td:eq(4)').text();
+    var payment_date = $(this).find('td:eq(5)').text();
     paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date, utr_no: utr_no });
 
   });
 
-  console.log(productDetails);
+  var paymentadvanceDetails = [];
+  $('#payment_table').find('tr').each(function () {
+    var amount = $(this).find('td:eq(4)').text();
+    alert($(this).find('td:eq(4)').data("advance_id") )
+    var advance_id = "null";
+    paymentadvanceDetails.push({ amount: amount, advance_id: advance_id});
+
+  });
+
+  console.log(paymentDetails);
+  console.log(paymentadvanceDetails);
   var chasis_choice = "Custom"
   var color_choice = "Custom"
 
@@ -2336,6 +2355,7 @@ function insert_sales_order_form() {
     data: {
       paymentDetails: paymentDetails,
       productDetails: productDetails,
+      paymentadvanceDetails: paymentadvanceDetails,
       order_category: $('#order_category :selected').val(),
       product_id: $('#pmodel :selected').val(),
       customer_name: $('#cus_name').val(),
