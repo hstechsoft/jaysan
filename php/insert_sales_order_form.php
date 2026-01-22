@@ -127,6 +127,7 @@ $payment_id_advance = null;
 if($advance_ref_id = null)
 $payment_id_advance = $payment_id;
 
+echo "payment_id_advance: ".$payment_id_advance;
 
 echo "advance_ref_id: ".$advance_ref_id;
   
