@@ -127,7 +127,7 @@ $payment_id_advance = $payment_id;
 
   
       $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id_advance,$amount,$oid,$customer_id,$advance_ref_id)";
-
+echo $sql_insert_advance;
       if ($conn->query($sql_insert_advance) === TRUE) {
           
       } else {
