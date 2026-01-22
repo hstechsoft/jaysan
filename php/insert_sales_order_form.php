@@ -141,7 +141,7 @@ $payment_id_advance = $payment_id;
       }
 
 
-      if($advance_ref_id <> null){
+      if($advance_ref_id != "NULL"){
         // update sale_payment_advance set oid = $oid where advance_ref_id = $advance_ref_id
         $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount-$amount WHERE advance_id = $advance_ref_id";
         if ($conn->query($sql_update_advance) === TRUE) {
