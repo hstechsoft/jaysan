@@ -30,6 +30,7 @@ $production_untill = test_input($_GET['production_untill']);
 $productDetails = ($_GET['productDetails']);
 $paymentDetails = isset($_GET['paymentDetails']) ? $_GET['paymentDetails'] : 0;
 $paymentadvanceDetails = isset($_GET['paymentadvanceDetails']) ? $_GET['paymentadvanceDetails'] : 0;
+$sparesDetails = isset($_GET['sparesDetails']) ? $_GET['sparesDetails'] : 0;
  
 function test_input($data) {
 $data = trim($data);
@@ -141,16 +142,28 @@ $payment_id_advance = $payment_id;
       }
 
 
-      if($advance_ref_id != "NULL"){
-        // update sale_payment_advance set oid = $oid where advance_ref_id = $advance_ref_id
-        $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount-$amount WHERE advance_id = $advance_ref_id";
-        if ($conn->query($sql_update_advance) === TRUE) {
+    }
+
+
+    if($sparesDetails != 0)
+foreach ($sparesDetails as $spare)
+    {
+      $qno = $spare['qno'];
+      $remark = $spare['remark'];
+      $amount = $spare['amount'];
+
+  
+  
+      $sql_insert_spares = "INSERT INTO sale_order_spares ( oid,qno,remark,amount,dcf_no) VALUES ( '$oid','$qno','$remark','$amount','NULL');";
+
+      if ($conn->query($sql_insert_spares) === TRUE) {
           
-        } else {
-            echo "Error: " . $sql_update_advance . "<br>" . $conn->error;
-        }
+      } else {
+          echo "Error: " . $sql_insert_spares . "<br>" . $conn->error;
       }
     }
+
+
 
     foreach ($productDetails as $product)
     {
