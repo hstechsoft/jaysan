@@ -5,7 +5,7 @@
 $qno = test_input($_POST['qno']);
 $remark = test_input($_POST['remark']);
 $amount = test_input($_POST['amount']);
-$dcf_no = test_input($_POST['dcf_no']);
+$dcf_no = ($_POST['dcf_no']);
 
  
  
@@ -17,7 +17,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+$dcf_no = sql_nullable($dcf_no);
  $sql = "INSERT INTO sale_order_spares ( oid,qno,remark,amount,dcf_no) VALUES ($oid,$qno,$remark,$amount,$dcf_no)";
 
   if ($conn->query($sql) === TRUE) {
