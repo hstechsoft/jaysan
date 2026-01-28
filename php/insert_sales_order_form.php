@@ -155,7 +155,7 @@ foreach ($sparesDetails as $spare)
   
   
       $sql_insert_spares = "INSERT INTO sale_order_spares ( oid,qno,remark,amount,dcf_no) VALUES ( '$oid','$qno','$remark','$amount','NULL');";
-
+echo $sql_insert_spares;
       if ($conn->query($sql_insert_spares) === TRUE) {
           echo "sales order spare inserted successfully";
       } else {
