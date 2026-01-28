@@ -5,7 +5,7 @@
 $qno = test_input($_POST['qno']);
 $remark = test_input($_POST['remark']);
 $amount = test_input($_POST['amount']);
-$dcf_no = test_input($_POST['dcf_no']);
+$dcf_no = ($_POST['dcf_no']);
 $spares_id = test_input($_POST['spares_id']);
 
 
@@ -19,7 +19,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+$dcf_no = sql_nullable($dcf_no);
  $sql =  "UPDATE  sale_order_spares SET oid =  $oid,qno =  $qno,remark =  $remark,amount =  $amount,dcf_no =  $dcf_no,spares_id =  $spares_id WHERE spares_id =  $spares_id";
 
   if ($conn->query($sql) === TRUE) {
