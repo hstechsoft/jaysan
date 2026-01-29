@@ -21,7 +21,7 @@ return $data;
 
   if ($conn->query($sql) === TRUE) {
 
-$sql_delete_advance = "DELETE FROM jaysan_advance_payment WHERE jaysan_advance_payment.oid = $oid";
+$sql_delete_advance = "DELETE FROM sale_payment_advance WHERE sale_payment_advance.oid = $oid";
 log_delete_query($sql_delete_advance);
 if ($conn->query($sql_delete_advance) === TRUE) { 
 echo "ok";
