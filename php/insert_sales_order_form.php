@@ -104,6 +104,7 @@ if($paymentDetails != 0)
       $amount = $payment['amount'];
       $payment_date = $payment['payment_date'];
         $utr_no = $payment['utr_no'];
+        $advance_deposite = $payment['advance_deposite'];
     
 
   
@@ -111,7 +112,17 @@ if($paymentDetails != 0)
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           $payment_id = $conn->insert_id;
-        
+       if($advance_deposite > 0)
+       {
+   $sql_insert_advance_deposite = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$advance_deposite,$oid,$customer_id,null)";
+
+      if ($conn->query($sql_insert_advance_deposite) === TRUE) {
+          
+      } else {
+          echo "Error: " . $sql_insert_advance_deposite . "<br>" . $conn->error;
+      }
+       }
+
       } else {
           echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
       }
