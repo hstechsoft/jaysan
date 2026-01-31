@@ -67,6 +67,7 @@ if($paymentDetails != 0)
     $total_debit = $total_product_price + $total_spares_amount;
     if($total_received > $total_debit)
     {
+      echo $paymentadvanceDetails ;
          if($paymentadvanceDetails != 0)
 {
         echo "Advance already available do not pay from advance.";
