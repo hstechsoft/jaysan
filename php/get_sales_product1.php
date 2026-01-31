@@ -17,7 +17,7 @@ return $data;
 
 
 
- $sql = "SELECT sop.*, jpm.model_id,jpm.model_name,jmt.mtid,jmt.type_name,(SELECT jaysan_final_product.product_name FROM jaysan_final_product WHERE jaysan_final_product.product_id = jpm.product_id) as produt  FROM sales_order_product sop INNER join jaysan_product_model jpm on sop.model_id = jpm.model_id
+ $sql = "SELECT sop.*, jpm.model_id,jpm.model_name,jmt.mtid,jmt.type_name,jpm.product_id,(SELECT jaysan_final_product.product_name FROM jaysan_final_product WHERE jaysan_final_product.product_id = jpm.product_id) as produt  FROM sales_order_product sop INNER join jaysan_product_model jpm on sop.model_id = jpm.model_id
 INNER join jaysan_model_type jmt on sop.type_id = jmt.mtid WHERE sop.oid =  $oid";
 
 $result = $conn->query($sql);
