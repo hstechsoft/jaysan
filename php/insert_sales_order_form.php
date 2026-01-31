@@ -53,6 +53,8 @@ if($paymentDetails != 0)
       $total_received += $amount;
      
     }
+
+    if(count($paymentadvanceDetails) > 0)
       foreach ($paymentadvanceDetails as $payment)
     {
 if($payment['advance_id']>0)
@@ -83,7 +85,7 @@ if($payment['advance_id']>0)
     {
 
 
-       
+       if(count($paymentadvanceDetails) > 0)
          foreach ($paymentadvanceDetails as $payment)
     {
 if($payment['advance_id']>0)
