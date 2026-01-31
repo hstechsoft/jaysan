@@ -200,7 +200,8 @@ $remaining_product_price = $amount >= $remaining_product_price ? 0 : $remaining_
      
    
 $amount = test_input($payment['amount']);
-
+if($payment['advance_id'] > 0 )
+  {
 $advance_ref_id = sql_nullable($payment['advance_id']);
 
 $payment_id_advance = "NULL";
@@ -217,7 +218,7 @@ $payment_id_advance = $payment_id;
       } else {
           echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
       }
-
+  }
 
     }
 
