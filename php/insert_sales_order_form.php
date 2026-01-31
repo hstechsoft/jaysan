@@ -53,6 +53,7 @@ if($paymentDetails != 0)
       $total_received += $amount;
      
     }
+    echo $paymentadvanceDetails; 
 echo print_r($paymentadvanceDetails);
     if(count($paymentadvanceDetails) > 0)
       foreach ($paymentadvanceDetails as $payment)
