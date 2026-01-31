@@ -39,6 +39,45 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+
+$total_received = 0;
+$total_product_price = 0;
+$total_spares_amount = 0;
+
+
+if($paymentDetails != 0)
+    foreach ($paymentDetails as $payment)
+    {
+      $amount = $payment['amount'];
+      $total_received += $amount;
+    }
+ foreach ($productDetails as $product)
+    {
+      $price = $product['price']; 
+      $qty = $product['qty']; 
+      $total_product_price += ($price * $qty);
+    }
+    if($sparesDetails != 0)
+    foreach ($sparesDetails as $spare)
+    {
+      $amount = $spare['amount'];
+      $total_spares_amount += $amount;
+    }
+
+    $total_debit = $total_product_price + $total_spares_amount;
+    if($total_received > $total_debit)
+    {
+         if($paymentadvanceDetails != 0)
+{
+        echo "Advance already available do not pay from advance.";
+      exit();
+}
+
+    }
+
+    
+
+
 // insert customer if customer_id is 0
 if($customer_id == "'0'"){
   $sql_insert_customer = "INSERT  INTO customer (cus_name,cus_phone ,cus_address) VALUES($customer_name,$customer_phone,$delivery_addr) ON DUPLICATE KEY UPDATE cus_id = LAST_INSERT_ID(cus_id)";
@@ -97,6 +136,7 @@ if ($conn->multi_query($sql)) {
     $oid = $conn->insert_id;  // Get the ID of the inserted sales order
 //  insert payment details 
 $payment_id = null;
+$remaining_product_price = $total_product_price+$total_spares_amount;
 if($paymentDetails != 0)
     foreach ($paymentDetails as $payment)
     {
@@ -112,16 +152,34 @@ if($paymentDetails != 0)
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           $payment_id = $conn->insert_id;
-       if($advance_deposite > 0)
-       {
-   $sql_insert_advance_deposite = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$advance_deposite,$oid,$customer_id,null)";
 
-      if ($conn->query($sql_insert_advance_deposite) === TRUE) {
+  //      if($advance_deposite > 0)
+  //      {
+  //  $sql_insert_advance_deposite = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$advance_deposite,$oid,$customer_id,null)";
+
+  //     if ($conn->query($sql_insert_advance_deposite) === TRUE) {
+          
+  //     } else {
+  //         echo "Error: " . $sql_insert_advance_deposite . "<br>" . $conn->error;
+  //     }
+  //      }
+
+  $remain_advance = $amount - $remaining_product_price;
+  if($remain_advance > 0)
+  {
+    // insert into sale_payment_advance
+    $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$remain_advance,$oid,$customer_id,null)";
+
+      if ($conn->query($sql_insert_advance) === TRUE) {
           
       } else {
-          echo "Error: " . $sql_insert_advance_deposite . "<br>" . $conn->error;
+          echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
       }
-       }
+
+  }
+$remaining_product_price = $amount >= $remaining_product_price ? 0 : $remaining_product_price - $amount;
+
+
 
       } else {
           echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
