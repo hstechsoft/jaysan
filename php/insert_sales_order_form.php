@@ -152,7 +152,7 @@ if($paymentDetails != 0)
       $amount = $payment['amount'];
       $payment_date = $payment['payment_date'];
         $utr_no = $payment['utr_no'];
-        $advance_deposite = $payment['advance_deposite'];
+        // $advance_deposite = $payment['advance_deposite'];
     
 
   
