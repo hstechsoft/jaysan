@@ -19,6 +19,117 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
     <style>
+        /* Section Titles */
+        #compactFilterBar h6 {
+            margin: 4px 0 !important;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Divider */
+        #compactFilterBar .hr {
+            width: 100%;
+            height: 1px;
+            background: #e5e5e5;
+            margin: 6px 0;
+        }
+
+        /* Box Container */
+        #compactFilterBar .filter-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 6px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+        #compactFilterBar .filterr-box {
+            text-align: center;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 6px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 6px;
+        }
+
+
+        /* Icons */
+        #compactFilterBar .filter-box i {
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Inputs */
+        #compactFilterBar .filter-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 12px;
+            padding: 2px;
+            background: none;
+        }
+
+        /* Buttons */
+        #compactFilterBar .filter-btn-action {
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #compactFilterBar .radio-group {
+            display: flex;
+            flex-direction: row;
+            font-size: 12px;
+            gap: 2px;
+            width: 100%;
+        }
+
+        #compactFilterBar .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+
+        @media (max-width: 768px) {
+            #compactFilterBar .filter-box {
+                min-width: 48%;
+            }
+        }
+
+        .blink-badge {
+            animation: pulseBlink 1s infinite;
+        }
+
+        @keyframes pulseBlink {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.25);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
         .ui-autocomplete {
             z-index: 1056 !important;
         }
@@ -55,6 +166,31 @@
             z-index: 5;
         }
 
+        .mobile-product-card {
+            border: 0;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .mobile-product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            transition: all .2s ease;
+        }
+
+        .badge {
+            font-weight: 500;
+        }
+
+        .sub-type-text {
+            white-space: normal;
+            /* allow multiple lines */
+            word-break: break-word;
+            /* break long words */
+            overflow-wrap: anywhere;
+            /* modern browsers */
+        }
+
         @media (max-width: 766px) {
 
             .table-bordered td,
@@ -62,6 +198,73 @@
                 padding: 2px 4px;
                 font-size: 8px;
                 white-space: nowrap;
+            }
+        }
+
+
+        /* sub type*/
+        /* Make fieldsets responsive */
+        #sub_type_div fieldset {
+            padding: 0.75rem;
+            min-width: 0;
+        }
+
+        /* Legend scaling */
+        #sub_type_div legend {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0 6px;
+        }
+
+        /* Checkbox & radio spacing */
+        #sub_type_div .form-check,
+        #sub_type_div .form-check-inline {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Long subtype names wrap properly */
+        #sub_type_div label {
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 767px) {
+
+            #sub_type_div .col {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            #sub_type_div fieldset {
+                margin-bottom: 0.5rem;
+            }
+
+            #sub_type_div .form-check-inline {
+                display: flex;
+                align-items: start;
+                gap: 6px;
+            }
+
+            #sub_type_div input[type="checkbox"],
+            #sub_type_div input[type="radio"] {
+                transform: scale(1.1);
+            }
+
+            .boxborder {
+                width: 250px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+
+            #sub_type_div .col {
+                flex: 0 0 50%;
+                max-width: 100%;
+            }
+
+            .boxborder {
+                width: 262px;
             }
         }
     </style>
@@ -93,7 +296,8 @@
                                                 Total payment
                                             </span>
                                         </label>
-                                        <input id='total_payment_m' type='number' class='form-control' disabled>
+                                        <input id='total_payment_m' type='number' data-paid_amt="0" class='form-control'
+                                            disabled>
                                     </div>
                                 </div>
                                 <div class="mt-1 ">
@@ -107,10 +311,20 @@
                                         <input type='datetime-local' id='nex_payment_date_m' class='form-control'
                                             placeholder='Date'>
                                     </div>
+
+                                    <div class='input-group '>
+                                        <label class='input-group-text ' for='extra_payment_m'><span>
+                                                Extra payment
+                                            </span>
+                                        </label>
+                                        <input type='number' id='extra_payment_m' value="0" class='form-control'
+                                            placeholder='Extra Payment' disabled>
+                                    </div>
                                 </div>
                                 <div class="mt-1 d-flex  justify-content-around">
 
                                     <p class="small my-auto"> Paid : &#8377; <span id="total_amount_m"> 0</span> </p>
+
                                     <button id="update_pay_btn" class="btn btn-primary btn-sm">Ok</button>
                                 </div>
 
@@ -233,6 +447,10 @@
                 <div class="card ">
                     <div class="card-header d-flex justify-content-center">
                         Order form - Marketing
+                        <div class="form-check form-switch float-end">
+                            <input class="form-check-input" type="checkbox" id="overall_report_btn" checked>
+                            <label class="form-check-label" for="overall_report_btn">Report</label>
+                        </div>
                     </div>
 
                     <div class="card-body">
@@ -414,7 +632,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-between mt-1 gap-5">
+                                    <div class="d-md-flex justify-content-between mt-1 gap-5">
                                         <div class="col">
                                             <div class='input-group '>
                                                 <label class='input-group-text ' for='billing_price'><span>
@@ -428,17 +646,21 @@
 
 
                                         <div class="col">
-                                            <div class='input-group '>
-                                                <label class='input-group-text ' for='machine_price'><span>
-                                                        Price/Machine
-                                                    </span>
-                                                </label>
-                                                <input id='machine_price' type='number' class='form-control'>
+                                            <div class="d-md-flex justify-content-between">
+                                                <div class='input-group'>
 
-                                                <span class="input-group-text">CN : <span class="ms-1"
-                                                        id="credit_amount"> 0
-                                                    </span></span>
+                                                    <label class='input-group-text ' for='machine_price'><span>
+                                                            Price/Machine
+                                                        </span>
+                                                    </label>
+                                                    <input id='machine_price' type='number' class='form-control'>
+                                                </div>
+                                                <div class='input-group'>
+                                                    <span class="input-group-text">CN : <span class="ms-1"
+                                                            id="credit_amount"> 0
+                                                        </span></span>
 
+                                                </div>
                                             </div>
 
                                             <div class="form-check mb-3 d-none" id="spl_checkbox_hide">
@@ -471,9 +693,9 @@
 
                                 <div>
 
-                                    <div class="table-responsive">
+                                    <div class="table-responsive d-none d-md-block">
                                         <table id='sales_product1'
-                                            class='table table-bordered border-dark border-opacity-50 text-center mt-1'>
+                                            class='table table-bordered border-dark border-opacity-50 text-center mt-1 '>
                                             <thead class="small">
                                                 <tr>
 
@@ -502,6 +724,43 @@
 
                                             </tbody>
                                         </table>
+
+                                    </div>
+
+                                    <div class="d-md-none" id="product_details_mobile_view">
+
+                                    </div>
+
+
+
+                                    <div class="table-responsive d-none" id="spare_table">
+                                        <table
+                                            class="table table-bordered border-dark border-opacity-50 text-center mt-1">
+                                            <caption></caption>
+                                            <thead class="small">
+                                                <tr>
+
+                                                    <th colspan='5' scope='col' class='bg-info bg-opacity-25 small'>
+                                                        Spares
+                                                    </th>
+
+                                                </tr>
+
+                                                <tr class="small">
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Quotation no</th>
+                                                    <th scope="col">Amount</th>
+                                                    <th scope="col">Remark</th>
+                                                    <th scope="col">Delete</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="spare_tbody" class="align-middle small">
+
+                                            </tbody>
+
+
+                                        </table>
                                     </div>
                                 </div>
 
@@ -527,7 +786,8 @@
                                             Total payment
                                         </span>
                                     </label>
-                                    <input id='total_payment' type='number' class='form-control' required>
+                                    <input id='total_payment' data-paid_amt="0" type='number' class='form-control'
+                                        required>
                                 </div>
                             </div>
                             <div class="m-sm-0 mt-1 ">
@@ -544,6 +804,7 @@
                             </div>
                             <div class="m-sm-0 mt-1 d-flex d-sm-block justify-content-center">
                                 <p class="small my-auto"> Paid : &#8377; <span id="total_amount"> 0</span> </p>
+                                <p class="small my-auto"> Balance : &#8377; <span id="total_balance_amount"> 0</span> </p>
                             </div>
 
                             <div class="m-sm-0 mt-1">
@@ -552,7 +813,7 @@
                                             Extra payment
                                         </span>
                                     </label>
-                                    <input type="number" class="form-control rounded-3 " data-advance_id="" disabled id="extra_payment"
+                                    <input type="number" class="form-control rounded-3 " disabled id="extra_payment"
                                         placeholder="">
                                 </div>
                             </div>
@@ -561,124 +822,116 @@
                     </div>
                     <div class="card-body">
 
-                        <div class="d-flex">
-                            <div class="row row-cols-1 row-cols-sm-2">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="row row-cols-1 row-cols-sm-2">
 
 
-                                <!-- <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text mrequired' for='total_payment'><span>
-                Total payment 
-                </span>
-                </label>
-                <input id='total_payment' type='number' class='form-control' required >
-                </div>
-        </div>
-        <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text mrequired' for='advance_payment'><span>
-                advance payment 
-                </span>
-                </label>
-                <input id='advance_payment' type='number' class='form-control'  required>
-                </div>
-        </div>
-    
-        <div class="col">
-            <div class='input-group mb-2'> 
-                <label class='input-group-text' for='balance_payment'><span>
-                Balance payment 
-                </span>
-                </label>
-                <input id='balance_payment' type='number' class='form-control' disabled  >
-                </div>
-        </div> -->
-
-                                <div class="col">
-                                    <div class='input-group mb-2'>
-                                        <label class='input-group-text' for='amount'><span>
-                                                Amount
+                                    <!-- <div class="col">
+                                        <div class='input-group mb-2'> 
+                                            <label class='input-group-text mrequired' for='total_payment'><span>
+                                            Total payment 
                                             </span>
-                                        </label>
-                                        <input id='amount' type='number' class='form-control'>
+                                            </label>
+                                            <input id='total_payment' type='number' class='form-control' required >
+                                            </div>
                                     </div>
-                                </div>
-
-                                <div class="col">
-
-
-                                    <div class='input-group mb-2'>
-                                        <label class='input-group-text' for='ref_no'><span>
-                                                Paid on
+                                    <div class="col">
+                                        <div class='input-group mb-2'> 
+                                            <label class='input-group-text mrequired' for='advance_payment'><span>
+                                            advance payment 
                                             </span>
-                                        </label>
-                                        <input type='datetime-local' id='payment_date' class='form-control'
-                                            placeholder='Date'>
+                                            </label>
+                                            <input id='advance_payment' type='number' class='form-control'  required>
+                                            </div>
                                     </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class='input-group mb-2'>
-                                        <label class='input-group-text' for='ref_no'><span>
-                                                Reference
+                                
+                                    <div class="col">
+                                        <div class='input-group mb-2'> 
+                                            <label class='input-group-text' for='balance_payment'><span>
+                                            Balance payment 
                                             </span>
-                                        </label>
-                                        <input id='ref_no' type='text' class='form-control'>
-                                    </div>
-                                </div>
+                                            </label>
+                                            <input id='balance_payment' type='number' class='form-control' disabled  >
+                                            </div>
+                                    </div> -->
 
-                                <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0 gap-2">
-                                    <div class='input-group mb-2'>
-                                        <label class='input-group-text' for='utr_no'><span>
-                                                UTR No
-                                            </span>
-                                        </label>
-                                        <input id='utr_no' type='text' class='form-control'>
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <label class='input-group-text' for='amount'><span>
+                                                    Amount
+                                                </span>
+                                            </label>
+                                            <input id='amount' data-advance_id="null" type='number'
+                                                class='form-control'>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-primary btn-sm" id="payment_add_btn" type="button">
-                                        Add</button>
-                                </div>
 
+                                    <div class="col">
+
+
+                                        <div class='input-group mb-2'>
+                                            <label class='input-group-text' for='payment_date'><span>
+                                                    Paid on
+                                                </span>
+                                            </label>
+                                            <input type='datetime-local' id='payment_date' class='form-control'
+                                                placeholder='Date'>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class='input-group mb-2'>
+                                            <label class='input-group-text' for='ref_no'><span>
+                                                    Reference
+                                                </span>
+                                            </label>
+                                            <input id='ref_no' type='text' class='form-control'>
+                                        </div>
+                                    </div>
+
+                                    <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0 gap-2">
+                                        <div class='input-group mb-2'>
+                                            <label class='input-group-text' for='utr_no'><span>
+                                                    UTR No
+                                                </span>
+                                            </label>
+                                            <input id='utr_no' type='text' class='form-control'>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm" id="payment_add_btn" type="button">
+                                            Add</button>
+                                    </div>
+
+                                </div>
                             </div>
 
-                            <div class="card">
-                                <div class="card-header p-0">
-                                    Advance Payment
-                                </div>
-                                <div class="card-body p-0">
+                            <div class="col-md-5">
+                                <div class="card d-none" id="advance_payment_card">
+                                    <div class="card-header p-0">
+                                        Advance Payment
+                                    </div>
+                                    <div class="card-body p-0">
 
-                                    <div class="table-responsive">
-                                        <table class="table caption-top table-bordered table-striped ">
-                                            <thead style="font-size: 10px;">
+                                        <div class="table-responsive">
+                                            <table class="table caption-top table-bordered table-striped ">
+                                                <thead style="font-size: 10px;">
 
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">UTR.No</th>
-                                                    <th scope="col">Available Amount</th>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">UTR.No</th>
+                                                        <th scope="col">Available Amount</th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody id="">
-                                                <tr style="font-size: 10px;">
-
-                                                    <td>1</td>
-                                                    <td>UTR5236569959</td>
-                                                    <td>50000</td>
-
-                                                </tr>
-                                                <tr style="font-size: 10px;">
-
-                                                    <td>2</td>
-                                                    <td>UTR52569959</td>
-                                                    <td>25000</td>
-
-                                                </tr>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="advance_payment_tbody">
 
 
-                                            </tbody>
+
+                                                </tbody>
 
 
-                                        </table>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -730,7 +983,7 @@
 
                                     </div>
                                     <select class='custom-select form-control' id='order_type' required>
-                                        <option value=""  disabled>Choose Options...</option>
+                                        <option value="" disabled>Choose Options...</option>
                                         <option value='Emergency'>Emergency</option>
                                         <option value='Reqular' selected>Reqular</option>
 
@@ -749,7 +1002,7 @@
 
                                     </div>
                                     <select class='custom-select form-control' id='oe_supply' required>
-                                        <option value=""  disabled>Choose Options...</option>
+                                        <option value="" disabled>Choose Options...</option>
                                         <option value='1'>Yes</option>
                                         <option value='0' selected>No</option>
 
@@ -894,14 +1147,107 @@
 
 
 
+                <div class="table-responsive d-none" style="max-height: 90vh; overflow-y: auto;" id="overall_report">
 
-                <div class="table-responsive">
+                    <table id='order_table1'
+                        class='table table-bordered border-dark border-opacity-50 text-center small'>
+                        <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
+                            <tr>
+
+                                <th colspan='10' scope='col' class='bg-info bg-opacity-25 '>
+                                    <div class="form-check form-switch float-start">
+                                        <input class="form-check-input " type="checkbox" id="all_report">All
+                                    </div>
+                                    Sales Order
+                                    <div class="form-check form-switch float-end">
+                                        <input class="form-check-input" type="checkbox" id="delivered_report">Delivered
+                                    </div>
+                                </th>
+
+                            </tr>
+
+                            <tr>
+
+                                <th scope='col'>#</th>
+                                <th scope='col' style="width: 10%;">
+                                    <div id="compactFilterBar">
+                                        <div class="filter-box " style="background-color: #f6f4f4;">
+                                            <i class="fa fa-hashtag"></i>
+                                            <input type="number" id="order_no" class="filter-input text-dark"
+                                                placeholder="Order No">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th scope='col'>
+                                    <div id="compactFilterBar">
+                                        <div class="filterr-box text-center" style="background-color: #f6f4f4;">
+                                            Dated</div>
+                                    </div>
+                                </th>
+                                <th scope='col'>
+                                    <div id="compactFilterBar">
+                                        <div class="filter-box " style="background-color: #f6f4f4;">
+                                            <i class="fa fa-money"></i>
+                                            <select id="payment" class="filter-input text-dark">
+                                                <option disabled selected value="null">Payment</option>
+                                                <option value="1">Pending</option>
+                                                <option value="">All</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th scope='col'>
+                                    <div id="compactFilterBar" class="d-flex">
+                                        <div class="filter-box " style="background-color: #f6f4f4;">
+                                            <i class="fa fa-users"></i>
+                                            <input type="text" id="cust_auto" class="filter-input text-dark"
+                                                placeholder="Customer">
+                                        </div>
+
+                                        <!-- Customer No -->
+                                        <div class="filter-box " style="background-color: #f6f4f4;">
+                                            <i class="fa fa-phone"></i>
+                                            <input type="number" id="cust_phone_auto" class="filter-input text-dark"
+                                                placeholder="Mobile">
+                                        </div>
+                                    </div>
+                                </th>
+                                <th scope='col'>
+
+                                    <div id="compactFilterBar">
+                                        <div class="filterr-box" style="background-color: #f6f4f4;">Product
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <!-- <th scope='col'>Download</th> -->
+                                <th scope='col' style="width: 10%;">
+
+                                    <div id="compactFilterBar">
+                                        <div class="filterr-box " style="background-color: #f6f4f4;">DCF
+                                        </div>
+                                    </div>
+                                </th>
+
+
+                            </tr>
+                        </thead>
+
+                        <tbody class='align-middle ' id='order_table_report'>
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+                <div class="table-responsive d-none d-md-block">
                     <table id='order_table1'
                         class='table table-bordered border-dark border-opacity-50 text-center small'>
                         <thead>
                             <tr>
 
-                                <th colspan='11' scope='col' class='bg-info bg-opacity-25'>Sales Order</th>
+                                <th colspan='11' scope='col' class='bg-info bg-opacity-25'>Sale Orders</th>
 
                             </tr>
 
@@ -938,13 +1284,17 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-responsive">
+
+                <h6 class='d-md-none'>Sale Orders</h6>
+                <div class="d-md-none" id="mobile_order_card"></div>
+
+                <div class="table-responsive d-none d-md-block">
                     <table id='order_table1'
                         class='table table-bordered border-dark border-opacity-50 text-center small'>
                         <thead>
                             <tr>
 
-                                <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Approved Sales Order</th>
+                                <th colspan='10' scope='col' class='bg-info bg-opacity-25'>Approved Sale Orders</th>
 
                             </tr>
 
@@ -981,7 +1331,10 @@
                     </table>
                 </div>
 
-                <div class="table-responsive">
+                <h6 class='d-md-none'>Approved Sale Orders</h6>
+                <div class="d-md-none" id="mobile_approved_order_card"></div>
+
+                <div class="table-responsive d-none d-md-block">
                     <table id='req_table1' class='table table-bordered border-dark border-opacity-50 text-center small'>
                         <thead>
                             <tr>
@@ -1022,6 +1375,9 @@
                         </tbody>
                     </table>
                 </div>
+
+                <h6 class='d-md-none'>Requirement Orders</h6>
+                <div class="d-md-none" id="mobile_req_card"></div>
             </form>
             <!-- content -->
 
@@ -1304,7 +1660,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Spares Quotation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close spare_close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class='input-group mt-2'>
@@ -1336,8 +1693,10 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary spare_close"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary " id="add_quotation_btn">Add</button>
+                        <button type="submit" class="btn btn-primary d-none" id="update_quotation_btn">Update</button>
                     </div>
                 </div>
             </div>

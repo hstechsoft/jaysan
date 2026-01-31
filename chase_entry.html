@@ -89,6 +89,26 @@
                                             <div class="invalid-feedback">Please select a valid sale order.</div>
                                         </div>
 
+                                        <!-- Customer -->
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control form-control-sm rounded-3"
+                                                id="customer" value="" readonly>
+                                            <label for="customer">
+                                                <i class="fa-solid fa-building me-1"></i> Customer
+                                            </label>
+                                        </div>
+
+                                        <!-- Show Customer -->
+                                        <div class="form-floating mb-3">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="show_customer">
+                                                <label class="form-check-label" for="show_customer">Do you need to display
+                                                    customer name on job card?
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <!-- Chase No -->
                                         <div class="form-floating mb-2">
                                             <input type="text" class="form-control form-control-sm rounded-3"
@@ -208,24 +228,30 @@
                                                         JAYSAN AGRI INDUSTRIAL
                                                     </th>
                                                     <td class="fw-semibold small">Doc No</td>
-                                                    <th id="dc_no" class="small"></th>
+                                                    <th id="dc_no" class="small" colspan="2"></th>
                                                 </tr>
 
                                                 <tr>
                                                     <td class="fw-semibold small">Doc.Date</td>
-                                                    <th id="dc_date" class="small"></th>
+                                                    <th id="dc_date" class="small" colspan="2"></th>
                                                 </tr>
 
                                                 <tr>
                                                     <td class="fw-semibold small">Doc.Rev.No & Date</td>
-                                                    <th class="small"></th>
+                                                    <th class="small" colspan="2"></th>
                                                 </tr>
 
                                                 <tr>
-                                                    <th colspan="10"
+                                                    <th colspan="11"
                                                         class="text-center small fw-bold bg-primary text-white">
                                                         Model Confirmation Note
                                                     </th>
+                                                </tr>
+                                                <tr class="d-none" id="cus_row">
+                                                    <th colspan="2">Customer name:</th>
+                                                    <th colspan="4" id="customer_name"></th>
+                                                    <th colspan="2">Sale order on:</th>
+                                                    <th colspan="3" id="sale_order_no"></th>
                                                 </tr>
                                             </thead>
 
@@ -235,20 +261,20 @@
                                                     <td colspan="2">Model</td>
                                                     <td colspan="2">Type</td>
                                                     <td colspan="4">Sub Type</td>
-                                                    <td colspan="2">Chase No</td>
+                                                    <td colspan="3">Chase No</td>
                                                 </tr>
 
                                                 <tr>
                                                     <th colspan="2" id="model"></th>
                                                     <th colspan="2" id="type"></th>
                                                     <th colspan="4" id="sub_type"></th>
-                                                    <th colspan="2" id="chase_no_val"></th>
+                                                    <th colspan="3" id="chase_no_val"></th>
                                                 </tr>
 
                                                 <tr>
                                                     <td colspan="4">Marketing Commitment Date</td>
                                                     <th id="mcd"></th>
-                                                    <td colspan="4">Production Commitment Date</td>
+                                                    <td colspan="5">Production Commitment Date</td>
                                                     <th id="pcd"></th>
                                                 </tr>
 
@@ -256,25 +282,26 @@
                                                     <td colspan="4">Despatch Commitment Date</td>
                                                     <th></th>
                                                     <td colspan="3">Transport Type</td>
-                                                    <th id="transport_type" colspan="2"></th>
+                                                    <th id="transport_type" colspan="3"></th>
                                                 </tr>
 
                                                 <tr>
                                                     <td colspan="2">Department</td>
                                                     <td colspan="2" id="department_val"></td>
                                                     <td colspan="2">Prepared By</td>
-                                                    <th colspan="4" id="prepared_by_val"></th>
+                                                    <th colspan="5" id="prepared_by_val"></th>
                                                 </tr>
 
                                                 <tr>
                                                     <td>Instructions / Note</td>
                                                     <th colspan="4" id="ins_note"></th>
                                                     <td>QR Code</td>
-                                                    <th colspan="4" id="qrcode"></th>
+                                                    <th colspan="5" id="qrcode"></th>
                                                 </tr>
 
                                                 <tr class="fw-semibold">
                                                     <td>Section</td>
+                                                    <td>Features</td>
                                                     <td>Technician</td>
                                                     <td>Date</td>
                                                     <td>In time</td>
@@ -293,6 +320,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <td>2hrs</td>
                                                     <td></td>
                                                     <td></td>
@@ -301,6 +329,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Gear Box</td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -317,6 +346,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <td>2hrs</td>
                                                     <td></td>
                                                     <td></td>
@@ -325,6 +355,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Traveling Motor</td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -341,6 +372,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <td>2hrs</td>
                                                     <td></td>
                                                     <td></td>
@@ -353,6 +385,7 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <td>2hrs</td>
                                                     <td></td>
                                                     <td></td>
@@ -360,7 +393,8 @@
                                                     <td></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pre Performance Testing</td>
+                                                    <td>Final</td>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -380,7 +414,7 @@
                                                     <td>Authorised Signature</td>
                                                     <td></td>
                                                     <td>Remarks</td>
-                                                    <td colspan="3"></td>
+                                                    <td colspan="4"></td>
                                                 </tr>
 
                                             </tbody>

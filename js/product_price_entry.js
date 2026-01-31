@@ -1914,6 +1914,7 @@ function get_jaysan_model_subtype() {
                                         <input type="number" class="form-control rounded-3" id='base_discount'
                                             value="${item.discount}" placeholder="Base discount">
                                     </td>
+                                    <td><i class="fa-regular fa-eye"></i></td>
                                 </tr>
                             `);
                         });

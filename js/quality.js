@@ -5,92 +5,6 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 $(document).ready(function () {
-    var allWeldingData = [];
-
-    var processData = {
-        process_id: "297",
-
-    };
-
-
-    var arr_obj = []
-    arr_obj[1] = [];
-    arr_obj[0] = [];
-    arr_obj[1].push({
-        godown_id: "1",
-        dep_id: "1",
-        dep_sec_id: "",
-        dep_sec_machine_id: "",
-        min_time: "",
-        max_time: "",
-        cost: ""
-
-    });
-
-    arr_obj[1].push({
-        godown_id: "10",
-        dep_id: "1",
-        dep_sec_id: "",
-        dep_sec_machine_id: "",
-        min_time: "",
-        max_time: "",
-        cost: ""
-    });
-
-    allWeldingData.push({
-        input_parts: arr_obj[0],
-        process: processData,
-
-
-    });
-
-    processData = {
-        process_id: "298",
-
-    };
-    allWeldingData.push({
-        input_parts: arr_obj[1],
-        process: processData,
-
-
-    });
-
-    console.log(allWeldingData);
-
-
-    $.ajax({
-        url: "php/ref_delete.php",
-        type: "POST", //send it through get method
-        data: {
-            allWeldingData: JSON.stringify(allWeldingData),
-        },
-        success: function (response) {
-
-
-            if (response.trim() != "error") {
-                console.log(response);
-
-                if (response.trim() != "0 result") {
-
-
-
-
-                }
-                else {
-                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
-
-                }
-            }
-
-
-
-
-
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
 
 
     $("#menu_bar").load('menu.html',
@@ -116,71 +30,33 @@ $(document).ready(function () {
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-    $("#helper_checkbox").on("change", function () {
-        if ($(this).is(":checked")) {
-            $("#helper").prop("disabled", false);
-            $("#add_employee").removeClass("d-none")
-        }
-        else {
-            $("#helper").prop("disabled", true);
-            $("#add_employee").addClass("d-none")
-            $(".form-group .row .help").remove();
-        }
-    })
 
-    $("#add_employee").on("click", function () {
-        $(".form-group .row").append(`<div class="col-md-6 help"><div class="form-floating mb-3"><select class="form-select" id="helper" required><option selected disabled value="">Choose...</option></select><label for="helper">Helper</label><div class="invalid-feedback">Kindly Select Vaild </div></div></div>`)
-    })
-
-    $("#work_entry_btn").on("click", function () {
-        // $("#work_form").addClass("d-none")
-        $("#work_update").removeClass("d-none")
-    })
-
-    $("#pause_reason_btn").on("click", function () {
-        $("#resume_btn").removeClass("d-none")
-        $("#pause_btn").addClass("d-none")
-    })
-
-    $("#resume_btn").on("click", function () {
-        $("#pause_btn").removeClass("d-none")
-        $("#resume_btn").addClass("d-none")
-    })
-
-    $("#rework_reason_btn").on("click", function () {
-        $("#rework_end_btn").removeClass("d-none")
-        $("#rework_btn").addClass("d-none")
-    })
-
-    $("#rework_end_btn").on("click", function () {
-        $("#rework_btn").removeClass("d-none")
-        $("#rework_end_btn").addClass("d-none")
-    })
-
-    $("#other_work").on("change", function () {
-        if ($(this).is(":checked")) {
-            $("#extra_work_div").removeClass("d-none")
-        }
-        else {
-            $("#extra_work_div").addClass("d-none")
-        }
-    })
-
-    $("#work_update_btn").on("click", function () {
-        let invalidFound = false;
-
-        $(".employee-select").each(function () {
-            if ($(this).val() === "" || $(this).val() === null) {
-                invalidFound = true;
+    $("#submit_btn").on("click", function () {
+        swal({
+            title: "Warning",
+            content: {
+                element: "div",
+                attributes: {
+                    innerHTML: `
+                    <div class="text-center">
+                        <i class="fa-solid fa-face-angry text-danger fs-1 mb-2"></i>
+                        <p class="mt-2">Still there are items to check!</p>
+                    </div>
+                `
+                }
+            },
+            buttons: {
+                confirm: {
+                    text: "Close",
+                    className: "btn btn-danger"
+                }
             }
         });
-
-        if (invalidFound) {
-            $("#endWorkModal").modal('show');
-        } else {
-            window.location.href = "http://localhost/jaysan/quality.html";
-        }
     });
+
+
+
+
 
 });
 

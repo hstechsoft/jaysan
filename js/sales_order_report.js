@@ -151,7 +151,7 @@ $(document).ready(function () {
 
   $('#cust_phone_auto').on('input', function () {
     //check the value not empty
-      $('#cust_auto').val("");
+    $('#cust_auto').val("");
     let cus_no = $(this).val().trim();
     cus_no = "%" + cus_no + "%";
     if (cus_no != "") {
@@ -442,6 +442,25 @@ $(document).ready(function () {
   });
 
 
+  $("#delivered_report").on("click", function () {
+    if ($(this).is(":checked")) {
+      $("#all_report").prop("checked", false);
+      get_sale_order_report('', '', '', 'Delivered', '', '', '', '', '', '', '', '', '', '', '');
+    }
+    else {
+      get_sale_order_report('', '', '', '', '', '', '', '', '', '', '', '', '', 1, '');
+    }
+  })
+
+  $("#all_report").on("click", function () {
+    if ($(this).is(":checked")) {
+      $("#delivered_report").prop("checked", false);
+      get_sale_order_report('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+    }
+    else {
+      get_sale_order_report('', '', '', '', '', '', '', '', '', '', '', '', '', 1, '');
+    }
+  })
 });
 
 
@@ -1032,7 +1051,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
       production_date: production_date || "",
       sale_order_date: sale_date || "",
       order_category: order_category || "",
-      remain_dcf: remaining_dcf || "",
+      remain_dcf: remaining_dcf || 1,
       payment: payment || "",
     },
     success: function (response) {
@@ -1055,6 +1074,52 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
             let headingId = `heading-${obj.order_no}`;
             let collapseId = `collapse-${obj.order_no}`;
             var product = JSON.parse(obj.product);
+
+            var total = parseFloat(obj.debit) || 0;
+            var paid = parseFloat(obj.credit) || 0;
+
+            var percent = (paid / total) * 100;
+            percent = Math.min(Math.max(percent, 0), 100);
+
+
+            var price = `
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="my-auto small">Total</p>
+                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Paid</p>
+                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Balance</p>
+                                    <p class="small text-bg-warning fw-bold my-auto">${obj.bal}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="progress bg-danger">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar"
+                                        style="width:${percent}%;"
+                                        aria-valuenow="${percent}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="">
+                                        ${Math.round(percent)}%
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        `;
+
 
 
             product.forEach(function (item, index) {
@@ -1191,7 +1256,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
 
 
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + obj.pay_details + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 

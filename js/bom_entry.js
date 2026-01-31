@@ -735,7 +735,7 @@ function get_jaysan_model_subtype_list() {
           obj.forEach(item => {
 
             count += 1;
-            $("#alice_name_tbody").append(`<tr style='font-size: 13px'><td>${count}</td><td>${item.alias_name}</td><td>${item.subtype_name}</td><td><button data-msid=${item.msid} data-alice_name='${item.alias_name}' class="btn btn-primary btn-sm" id='gear'><i class="fa-solid fa-gears" ></i></button></td></tr>`)
+            $("#alice_name_tbody").append(`<tr style='font-size: 13px'><td>${count}</td><td>${item.alias_name}  (<span class='text-danger'>Need bom name if mapped</span>)</td><td>${item.subtype_name}</td><td><button data-msid=${item.msid} data-alice_name='${item.alias_name}' class="btn btn-primary btn-sm" id='gear'><i class="fa-solid fa-gears" ></i></button></td></tr>`)
 
           });
 

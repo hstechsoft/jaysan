@@ -47,6 +47,7 @@ $(document).ready(function () {
 
     $("#sale_order").on("change", function () {
 
+        $("#show_customer").prop("checked", false).trigger("change");
         $("#chase_entry_table").addClass("d-none");
         $("#chase_no").val('');
         $("#prepared_by").val('');
@@ -59,12 +60,22 @@ $(document).ready(function () {
         if (encodedDetails) {
 
             details = JSON.parse(decodeURIComponent(encodedDetails));
+            $("#customer").val(details.cus_name);
             console.log("✅ Details loaded:", details);
         } else {
             console.warn("⚠️ No details found in selected option");
             details = null;
         }
     });
+
+    $("#show_customer").on("change", function(){
+        if($(this).is(":checked")){
+            $("#cus_row").removeClass("d-none");
+        }
+        else{
+            $("#cus_row").addClass("d-none");
+        }
+    })
 
     $("#chase_entry_preview_btn").on("click", function () {
         if (
@@ -85,6 +96,8 @@ $(document).ready(function () {
 
             if (details !== null) {
                 var mcd = details.commitment_date.trim().split(" ");
+                $("#sale_order_no").text(details.order_no || "");
+                $("#customer_name").text(details.cus_name || "")
                 $("#model").text(details.model || "");
                 $("#type").text(details.type || "");
                 $("#sub_type").text(details.sub_type || "");
@@ -224,7 +237,7 @@ function get_assign_order() {
 
 
                     obj.forEach(function (obj) {
-                        let label = obj.cus_name + " - " + obj.product + " - " + obj.order_no;
+                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date ;
                         if (obj.order_type === "Emergency") {
                             label += " 🚨";
                         }
