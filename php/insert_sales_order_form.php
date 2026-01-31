@@ -48,15 +48,20 @@ $total_spares_amount = 0;
 if($paymentDetails != 0)
     foreach ($paymentDetails as $payment)
     {
+      echo "Payment found: ".$payment['amount'];
       $amount = $payment['amount'];
       $total_received += $amount;
+      echo " Total Received after adding payment: ".$total_received."\n";
     }
       foreach ($paymentadvanceDetails as $payment)
     {
 if($payment['advance_id']>0)
 {
+  echo "Advance payment found: ".$payment['amount'];
+
       $amount = $payment['amount'];
       $total_received += $amount;
+      echo " Total Received after adding advance: ".$total_received."\n";
 }
     }
 
