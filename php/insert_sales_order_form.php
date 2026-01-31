@@ -70,11 +70,16 @@ if($paymentDetails != 0)
 
 
         print_r($paymentadvanceDetails);
-         if($paymentadvanceDetails != 0)
+         foreach ($paymentadvanceDetails as $payment)
+    {
+if($payment['advance_id']>0)
 {
         echo "Advance already available do not pay from advance.";
       exit();
 }
+    }
+        
+
 
     }
 
