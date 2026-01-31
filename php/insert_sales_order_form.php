@@ -83,7 +83,7 @@ if($payment['advance_id']>0)
     {
 
 
-        print_r($paymentadvanceDetails);
+       
          foreach ($paymentadvanceDetails as $payment)
     {
 if($payment['advance_id']>0)
