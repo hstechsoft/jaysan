@@ -51,6 +51,15 @@ if($paymentDetails != 0)
       $amount = $payment['amount'];
       $total_received += $amount;
     }
+      foreach ($paymentadvanceDetails as $payment)
+    {
+if($payment['advance_id']>0)
+{
+      $amount = $payment['amount'];
+      $total_received += $amount;
+}
+    }
+
  foreach ($productDetails as $product)
     {
       $price = $product['price']; 
