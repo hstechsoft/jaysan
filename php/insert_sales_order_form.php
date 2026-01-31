@@ -65,6 +65,7 @@ if($paymentDetails != 0)
     }
 
     $total_debit = $total_product_price + $total_spares_amount;
+    echo "Total Received: ".$total_received." Total Debit: ".$total_debit."\n";
     if($total_received > $total_debit)
     {
 
