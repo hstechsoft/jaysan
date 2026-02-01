@@ -6,7 +6,7 @@ $payment_date = test_input($_POST['payment_date']);
 $oid = test_input($_POST['oid']);
 $ref_no = test_input($_POST['ref_no']);
 $utr_no = test_input($_POST['utr_no']);
-$advance_deposite = test_input($_POST['advance_deposite']);
+
 $customer_id = test_input($_POST['customer_id']);
 
 
@@ -24,19 +24,14 @@ return $data;
 
   if ($conn->query($sql) === TRUE) {
    $payment_id = $conn->insert_id;
-     $sql_insert_advance_deposite = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$advance_deposite,$oid,$customer_id,null)";
-
-      if ($conn->query($sql_insert_advance_deposite) === TRUE) {
-          
-      } else {
-          echo "Error: " . $sql_insert_advance_deposite . "<br>" . $conn->error;
-      }
+  
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
 
-
+  require __DIR__ . '/modify_payment.php';
+        modify_payment($conn, $oid, $customer_id);
 echo "ok";
 
 $conn->close();

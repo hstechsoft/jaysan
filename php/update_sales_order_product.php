@@ -9,6 +9,7 @@ $required_qty = test_input($_POST['required_qty']);
 $price = test_input($_POST['price']);
 $billing_amount = test_input($_POST['billing_amount']);
 $opid = test_input($_POST['opid']);
+$customer_id = test_input($_POST['customer_id']);
 
 
  
@@ -29,6 +30,8 @@ return $data;
 $sql_delete_advance = "DELETE FROM jaysan_advance_payment WHERE jaysan_advance_payment.oid = $oid";
 log_delete_query($sql_delete_advance);
 if ($conn->query($sql_delete_advance) === TRUE) { 
+    require __DIR__ . '/modify_payment.php';
+        modify_payment($conn, $oid, $customer_id);
 echo "ok";
   } else {
     echo "Error deleting record: " . $conn->error;    

@@ -93,7 +93,7 @@ if($payment['advance_id']>0)
       http_response_code(422);
 
         echo "Advance already available do not pay from advance.";
-         
+  $conn->close();         
 
       exit();
 }

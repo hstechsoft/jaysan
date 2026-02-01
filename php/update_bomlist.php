@@ -5,8 +5,10 @@
  $part_id =test_input($_GET['part_id']);
  $bom_id =test_input($_GET['bom_id']);
  if($bom_id =="''" || $part_id =="''"){
+    $conn->close();
+        echo "Invalid Input";  
      exit();
-     echo "Invalid Input";    
+   
  }
  
   

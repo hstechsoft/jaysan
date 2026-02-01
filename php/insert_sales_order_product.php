@@ -9,6 +9,7 @@ $required_qty = test_input($_POST['required_qty']);
 $price = test_input($_POST['price']);
 $billing_amount = test_input($_POST['billing_amount']);
 $opid = test_input($_POST['opid']);
+$customer_id = test_input($_POST['customer_id']);
 
 
  
@@ -25,6 +26,8 @@ return $data;
  $sql = "INSERT INTO sales_order_product (oid,type_id,model_id,sub_type,required_qty,price,billing_amount) VALUES ($oid,$type_id,$model_id,$sub_type,$required_qty,$price,$billing_amount)";
 
   if ($conn->query($sql) === TRUE) {
+        require __DIR__ . '/modify_payment.php';
+        modify_payment($conn, $oid, $customer_id);
 echo "ok";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

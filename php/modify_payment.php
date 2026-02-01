@@ -1,18 +1,11 @@
 <?php
- include 'db_head.php';
-$oid = test_input($_POST['oid']);
-$customer_id = test_input($_POST['customer_id']);
 
 
 
 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
-}
+
+function modify_payment(mysqli $conn, int $oid, int $customer_id)
+{
 $credit = 0;
 $debit = 0;
 // get full info
@@ -117,7 +110,7 @@ if($amount - $remaining_advance > 0)
 
 
 
-$conn->close();
+}
 
  ?>
 

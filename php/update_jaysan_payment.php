@@ -16,6 +16,40 @@ $data = "'".$data."'";
 return $data;
 }
 
+// get oid and customer id before delete
+$oid = null;
+$customer_id = null;  
+
+$sql_get = "SELECT jaysan_payment.oid, sale_order.customer_id FROM jaysan_payment JOIN sale_order ON jaysan_payment.oid = sale_order.oid WHERE jaysan_payment.payment_id =  $payment_id";
+$result_get = $conn->query($sql_get);
+if ($result_get->num_rows > 0) {
+  $row = $result_get->fetch_assoc();
+  $oid = $row['oid'];
+  $customer_id = $row['customer_id'];
+} 
+
+
+// check payment is not approved
+$sql_check = "SELECT * FROM jaysan_payment WHERE payment_id = $payment_id and sts = 'approved'";
+$result_check = $conn->query($sql_check);
+if ($result_check->num_rows > 0) {
+  http_response_code(400);
+  echo "payment approved no modify allowed";
+  $conn->close();
+  exit();
+}
+
+// delete all advance deposite linked to this payment
+$sql_delete_advance = "DELETE FROM sale_payment_advance WHERE sale_payment_advance.payment_id = $payment_id and sale_payment_advance.advance_ref_id is NULL";
+if ($conn->query($sql_delete_advance) === TRUE) { 
+} else {
+  echo "Error deleting record: " . $conn->error;    
+  $conn->close();
+  exit();
+}
+
+
+
 $sql = "SET time_zone = '+05:30';"; 
 $sql .= "UPDATE jaysan_payment SET payment_date = $pay_date,  jaysan_payment.sts = $pay_sts ,jaysan_payment.approved_by = $emp_id, jaysan_payment.approved_date = current_timestamp  WHERE jaysan_payment.payment_id = $payment_id AND jaysan_payment.payment_id = $payment_id";
 
@@ -54,7 +88,8 @@ echo "ok";
 } else {
   echo "Error: " . $sql_last_pay . "<br>" . $conn->error;
 }
-
+  require __DIR__ . '/modify_payment.php';
+        modify_payment($conn, $oid, $customer_id);
 // echo  'chage - '.$aff_row .PHP_EOL;
 
 
