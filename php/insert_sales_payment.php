@@ -9,8 +9,6 @@ $utr_no = test_input($_POST['utr_no']);
 
 $customer_id = test_input($_POST['customer_id']);
 
-echo $customer_id."\n";
-echo $oid."\n";
 
 function test_input($data) {
 $data = trim($data);

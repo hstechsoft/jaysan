@@ -6,6 +6,10 @@
 
 function modify_payment(mysqli $conn, int $oid, int $customer_id)
 {
+  
+echo $customer_id."\n";
+echo $oid."\n";
+
 $credit = 0;
 $debit = 0;
 // get full info
