@@ -950,7 +950,7 @@ $(document).ready(function () {
     var d = new Date(row.find("td").eq(5).text());
     var ddd = d.toISOString().slice(0, 16);
     console.log(d, ddd);
-    $("#amount").val(row.find("td").eq(3).text()).data({"payment_id": $(this).val(), "oid": $(this).data("oid")});
+    $("#amount").val(row.find("td").eq(3).text()).data({ "payment_id": $(this).val(), "oid": $(this).data("oid") });
     $("#payment_date").val(ddd);
     $("#ref_no").val(row.find("td").eq(1).text());
     $("#utr_no").val(row.find("td").eq(2).text());
@@ -2229,7 +2229,7 @@ function delete_sales_pay(payment_id) {
 
     },
     error: function (xhr) {
-      //Do Something to handle error
+      salert("Warning", xhr.responseText, "warning");
     }
   });
 
@@ -3675,7 +3675,8 @@ function get_jaysan_sales_payment_m(oid) {
 
 
   $.ajax({
-    url: "php/get_sales_payment_m.php",
+    // url: "php/get_sales_payment_m.php",
+    url: "php/get_sale_order_payment_details.php",
     type: "get", //send it through get method
     data: {
 
@@ -3696,26 +3697,55 @@ function get_jaysan_sales_payment_m(oid) {
           var total_amount = 0
           var sts = ""
           obj.forEach(function (obj) {
-            if (obj.sts == "approved") {
-              sts = "<i class='fa-solid fa-thumbs-up'></i>"
-            }
-            else
-              sts = "<i class='fa-solid fa-hourglass-half'></i>"
 
-            $('#total_payment_m').val(obj.total_payment)
-            count = count + 1;
-            $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + obj.ref_no + "</td> <td  contenteditable=\"true\">" + obj.utr_no + "</td> <td>" + obj.amount + "</td> <td>" + obj.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
-            total_amount = total_amount + Number(obj.amount)
+            var received_details = obj.received_details ? JSON.parse(obj.received_details) : [];
+            received_details.forEach(function (payment) {
+              if (payment.sts == "approved") {
+                sts = "<i class='fa-solid fa-thumbs-up'></i>"
+              }
+              else
+                sts = "<i class='fa-solid fa-hourglass-half'></i>"
+
+              count = count + 1;
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              total_amount = total_amount + Number(payment.amount)
+            });
+
+            var advance_taken_details = obj.advance_taken_details ? JSON.parse(obj.advance_taken_details) : [];
+            advance_taken_details.forEach(function (advance) {
+              count = count + 1;
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + advance.payment_date + "</td> <td></td><td><button class='btn btn-outline-danger btn-sm border-0' disabled type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              total_amount += Number(advance.advance_taken)
+            });
 
             // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
+            // $('#total_amount_m').text(total_amount)
+            // var d = Number($("#total_payment_m").val()) - total_amount;
+            // if (d <= 0) {
+            //   $("#total_payment_m").data("paid_am st", -1)
+            // }
+            // else {
+            //   $("#total_payment_m").data("paid_amt", d)
+            // }
+            $('#total_payment_m').val(parseFloat(obj.total_product_price) + parseFloat(obj.total_spares_amount))
             $('#total_amount_m').text(total_amount)
-            var d = Number($("#total_payment_m").val()) - total_amount;
-            if (d <= 0) {
-              $("#total_payment_m").data("paid_am st", -1)
+            $('#total_balance_amount_m').text(parseFloat($('#total_payment_m').val() || 0) - total_amount)
+            if (total_amount < Number($("#total_payment_m").val())) {
+              $("#total_payment_m").data("paid_amt", Number($("#total_payment_m").val()) - total_amount)
             }
             else {
-              $("#total_payment_m").data("paid_amt", d)
+              $("#total_payment_m").data("paid_amt", -1)
             }
+
+            if ($("#total_balance_amount_m").text() <= 0) {
+              $("#advance_payment_card_m").prop("disabled", true).css("pointer-events", "none");
+              $("#advance_payment_card_m td").css({ "opacity": "0.6", color: "red" });
+            }
+            else {
+              $("#advance_payment_card_m").prop("disabled", false).css("pointer-events", "auto");
+              $("#advance_payment_card_m td").css({ color: "green" });
+            }
+
             $('#nex_payment_date_m').val(obj.next_payment_date)
           })
 

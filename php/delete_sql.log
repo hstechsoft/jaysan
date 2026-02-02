@@ -69,3 +69,4 @@
 [2026-02-02 09:31:45] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_sales_pay.php | SQL:DELETE from jaysan_payment WHERE payment_id = 'undefined' and sts <> 'approved'
 [2026-02-02 10:14:27] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_sales_pay.php | SQL:DELETE from jaysan_payment WHERE payment_id = '843' and sts <> 'approved'
 [2026-02-02 10:28:59] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_sales_pay.php | SQL:DELETE from jaysan_payment WHERE payment_id = '844' and sts <> 'approved'
+[2026-02-02 15:35:26] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_sales_pay.php | SQL:DELETE from jaysan_payment WHERE payment_id = '866' and sts <> 'approved'
