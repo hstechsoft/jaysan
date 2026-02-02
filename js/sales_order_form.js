@@ -943,20 +943,45 @@ $(document).ready(function () {
 
   $('#payment_table').on("click", "#fa_edit", function () {
 
+    $("#payment_update_btn").removeClass("d-none");
+    $("#payment_add_btn").addClass("d-none");
     var row = $(this).closest("tr");
 
     var d = new Date(row.find("td").eq(5).text());
     var ddd = d.toISOString().slice(0, 16);
     console.log(d, ddd);
-    
-    $("#amount").val(row.find("td").eq(3).text());
+    $("#amount").val(row.find("td").eq(3).text()).data({"payment_id": $(this).val(), "oid": $(this).data("oid")});
     $("#payment_date").val(ddd);
     $("#ref_no").val(row.find("td").eq(1).text());
     $("#utr_no").val(row.find("td").eq(2).text());
 
 
 
+
   });
+
+  $("#payment_update_btn").on("click", function () {
+
+    console.log($("#amount").val(), $("#payment_date").val(), $("#ref_no").val(), $("#utr_no").val(), $("#amount").data("payment_id"));
+
+    const amount = parseFloat($("#amount").val());
+    const utr = $("#utr_no").val().trim();
+    const paymentId = Number($("#amount").data("payment_id"));
+
+    if (
+      !amount || amount <= 0 ||
+      !utr ||
+      !paymentId || paymentId <= 0
+    ) {
+      salert("Warning", "Data missing, try later", "warning");
+      return;
+
+    }
+    else {
+      update_jaysan_payment1(amount, $("#payment_date").val(), $("#ref_no").val(), utr, paymentId, $("#amount").data("oid"));
+    }
+  })
+
   var pt_p = 0;
   var pe_a = 0;
 
@@ -2351,6 +2376,53 @@ function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id
 
 }
 
+function update_jaysan_payment1(amount, payment_date, ref_no, utr_no, payment_id, oid) {
+  $.ajax({
+    url: "php/update_jaysan_payment1.php",
+    type: "post", //send it through get method
+    data: {
+      ref_no: ref_no,
+      utr_no: utr_no,
+      amount: amount,
+      pay_date: payment_date,
+      payment_id: payment_id,
+
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        $("#payment_update_btn").addClass("d-none");
+        $("#payment_add_btn").removeClass("d-none");
+        shw_toast("Success", "Payment Added", "success")
+
+        $('#ref_no').val("")
+        $('#utr_no').val("")
+        $('#amount').val("")
+        $('#amount').data({ "advance_id": "", payment_id: "" })
+        $('#payment_date').val("")
+        $("#extra_payment").val("");
+        get_sales_order_single(oid)
+
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      salert("Warning", xhr.responseText, "warning");
+    }
+  });
+
+
+
+
+}
 
 
 function update_sales_pay_date() {
