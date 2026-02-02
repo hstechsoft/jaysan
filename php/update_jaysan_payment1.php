@@ -1,10 +1,13 @@
 <?php
  include 'db_head.php';
 
- $emp_id = test_input($_GET['emp_id']);
- $payment_id = test_input($_GET['payment_id']);
-$pay_date = test_input($_GET['pay_date']);
-$pay_sts = test_input($_GET['pay_sts']);
+ $amount = test_input($_POST['amount']);
+ $utr_no = test_input($_POST['utr_no']);
+ $ref_no = test_input($_POST['ref_no']);
+ $payment_id = test_input($_POST['payment_id']);
+$pay_date = test_input($_POST['pay_date']);
+
+
 
  
  
@@ -51,7 +54,7 @@ if ($conn->query($sql_delete_advance) === TRUE) {
 
 
 $sql = "SET time_zone = '+05:30';"; 
-$sql .= "UPDATE jaysan_payment SET payment_date = $pay_date,  jaysan_payment.sts = $pay_sts ,jaysan_payment.approved_by = $emp_id, jaysan_payment.approved_date = current_timestamp  WHERE jaysan_payment.payment_id = $payment_id AND jaysan_payment.payment_id = $payment_id";
+$sql .= "UPDATE jaysan_payment SET amount = $amount, utr_no = $utr_no, ref_no = $ref_no, payment_date = $pay_date WHERE jaysan_payment.payment_id = $payment_id";
 
 
 
