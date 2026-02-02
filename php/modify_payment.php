@@ -15,6 +15,7 @@ if ($result_full_info->num_rows > 0) {
   while($row = $result_full_info->fetch_assoc()) {
     $debit = $row['debit'];
     $credit = $row['credit'];
+    echo "full info debit: ".$debit." credit: ".$credit."\n";
    
   }
 }
