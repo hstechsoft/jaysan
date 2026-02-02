@@ -18,7 +18,7 @@ if ($result_full_info->num_rows > 0) {
    
   }
 }
-
+echo "debit: ".$debit." credit: ".$credit."\n";
 if($debit >= $credit)
 {
  
