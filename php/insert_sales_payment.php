@@ -31,7 +31,7 @@ return $data;
 
 
   require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, $oid, $customer_id);
+        modify_payment($conn, (int)$oid, (int)$customer_id);
 echo "ok";
 
 $conn->close();

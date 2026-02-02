@@ -312,14 +312,14 @@
                                             placeholder='Date'>
                                     </div>
 
-                                    <div class='input-group '>
+                                    <!-- <div class='input-group '>
                                         <label class='input-group-text ' for='extra_payment_m'><span>
                                                 Extra payment
                                             </span>
                                         </label>
                                         <input type='number' id='extra_payment_m' value="0" class='form-control'
                                             placeholder='Extra Payment' disabled>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="mt-1 d-flex  justify-content-around">
 
@@ -445,13 +445,16 @@
             <!-- Add New Process Modal -->
             <form id="sales_order_form1" onsubmit="return false">
                 <div class="card ">
-                    <div class="card-header d-flex justify-content-center">
-                        Order form - Marketing
-                        <div class="form-check form-switch float-end">
-                            <input class="form-check-input" type="checkbox" id="overall_report_btn" checked>
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="float-center">
+                            Order form - Marketing
+                        </div>
+                        <div class="form-check form-switch float-end d-none d-md-block">
+                            <input class="form-check-input" type="checkbox" id="overall_report_btn">
                             <label class="form-check-label" for="overall_report_btn">Report</label>
                         </div>
                     </div>
+
 
                     <div class="card-body">
                         <div class='input-group'>
@@ -686,6 +689,8 @@
                                     <div class="d-flex justify-content-center">
                                         <button class="btn btn-primary btn-sm " type="button"
                                             id="add_sale_product_btn">Add</button>
+                                        <button class="btn btn-primary btn-sm d-none" type="button"
+                                            id="update_sale_product_btn">Update</button>
                                     </div>
 
 
@@ -804,7 +809,8 @@
                             </div>
                             <div class="m-sm-0 mt-1 d-flex d-sm-block justify-content-center">
                                 <p class="small my-auto"> Paid : &#8377; <span id="total_amount"> 0</span> </p>
-                                <p class="small my-auto"> Balance : &#8377; <span id="total_balance_amount"> 0</span> </p>
+                                <p class="small my-auto"> Balance : &#8377; <span id="total_balance_amount"> 0</span>
+                                </p>
                             </div>
 
                             <div class="m-sm-0 mt-1">
@@ -1147,7 +1153,8 @@
 
 
 
-                <div class="table-responsive d-none" style="max-height: 90vh; overflow-y: auto;" id="overall_report">
+                <div class="table-responsive d-none " style="max-height: 90vh; overflow-y: auto;"
+                    id="overall_report">
 
                     <table id='order_table1'
                         class='table table-bordered border-dark border-opacity-50 text-center small'>
@@ -1158,7 +1165,7 @@
                                     <div class="form-check form-switch float-start">
                                         <input class="form-check-input " type="checkbox" id="all_report">All
                                     </div>
-                                    Sales Order
+                                    Sale Order Reports
                                     <div class="form-check form-switch float-end">
                                         <input class="form-check-input" type="checkbox" id="delivered_report">Delivered
                                     </div>
@@ -1221,13 +1228,13 @@
                                 </th>
 
                                 <!-- <th scope='col'>Download</th> -->
-                                <th scope='col' style="width: 10%;">
+                                <!-- <th scope='col' style="width: 10%;">
 
                                     <div id="compactFilterBar">
                                         <div class="filterr-box " style="background-color: #f6f4f4;">DCF
                                         </div>
                                     </div>
-                                </th>
+                                </th> -->
 
 
                             </tr>

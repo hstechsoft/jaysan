@@ -33,7 +33,7 @@ $sql_delete_advance = "DELETE FROM sale_payment_advance WHERE sale_payment_advan
 log_delete_query($sql_delete_advance);
 if ($conn->query($sql_delete_advance) === TRUE) { 
     require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, $oid, $customer_id);
+        modify_payment($conn, (int)$oid, (int)$customer_id);
 echo "ok";
   } else {
     echo "Error deleting record: " . $conn->error;    

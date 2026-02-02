@@ -20,7 +20,7 @@ if ($result_full_info->num_rows > 0) {
   }
 }
  
-$total_after_insert = $credit + $amount;
+$total_after_insert =  (float)$credit +  (float)$amount;
 
 if($total_after_insert > $debit)
 {

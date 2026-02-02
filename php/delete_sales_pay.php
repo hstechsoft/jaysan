@@ -24,7 +24,7 @@ if ($result_check->num_rows > 0) {
 $oid = null;
 $customer_id = null;  
 
-$sql_get = "SELECT jaysan_payment.oid, sale_order.customer_id FROM jaysan_payment JOIN sale_order ON jaysan_payment.oid = sale_order.oid WHERE jaysan_payment.payment_id =  $payment_id";
+$sql_get = "SELECT jaysan_payment.oid, sales_order_form.customer_id FROM jaysan_payment JOIN sales_order_form ON jaysan_payment.oid = sales_order_form.oid WHERE jaysan_payment.payment_id =  $payment_id";
 $result_get = $conn->query($sql_get);
 if ($result_get->num_rows > 0) {
   $row = $result_get->fetch_assoc();
@@ -48,7 +48,8 @@ log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
     echo "ok";
     require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, $oid, $customer_id);
+        modify_payment($conn, (int)$oid, (int)$customer_id);
+
   } else {
     echo "Error deleting record: " . $conn->error;
   }
