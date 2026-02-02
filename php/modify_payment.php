@@ -7,24 +7,23 @@
 function modify_payment(mysqli $conn, int $oid, int $customer_id)
 {
   
-echo $customer_id."\n";
-echo $oid."\n";
+
 
 $credit = 0;
 $debit = 0;
 // get full info
 $sql_full_info = "select * from sale_order_payment_full where oid = $oid ";
-echo "sql: ".$sql_full_info."\n";
+
 $result_full_info = $conn->query($sql_full_info);
 if ($result_full_info->num_rows > 0) {
   while($row = $result_full_info->fetch_assoc()) {
     $debit = $row['debit'];
     $credit = $row['credit'];
-    echo "full info debit: ".$debit." credit: ".$credit."\n";
+ 
    
   }
 }
-echo "debit: ".$debit." credit: ".$credit."\n";
+
 if($debit >= $credit)
 {
  
