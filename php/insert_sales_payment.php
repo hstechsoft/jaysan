@@ -25,14 +25,14 @@ return $data;
 
   if ($conn->query($sql) === TRUE) {
    $payment_id = $conn->insert_id;
-  
+   require __DIR__ . '/modify_payment.php';
+        modify_payment($conn, (int)$oid, (int)$customer_id);
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
 
 
-  require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, (int)$oid, (int)$customer_id);
+ 
 echo "ok";
 
 $conn->close();
