@@ -30,7 +30,7 @@ if ($result_get->num_rows > 0) {
 
   if ($conn->query($sql) === TRUE) {
       require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, (int)$oid, (int)$customer_id);
+        modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
    echo "ok";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

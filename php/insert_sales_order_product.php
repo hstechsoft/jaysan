@@ -1,7 +1,7 @@
 <?php
- include 'db_head.php';
+include 'db_head.php';
 
- $oid = test_input($_POST['oid']);
+$oid = test_input($_POST['oid']);
 $type_id = test_input($_POST['type_id']);
 $model_id = test_input($_POST['model_id']);
 $sub_type = test_input($_POST['sub_type']);
@@ -12,26 +12,28 @@ $opid = test_input($_POST['opid']);
 $customer_id = test_input($_POST['customer_id']);
 
 
- 
- 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
+
+
+function test_input($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  $data = "'" . $data . "'";
+  return $data;
 }
 
 
- $sql = "INSERT INTO sales_order_product (oid,type_id,model_id,sub_type,required_qty,price,billing_amount) VALUES ($oid,$type_id,$model_id,$sub_type,$required_qty,$price,$billing_amount)";
+$sql = "INSERT INTO sales_order_product (oid,type_id,model_id,sub_type,required_qty,price,billing_amount) VALUES ($oid,$type_id,$model_id,$sub_type,$required_qty,$price,$billing_amount)";
 
-  if ($conn->query($sql) === TRUE) {
-        require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, (int)$oid, (int)$customer_id);
-echo "ok";
-  } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-  }
+if ($conn->query($sql) === TRUE) {
+  require __DIR__ . '/modify_payment.php';
+  modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
+
+  echo "ok";
+} else {
+  echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
 
 //   $sql_get_advance ="SELECT (SELECT sum(jaysan_payment.amount) from jaysan_payment WHERE jaysan_payment.oid = $oid) as payment_amount,
@@ -90,7 +92,3 @@ echo "ok";
 //     echo "0 results";
 //   } 
 $conn->close();
-
- ?>
-
-

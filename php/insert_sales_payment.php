@@ -24,7 +24,7 @@ return $data;
   if ($conn->query($sql) === TRUE) {
    $payment_id = $conn->insert_id;
    require __DIR__ . '/modify_payment.php';
-        modify_payment($conn, (int)$oid, (int)$customer_id);
+        modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
