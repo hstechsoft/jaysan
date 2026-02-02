@@ -9,6 +9,7 @@ $trans_mode = test_input($_POST['trans_mode']);
 $trans_ref = test_input($_POST['trans_ref']);
 $dcf_by = test_input($_POST['dcf_by']);
 $ass_arr = ($_POST['ass_arr']);
+$spares_arr = ($_POST['spares_arr']);
 $dcf_report = ($_POST['dcf_report']);
 $narration =  test_input($_POST['narration']);
 
@@ -48,7 +49,18 @@ if ($conn->multi_query($sql)) {
     // $sql = "UPDATE assign_product SET  assign_product.dcf_id =   0  WHERE assign_product.ass_id in ($ass_arr)";
   
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+  
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+
+  // update spares if any
+ $sql = "UPDATE sale_order_spares SET  sale_order_spares.dcf_no =    $dcf_id  WHERE sale_order_spares.spares_id in ($spares_arr)";
+
+    // $sql = "UPDATE assign_product SET  assign_product.dcf_id =   0  WHERE assign_product.ass_id in ($ass_arr)";
+  
+  if ($conn->query($sql) === TRUE) {
+   
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
@@ -56,7 +68,7 @@ if ($conn->multi_query($sql)) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
-
+echo "ok";
 $conn->close();
 
  ?>
