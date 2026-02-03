@@ -14,7 +14,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-$sql = "SELECT *  FROM customer where cus_type = 'dealer'" ;
+$sql = "SELECT *  FROM customer left join customer_subgroup_master on customer.cus_type_id = customer_subgroup_master.sub_group_id where cus_type = 'dealer'" ;
 
 $result = $conn->query($sql);
 
