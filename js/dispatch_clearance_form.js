@@ -114,7 +114,7 @@ $(document).ready(function () {
 
       var billing_amount = $(this).data("billing_amount")
 
-      $(this).find("td").eq(4).find('li').each(function () {
+      $(this).find("td").eq(4).each(function () {
 
         if ($(this).find('input').prop("checked")) {
 
@@ -126,7 +126,7 @@ $(document).ready(function () {
 
       if (count > 0) {
         console.log($(this).find("td").eq(1).find("ul").data("price"));
-        var tamount = parseInt($(this).find("td").eq(1).find("ul").data("price")) * parseInt(count)
+        var tamount = parseInt($(this).find("td").eq(1).find("ul").data("price")) * parseInt(count) || billing_amount
         total_amount = total_amount + tamount
         var len = $("#sptable tr").length + 1;
         $("#sptable").append("<tr>" + "<td>" + len + "</td>" + "<td>" + $(this).find("td").eq(1).html() + "</td>" + "<td>" + $(this).find("td").eq(2).html() + "</td>" + "<td>" + $(this).find("td").eq(3).html() + "</td>" + "<td>" + count + "</td>" + "<td>" + tamount + "</td>")
@@ -543,6 +543,57 @@ function get_sales_product() {
           obj.forEach(function (obj) {
             count = count + 1;
             $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
+
+          });
+          get_sale_order_spares()
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='4' scope='col'>No Data</td>");
+          get_sale_order_spares();
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+function get_sale_order_spares() {
+
+
+  $.ajax({
+    url: "php/get_sale_order_spares.php",
+    type: "get", //send it through get method
+    data: {
+      oid: oid
+
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+
+          var obj = JSON.parse(response);
+          var count = $("#sales_pro_table tr").length;
+
+
+          obj.forEach(function (obj) {
+            count = count + 1;
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.amount+" - "+ obj.remark  + "</td><td>" + obj.qno + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
 
           });
 

@@ -255,6 +255,7 @@ $(document).ready(function () {
                 },
                 error: function (xhr) {
                     alert("Error: " + xhr.responseText);
+                    // update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_id, po_no);
                 },
                 // complete: function () {
                 //     $("#overlay").fadeOut();

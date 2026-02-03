@@ -461,6 +461,21 @@ $(document).ready(function () {
       get_sale_order_report('', '', '', '', '', '', '', '', '', '', '', '', '', 1, '');
     }
   })
+
+  $("#order_table").on("click", ".togglePrice", function () {
+
+    var pricesummary = $(this).closest("td").find("ul.priceList").attr("id");
+    var pricedetails = $(this).closest("td").find("ul.mainPriceList").attr("id");
+
+    if ($(this).is(":checked")) {
+      $("#" + pricesummary).removeClass("d-none");
+      $("#" + pricedetails).addClass("d-none");
+    }
+    else {
+      $("#" + pricesummary).addClass("d-none");
+      $("#" + pricedetails).removeClass("d-none");
+    }
+  });
 });
 
 
@@ -1074,6 +1089,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
             let headingId = `heading-${obj.order_no}`;
             let collapseId = `collapse-${obj.order_no}`;
             var product = JSON.parse(obj.product);
+            var advance_deposite_details = JSON.parse(obj.advance_deposite_details) || [];
 
             var total = parseFloat(obj.debit) || 0;
             var paid = parseFloat(obj.credit) || 0;
@@ -1082,8 +1098,53 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
             percent = Math.min(Math.max(percent, 0), 100);
 
 
+            var advance_given = 0
+            advance_deposite_details.forEach(function(advance){
+              advance_given += parseFloat(advance.advance_given) || 0;
+            })
             var price = `
-                        <ul class="list-group">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
+                        </div>
+                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <p class="my-auto small">Total Product Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_product_price || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Spare Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_spares_amount || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Taken:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Given:</p>
+                                    <p class="small fw-bold my-auto">${advance_given || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-success text-white">
+                                <div class="d-flex justify-content-between  gap-2 ">
+                                    <p class="my-auto small">Total:</p>
+                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item  bg-warning">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Balance:</p>
+                                    <p class="small fw-bold my-auto">${obj.bal || 0}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>

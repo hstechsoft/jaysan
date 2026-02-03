@@ -267,6 +267,94 @@
                 width: 262px;
             }
         }
+
+        /* End of  */
+
+        /* ---------- GLOBAL SAFETY ---------- */
+        #order_form_div {
+            overflow-x: hidden;
+        }
+
+        /* ---------- TABLE RESPONSIVENESS ---------- */
+        #order_form table {
+            width: 100%;
+            min-width: 900px;
+            /* keeps structure */
+        }
+
+        #order_form {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* ---------- TEXT WRAPPING ---------- */
+        #order_form th,
+        #order_form td,
+        #order_form span,
+        #order_form p {
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        /* ---------- IMAGE RESPONSIVE ---------- */
+        #order_form img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ---------- MOBILE (≤576px) ---------- */
+        @media (max-width: 576px) {
+
+            #order_form_div .card-header {
+                font-size: 14px;
+                text-align: center;
+            }
+
+            #order_form table {
+                font-size: 11px;
+            }
+
+            #order_form th,
+            #order_form td {
+                padding: 4px !important;
+            }
+
+            #order_form p.small {
+                font-size: 11px;
+            }
+
+            /* Center logo properly */
+            #order_form img {
+                max-height: 40px;
+                margin: auto;
+                display: block;
+            }
+
+            #order_form table {
+                min-width: 300px;
+            }
+        }
+
+        /* ---------- TABLET (≤768px) ---------- */
+        @media (max-width: 768px) {
+
+            #order_form table {
+                font-size: 12px;
+
+            }
+
+            #order_form th,
+            #order_form td {
+                padding: 6px;
+            }
+        }
+
+        /* ---------- LARGE SCREENS (no change, just safety) ---------- */
+        @media (min-width: 992px) {
+            #order_form {
+                overflow-x: visible;
+            }
+        }
     </style>
 
 
@@ -479,10 +567,6 @@
                     <div class="card-header d-flex justify-content-between">
                         <div class="float-center">
                             Order form - Marketing
-                        </div>
-                        <div class="form-check form-switch float-end d-none d-md-block">
-                            <input class="form-check-input" type="checkbox" id="overall_report_btn">
-                            <label class="form-check-label" for="overall_report_btn">Report</label>
                         </div>
                     </div>
 
@@ -722,6 +806,8 @@
                                             id="add_sale_product_btn">Add</button>
                                         <button class="btn btn-primary btn-sm d-none" type="button"
                                             id="update_sale_product_btn">Update</button>
+                                        <button class="btn btn-secondary btn-sm d-none" type="button"
+                                            id="cancel_sale_product_btn">Cancel</button>
                                     </div>
 
 
@@ -940,6 +1026,9 @@
                                         <button class="btn btn-primary btn-sm d-none" id="payment_update_btn"
                                             type="button">
                                             Update</button>
+                                        <button class="btn btn-secondary btn-sm d-none" id="payment_cancel_btn"
+                                            type="button">
+                                            Cancel</button>
                                     </div>
 
                                 </div>
@@ -1187,99 +1276,6 @@
 
 
 
-                <div class="table-responsive d-none " style="max-height: 90vh; overflow-y: auto;" id="overall_report">
-
-                    <table id='order_table1'
-                        class='table table-bordered border-dark border-opacity-50 text-center small'>
-                        <thead style="position: sticky; top: 0; z-index: 5; background: rgb(233, 233, 233);">
-                            <tr>
-
-                                <th colspan='10' scope='col' class='bg-info bg-opacity-25 '>
-                                    <div class="form-check form-switch float-start">
-                                        <input class="form-check-input " type="checkbox" id="all_report">All
-                                    </div>
-                                    Sale Order Reports
-                                    <div class="form-check form-switch float-end">
-                                        <input class="form-check-input" type="checkbox" id="delivered_report">Delivered
-                                    </div>
-                                </th>
-
-                            </tr>
-
-                            <tr>
-
-                                <th scope='col'>#</th>
-                                <th scope='col' style="width: 10%;">
-                                    <div id="compactFilterBar">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-hashtag"></i>
-                                            <input type="number" id="order_no" class="filter-input text-dark"
-                                                placeholder="Order No">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box text-center" style="background-color: #f6f4f4;">
-                                            Dated</div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-money"></i>
-                                            <select id="payment" class="filter-input text-dark">
-                                                <option disabled selected value="null">Payment</option>
-                                                <option value="1">Pending</option>
-                                                <option value="">All</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-                                    <div id="compactFilterBar" class="d-flex">
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-users"></i>
-                                            <input type="text" id="cust_auto" class="filter-input text-dark"
-                                                placeholder="Customer">
-                                        </div>
-
-                                        <!-- Customer No -->
-                                        <div class="filter-box " style="background-color: #f6f4f4;">
-                                            <i class="fa fa-phone"></i>
-                                            <input type="number" id="cust_phone_auto" class="filter-input text-dark"
-                                                placeholder="Mobile">
-                                        </div>
-                                    </div>
-                                </th>
-                                <th scope='col'>
-
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box" style="background-color: #f6f4f4;">Product
-                                        </div>
-                                    </div>
-                                </th>
-
-                                <!-- <th scope='col'>Download</th> -->
-                                <!-- <th scope='col' style="width: 10%;">
-
-                                    <div id="compactFilterBar">
-                                        <div class="filterr-box " style="background-color: #f6f4f4;">DCF
-                                        </div>
-                                    </div>
-                                </th> -->
-
-
-                            </tr>
-                        </thead>
-
-                        <tbody class='align-middle ' id='order_table_report'>
-
-                        </tbody>
-
-                    </table>
-                </div>
-
 
                 <div class="table-responsive d-none d-md-block">
                     <table id='order_table1'
@@ -1310,7 +1306,7 @@
                                 <th scope='col'>order no</th>
                                 <th scope='col'>Dated</th>
                                 <th scope='col'>Employee</th>
-                                <th scope='col'>Payment</th>
+                                <th scope='col' style="width: 20%;">Payment</th>
                                 <th scope='col'>customer</th>
                                 <th scope='col'>Product</th>
                                 <th scope='col'>edit</th>
