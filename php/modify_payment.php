@@ -26,7 +26,7 @@ if ($result_full_info->num_rows > 0) {
 
 if($debit >= $credit)
 {
- echo "done";
+ echo "ok";
   $conn->close();
   exit();
 }
