@@ -26,7 +26,7 @@ if ($result_full_info->num_rows > 0) {
 
 if($debit >= $credit)
 {
- 
+ echo "done";
   $conn->close();
   exit();
 }
@@ -113,7 +113,7 @@ if($amount - $remaining_advance > 0)
 
 }
 
-echo "done";
+
 
 }
 
