@@ -73,8 +73,8 @@ if ($conn->multi_query($sql)) {
   echo "Error: " . $sql . "<br>" . $conn->error;
 }
 $aff_row = 0;
-$oid = 0;
-$order_no = 0;
+
+
 $sql_last_pay = "UPDATE sales_order_form  SET first_payment_date = $pay_date WHERE 
     (
         (sales_order_form.first_payment_date > $pay_date 
