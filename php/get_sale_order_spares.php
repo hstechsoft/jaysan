@@ -15,7 +15,8 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM sale_order_spares WHERE oid =  $oid";
+ $sql = "SELECT sale_order_spares.*,order_no FROM sale_order_spares
+ inner join sales_order_form sof on sof.oid = sale_order_spares.oid WHERE sale_order_spares.oid =  $oid";
 
 $result = $conn->query($sql);
 
