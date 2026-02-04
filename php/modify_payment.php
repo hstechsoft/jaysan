@@ -19,8 +19,7 @@ if ($result_full_info->num_rows > 0) {
   while($row = $result_full_info->fetch_assoc()) {
     $debit = $row['debit'];
     $credit = $row['credit'];
-    $emp_id = $row['emp_id']; 
-    $customer_id = $row['customer_id'];
+   
  
    
   }
@@ -31,6 +30,18 @@ if($debit >= $credit)
  echo "ok";
   $conn->close();
   exit();
+}
+
+// get customer and emp id
+$sql_order_info = "select emp_id, customer_id from sales_order_form where oid = $oid "; 
+$result_order_info = $conn->query($sql_order_info);
+if ($result_order_info->num_rows > 0) {
+  while($row = $result_order_info->fetch_assoc()) {
+    $emp_id = $row['emp_id'];
+    $customer_id = $row['customer_id'];
+ 
+   
+  }
 }
 $remaining_debit = $debit;
 //get received amount
