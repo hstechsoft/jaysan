@@ -196,7 +196,7 @@ if($paymentDetails != 0)
   if($remain_advance > 0)
   {
     // insert into sale_payment_advance
-    $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$remain_advance,$oid,$customer_id,null)";
+    $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id,$remain_advance,$oid,$customer_id,null,$emp_id,NOW())";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
           
@@ -231,7 +231,7 @@ $payment_id_advance = $payment_id;
 
 
   
-      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id_advance,$amount,$oid,$customer_id,$advance_ref_id)";
+      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id_advance,$amount,$oid,$customer_id,$advance_ref_id,$emp_id,NOW())";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
           

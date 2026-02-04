@@ -38,7 +38,7 @@ return $data;
     INNER JOIN sales_order_product sop ON ap.opid = sop.opid
     inner join sales_order_form sof on sof.oid = sop.oid
     WHERE ap.dcf_id > 0 
-      AND ap.assign_type = 'Delivered' and sof.customer_id = $cus_id
+       and sof.customer_id = $cus_id
     GROUP BY ap.dcf_id
 ),
 

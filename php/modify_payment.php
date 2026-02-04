@@ -8,7 +8,7 @@ function modify_payment(mysqli $conn, int $oid, int $customer_id)
 {
   
 
-
+$emp_id = 0;
 $credit = 0;
 $debit = 0;
 // get full info
@@ -19,6 +19,8 @@ if ($result_full_info->num_rows > 0) {
   while($row = $result_full_info->fetch_assoc()) {
     $debit = $row['debit'];
     $credit = $row['credit'];
+    $emp_id = $row['emp_id']; 
+    $customer_id = $row['customer_id'];
  
    
   }
@@ -45,7 +47,7 @@ if ($result_amount_received->num_rows > 0) {
     if($remaining_advance > 0)
   {
     // insert advance
-      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$remaining_advance,$oid,$customer_id,null)";
+      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id,$remaining_advance,$oid,$customer_id,null,$emp_id,NOW())";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
           
@@ -85,7 +87,7 @@ foreach($sale_advance_array as $advance_payment)
 //   update advance if any remaining else delete it
 if($amount - $remaining_advance > 0)
 {
-      $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount -   $remaining_advance WHERE advance_id = $advance_id";
+      $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount -   $remaining_advance, dated = NOW(), emp_id = $emp_id WHERE advance_id = $advance_id";
 
       if ($conn->query($sql_update_advance) === TRUE) {
           

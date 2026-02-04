@@ -6,6 +6,7 @@ $amount = test_input($_POST['amount']);
 $oid = test_input($_POST['oid']);
 $cus_id = test_input($_POST['cus_id']);
 $advance_ref_id = ($_POST['advance_ref_id']);
+$emp_id = test_input($_POST['emp_id']);
 
 $credit = 0;
 $debit = 0;
@@ -51,7 +52,7 @@ if($advance_ref_id == "NULL")
 if($advance_ref_id == "NULL")
 $payment_id_advance = $payment_id;
 
- $sql = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id_advance,$amount,$oid,$cus_id,$advance_ref_id)";
+ $sql = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id_advance,$amount,$oid,$cus_id,$advance_ref_id,$emp_id,NOW())";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
