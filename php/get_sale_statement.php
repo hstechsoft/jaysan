@@ -38,7 +38,7 @@ return $data;
     INNER JOIN sales_order_product sop ON ap.opid = sop.opid
     inner join sales_order_form sof on sof.oid = sop.oid
     WHERE ap.dcf_id > 0 
-       and sof.customer_id = $cus_id
+      and sof.customer_id = $cus_id
     GROUP BY ap.dcf_id
 ),
 
@@ -67,7 +67,7 @@ jaysan_payment_details AS (
 
 )
 
-SELECT JSON_OBJECT(
+SELECT  JSON_OBJECT(
     'payments', (
         SELECT JSON_ARRAYAGG(JSON_OBJECT(
             'credit', amount,
@@ -93,9 +93,22 @@ SELECT JSON_OBJECT(
             'dcf_date', dcf_date
         ))
         FROM spares_details
+    ),
+    'reamining_balance', ( (SELECT COALESCE(SUM(amount), 0) FROM jaysan_payment_details) -
+        (SELECT COALESCE(SUM(total_product_price), 0) FROM product_price) +
+        (SELECT COALESCE(SUM(amount), 0) FROM spares_details) 
+       
+    ),
+    'total_paid_amount', (
+        SELECT COALESCE(SUM(amount), 0) FROM jaysan_payment_details
+    ),
+    'total_product_amount', (
+        SELECT COALESCE(SUM(total_product_price), 0) FROM product_price
+    ),
+    'total_spares_amount', (
+        SELECT COALESCE(SUM(amount), 0) FROM spares_details
     )
-) AS full_result;
-";
+) AS full_result";
 
 $result = $conn->query($sql);
 
