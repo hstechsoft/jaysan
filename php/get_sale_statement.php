@@ -56,6 +56,7 @@ spares_details AS (
 
 jaysan_payment_details AS (
     SELECT 
+    sof.order_no,
         jp.amount,
         DATE_ONLY(jp.dated) AS dated,
         jp.utr_no
