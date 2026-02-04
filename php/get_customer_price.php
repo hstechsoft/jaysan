@@ -42,6 +42,7 @@ $sql = "SELECT JSON_OBJECT(
             'mtid', sub.mtid,
             'subtype_name', sub.subtype_name,
             'main_price', sub.price,
+            'main_discount', sub.discount,
             'is_reduce', sub.is_reduce,
             'gsp_id', gstp.gsp_id,
             'price', gstp.price,
