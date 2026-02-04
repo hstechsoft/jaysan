@@ -1589,20 +1589,52 @@ function get_customer_price(mtid, group_id) {
                         subgroups.forEach(sg => {
                             const priceObj = priceDetails.find(p => p.sub_group_id === sg.sub_group_id);
 
+
+                            var finalPrice = 0;
+                            var finalDiscount = 0;
+
+                            if (gt.main_price > 0 && gt.main_price != null) {
+                                if(gt.price > 0 && gt.price != null){
+                                    finalPrice = priceObj.price != null ? priceObj.price : gt.price;
+                                }
+                                else{
+                                    finalPrice = gt.price != null ? gt.price : gt.main_price ?? 0;
+                                }
+                            } else {
+                                finalPrice = gt.main_price != null ? gt.main_price : 0;
+                            }
+
+                            if (gt.main_discount > 0 && gt.main_discount != null) {
+                                if(gt.discount > 0 && gt.discount != null){
+                                    finalDiscount = priceObj.discount != null ? priceObj.discount : gt.discount;
+                                }
+                                else{
+                                    finalDiscount = gt.discount != null ? gt.discount : gt.main_discount ?? 0;
+                                }
+                            } else {
+                                finalDiscount = gt.main_discount != null ? gt.main_discount : 0;
+                            }
+
                             customerTds += `
                                 <td contenteditable="true"
                                     data-msid="${gt.msid}"
-                                    data-sub_group_id="${sg.sub_group_id}" data-price_type=''>
-                                    ${priceObj?.price ?? gt.main_price}
-                                </td><td contenteditable="true" id='discount_cell'>${priceObj.discount ?? gt.discount ?? 0}</td>
-                            `;
+                                    data-sub_group_id="${sg.sub_group_id}"
+                                    data-price_type="">
+                                    ${gt.main_price > 0 || gt.main_price !== null ? (gt.price > 0 || gt.price !== null ? (priceObj.price > 0 ? priceObj.price : gt.price ?? gt.main_price ) : gt.price ?? gt.main_price) : gt.main_price ?? 0}
+                                </td>
+
+                                <td contenteditable="true" id="discount_cell">
+                                    ${gt.main_discount > 0 || gt.main_discount !== null ? (gt.discount > 0 || gt.discount !== null ? (priceObj.discount > 0 ? priceObj.discount : gt.discount ?? gt.main_discount ) : gt.discount ?? gt.main_discount) : gt.main_discount ?? 0}
+                                </td>
+                                `;
+
                         });
 
                         $("#product_type_ttbody").append(`
                             <tr data-msid="${gt.msid}" data-mtid="${gt.mtid}">
                                 <td>${index + 1}</td>
                                 <td>${gt.subtype_name}</td>
-                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${gt.discount !== null ? gt.discount : 0}</td>
+                                <td id='edit_price_feature' data-sub_group_id='${gt.group_id}' data-price_type='main_subtype_price' contenteditable="true">${gt.main_price > 0 || gt.main_price !== null ? (gt.price > 0 ? gt.price ?? 0 : gt.main_price) : gt.main_price ?? 0}</td><td contenteditable='true' id='discount_cell'>${gt.main_discount > 0 || gt.main_discount !== null ? (gt.discount > 0 ? gt.discount ?? 0 : gt.main_discount ?? 0) : gt.main_discount ?? 0}</td>
 
                                 ${customerTds}
 
