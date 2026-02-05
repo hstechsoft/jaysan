@@ -101,7 +101,8 @@ if($total_advance_deposited > 0)
 
       // need to iterate all  payment entries except current
       
-  $sql_all_payment_entries = "SELECT * FROM jaysan_payment WHERE oid = $oid ";
+$sql_all_payment_entries ="SELECT * FROM jaysan_payment WHERE oid = $oid
+ AND payment_id <> $payment_id ";
   $result_all_payment_entries = $conn->query($sql_all_payment_entries); 
   if ($result_all_payment_entries->num_rows > 0) {
     while($row = $result_all_payment_entries->fetch_assoc()) {
