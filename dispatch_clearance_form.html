@@ -33,6 +33,99 @@
             display: table-cell !important;
             vertical-align: middle !important;
         }
+
+        .statement-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .statement-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 6px;
+        }
+
+        /* Payments timeline */
+        .payment-timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        /* Invoice cards */
+        .invoice-card {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 14px;
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .invoice-row {
+            border-bottom: 1px dashed #eee;
+            padding: 6px 0;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .invoice-total {
+            text-align: right;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        /* Summary */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .balance-box {
+            background: #fff3f3;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .balance-amount {
+            font-size: 20px;
+            font-weight: 800;
+            color: #dc3545;
+        }
     </style>
 
 
@@ -730,6 +823,72 @@
 
             </div>
 
+
+            <div class="table-responsive d-none">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption></caption>
+                    <!-- <thead>
+
+                        <tr>
+                            <th scope="col">Payment</th>
+                            <th scope="col">Products</th>
+                            <th scope="col">Spares</th>
+                            <th scope="col">Amount Summary</th>
+
+                        </tr>
+                    </thead> -->
+                    <tbody id="product_price_tbody"></tbody>
+
+
+
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption></caption>
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Payment</th>
+                            <th scope="col">UTR/No</th>
+                            <th scope="col">Order/No</th>
+                            <th scope="col">Date</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="payment_tbody">
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table caption-top table-bordered table-striped ">
+                    <caption></caption>
+                    <thead>
+
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 20%;">Product</th>
+                            <th scope="col">DCF/No</th>
+                            <th scope="col">DCF Date</th>
+                            <th scope="col">Total Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="product_tbody">
+
+
+                    </tbody>
+
+
+                </table>
+            </div>
         </div>
     </div>
 
@@ -755,7 +914,7 @@
                         <label for="quotation_no">Order no </label>
                     </div>
                     <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="amount" placeholder="" >
+                        <input type="text" class="form-control rounded-3" id="amount" placeholder="">
                         <label for="amount">Amount</label>
                     </div>
                     <div class="form-floating mb-2">

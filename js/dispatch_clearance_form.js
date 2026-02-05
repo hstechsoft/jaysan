@@ -273,7 +273,7 @@ $(document).ready(function () {
 
   })
 
-
+  get_sale_statement()
 });
 
 
@@ -290,6 +290,152 @@ function print() {
 
 
 }
+
+
+
+
+function get_sale_statement() {
+
+  $.ajax({
+    url: "php/get_sale_statement.php",
+    type: "get",
+    data: { cus_id: 6481 },
+
+    success: function (response) {
+
+      if (response.trim() === "0 result" || response.trim() === "error") return;
+
+      const outer = JSON.parse(response);
+      const data = JSON.parse(outer[0].full_result);
+
+      const payments = data.payments || [];
+      const products = data.products || [];
+
+      let paymentHtml = `
+        <div class="statement-box payment-box">
+          <div class="statement-title">💳 Payments</div>
+
+          <div class="payment-timeline">
+            ${payments.map(p => `
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <div class="small text-muted">${p.dated}</div>
+                  ${p.utr_no ? `<div class="small">UTR: ${p.utr_no}</div>` : ""}
+                  <div class="fw-bold text-success">₹${p.credit.toLocaleString()}</div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+        `;
+
+      var p_count = 0;
+      payments.forEach(function (p) {
+        p_count++;
+        $("#payment_tbody").append("<tr><td>" + p_count + "</td><td>" + p.credit + "</td><td>" + p.utr_no + "</td><td>" + p.order_no + "</td><td>" + p.dated + "</td></tr>");
+      });
+
+
+      var prod_count = 0;
+      products.forEach(function (p) {
+        prod_count++;
+        var product_details = ''
+        p.product_details.forEach(function (d) {
+          product_details += `
+              <li class="small">${d.product_name} - ${d.model_name} - ${d.type_name} - ${d.sub_type} - Order/no: ${d.order_no} - Price: ₹${d.price}</li>
+            `;
+
+        });
+        $("#product_tbody").append("<tr><td>" + prod_count + "</td><td>" + product_details + "</td><td>" + p.dcf_id + "</td><td>" + p.dcf_date + "</td><td>" + p.total_product_price + "</td></tr>");
+      });
+
+      let productHtml = `
+      <div class="statement-box product-box">
+        <div class="statement-title">📦 Products</div>
+
+        ${products.map(p => `
+          <div class="invoice-card">
+            <div class="invoice-header">
+              <span>DCF #${p.dcf_id}</span>
+              <span class="badge bg-dark">${p.dcf_date}</span>
+            </div>
+
+            ${p.product_details.map(d => `
+              <div class="invoice-row">
+                <div class="fw-semibold">${d.product_name}</div>
+                <div class="small text-muted">
+                  ${d.model_name} · ${d.type_name}
+                </div>
+                <div class="small fst-italic text-break">${d.sub_type}</div>
+
+                <div class="price-row">
+                  <span>Price</span>
+                  <span>₹${d.price.toLocaleString()}</span>
+                </div>
+                <div class="price-row text-success">
+                  <span>Billing</span>
+                  <span>₹${d.billing_amount.toLocaleString()}</span>
+                </div>
+              </div>
+            `).join("")}
+
+            <div class="invoice-total">
+              Total : ₹${p.total_product_price.toLocaleString()}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+      `;
+
+
+
+
+
+      let summaryHtml = `
+      <div class="statement-box summary-box">
+        <div class="statement-title">📊 Summary</div>
+
+        <div class="summary-row">
+          <span>Total Product</span>
+          <span>₹${data.total_product_amount.toLocaleString()}</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Total Spares</span>
+          <span>₹${data.total_spares_amount.toLocaleString()}</span>
+        </div>
+
+        <div class="summary-row text-success">
+          <span>Total Paid</span>
+          <span>₹${data.total_paid_amount.toLocaleString()}</span>
+        </div>
+
+        <div class="balance-box">
+          <div class="small text-muted">Remaining Balance</div>
+          <div class="balance-amount">
+            ₹${data.reamining_balance.toLocaleString()}
+          </div>
+        </div>
+      </div>
+      `;
+
+      $("#product_price_tbody").html(`
+      <tr>
+        <td style="width:25%">${paymentHtml}</td>
+        <td style="width:50%">${productHtml}</td>
+        <td style="width:25%">${summaryHtml}</td>
+      </tr>
+      `);
+
+    }
+  });
+}
+
+
+
+
+
 
 function insert_dcf() {
 
@@ -593,7 +739,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.amount+" - "+ obj.remark  + "</td><td>" + obj.qno + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" +obj.qno+" - "+ obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
 
           });
 

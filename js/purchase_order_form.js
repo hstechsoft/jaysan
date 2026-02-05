@@ -96,7 +96,7 @@ $(document).ready(function () {
 
             var batch_id = $(this).data("batch_id");
             let material_part_id = $(this).data("material_part_id");
-            console.log(material_part_id);
+            // //console.log(material_part_id);
 
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
         }
         let po_terms = $("#terms_of_delivery_input").val();
-        console.log(po_terms);
+        // //console.log(po_terms);
         let po_no = $("#po_no").val();
         if (allApproved) {
             // TODO: handle click here
@@ -153,7 +153,7 @@ $(document).ready(function () {
                     watermark_text: ""       // optional
                 },
                 success: function (res) {
-                    console.log(res);
+                    //console.log(res);
 
                     insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_no);
                 },
@@ -192,7 +192,7 @@ $(document).ready(function () {
             var batch_id = $(this).data("batch_id");
             let material_part_id = $(this).data("material_part_id");
 
-            console.log(material_part_id);
+            //console.log(material_part_id);
             let quantity = $(this).data("batch_qty");
             let rate = $(this).find("td").eq(4).text().trim();
             let due_date = $(this).find("td").eq(2).text().trim();
@@ -249,7 +249,7 @@ $(document).ready(function () {
                     watermark_text: ""       // optional
                 },
                 success: function (res) {
-                    console.log(res);
+                    //console.log(res);
 
                     update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_id, po_no);
                 },
@@ -316,7 +316,7 @@ $(document).ready(function () {
         var raw_material_total_amount = 0;
 
 
-        console.log("change");
+        //console.log("change");
 
 
         get_po_order_total(this_row)
@@ -389,7 +389,7 @@ $(document).ready(function () {
             gst_details += gst_text + '<br>';
             total_gst = total_gst * 0;
             gst_amount_details += total_gst.toFixed(2) + '<br>' + total_gst.toFixed(2) + '<br>'
-            console.log("gst_0 " + gst_amount_details);
+            //console.log("gst_0 " + gst_amount_details);
 
         }
 
@@ -403,7 +403,7 @@ $(document).ready(function () {
             gst_details += gst_text + '<br>';
             total_gst = total_gst * 0.025;
             gst_amount_details += total_gst.toFixed(2) + '<br>' + total_gst.toFixed(2) + '<br>'
-            console.log("gst_5 " + gst_amount_details);
+            //console.log("gst_5 " + gst_amount_details);
 
         }
         if (gst_12.length > 0) {
@@ -416,7 +416,7 @@ $(document).ready(function () {
             gst_details += gst_text + '<br>';
             total_gst = total_gst * 0.06;
             gst_amount_details += total_gst.toFixed(2) + '<br>' + total_gst.toFixed(2) + '<br>'
-            console.log("gst_12 " + gst_amount_details);
+            //console.log("gst_12 " + gst_amount_details);
 
         }
         if (gst_18.length > 0) {
@@ -467,7 +467,7 @@ $(document).ready(function () {
             let discount = $(this).data("discount");
             let uom = $(this).data("uom");
             let approve = $(this).data("approve");
-            console.log(approve);
+            //console.log(approve);
 
             if (materials !== "" && Due !== "" && quantity !== "" && rate !== "" && amount !== "") {
                 $("#purchase_order_details").append("<tr data-approve=" + approve + "><td  class='text-center' style='max-width: 5px; text-align: center;'>" + count + "</td><td>" + materials + "</td><td>" + Due + "</td><td>" + quantity + "</td><td>" + rate + "</td><td>" + uom + "</td><td>" + discount + "</td><td>" + amount + "</td></tr>");
@@ -481,7 +481,7 @@ $(document).ready(function () {
         let safeTotal = Math.min(Math.round(final_total), 999999999999999);
         let words = numberToWords(safeTotal);
 
-        console.log(words);
+        //console.log(words);
 
         $("#purchase_order_details").append("<tr><th scope='col' colspan='7' class='text-center' style='text-align:center'>Total</th>\<td id='raw_material_total_amount_id'>" + $("#raw_material_total_amount_id").text() + "</td></tr>" +
             "<tr><td id='gst_details' colspan='7'>" + gst_details + "</td><td id='gst_amount_details'>" + gst_amount_details + "</td></tr>" +
@@ -516,7 +516,7 @@ $(document).ready(function () {
         let rate = $("#rate").val().trim();
         let discount = $("#discount").val().trim();
         let gst_rate = $("#material").data("gst_rate");
-        console.log(gst_rate);
+        //console.log(gst_rate);
 
 
         if (materials == "" || Due == "" || quantity == "" || uom == "" || rate == "" || discount == "" || gst_rate == "") {
@@ -525,7 +525,7 @@ $(document).ready(function () {
         }
         // let amnt = (rate * quantity);
         // amnt = amnt - (amnt * (discount / 100));
-        // console.log("amount " + amnt);
+        // //console.log("amount " + amnt);
 
         // let count = $("#selected_materials tr").length;
         // let extra_po_data = "<tr data-batch_id='0' data-approved='0' data-batch_qty='" + quantity + "' data-uom='" + uom + "' data-discount='" + discount + "'>" +
@@ -597,7 +597,7 @@ $(document).ready(function () {
 
         if (($("#selected_materials tr#totalRow").length === 0) && $("#selected_materials tr").length > 0) {
 
-            console.log("hiiiii");
+            //console.log("hiiiii");
 
             $("#selected_materials").append(
                 "<tr  id ='totalRow'><th scope='col' colspan='3'>Total</th><td id='total'>" + total_qty + "</td><td></td><td id='raw_material_total_amount_id' colspan='2'>" + total_amount + "</td></tr>"
@@ -633,7 +633,7 @@ $(document).ready(function () {
                         dataType: "json",
                         success: function (data) {
 
-                            console.log(data);
+                            //console.log(data);
                             response($.map(data, function (item) {
                                 return {
                                     label: item.part_name,
@@ -673,7 +673,7 @@ $(document).ready(function () {
 
     $("#get_po_list").on("click", "tr td i.fa-pen-to-square", function () {
         po_id = $(this).data("po_id");
-        console.log(po_id);
+        //console.log(po_id);
 
         sub_but = 1;
         get_jaysan_po_material(po_id);
@@ -686,7 +686,7 @@ $(document).ready(function () {
 
     $("#get_po_list").on("click", "tr td i.fa-print", function () {
         let path = $(this).data("po_path");
-        console.log(path);
+        //console.log(path);
 
         window.open(path, '_blank');
     })
@@ -702,7 +702,7 @@ function get_jaysan_po_material(po_id) {
             jaysan_po_id: po_id,
         },
         success: function (response) {
-            console.log(response);
+            //console.log(response);
 
 
             $("#po_dashboard_table").empty();
@@ -730,7 +730,7 @@ function get_jaysan_po_material(po_id) {
                     var mat = JSON.parse(materials_list);
 
                     mat.forEach(function (mat) {
-                        console.log(mat.material_id);
+                        //console.log(mat.material_id);
 
                         $("#po_dashboard_table").append(
                             "<tr data-batch_id='" + mat.batch_id + "' data-uom='" + mat.uom + "' data-raw_material_rate='" + mat.material_rate + "' data-gst_rate='" + mat.gst + "' data-approve='" + mat.is_approved + "' data-material_part_id='" + mat.material_id + "'>" +
@@ -803,7 +803,7 @@ function get_po_order_total(row_ref) {
         materials = $("#material").val();
         gst_rate = $("#material").data("gst_rate");
         material_part_id = $("#material").data("material_part_id");
-        console.log(material_part_id);
+        //console.log(material_part_id);
         approve = '0';
 
     }
@@ -821,9 +821,9 @@ function get_po_order_total(row_ref) {
         batch_date = row.find("td:eq(5)").text();
         materials = row.find("td:eq(1)").text();
         material_part_id = row.data("material_part_id");
-        console.log(material_part_id);
+        //console.log(material_part_id);
 
-        console.log(row.is(["data-approve"]));
+        //console.log(row.is(["data-approve"]));
 
         if (row.data("approve") != undefined) {
             approve = row.data("approve");
@@ -974,7 +974,7 @@ function get_mrf_po_details() {
         },
         success: function (response) {
 
-            console.log(response);
+            //console.log(response);
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
@@ -1042,7 +1042,7 @@ function get_mrf_po_company_wise(order_to) {
             order_to_id: order_to,
         },
         success: function (response) {
-            console.log(response);
+            //console.log(response);
 
 
             $("#po_dashboard_table").empty();
@@ -1055,7 +1055,7 @@ function get_mrf_po_company_wise(order_to) {
 
 
                 obj.forEach(function (obj) {
-                    console.log(obj.material_part_id);
+                    //console.log(obj.material_part_id);
 
                     po_order_to = obj.po_order_to;
                     po_delivery_to = obj.po_delivery_to;
@@ -1106,7 +1106,7 @@ function get_mrf_po_basic_details(mrf_id) {
         },
         success: function (response) {
 
-            console.log(response);
+            //console.log(response);
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
@@ -1139,11 +1139,11 @@ function get_mrf_po_basic_details(mrf_id) {
 
 
 function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path, po_id, po_no) {
-    console.log(po_order_to);
-    console.log(po_materials);
-    console.log(po_email);
-    console.log(po_path);
-    console.log(po_terms);
+    //console.log(po_order_to);
+    //console.log(po_materials);
+    //console.log(po_email);
+    //console.log(po_path);
+    //console.log(po_terms);
 
 
     $.ajax({
@@ -1164,7 +1164,7 @@ function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
         success: function (response) {
 
 
-            console.log(response);
+            //console.log(response);
             if (response.trim() == "ok") {
                 location.reload();
 
@@ -1191,11 +1191,11 @@ function update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
 
 
 function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, po_email, po_path, po_no) {
-    console.log(po_order_to);
-    console.log(po_materials);
-    console.log(po_email);
-    console.log(po_path);
-    console.log("sds" + po_no);
+    //console.log(po_order_to);
+    //console.log(po_materials);
+    //console.log(po_email);
+    //console.log(po_path);
+    //console.log("sds" + po_no);
 
 
     $.ajax({
@@ -1215,7 +1215,7 @@ function insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materia
         success: function (response) {
 
 
-            console.log(response);
+            //console.log(response);
             if (response.trim() > 0) {
                 location.reload();
 
@@ -1250,7 +1250,7 @@ function get_po_list() {
         },
         success: function (response) {
 
-            console.log(response);
+            //console.log(response);
 
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
