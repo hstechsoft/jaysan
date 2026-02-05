@@ -101,8 +101,37 @@ if($total_advance_deposited > 0)
 
       // need to iterate all  payment entries except current
       
-$sql_all_payment_entries ="SELECT * FROM jaysan_payment WHERE oid = $oid
- AND payment_id <> $payment_id ";
+// update remaining advance to current  payment
+$can_add_here = $amount - $total_advance_deposited;
+
+if($can_add_here > 0)
+{
+    if($total_advance_deposited > 0)
+    {
+        $sql_update_current_advance =
+        "UPDATE sale_payment_advance
+         SET amount = amount + $can_add_here,
+             dated = NOW(),
+             emp_id = $emp_id
+         WHERE payment_id = $payment_id
+           AND advance_ref_id IS NULL";
+    }
+    else
+    {
+        $sql_update_current_advance =
+        "INSERT INTO sale_payment_advance
+         (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated)
+         VALUES
+         ($payment_id,$can_add_here,$oid,$customer_id,NULL,$emp_id,NOW())";
+    }
+
+    $conn->query($sql_update_current_advance);
+}
+
+// only real overflow goes to redistribution
+$advance_going_to_be_added = $advance_going_to_be_added - $can_add_here;
+
+  $sql_all_payment_entries = "SELECT * FROM jaysan_payment WHERE oid = $oid AND payment_id <> $payment_id ";
   $result_all_payment_entries = $conn->query($sql_all_payment_entries); 
   if ($result_all_payment_entries->num_rows > 0) {
     while($row = $result_all_payment_entries->fetch_assoc()) {
