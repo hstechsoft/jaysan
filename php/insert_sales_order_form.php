@@ -108,13 +108,20 @@ if($payment['advance_id']>0)
 
 // insert customer if customer_id is 0
 if($customer_id == "'0'"){
-  $sql_insert_customer = "INSERT  INTO customer (cus_name,cus_phone ,cus_address) VALUES($customer_name,$customer_phone,$delivery_addr) ON DUPLICATE KEY UPDATE cus_id = LAST_INSERT_ID(cus_id)";
+  $sql_insert_customer = "INSERT  INTO customer (cus_name,cus_phone ,cus_address,pincode) VALUES($customer_name,$customer_phone,$delivery_addr,$pincode) ON DUPLICATE KEY UPDATE cus_id = LAST_INSERT_ID(cus_id)";
   if ($conn->query($sql_insert_customer) === TRUE) {
     $customer_id = $conn->insert_id;
   } else {
     echo "Error: " . $sql_insert_customer . "<br>" . $conn->error;
   }
 }
+
+// update address and pincode
+$sql_update_customer = "UPDATE customer SET cus_address = $delivery_addr, pincode = $pincode WHERE cus_id = $customer_id";
+if ($conn->query($sql_update_customer) === TRUE) {
+} else {
+  echo "Error: " . $sql_update_customer . "<br>" . $conn->error;
+} 
 // if order_category is 'Sales' or 'Requirement' then get the last order_no and increment it by 1
 // else set order_no to 1
 if($order_category == "'Sales'")
