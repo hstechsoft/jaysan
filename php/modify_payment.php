@@ -74,6 +74,18 @@ if ($result_amount_received->num_rows > 0) {
 if($res > 0)
   {
 // insert advance asusually
+if($total_advance_deposited > 0)
+  {
+      $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount + $remaining_advance, dated = NOW(), emp_id = $emp_id WHERE payment_id = $payment_id and advance_ref_id is null";
+
+      if ($conn->query($sql_update_advance) === TRUE) {
+          
+      } else {
+          echo "Error: " . $sql_update_advance . "<br>" . $conn->error;
+      }
+  }
+  else
+{
       $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id,$remaining_advance,$oid,$customer_id,null,$emp_id,NOW())";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
@@ -81,6 +93,7 @@ if($res > 0)
       } else {
           echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
       }
+  }
   }
   else
     {
