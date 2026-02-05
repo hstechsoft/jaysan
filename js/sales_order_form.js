@@ -136,7 +136,6 @@ $(document).ready(function () {
   });
 
   $('#cus_name').on('input', function () {
-
     if ($(this).val().trim() !== "") {
       $("label[for='cus_name']").fadeOut(300);
     } else {
@@ -144,6 +143,7 @@ $(document).ready(function () {
     }
     //check the value not empty
     if ($('#cus_name').val() != "") {
+
       $('#cus_name').autocomplete({
         //get data from databse return as array of object which contain label,value
 
@@ -158,6 +158,7 @@ $(document).ready(function () {
           cus_id = ui.item.cus_id;
           $('#cus_phone').val(ui.item.cus_phone)
           $('#delivery_address').val(ui.item.cus_addr)
+          $('#pincode').val(ui.item.pincode)
           // cus_type_id = (ui.item.cus_type_id)
           // $("#cusTypeModal").modal("show")
           if (ui.item.cus_type_id === null) {
@@ -207,6 +208,7 @@ $(document).ready(function () {
           cus_id = ui.item.cus_id;
           $('#cus_name').val(ui.item.cus_name)
           $('#delivery_address').val(ui.item.cus_addr)
+          $('#pincode').val(ui.item.pincode)
 
           if (ui.item.cus_type_id === null) {
             $("#cus_type_update_btn").data("cus_id", ui.item.cus_id)
@@ -345,7 +347,7 @@ $(document).ready(function () {
       setTimeout(function () {
 
         get_jaysan_sales_payment_m(oid)
-      }, 500);
+      }, 1000);
       $('#sales_pay').modal('show')
 
     }
@@ -446,6 +448,8 @@ $(document).ready(function () {
 
     if (edit_sec == 0 && $('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "" && $('#billing_price').val() != "" && $('#machine_price').val() != "") {
       $("#payment_table").empty();
+      $("#advance_payment_card").prop("disabled", false).css("pointer-events", "auto");
+      $("#advance_payment_card td").css({ color: "green" });
       $("#total_amount").text(0);
       $("#total_balance_amount").text(0);
       clear_payment_field();
@@ -658,6 +662,8 @@ $(document).ready(function () {
             var amt = parseFloat($(this).closest('tr').find('td').eq(6).text() || 0) * parseFloat($(this).closest('tr').find('td').eq(5).text() || 0);
 
             $("#payment_table").empty();
+            $("#advance_payment_card").prop("disabled", false).css("pointer-events", "auto");
+            $("#advance_payment_card td").css({ color: "green" });
             $("#total_amount").text(0);
             $("#total_balance_amount").text(0);
             clear_payment_field();
@@ -772,7 +778,7 @@ $(document).ready(function () {
 
   $('#payment_table').on("click", "button#fa-trash", function () {
     var btn_val = $(this).val()
-    //console.log$(this).val(), $(this).data("oid"));
+    console.log(btn_val);
 
     swal({
       title: "Are you sure?",
@@ -785,8 +791,11 @@ $(document).ready(function () {
         if (willDelete) {
 
           {
-            if ($(this).val() && $(this).data("oid")) {
-              e_delete_sales_pay($(this).val(), $(this).data("oid"))
+            if (btn_val && $(this).data("advance_id")) {
+              e_delete_sales_pay($(this).data("advance_id"), btn_val)
+            }
+            else if ($(this).data("payment_id") && btn_val) {
+              na_delete_sales_pay($(this).data("payment_id"), btn_val)
             }
             else {
               $(this).closest('tr').remove();
@@ -1054,20 +1063,22 @@ $(document).ready(function () {
     }
 
     else if ($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "" && $('#utr_no').val() != "" && edit_sec == 1 && Number(oid) > 0 && cus_id > 0) {
-      //console.logpayment_id, advance_id);
+      console.log(payment_id, advance_id);
 
-      if (advance_id !== 'undefined' && advance_id !== 'null' && advance_id !== "" && payment_id !== 'undefined' && payment_id !== 'null' && payment_id !== "") {
+      if (advance_id !== undefined && advance_id !== 'null' && advance_id !== "" && payment_id !== undefined && payment_id !== 'null' && payment_id !== "") {
         insert_sale_payment_advance(payment_id, advance_id, $('#amount').val(), oid, cus_id);
       }
       else {
         update_sales_pay($('#amount').val(), $('#payment_date').val(), oid, $('#ref_no').val(), $('#utr_no').val(), cus_id, $('#extra_payment').val())
+
       }
+
 
     }
     else
       //console.log$('#amount').val(), $('#payment_date').val(), $('#ref_no').val(), $('#utr_no').val(), edit_sec, oid, cus_id, $('#extra_payment').val());
 
-    shw_toast("Error", "Please fill all details ", "error")
+      shw_toast("Error", "Please fill all details ", "error")
 
 
 
@@ -1091,7 +1102,10 @@ $(document).ready(function () {
   });
 
   $('#payment_table_m').on("click", "button#fa-trash", function () {
-    var btn_val = $(this).val()
+    var oid = $(this).val()
+    var payment_id = $(this).data("payment_id");
+    var advance_id = $(this).data("advance_id");
+
     //console.logbtn_val);
 
     swal({
@@ -1105,7 +1119,13 @@ $(document).ready(function () {
         if (willDelete) {
 
           {
-            delete_sales_pay(btn_val)
+            if (payment_id) {
+              na_delete_sales_pay_m(payment_id, oid)
+
+            }
+            else if (advance_id) {
+              delete_sales_pay(advance_id, oid)
+            }
           }
 
         }
@@ -1500,6 +1520,8 @@ $(document).ready(function () {
 
   $("#advance_payment_tbody").on("dblclick", "tr", function () {
 
+    $("#payment_cancel_btn").removeClass("d-none");
+
     $("#extra_payment").val(0);
     var utr_no = $(this).find("td").eq(1).text();
     var amt = $(this).find("td").eq(2).text();
@@ -1557,7 +1579,6 @@ $(document).ready(function () {
     $("#utr_no_m").val(utr_no);
 
   })
-
 
   $("#spare_tbody").on("click", "#trash_spare", function () {
 
@@ -1617,10 +1638,10 @@ $(document).ready(function () {
 
 
 
-  $("#order_table, #mobile_order_card, #app_order_table, #mobile_approved_order_card, #req_table, #mobile_req_card").on("click", ".togglePrice", function () {
+  $("#order_table, #app_order_table, #req_table").on("click", ".togglePrice", function () {
 
-    var pricesummary = $(this).closest("td").find("ul.priceList").attr("id");
-    var pricedetails = $(this).closest("td").find("ul.mainPriceList").attr("id");
+    var pricesummary = $(this).closest("td").find("ul.priceList").attr("id")
+    var pricedetails = $(this).closest("td").find("ul.mainPriceList").attr("id")
 
     if ($(this).is(":checked")) {
       $("#" + pricesummary).removeClass("d-none");
@@ -1631,7 +1652,24 @@ $(document).ready(function () {
       $("#" + pricedetails).removeClass("d-none");
     }
   });
+
+  $(" #mobile_order_card, #mobile_approved_order_card, #mobile_req_card").on("click", ".mtogglePrice", function () {
+
+    var m_pricesummary = $(this).closest("span").find("ul.mpriceList").attr("id");
+    var m_pricedetails = $(this).closest("span").find("ul.mmainPriceList").attr("id");
+
+    if ($(this).is(":checked")) {
+      $("#" + m_pricesummary).removeClass("d-none");
+      $("#" + m_pricedetails).addClass("d-none");
+    }
+    else {
+      $("#" + m_pricesummary).addClass("d-none");
+      $("#" + m_pricedetails).removeClass("d-none");
+    }
+  });
+
 });
+
 
 
 
@@ -2141,26 +2179,28 @@ function print() {
 
 }
 
-function e_delete_sales_pay(payment_id, oid) {
+function e_delete_sales_pay(advance_id, oid) {
 
   //console.logpayment_id, oid);
 
 
   $.ajax({
-    url: "php/delete_sales_pay.php",
-    type: "get", //send it through get method
+    url: "php/delete_sale_payment_advance.php",
+    type: "post", //send it through get method
     data: {
-      payment_id: payment_id,
+      advance_id: advance_id,
 
 
     },
     success: function (response) {
 
-      //console.log
+      console.log(response)
 
-      if (response.includes("ok")) {
+
+      if (response.trim() == "ok") {
 
         shw_toast("Success", "Payment Deleted ", "success")
+        get_sales_advance(cus_id)
         get_jaysan_sales_product(oid)
 
       }
@@ -2181,9 +2221,9 @@ function e_delete_sales_pay(payment_id, oid) {
 
 }
 
-function delete_sales_pay(payment_id) {
+function na_delete_sales_pay(payment_id, oid) {
 
-
+  console.log(payment_id, oid);
 
 
   $.ajax({
@@ -2196,11 +2236,99 @@ function delete_sales_pay(payment_id) {
     },
     success: function (response) {
 
-      //console.log
+      console.log(response)
+
+
+      if (response.toString().includes("ok")) {
+console.log("f");
+
+        shw_toast("Success", "Payment Deleted ", "success")
+        get_sales_advance(cus_id)
+        get_jaysan_sales_payment(oid)
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //console.logxhr.responseText);
+      salert("Warning", xhr.responseText, "warning");
+    }
+  });
+
+
+
+
+}
+
+function delete_sales_pay(advance_id, oid) {
+
+
+
+
+  $.ajax({
+    url: "php/delete_sale_payment_advance.php",
+    type: "post", //send it through get method
+    data: {
+      advance_id: advance_id,
+
+
+    },
+    success: function (response) {
+
+      console.log(response)
 
       if (response.trim() == "ok") {
 
         shw_toast("Success", "Payment Deleted ", "success")
+        get_sales_advance_m(cus_id)
+
+        get_jaysan_sales_payment_m(oid)
+
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      salert("Warning", xhr.responseText, "warning");
+    }
+  });
+
+
+
+
+}
+
+function na_delete_sales_pay_m(payment_id, oid) {
+
+  //console.logpayment_id, oid);
+
+
+  $.ajax({
+    url: "php/delete_sales_pay.php",
+    type: "get", //send it through get method
+    data: {
+      payment_id: payment_id,
+
+
+    },
+    success: function (response) {
+
+      console.log(response)
+
+
+      if (response.includes("ok")) {
+
+        shw_toast("Success", "Payment Deleted ", "success")
+        get_sales_advance_m(cus_id)
+
         get_jaysan_sales_payment_m(oid)
 
       }
@@ -2211,6 +2339,7 @@ function delete_sales_pay(payment_id) {
 
     },
     error: function (xhr) {
+      //console.logxhr.responseText);
       salert("Warning", xhr.responseText, "warning");
     }
   });
@@ -2248,7 +2377,9 @@ function insert_sales_pay(cus_id) {
         $('#payment_date_m').val("")
         $("#extra_payment_m").val(0)
         shw_toast("Success", "Payment Added", "success")
+        get_sales_advance_m(cus_id)
         get_jaysan_sales_payment_m(oid)
+
 
 
       }
@@ -2291,6 +2422,8 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
 
       if (response.trim() == "ok") {
 
+        $("#payment_cancel_btn").addClass("d-none");
+        $("#payment_add_btn").removeClass("d-none");
         shw_toast("Success", "Payment Added", "success")
         $('#ref_no, #ref_no_m').val("")
         $('#utr_no, #utr_no_m').val("")
@@ -2298,6 +2431,8 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
         $('#amount, #amount_m').data({ "advance_id": "", "payment_id": "" })
         $('#payment_date, #payment_date_m').val("")
         $("#extra_payment, #extra_payment_m").val(0);
+        get_sales_advance_m(cus_id)
+        get_jaysan_sales_payment_m(oid)
         get_sales_order_single(oid)
 
 
@@ -2349,6 +2484,8 @@ function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id
         get_sales_order_single(oid)
         get_jaysan_sales_payment_m(oid)
 
+        get_sales_advance_m(cus_id)
+
 
 
       }
@@ -2382,9 +2519,9 @@ function update_jaysan_payment1(amount, payment_date, ref_no, utr_no, payment_id
     },
     success: function (response) {
 
-      //console.log
+      console.log(response)
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $("#payment_update_btn, #payment_cancel_btn").addClass("d-none");
         $("#payment_add_btn").removeClass("d-none");
@@ -2682,7 +2819,7 @@ function get_assign_sts(order_id) {
 
 function get_jaysan_model_subtype() {
 
-  //console.log$('#ptype').val());
+  console.log($('#ptype').val(), $('#ptype').data("cus_type_id"));
 
 
   $.ajax({
@@ -3054,16 +3191,110 @@ function get_sales_order(approve_sts) {
             var percent = (paid / total) * 100;
             percent = Math.min(Math.max(percent, 0), 100);
 
+            var received_details = JSON.parse(obj.received_details) || [];
+
+            var f_total_product_price = parseFloat(obj.total_product_price || 0)+parseFloat(obj.total_spares_amount || 0)
+            var f_paid = 0
+            received_details.forEach(function (rev){
+              paid += parseFloat(rev.amount)
+            })
 
             var advance_given = 0
             advance_deposite_details.forEach(function (advance) {
               advance_given += parseFloat(advance.advance_given) || 0;
             })
+
+            var advance_taken_details = JSON.parse(obj.advance_taken_details) || [];
+
+            var total_advance_taken = 0;
+            advance_taken_details.forEach(function(advance_taken){
+              total_advance_taken += parseFloat(advance_taken.advance_taken || 0)
+            })
+            
             var price = `
                         <div class="form-check form-switch">
                           <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
                         </div>
                         <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <p class="my-auto small">Total Product Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_product_price || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Spare Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_spares_amount || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Taken:</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Given:</p>
+                                    <p class="small fw-bold my-auto">${advance_given || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-success text-white">
+                                <div class="d-flex justify-content-between  gap-2 ">
+                                    <p class="my-auto small">Total:</p>
+                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item  bg-warning">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Balance:</p>
+                                    <p class="small fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="my-auto small">Total</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Paid</p>
+                                    <p class="small fw-bold my-auto">${f_paid}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Balance</p>
+                                    <p class="small text-bg-warning fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="progress bg-danger">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar"
+                                        style="width:${percent}%;"
+                                        aria-valuenow="${percent}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="">
+                                        ${Math.round(percent)}%
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        `;
+
+            var mprice = `
+                        <div class="form-check form-switch">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                        </div>
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -3101,7 +3332,7 @@ function get_sales_order(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
@@ -3138,14 +3369,13 @@ function get_sales_order(approve_sts) {
                         </ul>
                         `;
 
-
-            if (obj.pay_sts == "na")
+            if (obj.pay_sts == "na" || obj.pay_sts === null) {
               bd = "disabled"
-
+            }
             //console.logobj.pay_sts);
 
             $("#payment_add_btn_m").data("cus_id", obj.customer_id);
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  " + bd + " type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' data-cus_id='" + obj.customer_id + "' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  " + bd + " type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td></tr>")
 
 
             $("#mobile_order_card").append(`
@@ -3154,27 +3384,26 @@ function get_sales_order(approve_sts) {
 
                           <!-- Header -->
                           <div class="d-flex justify-content-between align-items-center mb-1">
-                              <span class="fw-semibold">${count}) · ${obj.order_no}</span>
-                              <span class="badge bg-light text-dark small">${obj.sale_order_date}</span>
+                              <span class="small fw-semibold">${count}) Order.no: ${obj.order_no}</span>
+                              <span class="badge bg-light text-dark small">${obj.dated}</span>
                           </div>
 
                           <!-- Info -->
                           <div class="small text-muted mb-1">
-                              <i class="fa-solid fa-user me-1"></i> ${obj.emp_name}
+                              <i class="fa-solid fa-user me-1"></i> ${obj.emp}
                           </div>
 
                           <div class="small mb-1">
                               <span class="text-muted">Customer:</span>
-                              <span class="fw-semibold">${obj.cus_name} - ${obj.cus_phone}</span>
+                              <span class="fw-semibold">${obj.cus}</span>
                           </div>
 
-                          <div class="small mb-1">
+                          <div class="small mb-1 price">
                               <span class="text-muted">Payment:</span>
-                              <span class="fw-semibold">${price}</span>
+                              <span class="fw-semibold">${mprice}</span>
                           </div>
 
-                          <div class="small text-muted mb-2">
-                              <i class="fa-solid fa-box me-1"></i> ${pro}
+                          <div class="small text-muted mb-2"> ${obj.pro}
                           </div>
 
                           <hr class="my-2">
@@ -3194,7 +3423,7 @@ function get_sales_order(approve_sts) {
                               </button>
 
                               <button type="button"
-                                  value="${obj.oid}"
+                                  value="${obj.oid}"  data-cus_id="${obj.customer_id}"
                                   class="btn btn-success btn-sm pay_btn border-0 flex-fill">
                                   Pay
                               </button>
@@ -3809,8 +4038,87 @@ function get_sales_order_approval(approve_sts) {
                         </ul>
                         `;
 
-                        $("#payment_add_btn_m").data("cus_id", obj.customer_id);
-            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
+            var mprice = `
+                        <div class="form-check form-switch">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                        </div>
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <p class="my-auto small">Total Product Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_product_price || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Spare Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_spares_amount || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Taken:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Given:</p>
+                                    <p class="small fw-bold my-auto">${advance_given || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-success text-white">
+                                <div class="d-flex justify-content-between  gap-2 ">
+                                    <p class="my-auto small">Total:</p>
+                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item  bg-warning">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Balance:</p>
+                                    <p class="small fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="my-auto small">Total</p>
+                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Paid</p>
+                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Balance</p>
+                                    <p class="small text-bg-warning fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="progress bg-danger">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar"
+                                        style="width:${percent}%;"
+                                        aria-valuenow="${percent}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="">
+                                        ${Math.round(percent)}%
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        `;
+
+            $("#payment_add_btn_m").data("cus_id", obj.customer_id);
+            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "'  data-cus_id='" + obj.customer_id + "'  class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
 
             $("#mobile_approved_order_card").append(`
               <div class="card mb-2 shadow-sm border-0 rounded-3" data-oid="${obj.oid}">
@@ -3836,7 +4144,7 @@ function get_sales_order_approval(approve_sts) {
 
                       <div class="small mb-1">
                           <span class="text-muted">Payment:</span>
-                          <span class="fw-semibold">${price}</span>
+                          <span class="fw-semibold">${mprice}</span>
                       </div>
 
                       <div class="small text-muted mb-2">
@@ -3861,7 +4169,7 @@ function get_sales_order_approval(approve_sts) {
                           </button>
 
                           <button type="button"
-                              value="${obj.oid}"
+                              value="${obj.oid}"  data-cus_id="${obj.customer_id}" 
                               class="btn btn-success btn-sm pay_btn border-0 flex-fill">
                               Pay
                           </button>
@@ -4019,8 +4327,87 @@ function get_req_order(approve_sts) {
                         </ul>
                         `;
 
+            var mprice = `
+                        <div class="form-check form-switch">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                        </div>
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <p class="my-auto small">Total Product Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_product_price || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Spare Price:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_spares_amount || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Taken:</p>
+                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Total Advance Given:</p>
+                                    <p class="small fw-bold my-auto">${advance_given || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item bg-success text-white">
+                                <div class="d-flex justify-content-between  gap-2 ">
+                                    <p class="my-auto small">Total:</p>
+                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
+                                </div>
+                            </li>
+                            <li class="list-group-item  bg-warning">
+                                <div class="d-flex justify-content-between  gap-2">
+                                    <p class="my-auto small">Balance:</p>
+                                    <p class="small fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="my-auto small">Total</p>
+                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                </div>
+                            </li>
 
-                        $("#payment_add_btn_m").data("cus_id", obj.customer_id);
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Paid</p>
+                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <p class="small my-auto">Balance</p>
+                                    <p class="small text-bg-warning fw-bold my-auto">${balance}</p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item">
+                                <div class="progress bg-danger">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar"
+                                        style="width:${percent}%;"
+                                        aria-valuenow="${percent}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="">
+                                        ${Math.round(percent)}%
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        `;
+
+
+            $("#payment_add_btn_m").data("cus_id", obj.customer_id);
             $('#req_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' class='sale_btn btn btn-success btn-sm border-0'><i class='fa-solid fa-diamond-turn-right'></i></td></tr>")
 
             $("#mobile_req_card").append(`
@@ -4047,7 +4434,7 @@ function get_req_order(approve_sts) {
 
                         <div class="small mb-1">
                             <span class="text-muted">Payment:</span>
-                            <span class="fw-semibold">${price}</span>
+                            <span class="fw-semibold">${mprice}</span>
                         </div>
 
                         <div class="small text-muted mb-2">
@@ -4118,7 +4505,7 @@ function get_sales_order_single(oid) {
 
     },
     success: function (response) {
-      //console.log
+      console.log(response)
 
 
       if (response.trim() != "error") {
@@ -4148,7 +4535,19 @@ function get_sales_order_single(oid) {
             //  $('#product').val(obj.pid)
             //  $('#pmodel').val(obj.product_id)
 
-            $('#cus_name').val(obj.cus_name)
+            $('#cus_name')
+              .val(obj.cus_name)
+              .trigger("input")
+              .autocomplete("search", obj.cus_name);
+
+            setTimeout(() => {
+              const menu = $('#cus_name').autocomplete("widget");
+              const firstItem = menu.find(".ui-menu-item").first();
+
+              if (firstItem.length) {
+                firstItem.trigger("click");
+              }
+            }, 300);
             $('#cus_phone').val(obj.cus_phone)
             $('#order_type').val(obj.order_type)
             $('#oe_supply').val(obj.oe_supply)
@@ -4252,7 +4651,19 @@ function get_req_order_single(oid) {
             //  $('#product').val(obj.pid)
             //  $('#pmodel').val(obj.product_id)
 
-            $('#cus_name').val(obj.cus_name)
+            $('#cus_name')
+              .val(obj.cus_name)
+              .trigger("input")
+              .autocomplete("search", obj.cus_name);
+
+            setTimeout(() => {
+              const menu = $('#cus_name').autocomplete("widget");
+              const firstItem = menu.find(".ui-menu-item").first();
+
+              if (firstItem.length) {
+                firstItem.trigger("click");
+              }
+            }, 300);
             $('#cus_phone').val(obj.cus_phone)
             $('#order_type').val(obj.order_type)
             $('#oe_supply').val(obj.oe_supply)
@@ -4339,14 +4750,14 @@ function get_jaysan_sales_payment(oid) {
             var received_details = obj.received_details ? JSON.parse(obj.received_details) : [];
             received_details.forEach(function (payment) {
               count = count + 1;
-              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + payment.formatted_datetime + "</td> <td><button class='btn btn-outline-warning btn-sm border-0 fa_edit' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + payment.formatted_datetime + "</td> <td><button class='btn btn-outline-warning btn-sm border-0 fa_edit' type='button' value='" + payment.payment_id + "' data-oid='" + obj.oid + "' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + obj.oid + "' data-payment_id='" + payment.payment_id + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount += Number(payment.amount)
             });
 
             var advance_taken_details = obj.advance_taken_details ? JSON.parse(obj.advance_taken_details) : [];
             advance_taken_details.forEach(function (advance) {
               count = count + 1;
-              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + 0 + "</td><td>" + advance.payment_date + "</td> <td class='text-danger'>Advance cann't detele</td> </tr>")
+              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + 0 + "</td><td>" + advance.payment_date + "</td> <td class=''><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + obj.oid + "' data-advance_id='" + advance.advance_id + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </td> </tr>")
               total_amount += Number(advance.advance_taken)
             });
 
@@ -4358,7 +4769,7 @@ function get_jaysan_sales_payment(oid) {
             // $('#total_amount').text(obj.debit)
             // $('#')
             $('#total_balance_amount').text(obj.bal);
-            $('#total_amount').text(obj.credit)
+            $('#total_amount').text(obj.total_received_payment)
 
 
           })
@@ -4436,20 +4847,20 @@ function get_jaysan_sales_payment_m(oid) {
                 sts = "<i class='fa-solid fa-hourglass-half'></i>"
 
               count = count + 1;
-              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.oid + "' data-payment_id='" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount = total_amount + Number(payment.amount)
             });
 
             var advance_taken_details = obj.advance_taken_details ? JSON.parse(obj.advance_taken_details) : [];
             advance_taken_details.forEach(function (advance) {
               count = count + 1;
-              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + advance.payment_date + "</td> <td></td><td class='text-danger'>Advance cann't detele</td> </tr>")
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + advance.payment_date + "</td> <td></td><td class=''><button value  = '" + obj.oid + "' data-advance_id='" + advance.advance_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount += Number(advance.advance_taken)
             });
 
-            $("#total_payment_m").val(parseFloat(obj.total_product_price || 0) + parseFloat(obj.total_spare_price || 0));
+            $("#total_payment_m").val(parseFloat(obj.total_product_price || 0) + parseFloat(obj.total_spares_amount || 0));
             $('#total_balance_amount_m').text(obj.bal);
-            $('#total_amount_m').text(obj.credit)
+            $('#total_amount_m').text(obj.total_received_payment)
 
             // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
             // $('#total_amount_m').text(total_amount)
@@ -4795,9 +5206,9 @@ function insert_sales_order_form() {
 
   });
 
-  //console.logpaymentDetails);
-  //console.logpaymentadvanceDetails);
-  //console.logsparesDetails);
+  console.log(paymentDetails);
+  console.log(paymentadvanceDetails);
+  console.log(sparesDetails);
   var chasis_choice = "Custom"
   var color_choice = "Custom"
   var production_untill = $('#production_untill').length > 0 ? $('#production_untill').val() : '';
@@ -4847,14 +5258,20 @@ function insert_sales_order_form() {
     },
     success: function (response) {
 
-      //console.log
+      console.log(response);
 
       if (response.trim() == "ok") {
 
         location.reload();
 
       }
-
+      `<br />
+<b>Fatal error</b>:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (\`u333142350_jaysan\`.\`sale_order_spares\`, CONSTRAINT \`sale_order_spares_ibfk_3\` FOREIGN KEY (\`emp_id\`) REFERENCES \`employee\` (\`emp_id\`)) in C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php:264
+Stack trace:
+#0 C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php(264): mysqli-&gt;query('INSERT INTO sal...')
+#1 {main}
+  thrown in <b>C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php</b> on line <b>264</b><br />
+`
 
 
 
@@ -4998,7 +5415,6 @@ function update_sales_order_form() {
 
 
 function get_customer_autocomplete(request, response) {
-
   var cusname = $('#cus_name').val() + '%';
   var customer = [];
   var object = {};
@@ -5032,6 +5448,7 @@ function get_customer_autocomplete(request, response) {
             cus_phone: obj.cus_phone,
             cus_type_id: obj.cus_type_id,
             sub_group_name: obj.sub_group_name,
+            pincode: obj.pincode
 
 
           };
@@ -5118,6 +5535,7 @@ function get_phone_autocomplete(request, response) {
             cus_phone: obj.cus_phone,
             cus_type_id: obj.cus_type_id,
             sub_group_name: obj.sub_group_name,
+            pincode: obj.pincode,
 
 
 
