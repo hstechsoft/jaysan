@@ -56,8 +56,24 @@ if ($result_amount_received->num_rows > 0) {
 
     $remaining_advance = $row['amount'] - $remaining_debit;
     if($remaining_advance > 0)
+  { 
+    $advance_going_to_be_added = $remaining_advance;
+    $total_advance_deposited = 0;
+// get total advance deposited
+  $sql_total_advance = "SELECT SUM(amount) as total_advance FROM sale_payment_advance WHERE payment_id = $payment_id and advance_ref_id is null";
+  $result_total_advance = $conn->query($sql_total_advance);
+ 
+  if ($result_total_advance->num_rows > 0) {
+    while($row = $result_total_advance->fetch_assoc()) {
+      $total_advance_deposited = $row['total_advance'];
+     
+    }
+  }
+
+  $res =  $amount - ($total_advance_deposited + $advance_going_to_be_added);
+if($res > 0)
   {
-    // insert advance
+// insert advance asusually
       $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id,$remaining_advance,$oid,$customer_id,null,$emp_id,NOW())";
 
       if ($conn->query($sql_insert_advance) === TRUE) {
@@ -65,6 +81,63 @@ if ($result_amount_received->num_rows > 0) {
       } else {
           echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
       }
+  }
+  else
+    {
+      // update advance if there is already advance deposited and remaining amount is less than total advance deposited so need to re deposit into another payment entry
+
+      // need to iterate all  payment entries except current
+      
+  $sql_all_payment_entries = "SELECT * FROM jaysan_payment WHERE oid = $oid ";
+  $result_all_payment_entries = $conn->query($sql_all_payment_entries); 
+  if ($result_all_payment_entries->num_rows > 0) {
+    while($row = $result_all_payment_entries->fetch_assoc()) {
+      $payment_id_other_entry = $row['payment_id'];
+      $other_amount = $row['amount'];
+// get advance deposited in other entry
+      $sql_other_entry_advance = "SELECT SUM(amount) as total_advance FROM sale_payment_advance WHERE payment_id = $payment_id_other_entry and advance_ref_id is null and oid = $oid";
+$result_other_entry_advance = $conn->query($sql_other_entry_advance);
+$total_advance_deposited_other_entry = 0;
+
+if ($result_other_entry_advance->num_rows > 0) {  
+  while($row = $result_other_entry_advance->fetch_assoc()) {
+    $total_advance_deposited_other_entry = $row['total_advance'];
+
+  }
+  }
+$deposite_amount_to_other_entry =  ($other_amount - ($total_advance_deposited_other_entry + $advance_going_to_be_added))> 0 ? $advance_going_to_be_added : $other_amount - $total_advance_deposited_other_entry;
+
+if($deposite_amount_to_other_entry > 0)
+  {
+    // insert advance
+$advance_going_to_be_added = $advance_going_to_be_added - $deposite_amount_to_other_entry;
+if($total_advance_deposited_other_entry > 0)
+  {
+    // update advance
+    $sql_update_advance = "UPDATE sale_payment_advance SET amount = amount + $deposite_amount_to_other_entry, dated = NOW(), emp_id = $emp_id WHERE payment_id = $payment_id_other_entry and advance_ref_id is null and oid = $oid";
+    
+      if ($conn->query($sql_update_advance) === TRUE) {
+          
+      } else {
+          echo "Error: " . $sql_update_advance . "<br>" . $conn->error;
+      }
+
+  }
+  else
+    {
+      // insert advance
+      $sql_insert_advance = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id,emp_id,dated) VALUES ($payment_id_other_entry,$deposite_amount_to_other_entry,$oid,$customer_id,null,$emp_id,NOW())"; 
+      if ($conn->query($sql_insert_advance) === TRUE) {
+          
+      } else {
+          echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
+    }
+    }
+  }
+
+    }
+    }
+    }
 
   }
 
