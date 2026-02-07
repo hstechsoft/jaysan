@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+var obj = [];
 $(document).ready(function () {
 
 
@@ -572,6 +573,79 @@ $(document).ready(function () {
 
     })
 
+    $("#excel_btn").on("click", function () {
+
+        if (!obj.length) {
+            salert("Warning", "No data to export", "warning");
+            return;
+        }
+
+        const excelData = [[
+            "S.No",
+            "MRF Form.No",
+            "Form Raised Date",
+            "Part Name",
+            "Form Raised Person Name",
+            "Requested Qty",
+            "Purchase Part Name",
+            "Purchase Qty",
+            "DC Person Name",
+            "PO.No",
+            "PO Batch Date",
+            "Status",
+            "Material Status",
+            "Received By",
+            "Received Qty",
+            "Received Date"
+        ]];
+
+        obj.forEach((row, index) => {
+
+            var rd = '';
+            var rdq = '';
+            var rddate = '';
+
+            row.rd == "No Material Received" ? [] : JSON.parse(row.rd).forEach(function(r){
+                rd = r.received_by
+                rdq = r.grn_receive_qty
+                rddate = r.grn_dc_date
+            })
+
+            var po_no = '';
+            
+            JSON.parse(row.batch).forEach(function(b){
+                po_no = b.po_no
+            })
+
+
+            excelData.push([
+                index + 1,
+                row.mrf_id,
+                row.dated,
+                row.part_name,
+                row.purchase_req_by,
+                row.req_qty + " " + row.mrf_uom,
+                row.raw_material_name,
+                row.order_qty + " " + row.uom,
+                row.purchase_req_by,
+                po_no,
+                row.batch_date,
+                row.status,
+                row.rd == "No Material Received" ? "Not Received" : "Received",
+                row.rd == "No Material Received" ? "No One Received" : rd,
+                row.rd == "No Material Received" ? "No Qty Received" : rdq,
+                row.rd == "No Material Received" ? "Not Received" : rddate
+            ]);
+        });
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(excelData);
+
+        XLSX.utils.book_append_sheet(wb, ws, "PO Dashboard");
+
+        XLSX.writeFile(wb, "PO_Dashboard.xlsx");
+    });
+
 });
 
 
@@ -638,82 +712,86 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
             console.log(response);
 
             if (response.trim() != "error") {
-                $("#po_dashboard_details").empty();
-                var obj = JSON.parse(response);
-                var count = 0;
+                    $("#po_dashboard_details").empty();
+                if (response.trim() != "0 result") {
+                    obj = JSON.parse(response);
+                    var count = 0;
 
-                console.log(response);
-
-
-                obj.forEach(function (obj) {
-                    count += 1;
-                    var btch;
-                    var batch = "";
-                    var purchase = '';
-                    try {
-                        btch = JSON.parse(obj.batch);
-                    } catch (error) {
-                        btch = "no purchase entry";
-                    }
-                    if (btch != "no purchase entry") {
-                        btch.forEach(function (item) {
-                            let rev_detls;
-                            let receive_detls = '';
-                            var percentage = 0;
-                            var progress = '';
-                            if (item.batch_qty == null || item.total_received == 0 || item.total_received == null) {
-                                percentage = 0;
-                            } else {
-                                percentage = (parseFloat(item.total_received) / parseFloat(item.batch_qty)) * 100;
-                            }
-                            percentage = Math.round(percentage);
-                            if (percentage != 0) {
-                                progress = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received out of " + item.batch_qty;
-                            }
-                            else {
-                                progress = 'Not Received';
-                            }
+                    console.log(response);
 
 
-                            try {
-                                rev_detls = JSON.parse(item.receive_details);
-                            } catch (error) {
-                                rev_detls = "No Material Received";
-                            }
-                            if (rev_detls != "No Material Received") {
-                                rev_detls.forEach(function (rev_item) {
-                                    receive_detls += "<li  class='list-group-item text-center'><span class='fw-bold'>" + rev_item.received_by + "</span> - <span class='ps-3'>Dc No: " + rev_item.grn_dc_no + "</span><br>" + rev_item.grn_dc_date + "<span class='text-danger ps-3'>rev-qty: " + rev_item.grn_receive_qty + "</span></li>"
-                                })
-                            }
-                            else {
-                                receive_detls = "<li  class='list-group-item text-danger text-center'>" + item.receive_details + "</li>"
-                            }
-                            var status = 'pending';
-                            if (item.due_sts == "active") {
-                                status = "<span class='text-primary text-success fw-bold  ps-5'>" + item.due_sts + "</span>"
-                            }
-                            else if (item.due_sts == "no_sts") {
-                                status = "<span class='text-primary text-warning fw-bold   ps-5'>" + item.due_sts + "</span>"
-                            }
-                            else {
-                                status = "<span class='text-primary text-danger fw-bold  ps-5'>" + item.due_sts + "</span>"
-                            }
-                            batch += "<li class='list-group-item'><div class='row'><div class='col-6 border' style='font-size:12px'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + "(" + item.po_id + ")" + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
+                    obj.forEach(function (obj) {
+                        count += 1;
+                        var btch;
+                        var batch = "";
+                        var purchase = '';
+                        try {
+                            btch = JSON.parse(obj.batch);
+                        } catch (error) {
+                            btch = "no purchase entry";
+                        }
+                        if (btch != "no purchase entry") {
+                            btch.forEach(function (item) {
+                                let rev_detls;
+                                let receive_detls = '';
+                                var percentage = 0;
+                                var progress = '';
+                                if (item.batch_qty == null || item.total_received == 0 || item.total_received == null) {
+                                    percentage = 0;
+                                } else {
+                                    percentage = (parseFloat(item.total_received) / parseFloat(item.batch_qty)) * 100;
+                                }
+                                percentage = Math.round(percentage);
+                                if (percentage != 0) {
+                                    progress = "<div class='progress'> <div class='progress-bar progress-bar-striped' role='progressbar' style='width: " + percentage + "%' aria-valuenow=" + percentage + " aria-valuemin='0' aria-valuemax='100'>" + percentage + "% </div></div>" + percentage + "% Received out of " + item.batch_qty;
+                                }
+                                else {
+                                    progress = 'Not Received';
+                                }
 
-                        })
-                        purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + obj.uom+"-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
-                    }
-                    else {
-                        batch = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
-                        purchase = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
-                    }
 
-                    $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.req_date + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
-                });
+                                try {
+                                    rev_detls = JSON.parse(item.receive_details);
+                                } catch (error) {
+                                    rev_detls = "No Material Received";
+                                }
+                                if (rev_detls != "No Material Received") {
+                                    rev_detls.forEach(function (rev_item) {
+                                        receive_detls += "<li  class='list-group-item text-center'><span class='fw-bold'>" + rev_item.received_by + "</span> - <span class='ps-3'>Dc No: " + rev_item.grn_dc_no + "</span><br>" + rev_item.grn_dc_date + "<span class='text-danger ps-3'>rev-qty: " + rev_item.grn_receive_qty + "</span></li>"
+                                    })
+                                }
+                                else {
+                                    receive_detls = "<li  class='list-group-item text-danger text-center'>" + item.receive_details + "</li>"
+                                }
+                                var status = 'pending';
+                                if (item.due_sts == "active") {
+                                    status = "<span class='text-primary text-success fw-bold  ps-5'>" + item.due_sts + "</span>"
+                                }
+                                else if (item.due_sts == "no_sts") {
+                                    status = "<span class='text-primary text-warning fw-bold   ps-5'>" + item.due_sts + "</span>"
+                                }
+                                else {
+                                    status = "<span class='text-primary text-danger fw-bold  ps-5'>" + item.due_sts + "</span>"
+                                }
+                                batch += "<li class='list-group-item'><div class='row'><div class='col-6 border' style='font-size:12px'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + "(" + item.po_id + ")" + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
 
-                //    get_sales_order()
+                            })
+                            purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + obj.uom + "-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
+                        }
+                        else {
+                            batch = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
+                            purchase = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
+                        }
+
+                        $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.dated + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
+                    });
+
+                    //    get_sales_order()
+                }
+                else{
+                    $("#po_dashboard_details").append("<tr><td colspan='3' class='text-danger text-center'>No data found </td></tr>")
+                }
             }
-
             else {
                 salert("Error", "User ", "error");
             }

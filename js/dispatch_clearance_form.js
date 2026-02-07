@@ -270,6 +270,27 @@ $(document).ready(function () {
   })
 
   get_sale_statement()
+
+  $("#sales_pro_table").on("click", "#modal_btn", function () {
+
+    $("#add_extra").data({"oid": $(this).data("oid"), "cus_id": $(this).data("cus_id")});
+    $("#extraProductModal").modal("show");
+  })
+
+  $("#add_extra").on("click", function () {
+    var amount = $("#amount").val() || 0;
+    var qno = $("#quotation_no").val() || "";
+    var oid = $(this).data("oid") || 0;
+    var customer_id = $(this).data("cus_id") || 0;
+    var remark = $("#remark").val();
+
+    if (amount != 0 && qno != '' && oid != 0 && customer_id != 0) {
+      insert_sale_order_spares(oid, qno, remark, amount, "null", customer_id)
+    }
+    else {
+      salert("Warning", "Fill the required field", "warning");
+    }
+  })
 });
 
 
@@ -431,6 +452,61 @@ function get_sale_statement() {
 
 
 
+function insert_sale_order_spares(oid, qno, remark, amount, dcf_no, customer_id) {
+
+
+  $.ajax({
+    url: "php/insert_sale_order_spares.php",
+    type: "POST", //send it through get method
+    data: {
+      oid: oid,
+      qno: qno,
+      remark: remark,
+      amount: amount,
+      dcf_no: dcf_no,
+      customer_id: customer_id
+
+    },
+    success: function (response) {
+      $("#extraProductModal").modal("hide");
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        // $("#amount").val('');
+        // $("#quotation_no").val('');
+        // $(this).data("oid", '');
+        // $(this).data("cus_id", '');
+        // $("#remark").val('');
+
+
+        // get_sales_product()
+        // get_sales_cus()
+        window.location.reload();
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      salert("Warning", xhr.responseText, "warning")
+    }
+  });
+
+
+
+
+}
+
+`<br />
+<b>Fatal error</b>:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (\`u333142350_jaysan\`.\`sale_order_spares\`, CONSTRAINT \`sale_order_spares_ibfk_2\` FOREIGN KEY (\`oid\`) REFERENCES \`sales_order_form\` (\`oid\`)) in C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php:25
+Stack trace:
+#0 C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php(25): mysqli-&gt;query('INSERT INTO sal...')
+#1 {main}
+  thrown in <b>C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php</b> on line <b>25</b><br />
+`
 
 
 function insert_dcf() {
@@ -684,7 +760,7 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "<button type='submit' class='btn btn-success float-end' id='modal_btn' data-oid='" + obj.oid + "' data-cus_id='" + obj.customer_id + "'>+</button></td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
 
           });
           get_sale_order_spares()
