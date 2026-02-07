@@ -434,7 +434,11 @@ $(document).ready(function () {
       oid = $(this).val()
       $('#sales_pay').modal('show')
       oid = $(this).val()
-      get_jaysan_sales_payment_m(oid)
+      get_sales_advance_m($(this).data("cus_id"));
+      setTimeout(function () {
+
+        get_jaysan_sales_payment_m(oid)
+      }, 1000);
     }
   })
 
@@ -1026,8 +1030,8 @@ $(document).ready(function () {
         });
         if (advance_deposite_id && advance_deposite_id > 0) {
 
-          $("#total_amount").text(0);
-          $("#total_balance_amount").text(0);
+          // $("#total_amount").text(0);
+          // $("#total_balance_amount").text(0);
           clear_payment_field();
           salert("Error", "Remove/Delete the advance payment , Please add the current amount first", "error");
           return;
@@ -1707,7 +1711,7 @@ function update_sale_order_spares(oid, qno, remark, amount, dcf_no, spares_id) {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $("#update_quotation_btn").addClass("d-none");
         $("#add_quotation_btn").removeClass("d-none");
@@ -1753,7 +1757,7 @@ function delete_sale_order_spares(spares_id, oid) {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         shw_toast("Success", "Spares deleted", "success")
         // $("#total_payment").val(0);
@@ -1798,7 +1802,7 @@ function insert_sale_order_spares(oid, qno, remark, amount, dcf_no) {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $("#spareModal").modal("hide");
         shw_toast("Success", "Spares Updated", "success")
@@ -1846,7 +1850,7 @@ function insert_sales_order_product(oid, type_id, model_id, sub_type, required_q
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $('#product').val("")
         $('#pmodel').val("")
@@ -1905,7 +1909,7 @@ function update_sales_order_product(oid, opid, type_id, model_id, sub_type, requ
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $("#update_sale_product_btn, #cancel_sale_product_btn").addClass("d-none");
         $("#add_sale_product_btn").removeClass("d-none");
@@ -2076,7 +2080,7 @@ function update_customer_type(cus_sub_group_id, cus_id) {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
         $("#customer_type").val($("#cus_sub_group").val());
         $("#cus_sub_group").data("cus_sub_group_id", '');
         $("#cus_sub_group").val('');
@@ -2197,7 +2201,7 @@ function e_delete_sales_pay(advance_id, oid) {
       console.log(response)
 
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         shw_toast("Success", "Payment Deleted ", "success")
         get_sales_advance(cus_id)
@@ -2281,7 +2285,7 @@ function delete_sales_pay(advance_id, oid) {
 
       console.log(response)
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         shw_toast("Success", "Payment Deleted ", "success")
         get_sales_advance_m(cus_id)
@@ -2369,7 +2373,7 @@ function insert_sales_pay(cus_id) {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $('#ref_no_m').val("")
         $('#utr_no_m').val("")
@@ -2420,7 +2424,7 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         $("#payment_cancel_btn").addClass("d-none");
         $("#payment_add_btn").removeClass("d-none");
@@ -2472,7 +2476,7 @@ function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         shw_toast("Success", "Payment Added", "success")
         $('#ref_no').val("")
@@ -2572,7 +2576,7 @@ function update_sales_pay_date() {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         shw_toast("Success", "Payment Date Updated", "success")
         get_jaysan_sales_payment_m(oid)
@@ -3037,7 +3041,7 @@ function delete_sales_order_product(oid, opid) {
 
       if (response.trim() != "error") {
 
-        if (response.trim() == "ok") {
+        if (response.toString().includes("ok")) {
           shw_toast("Success", "Product Deleted", "success")
           // $("#total_payment").val(0);
           get_sales_order_single(oid)
@@ -3081,7 +3085,7 @@ function delete_sales_order_product(oid, opid) {
 
 //       if (response.trim() != "error") {
 
-//         if (response.trim() == "ok") {
+//         if (response.toString().includes("ok")) {
 //           shw_toast("Success", "Product Deleted", "success")
 //           get_jaysan_sales_product(sales_oid)
 //         }
@@ -3122,7 +3126,7 @@ function delete_sales_order(oid) {
 
       if (response.trim() != "error") {
 
-        if (response.trim() == "ok") {
+        if (response.toString().includes("ok")) {
 
 
           location.reload()
@@ -3264,7 +3268,7 @@ function get_sales_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${f_paid}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment}</p>
                                 </div>
                             </li>
 
@@ -5260,7 +5264,7 @@ function insert_sales_order_form() {
 
       console.log(response);
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         location.reload();
 
@@ -5385,7 +5389,7 @@ function update_sales_order_form() {
 
       //console.log
 
-      if (response.trim() == "ok") {
+      if (response.toString().includes("ok")) {
 
         location.reload();
 

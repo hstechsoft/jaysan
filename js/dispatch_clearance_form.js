@@ -114,15 +114,11 @@ $(document).ready(function () {
 
       var billing_amount = $(this).data("billing_amount")
 
-      $(this).find("td").eq(4).each(function () {
-
-        if ($(this).find('input').prop("checked")) {
-
-          count = count + 1
-          total_qty = total_qty + 1
-          ass_id.push($(this).find('input').val())
-        }
-      })
+      $(this).find("td").eq(4).find("input:checked").each(function () {
+        count++;
+        total_qty++;
+        ass_id.push($(this).val());
+      });
 
       if (count > 0) {
         console.log($(this).find("td").eq(1).find("ul").data("price"));
@@ -739,7 +735,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" +obj.qno+" - "+ obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
 
           });
 
