@@ -3247,7 +3247,7 @@ function get_sales_order(approve_sts) {
                             <li class="list-group-item bg-success text-white">
                                 <div class="d-flex justify-content-between  gap-2 ">
                                     <p class="my-auto small">Total:</p>
-                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
                             <li class="list-group-item  bg-warning">
@@ -4851,7 +4851,7 @@ function get_jaysan_sales_payment_m(oid) {
                 sts = "<i class='fa-solid fa-hourglass-half'></i>"
 
               count = count + 1;
-              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.oid + "' data-payment_id='" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\" style='width: 10%'>" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.oid + "' data-payment_id='" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount = total_amount + Number(payment.amount)
             });
 

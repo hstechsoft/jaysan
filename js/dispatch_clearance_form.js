@@ -179,6 +179,7 @@ $(document).ready(function () {
 
   $("#dcf_submit_btn").on("click", function () {
     if (ass_id.length > 0 && $("#consignee").val() != "" && $("#godown").val() != null) {
+        $("#dcf_submit_btn").prop("disabled", true);
       $("#print_company").html($("#godown_des").val().replace(/\n/g, "<br>"));
       $("#print_consignee").html($("#consignee").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
       $("#print_buyer").html($("#buyer").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
@@ -500,13 +501,6 @@ function insert_sale_order_spares(oid, qno, remark, amount, dcf_no, customer_id)
 
 }
 
-`<br />
-<b>Fatal error</b>:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (\`u333142350_jaysan\`.\`sale_order_spares\`, CONSTRAINT \`sale_order_spares_ibfk_2\` FOREIGN KEY (\`oid\`) REFERENCES \`sales_order_form\` (\`oid\`)) in C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php:25
-Stack trace:
-#0 C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php(25): mysqli-&gt;query('INSERT INTO sal...')
-#1 {main}
-  thrown in <b>C:\\xampp\\htdocs\\jaysan\\php\\insert_sale_order_spares.php</b> on line <b>25</b><br />
-`
 
 
 function insert_dcf() {
@@ -524,7 +518,8 @@ function insert_dcf() {
       dcf_by: current_user_id,
       ass_arr: ass_id,
       dcf_report: $("#dcf_print").html(),
-      narration: narration
+      narration: narration,
+      spares_arr: 0,
 
     },
     beforeSend: function () {
@@ -538,8 +533,8 @@ function insert_dcf() {
 
       if (response.trim() == "ok") {
         $("#dcf_submit_btn").prop("disabled", true);
-        $("#dcf").find("*").prop("disabled", true);
-        $("#print_btn").removeAttr("disabled")
+        // $("#dcf").find("*").prop("disabled", false);
+        $("#print_btn").prop("disabled", false)
         shw_toast("success", "Dispatch Clearance Form Created", "")
         $("#print_btn").trigger("click");
       }
@@ -760,7 +755,7 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "<button type='submit' class='btn btn-success float-end' id='modal_btn' data-oid='" + obj.oid + "' data-cus_id='" + obj.customer_id + "'>+</button></td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "<button type='submit' class='btn btn-success float-end d-none' id='modal_btn' data-oid='" + obj.oid + "' dat a-cus_id='" + obj.customer_id + "'>+</button></td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
 
           });
           get_sale_order_spares()
