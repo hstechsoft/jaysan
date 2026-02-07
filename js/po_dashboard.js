@@ -789,7 +789,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                     //    get_sales_order()
                 }
                 else{
-                    $("#po_dashboard_details").append("<tr><td colspan='3' class='text-danger text-center'>No data found </td></tr>")
+                    $("#po_dashboard_details").append("<tr><td colspan='4' class='text-danger text-center'>No data found </td></tr>")
                 }
             }
             else {
