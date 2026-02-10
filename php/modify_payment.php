@@ -36,7 +36,8 @@ if($debit >= $credit)
 $sql_order_info = "select emp_id, customer_id from sales_order_form where oid = $oid "; 
 $result_order_info = $conn->query($sql_order_info);
 if ($result_order_info->num_rows > 0) {
-  while($row = $result_order_info->fetch_assoc()) {
+
+while($row = $result_order_info->fetch_assoc()) {
     $emp_id = $row['emp_id'];
     $customer_id = $row['customer_id'];
  

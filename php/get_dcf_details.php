@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql = "SELECT dcf.dcf_id,dcf.dcf_report FROM dcf WHERE dcf_id =  $dcf_id";
+ $sql = "SELECT dcf.dcf_id,dcf.dcf_report,dcf.sts FROM dcf WHERE dcf_id =  $dcf_id";
 
 $result = $conn->query($sql);
 
