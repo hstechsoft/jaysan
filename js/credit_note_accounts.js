@@ -86,27 +86,32 @@ $(document).ready(function () {
   });
 
 
-  $("#combine_btn").click(function(){
-    var checked_count = 0;
-    var tr = [];
-    $("#credit_note_report tr").each(function(){
-      if($(this).find("input").is(":checked")){
-        tr = $(this).closest("tr").html();
-        
-        checked_count += 1;
-        return;
-      }
-    })
 
-    alert(checked_count)
-    if(checked_count <= 1){
-      salert("Warning", "Check more than on Credit Note!", "warning");
-      return;
+  $("#combine_btn").click(function () {
+  let checked_count = 0;
+  let rows = [];
+
+  $("#credit_note_report tr").each(function () {
+    if ($(this).find("input").is(":checked")) {
+      checked_count++;
+      rows.push($(this).clone()); // clone row
     }
-    $("#multiCNModal").modal("show");
-    
-    $("#multiCNModal_tbody").append("<tr><tr>")
-  })
+  });
+
+  if (checked_count <= 1) {
+    salert("Warning", "Check more than one Credit Note!", "warning");
+    return;
+  }
+
+  $("#multiCNModal_tbody").empty(); // clear previous data
+
+  $.each(rows, function (index, row) {
+    $("#multiCNModal_tbody").append(row);
+  });
+
+  $("#multiCNModal").modal("show");
+});
+
 
 });
 

@@ -841,7 +841,7 @@ $(document).ready(function () {
         $("#requestModal").modal("hide");
 
         window.open(
-            'http://localhost/jaysan/store_stock_allocate.html?part_id=' + part_idddd + '&req=1',
+            'store_stock_allocate.html?part_id=' + part_idddd + '&req=1',
             '_blank'
         );
     });

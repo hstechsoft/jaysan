@@ -33,6 +33,46 @@
       display: table-cell !important;
       vertical-align: middle !important;
     }
+
+
+    /* WATERMARK */
+
+    .table-watermark-wrapper {
+      position: relative;
+    }
+
+    .dcf-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 70px;
+      font-weight: 800;
+      color: rgba(255 0 24 / 46%);
+      /* Bootstrap danger color */
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Optional sliding animation */
+    @keyframes slideWatermark {
+      0% {
+        transform: translate(-60%, -50%) rotate(-30deg);
+      }
+
+      100% {
+        transform: translate(-40%, -50%) rotate(-30deg);
+      }
+    }
+
+    .dcf-watermark {
+      animation: slideWatermark 3s ease-in-out infinite alternate;
+    }
   </style>
 
 
@@ -139,7 +179,8 @@
         </div>
 
         <div class="card-body m-0 p-0  " style="max-height: 50vh; overflow-y: auto; font-size: 13px;">
-          <table id='dcf_list1' class='table table-bordered border-dark border-opacity-50 text-center d-none d-md-block'>
+          <table id='dcf_list1'
+            class='table table-bordered border-dark border-opacity-50 text-center d-none d-md-block'>
             <thead class="small">
 
 
@@ -195,7 +236,7 @@
 
   </div>
 
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
 
 

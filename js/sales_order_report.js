@@ -445,7 +445,7 @@ $(document).ready(function () {
   $("#delivered_report").on("click", function () {
     if ($(this).is(":checked")) {
       $("#all_report").prop("checked", false);
-      get_sale_order_report('', '', '', 'Delivered', '', '', '', '', '', '', '', '', '', 0, '');
+      get_sale_order_report('', '', '', 'Delivered', '', '', '', '', '', '', '', '', '', 0, 'Sales');
     }
     else {
       get_sale_order_report('', '', '', '', '', '', '', '', '', '', '', '', '', 1, '');

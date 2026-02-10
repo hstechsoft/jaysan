@@ -126,6 +126,47 @@
             font-weight: 800;
             color: #dc3545;
         }
+
+
+
+        /* WATERMARK */
+
+        .table-watermark-wrapper {
+            position: relative;
+        }
+
+        .dcf-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 70px;
+            font-weight: 800;
+            color: rgba(255 0 24 / 46%);
+            /* Bootstrap danger color */
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Optional sliding animation */
+        @keyframes slideWatermark {
+            0% {
+                transform: translate(-60%, -50%) rotate(-30deg);
+            }
+
+            100% {
+                transform: translate(-40%, -50%) rotate(-30deg);
+            }
+        }
+
+        .dcf-watermark {
+            animation: slideWatermark 3s ease-in-out infinite alternate;
+        }
     </style>
 
 
@@ -582,226 +623,233 @@
 
 
                     <div class="table-responsive">
-                        <table id='' class='  table table-sm table-bordered border-dark border-opacity-50 text-center '>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="5" colspan="3">
-                                        <div class="d-flex ">
-                                            <p class="small text-start" id="print_company"></p>
-                                        </div>
+                        <div class="table-watermark-wrapper position-relative">
+                            <table id=''
+                                class='  table table-sm table-bordered border-dark border-opacity-50 text-center '>
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="5" colspan="3">
+                                            <div class="d-flex ">
+                                                <p class="small text-start" id="print_company"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">Date :</p>
-                                            <p class="small m-0 p-0" id="print_dated"></p>
-                                        </div>
-                                    </td>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">Date :</p>
+                                                <p class="small m-0 p-0" id="print_dated"></p>
+                                            </div>
+                                        </td>
 
-                                </tr>
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0 fw-bold">Transport Mode :</p>
-                                            <p class="small m-0 p-0" id="print_transport"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0 fw-bold">Transport Payment Ref :</p>
-                                            <p class="small m-0 p-0" id="print_transport_payment"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0 fw-bold">Vehicle No:</p>
-                                            <p class="small m-0 p-0" id="print_vno"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0 fw-bold">Driver Details :</p>
-                                            <p class="small m-0 p-0" id="print_driver"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="d-flex">
-                                            <p class="small m-0 p-0 fw-bold"
-                                                style="word-wrap: break-word; white-space: pre-wrap; overflow-wrap: break-word;">
-                                                consignee(Ship to)</p>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0 fw-bold">Transport Mode :</p>
+                                                <p class="small m-0 p-0" id="print_transport"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0 fw-bold">Transport Payment Ref :</p>
+                                                <p class="small m-0 p-0" id="print_transport_payment"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0 fw-bold">Vehicle No:</p>
+                                                <p class="small m-0 p-0" id="print_vno"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0 fw-bold">Driver Details :</p>
+                                                <p class="small m-0 p-0" id="print_driver"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="d-flex">
+                                                <p class="small m-0 p-0 fw-bold"
+                                                    style="word-wrap: break-word; white-space: pre-wrap; overflow-wrap: break-word;">
+                                                    consignee(Ship to)</p>
 
-                                        </div>
-                                        <div class="d-flex ">
+                                            </div>
+                                            <div class="d-flex ">
 
-                                            <p class="small m-0 p-0 text-start" id="print_consignee"></p>
-                                        </div>
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0 fw-bold">Buyer(Bill to)</p>
+                                                <p class="small m-0 p-0 text-start" id="print_consignee"></p>
+                                            </div>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0 fw-bold">Buyer(Bill to)</p>
 
-                                        </div>
-                                        <div class="d-flex">
+                                            </div>
+                                            <div class="d-flex">
 
-                                            <p class="small m-0 p-0 text-start" id="print_buyer"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">GST No :</p>
-                                            <p class="small m-0 p-0" id="print_con_gst"></p>
-                                        </div>
+                                                <p class="small m-0 p-0 text-start" id="print_buyer"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">GST No :</p>
+                                                <p class="small m-0 p-0" id="print_con_gst"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">GST No :</p>
-                                            <p class="small m-0 p-0" id="print_buy_gst"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">PAN:</p>
-                                            <p class="small m-0 p-0" id="print_con_pan"></p>
-                                        </div>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">GST No :</p>
+                                                <p class="small m-0 p-0" id="print_buy_gst"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">PAN:</p>
+                                                <p class="small m-0 p-0" id="print_con_pan"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">PAN:</p>
-                                            <p class="small m-0 p-0" id="print_buy_pan"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">Contact:</p>
-                                            <p class="small m-0 p-0" id="print_con_contact"></p>
-                                        </div>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">PAN:</p>
+                                                <p class="small m-0 p-0" id="print_buy_pan"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">Contact:</p>
+                                                <p class="small m-0 p-0" id="print_con_contact"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex gap-1">
-                                            <p class="small m-0 p-0">Contact:</p>
-                                            <p class="small m-0 p-0" id="print_buy_contact"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex gap-1">
+                                                <p class="small m-0 p-0">Contact:</p>
+                                                <p class="small m-0 p-0" id="print_buy_contact"></p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="small text-bg-secondary" colspan="6" scope="col">
+                                            Product
+                                        </td>
+                                    </tr>
+                                    <tr class="small fw-bold">
+                                        <td>#</td>
+                                        <td>Product</td>
+                                        <td>Order No</td>
+                                        <td>Delivered</td>
+                                        <td>Dispatch Qty</td>
+
+                                        <td>Amount</td>
+                                    </tr>
+                                    <tr class="print_product ">
+
+                                    </tr>
                                     <td class="small text-bg-secondary" colspan="6" scope="col">
-                                        Product
+                                        Payment
                                     </td>
-                                </tr>
-                                <tr class="small fw-bold">
-                                    <td>#</td>
-                                    <td>Product</td>
-                                    <td>Order No</td>
-                                    <td>Delivered</td>
-                                    <td>Dispatch Qty</td>
+                                    <tr class="small fw-bold">
+                                        <td>#</td>
 
-                                    <td>Amount</td>
-                                </tr>
-                                <tr class="print_product ">
+                                        <td>Order No</td>
+                                        <td colspan="2">Dated</td>
 
-                                </tr>
-                                <td class="small text-bg-secondary" colspan="6" scope="col">
-                                    Payment
-                                </td>
-                                <tr class="small fw-bold">
-                                    <td>#</td>
+                                        <td colspan="2">Amount</td>
+                                    </tr>
+                                    <tr class="print_payment text-center">
 
-                                    <td>Order No</td>
-                                    <td colspan="2">Dated</td>
-
-                                    <td colspan="2">Amount</td>
-                                </tr>
-                                <tr class="print_payment text-center">
-
-                                </tr>
+                                    </tr>
 
 
-                                <tr class="small">
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
+                                    <tr class="small">
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Invoice By : </p>
-                                            <p class="small m-0 p-0" id="print_invoice_by"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Invoice By : </p>
+                                                <p class="small m-0 p-0" id="print_invoice_by"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Invoice By Signature : </p>
-                                            <p class="small m-0 p-0" id="print_invoice_signature"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Invoice By Signature : </p>
+                                                <p class="small m-0 p-0" id="print_invoice_signature"></p>
+                                            </div>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
 
-                                <tr class="small">
-                                    <td colspan="6">
-                                        <div class="d-flex justify-content-start">
+                                    <tr class="small">
+                                        <td colspan="6">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Invoice No : </p>
-                                            <p class="small m-0 p-0" id="print_invoice_no"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Invoice No : </p>
+                                                <p class="small m-0 p-0" id="print_invoice_no"></p>
+                                            </div>
 
-                                    </td>
+                                        </td>
 
-                                </tr>
+                                    </tr>
 
-                                <tr class="small">
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
+                                    <tr class="small">
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Payment Confirmation by : </p>
-                                            <p class="small m-0 p-0" id="print_payment_confirm_by"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Payment Confirmation by : </p>
+                                                <p class="small m-0 p-0" id="print_payment_confirm_by"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Payment Confirmation signature : </p>
-                                            <p class="small m-0 p-0" id="print_payment_confirm_sig"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Payment Confirmation signature : </p>
+                                                <p class="small m-0 p-0" id="print_payment_confirm_sig"></p>
+                                            </div>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
 
-                                <tr class="small">
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
+                                    <tr class="small">
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
 
-                                            <p class="small m-0 p-0"> Marketing HOD Signature : </p>
-                                            <p class="small m-0 p-0" id="print_hod_sig"></p>
-                                        </div>
+                                                <p class="small m-0 p-0"> Marketing HOD Signature : </p>
+                                                <p class="small m-0 p-0" id="print_hod_sig"></p>
+                                            </div>
 
-                                    </td>
-                                    <td colspan="3">
-                                        <div class="d-flex justify-content-start">
-                                            DCF Created By: <span class="ps-1 fw-bold" id="dcf_print_by"></span>
-                                        </div>
+                                        </td>
+                                        <td colspan="3">
+                                            <div class="d-flex justify-content-start">
+                                                DCF Created By: <span class="ps-1 fw-bold" id="dcf_print_by"></span>
+                                            </div>
 
-                                    </td>
+                                        </td>
 
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="dcf-watermark">
+                                <i class="fa-solid fa-thumbs-down"></i>
+                                DCF NOT APPROVED
+                            </div>
+                        </div>
                     </div>
 
 

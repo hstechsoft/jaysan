@@ -63,7 +63,7 @@ function approve_dcf_pay() {
 
   $("#print_payment_confirm_by").html(current_user_name + " (" + getIndianDateTime() + ")")
 
-  $("#dcf_report").find(".fa-thumbs-down").after("approved by -" + current_user_name);
+  $("#dcf_report").find("td").find(".fa-thumbs-down").after("approved by -" + current_user_name);
 
   $.ajax({
     url: "php/approve_dcf_pay.php",
@@ -129,9 +129,22 @@ function get_dcf_details(dcf_id) {
 
 
           obj.forEach(function (obj) {
+
+
+
             count = count + 1;
             $('#dcf_report').html(obj.dcf_report)
+
+            if (obj.sts == "delivery") {
+              alert(obj.sts)
+              $(".dcf-watermark")
+                .html(`<i class="fa-solid fa-thumbs-up me-2"></i>DCF APPROVED`)
+                .css("color", "rgb(17 200 8 / 42%)");
+            }
+
             dcf_id1 = obj.dcf_id
+
+
           });
 
 
