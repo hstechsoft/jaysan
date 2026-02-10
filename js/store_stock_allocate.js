@@ -516,6 +516,19 @@ $(document).ready(function () {
     });
 
 
+    $("#material_request_btn").on("click", function () {
+
+        if (req > 0 && part_id > 0) {
+
+            $(this).prop("disabled", true);
+
+            window.location.href =
+                `material_request_form.html?part_id_para=${part_id}&req_para=${req}&qty_para=${0}`;
+
+        } else {
+            salert("Warning", "Data missing. Try later", "warning");
+        }
+    });
 
 });
 

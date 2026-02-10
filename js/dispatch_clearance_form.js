@@ -6,6 +6,7 @@ var oid = urlParams.get('oid');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var ass_id = [];
+var spare_id = [];
 var oid_arr = []
 
 $(document).ready(function () {
@@ -118,6 +119,7 @@ $(document).ready(function () {
         count++;
         total_qty++;
         ass_id.push($(this).val());
+        spare_id.push($(this).data("spare_id"));
       });
 
       if (count > 0) {
@@ -755,7 +757,7 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "<button type='submit' class='btn btn-success float-end d-none' id='modal_btn' data-oid='" + obj.oid + "' dat a-cus_id='" + obj.customer_id + "'>+</button></td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td class='d-flex justify-content-between'>" + obj.rtd + "<button type='submit' class='btn btn-success float-end ' id='modal_btn' data-oid='" + obj.oid + "' dat a-cus_id='" + obj.customer_id + "'>+</button></td></tr>")
 
           });
           get_sale_order_spares()
@@ -806,7 +808,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='"+obj.spares_id+"'></input></td></tr>")
 
           });
 

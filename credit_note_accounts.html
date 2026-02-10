@@ -84,7 +84,8 @@
               <th scope="col">CN Dated</th>
               <th scope="col">Status</th>
               <th scope="col">Employee</th>
-              <th scope="col">Action</th>
+              <th scope="col">Action <button class="btn btn-outline-secondary border-0 float-end" id="combine_btn"><i
+                    class="fa-solid fa-code-merge"></i></button></th>
 
             </tr>
           </thead>
@@ -102,6 +103,53 @@
   <div id='footer' class="mt-auto"></div>
 
 
+
+  <!-- Modal -->
+  <div class="modal fade" id="multiCNModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+          <table class="table caption-top table-bordered table-striped ">
+              <caption></caption>
+            <thead>
+          
+              <tr>
+              <th scope="col">#</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Invoice</th>
+
+              <th scope="col">CN Amount </th>
+              <th scope="col">Credit Note </th>
+              <th scope="col">CN Dated</th>
+              <th scope="col">Status</th>
+              <th scope="col">Employee</th>
+              <th scope="col">Action</th>
+
+            </tr>
+            </thead>
+            <tbody id="multiCNModal_tbody">
+          
+          
+            </tbody>
+          
+          
+          </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

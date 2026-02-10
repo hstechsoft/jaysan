@@ -704,43 +704,49 @@ $(document).ready(function () {
   });
 
   $('#sales_product, #product_details_mobile_view').on("click", "button#fa_edit", function () {
+    
     $("#update_sale_product_btn, #cancel_sale_product_btn").removeClass("d-none");
     $("#add_sale_product_btn").addClass("d-none");
-    var opid = $(this).val()
-    var oid = $(this).data("oid")
-    var product_id = $(this).closest('tr').find('td').eq(1).data("product_id");
-    var model_id = $(this).closest('tr').find('td').eq(2).data("model_id");
-    var type_id = $(this).closest('tr').find('td').eq(3).data("type_id");
-    var price = $(this).closest('tr').find('td').eq(6).text();
-    var qty = $(this).closest('tr').find('td').eq(5).text();
-    var sub_type = $(this).closest('tr').find('td').eq(4).text();
-    var billing_price = $(this).closest('tr').find('td').eq(7).text();
+    var thiss = $("#sales_product").find("#fa_edit")
+    var opid = thiss.val()
+    var oid = thiss.data("oid")
+    var product_id = thiss.closest('tr').find('td').eq(1).data("product_id");
+    var model_id = thiss.closest('tr').find('td').eq(2).data("model_id");
+    var type_id = thiss.closest('tr').find('td').eq(3).data("type_id");
+    var price = thiss.closest('tr').find('td').eq(6).text();
+    var qty = thiss.closest('tr').find('td').eq(5).text();
+    var sub_type = thiss.closest('tr').find('td').eq(4).text();
+    var billing_price = thiss.closest('tr').find('td').eq(7).text();
 
     $("#update_sale_product_btn").data({ "opid": opid, oid: oid });
 
     $("#qty").val(qty);
-    $('#product').val(product_id).trigger("change");
-    setTimeout(function () {
-      $('#pmodel').val(model_id).trigger("change");
-      setTimeout(function () {
-        $('#ptype').val(type_id).trigger("change");
-        setTimeout(function () {
+    $('#product').val(product_id).trigger('change');
 
-          var sub_type_arr = sub_type.split(",");
-          $('#sub_type_div input[type="checkbox"],input[type="radio"]').each(function () {
-            if (sub_type_arr.includes($(this).parent().text().trim())) {
-              $(this).prop("checked", true);
+    setTimeout(() => {
+      $('#pmodel').val(model_id).trigger('change');
+
+      setTimeout(() => {
+        $('#ptype').val(type_id).trigger('change');
+
+        setTimeout(() => {
+
+          const subArr = sub_type.split(',').map(s => s.trim());
+
+          $('#sub_type_div input[type="checkbox"], #sub_type_div input[type="radio"]').each(function () {
+            if (subArr.includes($(this).parent().text().trim())) {
+              $(this).prop('checked', true);
             }
-            setTimeout(function () {
-              $("#billing_price").val(billing_price);
-              $("#machine_price").val(price);
-            }, 200);
           });
+
+          $('#billing_price').val(billing_price);
+          $('#machine_price').val(price);
+
         }, 500);
-      }
-        , 500);
-    }
-      , 500);
+
+      }, 500);
+
+    }, 500);
 
   });
 
@@ -1030,10 +1036,10 @@ $(document).ready(function () {
         });
         if (advance_deposite_id && advance_deposite_id > 0) {
 
-          // $("#total_amount").text(0);
-          // $("#total_balance_amount").text(0);
+          $("#total_amount").text(0);
+          $("#total_balance_amount").text(0);
           clear_payment_field();
-          salert("Error", "Remove/Delete the advance payment , Please add the current amount first", "error");
+          salert("Error", "Remove/Delete the advance payment , Please add the Received amount first", "error");
           return;
         }
       }
@@ -1804,6 +1810,11 @@ function insert_sale_order_spares(oid, qno, remark, amount, dcf_no) {
 
       if (response.toString().includes("ok")) {
 
+        $("#quotation_fields_check").prop("checked", false);
+        $("#quotation_no").val('');
+        $("#quotation_amount").val("")
+        $("#quotation_remark").val("")
+        $("#spareModal").modal("hide");
         $("#spareModal").modal("hide");
         shw_toast("Success", "Spares Updated", "success")
         get_sales_order_single(oid);
@@ -2244,7 +2255,7 @@ function na_delete_sales_pay(payment_id, oid) {
 
 
       if (response.toString().includes("ok")) {
-console.log("f");
+        console.log("f");
 
         shw_toast("Success", "Payment Deleted ", "success")
         get_sales_advance(cus_id)
@@ -3197,9 +3208,9 @@ function get_sales_order(approve_sts) {
 
             var received_details = JSON.parse(obj.received_details) || [];
 
-            var f_total_product_price = parseFloat(obj.total_product_price || 0)+parseFloat(obj.total_spares_amount || 0)
+            var f_total_product_price = parseFloat(obj.total_product_price || 0) + parseFloat(obj.total_spares_amount || 0)
             var f_paid = 0
-            received_details.forEach(function (rev){
+            received_details.forEach(function (rev) {
               paid += parseFloat(rev.amount)
             })
 
@@ -3211,10 +3222,10 @@ function get_sales_order(approve_sts) {
             var advance_taken_details = JSON.parse(obj.advance_taken_details) || [];
 
             var total_advance_taken = 0;
-            advance_taken_details.forEach(function(advance_taken){
+            advance_taken_details.forEach(function (advance_taken) {
               total_advance_taken += parseFloat(advance_taken.advance_taken || 0)
             })
-            
+
             var price = `
                         <div class="form-check form-switch">
                           <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
@@ -3247,7 +3258,7 @@ function get_sales_order(approve_sts) {
                             <li class="list-group-item bg-success text-white">
                                 <div class="d-flex justify-content-between  gap-2 ">
                                     <p class="my-auto small">Total:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
+                                    <p class="small fw-bold my-auto">${obj.credit || 0}</p>
                                 </div>
                             </li>
                             <li class="list-group-item  bg-warning">
@@ -3268,7 +3279,7 @@ function get_sales_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.total_received_payment}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -3296,9 +3307,9 @@ function get_sales_order(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
                         </div>
-                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
+                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -3314,7 +3325,7 @@ function get_sales_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between  gap-2">
                                     <p class="my-auto small">Total Advance Taken:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -3336,18 +3347,18 @@ function get_sales_order(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
+                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
-                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
                                 </div>
                             </li>
 
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -3958,10 +3969,24 @@ function get_sales_order_approval(approve_sts) {
             var percent = (paid / total) * 100;
             percent = Math.min(Math.max(percent, 0), 100);
 
+            var received_details = JSON.parse(obj.received_details) || [];
+
+            var f_total_product_price = parseFloat(obj.total_product_price || 0) + parseFloat(obj.total_spares_amount || 0)
+            var f_paid = 0
+            received_details.forEach(function (rev) {
+              paid += parseFloat(rev.amount)
+            })
 
             var advance_given = 0
             advance_deposite_details.forEach(function (advance) {
               advance_given += parseFloat(advance.advance_given) || 0;
+            })
+
+            var advance_taken_details = JSON.parse(obj.advance_taken_details) || [];
+
+            var total_advance_taken = 0;
+            advance_taken_details.forEach(function (advance_taken) {
+              total_advance_taken += parseFloat(advance_taken.advance_taken || 0)
             })
             var price = `
                         <div class="form-check form-switch">
@@ -3983,7 +4008,7 @@ function get_sales_order_approval(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between  gap-2">
                                     <p class="my-auto small">Total Advance Taken:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -4009,14 +4034,14 @@ function get_sales_order_approval(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
-                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
                                 </div>
                             </li>
 
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -4044,9 +4069,9 @@ function get_sales_order_approval(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
                         </div>
-                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
+                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -4062,7 +4087,7 @@ function get_sales_order_approval(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between  gap-2">
                                     <p class="my-auto small">Total Advance Taken:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -4084,18 +4109,18 @@ function get_sales_order_approval(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
+                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
-                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
                                 </div>
                             </li>
 
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -4247,10 +4272,24 @@ function get_req_order(approve_sts) {
             var percent = (paid / total) * 100;
             percent = Math.min(Math.max(percent, 0), 100);
 
+            var received_details = JSON.parse(obj.received_details) || [];
+
+            var f_total_product_price = parseFloat(obj.total_product_price || 0) + parseFloat(obj.total_spares_amount || 0)
+            var f_paid = 0
+            received_details.forEach(function (rev) {
+              paid += parseFloat(rev.amount)
+            })
 
             var advance_given = 0
             advance_deposite_details.forEach(function (advance) {
               advance_given += parseFloat(advance.advance_given) || 0;
+            })
+
+            var advance_taken_details = JSON.parse(obj.advance_taken_details) || [];
+
+            var total_advance_taken = 0;
+            advance_taken_details.forEach(function (advance_taken) {
+              total_advance_taken += parseFloat(advance_taken.advance_taken || 0)
             })
             var price = `
                         <div class="form-check form-switch">
@@ -4272,7 +4311,7 @@ function get_req_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between  gap-2">
                                     <p class="my-auto small">Total Advance Taken:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -4298,14 +4337,14 @@ function get_req_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
-                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
                                 </div>
                             </li>
 
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -4333,9 +4372,9 @@ function get_req_order(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
                         </div>
-                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
+                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -4351,7 +4390,7 @@ function get_req_order(approve_sts) {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between  gap-2">
                                     <p class="my-auto small">Total Advance Taken:</p>
-                                    <p class="small fw-bold my-auto">${obj.total_advance_taken || 0}</p>
+                                    <p class="small fw-bold my-auto">${total_advance_taken}</p>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -4373,18 +4412,18 @@ function get_req_order(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
+                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
-                                    <p class="small fw-bold my-auto">${obj.debit}</p>
+                                    <p class="small fw-bold my-auto">${f_total_product_price}</p>
                                 </div>
                             </li>
 
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="small my-auto">Paid</p>
-                                    <p class="small fw-bold my-auto">${obj.credit}</p>
+                                    <p class="small fw-bold my-auto">${obj.total_received_payment || 0}</p>
                                 </div>
                             </li>
 
@@ -4551,7 +4590,7 @@ function get_sales_order_single(oid) {
               if (firstItem.length) {
                 firstItem.trigger("click");
               }
-            }, 300);
+            }, 500);
             $('#cus_phone').val(obj.cus_phone)
             $('#order_type').val(obj.order_type)
             $('#oe_supply').val(obj.oe_supply)
@@ -5028,10 +5067,10 @@ function get_jaysan_sales_product(oid) {
                       <button
                         class="btn btn-sm btn-light text-danger delete-row rounded-circle"
                         data-oid="${obj.oid}"
-                        value="${obj.opid}" id='fa-trash'>
+                        value="${obj.opid}" name='db_delete' id='fa-trash'>
                         <i class="fa fa-trash"></i>
                       </button>
-                      <button value ='${obj.opid}' data-oid="${obj.oid}"  class='btn btn-sm btn-light text-warning delete-row rounded-circle' id='fa_edit'><i class='fa fa-edit' ></i></button>
+                      <button  name='db_edit' value ='${obj.opid}' data-oid="${obj.oid}"  class='btn btn-sm btn-light text-warning delete-row rounded-circle' id='fa_edit'><i class='fa fa-edit' ></i></button>
                     </div>
 
                     <!-- Sub scale -->
