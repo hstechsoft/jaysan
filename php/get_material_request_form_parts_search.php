@@ -19,6 +19,7 @@ $sql = "SET time_zone = '+05:30';";
 
 $sql .= "SELECT DISTINCT
     mrf.mrf_id,
+    mrf_details_view.*,
     (select count(material_request_form.mrf_id) from material_request_form where material_request_form.part_id = mrf.part_id) as total_part_count,
     mrf.*,
     emp_tally_stock.emp_name as tally_stock_approved_by_name,
@@ -43,6 +44,7 @@ LEFT JOIN employee emp_tally_stock on mrf.tally_stock_approved_by = emp_tally_st
 LEFT JOIN employee emp_purchase_requested ON mrf_purchase.purchase_requested_by = emp_purchase_requested.emp_id
 LEFT JOIN employee emp_purchase_verified ON mrf_purchase.purchase_verified_by = emp_purchase_verified.emp_id
 LEFT JOIN employee emp_purchase_approved ON mrf_purchase.purchase_approved_by = emp_purchase_approved.emp_id
+left join mrf_details_view on mrf.mrf_id = mrf_details_view.mrf_id
 WHERE mrf.part_id = $part_id";
 
 
