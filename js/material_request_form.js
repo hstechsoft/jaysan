@@ -488,7 +488,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
               parseFloat(obj.mrf_receive_qty || 0);
 
             if (pending === 0) {
-              status = `<span class='text-success'>Material Received</span>`;
+                            status = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty-" + obj.mrf_receive_qty+" Qty"})</span>`;
             } else {
               status = `
                       <span class='text-danger'>
@@ -837,7 +837,7 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
               parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
 
             if (pending === 0) {
-              status = `<span class='text-success'>Material Received${mrf_batch_qty + "-" + obj.mrf_receive_qty}</span>
+              status = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty+" Qty"})</span>
                     ${bth_d}`;
             } else {
               status = `
