@@ -28,7 +28,7 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';";
 
-$sql .= "SELECT DISTINCT
+$sql .= "SELECT 
     mrf.mrf_id,
     mrf_details_view.*,
     (select count(material_request_form.mrf_id) from material_request_form where material_request_form.part_id = mrf.part_id) as total_part_count,
