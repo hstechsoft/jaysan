@@ -10,6 +10,13 @@ $mrf_purchase_query = "1";
  if($mrf_purchase_by != 'all') {
 $mrf_purchase_query = "mrf_purchase.purchase_requested_by = $mrf_purchase_by";
  }
+$mrf_receive_query = "1";
+ $receive_filter = isset($_POST['receive_filter']) ? ($_POST['receive_filter']) : 'all';
+ if($receive_filter == 'pending') {
+    $mrf_receive_query = "(mrf_details_view.mrf_batch_qty > mrf_details_view.mrf_receive_qty)";
+ } else if($receive_filter == 'received') {
+    $mrf_receive_query = "(mrf_details_view.mrf_batch_qty <= mrf_details_view.mrf_receive_qty)";
+ }
  
 function test_input($data) {
 $data = trim($data);
@@ -48,7 +55,7 @@ LEFT JOIN employee emp_tally_stock on mrf.tally_stock_approved_by = emp_tally_st
 LEFT JOIN employee emp_purchase_requested ON mrf_purchase.purchase_requested_by = emp_purchase_requested.emp_id
 LEFT JOIN employee emp_purchase_verified ON mrf_purchase.purchase_verified_by = emp_purchase_verified.emp_id
 LEFT JOIN employee emp_purchase_approved ON mrf_purchase.purchase_approved_by = emp_purchase_approved.emp_id
-left join mrf_details_view on mrf.mrf_id = mrf_details_view.mrf_id
+INNER JOIN mrf_details_view ON mrf.mrf_id = mrf_details_view.mrf_id
 WHERE ";
 
 if(count($status) > 0) {
@@ -72,6 +79,7 @@ if($emp_id != "'all'") {
    $sql =  $sql. "1=1";
 }
 $sql  = $sql . " AND " . $mrf_purchase_query;
+$sql  = $sql . " AND " . $mrf_receive_query;
 $sql = $sql . " ORDER BY mrf.mrf_id DESC";
 
 if ($conn->multi_query($sql)) {
