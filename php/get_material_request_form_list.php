@@ -13,9 +13,9 @@ $mrf_purchase_query = "mrf_purchase.purchase_requested_by = $mrf_purchase_by";
 $mrf_receive_query = "1";
  $receive_filter = isset($_POST['receive_filter']) ? ($_POST['receive_filter']) : 'all';
  if($receive_filter == 'pending') {
-    $mrf_receive_query = "(mrf_details_view.mrf_batch_qty > mrf_details_view.mrf_receive_qty)";
+    $mrf_receive_query = "(ifnull(mrf_details_view.mrf_batch_qty, 0) > ifnull(mrf_details_view.mrf_receive_qty, 0))";
  } else if($receive_filter == 'received') {
-    $mrf_receive_query = "(mrf_details_view.mrf_batch_qty <= mrf_details_view.mrf_receive_qty)";
+    $mrf_receive_query = "(ifnull(mrf_details_view.mrf_batch_qty, 0) <= ifnull(mrf_details_view.mrf_receive_qty, 0))";
  }
  
 function test_input($data) {
