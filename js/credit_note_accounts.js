@@ -87,30 +87,68 @@ $(document).ready(function () {
 
 
 
+
+  $("#credit_note_report").on("click", "input", function () {
+
+    var cus_id = $(this).val();
+
+    var chk_count = $("#credit_note_report input:checked").length;
+
+    var checked_value = chk_count > 0;
+
+    $("#credit_note_report tr").each(function () {
+
+      var current_input = $(this).find("input");
+      var current_val = current_input.val();
+
+      if (current_val != cus_id && checked_value) {
+        $(this).addClass("d-none");
+      } else {
+        $(this).removeClass("d-none");
+      }
+
+    });
+
+  })
+
   $("#combine_btn").click(function () {
-  let checked_count = 0;
-  let rows = [];
 
-  $("#credit_note_report tr").each(function () {
-    if ($(this).find("input").is(":checked")) {
-      checked_count++;
-      rows.push($(this).clone()); // clone row
+    let rows = [];
+
+    $("#credit_note_report input:checked").each(function () {
+
+      let tr = $(this).closest("tr");
+
+      rows.push({
+        name: tr.find("td").eq(1).text().trim(),
+        invoice_no: tr.find("td").eq(3).text().trim(),
+        cn_amount: tr.find("td").eq(4).text().trim(),
+        cn_note: tr.find("td").eq(5).text().trim(),
+        cn_date: tr.find("td").eq(6).text().trim(),
+        emp: tr.find("td").eq(8).text().trim()
+      });
+
+    });
+
+    if (rows.length <= 1) {
+        salert("Warning", "Check more than one Credit Note!", "warning");
+        return;
     }
+
+
+    $("#multiCNModal_tbody").empty();
+
+    var total_cn_value = 0
+
+    $.each(rows, function (index, row) {
+      total_cn_value += parseFloat(row.cn_amount);
+      $("#multiCNModal_tbody").append(`<tr><td>${index+1}</td><td>${row.name}</td><td>${row.invoice_no}</td><td>${row.emp}</td><td contenteditable = 'true'>${row.cn_note}</td><td contenteditable='true'>${row.cn_date}</td><td contenteditable='true'>${row.cn_amount}</td></tr>`);
+    });
+
+    $("#multiCNModal_tbody").append(`<tr><td colspan='6' class='text-end text-primary'>Total CN Value</td><td td>${total_cn_value}</td></tr>`)
+
+    $("#multiCNModal").modal("show");
   });
-
-  if (checked_count <= 1) {
-    salert("Warning", "Check more than one Credit Note!", "warning");
-    return;
-  }
-
-  $("#multiCNModal_tbody").empty(); // clear previous data
-
-  $.each(rows, function (index, row) {
-    $("#multiCNModal_tbody").append(row);
-  });
-
-  $("#multiCNModal").modal("show");
-});
 
 
 });
@@ -278,7 +316,7 @@ function get_credit_note_report() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small verify' id=''>Verify</button><input class='form-check-input check_box' type='checkbox' value='' id='check_box'></td></tr>")
+            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small verify' id=''>Verify</button><input class= 'form-check-input check_box' type='checkbox' value='" + obj.cus_id + "' id='check_box'></td></tr>")
           });
 
 

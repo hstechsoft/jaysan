@@ -29,7 +29,7 @@
   <section id="menu_bar">
 
   </section>
-  
+
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header ">
@@ -392,10 +392,30 @@
                         <div class="d-flex   justify-content-between  align-content-around">
                           <span class="fw-bold">Material Request Form Details</span>
                           <span>
-
                             <button type="button" class="btn btn-sm btn-secondary border-0" id="clear_btn"><i
                                 class="fa-solid fa-rotate-right"></i></button>
                           </span>
+                        </div>
+                      </th>
+                    </tr>
+                    <tr>
+                      <th colspan="4">
+                        <div class="d-flex justify-content-between">
+
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="received_btn">
+                            <label class="form-check-label" for="received_btn">
+                              Received MRF
+                            </label>
+                          </div>
+
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="all_btn">
+                            <label class="form-check-label" for="all_btn">
+                              All MRF
+                            </label>
+                          </div>
+
                         </div>
                       </th>
                     </tr>
@@ -404,6 +424,7 @@
                       <th scope="col">Part</th>
 
 
+                      <th scope="col">Status</th>
                       <th scope="col">Action</th>
 
 
@@ -461,7 +482,7 @@
 
   </div>
 
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
