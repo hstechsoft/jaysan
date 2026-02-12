@@ -2,15 +2,10 @@
 <?php
  include 'db_head.php';
 
- $part_id =test_input($_GET['part_id']);
- $bom_id =test_input($_GET['bom_id']);
- if($bom_id =="''" || $part_id =="''"){
-    $conn->close();
-        echo "Invalid Input";  
-     exit();
-   
- }
- 
+
+ $bom_id =($_POST['bom_id']);
+
+
   
  
 function test_input($data) {
@@ -21,17 +16,9 @@ $data = "'".$data."'";
 return $data;
 }
 
-$sql_clear_isdefault = "update bom_output set is_default = null where part_id = $part_id";
-  
-  if ($conn->query($sql_clear_isdefault) === TRUE) {
-    
-    
-  } else {
-    echo "Error: " . $sql_clear_isdefault . "<br>" . $conn->error;
-  }
 
 
-$sql_update = "UPDATE `bom_output` SET `is_default` = 1 WHERE `bom_id` = $bom_id AND part_id = $part_id";
+$sql_update = "UPDATE `bom_output` SET `is_default` = 1 WHERE `bom_id` in ($bom_id)";
   
   if ($conn->query($sql_update) === TRUE) {
     echo "ok";
