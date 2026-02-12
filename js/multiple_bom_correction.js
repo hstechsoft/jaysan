@@ -45,7 +45,13 @@ $(document).ready(function () {
         const row = $(this).closest("tr");
         const part_id = row.data("part_id");
 
-        const selectedBom = row.find("input[type='radio']:checked").val();
+        let selectedBom = [];
+
+        row.find("input[type='checkbox']:checked").each(function () {
+            selectedBom.push($(this).val());
+        });
+
+        selectedBom = selectedBom.join(",");
 
         if (!selectedBom) {
             salert("Warning", "Please select a BOM", "warning");
@@ -65,17 +71,19 @@ $(document).ready(function () {
 
 
 function update_bomlist(part_id, bom_id) {
+    console.log( bom_id);
+
     $.ajax({
         url: "php/update_bomlist.php",
-        type: "get", //send it through get method
+        type: "post", //send it through get method
         data: {
-            part_id: part_id,
             bom_id: bom_id,
 
 
         },
         success: function (response) {
 
+            console.log(response);
 
             if (response.trim() == "ok") {
                 get_bomlist_correction("not_done")
@@ -135,7 +143,7 @@ function get_bomlist_correction(cat) {
                                         <div class="form-check">
                                             <input
                                                 class="form-check-input default-bom-radio"
-                                                type="radio"
+                                                type="checkbox"
                                                 name="bom_${row.part_id}"
                                                 value="${item.bom_id}"
                                                 id="${radioId}"
@@ -158,7 +166,7 @@ function get_bomlist_correction(cat) {
                                     <td>${bomList}</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary link-bom-btn">
-                                            <i class="fa-solid fa-link me-1"></i> BOM
+                                            <i class="fa-solid fa-link me-1"></i> Submit
                                         </button>
                                     </td>
                                 </tr>

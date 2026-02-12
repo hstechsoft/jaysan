@@ -351,6 +351,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
 
 
           obj.forEach(function (obj) {
+            var statuss = ''
 
             var edit_btn = "disabled";
             if (field_name == "tally_stock_approved_by") {
@@ -444,58 +445,96 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
               batch_details = [];
             }
 
-            var status = '';
             var bth_d = '';
+            var mrf_batch_qty = 0;
 
             batch_details.forEach(function (bd) {
 
               let po_details = bd.po_details || [];
 
               if (typeof po_details === "string") {
-                po_details = JSON.parse(po_details || "[]");
+                try {
+                  po_details = JSON.parse(po_details || "[]");
+                } catch (e) {
+                  po_details = [];
+                }
               }
+
+              mrf_batch_qty += parseFloat(bd.batch_qty || 0);
+
+
+              bth_d += `
+                      <div class="border rounded px-1 py-1 mb-1 small">
+
+                          <div class="d-flex justify-content-between align-items-start">
+
+                              <div>
+                                  <span class="badge bg-secondary fw-semibold">
+                                      ${bd.batch_qty || 0} Qty • ${bd.batch_date || "-"}
+                                  </span>
+                              </div>
+
+                              <div class="d-flex flex-wrap justify-content-end gap-1" style="max-width: 50%;">
+                  `;
+
+              let hasGRN = false;
 
               po_details.forEach(function (po_d) {
 
                 let grn_details = po_d.grn_details || [];
 
                 if (typeof grn_details === "string") {
-                  grn_details = JSON.parse(grn_details || "[]");
+                  try {
+                    grn_details = JSON.parse(grn_details || "[]");
+                  } catch (e) {
+                    grn_details = [];
+                  }
                 }
 
-                if (Array.isArray(grn_details)) {
+                if (Array.isArray(grn_details) && grn_details.length > 0) {
                   grn_details.forEach(function (grn) {
 
-                    bth_d += `
-                              <div class="d-flex justify-content-between align-items-center small border rounded px-1 py-1 mb-1">
-                                  <span class="badge bg-secondary text-white fw-semibold">
-                                      ${bd.batch_qty} Qty • ${bd.batch_date}
-                                  </span>
+                    hasGRN = true;
 
-                                  <span class="badge bg-success text-white">
-                                      ${grn.received_qty || 0} Qty • ${grn.grn_date || "-"}
-                                  </span>
-                              </div>
-                          `;
+                    bth_d += `
+                            <span class="badge bg-success">
+                                ${grn.received_qty || 0} Qty • ${grn.grn_date || "-"}
+                            </span>
+                        `;
                   });
                 }
-
               });
+
+              if (!hasGRN) {
+                if (!hasGRN) {
+                  bth_d += `
+                              <span class="badge bg-warning text-dark">
+                                  No PO
+                              </span>
+                          `;
+                }
+              }
+
+              bth_d += `
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
 
             let pending =
-              parseFloat(obj.mrf_batch_qty || 0) -
-              parseFloat(obj.mrf_receive_qty || 0);
+              parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
 
             if (pending === 0) {
-                            status = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty-" + obj.mrf_receive_qty+" Qty"})</span>`;
+              statuss = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty + " Qty"})</span>
+                    ${bth_d}`;
             } else {
-              status = `
-                      <span class='text-danger'>
-                          ${pending} Material Not Received
-                      </span>
-                      ${bth_d}
-                  `;
+              statuss = `
+                    <span class='text-danger'>
+                        ${pending} Material Not Received
+                    </span>
+                    ${bth_d}
+                `;
             }
 
             count = count + 1;
@@ -503,7 +542,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
               "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + status + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + statuss + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
             );
 
 
@@ -732,6 +771,8 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
           obj.forEach(function (obj) {
 
             var edit_btn = "disabled";
+            var statuss = ''
+
 
             if (obj.emp_id == current_user_id && obj.status == "created")
 
@@ -792,55 +833,91 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
               batch_details = [];
             }
 
-            var status = '';
             var bth_d = '';
-            var mrf_batch_qty = 0
+            var mrf_batch_qty = 0;
 
             batch_details.forEach(function (bd) {
 
               let po_details = bd.po_details || [];
 
-              mrf_batch_qty += parseFloat(bd.batch_qty);
               if (typeof po_details === "string") {
-                po_details = JSON.parse(po_details || "[]");
+                try {
+                  po_details = JSON.parse(po_details || "[]");
+                } catch (e) {
+                  po_details = [];
+                }
               }
+
+              mrf_batch_qty += parseFloat(bd.batch_qty || 0);
+
+
+              bth_d += `
+                      <div class="border rounded px-1 py-1 mb-1 small">
+
+                          <div class="d-flex justify-content-between align-items-start">
+
+                              <div>
+                                  <span class="badge bg-secondary fw-semibold">
+                                      ${bd.batch_qty || 0} Qty • ${bd.batch_date || "-"}
+                                  </span>
+                              </div>
+
+                              <div class="d-flex flex-wrap justify-content-end gap-1" style="max-width: 50%;">
+                  `;
+
+              let hasGRN = false;
 
               po_details.forEach(function (po_d) {
 
                 let grn_details = po_d.grn_details || [];
 
                 if (typeof grn_details === "string") {
-                  grn_details = JSON.parse(grn_details || "[]");
+                  try {
+                    grn_details = JSON.parse(grn_details || "[]");
+                  } catch (e) {
+                    grn_details = [];
+                  }
                 }
 
-                if (Array.isArray(grn_details)) {
+                if (Array.isArray(grn_details) && grn_details.length > 0) {
                   grn_details.forEach(function (grn) {
 
-                    bth_d += `
-                              <div class="d-flex justify-content-between align-items-center small border rounded px-1 py-1 mb-1">
-                                  <span class="badge bg-secondary text-white fw-semibold">
-                                      ${bd.batch_qty} Qty • ${bd.batch_date}
-                                  </span>
+                    hasGRN = true;
 
-                                  <span class="badge bg-success text-white">
-                                      ${grn.received_qty || 0} Qty • ${grn.grn_date || "-"}
-                                  </span>
-                              </div>
-                          `;
+                    bth_d += `
+                            <span class="badge bg-success">
+                                ${grn.received_qty || 0} Qty • ${grn.grn_date || "-"}
+                            </span>
+                        `;
                   });
                 }
-
               });
+
+              if (!hasGRN) {
+                if (!hasGRN) {
+                  bth_d += `
+                              <span class="badge bg-warning text-dark">
+                                  No PO
+                              </span>
+                          `;
+                }
+              }
+
+              bth_d += `
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
 
             let pending =
               parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
 
             if (pending === 0) {
-              status = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty+" Qty"})</span>
+              statuss = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty + " Qty"})</span>
                     ${bth_d}`;
             } else {
-              status = `
+              statuss = `
                     <span class='text-danger'>
                         ${pending} Material Not Received
                     </span>
@@ -855,7 +932,7 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
               "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + status + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + statuss + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
             );
 
 
