@@ -71,12 +71,13 @@ $(document).ready(function () {
 
 
 function update_bomlist(part_id, bom_id) {
-    console.log( bom_id);
+    console.log( part_id, bom_id);
 
     $.ajax({
         url: "php/update_bomlist.php",
         type: "post", //send it through get method
         data: {
+            part_id: part_id,
             bom_id: bom_id,
 
 
