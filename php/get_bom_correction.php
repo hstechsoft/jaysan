@@ -28,7 +28,6 @@ if ($result->num_rows > 0) {
     exit;
 }
 }
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
