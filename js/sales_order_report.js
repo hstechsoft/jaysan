@@ -1066,7 +1066,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
       production_date: production_date || "",
       sale_order_date: sale_date || "",
       order_category: order_category || "",
-      remain_dcf: remaining_dcf || 1,
+      remain_dcf: remaining_dcf || 0,
       payment: payment || "",
     },
     success: function (response) {
