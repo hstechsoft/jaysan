@@ -35,7 +35,13 @@ $(document).ready(function () {
     );
 
 
-    get_jaysan_stock_request()
+    if (!part_id || !req) {
+        $("#part_name_as_title").addClass("d-none")
+        get_jaysan_stock_needed()
+    }
+    else {
+        get_jaysan_stock_request()
+    }
     get_jaysan_stock_available()
 
     check_login();
@@ -305,7 +311,7 @@ $(document).ready(function () {
         let selectedFromPlaces = [];
 
         // ------------------ COLLECT REQUESTS ------------------
-        $("#material_requested_details tr").each(function () {
+        $("#material_requested_details tr, #material_needed_details tr").each(function () {
 
             let qtyText = $(this).find("td").eq(3).text().trim();
             let qty = Number(qtyText);
@@ -495,7 +501,7 @@ $(document).ready(function () {
             if (isNaN(qty) || qty <= 0) return;
 
             allocation_json.push({
-                part_id: part_id,
+                part_id: part_id || $("#search_stock_part").data("process_id"),
                 from_place_id: f_place_id,
                 from_place_type: f_place_type,
                 to_palce_id: t_place_id,
@@ -530,14 +536,83 @@ $(document).ready(function () {
         }
     });
 
+
+
+    $('#search_stock_part').on('input', function () {
+        //check the value not empty
+        $(this).data('process_id', "");
+
+        if ($('#search_stock_part').val() != "") {
+            $('#search_stock_part').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_part_name_auto1.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            part: $('#search_stock_part').val(),
+                            term: 'part',
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("process_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+                    if (ui.item.id) {
+                        $("#part_name_as_title").removeClass().text(ui.item.label)
+                        get_jaysan_stock_needed(1, '', '', '', '', '', ui.item.id, '', '',)
+                        get_jaysan_stock_available('', '', '', '', '', '', ui.item.id, '', '',)
+                    }
+                    else {
+                        get_jaysan_stock_needed(1, '', '', '', '', '', '', '', '',)
+                        get_jaysan_stock_available('', '', '', '', '', '', '', '', '',)
+                    }
+
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
 });
 
 
 
 
-
-
-function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+function get_jaysan_stock_needed(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+    console.log(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query);
 
     $.ajax({
         url: "php/get_jaysan_stock.php",
@@ -550,7 +625,135 @@ function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_
             creditor_query: creditor_query,
             dep_query: dep_query,
             sec_query: sec_query,
-            part_query: part_id,
+            part_query: part_id ?? part_query,
+            qty_query: qty_query,
+            min_order_query: 1,
+            requst_query: '',
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() !== "error") {
+
+
+                $("#stock_req_table").addClass("d-none")
+                $("#stock_need_table").removeClass("d-none")
+                $("#material_needed_details").empty();
+                if (response.trim() !== "0 result") {
+
+                    var obj = JSON.parse(response);
+
+
+                    var count = 0;
+                    var s_count = 0;
+
+                    obj.forEach(function (item) {
+
+                        // $("#part_name_as_title").text(item.part_name);
+
+                        // ---------- STOCK DETAILS ----------
+                        var unitList = typeof item.unit_total === "string"
+                            ? JSON.parse(item.unit_total)
+                            : item.unit_total;
+
+                        var tbody = "";
+
+                        unitList.forEach(function (u) {
+
+                            var departments = u.department_details || [];
+
+                            departments.forEach(function (d) {
+
+                                if (d.department === "no-department") {
+
+                                    s_count++;
+                                    tbody += `
+                                            <tr>
+                                                <td>${s_count}</td>
+                                                <td>${item.part_name}</td>
+                                                <td>${u.godown_qty}</td>
+                                                <td contenteditable='true' class="allocated_qty" data-t_place_id='${u.godown_id}' data-t_place_type='${u.store_type}'>${u.godown_qty}</td>
+                                                <td>${u.unit}</td>
+                                            </tr>`;
+
+                                } else {
+
+                                    var sections = d.section_details || [];
+
+                                    sections.forEach(function (s) {
+
+                                        s_count++;
+
+                                        if (s.section === "no-section") {
+
+                                            tbody += `
+                                                    <tr>
+                                                        <td>${s_count}</td>
+                                                        <td>${item.part_name}</td>
+                                                        <td>${d.department_qty}</td>
+                                                        <td contenteditable='true' class="allocated_qty" data-t_place_id='${d.dep_id}' data-t_place_type='${d.store_type}'>0</td>
+                                                        <td>${d.department}</td>
+                                                    </tr>`;
+
+                                        } else {
+
+                                            tbody += `
+                                                    <tr>
+                                                        <td>${s_count}</td>
+                                                        <td>${item.part_name}</td>
+                                                        <td>${s.Section_qty}</td>
+                                                        <td contenteditable='true' class="allocated_qty" data-t_place_id='${s.sec_id}' data-t_place_type='${s.store_type}'>0</td>
+                                                        <td>${s.section}</td>
+                                                    </tr>`;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                        $("#material_needed_details").append(tbody);
+
+                    });
+
+                } else {
+                    $("#material_needed_details").append(
+                        "<tr><td colspan='6'>Stock Not Available</td></tr>"
+                    );
+                }
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+    console.log(part_id, req);
+
+    $.ajax({
+        url: "php/get_jaysan_stock.php",
+        type: "get", //send it through get method
+        data: {
+
+
+            from_date: from_date,
+            to_date: to_date,
+            creditor_query: creditor_query,
+            dep_query: dep_query,
+            sec_query: sec_query,
+            part_query: part_id ?? part_query,
             qty_query: qty_query,
             min_order_query: min_order_query,
             requst_query: req,
@@ -562,11 +765,13 @@ function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_
 
             if (response.trim() !== "error") {
 
-                if (response.trim() !== "ok") {
+                $("#stock_req_table").removeClass("d-none")
+                $("#stock_need_table").addClass("d-none")
+                $("#material_requested_details").empty();
+                if (response.trim() !== "0 result") {
 
                     var obj = JSON.parse(response);
 
-                    $("#material_requested_details").empty();
 
                     var count = 0;
                     var s_count = 0;
@@ -630,6 +835,7 @@ function get_jaysan_stock_request(min_order_query, from_date, to_date, creditor_
 }
 
 function get_jaysan_stock_available(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query) {
+    console.log(min_order_query, from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query, request_query);
 
     $.ajax({
         url: "php/get_jaysan_stock.php",
@@ -642,7 +848,7 @@ function get_jaysan_stock_available(min_order_query, from_date, to_date, credito
             creditor_query: creditor_query,
             dep_query: dep_query,
             sec_query: sec_query,
-            part_query: part_id,
+            part_query: part_id ?? part_query,
             qty_query: qty_query,
             min_order_query: min_order_query,
             requst_query: "",
@@ -653,12 +859,12 @@ function get_jaysan_stock_available(min_order_query, from_date, to_date, credito
 
 
             if (response.trim() !== "error") {
+                $("#store_stock_allocate_tbody").empty();
 
-                if (response.trim() !== "ok") {
+                if (response.trim() !== "0 result") {
 
                     var obj = JSON.parse(response);
 
-                    $("#store_stock_allocate_tbody").empty();
 
                     var count = 0;
                     var s_count = 0;
@@ -770,7 +976,13 @@ function insert_stock_allocation(allocation_json) {
 
             if (response.trim() == "ok") {
                 if (response.trim() === "ok") {
-                    window.location.href = "http://localhost/jaysan/json_stock.html";
+
+                    if (part_id) {
+                        window.location.href = "http://localhost/jaysan/json_stock.html";
+                    }
+                    else{
+                        window.location.reload()
+                    }
                 } else {
                     console.log(response);
                 }

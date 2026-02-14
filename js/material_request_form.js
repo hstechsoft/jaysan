@@ -257,7 +257,7 @@ $(document).ready(function () {
     }
   });
   var sts_array = [];
-  get_material_request_form_list(sts_array, 'all', 'pending');
+  get_material_request_form_list(sts_array, 'all', 'all');
 
   // $("#material_requset_form_table").on("click", "tr td button", function(event) {
   //   event.preventDefault();
@@ -293,17 +293,17 @@ $(document).ready(function () {
     var sts_array = [];
     $("#received_btn").prop("checked", false);
     $("#all_btn").prop("checked", false);
-    get_material_request_form_list(sts_array, 'all', 'pending');
+    get_material_request_form_list(sts_array, 'all', 'all');
   });
 
   $("#all_btn").on("click", function (event) {
     var sts_array = [];
     if ($(this).is(":checked")) {
       $("#received_btn").prop("checked", false);
-      get_material_request_form_list(sts_array, 'all', 'all');
+      get_material_request_form_list(sts_array, 'all', 'pending');
     }
     else {
-      get_material_request_form_list(sts_array, 'all', 'pending');
+      get_material_request_form_list(sts_array, 'all', 'all');
     }
   });
 
@@ -314,7 +314,7 @@ $(document).ready(function () {
       get_material_request_form_list(sts_array, 'all', 'received');
     }
     else {
-      get_material_request_form_list(sts_array, 'all', 'pending');
+      get_material_request_form_list(sts_array, 'all', 'all');
     }
   });
 
@@ -438,15 +438,16 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
             }
 
             var batch_details = [];
+            var bth_d = '';
+            var mrf_batch_qty = 0;
 
             try {
               batch_details = JSON.parse(obj.batch_details || "[]");
             } catch (e) {
               batch_details = [];
+              mrf_batch_qty = 1;
             }
 
-            var bth_d = '';
-            var mrf_batch_qty = 0;
 
             batch_details.forEach(function (bd) {
 
@@ -525,7 +526,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
             let pending =
               parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
 
-            if (pending === 0) {
+            if (pending === 0 && obj.mrf_receive_qty !== null) {
               statuss = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty + " Qty"})</span>
                     ${bth_d}`;
             } else {
@@ -826,15 +827,16 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
             }
 
             var batch_details = [];
+            var bth_d = '';
+            var mrf_batch_qty = 0;
 
             try {
               batch_details = JSON.parse(obj.batch_details || "[]");
             } catch (e) {
               batch_details = [];
+              mrf_batch_qty = 1
             }
 
-            var bth_d = '';
-            var mrf_batch_qty = 0;
 
             batch_details.forEach(function (bd) {
 
@@ -913,7 +915,7 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
             let pending =
               parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
 
-            if (pending === 0) {
+            if (pending === 0 && obj.mrf_receive_qty !== null) {
               statuss = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty + " Qty"})</span>
                     ${bth_d}`;
             } else {

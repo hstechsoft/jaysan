@@ -135,7 +135,7 @@ function get_dcf_details(dcf_id) {
             count = count + 1;
             $('#dcf_report').html(obj.dcf_report)
 
-            if (obj.sts == "delivery") {
+            if (obj.sts == "invoice") {
               alert(obj.sts)
               $(".dcf-watermark")
                 .html(`<i class="fa-solid fa-thumbs-up me-2"></i>DCF APPROVED`)

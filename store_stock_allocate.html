@@ -62,7 +62,7 @@
 
                 <div class="col-md-6">
 
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption class="text-center bg-light text-dark">Part available From</caption>
                             <thead>
@@ -117,7 +117,7 @@
 
                 <div class="col-md-5">
 
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="stock_req_table" style="height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption class="text-center bg-light text-dark">Part Request From</caption>
                             <thead>
@@ -168,9 +168,41 @@
 
 
                         </table>
+                        <button type="button" class="btn btn-primary " id="material_request_btn">Request</button>
                     </div>
 
-                    <button type="button" class="btn btn-primary " id="material_request_btn">Request</button>
+                    <div class="table-responsive d-none" id="stock_need_table" style="height: 80vh; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption class="text-center bg-light text-dark">Low Section Stock</caption>
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">
+                                        <div class="position-relative">
+                                            <i
+                                                class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                            <input type="text" class="form-control form-control-sm ps-4 rounded-2 "
+                                                id="search_stock_part" placeholder="Part">
+                                        </div>
+                                    </th>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Allocate Qty</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="material_needed_details">
+
+
+
+                            </tbody>
+
+
+                        </table>
+                        <button type="button" class="btn btn-primary " id="material_request_btn">Request</button>
+                    </div>
+
 
                 </div>
 
