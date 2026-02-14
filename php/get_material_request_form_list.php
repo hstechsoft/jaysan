@@ -17,6 +17,8 @@ $mrf_receive_query = "1";
  } else if($receive_filter == 'received') {
     $mrf_receive_query = "(ifnull(mrf_details_view.mrf_batch_qty, 0) <= ifnull(mrf_details_view.mrf_receive_qty, 0))";
  }
+
+
  
 function test_input($data) {
 $data = trim($data);
@@ -55,7 +57,7 @@ LEFT JOIN employee emp_tally_stock on mrf.tally_stock_approved_by = emp_tally_st
 LEFT JOIN employee emp_purchase_requested ON mrf_purchase.purchase_requested_by = emp_purchase_requested.emp_id
 LEFT JOIN employee emp_purchase_verified ON mrf_purchase.purchase_verified_by = emp_purchase_verified.emp_id
 LEFT JOIN employee emp_purchase_approved ON mrf_purchase.purchase_approved_by = emp_purchase_approved.emp_id
-INNER JOIN mrf_details_view ON mrf.mrf_id = mrf_details_view.mrf_id
+LEFT JOIN mrf_details_view ON mrf.mrf_id = mrf_details_view.mrf_id
 WHERE ";
 
 if(count($status) > 0) {
