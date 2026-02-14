@@ -27,6 +27,19 @@ $(document).ready(function () {
   console.log(getIndianDateTime());
 
 
+  $("#dcf_search").on("keyup", function () {
+    const value = $(this).val().toLowerCase();
+
+    $("#dcf_list tr").each(function () {
+      const rowText = $(this).text().toLowerCase();
+      $(this).toggle(rowText.indexOf(value) !== -1);
+    });
+
+    $("#dcf_list_mobile_view li").each(function () {
+      const rowText = $(this).text().toLowerCase();
+      $(this).toggle(rowText.indexOf(value) !== -1);
+    });
+  });
   check_login();
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
@@ -148,8 +161,7 @@ function get_dcf_details(dcf_id) {
             count = count + 1;
             $('#dcf_report').html(obj.dcf_report)
 
-            if (obj.sts == "invoice") {
-              alert(obj.sts)
+            if (obj.sts == "invoice" || obj.sts == "delivery") {
               $(".dcf-watermark")
                 .html(`<i class="fa-solid fa-thumbs-up me-2"></i>DCF APPROVED`)
                 .css("color", "rgb(17 200 8 / 42%)");

@@ -72,6 +72,30 @@
         .dcf-watermark {
             animation: slideWatermark 3s ease-in-out infinite alternate;
         }
+
+        @media (max-width: 1024px) {
+            .dcf-watermark {
+                font-size: 50px;
+            }
+        }
+        @media (max-width: 767px) {
+            .dcf-watermark {
+                font-size: 30px;
+            }
+            table{
+                font-size: 12px;
+                padding: 4px;
+            }
+        }
+        @media (max-width: 539px) {
+            .dcf-watermark {
+                font-size: 25px;
+            }
+            table{
+                font-size: 12px;
+                padding: 3px;
+            }
+        }
     </style>
 
 
@@ -117,8 +141,9 @@
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="card">
-                                <div class="card-header small  text-center" style="font-size: 13px;">
-                                    DCF List - Approval
+                                <div class="card-header small d-flex justify-content-between text-center" style="font-size: 13px;">
+                                    <span> DCF List - Approval</span><div><input type="text" id="dcf_search"
+                                        class="form-control border-0  bg-white" placeholder="Search..."></div>
                                 </div>
 
                                 <div class="card-body m-0 p-0  "

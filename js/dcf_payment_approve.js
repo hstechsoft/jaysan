@@ -24,6 +24,19 @@ $(document).ready(function () {
     }
   );
 
+  $("#dcf_search").on("keyup", function () {
+    const value = $(this).val().toLowerCase();
+
+    $("#dcf_list tr").each(function () {
+      const rowText = $(this).text().toLowerCase();
+      $(this).toggle(rowText.indexOf(value) !== -1);
+    });
+
+    $("#dcf_list_mobile_view li").each(function () {
+      const rowText = $(this).text().toLowerCase();
+      $(this).toggle(rowText.indexOf(value) !== -1);
+    });
+  });
 
 
   check_login();
