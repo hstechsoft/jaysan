@@ -1,10 +1,13 @@
 <?php
  include 'db_head.php';
 
- $is_default = test_input($_POST['is_default']);
+
 $bom_id = test_input($_POST['bom_id']);
 
-
+ $is_default = sql_nullable($_POST['is_default']);
+ if($is_default != '1') {
+   $is_default = "NULL";
+ }
  
  
 function test_input($data) {
