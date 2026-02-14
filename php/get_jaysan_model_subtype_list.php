@@ -15,7 +15,9 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM jaysan_model_subtype WHERE alias_name <> ''";
+ $sql = "SELECT jaysan_model_subtype.*,bom_output.part_id,bom_output.component_cat,(select part_name from parts_tbl where part_id = bom_output.part_id) as part_name FROM jaysan_model_subtype 
+ left join bom_output on jaysan_model_subtype.bom_id = bom_output.bom_id
+ WHERE alias_name <> ''";
 
 $result = $conn->query($sql);
 
