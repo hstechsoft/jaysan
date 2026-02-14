@@ -32,7 +32,14 @@ $(document).ready(function () {
   //     }
   // });
 
+  $("#alias_search").on("keyup", function () {
+    const value = $(this).val().toLowerCase();
 
+    $("#alice_name_tbody tr").each(function () {
+      const rowText = $(this).text().toLowerCase();
+      $(this).toggle(rowText.indexOf(value) !== -1);
+    });
+  });
 
 
   $("#menu_bar").load('menu.html',
@@ -54,7 +61,7 @@ $(document).ready(function () {
 
 
 
-  if(alice_name !== '' || alice_name !== null || alice_name !== undefined){
+  if (alice_name !== '' || alice_name !== null || alice_name !== undefined) {
     // alert(alice_name)
     $("#alice_name_heading").text(alice_name)
   }
@@ -515,8 +522,9 @@ $(document).ready(function () {
 
   $('#bom_list_select').change(function () {
 
+    // alert(partId)
     if (partId !== null) {
-      $("#default_bom").removeClass("d-none");
+      $("#default_bom").removeClass("d-none").val(partId);
     }
     get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
 
@@ -526,7 +534,9 @@ $(document).ready(function () {
 
   $("#default_bom").click(function () {
     if ($('#bom_list_select').find(':selected').data('part_id') !== null || $('#bom_list_select').find(':selected').data('bom_id') !== null) {
-      update_jaysan_model_subtype_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').data('bom_id'));
+      $(this).prop("disabled", true);
+      update_jaysan_model_subtype_bom($(this).val(), $('#bom_list_select').find(':selected').data('bom_id'));
+
     }
     else {
       salert("Warning", "Data missing! Try again later", "warning");
@@ -694,8 +704,8 @@ $(document).ready(function () {
   get_jaysan_model_subtype_list()
 
 
-  $("#alice_name_tbody").on("click", "td button#gear", function(){
-    alert($(this).data("msid"))
+  $("#alice_name_tbody").on("click", "td button#gear", function () {
+    // alert($(this).data("msid"))
     partId = $(this).data("msid");
     alice_name = $(this).data("alice_name");
     $("#alice_name_heading").text($(this).data("alice_name"));
@@ -733,9 +743,12 @@ function get_jaysan_model_subtype_list() {
           var count = 0;
 
           obj.forEach(item => {
-
+            var colors = 'text-danger'
+            if (item.bom_id !== null) {
+              colors = 'text-success'
+            }
             count += 1;
-            $("#alice_name_tbody").append(`<tr style='font-size: 13px'><td>${count}</td><td>${item.alias_name}  (<span class='text-danger'>Need bom name if mapped</span>)</td><td>${item.subtype_name}</td><td><button data-msid=${item.msid} data-alice_name='${item.alias_name}' class="btn btn-primary btn-sm" id='gear'><i class="fa-solid fa-gears" ></i></button></td></tr>`)
+            $("#alice_name_tbody").append(`<tr style='font-size: 13px'><td>${count}</td><td>${item.alias_name}  (<span class='${colors}'>${item.component_cat !== null ? item.component_cat : "Need bom name if mapped"} </span>)</td><td>${item.subtype_name}</td><td><button data-msid=${item.msid} data-alice_name='${item.alias_name}' class="btn btn-primary btn-sm" id='gear'><i class="fa-solid fa-gears" ></i></button></td></tr>`)
 
           });
 
@@ -786,7 +799,7 @@ function update_jaysan_model_subtype_bom(part_id, bom_id) {
         swal("Success", "BOM Linked Successfully", "success", {
           button: "OK"
         }).then(() => {
-          window.location.href = 'product_price_entry.html';
+          window.location.reload()
         });
       }
 

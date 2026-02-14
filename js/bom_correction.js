@@ -69,8 +69,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("selected-part_id", ui.item.id);
-                    get_bom_list(part_id)
-                    get_bom_correction(ui.item.id, '', '', '', '');
+                    get_bom_list(ui.item.id)
 
                 },
 
@@ -83,7 +82,35 @@ $(document).ready(function () {
 
     });
 
-    get_bom_correction('5285', '', '', '', '');
+    $("#bom_list_select").on("change", function () {
+        var part_id = $(this).find(":selected").data("part_id");
+        var component_cat = $(this).val();
+        console.log($(this).html());
+
+        console.log(part_id, component_cat);
+
+        if (part_id && component_cat) {
+            get_bom_correction('', '', '', component_cat, part_id);
+        }
+        else {
+            salert("Warring", "Data miss Try again", "warning")
+        }
+
+    })
+
+
+    $("#bom_correction_tbody").on("click", ".submit_btn", function () {
+        var row = $(this).closest("tr");
+        var bom_id = row.find("select").find(":selected").val()
+
+        if (bom_id) {
+            update_bom_default(bom_id, 1);
+        }
+        else {
+            salert("Warning", "Select BOM", "warning");
+        }
+
+    })
 
 
     $("#bom_correction_tbody, #duplicate_bom_tbody").on("click", "button.trash_btn", function () {
@@ -350,9 +377,9 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                                 : "table-success";
 
 
-                            var buttons = ''
+                            var buttons = `<button class='btn btn-primary submit_btn' ><i class="fa-solid fa-upload"></i></button>`
                             if (item.duplication_status == 'duplicate') {
-                                buttons = `<button class='btn btn-danger trash_btn' data-bom_id='${item.parent_bom_id}'><i class='fa fa-trash'></i></button>`
+                                buttons += `<button class='btn btn-danger trash_btn' data-bom_id='${item.parent_bom_id}'><i class='fa fa-trash'></i></button>`
                             }
 
                             $("#bom_correction_tbody").append(`
@@ -360,16 +387,17 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                                         <td>${parseInt(lvl) + 1}.${index + 1}</td>
                                         <td>${item.input_part_name}</td>
                                         <td>
-                                            <div class="form-floating">
+                                        ${select_field == '<option selected disabled value="">Choose...</option>' ? 'Only one BOM' : `<div class="form-floating">
                                                 <select class="form-select default_bom"
                                                     data-input_part_id="${item.input_part_id}"
                                                     data-parent_bom_id="${item.parent_bom_id}">
                                                     ${select_field}
                                                 </select>
                                                 <label>Select BOM</label>
-                                            </div>
+                                            </div>`}
+                                            
                                         </td>
-                                        <td>${buttons}</td>
+                                        <td>${select_field == '<option selected disabled value="">Choose...</option>' ? '' : buttons}</td>
                                     </tr>
                                 `);
 
@@ -485,6 +513,39 @@ function get_duplicate_bom() {
 
 }
 
+function update_bom_default(bom_id, is_default) {
+
+    $.ajax({
+        url: "php/update_bom_default.php",
+        type: "post", //send it through get method
+        data: {
+
+            bom_id: bom_id,
+            is_default: is_default,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                get_bom_correction('', '', '', $("#bom_list_select").val(), $("#bom_list_select").find(":selected").data("part_id"));
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function insert_new_process(processId) {

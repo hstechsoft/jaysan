@@ -59,8 +59,13 @@
 
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col" class="">
-                                <input type="text" class="form-control rounded-3" id="part_name" placeholder="Part name">
+                            <th scope="col" class="d-flex">
+                                <input type="text" class="form-control rounded-3" id="part_name"
+                                    placeholder="Part name">
+                                <select class='form-select form-control' id='bom_list_select'>
+                                    <option disabled selected>Bom List</option>
+
+                                </select>
                             </th>
                             <th scope="col">Bom list</th>
                             <th scope="col">Action</th>
