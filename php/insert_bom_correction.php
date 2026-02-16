@@ -17,13 +17,13 @@ return $data;
 }
 
 
- $sql = "INSERT INTO bom_correction ( outpart_bom_id,bomlist_id,part_id) VALUES ($outpart_bom_id,$bomlist_id,$part_id)";
+$sql = "INSERT INTO bom_correction (outpart_bom_id, bomlist_id, part_id) VALUES ($outpart_bom_id, $bomlist_id, $part_id) ON DUPLICATE KEY UPDATE bomlist_id = $bomlist_id";
 
-  if ($conn->query($sql) === TRUE) {
-   echo "ok";
-  } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-  }
+if ($conn->query($sql) === TRUE) {
+  echo "ok";
+} else {
+  echo "Error: " . $sql . "<br>" . $conn->error;
+}
 $conn->close();
 
  ?>
