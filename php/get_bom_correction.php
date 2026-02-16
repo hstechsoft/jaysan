@@ -77,7 +77,8 @@ INNER JOIN parts_tbl in_part
     ON in_part.part_id = bom_input.part_id
 LEFT JOIN bom_correction
     ON bom_input.part_id = bom_correction.part_id
-   AND bom_correction.outpart_bom_id = $bom_id
+   AND bom_correction.outpart_bom_id = $bom_id and bom_correction.bom_output_id = bom_output.bom_id
+
 
 WHERE bom_output.bom_id = $bom_id
 UNION ALL
@@ -121,7 +122,7 @@ INNER JOIN parts_tbl in_part_child
     ON in_part_child.part_id = bom_input_child.part_id
 LEFT JOIN bom_correction bom_correction_child
     ON bom_input_child.part_id = bom_correction_child.part_id
-   AND bom_correction_child.outpart_bom_id = $bom_id 
+   AND bom_correction_child.outpart_bom_id = $bom_id and bom_correction_child.bom_output_id = bom_output_child.bom_id
    WHERE bom_output_child.component_cat <> 'Process' AND  bom_hi.correction_status = 'valid'  AND FIND_IN_SET(bom_output_child.bom_id, bom_hi.path) = 0)
    SELECT bom_hi.*,if(FIND_IN_SET(bomlist_id,path)>0,'duplicate','valid') as duplication_status FROM bom_hi WHERE $duplication_sts_query and $correction_sts_query order by level;";
 
