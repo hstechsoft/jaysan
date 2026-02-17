@@ -605,15 +605,15 @@ $(document).ready(function () {
             var rdq = '';
             var rddate = '';
 
-            row.rd == "No Material Received" ? [] : JSON.parse(row.rd).forEach(function(r){
+            row.rd == "No Material Received" ? [] : JSON.parse(row.rd).forEach(function (r) {
                 rd = r.received_by
                 rdq = r.grn_receive_qty
                 rddate = r.grn_dc_date
             })
 
             var po_no = '';
-            
-            JSON.parse(row.batch).forEach(function(b){
+
+            row.batch == "no purchase entry" ? [] : JSON.parse(row.batch).forEach(function (b) {
                 po_no = b.po_no
             })
 
@@ -645,6 +645,37 @@ $(document).ready(function () {
 
         XLSX.writeFile(wb, "PO_Dashboard.xlsx");
     });
+
+
+    $("#excel_view_btn").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#excel_type_po").removeClass("d-none");
+            $("#card_type_po").addClass("d-none");
+        }
+        else {
+            $("#card_type_po").removeClass("d-none");
+            $("#excel_type_po").addClass("d-none");
+        }
+    })
+
+    $("#excel_download_btn").click(function () {
+
+        let table = document.querySelector("#excel_type_po table");
+
+        if (!table) {
+            salert("Warning", "No data available to export", "warning");
+            return;
+        }
+
+        let workbook = XLSX.utils.table_to_book(table, { sheet: "MRF Report" });
+
+        XLSX.writeFile(workbook, "MRF_PO_Report.xlsx");
+
+    });
+
+    $("#mrf_tbody").on("keyUp", "td.material_in_date", function(){
+        $(this).closest(".material_in_by").removeClass('d-none')
+    })
 
 });
 
@@ -712,7 +743,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
             console.log(response);
 
             if (response.trim() != "error") {
-                    $("#po_dashboard_details").empty();
+                $("#po_dashboard_details").empty();
                 if (response.trim() != "0 result") {
                     obj = JSON.parse(response);
                     var count = 0;
@@ -786,9 +817,111 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                         $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.dated + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
                     });
 
+
+                    let grouped = {};
+
+                    obj.forEach(item => {
+                        if (!grouped[item.mrf_id]) {
+                            grouped[item.mrf_id] = [];
+                        }
+                        grouped[item.mrf_id].push(item);
+                    });
+
+                    $("#mrf_tbody").empty();
+
+                    Object.values(grouped).forEach(group => {
+
+                        let first = group[0];
+
+                        let totalOrdered = parseFloat(first.rm_order_qty_total || 0);
+                        let totalReceived = parseFloat(first.rm_receive_qty_total || 0);
+
+                        if (isNaN(totalReceived)) totalReceived = 0;
+
+                        let balance = totalOrdered - totalReceived;
+                        let extraQty = totalReceived > totalOrdered ? totalReceived - totalOrdered : 0;
+
+                        let batchData = [];
+                        try {
+                            batchData = JSON.parse(first.batch);
+                        } catch (e) {
+                            batchData = [];
+                        }
+
+                        if (batchData.length === 0) {
+                            batchData = [null];
+                        }
+
+                        batchData.forEach((batch, index) => {
+
+                            let materialInDate = "-";
+                            let materialQty = 0;
+                            let supplier = "Not Received";
+                            let materialInBy = "";
+
+                            if (batch) {
+
+                                if (batch.total_received && batch.total_received > 0) {
+
+                                    materialInDate = batch.batch_date || "-";
+                                    materialQty = batch.total_received || 0;
+
+                                    if (batch.receive_details && batch.receive_details !== "No Material Received") {
+                                        try {
+                                            let rd = JSON.parse(batch.receive_details);
+
+                                            if (rd.length > 0) {
+                                                supplier = `
+                                ${rd[0].grn_dc_no || ""} - 
+                                ${first.supplier_name || ""}
+                            `;
+                                                materialInBy = `${rd[0].received_by || ""}`;
+                                            }
+
+                                        } catch (e) { }
+                                    }
+                                }
+                            }
+
+                            $("#mrf_tbody").append(`
+                                <tr>
+                                    ${index === 0 ? `
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.dated.split(" ")[0]}</td>
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.mrf_id}</td>
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.raw_material_part_id || "-"}</td>
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.part_name}</td>
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.raw_material_name}</td>
+                                        <td class="bg-mrf text-center" rowspan="${batchData.length}">${first.req_qty}</td>
+                                        <td class="bg-mrf" rowspan="${batchData.length}">${first.req_date.split(" ")[0]}</td>
+
+                                        <td class="bg-tally1" rowspan="${batchData.length}">${first.batch_date || "-"}</td>
+
+                                        <td class="bg-tally2" rowspan="${batchData.length}">${first.purchase_req_by || "-"}</td>
+                                        <td class="bg-po" rowspan="${batchData.length}">${first.po_date ? first.po_date.split(" ")[0] : "-"}</td>
+                                        <td class="bg-po text-center" rowspan="${batchData.length}">${first.jaysan_po_id || 0}</td>
+                                    ` : ""}
+
+                                    <td class="bg-material material_in_date position-relative">${materialInDate}<span class=' material_in_by'>${materialInBy}</span></td>
+                                    <td class="bg-material text-center">${materialQty}</td>
+                                    <td class="bg-material">${supplier}</td>
+
+                                    ${index === 0 ? `
+                                        <td class="bg-balance text-center fw-bold" rowspan="${batchData.length}">
+                                            ${balance}
+                                        </td>
+                                        <td class="bg-balance text-center" rowspan="${batchData.length}">
+                                            ${extraQty}
+                                        </td>
+                                    ` : ""}
+                                </tr>
+                            `);
+                        });
+
+                    });
+
                     //    get_sales_order()
                 }
-                else{
+                else {
                     $("#po_dashboard_details").append("<tr><td colspan='4' class='text-danger text-center'>No data found </td></tr>")
                 }
             }

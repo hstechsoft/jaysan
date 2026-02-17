@@ -18,7 +18,59 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
+    <style>
+        .bg-mrf {
+            background-color: #cfd8c4 !important;
+        }
 
+        .bg-tally1 {
+            background-color: #e6caca !important;
+        }
+
+        .bg-tally2 {
+            background-color: #d9d2e9 !important;
+        }
+
+        .bg-po {
+            background-color: #c9dbe2 !important;
+        }
+
+        .bg-material {
+            background-color: #ddd9c4 !important;
+        }
+
+        .bg-balance {
+            background-color: #c5d6e8 !important;
+        }
+
+        thead th {
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.4px;
+            vertical-align: middle !important;
+        }
+
+        tbody td {
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .material_in_date .material_in_by {
+            display: none;
+            position: absolute;
+            background: #fff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            margin-left: 5px;
+        }
+
+        .material_in_date:hover .material_in_by {
+            display: inline-block;
+        }
+    </style>
 
 
 </head>
@@ -296,32 +348,87 @@
                             <button type="submit" class="btn btn-primary" id="search"><i
                                     class="fa fa-search"></i></button>
                         </div>
+
                     </div>
 
 
                 </form>
-                <div class="table-responsive">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption></caption>
-                        <thead>
 
-                            <tr>
-                                <th scope="col">
-                                    <input type="text" id="po_report_search_a" class="form-control border-0 bg-white"
-                                        placeholder="Search...">
-                                </th>
-                                <th scope="col">MRF Details</th>
-                                <th scope="col">Purchase details</th>
-                                <th scope="col" >Batch Details <button class="btn btn-success float-end" id="excel_btn"><i class="fa-solid fa-file-excel"></i></button></th>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="excel_view_btn">
+                            <label class="form-check-label" for="excel_view_btn">Excel view</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" id="card_type_po">
+                            <table class="table caption-top table-bordered table-striped ">
+                                <caption></caption>
+                                <thead>
 
-                            </tr>
-                        </thead>
-                        <tbody id="po_dashboard_details">
+                                    <tr>
+                                        <th scope="col">
+                                            <input type="text" id="po_report_search_a"
+                                                class="form-control border-0 bg-white" placeholder="Search...">
+                                        </th>
+                                        <th scope="col">MRF Details</th>
+                                        <th scope="col">Purchase details</th>
+                                        <th scope="col">Batch Details <button class="btn btn-success float-end"
+                                                id="excel_btn"><i class="fa-solid fa-file-excel"></i></button></th>
 
-                        </tbody>
+                                    </tr>
+                                </thead>
+                                <tbody id="po_dashboard_details">
+
+                                </tbody>
 
 
-                    </table>
+                            </table>
+                        </div>
+
+                        <div class="table-responsive d-none" id="excel_type_po"
+                            style="max-height: 650px; overflow-y: auto;">
+                            <table class="table caption-top table-bordered">
+                                <caption><button class="btn btn-success float-end" id="excel_download_btn"><i
+                                            class="fa-solid fa-file-excel"></i></button></caption>
+                                <thead class="text-center align-middle small"
+                                    style="position: sticky; top: 0; z-index: 5; color: rgb(0, 0, 0); font-weight: 600;">
+
+                                    <tr>
+                                        <th class="bg-mrf">MRF DATE</th>
+                                        <th class="bg-mrf">MRF NO</th>
+                                        <th class="bg-mrf">MATERIAL PART NO</th>
+                                        <th class="bg-mrf">MATERIAL NAME</th>
+                                        <th class="bg-mrf">RAW MATERIAL NAME</th>
+                                        <th class="bg-mrf">MATERIAL QTY</th>
+                                        <th class="bg-mrf">REQ. DATE</th>
+
+                                        <th class="bg-tally1">MRF TO TALLY DATE</th>
+                                        <th class="bg-tally2">PO REQUESTED BY</th>
+
+                                        <th class="bg-po">PO TO APPROVE FOR MD DATE</th>
+                                        <!-- <th class="bg-po">PO DATE</th> -->
+                                        <th class="bg-po">PO NO</th>
+
+                                        <th class="bg-material">MATERIAL IN DATE</th>
+                                        <th class="bg-material">MATERIAL IN QTY</th>
+                                        <th class="bg-material">INV NO & SUPPLIER NAME</th>
+                                        <!-- <th class="bg-material d-none">MATERIAL RECEIVED BY</th> -->
+
+                                        <th class="bg-balance">BALANCE MATERIAL IN</th>
+                                        <th class="bg-balance">EXTRA QTY</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="mrf_tbody">
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -357,7 +464,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- excel -->
-     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <!-- external js -->
     <script src="js/po_dashboard.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>

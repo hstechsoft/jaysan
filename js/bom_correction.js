@@ -25,6 +25,28 @@ $(document).ready(function () {
     );
 
 
+    $("#bom_correction_search").on("keyup", function () {
+        const value = $(this).val().toLowerCase();
+
+        $("#bom_correction_tbody tr").each(function () {
+            const rowText = $(this).text().toLowerCase();
+            $(this).toggle(rowText.indexOf(value) !== -1);
+        });
+    });
+
+    $("#bom_correction_tbody").on("dblclick", "tr", function () {
+        let partName = $(this).find("td").eq(1).text().trim();
+
+        $("#bom_correction_search")
+            .val(partName)
+            .trigger("keyup");
+    });
+
+    $(".clear_btn").on("click", function () {
+        $("#bom_correction_search")
+            .val('')
+            .trigger("keyup");
+    })
 
     check_login();
 
@@ -84,13 +106,14 @@ $(document).ready(function () {
 
     $("#bom_list_select").on("change", function () {
         var part_id = $(this).find(":selected").data("part_id");
+        var bom_id = $(this).find(":selected").data("bom_id");
         var component_cat = $(this).val();
         console.log($(this).html());
 
         console.log(part_id, component_cat);
 
         if (part_id && component_cat) {
-            get_bom_correction('', '', '', component_cat, part_id);
+            get_bom_correction(bom_id, '', '', component_cat, part_id);
         }
         else {
             salert("Warring", "Data miss Try again", "warning")
@@ -98,15 +121,26 @@ $(document).ready(function () {
 
     })
 
+    $("#bom_correction_tbody").on("change", "select", function () {
+        $(this).closest("tr").find(".submit_btn").trigger("click")
+    })
+
 
     $("#bom_correction_tbody").on("click", ".submit_btn", function () {
         var row = $(this).closest("tr");
-        var bom_id = row.find("select").find(":selected").val()
+        var outpart_bom_id = $("#bom_list_select").find(":selected").data("bom_id");
+        var part_id = row.data("input_part_id");
+        var bomlist_id = row.find("select").find(":selected").val();
+        var bom_output_id = row.data("parent_bom_id");
 
-        if (bom_id) {
-            update_bom_default(bom_id, 1);
-        }
-        else {
+        if (
+            typeof bomlist_id !== "undefined" && bomlist_id !== "" &&
+            typeof outpart_bom_id !== "undefined" && outpart_bom_id !== "" &&
+            typeof part_id !== "undefined" && part_id !== "" && typeof bom_output_id !== "undefined" && bom_output_id !== ""
+        ) {
+            insert_bom_correction(outpart_bom_id, bomlist_id, part_id, bom_output_id);
+        } else {
+            console.log("Values:", bomlist_id, outpart_bom_id, part_id, bom_output_id);
             salert("Warning", "Select BOM", "warning");
         }
 
@@ -158,6 +192,7 @@ $(document).ready(function () {
         XLSX.writeFile(workbook, "BOM_Report.xlsx");
 
     });
+
 });
 
 
@@ -196,7 +231,7 @@ function get_bom_list(part_id) {
                     obj.forEach(function (obj) {
                         count = count + 1;
                         //  $("#bom_list_item").append("<li  data-bom_id='"+ obj.bom_id+"' data-part_id='"+obj.part_id+" ' class=' list-group-item'>"+obj.component_cat + "</li>")
-                        $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "'>" + obj.component_cat + "</option>")
+                        $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "' data-bom_id='" + obj.bom_id + "'>" + obj.component_cat + "</option>")
 
                         // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
 
@@ -321,7 +356,6 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                     });
 
 
-                    // 🔹 Group data by level
                     var levelMap = {};
 
                     obj.forEach(function (item) {
@@ -331,7 +365,6 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                         levelMap[item.level].push(item);
                     });
 
-                    // 🔹 Sort levels numerically
                     var levels = Object.keys(levelMap).sort(function (a, b) {
                         return parseInt(a) - parseInt(b);
                     });
@@ -344,7 +377,7 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                         // 🔹 Add Level Header
                         $("#bom_correction_tbody").append(`
                             <tr class="table-primary">
-                                <td colspan="4" class="fw-bold">
+                                <td colspan="5" class="fw-bold">
                                     Level ${lvl}
                                 </td>
                             </tr>
@@ -377,20 +410,43 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                                 : "table-success";
 
 
-                            var buttons = `<button class='btn btn-primary submit_btn' ><i class="fa-solid fa-upload"></i></button>`
+                            var buttons = `<button class='btn btn-outline-primary border-0 submit_btn' ><i class="fa-solid fa-upload"></i></button>`
                             if (item.duplication_status == 'duplicate') {
                                 buttons += `<button class='btn btn-danger trash_btn' data-bom_id='${item.parent_bom_id}'><i class='fa fa-trash'></i></button>`
                             }
 
+                            let steps = item.part_path.split("->");
+
+                            let colors = [
+                                "chip-model",
+                                "chip-assembly",
+                                "chip-part"
+                            ];
+
+                            let compact = `
+                                <div class="d-flex align-items-center flex-wrap small">
+                                    ${steps.map((step, index) => `
+                                        <span class="process-chip ${colors[index] || 'chip-default'}">
+                                            ${step.trim()}
+                                        </span>
+                                        ${index < steps.length - 1
+                                    ? `<span class="process-arrow"><i class="fa-solid fa-angles-right"></i></span>`
+                                    : ""}
+                                    `).join("")}
+                                </div>
+                                `;
+
+                                var hide = ''
                             $("#bom_correction_tbody").append(`
-                                    <tr class="${rowColor}">
+                                ${select_field == '<option selected disabled value="">Choose...</option>' ? hide = 'd-none' : ''}
+                                    <tr class="${rowColor} ${hide}" data-input_part_id='${item.input_part_id}' data-parent_bom_id='${item.parent_bom_id}'>
                                         <td>${parseInt(lvl) + 1}.${index + 1}</td>
                                         <td>${item.input_part_name}</td>
+                                        <td>${compact}</td>
                                         <td>
                                         ${select_field == '<option selected disabled value="">Choose...</option>' ? 'Only one BOM' : `<div class="form-floating">
                                                 <select class="form-select default_bom"
-                                                    data-input_part_id="${item.input_part_id}"
-                                                    data-parent_bom_id="${item.parent_bom_id}">
+                                                    data-input_part_id="${item.input_part_id}">
                                                     ${select_field}
                                                 </select>
                                                 <label>Select BOM</label>
@@ -411,6 +467,9 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
                             break;
                         }
                     }
+
+
+                    $("#bom_correction_search").trigger("keyup")
 
                 } else {
 
@@ -454,7 +513,7 @@ function delete_bom(bom_id) {
 
 
             if (response.trim() == 'ok') {
-                get_bom_correction(208, '', '', '', '');
+                get_bom_correction($("#bom_list_select").find(":selected").data("bom_id"), '', '', $("#bom_list_select").val(), $("#bom_list_select").find(":selected").data("part_id"));
                 get_duplicate_bom();
             }
 
@@ -513,15 +572,18 @@ function get_duplicate_bom() {
 
 }
 
-function update_bom_default(bom_id, is_default) {
+function insert_bom_correction(outpart_bom_id, bomlist_id, part_id, bom_output_id) {
+    console.log(outpart_bom_id, bomlist_id, part_id, bom_output_id);
 
     $.ajax({
-        url: "php/update_bom_default.php",
+        url: "php/insert_bom_correction.php",
         type: "post", //send it through get method
         data: {
 
-            bom_id: bom_id,
-            is_default: is_default,
+            outpart_bom_id: outpart_bom_id,
+            bomlist_id: bomlist_id,
+            part_id: part_id,
+            bom_output_id: bom_output_id,
         },
         success: function (response) {
             console.log(response);
@@ -529,7 +591,7 @@ function update_bom_default(bom_id, is_default) {
 
 
             if (response.trim() == 'ok') {
-                get_bom_correction('', '', '', $("#bom_list_select").val(), $("#bom_list_select").find(":selected").data("part_id"));
+                get_bom_correction($("#bom_list_select").find(":selected").data("bom_id"), '', '', $("#bom_list_select").val(), $("#bom_list_select").find(":selected").data("part_id"));
             }
 
 
