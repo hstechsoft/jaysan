@@ -71,3 +71,4 @@
 [2026-02-02 10:28:59] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_sales_pay.php | SQL:DELETE from jaysan_payment WHERE payment_id = '844' and sts <> 'approved'
 [2026-02-10 03:31:52] | USER:141 | IP:::1 | FILE:/jaysanERP/php/delete_sales_order.php | SQL:DELETE from sales_order_form WHERE oid = '791'
 [2026-02-17 07:56:00] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '788 '
+[2026-02-17 08:11:31] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '66920 '
