@@ -46,6 +46,7 @@ $sql = "SET time_zone = '+05:30';";
 $sql .= "WITH
     mrf_cte AS(
     SELECT
+    mrf.form_history,
         mrf.mrf_id,
         mrf.part_id,
         mrf.dated,
