@@ -3307,9 +3307,9 @@ function get_sales_order(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="mtogglePrice">
                         </div>
-                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -3347,7 +3347,7 @@ function get_sales_order(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
@@ -4069,9 +4069,9 @@ function get_sales_order_approval(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="mtogglePrice">
                         </div>
-                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -4109,7 +4109,7 @@ function get_sales_order_approval(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
@@ -4372,9 +4372,9 @@ function get_req_order(approve_sts) {
 
             var mprice = `
                         <div class="form-check form-switch">
-                          <input class="form-check-input togglePrice  float-end" type="checkbox" id="togglePrice">
+                          <input class="form-check-input mtogglePrice  float-end" type="checkbox" id="mtogglePrice">
                         </div>
-                        <ul class="list-group d-none priceList" id="priceList${obj.order_no}">
+                        <ul class="list-group d-none mpriceList" id="mpriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between gap-2">
                                     <p class="my-auto small">Total Product Price:</p>
@@ -4412,7 +4412,7 @@ function get_req_order(approve_sts) {
                                 </div>
                             </li>
                         </ul>
-                        <ul class="list-group mainPriceList" id="mainPriceList${obj.order_no}">
+                        <ul class="list-group mmainPriceList" id="mmainPriceList${obj.order_no}">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <p class="my-auto small">Total</p>
