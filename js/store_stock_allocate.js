@@ -893,9 +893,9 @@ function get_jaysan_stock_available(min_order_query, from_date, to_date, credito
                                             <tr>
                                                 <td>${s_count}</td>
                                                 <td>${u.unit}</td>
-                                                <td>${u.godown_qty}</td>
-                                                <td contenteditable='true' class="allocated_qty" data-f_place_id='${u.godown_id}' data-f_place_type='${u.store_type}'>${u.godown_qty}</td>
-                                                <td class="balance_qty">${u.godown_qty}</td>
+                                                <td>${d.department_qty}</td>
+                                                <td contenteditable='true' class="allocated_qty" data-f_place_id='${u.godown_id}' data-f_place_type='${u.store_type}'>0</td>
+                                                <td class="balance_qty">${d.department_qty}</td>
                                             </tr>`;
 
                                 } else {
