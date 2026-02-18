@@ -1663,6 +1663,7 @@ $(document).ready(function () {
     }
   });
 
+  
   $(" #mobile_order_card, #mobile_approved_order_card, #mobile_req_card").on("click", ".mtogglePrice", function () {
 
     var m_pricesummary = $(this).closest("span").find("ul.mpriceList").attr("id");

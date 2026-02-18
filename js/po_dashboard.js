@@ -673,7 +673,7 @@ $(document).ready(function () {
 
     });
 
-    $("#mrf_tbody").on("keyUp", "td.material_in_date", function(){
+    $("#mrf_tbody").on("keyUp", "td.material_in_date", function () {
         $(this).closest(".material_in_by").removeClass('d-none')
     })
 
@@ -828,7 +828,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                     });
 
                     $("#mrf_tbody").empty();
-
+                    let ecount = 1;
                     Object.values(grouped).forEach(group => {
 
                         let first = group[0];
@@ -872,9 +872,9 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
 
                                             if (rd.length > 0) {
                                                 supplier = `
-                                ${rd[0].grn_dc_no || ""} - 
-                                ${first.supplier_name || ""}
-                            `;
+                                                ${rd[0].grn_dc_no || ""} - 
+                                                ${first.supplier_name || ""}
+                                            `;
                                                 materialInBy = `${rd[0].received_by || ""}`;
                                             }
 
@@ -886,6 +886,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             $("#mrf_tbody").append(`
                                 <tr>
                                     ${index === 0 ? `
+                                        <td class="bg-info text-center" rowspan="${batchData.length}">${ecount}</td>
                                         <td class="bg-mrf" rowspan="${batchData.length}">${first.dated.split(" ")[0]}</td>
                                         <td class="bg-mrf" rowspan="${batchData.length}">${first.mrf_id}</td>
                                         <td class="bg-mrf" rowspan="${batchData.length}">${first.raw_material_part_id || "-"}</td>
@@ -917,6 +918,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             `);
                         });
 
+                        ecount++;
                     });
 
                     //    get_sales_order()
