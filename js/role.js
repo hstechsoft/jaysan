@@ -207,7 +207,6 @@ $(document).ready(function () {
 
   })
 
-  let isSyncing = false;
 
   $("#app_role_name_select").on("change", function () {
 
