@@ -219,6 +219,10 @@ function get_dcf() {
           var obj = JSON.parse(response);
           var count = 0
 
+          obj.sort(function(a, b){
+            return parseInt(b.dcf_id) - (a.dcf_id);
+          })
+
 
           obj.forEach(function (obj) {
             count = count + 1;

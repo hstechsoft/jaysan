@@ -7,6 +7,14 @@ body {
   min-height: 100vh;
 }
 
+td:hover {
+  background-color: rgb(255, 210, 143) !important;
+}
+
+tr:hover {
+  background-color: rgb(255, 234, 204) !important;
+}
+
 @media print {
 
   table {
@@ -299,12 +307,15 @@ body {
   width: 350px;
   padding: 15px;
   border: 0.5px solid #333;
-  min-inline-size: min-content; /* IMPORTANT */
+  min-inline-size: min-content;
+  /* IMPORTANT */
 }
 
 .boxborder legend {
-  float: unset;                 /* Bootstrap override */
-  width: auto;                  /* Bootstrap override */
+  float: unset;
+  /* Bootstrap override */
+  width: auto;
+  /* Bootstrap override */
   padding: 0 8px;
   margin-bottom: 0;
   font-size: 12px;
@@ -988,7 +999,7 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
     letter-spacing: 0.5px;
   }
 
-  .page-wrapper{
+  .page-wrapper {
     margin-left: 0px !important;
   }
 }

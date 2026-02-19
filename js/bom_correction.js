@@ -176,7 +176,7 @@ $(document).ready(function () {
 
     });
 
-    get_duplicate_bom()
+    // get_duplicate_bom()
 
     $("#excle").on("click", function () {
 
@@ -514,7 +514,7 @@ function delete_bom(bom_id) {
 
             if (response.trim() == 'ok') {
                 get_bom_correction($("#bom_list_select").find(":selected").data("bom_id"), '', '', $("#bom_list_select").val(), $("#bom_list_select").find(":selected").data("part_id"));
-                get_duplicate_bom();
+                // get_duplicate_bom();
             }
 
 
