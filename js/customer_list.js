@@ -207,7 +207,7 @@ function get_all_customer() {
           tax = 1 + tax;
           count = count + 1;
 
-          $("#cus_table").append(" <tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td><td>" + obj.cus_phone + "</td> <td>" + obj.cus_address + "</td><td>" + obj.cus_gst + "</td><td>" + obj.sub_group_name || ' ' + "</td> <td><a target='_self' href='user_call.html?cus_id=" + obj.cus_id + "' class='btn btn-primary btn-sm' role='button'>View</a></td> <td>" + "<button value='" + obj.cus_id + "' type='button' class='btn text-danger' > <i class='fa-solid fa-trash-can'></i></button>" + "</td> </tr>")
+          $("#cus_table").append(" <tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td><td>" + obj.cus_phone + "</td> <td>" + obj.cus_address + "</td><td>" + obj.cus_gst + "</td><td>" + obj.sub_group_name ?? '' + "</td> <td><a target='_self' href='user_call.html?cus_id= " + obj.cus_id + "' class='btn btn-primary btn-sm' role='button'>View</a></td> <td><button value='" + obj.cus_id + "' type='button' class='btn text-danger' > <i class='fa-solid fa-trash-can'></i></button></td> </tr>")
 
 
         });

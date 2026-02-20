@@ -18,7 +18,12 @@
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
-
+<style>
+  thead th,
+  tbody td{
+    font-size: 10px;
+  }
+</style>
 
 
 </head>
@@ -51,54 +56,116 @@
     <div class="page-wrapper">
       <!-- content -->
 
-      <div class="table-responsive">
-        <table class="table caption-top table-bordered table-striped ">
-          <div class="d-flex   justify-content-between  align-content-center">
+      <div class="row">
 
-            <div class="mx-3">
-              <select class="form-select" id="sel_usr_in">
+        <div class="col-md-6">
+          <div class="table-responsive" style="height: 700px; overflow-y: auto;">
+            <table class="table small caption-top table-bordered table-striped ">
+              <div class="d-flex   justify-content-between  align-content-center">
 
-                <option selected value="" disabled>Select Employee...</option>
+                <div class="mx-3">
+                  <select class="form-select" id="sel_usr_in">
 
-              </select>
+                    <option selected value="" disabled>Select Employee...</option>
 
-            </div>
+                  </select>
 
-            <div class="mx-3">
-              <select class="form-select" id="sel_cn_sts">
+                </div>
 
-                <option selected value="" disabled>Select Status...</option>
+                <div class="mx-3">
+                  <select class="form-select" id="sel_cn_sts">
 
-              </select>
+                    <option selected value="" disabled>Select Status...</option>
 
-            </div>
+                  </select>
+
+                </div>
+              </div>
+              <caption>Credit Note Tracker</caption>
+              <thead style="position: sticky; z-index: 5; top: 0; background-color: aliceblue;">
+
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">Invoice</th>
+
+                  <th scope="col">CN Amount </th>
+                  <th scope="col">Credit Note </th>
+                  <th scope="col">CN Dated</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Employee</th>
+
+                </tr>
+              </thead>
+              <tbody id="credit_note_report">
+
+
+
+              </tbody>
+
+
+            </table>
           </div>
-          <caption>Credit Note Tracker</caption>
-          <thead>
+        </div>
 
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Customer</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Invoice</th>
+        <div class="col-md-6">
+          <div class="table-responsive" style="height: 700px; overflow-y: auto;">
+            <table class="table small caption-top table-bordered table-striped ">
+              <div class="float-end">
+                <input type="text" id="billing_details_search" placeholder="search">
+              </div>
+              <caption>Billing details</caption>
+              <thead style="position: sticky; z-index: 5; top: 0; background-color: aliceblue;">
 
-              <th scope="col">CN Amount </th>
-              <th scope="col">Credit Note </th>
-              <th scope="col">CN Dated</th>
-              <th scope="col">Status</th>
-              <th scope="col">Employee</th>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Bill/no</th>
+                  <th scope="col">Bill type</th>
+                  <th scope="col">Bill to</th>
+                  <th scope="col">Billed Date </th>
+                  <th scope="col">Document</th>
 
-            </tr>
-          </thead>
-          <tbody id="credit_note_report">
+                </tr>
+              </thead>
+              <tbody id="billing_details_tbody">
+
+                <tr>
+                  <td>1</td>
+                  <td>YRS1204</td>
+                  <td>Product</td>
+                  <td>Jai agro</td>
+                  <td>19/02/2026</td>
+                  <td>
+                    <button class="btn btn-outline-secondary border-0"><i class="fa fa-eye"></i></button>
+                    <button class="btn btn-outline-success border-0"><i class="fa fa-download"></i></button>
+                    <button class="btn btn-outline-primary border-0"><i class="fa fa-print"></i></button>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>2</td>
+                  <td>YRS2648</td>
+                  <td>Spares</td>
+                  <td>Balaji agro Industries</td>
+                  <td>22/02/2026</td>
+                  <td>
+                    <button class="btn btn-outline-secondary border-0"><i class="fa fa-eye"></i></button>
+                    <button class="btn btn-outline-success border-0"><i class="fa fa-download"></i></button>
+                    <button class="btn btn-outline-primary border-0"><i class="fa fa-print"></i></button>
+                  </td>
+                </tr>
+
+              </tbody>
 
 
+            </table>
+          </div>
+        </div>
 
-          </tbody>
-
-
-        </table>
       </div>
+
+
 
     </div>
   </div>

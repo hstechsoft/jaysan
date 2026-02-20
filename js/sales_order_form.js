@@ -704,7 +704,7 @@ $(document).ready(function () {
   });
 
   $('#sales_product, #product_details_mobile_view').on("click", "button#fa_edit", function () {
-    
+
     $("#update_sale_product_btn, #cancel_sale_product_btn").removeClass("d-none");
     $("#add_sale_product_btn").addClass("d-none");
     var thiss = $("#sales_product").find("#fa_edit")
@@ -1663,7 +1663,7 @@ $(document).ready(function () {
     }
   });
 
-  
+
   $(" #mobile_order_card, #mobile_approved_order_card, #mobile_req_card").on("click", ".mtogglePrice", function () {
 
     var m_pricesummary = $(this).closest("span").find("ul.mpriceList").attr("id");
@@ -3189,11 +3189,12 @@ function get_sales_order(approve_sts) {
           var obj = JSON.parse(response);
           var count = 0
 
-
+          obj.sort(function (a, b) {
+            return parseInt(b.oid) - parseInt(a.oid);
+          });
           obj.forEach(function (obj) {
             var bd = ""
             count = count + 1;
-            //  $('#order_table').append("<tr><td>"+count+"</td><td>"+obj.order_no+"</td><td>"+obj.order_category+"</td><td>"+obj.product+"</td><td>"+obj.customer+"</td><td>"+obj.so_date+"</td><td><button type = 'button' value='"+obj.oid+"'  class='edit_btn btn btn-outline-primary border-0'><i class='fa-solid fa-edit'></i> </button></td><td><button  type = 'button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
 
 
 
@@ -3954,6 +3955,9 @@ function get_sales_order_approval(approve_sts) {
           var obj = JSON.parse(response);
           var count = 0
 
+          obj.sort(function (a, b) {
+            return parseInt(b.oid) - parseInt(a.oid);
+          });
 
           obj.forEach(function (obj) {
             count = count + 1;
@@ -4258,6 +4262,9 @@ function get_req_order(approve_sts) {
           var obj = JSON.parse(response);
           var count = 0
 
+          obj.sort(function (a, b) {
+            return parseInt(b.oid) - parseInt(a.oid);
+          });
 
           obj.forEach(function (obj) {
             count = count + 1;
