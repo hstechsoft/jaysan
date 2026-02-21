@@ -13,7 +13,7 @@
     
     if ($conn->query($sql_process) === TRUE) {
         $bom_id = $conn->insert_id;
-    {
+    
       
         foreach ($inputPartsData as $input)
         { 
@@ -32,7 +32,7 @@
               }
         }
 
-        }
+        
       
     } else {
       echo "Error: " . $sql_process . "<br>" . $conn->error;
@@ -50,8 +50,8 @@ if($is_sub_ass)
 
   }
 
-        $sql_modify_bom = "
-    CREATE TEMPORARY TABLE tmp_bom_result AS
+  $conn->query("DROP TEMPORARY TABLE IF EXISTS tmp_bom_result");
+  $conn->query(" CREATE TEMPORARY TABLE tmp_bom_result AS
         WITH RECURSIVE bom_hi AS (       /* ========= Anchor ========= */
             SELECT
                 bo.part_id AS output_part,
@@ -157,19 +157,13 @@ if($is_sub_ass)
           child_input_part
     FROM tb
     WHERE child_input_part IS NOT NULL
-    ORDER BY parent_bom_in_id;
+    ORDER BY parent_bom_in_id");
 
-    SELECT tmp_bom_result.*,sum(child_qty) from tmp_bom_result WHERE 1 GROUP BY child_input_part ORDER BY child_input_part;
-
-    -- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
-
-    --  SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
-    UPDATE bom_input bi
+     $conn->query(  "UPDATE bom_input bi
     JOIN tmp_bom_result t 
         ON bi.bom_in_id = t.parent_bom_in_id
-    SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
-
-    INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
+    SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty");
+     $conn->query(" INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
     SELECT 
     $bom_id,
         child_input_part,
@@ -178,14 +172,13 @@ if($is_sub_ass)
         child_qty
     FROM tmp_bom_result WHERE parent_bom_in_id = 0
     ON DUPLICATE KEY UPDATE 
-    sub_ass_qty = IFNULL(child_qty,0) + VALUES(sub_ass_qty)";
+    sub_ass_qty = IFNULL(child_qty,0) + VALUES(sub_ass_qty)");
 
 
-    if ($conn->query($sql_modify_bom) === TRUE) {
-              } 
-              else {
-                echo "Error: " . $sql_modify_bom . "<br>" . $conn->error;
-              }
+       
+
+
+
 
 
     $sql_check_excess_qty = "select bom_input.part_id,parts_tbl.part_name from bom_input inner join parts_tbl on bom_input.part_id = parts_tbl.part_id where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $bom_id";
