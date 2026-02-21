@@ -37,6 +37,19 @@
     } else {
       echo "Error: " . $sql_process . "<br>" . $conn->error;
     }
+
+// check outpart is sub assembly or not
+$sql_check_sub_ass = "SELECT 1 from parts_tbl where part_id = $output_part and sub_ass = 1";
+$result_sub_ass = $conn->query($sql_check_sub_ass);
+$is_sub_ass = ($result_sub_ass && $result_sub_ass->num_rows > 0) ? true : false;
+if($is_sub_ass)
+  {
+    echo "ok";
+     $conn->close();
+     exit();
+
+  }
+
         $sql_modify_bom = "DROP TABLE IF EXISTS tmp_bom_result;
     CREATE TEMPORARY TABLE tmp_bom_result AS
         WITH RECURSIVE bom_hi AS (       /* ========= Anchor ========= */
