@@ -160,19 +160,25 @@ if($is_sub_ass)
     ORDER BY parent_bom_in_id");
 
      $conn->query(  "UPDATE bom_input bi
-    JOIN tmp_bom_result t 
-        ON bi.bom_in_id = t.parent_bom_in_id
-    SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty");
-     $conn->query(" INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
-    SELECT 
+JOIN (
+    SELECT parent_bom_in_id, SUM(child_qty) AS total_child_qty
+    FROM tmp_bom_result
+    GROUP BY parent_bom_in_id
+) t 
+ON bi.bom_in_id = t.parent_bom_in_id
+SET bi.sub_ass_qty = bi.sub_ass_qty + t.total_child_qty");
+     $conn->query("INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
+SELECT 
     $bom_id,
-        child_input_part,
-        0,
-        'MANUAL',
-        child_qty
-    FROM tmp_bom_result WHERE parent_bom_in_id = 0
-    ON DUPLICATE KEY UPDATE 
-    sub_ass_qty = IFNULL(child_qty,0) + VALUES(sub_ass_qty)");
+    child_input_part,
+    0,
+    'MANUAL',
+    SUM(child_qty)
+FROM tmp_bom_result
+WHERE parent_bom_in_id = 0
+GROUP BY child_input_part
+ON DUPLICATE KEY UPDATE 
+sub_ass_qty = VALUES(sub_ass_qty)");
 
 
        
