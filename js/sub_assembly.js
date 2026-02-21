@@ -210,6 +210,9 @@ $(document).ready(function () {
             issaved = "yes"
             location.reload()
           }
+        },
+        error: function (xrh) {
+          salert("Error", xhr.responseText, "error")
         }
       });
 
@@ -877,7 +880,12 @@ $(document).ready(function () {
               $(this).find("td").eq(0).text(index + 1);
 
             })
+            $("#bom_list li").each(function () {
 
+              if (selected_li.closest("tr").data('part-id') == $(this).data('part_id')) {
+                $(this).removeClass("text-bg-secondary");
+              }
+            });
 
 
           }
@@ -890,39 +898,39 @@ $(document).ready(function () {
       var process_id = $(this).val()
       get_machine_1(process_id, tbl_location)
     }
-    // else {
-    //   console.log("delete");
-    //   var selected_li = $(this).closest('li')
-    //   {
-    //     swal({
-    //       title: "Are you sure - delete? ",
-    //       text: "You will not be recover this  again!",
-    //       icon: "warning",
-    //       buttons: [
-    //         'No, cancel it!',
-    //         'Yes, I am sure!'
-    //       ],
-    //       dangerMode: true,
-    //     }).then(function (isConfirm) {
-    //       if (isConfirm) {
-    //         selected_li.remove();
-    //         console.log(selected_li.data('part-id'));
+    else if ($($(this).hasClass("delete_btn_update_table"))) {
+      console.log("delete");
+      var selected_li = $(this).closest('tr')
+      {
+        swal({
+          title: "Are you sure - delete? ",
+          text: "You will not be recover this  again!",
+          icon: "warning",
+          buttons: [
+            'No, cancel it!',
+            'Yes, I am sure!'
+          ],
+          dangerMode: true,
+        }).then(function (isConfirm) {
+          if (isConfirm) {
+            selected_li.remove();
+            console.log(selected_li.data('part-id'));
 
 
-    //         // Traverse through all list items and log their data attributes
-    //         $("#bom_list li").each(function () {
+            // Traverse through all list items and log their data attributes
+            $("#bom_list li").each(function () {
 
-    //           if (selected_li.data('part-id') == $(this).data('part_id')) {
-    //             $(this).removeClass("text-bg-secondary");
-    //           }
-    //         });
+              if (selected_li.data('part-id') == $(this).data('part_id')) {
+                $(this).removeClass("text-bg-secondary");
+              }
+            });
 
 
-    //       }
+          }
 
-    //     })
-    //   }
-    // }
+        })
+      }
+    }
   });
 
   $("#welding_table").on("click", "tr td", function () {
@@ -1230,7 +1238,7 @@ function get_sub_assembly_bom(part_id, component_cat) {
 
             $("#update_btn").val(obj.bom_id)
 
-            $('#welding_table_new').append("<tr data-part-id=" + obj.part_id + " data-part-qty=" + qty + "><td>" + count + "</td><td>" + obj.part_name + sub_ass + " </td><td contenteditable='true' class='input_part_qty' data-og_qty=" + obj.qty + ">" + obj.qty + "</td><td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td></tr>")
+            $('#welding_table_new').append("<tr data-part-id=" + obj.part_id + " data-part-qty=" + qty + "><td>" + count + "</td><td>" + obj.part_name + sub_ass + " </td><td contenteditable='true' class='input_part_qty' data-og_qty=" + obj.qty + ">" + obj.qty + "</td><td><button class='btn btn-outline-danger border-0 delete_btn_update_table'><i class='fa fa-trash ' aria-hidden='true'></i></button></td></tr>")
 
 
           });
