@@ -282,6 +282,7 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
             console.log(response);
 
 
+            
 
             if (response.trim() !== 'error') {
 
