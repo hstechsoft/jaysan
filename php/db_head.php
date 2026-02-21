@@ -48,10 +48,16 @@ if (!in_array($current_file, $public_files)) {
 
 
 
-$servername = "srv1002.hstgr.io";
-$username = "u333142350_db_user";
-$password = ":wi9x57Ci2";
+// $servername = "srv1002.hstgr.io";
+// $username = "u333142350_db_user";
+// $password = ":wi9x57Ci2";
+// $dbname = "u333142350_jaysan";
+
+$servername = "localhost";
+$username = "root";
+$password = "";
 $dbname = "u333142350_jaysan";
+
 
 
 
