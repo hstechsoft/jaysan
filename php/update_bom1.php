@@ -7,7 +7,7 @@ $input_part = $_POST['input_part'];
 $input_qty = $_POST['input_qty']; 
 $bom_id = $_POST['bom_id']; 
 
-
+echo "Received - BOM ID: $bom_id, Input Part: $input_part, Input Qty: $input_qty<br>";
 $parent_main_bom = 0;
 $bom_list = "";
 
