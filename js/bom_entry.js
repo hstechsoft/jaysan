@@ -425,7 +425,7 @@ $(document).ready(function () {
 
       $.ajax({
 
-        url: 'php/insert_bom.php',
+        url: 'php/insert_bom1.php',
         method: 'POST',
         data: {
 
