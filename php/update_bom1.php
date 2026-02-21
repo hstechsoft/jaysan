@@ -350,24 +350,31 @@ sub_ass_qty = VALUES(sub_ass_qty);");
 
 
 
-    $sql_check_excess_qty = "SELECT
+   $sql_check_excess_qty = "
+SELECT
     bi.bom_id,
+    bi.part_id,
     pt.part_name,
     bi.sub_ass_qty,
     bi.qty,
-    (bi.sub_ass_qty - bi.qty) AS excess_qty
+    (bi.sub_ass_qty - bi.qty) * $input_qty AS excess_qty
 FROM bom_input bi
-JOIN parts_tbl pt ON pt.part_id = bi.part_id
-WHERE bi.sub_ass_qty > bi.qty
-AND bi.bom_id IN ($bom_list);";
+JOIN parts_tbl pt 
+    ON pt.part_id = bi.part_id
+WHERE pt.sub_ass = 0
+AND bi.sub_ass_qty > bi.qty
+AND bi.bom_id IN ($bom_list)";
    
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-            echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")".
-                 
-                 "Excess Qty: " . $row['excess_qty'] . "<br><br>";
-          }
+      while ($row = $result->fetch_assoc()) {
+
+    echo "BOM: " . $row['bom_id'] .
+         " → Part: " . $row['part_name'] .
+         " (ID: " . $row['part_id'] . ")" .
+         " → Excess Qty: " . $row['excess_qty'] .
+         "<br><br>";
+}
         } else {
           echo "ok";
         }
