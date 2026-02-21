@@ -53,7 +53,7 @@ if (!in_array($current_file, $public_files)) {
 // $password = ":wi9x57Ci2";
 // $dbname = "u333142350_jaysan";
 
-$servername = "localhost";
+$servername = "192.168.0.160";
 $username = "root";
 $password = "";
 $dbname = "u333142350_jaysan";
