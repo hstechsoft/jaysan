@@ -739,7 +739,7 @@ $(document).ready(function () {
         setTimeout(() => {
 
           const subArr = sub_type.split(',').map(s => s.trim());
-alert(subArr)
+          
           $('#sub_type_div input[type="checkbox"], #sub_type_div input[type="radio"]')
             .each(function () {
               if (subArr.includes($(this).parent().text().trim())) {
@@ -772,7 +772,7 @@ alert(subArr)
     //console.logsub_type);
 
     sub_type = sub_type.slice(0, -1);
-    alert(sub_type)
+    
     if (count >= 1 && opid > 0 && oid > 0 && $('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "" && $('#billing_price').val() > 0 && $('#machine_price').val() > 0 && cus_id > 0) {
       update_sales_order_product(oid, opid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), cus_id);
       setTimeout(function(){
@@ -908,10 +908,10 @@ alert(subArr)
     var t_rem_payment = parseFloat($("#total_payment_m").data("paid_amt"));
     var amnt = parseFloat($(this).val() || 0);
 
-    // alert(t_rem_payment)
+    
 
     if (t_rem_payment > 0) {
-      // alert("1")
+      
       if (t_rem_payment > amnt) {
 
         pt_p = t_rem_payment - amnt;
@@ -935,7 +935,7 @@ alert(subArr)
 
     }
     else if (t_rem_payment <= 0) {
-      // alert("2")
+      
       if (t_payment < amnt && t_rem_payment == 0) {
         pe_a = amnt - t_payment;
         pt_p = -1;
@@ -1465,7 +1465,7 @@ alert(subArr)
 
     if (edit_sec == 1) {
       if (!oid) {
-        // alert(oid)
+        
         salert("Warning", "Data missing, try again", "warning");
         return;
       }
@@ -1976,7 +1976,7 @@ function update_sales_order_product(oid, opid, type_id, model_id, sub_type, requ
 
 function get_sales_advance(cus_id) {
 
-  // alert(cus_id);
+  
 
 
   $.ajax({
@@ -2026,7 +2026,7 @@ function get_sales_advance(cus_id) {
 }
 function get_sales_advance_m(cus_id) {
 
-  // alert(cus_id);
+  
 
 
   $.ajax({
@@ -2431,8 +2431,7 @@ function insert_sales_pay(cus_id) {
 
 
 function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id) {
-  // alert("insert" + current_user_id)
-  //console.logpayment_id, advance_id, amount, oid, cus_id);
+  
 
   $.ajax({
     url: "php/insert_sale_payment_advance.php",
@@ -2484,7 +2483,6 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
 }
 
 function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id, advance_deposite) {
-  // alert("update")
   $.ajax({
     url: "php/insert_sales_payment.php",
     type: "post", //send it through get method
@@ -4560,7 +4558,6 @@ function get_req_order(approve_sts) {
 }
 
 function get_sales_order_single(oid) {
-  // alert(oid)
   $.ajax({
     url: "php/get_sales_order_single.php",
     type: "get", //send it through get method

@@ -877,7 +877,7 @@ function get_bom_recent()
 
 $.ajax({
   url: "php/get_sub_assembly_bom_recent.php",
-  type: "get", //send it through get method
+  type: "get",
   data: {
   
   },

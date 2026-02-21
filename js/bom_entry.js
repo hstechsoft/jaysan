@@ -62,7 +62,7 @@ $(document).ready(function () {
 
 
   if (alice_name !== '' || alice_name !== null || alice_name !== undefined) {
-    // alert(alice_name)
+    
     $("#alice_name_heading").text(alice_name)
   }
 
@@ -522,7 +522,6 @@ $(document).ready(function () {
 
   $('#bom_list_select').change(function () {
 
-    // alert(partId)
     if (partId !== null) {
       $("#default_bom").removeClass("d-none").val(partId);
     }
@@ -705,7 +704,7 @@ $(document).ready(function () {
 
 
   $("#alice_name_tbody").on("click", "td button#gear", function () {
-    // alert($(this).data("msid"))
+
     partId = $(this).data("msid");
     alice_name = $(this).data("alice_name");
     $("#alice_name_heading").text($(this).data("alice_name"));
