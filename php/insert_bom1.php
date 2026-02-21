@@ -187,12 +187,14 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
 
 
-    $sql_check_excess_qty = "select bom_input.part_id,parts_tbl.part_name from bom_input inner join parts_tbl on bom_input.part_id = parts_tbl.part_id where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $bom_id";
+    $sql_check_excess_qty = "select bom_input.part_id,parts_tbl.part_name, bom_input.sub_ass_qty, bom_input.qty ,bom_input.qty-bom_input.sub_ass_qty as excess_qty from bom_input inner join parts_tbl on bom_input.part_id = parts_tbl.part_id where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $bom_id";
    
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-            echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")<br>";
+            echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")".
+                 
+                 "Excess Qty: " . $row['excess_qty'] . "<br><br>";
           }
         } else {
           echo "ok";
