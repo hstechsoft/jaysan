@@ -50,7 +50,7 @@ if($is_sub_ass)
 
   }
 
-        $sql_modify_bom = "DROP TABLE IF EXISTS tmp_bom_result;
+        $sql_modify_bom = "
     CREATE TEMPORARY TABLE tmp_bom_result AS
         WITH RECURSIVE bom_hi AS (       /* ========= Anchor ========= */
             SELECT
