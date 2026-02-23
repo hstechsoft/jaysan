@@ -1538,7 +1538,7 @@ if (response.trim() == "ok") {
   $('#newPartName').val(''),
    $('#newPartNo').val(''),
     $('#newPartDes').val('')
-  // $("#addNewPartModal").modal('hide');
+  $("#addNewPartModal").modal('hide');
 shw_toast("Added","Successfully Added")
 }
 

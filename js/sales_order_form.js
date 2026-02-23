@@ -462,7 +462,7 @@ $(document).ready(function () {
       $("#extra_payment").val(0);
       var count = 0
       var sub_type = ""
-      $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+      $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
@@ -594,7 +594,7 @@ $(document).ready(function () {
       var total_qty = parseFloat($('#required_qty').val() || 0);
       total_qty = total_qty + parseFloat($('#qty').val())
       var sub_type = ""
-      $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+      $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
@@ -764,7 +764,7 @@ $(document).ready(function () {
     var oid = $(this).data("oid")
     var sub_type = ""
     var count = 0
-    $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+    $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
       count = count + 1;
       //console.log$(this).parent().text());
       sub_type = sub_type + $(this).parent().text().trim() + ","

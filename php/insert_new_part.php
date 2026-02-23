@@ -51,7 +51,7 @@ if ($conn->multi_query($sql)) {
         VALUES ('$json_encoded_safe', '{}', '', '1', 'insert_new_part')";
 
     if (mysqli_query($conn, $sql_insert)) {
-        echo 'Inserted Successfully';
+        echo 'ok';
     } else {
         echo mysqli_error($conn);
     }

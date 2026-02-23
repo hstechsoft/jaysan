@@ -2876,7 +2876,7 @@ function insert_new_part() {
         $('#newPartName').val(''),
           $('#newPartNo').val(''),
           $('#newPartDes').val('')
-        // $("#addNewPartModal").modal('hide');
+        $("#addNewPartModal").modal('hide');
         shw_toast("Added", "Successfully Added")
       }
 

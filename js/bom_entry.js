@@ -62,7 +62,7 @@ $(document).ready(function () {
 
 
   if (alice_name !== '' || alice_name !== null || alice_name !== undefined) {
-    
+
     $("#alice_name_heading").text(alice_name)
   }
 
@@ -450,34 +450,35 @@ $(document).ready(function () {
   });
 
 
-  $('#update_btn').on('click', function () {
+  $('#update_part_btn').on('click', function () {
 
 
-    if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val()) {
+    if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val() && $("#part_name").data('selected-part_id') && $('#qty').val()) {
 
 
-      var inputPartsData = [];
-      $('#bom_table tr').each(function (index) {
+      var input_part = 0;
+      var input_qty = 0;
+      // $('#bom_table tr').each(function (index) {
 
 
-        inputPartsData.push({
-          part_id: $(this).find("td").eq(1).data('part-id'),
-          part_qty: $(this).find("td").eq(2).text().trim(),
-        });
-      });
+      //   inputPartsData.push({
+      //     part_id: $(this).find("td").eq(1).data('part-id'),
+      //     part_qty: $(this).find("td").eq(2).text().trim(),
+      //   });
+      // });
 
+      console.log($('#part_no_out').data('selected-part_id'), $("#bom_list_select").val(), $("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
 
 
       $.ajax({
 
-        url: 'php/update_bom.php',
+        url: 'php/update_bom1.php',
         method: 'POST',
         data: {
 
-          inputPartsData: inputPartsData,
-          output_part: $('#part_no_out').data('selected-part_id'),
-          bom_id: $('#update_btn').val(),
-          bom_list: $('#bom_list_select').val()
+          input_part: $("#part_name").data('selected-part_id'),
+          input_qty: $('#qty').val(),
+          bom_id: $('#update_part_btn').val(),
         },
         success: function (response) {
           console.log(response);
@@ -692,11 +693,17 @@ $(document).ready(function () {
       shw_toast("Input Required", "Please enter a BOM List Name.");
     }
 
-    if ($("#update_btn").hasClass('d-none') == false) {
+    if ($("#update_btn,").hasClass('d-none') == false) {
       $("#update_btn").addClass('d-none')
     }
     if ($("#submit_btn").hasClass('d-none')) {
       $("#submit_btn").removeClass('d-none')
+    }
+    if ($("#update_part_btn").hasClass('d-none') == false) {
+      $("#update_part_btn").addClass('d-none')
+    }
+    if ($("#add_part_btn").hasClass('d-none')) {
+      $("#add_part_btn").removeClass('d-none')
     }
   });
 
@@ -1011,6 +1018,13 @@ function get_bom(part_id, component_cat) {
             $("#submit_btn").addClass('d-none')
           }
 
+          if ($("#update_part_btn").hasClass('d-none')) {
+            $("#update_part_btn").removeClass('d-none')
+          }
+          if ($("#add_part_btn").hasClass('d-none') == false) {
+            $("#add_part_btn").addClass('d-none')
+          }
+
 
 
 
@@ -1028,7 +1042,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
 
-            $("#update_btn").val(obj.bom_id)
+            $("#update_btn, #update_part_btn").val(obj.bom_id)
 
             $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + obj.part_id + ">" + obj.part_name + sub_ass + "</td> <td contenteditable='true' class='qty-editable'>" + obj.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
 
@@ -1045,6 +1059,12 @@ function get_bom(part_id, component_cat) {
             $("#submit_btn").removeClass('d-none')
           }
 
+          if ($("#update_part_btn").hasClass('d-none') == false) {
+            $("#update_part_btn").addClass('d-none')
+          }
+          if ($("#add_part_btn").hasClass('d-none')) {
+            $("#add_part_btn").removeClass('d-none')
+          }
 
 
         }
@@ -1153,8 +1173,8 @@ function insert_new_part() {
         $('#baseunits').val('')
         $('#gstrate').val('')
 
-        // $("#addNewPartModal").modal('hide');
         shw_toast("Added", "Successfully Added")
+        $("#addNewPartModal").modal('hide');
       }
 
 

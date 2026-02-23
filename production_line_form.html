@@ -23,6 +23,10 @@
         #purchase_order_table tr {
             font-size: 12px;
         }
+
+        table tr {
+            font-size: 13px;
+        }
     </style>
 
 </head>
@@ -57,161 +61,231 @@
         <div class="page-wrapper mt-5 mt-md-0">
             <!-- content -->
             <div class="container mt-5">
-                <section id="work_form" class="">
-                    <h4 class="text-center text-white bg-dark p-1">WORK ENTRY FORM</h4>
-                    <form class="p-2 border rounded-4 shadow-sm bg-light needs-validation" id="WorkEntryForm" novalidate
-                        onsubmit="return false">
-                        <div class="form-group">
-                            <div class="row">
+                <div class="row">
 
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="employee" required>
-                                            <option selected disabled value="">Choose...</option>
-                                        </select>
-                                        <label for="employee">Employee</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                    <div class="col-md-8">
+
+                        <section id="work_form" class="">
+                            <h4 class="text-center text-white bg-dark p-1">WORK ENTRY FORM</h4>
+                            <form class="p-2 border rounded-4 shadow-sm bg-light needs-validation" id="WorkEntryForm"
+                                novalidate onsubmit="return false">
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="employee" required>
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="employee">Employee</label>
+                                                <div class="invalid-feedback">
+                                                    Kindly Select Vaild
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="section" required>
-                                            <option selected disabled value="">Choose...</option>
-                                        </select>
-                                        <label for="section">Section</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="section" required>
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="section">Section</label>
+                                                <div class="invalid-feedback">
+                                                    Kindly Select Vaild
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" value="" id="helper_checkbox"
-                                            required>
-                                        <label class="form-check-label" for="helper_checkbox">
-                                            <span class="">Do You Need Helper ? <i
-                                                    class="fa-solid fa-face-grin-beam-sweat text-danger"></i></span>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="helper" disabled required>
-                                            <option selected disabled value="">Choose...</option>
-                                        </select>
-                                        <label for="helper">Helper</label>
-                                        <div class="invalid-feedback">
-                                            Kindly Select Vaild
+                                        <div class="col-md-6">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    id="helper_checkbox" required>
+                                                <label class="form-check-label" for="helper_checkbox">
+                                                    <span class="">Do You Need Helper ? <i
+                                                            class="fa-solid fa-face-grin-beam-sweat text-danger"></i></span>
+                                                </label>
+                                            </div>
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="helper" disabled required>
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="helper">Helper</label>
+                                                <div class="invalid-feedback">
+                                                    Kindly Select Vaild
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-success d-none" id="add_employee">+<i
+                                                class="ms-1 fa-solid fa-people-line"></i></button>
+                                        <button type="submit" class="btn btn-primary " id="work_entry_btn">Start<i
+                                                class="ms-1 fa-solid fa-building-circle-check"></i></button>
                                     </div>
                                 </div>
+                            </form>
 
+                        </section>
+
+                        <section class="d-none mt-2" id="work_update">
+                            <h4 class="text-center text-white bg-dark p-1 mb-0">WORK UPDATE FORM</h4>
+                            <div class="table-responsive">
+                                <table class="table caption-top table-bordered table-striped ">
+                                    <thead>
+
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Work</th>
+                                            <th scope="col">Done By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+                                        <tr>
+
+                                            <td>1</td>
+                                            <td>welding</td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-select employee-select" id="employee" required>
+                                                        <option selected disabled value="">Choose...</option>
+                                                        <option value="john">john</option>
+                                                        <option value="vicky">vicky</option>
+                                                        <option value="babu">babu</option>
+                                                    </select>
+                                                    <label for="employee">Employee</label>
+                                                    <div class="invalid-feedback">
+                                                        Kindly Select Vaild
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>2</td>
+                                            <td>coating</td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-select employee-select" id="employee" required>
+                                                        <option selected disabled value="">Choose...</option>
+                                                        <option value="john">john</option>
+                                                        <option value="vicky">vicky</option>
+                                                        <option value="babu">babu</option>
+                                                    </select>
+                                                    <label for="employee">Employee</label>
+                                                    <div class="invalid-feedback">
+                                                        Kindly Select Vaild
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>3</td>
+                                            <td>setting</td>
+                                            <td>
+                                                <div class="form-floating mb-3">
+                                                    <select class="form-select employee-select" id="employee" required>
+                                                        <option selected disabled value="">Choose...</option>
+                                                        <option value="john">john</option>
+                                                        <option value="vicky">vicky</option>
+                                                        <option value="babu">babu</option>
+                                                    </select>
+                                                    <label for="employee">Employee</label>
+                                                    <div class="invalid-feedback">
+                                                        Kindly Select Vaild
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+
+
+                                    </tbody>
+
+
+                                </table>
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-success " id="work_update_btn">End
+                                        Work</button>
+                                    <button type="button" class="btn btn-warning " id="pause_btn" data-bs-toggle="modal"
+                                        data-bs-target="#pauseModal">Pause Work</button>
+                                    <button type="button" class="btn btn-info d-none" id="resume_btn"> Resume</button>
+                                    <button type="button" class="btn btn-primary " id="rework_btn"
+                                        data-bs-toggle="modal" data-bs-target="#reworkModal"> Rework</button>
+                                    <button type="button" class="btn btn-info d-none" id="rework_end_btn">
+                                        Resume</button>
+                                </div>
+                                <!-- </div> -->
                             </div>
-                            <div class="text-center">
-                                <button type="button" class="btn btn-success d-none" id="add_employee">+<i class="ms-1 fa-solid fa-people-line"></i></button>
-                                <button type="submit" class="btn btn-primary " id="work_entry_btn">Start<i class="ms-1 fa-solid fa-building-circle-check"></i></button>
-                            </div>
-                        </div>
-                    </form>
-
-                </section>
-
-                <section class="d-none mt-2" id="work_update">
-                    <h4 class="text-center text-white bg-dark p-1 mb-0">WORK UPDATE FORM</h4>
-                    <div class="table-responsive">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <thead>
-
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Work</th>
-                                    <th scope="col">Done By</th>
-                                </tr>
-                            </thead>
-                            <tbody id="">
-                                <tr>
-
-                                    <td>1</td>
-                                    <td>welding</td>
-                                    <td>
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select employee-select" id="employee" required>
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="john">john</option>
-                                                <option value="vicky">vicky</option>
-                                                <option value="babu">babu</option>
-                                            </select>
-                                            <label for="employee">Employee</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>2</td>
-                                    <td>coating</td>
-                                    <td>
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select employee-select" id="employee" required>
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="john">john</option>
-                                                <option value="vicky">vicky</option>
-                                                <option value="babu">babu</option>
-                                            </select>
-                                            <label for="employee">Employee</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>3</td>
-                                    <td>setting</td>
-                                    <td>
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select employee-select" id="employee" required>
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="john">john</option>
-                                                <option value="vicky">vicky</option>
-                                                <option value="babu">babu</option>
-                                            </select>
-                                            <label for="employee">Employee</label>
-                                            <div class="invalid-feedback">
-                                                Kindly Select Vaild
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-
-                            </tbody>
-
-
-                        </table>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-success " id="work_update_btn">End Work</button>
-                            <button type="button" class="btn btn-warning " id="pause_btn" data-bs-toggle="modal"
-                                data-bs-target="#pauseModal">Pause Work</button>
-                            <button type="button" class="btn btn-info d-none" id="resume_btn"> Resume</button>
-                            <button type="button" class="btn btn-primary " id="rework_btn" data-bs-toggle="modal"
-                                data-bs-target="#reworkModal"> Rework</button>
-                            <button type="button" class="btn btn-info d-none" id="rework_end_btn"> Resume</button>
-                        </div>
-                        <!-- </div> -->
+                        </section>
                     </div>
-                </section>
+
+                    <div class="col-md-4">
+                        <div class="table-responsive">
+                            <table class="table caption-top table-bordered table-striped ">
+                                <caption style="font-size: 13px;">Parts need to assemble for <span class="text-primary">JRB 312 Round Baler 4G Scaleless Bush Type</span></caption>
+                                <thead>
+
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Part</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="">
+                                    <tr>
+
+                                        <td>1</td>
+                                        <td>BRP 1620 Pipe OD 35mm x Thk 4.2mm</td>
+                                        <td>3</td>
+                                        <td><button type="submit" class="btn btn-outline-danger border-0" id="rework_btn"
+                                        data-bs-toggle="modal" data-bs-target="#correctionModal"><i
+                                                    class="fa-solid fa-eraser"></i></button>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+
+                                        <td>2</td>
+                                        <td>BR 1612 Hand Pipe 42.5 x 35</td>
+                                        <td>1</td>
+                                        <td><button type="submit" class="btn btn-outline-danger border-0" id="rework_btn"
+                                        data-bs-toggle="modal" data-bs-target="#correctionModal"><i
+                                                    class="fa-solid fa-eraser"></i></button>
+                                        </td>
+
+
+                                    </tr>
+                                    <tr>
+
+                                        <td>3</td>
+                                        <td>MLP 1618 Round Pipe OD76mm x 6mm Thk</td>
+                                        <td>2</td>
+                                        <td><button type="submit" class="btn btn-outline-danger border-0" id="rework_btn"
+                                        data-bs-toggle="modal" data-bs-target="#correctionModal"><i
+                                                    class="fa-solid fa-eraser"></i></button>
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -328,6 +402,33 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" id="end_work_reason_btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form action="">
+        <div class="modal fade" id="correctionModal" tabindex="-1" aria-labelledby="correctionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="correctionModalLabel">  Are there any corrections in the part❓</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control rounded-3" placeholder="" id="correction_reason" required
+                                style="height: 120px"></textarea>
+                            <label for="correction_reason">Reason</label>
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="correction_reason_btn">Submit</button>
                     </div>
                 </div>
             </div>
