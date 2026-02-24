@@ -191,9 +191,6 @@ $(document).ready(function () {
   });
 
 
-  $("#app_page_refersh").click(function () {
-    window.location.reload()
-  })
 
 });
 //

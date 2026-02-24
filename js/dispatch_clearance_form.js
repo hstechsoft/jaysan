@@ -181,7 +181,7 @@ $(document).ready(function () {
 
   $("#dcf_submit_btn").on("click", function () {
     if (ass_id.length > 0 && $("#consignee").val() != "" && $("#godown").val() != null) {
-        $("#dcf_submit_btn").prop("disabled", true);
+      $("#dcf_submit_btn").prop("disabled", true);
       $("#print_company").html($("#godown_des").val().replace(/\n/g, "<br>"));
       $("#print_consignee").html($("#consignee").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
       $("#print_buyer").html($("#buyer").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
@@ -276,7 +276,7 @@ $(document).ready(function () {
 
   $("#sales_pro_table").on("click", "#modal_btn", function () {
 
-    $("#add_extra").data({"oid": $(this).data("oid"), "cus_id": $(this).data("cus_id")});
+    $("#add_extra").data({ "oid": $(this).data("oid"), "cus_id": $(this).data("cus_id") });
     $("#extraProductModal").modal("show");
   })
 
@@ -533,12 +533,17 @@ function insert_dcf() {
       $("#loader-overlay").hide();
       console.log(response);
 
-      if (response.trim() == "ok") {
+      if (response.trim() > 0) {
         $("#dcf_submit_btn").prop("disabled", true);
         // $("#dcf").find("*").prop("disabled", false);
         $("#print_btn").prop("disabled", false)
         shw_toast("success", "Dispatch Clearance Form Created", "")
-        $("#print_btn").trigger("click");
+        $("#dcf_no").text(response.trim());
+        setTimeout(() => {
+          // console.log($("#dcf_print").html());
+          
+          update_dcf($("#dcf_print").html(), response.trim())
+        }, 100);
       }
 
 
@@ -555,7 +560,44 @@ function insert_dcf() {
 
 
 }
+function update_dcf(dcf_report, dcf_id) {
 
+
+  $.ajax({
+    url: "php/update_dcf.php",
+    type: "POST", //send it through get method
+    data: {
+      dcf_report: dcf_report,
+      dcf_id: dcf_id
+
+    },
+    beforeSend: function () {
+
+      // Show full-screen loader
+      $("#loader-overlay").show();
+    },
+    success: function (response) {
+      $("#loader-overlay").hide();
+      console.log(response);
+
+      if (response.trim() == "ok") {
+          $("#print_btn").trigger("click");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 
 function get_jaysan_payment() {
@@ -808,7 +850,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='"+obj.spares_id+"'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='" + obj.spares_id + "'></input></td></tr>")
 
           });
 

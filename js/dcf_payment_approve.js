@@ -213,9 +213,9 @@ function get_dcf() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#dcf_list').append("<tr><td>" + count + "</td><td>" + obj.dcf_id + "</td><td>" + obj.dated + "</td><td>" + obj.emp_name + "</td><td>" + obj.consignee + "</td><td> <button class='btn btn-sm btn-primary' value='" + obj.dcf_id + "'>View</button></td></tr>")
+            $('#dcf_list').append("<tr><td>" + count + "</td><td>" + obj.dcf_id + "</td><td>" + obj.order_no + "</td><td>" + obj.dated + "</td><td>" + obj.emp_name + "</td><td>" + obj.consignee + "</td><td> <button class='btn btn-sm btn-primary' value='" + obj.dcf_id + "'>View</button></td></tr>")
 
-            $("#dcf_list_mobile_view").append("<li class='list-group-item d-md-none'> <div class='d-block justify-content-between align-items-center'> <div> <strong>DCF ID:</strong> " + obj.dcf_id + "<br><strong>Date:</strong> " + obj.dated + "<br><strong>Employee:</strong> " + obj.emp_name + "<br><strong>Consignee:</strong> " + obj.consignee + "</div> <button class='btn btn-sm btn-primary mt-2 p-1 float-end' value='" + obj.dcf_id + "' style='font-size:10px'>View</button> </div> </li>");
+            $("#dcf_list_mobile_view").append("<li class='list-group-item d-md-none'> <div class='d-block justify-content-between align-items-center'> <div>  <p><strong>DCF ID:</strong> " + obj.dcf_id + "<strong>Sale order/no:</strong> " + obj.order_no + "</p><br><strong>Employee:</strong> " + obj.emp_name + "<br><strong>Consignee:</strong> " + obj.consignee + "</div> <button class='btn btn-sm btn-primary mt-2 p-1 float-end' value='" + obj.dcf_id + "' style='font-size:10px'>View</button> </div> </li>");
           });
 
           get_dcf_details($('#dcf_list tr:first').find("button").val() || $("#dcf_list_mobile_view li:first").find("button").val())

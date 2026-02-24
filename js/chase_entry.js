@@ -62,18 +62,18 @@ $(document).ready(function () {
 
             details = JSON.parse(decodeURIComponent(encodedDetails));
             $("#customer").val(details.cus_name);
-             console.log(" Details loaded:", details);
+            console.log(" Details loaded:", details);
         } else {
             console.warn("No details found in selected option");
             details = null;
         }
     });
 
-    $("#show_customer").on("change", function(){
-        if($(this).is(":checked")){
+    $("#show_customer").on("change", function () {
+        if ($(this).is(":checked")) {
             $("#cus_row").removeClass("d-none");
         }
-        else{
+        else {
             $("#cus_row").addClass("d-none");
         }
     })
@@ -93,7 +93,7 @@ $(document).ready(function () {
 
             $("#chase_no_val").text(chase);
             $("#prepared_by_val").html("Prepared By: <strong>" + prepare + "</strong>");
-            $("#department_val").html("Department: <strong>" + department + "</strong>");
+            $("#department_val").html("<strong>" + department + "</strong>");
 
             if (details !== null) {
                 var mcd = details.commitment_date.trim().split(" ");
@@ -152,7 +152,7 @@ $(document).ready(function () {
 
         // Encode it to protect HTML structure in POST
         console.log(invoiceHtml);
-        
+
         var encodedHtml = encodeURIComponent(invoiceHtml);
         $.ajax({
             url: "pdf_handler.php",
@@ -242,7 +242,7 @@ function get_assign_order() {
 
 
                     obj.forEach(function (obj) {
-                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date ;
+                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
                         if (obj.order_type === "Emergency") {
                             label += " 🚨";
                         }
@@ -274,6 +274,13 @@ function get_assign_order() {
                                 <td>${details}</td>
                             </tr>
                         `);
+                        $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style="max-width: 18rem; font-size: 12px;">
+                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.line_no}</b></div>
+                            <div class="card-body">
+                                <h6 class="card-title text-info">${obj.cus_name} - ${obj.cus_phone}</h6>
+                                <p class="card-text">${details}</p>
+                            </div>
+                        </div>`)
                     });
 
                 }

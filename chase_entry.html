@@ -28,6 +28,13 @@
         table tr {
             font-size: 13px;
         }
+
+        @media (max-width: 767px) {
+            .table-sm>:not(caption)>*>* {
+                padding: 1px;
+                font-size: 5px;
+            }
+        }
     </style>
 
 </head>
@@ -66,7 +73,7 @@
 
                 <section id="chase_entry">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-lg-3">
 
                             <form class=" needs-validation" id="chaseEntryForm" novalidate onsubmit="return false">
                                 <div class="card shadow-sm p-3 rounded-4">
@@ -227,11 +234,11 @@
                             </div>
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-lg-9">
 
 
                             <div class="card shadow-sm d-none" id="all_line_production_data">
-                                <div class="card-body p-0">
+                                <div class="card-body p-0 d-none d-md-block">
 
                                     <div class="table-responsive " style="max-height: 88vh; overflow-y: auto;">
                                         <table class="table table-bordered table-striped align-middle">
@@ -275,6 +282,9 @@
 
                                         </table>
                                     </div>
+
+                                </div>
+                                <div class="card-body d-md-none" id="mobile_view_arrange_order_tbody">
 
                                 </div>
                             </div>

@@ -5,10 +5,10 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 button, select{
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 td:hover {
   background-color: rgb(255, 210, 143) !important;
