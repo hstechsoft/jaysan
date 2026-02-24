@@ -1,8 +1,8 @@
 <?php
  include 'db_head.php';
 
- $dcf_report = test_input($_POST['dcf_report']);
-$dcf_id = test_input($_POST['dcf_id']);
+ $dcf_report = ($_POST['dcf_report']);
+$dcf_id = ($_POST['dcf_id']);
 
 
  
@@ -16,7 +16,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  dcf SET dcf_report =  $dcf_report WHERE dcf_id =  $dcf_id";
+ $sql =  "UPDATE  dcf SET dcf_report =  '$dcf_report' WHERE dcf_id =  $dcf_id";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
