@@ -5,8 +5,11 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  text-transform: uppercase;
 }
-
+button, select{
+  text-transform: uppercase;
+}
 td:hover {
   background-color: rgb(255, 210, 143) !important;
 }

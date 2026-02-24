@@ -12,14 +12,14 @@ var start = ''
 
 $(document).ajaxError(function (event, xhr) {
 
-    if (xhr.status === 401) {
-        // alert("Session expired. Please login again.");
-        window.location.href = "login.html";
-    }
+  if (xhr.status === 401) {
+    // alert("Session expired. Please login again.");
+    window.location.href = "login.html";
+  }
 
-    if (xhr.status === 403) {
-        // alert("Security validation failed. Please refresh the page.");
-    }
+  if (xhr.status === 403) {
+    // alert("Security validation failed. Please refresh the page.");
+  }
 
 });
 
@@ -139,14 +139,14 @@ $(document).ready(function () {
 
       function hideEmptyMenus() {
 
-        
+
         $(".flyout, #collape_exchange, .submenu, .sub-flyout").each(function () {
           if ($(this).find("a:not(.visually-hidden)").length === 0) {
             $(this).addClass("visually-hidden");
           }
         });
 
-        
+
         $(".sub-wrapper").each(function () {
           if ($(this).find("a:not(.visually-hidden)").length === 0) {
             $(this).addClass("visually-hidden");
@@ -191,7 +191,9 @@ $(document).ready(function () {
   });
 
 
-
+  $("#app_page_refersh").click(function () {
+    window.location.reload()
+  })
 
 });
 //
@@ -205,10 +207,10 @@ function get_app_menu(phone_id) {
   $.ajax({
     url: "php/get_app_menu1.php",
     type: "GET",
-    data: { 
+    data: {
       phone_id: phone_id,
-       email: localStorage.getItem("logemail")
-     },
+      email: localStorage.getItem("logemail")
+    },
     dataType: "json",
     success: function (response) {
 
@@ -221,11 +223,11 @@ function get_app_menu(phone_id) {
       $("#mobile_menu").empty();
 
       // let startUrl = "";
-      
+
 
       response.forEach(item => {
         console.log(item);
-        
+
 
         if (item.iswebview == "true") {
 

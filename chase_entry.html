@@ -24,6 +24,10 @@
         #purchase_order_table tr {
             font-size: 12px;
         }
+
+        table tr {
+            font-size: 13px;
+        }
     </style>
 
 </head>
@@ -67,9 +71,9 @@
                             <form class=" needs-validation" id="chaseEntryForm" novalidate onsubmit="return false">
                                 <div class="card shadow-sm p-3 rounded-4">
                                     <div class="d-flex gap-3">
-                                        <h5 class="fw-bold text-primary mb-3">
+                                        <h6 class="fw-bold text-primary mb-3">
                                             <i class="fa-solid fa-clipboard-check me-2"></i> Chase Entry Form
-                                        </h5>
+                                        </h6>
 
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" role="switch"
@@ -103,7 +107,8 @@
                                             <div class="form-check mb-3">
                                                 <input class="form-check-input" type="checkbox" value=""
                                                     id="show_customer">
-                                                <label class="form-check-label" for="show_customer">Do you need to display
+                                                <label class="form-check-label" for="show_customer">Do you need to
+                                                    display
                                                     customer name on job card?
                                                 </label>
                                             </div>
@@ -158,6 +163,68 @@
                                 </div>
 
                             </form>
+
+                            <div class="table-responsive d-none" id="bom_table">
+                                <table class="table caption-top table-bordered table-striped ">
+                                    <caption style="font-size: 13px;">Parts need to assemble for <span
+                                            class="text-primary">JRB 312 Round Baler 4G Scaleless Bush Type</span>
+                                    </caption>
+                                    <thead>
+
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Part</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+                                        <tr>
+
+                                            <td>1</td>
+                                            <td>BRP 1620 Pipe OD 35mm x Thk 4.2mm</td>
+                                            <td>3</td>
+                                            <td><button type="submit" class="btn btn-outline-danger border-0"
+                                                    id="rework_btn" data-bs-toggle="modal"
+                                                    data-bs-target="#correctionModal"><i
+                                                        class="fa-solid fa-eraser"></i></button>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>2</td>
+                                            <td>BR 1612 Hand Pipe 42.5 x 35</td>
+                                            <td>1</td>
+                                            <td><button type="submit" class="btn btn-outline-danger border-0"
+                                                    id="rework_btn" data-bs-toggle="modal"
+                                                    data-bs-target="#correctionModal"><i
+                                                        class="fa-solid fa-eraser"></i></button>
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>3</td>
+                                            <td>MLP 1618 Round Pipe OD76mm x 6mm Thk</td>
+                                            <td>2</td>
+                                            <td><button type="submit" class="btn btn-outline-danger border-0"
+                                                    id="rework_btn" data-bs-toggle="modal"
+                                                    data-bs-target="#correctionModal"><i
+                                                        class="fa-solid fa-eraser"></i></button>
+                                            </td>
+
+
+                                        </tr>
+
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
                         </div>
 
                         <div class="col-md-9">
@@ -223,7 +290,7 @@
 
                                             <thead class="table-light small">
                                                 <tr>
-                                                    <th rowspan="3" colspan="8"
+                                                    <th rowspan="2" colspan="8"
                                                         class="text-center align-middle fw-bold small">
                                                         JAYSAN AGRI INDUSTRIAL
                                                     </th>
@@ -237,6 +304,10 @@
                                                 </tr>
 
                                                 <tr>
+                                                    <td class="fw-semibold small">Marketing Person Name</td>
+                                                    <th class="small" colspan="5" id="marketing_person_name"></th>
+                                                    <td class="fw-semibold small">Line No</td>
+                                                    <th class="small" colspan="" id="line_no"></th>
                                                     <td class="fw-semibold small">Doc.Rev.No & Date</td>
                                                     <th class="small" colspan="2"></th>
                                                 </tr>

@@ -18,7 +18,14 @@
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
-
+<style>
+  @media (min-width: 1024px) {
+    #large_screen{
+      width: 40%;
+      margin: 0 auto;
+    }
+  }
+</style>
 
 
 </head>
@@ -45,7 +52,7 @@
 
     <div class="page-wrapper   mt-5 mt-md-0">
 
-      <div class="d-block d-sm-none">
+      <div class="d-block d-smm-none" id="large_screen">
         <div class="card">
           <div class="card-header small text-center ">
             payment Approval
@@ -60,7 +67,7 @@
       </div>
 
       <!-- content -->
-      <div style="max-height: 80vh; overflow-y: auto;" class="d-none d-sm-block">
+      <div style="max-height: 80vh; overflow-y: auto;" class="d-none d-smm-block">
         <table id='payment_table1' class='table table-bordered  text-center mt-2'>
           <thead class="small">
             <tr class="small">
