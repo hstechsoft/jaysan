@@ -15,11 +15,11 @@ return $data;
 }
 
 
- $sql = "SELECT (SELECT sales_order_form.order_no from dcf as dcf1 
+ $sql = "SELECT (SELECT  GROUP_CONCAT( DISTINCT sales_order_form.order_no) as order_no from dcf  as dcf1
 inner join assign_product on dcf1.dcf_id = assign_product.dcf_id 
 inner join sales_order_product on assign_product.opid = sales_order_product.opid
 inner join sales_order_form on sales_order_product.oid = sales_order_form.oid
-WHERE dcf1.dcf_id = dcf.dcf_id limit 1)as order_no, dcf.dcf_id, dcf.dated, dcf.consignee, DATE_FORMAT(dcf.dated, '%d-%m-%Y') as dated, employee.emp_name FROM dcf INNER join employee on dcf.dcf_by = employee.emp_id WHERE dcf.sts = $sts  ORDER by dcf_by ";
+WHERE dcf1.dcf_id = dcf.dcf_id GROUP by dcf1.dcf_id)as order_no, dcf.dcf_id, dcf.dated, dcf.consignee, DATE_FORMAT(dcf.dated, '%d-%m-%Y') as dated, employee.emp_name FROM dcf INNER join employee on dcf.dcf_by = employee.emp_id WHERE dcf.sts = $sts  ORDER by dcf_by ";
 
 $result = $conn->query($sql);
 
