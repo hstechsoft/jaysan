@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql = "SELECT (SELECT sales_order_form.order_no from dcf1 
+ $sql = "SELECT (SELECT sales_order_form.order_no from dcf as dcf1 
 inner join assign_product on dcf1.dcf_id = assign_product.dcf_id 
 inner join sales_order_product on assign_product.opid = sales_order_product.opid
 inner join sales_order_form on sales_order_product.oid = sales_order_form.oid
