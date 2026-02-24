@@ -68,7 +68,7 @@ if ($conn->multi_query($sql)) {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
-echo "ok";
+echo $dcf_id;
 $conn->close();
 
  ?>

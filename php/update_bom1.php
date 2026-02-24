@@ -19,6 +19,7 @@ $bom_list = "";
          
           
            if ($conn->query($sql_input) === TRUE) {
+            echo "BOM input updated successfully.<br>\n";
            } 
            else {
              echo "Error: " . $sql_input . "<br>" . $conn->error;
@@ -38,11 +39,13 @@ if($is_output_not_sub_ass)
     if($is_input_sub_ass)
       {
         // input part not sub ass so give ok and exit
+        echo "Input part is not sub-assembly.<br>\n";
         echo "ok";
         $conn->close();
         exit();
       }
       else{
+        echo "Input part is sub-assembly.<br>\n";
         // input part is sub ass so modify main bom sub qty
         // Recalculate — not increment
 
@@ -50,6 +53,7 @@ if($is_output_not_sub_ass)
 SET sub_ass_qty = 0 
 WHERE bom_id = $bom_id;";
         if ($conn->query($sql_update_sub_qty) === TRUE) {
+          echo "BOM sub-assembly quantity 0 updated successfully.<br>\n";
         } 
         else {
           echo "Error: " . $sql_update_sub_qty . "<br>" . $conn->error;
@@ -65,6 +69,7 @@ WHERE bom_id = $bom_id;";
                 bi.bom_in_id as bom_in_id,
                 bi.part_id AS input_part,
                 bi.qty,
+                  bi.qty AS req_qty, 
                 pt_hi.sub_ass,
                 0 AS level,
                 bo.component_cat,
@@ -81,6 +86,7 @@ WHERE bom_id = $bom_id;";
                 bi.bom_in_id as bom_in_id,  
                 bi.part_id AS input_part,
                 bi.qty,
+                 h.req_qty * bi.qty AS req_qty,
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
