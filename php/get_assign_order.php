@@ -17,7 +17,7 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
 $sql .= <<<SQL
-SELECT  order_type,commitment_date,dated as sale_order_date,color_choice,any_other_spec,color_choice_des,loading_type,hs1.order_no,hs1.sub_type,hs1.ass_date as date_f,hs1.ass_id,hs1.oid,(SELECT jaysan_final_product.product_name from  jaysan_final_product WHERE jaysan_final_product.product_id = jaysan_product_model.product_id) as product,employee.emp_name,jaysan_product_model.model_name as model,customer.cus_name,
+SELECT order_type,commitment_date,dated as sale_order_date,color_choice,any_other_spec,color_choice_des,loading_type,hs1.order_no,hs1.sub_type,hs1.ass_date as date_f,hs1.ass_id,hs1.oid,(SELECT jaysan_final_product.product_name from  jaysan_final_product WHERE jaysan_final_product.product_id = jaysan_product_model.product_id) as product,employee.emp_name,jaysan_product_model.model_name as model,customer.cus_name,
 customer.cus_phone,jaysan_model_type.type_name as type,line_no FROM
 ( SELECT sales_order_form.*,hs.type_id as hstype_id,hs.model_id,hs.sub_type,hs.ass_date,hs.ass_id,line_no
     FROM
@@ -30,7 +30,7 @@ customer.cus_phone,jaysan_model_type.type_name as type,line_no FROM
         FROM
             assign_product
         INNER JOIN sales_order_product ON sales_order_product.opid = assign_product.opid
-        inner join (SELECT mp.ass_id, @rn := @rn + 1 AS line_no FROM machine_production mp CROSS JOIN (SELECT @rn := 0) r ORDER BY mp.dated, mp.line_no) as machine_line on machine_line.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 and finished_details = 'no_sts'
+        inner join machine_line on machine_line.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 and finished_details = 'no_sts'
     ) AS hs
 INNER JOIN sales_order_form ON hs.oid = sales_order_form.oid
 ) AS hs1
@@ -38,7 +38,6 @@ INNER JOIN jaysan_model_type ON jaysan_model_type.mtid = hs1.hstype_id
 INNER JOIN customer ON hs1.customer_id = customer.cus_id
 INNER JOIN jaysan_product_model ON hs1.model_id = jaysan_product_model.model_id
 INNER JOIN employee ON hs1.emp_id = employee.emp_id
-
 SQL;
 
 
