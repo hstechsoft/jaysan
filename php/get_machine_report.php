@@ -32,7 +32,7 @@ ap_final as ( SELECT
     ap.opid,
     JSON_ARRAYAGG(
         JSON_OBJECT(
-            'line_no',(select line_no from  machine_production where ass_id = ap.ass_id),
+           
             'ass_id', ap.ass_id,
             'opid', ap.opid,
             'dated', ap.dated,
