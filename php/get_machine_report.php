@@ -50,7 +50,7 @@ GROUP BY ap.opid),
                    --  product_id = 30 and order_no = 1 and  type_id = '' and model_id = '' and sub_type in ('')
                   ),  
 
-                       final as( SELECT ap_final.assign_details,sp.* from ap_final INNER join sop_view sp on ap_final.opid = sp.opid    GROUP by oid ) 
+                       final as( SELECT ap_final.assign_details,sp.* from ap_final INNER join sop_view sp on ap_final.opid = sp.opid     ) 
 
          select final.* from final  where 1  order by final.order_no desc
 
