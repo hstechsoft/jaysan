@@ -65,7 +65,7 @@ GROUP BY ap.opid),
                   ),  
 
                        final as( SELECT JSON_ARRAYAGG(
-        JSON_OBJECT('assign_details', ap_final.assign_details)) as assign_details,sp.* from ap_final INNER join sop_view sp on ap_final.opid = sp.opid where   $customer_id_query and  $sale_order_date_query      GROUP by oid ) 
+        JSON_OBJECT('details', ap_final.assign_details)) as assign_details,sp.* from ap_final INNER join sop_view sp on ap_final.opid = sp.opid where   $customer_id_query and  $sale_order_date_query      GROUP by oid ) 
 
          select final.* from final  where 1 and $emp_id_query order by final.order_no desc
 
