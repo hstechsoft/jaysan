@@ -2,7 +2,7 @@
  include 'db_head.php';
 
 
-$dcf_id = test_input($_POST['dcf_id']);
+$ass_id = test_input($_POST['ass_id']);
 
 
  
@@ -16,7 +16,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  assign_product SET finished_details =  'print' WHERE finished_details = 'no_sts' AND dcf_id =  $dcf_id";
+ $sql =  "UPDATE  assign_product SET finished_details =  'print' WHERE finished_details = 'no_sts' AND ass_id =  $ass_id";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
