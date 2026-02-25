@@ -30,7 +30,7 @@ customer.cus_phone,jaysan_model_type.type_name as type,line_no FROM
         FROM
             assign_product
         INNER JOIN sales_order_product ON sales_order_product.opid = assign_product.opid
-        inner join machine_line on machine_line.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 and finished_details = 'no_sts'
+        inner join (SELECT mp.ass_id, @rn := @rn + 1 AS line_no FROM machine_production mp CROSS JOIN (SELECT @rn := 0) r ORDER BY mp.dated, mp.line_no) as machine_line on machine_line.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 and finished_details = 'no_sts'
     ) AS hs
 INNER JOIN sales_order_form ON hs.oid = sales_order_form.oid
 ) AS hs1
