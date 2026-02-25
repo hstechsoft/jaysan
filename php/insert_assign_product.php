@@ -25,7 +25,7 @@ if($selected_type != "'Production'")
 
 for ($i = 1; $i <= $qty; $i++) {
   
-  $sql = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,godown) VALUES ($opid,1,$selected_type,$selected_date,$des,$is_emergency,$godown)";
+  $sql = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,godown) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$godown)";
 
   if ($conn->query($sql) === TRUE) {
 
@@ -88,7 +88,7 @@ else
         //     VALUES ($opid_a[$i],$emergency_order[$i],'Production',$get_max_line_no ,'1','$selected_date')";
     
     
-         $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no,godown) VALUES ($opid,1,$selected_type,$selected_date,$des,$is_emergency,$get_max_line_no,$godown)";
+         $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no,godown) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$get_max_line_no,$godown)";
     
         }
            
@@ -96,7 +96,7 @@ else
             //  $sql_insert= "INSERT INTO  assign_product  ( ass_id, opid, emergency_order, assign_type, line_no,qty,dated )
             // VALUES ($ass_id[$i],$opid_a[$i],$emergency_order[$i],'Production','$last_line_no','1','$selected_date')";
     
-    $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no) VALUES ($opid,1,$selected_type,$selected_date,$des,$is_emergency,$last_line_no )";
+    $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$last_line_no )";
               
                if ($conn->query($sql_insert) === TRUE) {
                
