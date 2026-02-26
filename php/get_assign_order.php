@@ -37,7 +37,7 @@ INNER JOIN sales_order_form ON hs.oid = sales_order_form.oid
 INNER JOIN jaysan_model_type ON jaysan_model_type.mtid = hs1.hstype_id
 INNER JOIN customer ON hs1.customer_id = customer.cus_id
 INNER JOIN jaysan_product_model ON hs1.model_id = jaysan_product_model.model_id
-INNER JOIN employee ON hs1.emp_id = employee.emp_id
+INNER JOIN employee ON hs1.emp_id = employee.emp_id order by hs1.line_no
 SQL;
 
 
