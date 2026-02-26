@@ -272,7 +272,7 @@ function get_machine_report(production_date) {
                         var details = `
                             <div class="card shadow-sm border-0" style="border-radius: 10px;">
                                 <div class="card-body py-1 px-2 d-flex justify-content-between align-items-center">
-                                    <span class="text-muted small">${item.model_name}</span>
+                                    <span class="text-muted small">${item.line_no}-${item.model_name}</span>
                                     <span class="fw-semibold text-primary">${item.product}</span>
                                     <span class="badge bg-success">${item.type_name}</span>
                                 </div>

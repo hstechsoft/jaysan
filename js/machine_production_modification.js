@@ -312,8 +312,12 @@ $(document).ready(function () {
 
 
     $(document).on('change', '.order-check', function () {
-        let check = $(this).is(":checked");
-        $(this).closest("td").find(".ass-check").prop("checked", check).trigger("change");
+
+        let oid = $(this).data("oid");
+        let isChecked = $(this).is(":checked");
+
+        $(".order-" + oid).prop("checked", isChecked).trigger("change");
+
     });
 
     $("#mp_alter_btn1, #mp_alter_btn2, #mp_alter_btn3").on('click', function () {
@@ -867,70 +871,123 @@ function get_sale_order_mreport(sale_date, production_date) {
                     var obj = JSON.parse(response);
                     var count = 0
 
-                    obj.forEach(function (obj) {
-                        count++;
-                        var ddd = 0;
+                    obj.forEach(function (order, orderIndex) {
 
-                        var ass = JSON.parse(obj.product_details);
+                        let products = JSON.parse(order.product_details);
 
-                        var ass_d = `<td><div  class='d-flex justify-content-between px-3'><span class="count-label">${li_count} Qty</span><div>
-                                     Check All <input class="form-check-input mb-2  order-check" type="checkbox" id="order_${obj.oid}"></div></div>
-                                    <ul class="list-group" style='height:80px; overflow-y:auto'>`;
-                        var pro_d = `<td ><div  style='height:150px; overflow-y:auto'>`;
-                        var li_count = 0;
-                        ass.forEach(function (it) {
+                        let totalAssignments = 0;
 
-                            ddd += 1;
-                            var assign_d = it.assign_details;
-
-
-                            assign_d.forEach(function (item) {
-
-                                if (item.assign_type == 'Production') {
-                                    li_count += 1;
-                                    ass_d += `<li class="list-group-item">
-                                Production - ${item.dated} 
-                                    <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Production' data-ass_id='${item.ass_id}'>
-                                </li>`;
-                                }
-                                if (item.assign_type == 'Finshed') {
-                                    li_count += 1;
-                                    ass_d += `<li class="list-group-item">
-                                    Finished - ${item.godown_name} 
-                                    <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Finshed' data-ass_id='${item.ass_id}'>
-                                </li>`;
-                                }
-                                if (item.assign_type == 'Waiting') {
-                                    li_count += 1;
-                                    ass_d += `<li class="list-group-item" >
-                                    Waiting 
-                                    <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}" data-type='Waiting' data-ass_id='${item.ass_id}'>
-                                </li>`;
-                                }
-                            });
-
-                            pro_d += `<div class="card" data-opid='${it.opid}'>
-                                        <div class="card-header">${it.product} - ${it.model_name} - ${it.type_name}</div>
-                                        <div class="card-body p-1" style="font-size:10px">${it.sub_type}</div>
-                                    </div>`;
+                        products.forEach(function (prod) {
+                            totalAssignments += prod.assign_details.length;
                         });
 
-                        pro_d += `</div></td>`;
-                        ass_d += `</ul></td>`;
-                        // ddd += li_count
+                        let firstRow = true;
 
+                        products.forEach(function (prod) {
 
+                            prod.assign_details.forEach(function (assign) {
 
-                        $("#report_tbl").append(`
-                            <tr style='font-size: 13px'>
-                                <td rowspan='${ddd}'>${count}</td>
-                                <td rowspan='${ddd}'>${obj.cus_name} - ${obj.cus_phone} - <span class='badge bg-primary'>${obj.order_no}</span></td>
-                                ${pro_d}
-                                ${ass_d}
-                            </tr>
-                        `);
+                                let productHtml = `
+                                                <div class="card mb-1" data-opid="${prod.opid}">
+                                                    <div class="card-header p-1">
+                                                        ${prod.product} - ${prod.model_name} - ${prod.type_name}
+                                                    </div>
+                                                    <div class="card-body p-1 small">
+                                                        ${prod.sub_type}
+                                                    </div>
+                                                </div>
+                                            `;
+
+                                let assignLabel = "";
+
+                                if (assign.assign_type == "Production") {
+                                    assignLabel = `Production - ${assign.dated}`;
+                                }
+                                else if (assign.assign_type == "Finshed") {
+                                    assignLabel = `Finished - ${assign.godown_name ?? ''}`;
+                                }
+                                else if (assign.assign_type == "Waiting") {
+                                    assignLabel = `Waiting`;
+                                }
+
+                                let assignHtml = `
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span>${assignLabel}</span>
+                                                    <input class="form-check-input ass-check order-${order.oid}"
+                                                        type="checkbox"
+                                                        data-type="${assign.assign_type}"
+                                                        data-ass_id="${assign.ass_id}">
+                                                </div>
+                                            `;
+
+                                if (firstRow) {
+
+                                    $("#report_tbl").append(`
+                                                            <tr style="font-size:13px">
+                                                                <td rowspan="${totalAssignments}">
+                                                                    ${orderIndex + 1}
+                                                                </td>
+                                                                <td rowspan="${totalAssignments}" class="align-middle">
+                                                                    <div class="p-3 rounded-3 shadow-sm bg-light border h-100">
+
+                                                                        <div class="fw-bold text-dark fs-7 mb-1">
+                                                                            ${order.cus_name}
+                                                                        </div>
+
+                                                                        <div class="text-muted small mb-2">
+                                                                            <i class="fa-solid fa-phone me-1 text-secondary"></i>
+                                                                            ${order.cus_phone}
+                                                                        </div>
+
+                                                                        <div class="mb-3 d-flex justify-content-between">
+                                                                            <span class="badge bg-primary px-3 py-2 fs-7">
+                                                                                Order #${order.order_no}
+                                                                            </span>
+                                                                            <span class="badge bg-success px-3 py-2 fs-7">
+                                                                                Qty - ${totalAssignments}
+                                                                            </span>
+                                                                        </div>
+
+                                                                        <hr class="my-2">
+
+                                                                        <div class="d-flex justify-content-between align-items-center mt-2">
+
+                                                                            <span class="small fw-semibold text-secondary">
+                                                                                Select All
+                                                                            </span>
+
+                                                                            <div class="form-check form-switch m-0">
+                                                                                <input class="form-check-input order-check"
+                                                                                    type="checkbox"
+                                                                                    data-oid="${order.oid}">
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </td>
+                                                                <td>${productHtml}</td>
+                                                                <td>${assignHtml}</td>
+                                                            </tr>
+                                                        `);
+
+                                    firstRow = false;
+
+                                } else {
+
+                                    $("#report_tbl").append(`
+                                        <tr style="font-size:13px">
+                                            <td>${productHtml}</td>
+                                            <td>${assignHtml}</td>
+                                        </tr>
+                                    `);
+                                }
+
+                            });
+
+                        });
+
                     });
-                    console.log(ddd);
 
 
 
