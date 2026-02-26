@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        .add-box {
+            border: 2px dashed #0d6efd;
+            border-radius: 12px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            transition: 0.3s;
+        }
+
+        .add-box:hover {
+            background-color: #e7f1ff;
+        }
+
+        .add-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background-color: #0d6efd;
+            color: white;
+            font-size: 24px;
+            transition: 0.3s;
+        }
+
+        .add-btn:hover {
+            background-color: #0b5ed7;
+            transform: scale(1.05);
+        }
+
+        .machine-card {
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .machine-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .machine-card .card-header {
+            background: linear-gradient(135deg, #198754, #0f5132);
+            padding: 16px;
+            letter-spacing: 1px;
+        }
+
+        .machine-img {
+            max-height: 220px;
+            object-fit: contain;
+            transition: 0.3s ease;
+        }
+
+        .machine-img:hover {
+            transform: scale(1.05);
+        }
+
+        .motivation-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #333;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #start_work:hover {
+            transform: scale(1.05);
+        }
+
+        #end_work:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
+        <!-- top bar -->
+
+
+        <div class=" page-wrapper mt-5">
+
+            <div class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-5">
+
+                        <div class="card shadow-lg border-0 rounded-4">
+
+                            <div class="card-header bg-primary text-white text-center rounded-top-4">
+                                <h5 class="mb-0">📦 Production QR Scanner</h5>
+                            </div>
+
+                            <div class="card-body p-4">
+
+                                <!-- Section Select -->
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="section_select">
+                                        <option selected disabled value="null">Choose Section</option>
+                                    </select>
+                                    <label>Select Section</label>
+                                </div>
+
+                                <!-- Scan Button -->
+                                <div class="d-grid mb-3 d-none qr_section">
+
+                                    <!-- Plus Box -->
+                                    <div class="add-box mb-3">
+                                        <button type="button" class="add-btn" id="openScannerBtn">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- ID Input -->
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="job_ass_id"
+                                            placeholder="">
+                                        <label for="job_ass_id">ID</label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" id="job_card_btn">
+                                        Submit
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card machine-card shadow-lg border-0">
+
+                                <!-- Header -->
+                                <div class="card-header text-center text-white">
+                                    <h5 class="mb-0 fw-bold text-uppercase">JRB 312 Baler</h5>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="card-body text-center">
+
+                                    <img src="img/logo1.png" class="img-fluid rounded-3 mb-3 machine-img"
+                                        alt="JRB 312 Baler">
+
+                                    <div class="motivation-box">
+                                        🚀 <strong>Your effort builds progress.</strong><br>
+                                        Every task completed brings us one step closer to success!
+                                    </div>
+
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="card-footer text-center bg-white border-0 pb-4">
+
+                                    <button type="button" class="btn btn-success px-4 me-2 fw-bold shadow-sm"
+                                        id="start_work">
+                                        ▶ Start Work
+                                    </button>
+
+                                    <button type="button" class="btn btn-danger px-4 fw-bold shadow-sm d-none"
+                                        id="end_work">
+                                        ⏹ End Work
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+
+    <div id='footer' class="mt-auto"></div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- QR Code Scanning -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <!-- external js -->
+    <script src="js/job_card_qr_scan.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>

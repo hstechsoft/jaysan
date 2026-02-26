@@ -866,56 +866,67 @@ function get_sale_order_mreport(sale_date, production_date) {
 
                     var obj = JSON.parse(response);
                     var count = 0
-                    var ddd = 0;
 
                     obj.forEach(function (obj) {
                         count++;
+                        var ddd = 0;
 
-                        var ass = JSON.parse(obj.assign_details);
-                        var ass_d = "";
+                        var ass = JSON.parse(obj.product_details);
+
+                        var ass_d = `<td><div  class='d-flex justify-content-between px-3'><span class="count-label">${li_count} Qty</span><div>
+                                     Check All <input class="form-check-input mb-2  order-check" type="checkbox" id="order_${obj.oid}"></div></div>
+                                    <ul class="list-group" style='height:80px; overflow-y:auto'>`;
+                        var pro_d = `<td ><div  style='height:150px; overflow-y:auto'>`;
                         var li_count = 0;
+                        ass.forEach(function (it) {
 
-                        ass.forEach(function (item) {
+                            ddd += 1;
+                            var assign_d = it.assign_details;
 
-                            if (item.assign_type == 'Production') {
-                                li_count += 1;
-                                ass_d += `<li class="list-group-item">
+
+                            assign_d.forEach(function (item) {
+
+                                if (item.assign_type == 'Production') {
+                                    li_count += 1;
+                                    ass_d += `<li class="list-group-item">
                                 Production - ${item.dated} 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Production' data-ass_id='${item.ass_id}'>
                                 </li>`;
-                            }
-                            if (item.assign_type == 'Finshed') {
-                                li_count += 1;
-                                ass_d += `<li class="list-group-item">
+                                }
+                                if (item.assign_type == 'Finshed') {
+                                    li_count += 1;
+                                    ass_d += `<li class="list-group-item">
                                     Finished - ${item.godown_name} 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}"  data-type='Finshed' data-ass_id='${item.ass_id}'>
                                 </li>`;
-                            }
-                            if (item.assign_type == 'Waiting') {
-                                li_count += 1;
-                                ass_d += `<li class="list-group-item" >
+                                }
+                                if (item.assign_type == 'Waiting') {
+                                    li_count += 1;
+                                    ass_d += `<li class="list-group-item" >
                                     Waiting 
                                     <input class="form-check-input float-end ass-check" type="checkbox" id="ass_${item.ass_id}" data-type='Waiting' data-ass_id='${item.ass_id}'>
                                 </li>`;
-                            }
+                                }
+                            });
+
+                            pro_d += `<div class="card" data-opid='${it.opid}'>
+                                        <div class="card-header">${it.product} - ${it.model_name} - ${it.type_name}</div>
+                                        <div class="card-body p-1" style="font-size:10px">${it.sub_type}</div>
+                                    </div>`;
                         });
 
-                        ddd += li_count
+                        pro_d += `</div></td>`;
+                        ass_d += `</ul></td>`;
+                        // ddd += li_count
 
-                        var pro_d = `<div class="card">
-                            <div class="card-header">${obj.product} - ${obj.model_name} - ${obj.type_name}</div>
-                            <div class="card-body">${obj.sub_type}</div>
-                        </div>`;
+
 
                         $("#report_tbl").append(`
                             <tr style='font-size: 13px'>
-                                <td>${count}</td>
-                                <td>${obj.cus_name} - ${obj.cus_phone}</td>
-                                <td>${pro_d}</td>
-                                <td><div  class='d-flex justify-content-between px-3'><span class="count-label">${0}/${li_count} Qty</span><div>
-                                     Check All <input class="form-check-input mb-2  order-check" type="checkbox" id="order_${obj.oid}"></div></div>
-                                    <ul class="list-group" style='height:80px; overflow-y:auto'>${ass_d}</ul>
-                                </td>
+                                <td rowspan='${ddd}'>${count}</td>
+                                <td rowspan='${ddd}'>${obj.cus_name} - ${obj.cus_phone} - <span class='badge bg-primary'>${obj.order_no}</span></td>
+                                ${pro_d}
+                                ${ass_d}
                             </tr>
                         `);
                     });
