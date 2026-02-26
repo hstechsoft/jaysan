@@ -65,12 +65,57 @@ return $data;
 
 
 $sql = <<<SQL
-SELECT
+with mp_details as(SELECT
     *
 FROM
     machine_production
 WHERE
-    $production_date_query;
+    $production_date_query),
+    ap_details as( SELECT
+   ap.opid,
+   ap.dated,
+   ap.ass_id,
+   ap.qty,
+   ap.emergency_order,
+   ap.assign_type,
+   ap.finished_details,
+   ap.godown,
+   ap.chasis_no,
+   ap.dcf_id,
+   mp.line_no,
+   godown.godown_name
+ FROM assign_product ap
+ LEFT JOIN godown ON godown.gid = ap.godown 
+ inner join mp_details mp on mp.ass_id = ap.ass_id
+),
+    
+ap_final as ( SELECT
+    ap.opid,
+    ap.line_no,
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+           
+            'ass_id', ap.ass_id,
+            'opid', ap.opid,
+            'dated', ap.dated,
+            'assign_type', ap.assign_type,
+            'godown', ap.godown,
+            'dcf_id', ap.dcf_id,
+            'godown_name', godown_name
+        )
+    ) AS assign_details
+FROM ap_details ap
+
+GROUP BY ap.opid),
+    sop_view as(  SELECT emp_id,emp_name,oid,opid,order_category,customer_id,dated as sale_order_date,order_no,cus_name,cus_phone,product,model_name,type_name,sub_type from  sales_order_info_view 
+        WHERE 1 
+                   --  product_id = 30 and order_no = 1 and  type_id = '' and model_id = '' and sub_type in ('')
+                  ),  
+
+                       final as( SELECT ap_final.line_no, ap_final.assign_details,sp.* from ap_final INNER join sop_view sp on ap_final.opid = sp.opid     ) 
+
+         select final.* from final  where 1  order by final.order_no desc
+
 SQL;
 
 $result = $conn->query($sql);
