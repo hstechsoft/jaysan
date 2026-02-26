@@ -20,7 +20,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-if($selected_type != "'Production'")
+// if($selected_type != "'Production'")
 {
 
 for ($i = 1; $i <= $qty; $i++) {
@@ -36,76 +36,76 @@ for ($i = 1; $i <= $qty; $i++) {
 }
 
 
-else
-{
-    for ($i = 0; $i < $qty; $i++) {
+// else
+// {
+//     for ($i = 0; $i < $qty; $i++) {
    
-        $last_line_no = 0;
-            $get_last_id = "SELECT line_no  FROM `assign_product` WHERE dated >= $selected_date and assign_type = 'Production'  ORDER by line_no ASC LIMIT 1";
+//         $last_line_no = 0;
+//             $get_last_id = "SELECT line_no  FROM `assign_product` WHERE dated >= $selected_date and assign_type = 'Production'  ORDER by line_no ASC LIMIT 1";
         
         
         
-            $result = $conn->query($get_last_id);
-            if ($result && $result->num_rows > 0) {
-                $r = $result->fetch_assoc();
-                $last_line_no =  $r["line_no"]; // Append to array
+//             $result = $conn->query($get_last_id);
+//             if ($result && $result->num_rows > 0) {
+//                 $r = $result->fetch_assoc();
+//                 $last_line_no =  $r["line_no"]; // Append to array
                
-            } else {
-            //   echo "no line no";
-            }
+//             } else {
+//             //   echo "no line no";
+//             }
         
         
-            if( $last_line_no > 0)
-            {
-              $sql_update_line = "UPDATE assign_product SET  line_no =  line_no + 1  where line_no >=  $last_line_no and assign_type = 'Production'";
+//             if( $last_line_no > 0)
+//             {
+//               $sql_update_line = "UPDATE assign_product SET  line_no =  line_no + 1  where line_no >=  $last_line_no and assign_type = 'Production'";
         
         
           
-              if ($conn->query($sql_update_line) === TRUE) {
+//               if ($conn->query($sql_update_line) === TRUE) {
                
-              } else {
-                echo "Error: " . $sql_update_line . "<br>" . $conn->error;
-              }
-            }
+//               } else {
+//                 echo "Error: " . $sql_update_line . "<br>" . $conn->error;
+//               }
+//             }
           
         
-            $get_max_line_no = 0;
-        if($last_line_no == 0)
-        {
-          $get_max_last_id = "SELECT COALESCE(MAX(line_no), 0) + 1 as max_line_no FROM assign_product";
+//             $get_max_line_no = 0;
+//         if($last_line_no == 0)
+//         {
+//           $get_max_last_id = "SELECT COALESCE(MAX(line_no), 0) + 1 as max_line_no FROM assign_product";
         
-          $result = $conn->query($get_max_last_id);
-          if ($result && $result->num_rows > 0) {
-              $r = $result->fetch_assoc();
-              $get_max_line_no  =  $r["max_line_no"]; // Append to array
+//           $result = $conn->query($get_max_last_id);
+//           if ($result && $result->num_rows > 0) {
+//               $r = $result->fetch_assoc();
+//               $get_max_line_no  =  $r["max_line_no"]; // Append to array
               
-          } else {
+//           } else {
            
-          }
+//           }
         
      
-        //   $sql_insert= "INSERT INTO  assign_product  (opid, emergency_order, assign_type, line_no,qty,dated )
-        //     VALUES ($opid_a[$i],$emergency_order[$i],'Production',$get_max_line_no ,'1','$selected_date')";
+//         //   $sql_insert= "INSERT INTO  assign_product  (opid, emergency_order, assign_type, line_no,qty,dated )
+//         //     VALUES ($opid_a[$i],$emergency_order[$i],'Production',$get_max_line_no ,'1','$selected_date')";
     
     
-         $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no,godown) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$get_max_line_no,$godown)";
+//          $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no,godown) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$get_max_line_no,$godown)";
     
-        }
+//         }
            
-             else
-            //  $sql_insert= "INSERT INTO  assign_product  ( ass_id, opid, emergency_order, assign_type, line_no,qty,dated )
-            // VALUES ($ass_id[$i],$opid_a[$i],$emergency_order[$i],'Production','$last_line_no','1','$selected_date')";
+//              else
+//             //  $sql_insert= "INSERT INTO  assign_product  ( ass_id, opid, emergency_order, assign_type, line_no,qty,dated )
+//             // VALUES ($ass_id[$i],$opid_a[$i],$emergency_order[$i],'Production','$last_line_no','1','$selected_date')";
     
-    $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$last_line_no )";
+//     $sql_insert = "INSERT INTO assign_product (opid,qty,assign_type,dated,finished_details,emergency_order,line_no) VALUES ($opid,1,$selected_type,$selected_date,'no_sts',$is_emergency,$last_line_no )";
               
-               if ($conn->query($sql_insert) === TRUE) {
+//                if ($conn->query($sql_insert) === TRUE) {
                
-               } 
-               else {
-                 echo "Error: " . $sql_insert . "<br>" . $conn->error;
-               }
-        }
-}
+//                } 
+//                else {
+//                  echo "Error: " . $sql_insert . "<br>" . $conn->error;
+//                }
+//         }
+// }
 
 $sql_update =  "update sales_order_form set sales_order_form.approve_sts = (SELECT if(assign.required_qty > assign.assign_qty, 3 ,1) as res from (SELECT
     (
