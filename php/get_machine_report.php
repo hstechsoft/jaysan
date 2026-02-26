@@ -94,7 +94,7 @@ ap_final as ( SELECT
     ap.line_no,
     JSON_ARRAYAGG(
         JSON_OBJECT(
-           
+           'line_no', ap.line_no,
             'ass_id', ap.ass_id,
             'opid', ap.opid,
             'dated', ap.dated,
