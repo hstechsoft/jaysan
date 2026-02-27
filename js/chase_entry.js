@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 
 
-
     $("#menu_bar").load('menu.html',
         function () {
             var lo = (window.location.pathname.split("/").pop());
@@ -114,16 +113,18 @@ $(document).ready(function () {
 
                 // Clear old QR code
                 document.getElementById("qrcode").innerHTML = "";
-                $("#ass_id").html("QR Code: <b class='text-primary'>" + qrData + "</b>");
-                $("#chase_entry_btn").val(qrData)
+                // $("#ass_id").html("QR Code: <b class='text-primary'>" + qrData + "</b>");
+                // $("#chase_entry_btn").val(qrData)
 
                 // Generate new QR code
-                new QRCode(document.getElementById("qrcode"), {
-                    text: qrData,
-                    width: 150,
-                    height: 150,
-                });
+                // new QRCode(document.getElementById("qrcode"), {
+                //     text: qrData,
+                //     width: 150,
+                //     height: 150,
+                // });
 
+
+                update_assign_product_fd(qrData)
 
             } else {
                 salert("Error", "No details found for selected sale order", "error");
@@ -149,12 +150,13 @@ $(document).ready(function () {
     // })
     $("#chase_entry_btn").on("click", function (event) {
 
-        if ($(this).val()) {
-            update_assign_product_fd($(this).val())
-        }
-        else {
-            salert("Warning", "Try again later", "warning")
-        }
+        print()
+        // if ($(this).val()) {
+        //     update_assign_product_fd($(this).val())
+        // }
+        // else {
+        //     salert("Warning", "Try again later", "warning")
+        // }
     });
 
 
@@ -270,7 +272,7 @@ function get_assign_order() {
 }
 
 function update_assign_product_fd(ass_id) {
-console.log(ass_id);
+    console.log(ass_id);
 
     $.ajax({
         url: "php/update_assign_product_fd.php",
@@ -285,8 +287,59 @@ console.log(ass_id);
 
 
             if (response.trim() == 'ok') {
-                print();
-                window.location.reload();
+                get_assigned_order_ass_id(ass_id);
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_assigned_order_ass_id(ass_id) {
+    console.log(ass_id);
+
+    $.ajax({
+        url: "php/get_assigned_order_ass_id.php",
+        type: "get", //send it through get method
+        data: {
+
+            ass_id: ass_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+
+                    obj.forEach(function (items) {
+                        
+                        $("#qrcode").innerHTML = "";
+                        $("#ass_id").html("QR Code: <b class='text-primary'>" + items.qr_no + "</b>");
+                        // $("#chase_entry_btn").val(qrData)
+
+                        // Generate new QR code
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: items.qr_no,
+                            width: 150,
+                            height: 150,
+                        });
+
+                    });
+                }
             }
 
 

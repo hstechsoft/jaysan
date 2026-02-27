@@ -28,6 +28,7 @@ $(document).ready(function () {
 
     check_login();
     get_dep_section();
+    get_current_qr(current_user_id);
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -50,7 +51,7 @@ $(document).ready(function () {
     let html5QrCode;
     let isScanning = false;
 
-    $("#start_scan_btn").click(function () {
+    $("#openScannerBtn").click(function () {
 
         if (isScanning) return;
 
@@ -86,7 +87,12 @@ $(document).ready(function () {
 
     });
 
+    $("#start_work").click(function () {
 
+        if ($("#job_ass_id").val() > 0) {
+            insert_qr_work_entry(current_user_id, $("#job_ass_id").val());
+        }
+    })
 
 
 });
@@ -136,7 +142,115 @@ function insert_new_process(processId) {
 
 
 
+function insert_qr_work_entry(emp_id, qr_code) {
 
+    $.ajax({
+        url: "php/insert_qr_work_entry.php",
+        type: "post", //send it through get method
+        data: {
+
+            emp_id: emp_id,
+            qr_code: qr_code,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                get_current_qr(current_user_id)
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_current_qr(emp_id) {
+
+    $.ajax({
+        url: "php/get_current_qr.php",
+        type: "get",
+        data: {
+            emp_id: emp_id,
+        },
+        success: function (response) {
+            if (response.trim() != "error") {
+                $("#timing_section").empty();
+                if (response.trim() != "0 result") {
+                    $("#scan_section").addClass("d-none");
+                    $("#timing_section").removeClass("d-none");
+
+                    var obj = JSON.parse(response);
+
+                    obj.forEach(function (item) {
+
+                        $("#timing_section").append(`
+                            <div class="card machine-card">
+
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="mb-0 fw-bold text-uppercase">
+                                                ${item.product} ${item.model_name} ${item.type_name}
+                                            </h5>
+                                            <small class="text-light opacity-75">
+                                                ${item.sub_type}
+                                            </small>
+                                        </div>
+
+                                        <span class="status-badge">
+                                            🟢 Active
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body text-center">
+
+                                    <div class="motivation-box mb-3">
+                                        🚀 <strong>Production in Progress</strong><br>
+                                        Precision today, perfection tomorrow.
+                                    </div>
+
+                                    <div class="time-box">
+                                        <i class="fa-solid fa-clock text-success"></i>
+                                        Started at: <strong>${item.start_time}</strong>
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer text-center">
+
+                                    <button type="button"
+                                        class="btn btn-danger px-4 fw-bold shadow-sm "
+                                        id="end_work">
+                                        ⏹ End Work
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        `);
+                    });
+
+                }
+            }
+        },
+        error: function (xhr) {
+
+        },
+    })
+}
 
 function onScanSuccess(decodedText) {
 

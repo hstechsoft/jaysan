@@ -31,7 +31,7 @@ $(document).ready(function () {
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-
+    get_current_qr_list();
 
 
 
@@ -40,6 +40,41 @@ $(document).ready(function () {
 
 
 
+
+function get_current_qr_list() {
+
+    $.ajax({
+        url: "php/get_current_qr_list.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $("#job_card_dashboard_tbody").empty();
+                if(response.trim() != "0 result"){
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function insert_new_process(processId) {
 
@@ -79,8 +114,6 @@ function insert_new_process(processId) {
 
 
 }
-
-
 
 
 
