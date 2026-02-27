@@ -16,7 +16,7 @@ return $data;
 
 
  $sql = "
-with qr_report as( SELECT JSON_ARRAYAGG (JSON_OBJECT(
+with qr_report as( SELECT JSON_ARRAYAGG(JSON_OBJECT(
   'start_time', date_time_only(qr_work_entry.start_time),
   'production_id', qr_work_entry.production_id,
   'qr_work_id', qr_work_entry.qr_work_id,
