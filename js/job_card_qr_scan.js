@@ -92,6 +92,9 @@ $(document).ready(function () {
         if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0) {
             insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val());
         }
+        else{
+            salert("Warning", "Data missing, try later", "warning");
+        }
     })
 
     $("#timing_section").on("click", "#end_work", function () {
