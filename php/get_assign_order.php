@@ -26,7 +26,7 @@ customer.cus_phone,jaysan_model_type.type_name as type,line_no FROM
             sales_order_product.*,
             machine_line.line_no,
             assign_product.ass_id,
-            DATE_FORMAT(assign_product.dated, '%d-%m-%Y %h:%i %p') as ass_date
+            date_only(assign_product.dated) as ass_date
         FROM
             assign_product
         INNER JOIN sales_order_product ON sales_order_product.opid = assign_product.opid

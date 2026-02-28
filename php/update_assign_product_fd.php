@@ -3,6 +3,9 @@
 
 
 $ass_id = test_input($_POST['ass_id']);
+$chasis_no =test_input($_POST['chasis_no']);
+$prepared_by = test_input($_POST['prepared_by']);
+
 
 
  
@@ -16,7 +19,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  assign_product SET finished_details =  'print' WHERE finished_details = 'no_sts' AND ass_id =  $ass_id";
+ $sql =  "UPDATE  assign_product SET finished_details =  'print' , chasis_no = $chasis_no WHERE finished_details = 'no_sts' AND ass_id =  $ass_id";
 
   if ($conn->query($sql) === TRUE) {
   
@@ -25,7 +28,7 @@ return $data;
   }
 
   // insert into machine_production_taken 
-  $sql_insert_machine_production_taken = "insert into machine_production_taken (ass_id,line_no) values ($ass_id,(SELECT IFNULL(MAX(line_no), 0) + 1 FROM machine_production_taken))";
+  $sql_insert_machine_production_taken = "insert into machine_production_taken (ass_id,line_no,prepared_by) values ($ass_id,(SELECT IFNULL(MAX(line_no), 0) + 1 FROM machine_production_taken), $prepared_by)";
   if ($conn->query($sql_insert_machine_production_taken) === TRUE) {
   echo "ok";
   } else {
