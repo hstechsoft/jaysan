@@ -154,14 +154,14 @@
 
                                         <!-- Buttons -->
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-sm d-none"
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm d-none"
                                                 id="chase_entry_btn">
-                                                <i class="fa-solid fa-print me-1"></i> Submit
+                                                <i class="fa-solid fa-print me-1"></i>
                                             </button>
 
-                                            <button type="submit" class="btn btn-primary btn-sm"
+                                            <button type="submit" class="btn btn-outline-primary btn-sm"
                                                 id="chase_entry_preview_btn">
-                                                <i class="fa-solid fa-eye me-1"></i> Preview
+                                                <i class="fa-solid fa-qrcode"></i> Generate
                                             </button>
                                         </div>
 
@@ -171,67 +171,7 @@
 
                             </form>
 
-                            <div class="table-responsive d-none" id="bom_table">
-                                <table class="table caption-top table-bordered table-striped ">
-                                    <caption style="font-size: 13px;">Parts need to assemble for <span
-                                            class="text-primary">JRB 312 Round Baler 4G Scaleless Bush Type</span>
-                                    </caption>
-                                    <thead>
 
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Part</th>
-                                            <th scope="col">Qty</th>
-                                            <th scope="col">Action</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="">
-                                        <tr>
-
-                                            <td>1</td>
-                                            <td>BRP 1620 Pipe OD 35mm x Thk 4.2mm</td>
-                                            <td>3</td>
-                                            <td><button type="submit" class="btn btn-outline-danger border-0"
-                                                    id="rework_btn" data-bs-toggle="modal"
-                                                    data-bs-target="#correctionModal"><i
-                                                        class="fa-solid fa-eraser"></i></button>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>2</td>
-                                            <td>BR 1612 Hand Pipe 42.5 x 35</td>
-                                            <td>1</td>
-                                            <td><button type="submit" class="btn btn-outline-danger border-0"
-                                                    id="rework_btn" data-bs-toggle="modal"
-                                                    data-bs-target="#correctionModal"><i
-                                                        class="fa-solid fa-eraser"></i></button>
-                                            </td>
-
-
-                                        </tr>
-                                        <tr>
-
-                                            <td>3</td>
-                                            <td>MLP 1618 Round Pipe OD76mm x 6mm Thk</td>
-                                            <td>2</td>
-                                            <td><button type="submit" class="btn btn-outline-danger border-0"
-                                                    id="rework_btn" data-bs-toggle="modal"
-                                                    data-bs-target="#correctionModal"><i
-                                                        class="fa-solid fa-eraser"></i></button>
-                                            </td>
-
-
-                                        </tr>
-
-
-                                    </tbody>
-
-
-                                </table>
-                            </div>
                         </div>
 
                         <div class="col-lg-9">
@@ -240,11 +180,11 @@
                             <div class="card shadow-sm d-none" id="all_line_production_data">
                                 <div class="card-body p-0 d-none d-md-block">
 
-                                    <div class="table-responsive " style="max-height: 88vh; overflow-y: auto;">
+                                    <div class="table-responsive " style="max-height: 50vh; overflow-y: auto;">
                                         <table class="table table-bordered table-striped align-middle">
 
                                             <thead class="table-primary text-center"
-                                                style="position: sticky; top: 0; z-index: 5; font-size: 14px; text-align: center;  background: #f0f0f0;">
+                                                style="position: sticky; top: 0; z-index: 5; font-size: 14px; text-align: center;  background: #cfe2ff;">
                                                 <tr>
                                                     <th style="width: 10%;">Line/No</i>
                                                     </th>
@@ -355,8 +295,8 @@
                                                 <tr>
                                                     <td colspan="4">Marketing Commitment Date</td>
                                                     <th id="mcd"></th>
-                                                    <td colspan="5">Production Commitment Date</td>
-                                                    <th id="pcd"></th>
+                                                    <td colspan="4">Production Commitment Date</td>
+                                                    <th id="pcd" colspan="2"></th>
                                                 </tr>
 
                                                 <tr>
@@ -507,6 +447,25 @@
                                 </div>
                             </div>
 
+                            <div class="table-responsive mt-2" style="height: 50vh; overflow-y: auto;">
+                                <table class="table caption-top table-bordered table-striped ">
+                                    <thead class="small text-center align-middle" style="position: sticky; z-index: 5; top: 0; background-color: #cfe2ff;">
+
+                                        <tr>
+                                            <th scope="col">Line/No</th>
+                                            <th scope="col">Marketing Person Name</th>
+                                            <th scope="col" style="width: 30%;">Product Details</th>
+                                            <th scope="col">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="scanned_data_tbody" class="small">
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
                         </div>
 
                     </div>

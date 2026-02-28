@@ -89,11 +89,39 @@ $(document).ready(function () {
 
     $("#start_work").click(function () {
 
-        if ($("#job_ass_id").val() > 0) {
-            insert_qr_work_entry(current_user_id, $("#job_ass_id").val());
+        if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0) {
+            insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val());
         }
     })
 
+    $("#timing_section").on("click", "#end_work", function () {
+
+        let qrValue = $(this).val();
+
+        if (!qrValue) {
+            salert("Warning", "Data missing, try later", "warning");
+            return;
+        }
+
+        Swal.fire({
+            title: "Work Completed?",
+            html: "Have you assembled all parts and sub-assemblies? 🤔",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Completed",
+            cancelButtonText: "No",
+            confirmButtonColor: "#198754",
+            cancelButtonColor: "#dc3545",
+            reverseButtons: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                update_qr_end_time(qrValue);
+            }
+
+        });
+
+    });
 
 });
 
@@ -142,7 +170,7 @@ function insert_new_process(processId) {
 
 
 
-function insert_qr_work_entry(emp_id, qr_code) {
+function insert_qr_work_entry(emp_id, qr_code, sec_id) {
 
     $.ajax({
         url: "php/insert_qr_work_entry.php",
@@ -151,6 +179,7 @@ function insert_qr_work_entry(emp_id, qr_code) {
 
             emp_id: emp_id,
             qr_code: qr_code,
+            sec_id: sec_id,
         },
         success: function (response) {
             console.log(response);
@@ -175,6 +204,41 @@ function insert_qr_work_entry(emp_id, qr_code) {
 
 
 }
+
+
+function update_qr_end_time(qr_work_id) {
+
+    $.ajax({
+        url: "php/update_qr_end_time.php",
+        type: "post", //send it through get method
+        data: {
+
+            qr_work_id: qr_work_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                window.location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 function get_current_qr(emp_id) {
 
@@ -233,7 +297,7 @@ function get_current_qr(emp_id) {
 
                                     <button type="button"
                                         class="btn btn-danger px-4 fw-bold shadow-sm "
-                                        id="end_work">
+                                        id="end_work" value='${item.qr_work_id}'>
                                         ⏹ End Work
                                     </button>
 
