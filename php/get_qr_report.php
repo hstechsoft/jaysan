@@ -18,6 +18,7 @@ return $data;
  $sql = "
 with qr_report as( SELECT JSON_ARRAYAGG(JSON_OBJECT(
   'start_time', date_time_only(qr_work_entry.start_time),
+    'end_time', date_time_only(qr_work_entry.endā_time),
   'production_id', qr_work_entry.production_id,
   'qr_work_id', qr_work_entry.qr_work_id,
   'ass_id', CONVERT(machine_production_taken.ass_id USING utf8mb4) COLLATE utf8mb4_unicode_ci,
