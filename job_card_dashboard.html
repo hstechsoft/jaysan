@@ -20,6 +20,14 @@
 
 
     <style>
+        @media (max-width: 767px) {
+
+            table tr td,
+            table tr th {
+                font-size: 11px;
+            }
+        }
+
         .dashboard-table {
             max-height: 75vh;
             overflow-y: auto;
@@ -67,79 +75,79 @@
         <div class=" page-wrapper mt-5">
 
 
-                <div class="row g-3">
+            <div class="row g-3">
 
-                    <!-- LEFT TABLE -->
-                    <div class="col-12 col-xl-5 d-none">
+                <!-- LEFT TABLE -->
+                <div class="col-12 col-xl-5 d-none">
 
-                        <div class="card shadow-sm border-0 h-100">
+                    <div class="card shadow-sm border-0 h-100">
 
-                            <div class="card-header bg-primary-subtle text-primary fw-semibold text-center">
-                                <i class="fa-solid fa-box-open me-2"></i>
-                                Job Card Created Products
-                            </div>
-
-                            <div class="card-body p-0">
-
-                                <div class="table-responsive dashboard-table">
-                                    <table class="table table-hover align-middle mb-0 small">
-
-                                        <thead class="dashboard-thead text-center">
-                                            <tr>
-                                                <th>Line/No</th>
-                                                <th>Marketing Person</th>
-                                                <th>Customer</th>
-                                                <th style="width:30%">Product Details</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="dashboard_scanned_data_tbody"></tbody>
-
-                                    </table>
-                                </div>
-
-                            </div>
+                        <div class="card-header bg-primary-subtle text-primary fw-semibold text-center">
+                            <i class="fa-solid fa-box-open me-2"></i>
+                            Job Card Created Products
                         </div>
 
-                    </div>
+                        <div class="card-body p-0">
 
-                    <!-- RIGHT TABLE -->
-                    <div class="col-12 col-xl-12">
+                            <div class="table-responsive dashboard-table">
+                                <table class="table table-hover align-middle mb-0 small">
 
-                        <div class="card shadow-sm border-0 h-100">
+                                    <thead class="dashboard-thead text-center">
+                                        <tr>
+                                            <th>Line/No</th>
+                                            <th>Marketing Person</th>
+                                            <th>Customer</th>
+                                            <th style="width:30%">Product Details</th>
+                                        </tr>
+                                    </thead>
 
-                            <div class="card-header bg-success-subtle text-success fw-semibold text-center">
-                                <i class="fa-solid fa-location-crosshairs me-2"></i>
-                                Job Card Tracker
+                                    <tbody id="dashboard_scanned_data_tbody"></tbody>
+
+                                </table>
                             </div>
 
-                            <div class="card-body p-0">
-
-                                <div class="table-responsive dashboard-table">
-                                    <table class="table table-hover align-middle mb-0 small">
-
-                                        <thead class="dashboard-thead text-center">
-                                            <tr>
-                                                <th>Line/No</th>
-                                                <th>Marketing</th>
-                                                <th>Customer</th>
-                                                <th style="width:30%">Product</th>
-                                                <th>Status</th>
-                                                <th>Assembly</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="job_card_dashboard_tbody"></tbody>
-
-                                    </table>
-                                </div>
-
-                            </div>
                         </div>
-
                     </div>
 
                 </div>
+
+                <!-- RIGHT TABLE -->
+                <div class="col-12 col-xl-12">
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-header bg-success-subtle text-success fw-semibold text-center">
+                            <i class="fa-solid fa-location-crosshairs me-2"></i>
+                            Job Card Tracker
+                        </div>
+
+                        <div class="card-body p-0">
+
+                            <div class="table-responsive dashboard-table">
+                                <table class="table table-hover align-middle mb-0 small">
+
+                                    <thead class="dashboard-thead text-center">
+                                        <tr>
+                                            <th>Line/No</th>
+                                            <th>Marketing</th>
+                                            <th>Customer</th>
+                                            <th style="width:30%">Product</th>
+                                            <th>Status</th>
+                                            <th>Assembly</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="job_card_dashboard_tbody"></tbody>
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
