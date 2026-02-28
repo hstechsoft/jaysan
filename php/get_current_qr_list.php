@@ -15,7 +15,7 @@ return $data;
 
 
 
- $sql = "with qr_report as(SELECT  json_arrayagg(JSON_OBJECT('sec_name', dep_section.sec_name, 'emp_name', employee.emp_name, 'emp_id', qr_work_entry.emp_id, 'start_time', date_time_only(qr_work_entry.start_time), 'production_id', qr_work_entry.production_id, 'qr_work_id', qr_work_entry.qr_work_id, 'ass_id', machine_production_taken.ass_id)) as qr_details, date_time_only(qr_work_entry.start_time) as start_time, qr_work_entry.production_id, qr_work_entry.qr_work_id, machine_production_taken.ass_id  
+ $sql = "with qr_report as(SELECT  json_arrayagg(JSON_OBJECT('sec_name', dep_section.sec_name, 'emp_name', employee.emp_name, 'emp_id', qr_work_entry.emp_id, 'start_time', date_time_only(qr_work_entry.start_time),'end_time', date_time_only(qr_work_entry.end_time), 'production_id', qr_work_entry.production_id, 'qr_work_id', qr_work_entry.qr_work_id, 'ass_id', machine_production_taken.ass_id)) as qr_details, date_time_only(qr_work_entry.start_time) as start_time, qr_work_entry.production_id, qr_work_entry.qr_work_id, machine_production_taken.ass_id  
 FROM qr_work_entry  
 INNER JOIN machine_production_taken ON qr_work_entry.production_id = machine_production_taken.production_id
 inner join employee on qr_work_entry.emp_id = employee.emp_id
