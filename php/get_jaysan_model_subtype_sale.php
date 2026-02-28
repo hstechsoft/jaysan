@@ -70,7 +70,7 @@ return $data;
 //     jaysan_model_subtype.mtid = $mtid
 // GROUP BY
 //     subtype_group_id
-// ORDER BY
+// ORDER BY     
 //     subtype_group_id
 // DESC";
 
