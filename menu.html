@@ -10,12 +10,13 @@
 
         <!-- Center Title -->
         <h5 class="mobile-title m-0 flex-grow-1 text-center text-white">
-            <span class="">Jaysan</span><button type="button" class="btn btn-mute text-white float-end" onclick="window.location.reload()" ><i class="fa-solid fa-arrows-rotate"></i>   </button>
+            <span class="">Jaysan</span><button type="button" class="btn btn-mute text-white float-end"
+                onclick="window.location.reload()"><i class="fa-solid fa-arrows-rotate"></i> </button>
         </h5>
 
         <!-- Spacer (keeps title centered) -->
         <div style="width: 40px;">
-            
+
             <button type="button" class="btn btn-mute text-white " id="topbar_logout_btnn"><i
                     class="fa-solid fa-power-off"></i></button>
         </div>
@@ -115,8 +116,7 @@
                         <i class="bi bi-building me-1"></i> Add Company
                     </a>
 
-                    <a id="product_price_entry" class="submenu-item visually-hidden"
-                        href="product_price_entry.html">
+                    <a id="product_price_entry" class="submenu-item visually-hidden" href="product_price_entry.html">
                         <i class="bi bi-receipt me-1"></i> Add Product Price
                     </a>
 
@@ -162,8 +162,8 @@
                 <div class="collapse" id="collape_exchange">
                     <a id="add_company_master" class="list-group-item visually-hidden"
                         href="add_company_master.html">Add Company</a>
-                    <a id="product_price_entry" class="submenu-item visually-hidden"
-                        href="product_price_entry.html"> Add Product Price
+                    <a id="product_price_entry" class="submenu-item visually-hidden" href="product_price_entry.html">
+                        Add Product Price
                     </a>
                     <a id="add_work_master" class="list-group-item visually-hidden"
                         href="add_work_master.html">Work-master</a>
@@ -370,60 +370,6 @@
             </div>
 
 
-            <!-- CUSTOMER -->
-            <div class="menu-wrapper">
-                <div class="menu-item master-toggle">
-                    <i class="bi bi-people-fill"></i><span class="menu-text">Customer</span>
-                    <i class="bi bi-chevron-right arrow"></i>
-                </div>
-
-                <div class="flyout">
-                    <a id="create_customer" class="submenu-item visually-hidden" href="create_customer.html">Add New</a>
-                    <a id="customer_list" class="submenu-item visually-hidden" href="customer_list.html">List</a>
-                </div>
-
-                <div class="collapse" id="collape_exchange">
-                    <a id="create_customer" class="list-group-item visually-hidden" href="create_customer.html">Add
-                        New</a>
-                    <a id="customer_list" class="list-group-item visually-hidden" href="customer_list.html">List</a>
-                </div>
-            </div>
-
-
-            <!-- LEADS -->
-            <div class="menu-wrapper">
-                <div class="menu-item master-toggle">
-                    <i class="bi bi-megaphone-fill"></i><span class="menu-text">Leads</span>
-                    <i class="bi bi-chevron-right arrow"></i>
-                </div>
-
-                <div class="flyout">
-                    <a id="lead_list" class="submenu-item visually-hidden" href="lead_list.html">marketing Leads</a>
-                    <a id="lead_list_web" class="submenu-item visually-hidden" href="lead_list_web.html">Web Leads</a>
-                </div>
-
-                <div class="collapse" id="collape_exchange">
-                    <a id="lead_list" class="list-group-item visually-hidden" href="lead_list.html">marketing Leads</a>
-                    <a id="lead_list_web" class="list-group-item visually-hidden" href="lead_list_web.html">Web
-                        Leads</a>
-                </div>
-            </div>
-
-
-            <!-- TODAY WORK -->
-            <a id="dashboard" class="menu-item visually-hidden" href="dashboard.html">
-                <i class="bi bi-calendar-check-fill"></i><span class="menu-text">Today Work</span>
-            </a>
-
-            <a id="pending_work" class="menu-item visually-hidden" href="pending_work.html">
-                <i class="bi bi-clock-fill"></i><span class="menu-text">Pending Works</span>
-            </a>
-
-            <a id="payslip_upload" class="menu-item visually-hidden" href="payslip_upload.html">
-                <i class="bi bi-file-earmark-person-fill"></i>
-                <span class="menu-text">Payslip Upload</span>
-            </a>
-
 
             <!-- EXPENSES -->
             <div class="menu-wrapper">
@@ -542,31 +488,6 @@
             </div>
 
 
-            <!-- QUOTATION -->
-            <div class="menu-wrapper">
-                <div class="menu-item master-toggle">
-                    <i class="bi bi-file-text-fill"></i><span class="menu-text">Quotation</span>
-                    <i class="bi bi-chevron-right arrow"></i>
-                </div>
-
-                <div class="flyout">
-                    <a id="quotation_enquiry" class="submenu-item visually-hidden"
-                        href="quotation_enquiry.html">Quotation Enquiry</a>
-                    <a id="quotation_enquiry_master" class="submenu-item visually-hidden"
-                        href="quotation_enquiry_master.html">Quotation
-                        Master</a>
-                </div>
-
-                <div class="collapse" id="collape_exchange">
-                    <a id="quotation_enquiry" class="list-group-item visually-hidden"
-                        href="quotation_enquiry.html">Quotation
-                        Enquiry</a>
-                    <a id="quotation_enquiry_master" class="list-group-item visually-hidden"
-                        href="quotation_enquiry_master.html">Quotation
-                        Master</a>
-                </div>
-            </div>
-
 
             <!-- SALES ORDER -->
             <div class="menu-wrapper">
@@ -578,6 +499,8 @@
                 <div class="flyout">
                     <a id="sales_order_form" class="submenu-item visually-hidden" href="sales_order_form.html">Sales
                         Order Form</a>
+                    <a id="sales_payment_approval" class="submenu-item visually-hidden" href="sales_payment_approval.html">Sales
+                        Order Payment Approval</a>
                     <a id="dcf_report_all" class="submenu-item visually-hidden" href="dcf_report_all.html">DCF
                         Report</a>
                     <a id="dcf_invoice" class="submenu-item visually-hidden" href="dcf_invoice.html">DCF Invoice</a>
@@ -592,7 +515,8 @@
                         Payment Approve</a>
                     <a class="submenu-item visually-hidden" id="dcf_hod_approve" href="dcf_hod_approve.html"> DCF
                         Approve</a>
-                    <a class="submenu-item visually-hidden" id="dcf_payment_approve" href="dcf_payment_approve.html"> DCF
+                    <a class="submenu-item visually-hidden" id="dcf_payment_approve" href="dcf_payment_approve.html">
+                        DCF
                         Payment Approve</a>
                 </div>
 
@@ -613,39 +537,42 @@
                         Payment Approve</a>
                     <a class="submenu-item visually-hidden" id="dcf_hod_approve" href="dcf_hod_approve.html"> DCF
                         Approve</a>
-                    <a class="submenu-item visually-hidden" id="dcf_payment_approve" href="dcf_payment_approve.html"> DCF
+                    <a class="submenu-item visually-hidden" id="dcf_payment_approve" href="dcf_payment_approve.html">
+                        DCF
                         Payment Approve</a>
 
 
                 </div>
             </div>
 
-            <!-- CREDITOR -->
+
+            <!-- Production/ Job Card -->
             <div class="menu-wrapper">
                 <div class="menu-item master-toggle">
-                    <i class="bi bi-file-text-fill"></i><span class="menu-text">Credit Note</span>
+                    <i class="fa-solid fa-gears"></i><span class="menu-text">Production / Job Card</span>
                     <i class="bi bi-chevron-right arrow"></i>
                 </div>
 
                 <div class="flyout">
-                    <a id="credit_note_accounts" class="submenu-item visually-hidden"
-                        href="credit_note_accounts.html">New Entry</a>
-                    <a id="credit_note_marketing" class="submenu-item visually-hidden"
-                        href="credit_note_marketing.html">Credit Note</a>
-                    <a id="credit_note_tracker" class="submenu-item visually-hidden"
-                        href="credit_note_tracker.html">Report</a>
+                    <a id="machine_production_modification" class="submenu-item visually-hidden"
+                        href="machine_production_modification.html">Machine Production</a>
+                    <a id="production_order_arrangement_form" class="submenu-item visually-hidden"
+                        href="production_order_arrangement_form.html">Production Line</a>
+                    <a id="chase_entry" class="submenu-item visually-hidden" href="chase_entry.html">Job Card</a>
+                    <a id="job_card_dashboard" class="submenu-item visually-hidden" href="job_card_dashboard.html">Job Card Dashboard</a>
                 </div>
 
                 <div class="collapse" id="collape_exchange">
-                    <a id="credit_note_accounts" class="submenu-item visually-hidden"
-                        href="credit_note_accounts.html">New Entry</a>
-                    <a id="credit_note_marketing" class="submenu-item visually-hidden"
-                        href="credit_note_marketing.html">Credit Note</a>
-                    <a id="credit_note_tracker" class="submenu-item visually-hidden"
-                        href="credit_note_tracker.html">Report</a>
+                    <a id="machine_production_modification" class="list-group-item visually-hidden"
+                        href="machine_production_modification.html">Machine Production</a>
+                    <a id="production_order_arrangement_form" class="list-group-item visually-hidden"
+                        href="production_order_arrangement_form.html">Production Line</a>
+                    <a id="chase_entry" class="list-group-item visually-hidden" href="chase_entry.html">Job Card</a>
+                    <a id="job_card_dashboard" class="list-group-item visually-hidden" href="job_card_dashboard.html">Job Card Dashboard</a>
                 </div>
-
             </div>
+
+
 
             <!-- MRF -->
             <div class="menu-wrapper">
@@ -701,6 +628,116 @@
                 </div>
             </div>
 
+
+
+            <!-- CUSTOMER -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-people-fill"></i><span class="menu-text">Customer</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="create_customer" class="submenu-item visually-hidden" href="create_customer.html">Add New</a>
+                    <a id="customer_list" class="submenu-item visually-hidden" href="customer_list.html">List</a>
+                </div>
+
+                <div class="collapse" id="collape_exchange">
+                    <a id="create_customer" class="list-group-item visually-hidden" href="create_customer.html">Add
+                        New</a>
+                    <a id="customer_list" class="list-group-item visually-hidden" href="customer_list.html">List</a>
+                </div>
+            </div>
+
+
+            <!-- LEADS -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-megaphone-fill"></i><span class="menu-text">Leads</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="lead_list" class="submenu-item visually-hidden" href="lead_list.html">marketing Leads</a>
+                    <a id="lead_list_web" class="submenu-item visually-hidden" href="lead_list_web.html">Web Leads</a>
+                </div>
+
+                <div class="collapse" id="collape_exchange">
+                    <a id="lead_list" class="list-group-item visually-hidden" href="lead_list.html">marketing Leads</a>
+                    <a id="lead_list_web" class="list-group-item visually-hidden" href="lead_list_web.html">Web
+                        Leads</a>
+                </div>
+            </div>
+
+
+
+            <!-- CREDITOR -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-file-text-fill"></i><span class="menu-text">Credit Note</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="credit_note_accounts" class="submenu-item visually-hidden"
+                        href="credit_note_accounts.html">New Entry</a>
+                    <a id="credit_note_marketing" class="submenu-item visually-hidden"
+                        href="credit_note_marketing.html">Credit Note</a>
+                    <a id="credit_note_tracker" class="submenu-item visually-hidden"
+                        href="credit_note_tracker.html">Report</a>
+                </div>
+
+                <div class="collapse" id="collape_exchange">
+                    <a id="credit_note_accounts" class="submenu-item visually-hidden"
+                        href="credit_note_accounts.html">New Entry</a>
+                    <a id="credit_note_marketing" class="submenu-item visually-hidden"
+                        href="credit_note_marketing.html">Credit Note</a>
+                    <a id="credit_note_tracker" class="submenu-item visually-hidden"
+                        href="credit_note_tracker.html">Report</a>
+                </div>
+
+            </div>
+
+
+            <!-- QUOTATION -->
+            <div class="menu-wrapper">
+                <div class="menu-item master-toggle">
+                    <i class="bi bi-file-text-fill"></i><span class="menu-text">Quotation</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </div>
+
+                <div class="flyout">
+                    <a id="quotation_enquiry" class="submenu-item visually-hidden"
+                        href="quotation_enquiry.html">Quotation Enquiry</a>
+                    <a id="quotation_enquiry_master" class="submenu-item visually-hidden"
+                        href="quotation_enquiry_master.html">Quotation
+                        Master</a>
+                </div>
+
+                <div class="collapse" id="collape_exchange">
+                    <a id="quotation_enquiry" class="list-group-item visually-hidden"
+                        href="quotation_enquiry.html">Quotation
+                        Enquiry</a>
+                    <a id="quotation_enquiry_master" class="list-group-item visually-hidden"
+                        href="quotation_enquiry_master.html">Quotation
+                        Master</a>
+                </div>
+            </div>
+
+
+            <!-- TODAY WORK -->
+            <a id="dashboard" class="menu-item visually-hidden" href="dashboard.html">
+                <i class="bi bi-calendar-check-fill"></i><span class="menu-text">Today Work</span>
+            </a>
+
+            <a id="pending_work" class="menu-item visually-hidden" href="pending_work.html">
+                <i class="bi bi-clock-fill"></i><span class="menu-text">Pending Works</span>
+            </a>
+
+            <a id="payslip_upload" class="menu-item visually-hidden" href="payslip_upload.html">
+                <i class="bi bi-file-earmark-person-fill"></i>
+                <span class="menu-text">Payslip Upload</span>
+            </a>
 
             <!-- Spacer -->
             <div class="menu-spacer"></div>
