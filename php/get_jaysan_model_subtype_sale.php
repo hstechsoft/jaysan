@@ -76,20 +76,29 @@ return $data;
 
 
 $sql = <<<SQL
-SELECT 
-    st.msid,
-    st.is_default,
-    st.is_reduce,
-    st.subtype_name,
-    sp.discount,
-    sp.price,
+SELECT json_arrayagg(
+    JSON_OBJECT(
+        'msid', st.msid,
+        'subtype_name', st.subtype_name,
+        'is_default', st.is_default,
+        'is_reduce', st.is_reduce,
+        'price', IFNULL(sp.price, 0),
+        'discount', IFNULL(sp.discount, 0)
+       
+      
+    )) as price_details,
+
     stp.mrp,
     stp.min_price,
-    stp.max_price
+    stp.max_price,
+    ds.sec_name,
+    st.subtype_group_id
 FROM jaysan_model_subtype st
+LEFT JOIN  dep_section ds ON st.subtype_group_id = ds.dep_sec_id
 LEFT JOIN subgroup_subtype_price sp ON st.msid = sp.msid AND sp.sub_group_id = $subgroup_id
 LEFT JOIN subgroup_type_price stp ON st.mtid = stp.mtid AND stp.sub_group_id = $subgroup_id
-WHERE st.mtid = $mtid;
+WHERE st.mtid = $mtid
+GROUP BY st.subtype_group_id;
 SQL;
 
 $result = $conn->query($sql);
