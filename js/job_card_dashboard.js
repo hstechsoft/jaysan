@@ -25,6 +25,13 @@ $(document).ready(function () {
     );
 
 
+    $("#dashboard_scanned_product_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#job_card_dashboard_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
     check_login();
 

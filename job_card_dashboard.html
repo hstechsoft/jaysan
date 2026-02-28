@@ -25,6 +25,7 @@
             table tr td,
             table tr th {
                 font-size: 11px;
+                padding: 1px !important;
             }
         }
 
@@ -42,7 +43,9 @@
         }
 
         .table-hover tbody tr:hover {
-            background-color: #ffffff !important;
+            /* background-color: #ffffff !important; */
+            box-shadow: 20px 12px 20px 0px #d5d5d5;
+            border-radius: 10%;
             transition: 0.2s ease-in-out;
         }
     </style>
@@ -128,7 +131,19 @@
 
                                     <thead class="dashboard-thead text-center">
                                         <tr>
-                                            <th>Line/No</th>
+                                            <th scope="col">
+                                                <div class="d-flex justify-content-between">
+                                                     <div>Line/No</div>
+                                                    <div class="input-group input-group-sm" style="width: 180px;">
+                                                        <span class="input-group-text bg-white border-0">
+                                                            <i class="fa fa-search text-muted"></i>
+                                                        </span>
+                                                        <input type="text" id="dashboard_scanned_product_search"
+                                                            class="form-control border-0 bg-white"
+                                                            placeholder="Search...">
+                                                    </div>
+                                                </div>
+                                            </th>
                                             <th>Marketing</th>
                                             <th>Customer</th>
                                             <th style="width:30%">Product</th>

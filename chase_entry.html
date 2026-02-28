@@ -449,10 +449,23 @@
 
                             <div class="table-responsive mt-2" style="height: 50vh; overflow-y: auto;">
                                 <table class="table caption-top table-bordered table-striped ">
-                                    <thead class="small text-center align-middle" style="position: sticky; z-index: 5; top: 0; background-color: #cfe2ff;">
+                                    <thead class="small text-center align-middle"
+                                        style="position: sticky; z-index: 5; top: 0; background-color: #cfe2ff;">
 
                                         <tr>
-                                            <th scope="col">Line/No</th>
+                                            <th scope="col">
+                                                <div class="d-flex justify-content-between">
+                                                     <div>Line/No</div>
+                                                    <div class="input-group input-group-sm" style="width: 180px;">
+                                                        <span class="input-group-text bg-white border-0">
+                                                            <i class="fa fa-search text-muted"></i>
+                                                        </span>
+                                                        <input type="text" id="scanned_product_search"
+                                                            class="form-control border-0 bg-white"
+                                                            placeholder="Search...">
+                                                    </div>
+                                                </div>
+                                            </th>
                                             <th scope="col">Marketing Person Name</th>
                                             <th scope="col" style="width: 30%;">Product Details</th>
                                             <th scope="col">Action</th>

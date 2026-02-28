@@ -35,6 +35,13 @@ $(document).ready(function () {
         });
     });
 
+    $("#scanned_product_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#scanned_data_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
     check_login();
 
@@ -88,7 +95,7 @@ $(document).ready(function () {
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
-                    .append("<div>" + item.label+ "</div>")
+                    .append("<div>" + item.label + "</div>")
                     .appendTo(ul);
             };
         }
@@ -135,7 +142,7 @@ $(document).ready(function () {
             $("#chase_no").val() !== "" &&
             $("#prepared_by").val() !== "" &&
             $("#department").val() !== "" &&
-            $("#prepared_by").data("emp_id") !== "" && 
+            $("#prepared_by").data("emp_id") !== "" &&
             $("#prepared_by").data("emp_id") !== undefined
         ) {
 
