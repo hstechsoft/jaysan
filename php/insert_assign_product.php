@@ -107,31 +107,38 @@ for ($i = 1; $i <= $qty; $i++) {
 //         }
 // }
 
-$sql_update =  "update sales_order_form set sales_order_form.approve_sts = (SELECT if(assign.required_qty > assign.assign_qty, 3 ,1) as res from (SELECT
-    (
-    SELECT
-       ifnull (SUM(assign_product.qty),0)
-    FROM
-        assign_product
-    WHERE
-        assign_product.opid IN(
-       SELECT sales_order_product.opid from sales_order_product WHERE sales_order_product.oid = (SELECT sales_order_product.oid from sales_order_product WHERE sales_order_product.opid = $opid)
-    )
-)  as assign_qty,
-sales_order_form.oid,
-sales_order_form.required_qty
-FROM
-    sales_order_form
-WHERE
-    sales_order_form.oid =(
-    SELECT
-        sales_order_product.oid
-    FROM
-        sales_order_product
-    WHERE
-        sales_order_product.opid = $opid
-)
-              ) as  assign) WHERE sales_order_form.oid = (SELECT sales_order_product.oid from sales_order_product WHERE sales_order_product.opid = $opid) ";
+
+
+
+// $sql_update =  "update sales_order_form set sales_order_form.approve_sts = (SELECT if(assign.required_qty > assign.assign_qty, 3 ,1) as res from (SELECT
+//     (
+//     SELECT
+//        ifnull (SUM(assign_product.qty),0)
+//     FROM
+//         assign_product
+//     WHERE
+//         assign_product.opid IN(
+//        SELECT sales_order_product.opid from sales_order_product WHERE sales_order_product.oid = (SELECT sales_order_product.oid from sales_order_product WHERE sales_order_product.opid = $opid)
+//     )
+// )  as assign_qty,
+// sales_order_form.oid,
+// sales_order_form.required_qty
+// FROM
+//     sales_order_form
+// WHERE
+//     sales_order_form.oid =(
+//     SELECT
+//         sales_order_product.oid
+//     FROM
+//         sales_order_product
+//     WHERE
+//         sales_order_product.opid = $opid
+// )
+//               ) as  assign) WHERE sales_order_form.oid = (SELECT sales_order_product.oid from sales_order_product WHERE sales_order_product.opid = $opid) ";
+
+$sql_update = "update sales_order_form set sales_order_form.approve_sts =   (  SELECT if((select sum(sop1.required_qty) from sales_order_product sop1 WHERE sop1.oid = sop.oid) > ifnull(sum(assign_product.qty), 0), 3 ,1) as approve_sts from sales_order_product sop
+  LEFT join assign_product on sop.opid = assign_product.opid
+  WHERE oid  = (SELECT oid FROM sales_order_product WHERE sales_order_product.opid = $opid) GROUP BY oid) where oid = (SELECT oid FROM sales_order_product WHERE sales_order_product.opid = $opid)"; 
 
 if ($conn->query($sql_update) === TRUE) {
  echo "ok";
