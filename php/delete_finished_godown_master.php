@@ -1,10 +1,7 @@
 <?php
  include 'db_head.php';
 
- $part_id = test_input($_POST['part_id']);
-$time_taken = test_input($_POST['time_taken']);
-$godown_id = test_input($_POST['godown_id']);
-$category = test_input($_POST['category']);
+
 $master_id = test_input($_POST['master_id']);
 
 

@@ -35,8 +35,8 @@ if($is_output_not_sub_ass)
 
     $sql_check_input_sub_ass = "SELECT 1 FROM parts_tbl WHERE part_id = $input_part AND sub_ass = 0";
     $result_input_sub_ass = $conn->query($sql_check_input_sub_ass);
-    $is_input_sub_ass = ($result_input_sub_ass && $result_input_sub_ass->num_rows > 0) ? true : false;
-    if($is_input_sub_ass)
+    $is_input_not_sub_ass = ($result_input_sub_ass && $result_input_sub_ass->num_rows > 0) ? true : false;
+    if($is_input_not_sub_ass)
       {
         // input part not sub ass so give ok and exit
         echo "Input part is not sub-assembly.<br>\n";
