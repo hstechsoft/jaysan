@@ -53,24 +53,67 @@
 
             <div class="row">
 
-                <div class="col-md-5">
+                <div class="col-md-6">
+
+                    <div class="table-responsive" style="height: 78vh; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead class="small"
+                                style="position: sticky; z-index: 5; top: 0; background-color: rgb(204, 231, 255);">
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Material</th>
+                                    <th scope="col">Godown</th>
+                                    <th scope="col">Time Period</th>
+                                    <th scope="col">Priority</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="small" id="material_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header d-flex gap-1">
+                            <b class="text-primary small fs-7">Material Mapped List</b>
+                            <div class="input-group input-group-sm" style="width: 180px;">
+                                <span class="input-group-text bg-white border-0">
+                                    <i class="fa fa-search text-muted"></i>
+                                </span>
+                                <input type="text" id="material_search"
+                                    class="form-control border-0 bg-white" placeholder="Search...">
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <ul class="list-group" id="part_list"></ul>
+                        </div>
+                    </div>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
                     <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
                         onsubmit="return false">
                         <div class="form-floating mb-2">
                             <input type="text" class="form-control rounded-3" id="material" placeholder="">
                             <label for="material">Material</label>
                         </div>
-                        <!-- <div class="form-floating mb-2 d-flex justify-content-between">
+                        <div class="form-floating mb-2">
                             <input type="text" class="form-control rounded-3" id="godown" placeholder="">
                             <label for="godown">Godown</label>
-                            <button type="button" class="btn btn-outline-primary " id="add_godown">+</button>
                         </div>
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control rounded-3" placeholder="" id="godowns_name"
-                                style="height: 120px"></textarea>
-                            <label for="godowns_name">Godown Name</label>
-                        </div> -->
-                        <div  class="card p-3 small mb-2">
+                        <!-- <div  class="card p-3 small mb-2">
 
                             <div class="card-header d-flex justify-content-between">
                                 <span>Godown List</span>
@@ -124,43 +167,32 @@
                                 </div>
                             </div>
 
-                        </div>
-                        <div class="form-floating mb-2">
+                        </div> -->
+                        <div class="form-floating mb-2 d-flex">
                             <input type="number" class="form-control rounded-3" id="day_required" placeholder="">
-                            <label for="day_required">No.Of.Days </label>
+                            <label for="day_required">Time Period </label>
+                            <select class="form-select" id="unit">
+                                <option value="minutes">Minutes</option>
+                                <option selected value="hours">Hours</option>
+                            </select>
                         </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="priority">
+                                <option selected disabled value="null">Choose...</option>
+                                <option value="p1">P1</option>
+                                <option value="p2">P2</option>
+                                <option value="p3">P3</option>
+                            </select>
+                            <label for="priority">Priority</label>
 
-                        <button type="submit" class="btn btn-primary " id="submit_btn">Submit</button>
+                            <button type="submit" class="btn btn-primary " id="submit_btn">Submit</button>
+                            <button type="submit" class="btn btn-warning d-none" id="update_btn">Update</button>
+                            <button type="submit" class="btn btn-secondary d-none" id="clear_form">Clear</button>
                     </form>
                 </div>
 
-                <div class="col-md-7">
-
-                    <div class="table-responsive" style="height: 78vh; overflow-y: auto;">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption></caption>
-                            <thead class="small"
-                                style="position: sticky; z-index: 5; top: 0; background-color: rgb(204, 231, 255);">
-
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Material</th>
-                                    <th scope="col">Godown</th>
-                                    <th scope="col">Time Period</th>
-                                    <th scope="col">Action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody class="small" id="material_tbody">
 
 
-                            </tbody>
-
-
-                        </table>
-                    </div>
-
-                </div>
 
             </div>
 
@@ -188,6 +220,8 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
 
+    <!-- Sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 

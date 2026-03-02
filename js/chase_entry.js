@@ -214,7 +214,10 @@ $(document).ready(function () {
     // })
     $("#chase_entry_btn").on("click", function (event) {
 
-        print()
+        print();
+        setTimeout(() => {
+            window.location.reload();
+        }, 300)
         // if ($(this).val()) {
         //     update_assign_product_fd($(this).val())
         // }
@@ -296,6 +299,9 @@ $(document).ready(function () {
 
             setTimeout(() => {
                 print();
+                setTimeout(() => {
+                    window.location.reload();
+                }, 300);
             }, 500);
 
         }

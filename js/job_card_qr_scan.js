@@ -190,6 +190,7 @@ function insert_qr_work_entry(emp_id, qr_code, sec_id) {
 
 
             if (response.trim() == "ok") {
+                $("#start_work").prop("disabled", true).text("Time Started");
                 get_current_qr(current_user_id)
             }
 
@@ -224,6 +225,7 @@ function update_qr_end_time(qr_work_id) {
 
 
             if (response.trim() == "ok") {
+                $("#end_work").prop("disabled", true).text("Work Ended")
                 window.location.reload();
             }
 
