@@ -16,10 +16,10 @@ return $data;
 }
 
 
- $sql = "SELECT finished_godown_master.part_id,time_taken,godown_id,category,creditor_name,creditor_gst,creditor_phone,part_name FROM finished_godown_master 
+ $sql = "SELECT finished_godown_master.part_id,time_taken,godown_id,finished_godown_master.category,creditor_name,creditor_gst,creditor_phone,part_name FROM finished_godown_master 
  inner join parts_tbl on finished_godown_master.part_id = parts_tbl.part_id
  inner join creditors on finished_godown_master.godown_id = creditors.creditor_id
- where master_id = $part_id";
+ where finished_godown_master.part_id = $part_id";
 
 $result = $conn->query($sql);
 
