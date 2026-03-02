@@ -44,6 +44,7 @@ $result_sub_ass = $conn->query($sql_check_sub_ass);
 $is_sub_ass = ($result_sub_ass && $result_sub_ass->num_rows > 0) ? true : false;
 if($is_sub_ass)
   {
+    // output part is sub assembly so no need to update main  because no other bom created using this
     echo "ok";
      $conn->close();
      exit();
