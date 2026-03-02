@@ -26,9 +26,15 @@ return $data;
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
+  $max_line_no = 0;
+$sql_get_line_no = "SELECT IFNULL(MAX(line_no), 0) + 1 AS max_line_no FROM machine_production_taken";
+if ($result = $conn->query($sql_get_line_no)) {
+  $row = $result->fetch_assoc();
+  $max_line_no = $row['max_line_no'];
+}
 
   // insert into machine_production_taken 
-  $sql_insert_machine_production_taken = "insert into machine_production_taken (ass_id,line_no,prepared_by) values ($ass_id,(SELECT IFNULL(MAX(line_no), 0) + 1 FROM machine_production_taken), $prepared_by)";
+  $sql_insert_machine_production_taken = "insert into machine_production_taken (ass_id,line_no,prepared_by) values ($ass_id,$max_line_no, $prepared_by)";
   if ($conn->query($sql_insert_machine_production_taken) === TRUE) {
   echo "ok";
   } else {
