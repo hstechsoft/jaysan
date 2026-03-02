@@ -280,7 +280,7 @@ $(document).ready(function () {
             $("#ins_note").text(details.color_choice || "" + " " + details.any_other_spec || "" + " " + details.any_other_spec || "" + " " + details.color_choice_des || "");
 
 
-            const qrData = details.qr_no;
+            const qrData = details.production_id;
 
             // Clear old QR code
             document.getElementById("qrcode").innerHTML = "";
@@ -319,7 +319,7 @@ function get_assigned_order() {
 
             if (response.trim() != 'error') {
                 $("#scanned_data_tbody").empty();
-                if (response.trim() != '0 results') {
+                if (response.trim() != '0 result') {
 
 
                     var obj = JSON.parse(response);
@@ -380,7 +380,7 @@ function get_assign_order() {
 
 
             if (response.trim() != 'error') {
-                if (response.trim() != '0 results') {
+                if (response.trim() != '0 result') {
 
                     var obj = JSON.parse(response);
                     $("#sale_order").empty();
@@ -513,12 +513,12 @@ function get_assigned_order_ass_id(ass_id) {
                     obj.forEach(function (items) {
 
                         $("#qrcode").innerHTML = "";
-                        $("#ass_id").html("QR Code: <b class='text-primary'>" + items.qr_no + "</b>");
+                        $("#ass_id").html("QR Code: <b class='text-primary'>" + items.production_id + "</b>");
                         // $("#chase_entry_btn").val(qrData)
 
                         // Generate new QR code
                         new QRCode(document.getElementById("qrcode"), {
-                            text: items.qr_no,
+                            text: items.production_id,
                             width: 150,
                             height: 150,
                         });
