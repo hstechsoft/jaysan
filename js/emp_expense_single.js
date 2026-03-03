@@ -458,7 +458,7 @@ function get_expense_summary_single() {
 
 function get_expenses_single(exp_date) {
 
-  console.log(exp_date);
+  console.log(exp_date, current_user_id);
 
 
   $.ajax({
@@ -523,6 +523,7 @@ function get_expenses_single(exp_date) {
 }
 
 function insert_emp_expense(date, category, description, amount) {
+console.log(date, category, description, amount, current_user_id, work_id);
 
   let exp_date = date;
 
@@ -688,7 +689,7 @@ function get_expense_approve_sts(data) {
 
 
       if (response.trim() != "error") {
-        $("#exp_table").find("ul").empty();
+        $("#exp_table").empty();
         $("#exp_head").text("Expenditure Table - " + data);
 
         if (response.trim() != "0 result") {

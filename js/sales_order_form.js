@@ -4169,8 +4169,24 @@ function get_sales_order_approval(approve_sts) {
                         </ul>
                         `;
 
+
+            let proText = obj.pro;
+
+            let match = proText.match(/\d{4}-\d{2}-\d{2}/);
+            let ddu = 'd-none';
+
+            if (match) {
+              let productionDate = new Date(match[0]);
+              let today = new Date();
+              today.setHours(0, 0, 0, 0);
+                //  "2026-03-05" <= "2026-03-03"
+              if (productionDate <= today) {
+                ddu = "d-block";
+              }
+            }
+
             $("#payment_add_btn_m").data("cus_id", obj.customer_id);
-            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "'  data-cus_id='" + obj.customer_id + "'  class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
+            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0 " + ddu + "'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "'  data-cus_id='" + obj.customer_id + "'  class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
 
             $("#mobile_approved_order_card").append(`
               <div class="card mb-2 shadow-sm border-0 rounded-3" data-oid="${obj.oid}">

@@ -258,7 +258,8 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-$('#credit_note_report').append("<tr> <td>"+count+"</td> <td>"+obj.cus_name+"</td> <td>"+obj.cus_phone+"</td> <td>"+obj.invoice_no+"</td> <td>"+obj.cn_amount+"</td> <td contenteditable=\"true\">"+obj.credit_note_no+"</td> <td>"+obj.credit_note_date+"</td> <td>"+obj.cn_sts+"</td> <td>"+obj.emp_name+"</td> <td class='d-flex  gap-2'> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-success btn-sm small accept' id=''>accept</button></td></tr>")
+$('#credit_note_report').append("<tr> <td>"+count+"</td> <td>"+obj.cus_name+"</td> <td>"+obj.cus_phone+"</td> <td>"+obj.invoice_no+"</td> <td>"+obj.cn_amount+"</td> <td contenteditable=\"true\">"+obj.credit_note_no+"</td> <td>"+obj.credit_note_date+"</td> <td>"+obj.cn_sts+"</td> <td>"+obj.emp_name+"</td> </tr>")
+  /*<td class='d-flex  gap-2'> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-success btn-sm small accept' id=''>accept</button></td> */
   });
 
  

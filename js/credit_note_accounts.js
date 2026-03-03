@@ -4,7 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
-var sts = "all"
+var sts = ""
 var cn_emp = "all"
 $(document).ready(function () {
 
