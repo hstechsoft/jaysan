@@ -22,6 +22,7 @@ if ($result->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result)) {
         $rows[] = $r;
+       
     }
     print json_encode($rows);
 } else {

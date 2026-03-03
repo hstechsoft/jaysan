@@ -74,7 +74,7 @@ if($is_sub_ass)
                 boc.part_id AS output_part,
                 bi.bom_in_id as bom_in_id,  
                 bi.part_id AS input_part,
-                bi.qty,
+                bi.qty * h.qty AS qty,
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
