@@ -243,7 +243,7 @@ sub_ass_qty = VALUES(sub_ass_qty)");
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
 
-
+$response['bom_qty_check'] = "Input part has insufficient quantity";
                   $response['result'][] = [
    
    'parent_bom_id' => $row['bom_id'],
@@ -493,7 +493,7 @@ sub_ass_qty = VALUES(sub_ass_qty)");
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-         
+         $response['bom_qty_check'] = "Input part has insufficient quantity";
                  
                 $response['result'][] = [
    
