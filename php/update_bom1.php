@@ -71,7 +71,8 @@ WHERE bom_id = $bom_id;";
           echo "Error: " . $sql_update_sub_qty . "<br>" . $conn->error;
         }
 
-        $response['results'] = [];
+        $response['result'] = [];
+       
 
 // do recursice cte update /insert
 $response['parent_bom_id'] = $bom_id;
@@ -214,24 +215,31 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
 
 
-    $sql_check_excess_qty = "select bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, bom_input.part_id,parts_tbl.part_name, bom_input.sub_ass_qty, bom_input.qty ,bom_input.sub_ass_qty-bom_input.qty as excess_qty from bom_input 
+    $sql_check_excess_qty = "select  bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, json_arrayagg(json_object(
+               'part_id', bom_input.part_id,
+        'part_name', parts_tbl.part_name,
+        'sub_ass_qty', bom_input.sub_ass_qty,
+        'qty', bom_input.qty,
+        'excess_qty', bom_input.sub_ass_qty - bom_input.qty
+    )) as excess_qty_json
+    from bom_input 
     inner join parts_tbl on bom_input.part_id = parts_tbl.part_id 
     inner join bom_output on bom_input.bom_id = bom_output.bom_id
      inner join parts_tbl outpart on bom_output.part_id = outpart.part_id 
-    where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $bom_id";
+    where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $bom_id  group by bom_output.bom_id";
    
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-  $response['parent_bom_id'] = $row['bom_id'];
-  $response['parent_bom_part'] = $row['outpart_name'];
-  $response['parent_bom_partid'] = $row['outpart_id'];
-                  $response['results'][] = [
+
+
+                  $response['result'][] = [
    
-  
-    'child_excess_part' => $row['part_name'],
-    'child_excess_part_id' => $row['part_id'],
-    'child_excess_qty' => $row['excess_qty']
+   'parent_bom_id' => $row['bom_id'],
+    'parent_bom_part' => $row['outpart_name'],
+    'parent_bom_partid' => $row['outpart_id'],
+    'excess_qty_json' => $row['excess_qty_json'],
+   
 ];
             // echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")".
                  
@@ -457,26 +465,34 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
 
 
-    $sql_check_excess_qty = "select bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, bom_input.part_id,parts_tbl.part_name, bom_input.sub_ass_qty, bom_input.qty ,bom_input.sub_ass_qty-bom_input.qty as excess_qty from bom_input 
+    $sql_check_excess_qty = "select  bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, json_arrayagg(json_object(
+               'part_id', bom_input.part_id,
+        'part_name', parts_tbl.part_name,
+        'sub_ass_qty', bom_input.sub_ass_qty,
+        'qty', bom_input.qty,
+        'excess_qty', bom_input.sub_ass_qty - bom_input.qty
+    )) as excess_qty_json
+    from bom_input 
     inner join parts_tbl on bom_input.part_id = parts_tbl.part_id 
     inner join bom_output on bom_input.bom_id = bom_output.bom_id
      inner join parts_tbl outpart on bom_output.part_id = outpart.part_id 
-    where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $main_bom_id";
+    where bom_input.sub_ass_qty > bom_input.qty and bom_input.bom_id = $main_bom_id  group by bom_output.bom_id";
    
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-            $response['parent_bom_id'] = $row['bom_id'];
-  $response['parent_bom_part'] = $row['outpart_name'];
-  $response['parent_bom_partid'] = $row['outpart_id'];
+         
                  
-        $response['results'][] = [
+                $response['result'][] = [
    
-      'child_excess_part' => $row['part_name'],
-    'child_excess_part_id' => $row['part_id'],
-    'child_excess_qty' => $row['excess_qty']
-];
-          }
+   'parent_bom_id' => $row['bom_id'],
+    'parent_bom_part' => $row['outpart_name'],
+    'parent_bom_partid' => $row['outpart_id'],
+    'excess_qty_json' => $row['excess_qty_json'],
+  
+];       
+
+}
         } else {
          $response['bom_qty_check'] = "No excess quantity found";
         }
