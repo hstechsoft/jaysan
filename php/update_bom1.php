@@ -7,7 +7,7 @@ $input_part = $_POST['input_part'];
 $input_qty = $_POST['input_qty']; 
 $bom_id = $_POST['bom_id']; 
 
-// echo "Received - BOM ID: $bom_id, Input Part: $input_part, Input Qty: $input_qty<br>";
+ echo "Received - BOM ID: $bom_id, Input Part: $input_part, Input Qty: $input_qty<br>";
 $parent_main_bom = 0;
 $bom_list = "";
 
@@ -20,7 +20,7 @@ $bom_list = "";
           
            if ($conn->query($sql_input) === TRUE) {
             $response['general_bom_update'] = "BOM  updated successfully.";
-            // echo "BOM input updated successfully.<br>\n";
+             echo "BOM input updated successfully.<br>\n";
            } 
            else {
              echo "Error: " . $sql_input . "<br>" . $conn->error;
@@ -54,7 +54,7 @@ if($is_output_not_sub_ass)
       }
       else{
         $response['bom_sub_ass_check'] = "Input part is sub-assembly";
-        // echo "Input part is sub-assembly.<br>\n";
+         echo "Input part is sub-assembly.<br>\n";
         // input part is sub ass so modify main bom sub qty
         // Recalculate — not increment
 
@@ -62,11 +62,13 @@ if($is_output_not_sub_ass)
 SET sub_ass_qty = 0 
 WHERE bom_id = $bom_id;";
         if ($conn->query($sql_update_sub_qty) === TRUE) {
-        //   echo "BOM sub-assembly quantity 0 updated successfully.<br>\n";
+           echo "BOM sub-assembly quantity 0 updated successfully.<br>\n";
         } 
         else {
           echo "Error: " . $sql_update_sub_qty . "<br>" . $conn->error;
         }
+
+        $response['results'] = [];
 
 // do recursice cte update /insert
 $response['parent_bom_id'] = $bom_id;
@@ -214,10 +216,13 @@ sub_ass_qty = VALUES(sub_ass_qty)");
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-            $response['bom_qty_check'] = "Excess quantity found for Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")";
-              $response['parent_excess_part'] = $row['part_name'];
-            $response['parent_excess_part_id'] = $row['part_id'];
-            $response['parent_excess_qty'] = $row['excess_qty'];
+
+                  $response['results'][] = [
+    'bom_qty_check' => "Excess quantity found",
+    'parent_excess_part' => $row['part_name'],
+    'parent_excess_part_id' => $row['part_id'],
+    'parent_excess_qty' => $row['excess_qty']
+];
             // echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")".
                  
             //      "Excess Qty: " . $row['excess_qty'] . "<br><br>";
@@ -280,6 +285,8 @@ while ($row = $result->fetch_assoc()) {
 }
 $bom_list = implode(',', $boms);
         } 
+
+        echo $bom_list ;
 
         // set all sub ass 0 in $bom_list 
 
