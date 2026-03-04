@@ -39,6 +39,8 @@ if($is_output_not_sub_ass)
     $is_input_not_sub_ass = ($result_input_sub_ass && $result_input_sub_ass->num_rows > 0) ? true : false;
     if($is_input_not_sub_ass)
       {
+
+    echo "input part not sub ass so check any insufficent qty<br>\n";
         // input part not sub ass so check any insufficent qty
         $sql_check_insufficient_qty = "SELECT 1 FROM bom_input WHERE bom_id = $bom_id AND part_id = $input_part AND sub_ass_qty > qty";
         $result_insufficient_qty = $conn->query($sql_check_insufficient_qty);
