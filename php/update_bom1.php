@@ -217,6 +217,7 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
     $sql_check_excess_qty = "select  bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, json_arrayagg(json_object(
                'part_id', bom_input.part_id,
+               'child_bom_in_id', bom_input.bom_in_id,
         'part_name', parts_tbl.part_name,
         'sub_ass_qty', bom_input.sub_ass_qty,
         'qty', bom_input.qty,
@@ -467,6 +468,7 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
     $sql_check_excess_qty = "select  bom_output.bom_id,outpart.part_name as outpart_name,outpart.part_id as outpart_id, json_arrayagg(json_object(
                'part_id', bom_input.part_id,
+                 'child_bom_in_id', bom_input.bom_in_id,
         'part_name', parts_tbl.part_name,
         'sub_ass_qty', bom_input.sub_ass_qty,
         'qty', bom_input.qty,
