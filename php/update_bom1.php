@@ -283,7 +283,7 @@ WHERE sub_ass = 0";
 while ($row = $result->fetch_assoc()) {
     $boms[] = $row['bom_id'];
 }
-$bom_list = implode(',', $boms);
+// $bom_list = implode(',', $boms);
         } 
         
 
