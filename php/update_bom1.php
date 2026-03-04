@@ -212,8 +212,9 @@ SELECT
     0,
     'MANUAL',
     SUM(child_qty)
-FROM tmp_bom_result
-WHERE parent_bom_in_id = 0
+FROM tmp_bom_result 
+inner join parts_tbl on tmp_bom_result.child_input_part = parts_tbl.part_id
+WHERE parent_bom_in_id = 0 and parts_tbl.sub_ass = '0'
 GROUP BY child_input_part
 ON DUPLICATE KEY UPDATE 
 sub_ass_qty = VALUES(sub_ass_qty)");
@@ -463,8 +464,8 @@ SELECT
     0,
     'MANUAL',
     SUM(child_qty)
-FROM tmp_bom_result
-WHERE parent_bom_in_id = 0
+FROM tmp_bom_result inner join parts_tbl on tmp_bom_result.child_input_part = parts_tbl.part_id
+WHERE parent_bom_in_id = 0 and parts_tbl.sub_ass = '0'
 GROUP BY child_input_part
 ON DUPLICATE KEY UPDATE 
 sub_ass_qty = VALUES(sub_ass_qty)");
