@@ -21,6 +21,7 @@ return $data;
 
         /* ========= Anchor ========= */
         SELECT
+        bo.bom_id,
         pt_hi.part_name as inpart_name,
             bo.part_id AS output_part,
             part_out.part_name AS output_part_name,
@@ -41,6 +42,7 @@ return $data;
 
         /* ========= Recursive ========= */
         SELECT
+        boc.bom_id,
          pt.part_name as inpart_name,
             boc.part_id AS output_part,
             part_out.part_name AS output_part_name,
@@ -79,6 +81,7 @@ return $data;
    )) AS bom_data,
    output_part,
    output_part_name,
+   bom_id,
    level
    FROM bom_hi
    GROUP BY level, output_part;";
