@@ -242,6 +242,7 @@ sub_ass_qty = VALUES(sub_ass_qty)");
     //  2.store it in array
     //  3.reset sub aty to 0 to all  main bom 
     //  4.recompute one by one
+       $boms = [];
 $response['bom_sub_ass_check'] = "Input part is sub-assembly";
    
 $sql_get_all_list = "WITH RECURSIVE parent_chain AS (
@@ -273,7 +274,7 @@ $sql_get_all_list = "WITH RECURSIVE parent_chain AS (
     -- 🛑 stop climbing once MAIN BOM is reached
     WHERE pc.sub_ass = 1
 )
-   $boms = [];
+
 SELECT DISTINCT bom_id
 FROM parent_chain
 WHERE sub_ass = 0";
