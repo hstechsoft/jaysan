@@ -26,7 +26,7 @@ $bom_list = "";
              echo "Error: " . $sql_input . "<br>" . $conn->error;
            }
 
-           // check outpart is sub assembly or not
+       echo "de";    // check outpart is sub assembly or not
 $sql_check_sub_ass = "SELECT 1 from parts_tbl  inner join bom_output on parts_tbl.part_id = bom_output.part_id where bom_id = $bom_id and parts_tbl.sub_ass = 0";
 $result_sub_ass = $conn->query($sql_check_sub_ass);
 $is_output_not_sub_ass = ($result_sub_ass && $result_sub_ass->num_rows > 0) ? true : false;
