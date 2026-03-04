@@ -153,6 +153,11 @@ $(document).ready(function () {
     });
 
     $('#part_no').on('input', function () {
+
+        $("#correction_tbody").empty();
+        $("#correction_table").addClass("d-none");
+        $("#update_btn").prop("disabled", false);
+
         //check the value not empty
         if ($('#part_no').val() != "") {
             $('#part_no').autocomplete({
@@ -205,6 +210,11 @@ $(document).ready(function () {
     });
 
     $('#part_name_out').on('input', function () {
+
+        $("#correction_tbody").empty();
+        $("#correction_table").addClass("d-none");
+        $("#update_btn").prop("disabled", false);
+
         //check the value not empty
         if ($('#part_name_out').val() != "") {
             $('#part_name_out').autocomplete({
@@ -484,12 +494,52 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     console.log(response);
-                    if (response.trim() == "ok") {
+                    var res = JSON.parse(response);
+                    if (res.bom_qty_check == "No excess quantity found") {
 
                         get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
                         console.log($('#bom_list_select').val());
 
                         shw_toast("Updated", "Successfully Updated")
+                    }
+                    else if (res.result) {
+
+                        $("#correction_tbody").empty();
+                        $("#correction_table").removeClass("d-none");
+                        $("#update_btn").prop("disabled", true);
+                        var result = res.result;
+
+                        result.forEach(function (obj, index) {
+
+                            var details = JSON.parse(obj.excess_qty_json);
+                            var length = details.length;
+
+                            details.forEach(function (item, i) {
+
+                                $("#correction_tbody").append(`
+                                        <tr>
+                                            ${i == 0 ? `<td rowspan="${length}" class='text-center align-middle' data-parent_bom_id="${obj.parent_bom_id}" data-parent_bom_partid="${obj.parent_bom_partid}">${index + 1}</td>
+                                            <td  class='text-center align-middle' rowspan="${length}">${obj.parent_bom_part}</td>` : ""}
+
+                                            <td class='text-center'>${item.part_name}</td>
+                                            <td class='text-center' id="bg_main">${item.qty}</td>
+                                            <td class='text-center' id='bg_sub'>${item.sub_ass_qty}</td>
+                                            <td class='text-center' id='bg_need'>${item.excess_qty}</td>
+
+                                            ${i == 0 ? `<td  class='text-center align-middle' rowspan="${length}">
+                                                <button class=" btn btn-outline-primary allocate_btn" data-qty="${item.excess_qty}" val="${item.child_bom_in_id}">
+                                                    Allocate
+                                                </button>
+                                            </td>` : ""}
+                                        </tr>
+                                    `)
+
+                            });
+
+                        });
+                    }
+                    else {
+                        console.log(res.result)
                     }
                 }
             });
@@ -526,7 +576,7 @@ $(document).ready(function () {
 
                 console.log($('#part_no_out').data('selected-part_id'), $("#bom_list_select").val(), $("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
 
-                console.log($("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
+                console.log(input_part, qty, $('#update_part_btn').val());
 
 
                 $.ajax({
@@ -541,13 +591,61 @@ $(document).ready(function () {
                     },
                     success: function (response) {
                         console.log(response);
-                        
-                        if (response[1].trim() == "No excess quantity found") {
+                        var res = JSON.parse(response);
+                        if (res.bom_qty_check == "No excess quantity found") {
 
                             get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
                             console.log($('#bom_list_select').val());
 
                             shw_toast("Updated", "Successfully Updated")
+                        }
+
+                        if (res.bom_qty_check == "Input part has insufficient quantity") {
+
+                            get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+                            console.log($('#bom_list_select').val());
+
+                            shw_toast("Updated", "Successfully Updated")
+                        }
+                        else if (res.result) {
+
+                            $("#correction_tbody").empty();
+                            $("#correction_table").removeClass("d-none");
+                            $("#update_btn").prop("disabled", true);
+
+                            var result = res.result;
+
+                            result.forEach(function (obj, index) {
+
+                                var details = JSON.parse(obj.excess_qty_json);
+                                var length = details.length;
+
+                                details.forEach(function (item, i) {
+
+                                    $("#correction_tbody").append(`
+                                        <tr>
+                                            ${i == 0 ? `<td rowspan="${length}" class='text-center align-middle' data-parent_bom_id="${obj.parent_bom_id}" data-parent_bom_partid="${obj.parent_bom_partid}">${index + 1}</td>
+                                            <td  class='text-center align-middle' rowspan="${length}">${obj.parent_bom_part}</td>` : ""}
+
+                                            <td class='text-center'>${item.part_name}</td>
+                                            <td class='text-center' id="bg_main">${item.qty}</td>
+                                            <td class='text-center' id='bg_sub'>${item.sub_ass_qty}</td>
+                                            <td class='text-center' id='bg_need'>${item.excess_qty}</td>
+
+                                            ${i == 0 ? `<td class='text-center align-middle' rowspan="${length}">
+                                                <button class="btn btn-outline-primary allocate_btn" data-qty="${item.excess_qty}" val="${item.child_bom_in_id}">
+                                                    Allocate
+                                                </button>
+                                            </td>` : ""}
+                                        </tr>
+                                    `)
+
+                                });
+
+                            });
+                        }
+                        else {
+                            console.log(res.bom_qty_check)
                         }
                     }
                 });
@@ -1018,33 +1116,108 @@ function get_bom(part_id, component_cat) {
 
 
                     var obj = JSON.parse(response);
-                    var count = 0
+                    var count = 0;
 
-                    obj.forEach(function (obj) {
+                    // Build BOM map
+                    var bomMap = {};
+                    obj.forEach(function (o) {
+                        bomMap[o.output_part] = JSON.parse(o.bom_data);
+                    });
 
-                        var bom_data = JSON.parse(obj.bom_data);
-                        if (obj.level == 0) {
-                            alert(obj.bom_id)
-                            $('#update_part_btn').val(obj.bom_id);
+                    function getSubParts(part_id, parentPath, level = 1) {
 
+                        if (!bomMap[part_id]) return "";
+
+                        var html = "";
+
+                        bomMap[part_id].forEach(function (p) {
+
+                            var path = parentPath + " > " + p.inpart_name;
+
+                            if (p.sub_ass == 1) {
+
+                                html += `
+                                <div class="sub-card">
+                                    <div class="sub-card-title">
+                                        ${path}
+                                        <span class="badge bg-secondary ms-1">sub</span>
+                                        <span class="qty">(Qty ${p.corrected_qty})</span>
+                                    </div>
+
+                                    <div class="sub-card-body">
+                                        ${getSubParts(p.input_part, path, level + 1)}
+                                    </div>
+                                </div>
+                                `;
+
+                            }
+                            else {
+
+                                html += `
+                                    <div class="sub-part">                                              
+                                        ${p.inpart_name}
+                                        <span class="qty">(Qty ${p.corrected_qty})</span>
+                                    </div>
+                                    `;                      
+
+                            }
+
+                        });
+
+                        return html;
+                    }
+
+                    obj.forEach(function (o) {
+
+                        var bom_data = JSON.parse(o.bom_data);
+
+                        if (o.level == 0) {
+
+                            $('#update_part_btn').val(o.bom_id);
 
                             bom_data.forEach(function (item) {
-                                count = count + 1;
-                                var sub_ass = ""
+
+                                count++;
+
+                                var sub_ass = "";
+                                var subHTML = "";
+
                                 if (item.sub_ass == 1) {
-                                    sub_ass = "<span class='text-bg-secondary rounded-pill px-2 py-1 ms-2 small'>sub</span>"
-                                }
-                                else {
-                                    sub_ass = ""
+
+                                    sub_ass = "<span class='badge bg-secondary ms-2'>sub</span>";
+
+                                    subHTML = getSubParts(item.input_part, item.inpart_name);
+
                                 }
 
-                                $("#update_btn").val(item.bom_id)
+                                $("#update_btn").val(item.bom_id);
 
-                                $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id='" + item.part_id + "'>" + item.inpart_name + sub_ass + (Number(item.corrected_qty) < 0 ? "<b class=' ms-3 badge blink bg-danger'>Need " + Math.abs(item.corrected_qty) + " Qty</b>" : "") + "</td> <td contenteditable='true' class='qty-editable'>" + item.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
-                            })
+                                $('#bom_table').append(`
+                                    <tr class='small'>
+                                        <td>${count}</td>
+
+                                        <td data-part-id="${item.input_part}">
+                                            <div class="bom-line fw-semibold">
+                                                ${item.inpart_name} ${sub_ass}
+                                            </div>
+                                            ${subHTML} ${Number(item.corrected_qty) < 0 ? `<span class='badge bg-danger ms-2'>Need ${Math.abs(item.corrected_qty)}</span>` : ""}
+                                        </td>
+
+                                        <td contenteditable='true' class='qty-editable'>
+                                            ${item.corrected_qty < 0 ? 0 : item.corrected_qty}
+                                        </td>
+
+                                        <td>
+                                            <button class='btn btn-outline-danger border-0'>
+                                                <i class='fa fa-trash'></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `);
+
+                            });
 
                         }
-
 
                     });
 

@@ -160,7 +160,8 @@ $(document).ready(function () {
                 var mcd = details.commitment_date.trim().split(" ");
                 $("#sale_order_no").text(details.order_no || "");
                 $("#customer_name").text(details.cus_name || "")
-                $("#model").text(details.model || "");
+                $("#model").text(details.model || ""); 
+                $("#product").text(details.product || "");
                 $("#type").text(details.type || "");
                 $("#sub_type").text(details.sub_type || "");
                 $("#mcd").text(mcd[0] || "");
@@ -217,7 +218,7 @@ $(document).ready(function () {
         print();
         setTimeout(() => {
             window.location.reload();
-        }, 300)
+        }, 800)
         // if ($(this).val()) {
         //     update_assign_product_fd($(this).val())
         // }
@@ -265,6 +266,7 @@ $(document).ready(function () {
             var mcd = details.commitment_date.trim().split(" ");
             $("#sale_order_no").text(details.order_no || "");
             $("#customer_name").text(details.cus_name || "")
+            $("#product").text(details.product || "");
             $("#model").text(details.model || "");
             $("#type").text(details.type || "");
             $("#sub_type").text(details.sub_type || "");
@@ -301,7 +303,7 @@ $(document).ready(function () {
                 print();
                 setTimeout(() => {
                     window.location.reload();
-                }, 300);
+                }, 800);
             }, 500);
 
         }

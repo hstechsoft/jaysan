@@ -301,7 +301,7 @@ function get_credit_note_sts() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            if (obj.cn_sts != "" && obj.cn_sts != "verified") {
+            if (obj.cn_sts != "" && obj.cn_sts != "verified" &&  obj.cn_sts != "'new_entry'") {
 
               $("#sel_cn_sts").append(` <option value='${obj.cn_sts}' >${obj.cn_sts}</option>`);
             }
