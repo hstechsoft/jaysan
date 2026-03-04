@@ -30,9 +30,10 @@ $bom_list = "";
 $sql_check_sub_ass = "SELECT 1 from parts_tbl  inner join bom_output on parts_tbl.part_id = bom_output.part_id where bom_id = $bom_id and parts_tbl.sub_ass = 0";
 $result_sub_ass = $conn->query($sql_check_sub_ass);
 $is_output_not_sub_ass = ($result_sub_ass && $result_sub_ass->num_rows > 0) ? true : false;
-echo $is_output_not_sub_ass;
+
 if($is_output_not_sub_ass)
   {
+    echo "output part not sub ass";
     // output part not sub ass  so check input part
 
     $sql_check_input_sub_ass = "SELECT 1 FROM parts_tbl WHERE part_id = $input_part AND sub_ass = 0";
@@ -40,6 +41,7 @@ if($is_output_not_sub_ass)
     $is_input_not_sub_ass = ($result_input_sub_ass && $result_input_sub_ass->num_rows > 0) ? true : false;
     if($is_input_not_sub_ass)
       {
+        echo "input part not sub ass";
         // input part not sub ass so check any insufficent qty
         $sql_check_insufficient_qty = "SELECT 1 FROM bom_input WHERE bom_id = $bom_id AND part_id = $input_part AND sub_ass_qty > qty";
         $result_insufficient_qty = $conn->query($sql_check_insufficient_qty);
@@ -47,7 +49,7 @@ if($is_output_not_sub_ass)
         if($has_insufficient_qty)
         {
             $response['bom_qty_check'] = "Input part has insufficient quantity";
-        //   echo "Input part has insufficient quantity.<br>\n";
+           echo "Input part has insufficient quantity.<br>\n";
       
           $conn->close();
           exit();
