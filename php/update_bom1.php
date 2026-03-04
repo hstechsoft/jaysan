@@ -218,7 +218,6 @@ sub_ass_qty = VALUES(sub_ass_qty)");
           while ($row = $result->fetch_assoc()) {
 
                   $response['results'][] = [
-   
     'bom_qty_check' => "Excess quantity found",
     'parent_excess_part' => $row['part_name'],
     'parent_excess_part_id' => $row['part_id'],
