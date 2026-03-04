@@ -273,13 +273,13 @@ $sql_get_all_list = "WITH RECURSIVE parent_chain AS (
     -- 🛑 stop climbing once MAIN BOM is reached
     WHERE pc.sub_ass = 1
 )
-
+   $boms = [];
 SELECT DISTINCT bom_id
 FROM parent_chain
 WHERE sub_ass = 0";
    $result = $conn->query($sql_get_all_list);
   if ($result && $result->num_rows > 0) {
-        $boms = [];
+     
 while ($row = $result->fetch_assoc()) {
     $boms[] = $row['bom_id'];
 }
