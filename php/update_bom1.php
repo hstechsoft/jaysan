@@ -286,6 +286,8 @@ while ($row = $result->fetch_assoc()) {
 $bom_list = implode(',', $boms);
         } 
 
+        echo $bom_list ;
+
         // set all sub ass 0 in $bom_list 
 
         $sql_update_bom_empty = "UPDATE bom_input  SET sub_ass_qty = 0 WHERE bom_id IN ($bom_list)";
