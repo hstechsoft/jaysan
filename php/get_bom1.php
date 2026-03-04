@@ -75,8 +75,7 @@ return $data;
        'qty', qty,
        'sub_ass_qty', sub_ass_qty,
        'sub_ass', sub_ass,
-       'level', level,
-       'component_cat', component_cat,
+     'component_cat', component_cat,
        
        'corrected_qty', qty - sub_ass_qty
    )) AS bom_data,
