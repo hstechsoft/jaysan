@@ -57,7 +57,7 @@ if($is_output_not_sub_ass)
 
         else
             {
-               $response['bom_qty_check'] = "Input part has insufficient quantity";
+               $response['bom_qty_check'] = "No excess quantity found";
          
       
           $conn->close();
