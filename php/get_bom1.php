@@ -41,7 +41,7 @@ return $data;
 
         /* ========= Recursive ========= */
         SELECT
-         pt_hi.part_name as inpart_name,
+         pt.part_name as inpart_name,
             boc.part_id AS output_part,
             part_out.part_name AS output_part_name,
             bi.bom_in_id as bom_in_id,  
