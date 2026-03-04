@@ -4,7 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
-var sts = ""
+var sts = "new_entry"
 var cn_emp = "all"
 $(document).ready(function () {
 
@@ -131,8 +131,8 @@ $(document).ready(function () {
     });
 
     if (rows.length <= 1) {
-        salert("Warning", "Check more than one Credit Note!", "warning");
-        return;
+      salert("Warning", "Check more than one Credit Note!", "warning");
+      return;
     }
 
 
@@ -142,7 +142,7 @@ $(document).ready(function () {
 
     $.each(rows, function (index, row) {
       total_cn_value += parseFloat(row.cn_amount);
-      $("#multiCNModal_tbody").append(`<tr><td>${index+1}</td><td>${row.name}</td><td>${row.invoice_no}</td><td>${row.emp}</td><td contenteditable = 'true'>${row.cn_note}</td><td contenteditable='true'>${row.cn_date}</td><td contenteditable='true'>${row.cn_amount}</td></tr>`);
+      $("#multiCNModal_tbody").append(`<tr><td>${index + 1}</td><td>${row.name}</td><td>${row.invoice_no}</td><td>${row.emp}</td><td contenteditable = 'true'>${row.cn_note}</td><td contenteditable='true'>${row.cn_date}</td><td contenteditable='true'>${row.cn_amount}</td></tr>`);
     });
 
     $("#multiCNModal_tbody").append(`<tr><td colspan='6' class='text-end text-primary'>Total CN Value</td><td td>${total_cn_value}</td></tr>`)
@@ -316,7 +316,7 @@ function get_credit_note_report() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small verify' id=''>Verify</button><input class= 'form-check-input check_box' type='checkbox' value='" + obj.cus_id + "' id='check_box'></td></tr>")
+            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small d-none verify' id=''>Verify</button><input class= 'form-check-input check_box d-none' type='checkbox' value='" + obj.cus_id + "' id='check_box'></td></tr>")
           });
 
 
@@ -366,9 +366,10 @@ function get_credit_note_sts() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $("#sel_cn_sts").append(" <option value='" + obj.cn_sts + "'>" + obj.cn_sts + "</option>");
+            if (obj.cn_sts != "" && obj.cn_sts != "verified") {
 
-
+              $("#sel_cn_sts").append(` <option value='${obj.cn_sts}' >${obj.cn_sts}</option>`);
+            }
 
           });
 

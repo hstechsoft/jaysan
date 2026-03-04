@@ -230,9 +230,10 @@ function get_credit_note_sts() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $("#sel_cn_sts").append(" <option value='" + obj.cn_sts + "'>" + obj.cn_sts + "</option>");
+            if (obj.cn_sts != "" && obj.cn_sts != "verified") {
 
-
+              $("#sel_cn_sts").append(` <option value='${obj.cn_sts}' >${obj.cn_sts}</option>`);
+            }
 
           });
 

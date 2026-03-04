@@ -4179,9 +4179,10 @@ function get_sales_order_approval(approve_sts) {
               let productionDate = new Date(match[0]);
               let today = new Date();
               today.setHours(0, 0, 0, 0);
+              productionDate.setHours(0, 0, 0, 0);
                 //  "2026-03-05" <= "2026-03-03"
               if (productionDate <= today) {
-                ddu = "d-block";
+                ddu = "";
               }
             }
 

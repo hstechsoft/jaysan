@@ -1197,8 +1197,8 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
                         </ul>
                         `;
 
-
-
+            let ddd = 'd-none';
+            let block_count = 0;
             product.forEach(function (item, index) {
 
               accId += `-${index}`;
@@ -1260,8 +1260,20 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
                   var godown_details = '';
 
-                  ass.assign_details.forEach(function (g) {
 
+                  ass.assign_details.forEach(function (g) {
+                    let proText = new Date(g.production_date);
+
+
+                    let today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    proText.setHours(0, 0, 0, 0);
+                    //  "2026-03-05" <= "2026-03-03"
+
+                    if (proText <= today) {
+                      ddd = "";
+                      block_count += 1;
+                    }
                     if (ass.assign_type == "Production") {
 
                       godown_details = `<div class="card-body py-1 small text-center text-dark"><p>${g.production_date} - <b>${g.production_date_count}</i></p></div>`;
@@ -1332,8 +1344,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
 
 
-
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd )+ " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 

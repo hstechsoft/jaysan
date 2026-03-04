@@ -453,7 +453,7 @@ $(document).ready(function () {
     $('#update_part_btn').on('click', function () {
 
 
-        if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val() && $("#part_name").data('selected-part_id') && $('#qty').val()) {
+        if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val() && $("#part_name").data('selected-part_id') && $('#qty').val() && $('#update_part_btn').val()) {
 
 
             var input_part = 0;
@@ -468,6 +468,8 @@ $(document).ready(function () {
             // });
 
             console.log($('#part_no_out').data('selected-part_id'), $("#bom_list_select").val(), $("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
+
+            console.log($("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
 
 
             $.ajax({
@@ -505,6 +507,56 @@ $(document).ready(function () {
         if (isNaN(newQty) || newQty <= 0) {
             shw_toast("Warning", "Please enter a valid quantity.");
             $(this).text("1"); // Reset to default value
+        }
+        else {
+
+            let input_part = $(this).closest("tr").find("td").eq(1).data("part-id");
+            let qty = $(this).closest("tr").find("td").eq(2).text();
+            if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val() && input_part && qty && $('#update_part_btn').val()) {
+
+
+                // $('#bom_table tr').each(function (index) {
+
+
+                //   inputPartsData.push({
+                //     part_id: $(this).find("td").eq(1).data('part-id'),
+                //     part_qty: $(this).find("td").eq(2).text().trim(),
+                //   });
+                // });
+
+                console.log($('#part_no_out').data('selected-part_id'), $("#bom_list_select").val(), $("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
+
+                console.log($("#part_name").data('selected-part_id'), $('#qty').val(), $('#update_part_btn').val());
+
+
+                $.ajax({
+
+                    url: 'php/update_bom1.php',
+                    method: 'POST',
+                    data: {
+
+                        input_part: input_part,
+                        input_qty: qty,
+                        bom_id: $('#update_part_btn').val(),
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        
+                        if (response[1].trim() == "No excess quantity found") {
+
+                            get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+                            console.log($('#bom_list_select').val());
+
+                            shw_toast("Updated", "Successfully Updated")
+                        }
+                    }
+                });
+
+            }
+
+            else {
+                shw_toast("Insert", "Kindly select output part from autocomplete")
+            }
         }
     });
     $("#bom_recent_list").on("click", "li", function () {
@@ -707,7 +759,7 @@ $(document).ready(function () {
         }
     });
 
-    get_jaysan_model_subtype_list()
+    // get_jaysan_model_subtype_list()
 
 
 
@@ -929,6 +981,7 @@ function get_bom_recent() {
 
 
 function get_bom(part_id, component_cat) {
+    console.log(part_id, component_cat);
 
 
     $.ajax({
@@ -967,26 +1020,30 @@ function get_bom(part_id, component_cat) {
                     var obj = JSON.parse(response);
                     var count = 0
 
-
                     obj.forEach(function (obj) {
 
                         var bom_data = JSON.parse(obj.bom_data);
+                        if (obj.level == 0) {
+                            alert(obj.bom_id)
+                            $('#update_part_btn').val(obj.bom_id);
 
-                        bom_data.forEach(function (item) {
-                            count = count + 1;
-                            var sub_ass = ""
-                            if (item.sub_ass == 1) {
-                                sub_ass = "<span class='text-bg-secondary rounded-pill px-2 py-1 ms-2 small'>sub</span>"
-                            }
-                            else {
-                                sub_ass = ""
-                            }
 
-                            $("#update_btn, #update_part_btn").val(item.bom_id)
+                            bom_data.forEach(function (item) {
+                                count = count + 1;
+                                var sub_ass = ""
+                                if (item.sub_ass == 1) {
+                                    sub_ass = "<span class='text-bg-secondary rounded-pill px-2 py-1 ms-2 small'>sub</span>"
+                                }
+                                else {
+                                    sub_ass = ""
+                                }
 
-                            $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + item.part_id + ">" + item.part_name + sub_ass + "</td> <td contenteditable='true' class='qty-editable'>" + item.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
-                        })
+                                $("#update_btn").val(item.bom_id)
 
+                                $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id='" + item.part_id + "'>" + item.inpart_name + sub_ass + (Number(item.corrected_qty) < 0 ? "<b class=' ms-3 badge blink bg-danger'>Need " + Math.abs(item.corrected_qty) + " Qty</b>" : "") + "</td> <td contenteditable='true' class='qty-editable'>" + item.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
+                            })
+
+                        }
 
 
                     });
