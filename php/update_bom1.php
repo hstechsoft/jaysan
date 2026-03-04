@@ -54,6 +54,16 @@ if($is_output_not_sub_ass)
           print json_encode($response); 
           exit();
         }
+
+        else
+            {
+               $response['bom_qty_check'] = "Input part has insufficient quantity";
+         
+      
+          $conn->close();
+          print json_encode($response); 
+          exit(); 
+            }
       }
       else{
         $response['bom_sub_ass_check'] = "Input part is sub-assembly";
