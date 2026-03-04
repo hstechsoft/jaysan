@@ -68,8 +68,6 @@ WHERE bom_id = $bom_id;";
           echo "Error: " . $sql_update_sub_qty . "<br>" . $conn->error;
         }
 
-        $response['results'] = [];
-
 // do recursice cte update /insert
 $response['parent_bom_id'] = $bom_id;
  $conn->query("DROP TEMPORARY TABLE IF EXISTS tmp_bom_result");
@@ -216,13 +214,10 @@ sub_ass_qty = VALUES(sub_ass_qty)");
         $result = $conn->query($sql_check_excess_qty);
         if ($result && $result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-
-                  $response['results'][] = [
-    'bom_qty_check' => "Excess quantity found",
-    'parent_excess_part' => $row['part_name'],
-    'parent_excess_part_id' => $row['part_id'],
-    'parent_excess_qty' => $row['excess_qty']
-];
+            $response['bom_qty_check'] = "Excess quantity found for Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")";
+              $response['parent_excess_part'] = $row['part_name'];
+            $response['parent_excess_part_id'] = $row['part_id'];
+            $response['parent_excess_qty'] = $row['excess_qty'];
             // echo "Part: " . $row['part_name'] . " (ID: " . $row['part_id'] . ")".
                  
             //      "Excess Qty: " . $row['excess_qty'] . "<br><br>";
@@ -285,8 +280,6 @@ while ($row = $result->fetch_assoc()) {
 }
 $bom_list = implode(',', $boms);
         } 
-
-        echo $bom_list ;
 
         // set all sub ass 0 in $bom_list 
 
