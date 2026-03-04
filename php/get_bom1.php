@@ -21,6 +21,7 @@ return $data;
 
         /* ========= Anchor ========= */
         SELECT
+        parts_tbl.part_name as inpart_name,
             bo.part_id AS output_part,
             part_out.part_name AS output_part_name,
             bi.bom_in_id as bom_in_id,
@@ -40,6 +41,7 @@ return $data;
 
         /* ========= Recursive ========= */
         SELECT
+         parts_tbl.part_name as inpart_name,
             boc.part_id AS output_part,
             part_out.part_name AS output_part_name,
             bi.bom_in_id as bom_in_id,  
@@ -64,6 +66,7 @@ return $data;
    )
    SELECT JSON_ARRAYAGG(JSON_OBJECT(
        'output_part', output_part,
+       'inpart_name', inpart_name,
        'bom_in_id', bom_in_id,
        'input_part', input_part,
        'qty', qty,
