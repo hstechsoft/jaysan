@@ -77,10 +77,11 @@ return $data;
        'sub_ass', sub_ass,
        'level', level,
        'component_cat', component_cat,
-       'path', path,
+       
        'corrected_qty', qty - sub_ass_qty
    )) AS bom_data,
    output_part,
+   path,
    output_part_name,
    bom_id,
    level
