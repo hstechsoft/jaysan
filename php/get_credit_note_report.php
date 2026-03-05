@@ -26,7 +26,7 @@ return $data;
 }
 
 
- $sql = "with dcf_details as(SELECT date_only(get_machine_report) as report_date, employee.emp_name as invoice_by, emp_cn.emp_name as cn_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
+ $sql = "with dcf_details as(SELECT date_only(cn_create_date) as report_date, employee.emp_name as invoice_by, emp_cn.emp_name as cn_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
  inner JOIN assign_product on dcf.dcf_id = assign_product.dcf_id 
  inner join employee on dcf.invoice_by = employee.emp_id
  left join employee emp_cn on dcf.cn_created_by = emp_cn.emp_id
