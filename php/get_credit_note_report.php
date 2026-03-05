@@ -26,7 +26,11 @@ return $data;
 }
 
 
- $sql = "with dcf_details as(SELECT  assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf inner JOIN assign_product on dcf.dcf_id = assign_product.dcf_id WHERE dcf.sts = 'delivery' and $sts_query),
+ $sql = "with dcf_details as(SELECT employee.emp_name as invoice_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
+ inner JOIN assign_product on dcf.dcf_id = assign_product.dcf_id 
+ inner join employee on dcf.invoice_by = employee.emp_id
+ WHERE dcf.sts = 'delivery' and $sts_query),
+
 sop_details as(SELECT dcf_details.*,sop.billing_amount,sum(sop.price)as total_dealer_amount,sum(billing_amount)as total_billing_amount,(SELECT sales_order_form.customer_id from sales_order_form WHERE sales_order_form.oid = sop.oid) as cus_id,(SELECT sales_order_form.emp_id from sales_order_form WHERE sales_order_form.oid = sop.oid) as emp_id from dcf_details INNER join sales_order_product sop on dcf_details.opid = sop.opid GROUP by dcf_id)
 
 SELECT sop_details.*,customer.cus_name,customer.cus_phone,employee.emp_name, total_billing_amount-total_dealer_amount as cn_amount from sop_details inner join customer on sop_details.cus_id = customer.cus_id
