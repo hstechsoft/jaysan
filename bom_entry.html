@@ -70,7 +70,7 @@
       </div>
 
 
-      <div class="modal fade" id="addNewProcessModal"  tabindex="-1" aria-labelledby="addNewProcessModalLabel"
+      <div class="modal fade" id="addNewProcessModal" tabindex="-1" aria-labelledby="addNewProcessModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -97,8 +97,8 @@
       </div>
 
       <!-- Add New Part Modal -->
-      <div class="modal fade" id="addNewPartModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="addNewPartModalLabel"
-        aria-hidden="true">
+      <div class="modal fade" id="addNewPartModal" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="addNewPartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -127,7 +127,11 @@
                   </div>
                 </div>
 
-
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" value="" id="new_sub_ass">
+                  <label class="form-check-label" for="new_sub_ass">It's a sub assembly?
+                  </label>
+                </div>
 
 
                 <div class="mb-3">
@@ -217,7 +221,10 @@
         <div class="row ">
           <div class="col-8  pe-0">
             <div class="card">
-              <div class="card-header d-flex justify-content-between">Production Part <p class="ms-2 text-primary" id="alice_name_heading"></p><p></p></div>
+              <div class="card-header d-flex justify-content-between">Production Part <p class="ms-2 text-primary"
+                  id="alice_name_heading"></p>
+                <p></p>
+              </div>
               <div class="card-body d-flex justify-content-between">
                 <div>
 
@@ -357,16 +364,16 @@
               <div class="card-header h6">
                 Alice Name
               </div>
-              <div class="card-body"  style="height: 60vh; overflow-y: auto;">
+              <div class="card-body" style="height: 60vh; overflow-y: auto;">
 
                 <table class="table caption-top table-bordered table-striped ">
                   <caption>Bom Selection table</caption>
                   <thead
                     style="position: sticky; top: 0; z-index: 5; font-size: 13px; text-align: center; background: #f0f0f0;">
 
-                    <tr  style='font-size: 13px'>
+                    <tr style='font-size: 13px'>
                       <th scope="col"><input type="text" id="alias_search" class="form-control border-0 bg-white"
-                                        placeholder="Search..."></th>
+                          placeholder="Search..."></th>
                       <th>Alias Name</th>
                       <th>Bom</th>
                       <th>action </th>

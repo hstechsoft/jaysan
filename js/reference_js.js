@@ -94,9 +94,24 @@ $(document).ready(function () {
     });
   });
 
+  get_all_bom()
 
+  $("#excle_btn").click(function () {
 
+    let table = document.querySelector("table");
+    let html = table.outerHTML;
 
+    let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+
+    let link = document.createElement("a");
+    link.href = url;
+    link.download = "BOM_Report.xls";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  });
 
 });
 
@@ -143,6 +158,55 @@ $(document).ready(function () {
 //         alert("Error: " + xhr.responseText);
 //     }
 // });
+
+function get_all_bom() {
+
+  $.ajax({
+    url: "php/get_all_bom.php",
+    type: "get",
+    data: {
+      part_id: 4074,
+      component_cat: "312 4G S",
+    },
+    success: function (response) {
+
+      let data = JSON.parse(response);
+      $("#all_bom_table").empty();
+
+      data.forEach((item, index) => {
+
+        $("#all_bom_table").append(`
+          <tr>
+            <td>${index + 1}</td>
+            <td>${item.parent_bom_id}</td>
+            <td>${item.component_cat}</td>
+            <td>${item.output_part_id}</td>
+            <td>${item.output_part_name}</td>
+            <td>${item.input_part_id}</td>
+            <td>${item.input_part_name}</td>
+            <td>${item.qty}</td>
+            <td>${item.sub_ass_qty}</td>
+            <td>${item.bomlist_id}</td>
+            <td>${item.level}</td>
+            <td>${item.path}</td>
+            <td>${item.time_taken ?? ""}</td>
+            <td>${item.category ?? ""}</td>
+            <td>${item.creditor_name ?? ""}</td>
+          </tr>
+        `);
+
+      });
+
+    },
+    error: function (xhr) {
+      console.log(xhr);
+    }
+  });
+
+}
+
+
+
 
 
 

@@ -2325,6 +2325,7 @@ function update_input(partId, processId, change_input_id, qty) {
 
 function insert_new_part() {
 
+  var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
   $.ajax({
     url: "php/insert_new_part.php",
@@ -2332,7 +2333,8 @@ function insert_new_part() {
     data: {
       newPartName: $('#newPartName').val(),
       newPartNo: $('#newPartNo').val(),
-      newPartDes: $('#newPartDes').val()
+      newPartDes: $('#newPartDes').val(),
+      sub_ass: sub_ass,
 
     },
     success: function (response) {

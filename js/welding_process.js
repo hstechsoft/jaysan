@@ -1492,7 +1492,7 @@ $(document).ready(function () {
     var max = $("#max_time").val();
     var cost = $("#cost").val();
     console.log(machine_id, section_id);
-    
+
 
     if ($('#welding_table td.tbl_selected').length > 0) {
       var a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
@@ -1686,7 +1686,7 @@ function get_dep_sec_machine(sec_id) {
 }
 function insert_dep_sec_machine(sec_id, mach_name) {
   console.log(sec_id, mach_name);
-  
+
   $.ajax({
     url: "php/insert_dep_sec_machine.php",
     type: "get", //send it through get method
@@ -2858,6 +2858,7 @@ function update_input(partId, processId, change_input_id, qty) {
 
 function insert_new_part() {
 
+  var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
   $.ajax({
     url: "php/insert_new_part.php",
@@ -2865,7 +2866,8 @@ function insert_new_part() {
     data: {
       newPartName: $('#newPartName').val(),
       newPartNo: $('#newPartNo').val(),
-      newPartDes: $('#newPartDes').val()
+      newPartDes: $('#newPartDes').val(),
+      sub_ass: sub_ass,
 
     },
     success: function (response) {
