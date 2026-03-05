@@ -179,7 +179,7 @@ function get_credit_note_report() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td>" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td></tr>")
+            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td>" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td><td><div>"+obj.invoice_by+"<span class='badge bg-secondary float-end'>DCF ID: "+obj.dcf_id+"</span><br><p><span class='badge bg-primary float-start'>Credit Note By: "+obj.cn_by+"</span><br><span class='badge bg-primary float-start'>Credit Note Date: "+obj.report_date+"</span></p></div></td></tr>")
 
           });
 

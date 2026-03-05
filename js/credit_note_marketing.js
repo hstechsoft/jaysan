@@ -251,7 +251,7 @@ function get_credit_note_report() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add d-none' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small accept' id=''>accept</button></td> </tr>")
+            $('#credit_note_report').append("<tr class='small'> <td>" + count + "</td> <td>" + obj.cus_name + "<span class='badge bg-primary float-end small'>DCF/NO: "+obj.dcf_id+"</span></td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "<span class='badge bg-secondary float-end small'>Invoice by: "+obj.invoice_by+"</span></td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.report_date  + "<span class='badge bg-success float-end small'>Credit by: "+obj.cn_by+"</span></td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add d-none' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small accept' id=''>accept</button></td> </tr>")
           });
 
 

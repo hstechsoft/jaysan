@@ -70,7 +70,7 @@ $(document).ready(function () {
             icon: 'success'
           }).then(function () {
 
-            update_dcf_credit_note(dcf_id, "verified", cn) // <--- submit form programmatically
+            update_dcf_credit_sts(dcf_id, "verified") // <--- submit form programmatically
 
 
           });
@@ -211,7 +211,8 @@ function update_dcf_credit_note(dcf_id, sts, cn) {
     data: {
       dcf_id: dcf_id,
       cn_sts: sts,
-      credit_note_no: cn
+      credit_note_no: cn,
+      emp_id: current_user_id
 
 
     },
@@ -240,7 +241,45 @@ function update_dcf_credit_note(dcf_id, sts, cn) {
 
 
 }
+function update_dcf_credit_sts(dcf_id, sts) {
 
+
+
+
+  $.ajax({
+    url: "php/update_dcf_credit_sts.php",
+    type: "get", //send it through get method
+    data: {
+      dcf_id: dcf_id,
+      cn_sts: sts,
+
+
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        shw_toast("Success", " Updated", "success")
+        get_credit_note_report()
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function get_employee() {
 
@@ -316,7 +355,7 @@ function get_credit_note_report() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#credit_note_report').append("<tr> <td>" + count + "</td> <td>" + obj.cus_name + "</td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "</td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.credit_note_date + "</td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small d-none verify' id=''>Verify</button><input class= 'form-check-input check_box d-none' type='checkbox' value='" + obj.cus_id + "' id='check_box'></td></tr>")
+            $('#credit_note_report').append("<tr class='small'> <td>" + count + "</td> <td>" + obj.cus_name + "<span class='badge bg-primary float-end small'>DCF/NO: "+obj.dcf_id+"</span></td> <td>" + obj.cus_phone + "</td> <td>" + obj.invoice_no + "</td> <td>" + obj.cn_amount + "<span class='badge bg-secondary float-end small'>Invoice by: "+obj.invoice_by+"</span></td> <td contenteditable=\"true\">" + obj.credit_note_no + "</td> <td>" + obj.report_date  + "<span class='badge bg-success float-end small'>Credit by: "+obj.cn_by+"</span></td> <td>" + obj.cn_sts + "</td> <td>" + obj.emp_name + "</td> <td class='d-flex  gap-2'> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='" + obj.dcf_id + "' class='btn btn-success btn-sm small d-none verify' id=''>Verify</button><input class= 'form-check-input check_box d-none' type='checkbox' value='" + obj.cus_id + "' id='check_box'></td></tr>")
           });
 
 

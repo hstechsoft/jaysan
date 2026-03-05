@@ -136,6 +136,8 @@ function update_machine_production(old_line_no, old_ass_id, new_line_no, new_ass
 }
 
 function get_machine_report(production_date) {
+    console.log(production_date);
+    
     $.ajax({
         url: "php/get_machine_report.php",
         type: "get", //send it through get method
@@ -170,7 +172,8 @@ function get_machine_report(production_date) {
                                 product: row.product,
                                 model_name: row.model_name,
                                 type_name: row.type_name,
-                                sub_type: row.sub_type
+                                sub_type: row.sub_type,
+                                order_no: row.order_no
                             });
                         });
 
@@ -205,7 +208,7 @@ function get_machine_report(production_date) {
                                 data-ass_id='${item.ass_id}' 
                                 data-line_no='${item.line_no}'>
                                 <td>${count}</td>
-                                <td>${item.cus_name} - ${item.cus_phone}</td>
+                                <td>${item.cus_name} - ${item.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${item.order_no}</span></td>
                                 <td>${details}</td>
                             </tr>
                         `);

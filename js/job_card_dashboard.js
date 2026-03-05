@@ -112,6 +112,7 @@ function get_current_qr_list() {
                                     ${obj.product}
                                     <span class="text-muted">${obj.model_name}</span>
                                     <span class="badge bg-info text-dark ms-1">${obj.type_name}</span>
+                                    <span class="badge bg-secondary ms-1">Sale Order/No: ${obj.order_no}</span>
                                 </div>
 
                                 <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">

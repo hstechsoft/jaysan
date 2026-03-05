@@ -334,7 +334,7 @@ function get_assigned_order() {
 
 
                     obj.forEach(function (obj) {
-                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no}</td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
                             <div class="small">
                                 <div class="fw-semibold">
                                     ${obj.product}
@@ -424,7 +424,7 @@ function get_assign_order() {
                             <tr class='text-center' style=" font-size: 13px"
                                 data-ass_id='${obj.ass_id}'>
                                 <td>${obj.line_no}</td>
-                                <td>${obj.cus_name} - ${obj.cus_phone}</td>
+                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
                                 <td>${details}</td>
                             </tr>
                         `);

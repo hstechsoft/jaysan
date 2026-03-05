@@ -390,6 +390,7 @@ $(document).ready(function () {
 
     $('#bom_table').on('click', 'button', function () {
 
+        var bom_in_id = $(this).val();
         swal({
             title: "Are you sure?",
             text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -401,11 +402,15 @@ $(document).ready(function () {
             .then((willDelete) => {
                 if (willDelete) {
 
+                    if (bom_in_id > 0) {
+                        delete_bom_input(bom_in_id);
+                    } else {
+                        // Get the closest row (tr) to the clicked button
+                        var row = $(this).closest('tr');
+                        // Remove the row from the table
+                        row.remove();
+                    }
 
-                    // Get the closest row (tr) to the clicked button
-                    var row = $(this).closest('tr');
-                    // Remove the row from the table
-                    row.remove();
                 } else {
                     swal("Your imaginary file is safe!");
                 }
@@ -494,6 +499,7 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     console.log(response);
+                    $("#correction_table").addClass("d-none");
                     var res = JSON.parse(response);
                     if (res.bom_qty_check == "No excess quantity found") {
 
@@ -502,7 +508,8 @@ $(document).ready(function () {
 
                         shw_toast("Updated", "Successfully Updated")
                     }
-                    else if (res.result) {
+                    else if (res.bom_qty_check == "Input part has insufficient quantity") {
+
 
                         $("#correction_tbody").empty();
                         $("#correction_table").removeClass("d-none");
@@ -521,14 +528,17 @@ $(document).ready(function () {
                                             ${i == 0 ? `<td rowspan="${length}" class='text-center align-middle' data-parent_bom_id="${obj.parent_bom_id}" data-parent_bom_partid="${obj.parent_bom_partid}">${index + 1}</td>
                                             <td  class='text-center align-middle' rowspan="${length}">${obj.parent_bom_part}</td>` : ""}
 
-                                            <td class='text-center'>${item.part_name}</td>
+                                            <td class='text-center part_cell' data-part_id="${item.part_id}" data-qty="${item.sub_ass_qty}" >${item.part_name}</td>
                                             <td class='text-center' id="bg_main">${item.qty}</td>
                                             <td class='text-center' id='bg_sub'>${item.sub_ass_qty}</td>
                                             <td class='text-center' id='bg_need'>${item.excess_qty}</td>
 
                                             ${i == 0 ? `<td  class='text-center align-middle' rowspan="${length}">
-                                                <button class=" btn btn-outline-primary allocate_btn" data-qty="${item.excess_qty}" val="${item.child_bom_in_id}">
+                                                <button class=" btn btn-outline-primary allocate_btn"  data-bom_id=${obj.parent_bom_id}>
                                                     Allocate
+                                                </button>
+                                                <button class=" btn btn-outline-danger cancle_btn" >
+                                                    Cancle
                                                 </button>
                                             </td>` : ""}
                                         </tr>
@@ -551,8 +561,19 @@ $(document).ready(function () {
 
     });
 
+    $("#only_bom_materials").on("click", function () {
+        if ($(this).is(":checked")) {
+
+            get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val(), 11)
+        }
+        else {
+
+            get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+        }
+    })
 
     $("#bom_table").on("blur", ".qty-editable", function () {
+        alert
         let newQty = $(this).text().trim();
         if (isNaN(newQty) || newQty <= 0) {
             shw_toast("Warning", "Please enter a valid quantity.");
@@ -562,6 +583,8 @@ $(document).ready(function () {
 
             let input_part = $(this).closest("tr").find("td").eq(1).data("part-id");
             let qty = $(this).closest("tr").find("td").eq(2).text();
+            $("#part_name").data('selected-part_id', input_part)
+            $('#qty').val(qty)
             if ($('#part_no_out').data('selected-part_id') && $("#bom_list_select").val() && input_part && qty && $('#update_part_btn').val()) {
 
 
@@ -593,21 +616,13 @@ $(document).ready(function () {
                         console.log(response);
                         var res = JSON.parse(response);
                         if (res.bom_qty_check == "No excess quantity found") {
-
                             get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
                             console.log($('#bom_list_select').val());
 
                             shw_toast("Updated", "Successfully Updated")
                         }
 
-                        if (res.bom_qty_check == "Input part has insufficient quantity") {
-
-                            get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
-                            console.log($('#bom_list_select').val());
-
-                            shw_toast("Updated", "Successfully Updated")
-                        }
-                        else if (res.result) {
+                        else if (res.bom_qty_check == "Input part has insufficient quantity") {
 
                             $("#correction_tbody").empty();
                             $("#correction_table").removeClass("d-none");
@@ -627,14 +642,18 @@ $(document).ready(function () {
                                             ${i == 0 ? `<td rowspan="${length}" class='text-center align-middle' data-parent_bom_id="${obj.parent_bom_id}" data-parent_bom_partid="${obj.parent_bom_partid}">${index + 1}</td>
                                             <td  class='text-center align-middle' rowspan="${length}">${obj.parent_bom_part}</td>` : ""}
 
-                                            <td class='text-center'>${item.part_name}</td>
+                                            <td class='text-center part_cell'  data-part_id="${item.part_id}" data-qty="${item.sub_ass_qty}" >${item.part_name}</td>
                                             <td class='text-center' id="bg_main">${item.qty}</td>
                                             <td class='text-center' id='bg_sub'>${item.sub_ass_qty}</td>
                                             <td class='text-center' id='bg_need'>${item.excess_qty}</td>
 
                                             ${i == 0 ? `<td class='text-center align-middle' rowspan="${length}">
-                                                <button class="btn btn-outline-primary allocate_btn" data-qty="${item.excess_qty}" val="${item.child_bom_in_id}">
+                                                <button class="btn btn-outline-primary allocate_btn" data-bom_id=${obj.parent_bom_id}>
                                                     Allocate
+                                                </button>
+                                                
+                                                <button class=" btn btn-outline-danger cancle_btn" >
+                                                    Cancle
                                                 </button>
                                             </td>` : ""}
                                         </tr>
@@ -857,17 +876,123 @@ $(document).ready(function () {
         }
     });
 
+    $("#cancle_btn").click(function(){
+        window.location.reload();
+    })
     // get_jaysan_model_subtype_list()
+    $("#correction_tbody").on("click", ".allocate_btn", function () {
 
+        var bom_id = $(this).data("bom_id");
+        var inputPartsData = [];
 
+        if (bom_id) {
+
+            $("#correction_tbody .part_cell").each(function () {
+
+                var Qty = $(this).data("qty");
+                var part_id = $(this).data("part_id");
+
+                if (Qty && part_id) {
+                    inputPartsData.push({
+                        part_id: part_id,
+                        part_qty: Qty
+                    });
+                }
+
+            });
+
+            if (inputPartsData.length > 0) {
+                console.log(inputPartsData);
+
+                update_bom(bom_id, inputPartsData);
+            } else {
+                salert("Warning", "Part/Qty Data Missing Try Later", "warning");
+            }
+
+        } else {
+            console.log("BOM ID missing:", bom_id);
+            salert("Warning", "Data Missing Try Later", "warning");
+        }
+
+    });
 
 });
 
 
 
+function delete_bom_input(bom_in_id) {
+
+    console.log(bom_in_id);
+
+
+    $.ajax({
+        url: "php/delete_bom_input.php",
+        type: "post", //send it through get method
+        data: {
+            bom_in_id: bom_in_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() == "ok") {
+
+                get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+            }
 
 
 
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function update_bom(bom_id, inputPartsData) {
+
+    console.log(bom_id, inputPartsData);
+
+
+    $.ajax({
+        url: "php/update_bom.php",
+        type: "post", //send it through get method
+        data: {
+            inputPartsData: inputPartsData,
+            bom_id: bom_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() == "ok") {
+                get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val());
+
+                $("#update_part_btn").trigger("click");
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function update_jaysan_model_subtype_bom(part_id, bom_id) {
 
@@ -1078,7 +1203,7 @@ function get_bom_recent() {
 }
 
 
-function get_bom(part_id, component_cat) {
+function get_bom(part_id, component_cat, mat) {
     console.log(part_id, component_cat);
 
 
@@ -1113,30 +1238,71 @@ function get_bom(part_id, component_cat) {
                     }
 
 
-
-
                     var obj = JSON.parse(response);
                     var count = 0;
+                    if (mat == 11) {
 
-                    // Build BOM map
-                    var bomMap = {};
-                    obj.forEach(function (o) {
-                        bomMap[o.output_part] = JSON.parse(o.bom_data);
-                    });
+                        obj.forEach(function (obj) {
+                            var bom_data = JSON.parse(obj.bom_data);
+                            if (obj.level == 0) {
 
-                    function getSubParts(part_id, parentPath, level = 1) {
+                                bom_data.forEach(function (item) {
 
-                        if (!bomMap[part_id]) return "";
 
-                        var html = "";
+                                    if (item.sub_ass == 0) {
+                                        count++;
+                                        $('#bom_table').append(`
+                                            <tr class='small'>
+                                                <td>${count}</td>
 
-                        bomMap[part_id].forEach(function (p) {
+                                                <td data-part-id="${item.input_part}">
+                                                        ${item.inpart_name} 
+                                                </td>
 
-                            var path = parentPath + " > " + p.inpart_name;
+                                                <td>
+                                                    ${item.sub_ass_qty}
+                                                </td>
+                                                <td>
+                                                    <button class='btn btn-outline-danger border-0' value='${item.bom_in_id}' disabled>
+                                                        <i class='fa fa-trash'></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `);
+                                    }
 
-                            if (p.sub_ass == 1) {
 
-                                html += `
+                                });
+                            }
+                        })
+
+                    }
+                    else {
+
+
+                        // Build BOM map
+                        var bomMap = {};
+                        obj.forEach(function (o) {
+                            bomMap[o.output_part] = JSON.parse(o.bom_data);
+                        });
+
+                        function getSubParts(part_id, parentPath, level = 1) {
+
+                            if (!bomMap[part_id]) return "";
+
+                            var html = "";
+
+                            bomMap[part_id].forEach(function (p) {
+
+                                var path = parentPath + " > " + p.inpart_name;
+
+                                if (p.sub_ass == 1) {
+
+                                    html += `
+                                <div class="sub-part">                                              
+                                        ${p.inpart_name}
+                                     <span class="qty">(Qty ${p.corrected_qty})</span>
+                                </div>
                                 <div class="sub-card">
                                     <div class="sub-card-title">
                                         ${path}
@@ -1150,49 +1316,49 @@ function get_bom(part_id, component_cat) {
                                 </div>
                                 `;
 
-                            }
-                            else {
+                                }
+                                else {
 
-                                html += `
+                                    html += `
                                     <div class="sub-part">                                              
                                         ${p.inpart_name}
                                         <span class="qty">(Qty ${p.corrected_qty})</span>
                                     </div>
-                                    `;                      
-
-                            }
-
-                        });
-
-                        return html;
-                    }
-
-                    obj.forEach(function (o) {
-
-                        var bom_data = JSON.parse(o.bom_data);
-
-                        if (o.level == 0) {
-
-                            $('#update_part_btn').val(o.bom_id);
-
-                            bom_data.forEach(function (item) {
-
-                                count++;
-
-                                var sub_ass = "";
-                                var subHTML = "";
-
-                                if (item.sub_ass == 1) {
-
-                                    sub_ass = "<span class='badge bg-secondary ms-2'>sub</span>";
-
-                                    subHTML = getSubParts(item.input_part, item.inpart_name);
+                                    `;
 
                                 }
 
-                                $("#update_btn").val(item.bom_id);
+                            });
 
-                                $('#bom_table').append(`
+                            return html;
+                        }
+
+                        obj.forEach(function (o) {
+
+                            var bom_data = JSON.parse(o.bom_data);
+
+                            if (o.level == 0) {
+
+                                $('#update_part_btn').val(o.bom_id);
+
+                                bom_data.forEach(function (item) {
+
+                                    count++;
+
+                                    var sub_ass = "";
+                                    var subHTML = "";
+
+                                    if (item.sub_ass == 1) {
+
+                                        sub_ass = "<span class='badge bg-secondary ms-2'>sub</span>";
+
+                                        subHTML = getSubParts(item.input_part, item.inpart_name);
+
+                                    }
+
+                                    $("#update_btn").val(item.bom_id);
+
+                                    $('#bom_table').append(`
                                     <tr class='small'>
                                         <td>${count}</td>
 
@@ -1200,28 +1366,29 @@ function get_bom(part_id, component_cat) {
                                             <div class="bom-line fw-semibold">
                                                 ${item.inpart_name} ${sub_ass}
                                             </div>
-                                            ${subHTML} ${Number(item.corrected_qty) < 0 ? `<span class='badge bg-danger ms-2'>Need ${Math.abs(item.corrected_qty)}</span>` : ""}
+                                            ${subHTML} ${Number(item.corrected_qty) > 0 ? `<span class='badge blink bg-danger ms-2'>Need ${Math.abs(item.corrected_qty)}</span>` : ""}
                                         </td>
 
                                         <td contenteditable='true' class='qty-editable'>
-                                            ${item.corrected_qty < 0 ? 0 : item.corrected_qty}
+                                            ${item.corrected_qty > 0 ? 0 : item.corrected_qty}
                                         </td>
 
                                         <td>
-                                            <button class='btn btn-outline-danger border-0'>
+                                            <button class='btn btn-outline-danger border-0'  value='${item.bom_in_id}'>
                                                 <i class='fa fa-trash'></i>
                                             </button>
                                         </td>
                                     </tr>
                                 `);
 
-                            });
+                                });
 
-                        }
+                            }
 
-                    });
+                        });
 
-                    $('#bom_table').get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        $('#bom_table').get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 }
                 else {
                     if ($("#update_btn").hasClass('d-none') == false) {
