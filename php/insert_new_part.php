@@ -11,6 +11,8 @@ $category       = test_input($_GET['category']);
 $baseunits      = test_input($_GET['baseunits']);
 $gstrate        = test_input($_GET['gstrate']);
 
+$sub_ass = isset($_GET['sub_ass']) ? test_input($_GET['sub_ass']) : "'0'";
+
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -20,8 +22,8 @@ function test_input($data) {
 
 // Multi-query: set time zone + insert
 $sql = "SET time_zone = '+05:30';";
-$sql .= "INSERT INTO parts_tbl (part_name, part_no, des, reorder_qty, min_order_qty, Parent, category, baseunits, gstrate) 
-         VALUES ($newPartName, $newPartNo, $newPartDes, $reorder_qty, $min_order_qty, $Parent, $category, $baseunits, $gstrate)";
+$sql .= "INSERT INTO parts_tbl (part_name, part_no, des, reorder_qty, min_order_qty, Parent, category, baseunits, gstrate, sub_ass) 
+         VALUES ($newPartName, $newPartNo, $newPartDes, $reorder_qty, $min_order_qty, $Parent, $category, $baseunits, $gstrate, $sub_ass)";
 
 if ($conn->multi_query($sql)) {
     // Clear all result sets
