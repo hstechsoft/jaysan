@@ -26,7 +26,7 @@ return $data;
 }
 
 
- $sql = "with dcf_details as(SELECT employee.emp_name as invoice_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
+ $sql = "with dcf_details as(SELECT  employee.emp_name as invoice_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
  inner JOIN assign_product on dcf.dcf_id = assign_product.dcf_id 
  inner join employee on dcf.invoice_by = employee.emp_id
  WHERE dcf.sts = 'delivery' and $sts_query),

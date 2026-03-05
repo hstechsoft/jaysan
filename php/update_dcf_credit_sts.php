@@ -4,9 +4,7 @@
 
  $dcf_id =test_input($_GET['dcf_id']);
  $cn_sts =test_input($_GET['cn_sts']);
-  $credit_note_no =test_input($_GET['credit_note_no']);
-  $emp_id =test_input($_GET['emp_id']);
-
+ 
 
 function test_input($data) {
 $data = trim($data);
@@ -19,7 +17,7 @@ return $data;
 
 
 
-$sql = "UPDATE dcf SET cn_create_date=NOW(), credit_note_no=$credit_note_no,cn_sts=$cn_sts, cn_created_by=$emp_id where dcf_id = $dcf_id";
+$sql = "UPDATE dcf SET  cn_sts=$cn_sts where dcf_id = $dcf_id";
   
   if ($conn->query($sql) === TRUE) {
     
