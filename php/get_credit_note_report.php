@@ -26,9 +26,10 @@ return $data;
 }
 
 
- $sql = "with dcf_details as(SELECT  employee.emp_name as invoice_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
+ $sql = "with dcf_details as(SELECT date_only(get_machine_report) as report_date, employee.emp_name as invoice_by, emp_cn.emp_name as cn_by, assign_product.opid,dcf.dcf_id,dcf.invoice_no,dcf.credit_note_no,dcf.credit_note_accept,dcf.credit_note_date,dcf.cn_sts FROM dcf 
  inner JOIN assign_product on dcf.dcf_id = assign_product.dcf_id 
  inner join employee on dcf.invoice_by = employee.emp_id
+ left join employee emp_cn on dcf.cn_created_by = emp_cn.emp_id
  WHERE dcf.sts = 'delivery' and $sts_query),
 
 sop_details as(SELECT dcf_details.*,sop.billing_amount,sum(sop.price)as total_dealer_amount,sum(billing_amount)as total_billing_amount,(SELECT sales_order_form.customer_id from sales_order_form WHERE sales_order_form.oid = sop.oid) as cus_id,(SELECT sales_order_form.emp_id from sales_order_form WHERE sales_order_form.oid = sop.oid) as emp_id from dcf_details INNER join sales_order_product sop on dcf_details.opid = sop.opid GROUP by dcf_id)
