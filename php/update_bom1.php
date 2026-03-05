@@ -1,7 +1,10 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 include 'db_head.php';
 
-
+$update_check = 0;
+$conn->begin_transaction();
+try {
 $response = array(); 
 $input_part = $_POST['input_part']; 
 $input_qty = $_POST['input_qty']; 
@@ -48,7 +51,7 @@ if($is_output_not_sub_ass)
         if($has_insufficient_qty)
         {
             $response['bom_qty_check'] = "Input part has insufficient quantity";
-         
+         $conn->commit();
       
           $conn->close();
           print json_encode($response); 
@@ -59,7 +62,7 @@ if($is_output_not_sub_ass)
             {
                $response['bom_qty_check'] = "No excess quantity found";
          
-      
+      $conn->commit();
           $conn->close();
           print json_encode($response); 
           exit(); 
@@ -258,6 +261,7 @@ $response['bom_qty_check'] = "Input part has insufficient quantity";
             //      "Excess Qty: " . $row['excess_qty'] . "<br><br>";
           }
         } else {
+            $update_check = 1;
             $response['bom_qty_check'] = "No excess quantity found";
         //   echo "ok";
         }
@@ -334,7 +338,7 @@ if(!empty($boms)){
 }
       
 $response['results'] = [];
-
+require __DIR__ . '/bom_correction_check.php';
 foreach ($boms as $main_bom_id) {
 
     // recompute bom one by one
@@ -350,10 +354,11 @@ foreach ($boms as $main_bom_id) {
                 pt_hi.sub_ass,
                 0 AS level,
                 bo.component_cat,
-            CAST((SELECT part_name FROM parts_tbl WHERE part_id = bo.part_id) AS CHAR) AS path
+            CAST(outpart.part_name AS CHAR) AS path
             FROM bom_output bo
             JOIN bom_input bi ON bo.bom_id = bi.bom_id
             JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
+            JOIN parts_tbl outpart ON outpart.part_id = bo.part_id
             WHERE bo.bom_id = $main_bom_id
             UNION ALL
 
@@ -367,7 +372,7 @@ foreach ($boms as $main_bom_id) {
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
-            CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS VARCHAR(500))
+            CAST(CONCAT(h.path, '>', outpart.part_name) AS VARCHAR(500))
 
 
             FROM bom_output boc
@@ -376,6 +381,7 @@ foreach ($boms as $main_bom_id) {
             AND h.sub_ass = 1
             JOIN bom_input bi ON boc.bom_id = bi.bom_id
             JOIN parts_tbl pt ON bi.part_id = pt.part_id
+            join parts_tbl outpart on boc.part_id = outpart.part_id
             WHERE boc.component_cat <> 'Process'
             AND boc.part_id <> h.output_part
         ),
@@ -507,15 +513,40 @@ sub_ass_qty = VALUES(sub_ass_qty)");
 
 }
         } else {
+            $update_check = 1;
          $response['bom_qty_check'] = "No excess quantity found";
         }
+
+// check duplicate in bom 
+
+
+if(correction_check_fn($conn, (int)$main_bom_id)) {
+    $update_check = 0;
+     $response['bom_qty_check'] = "duplicate found";
+     break;
+}
+
 
       
 }
   }
 
+if($update_check){
+    $conn->commit();
+} else {
+    $conn->rollback();
+}
+
 print json_encode($response);
 
+} catch (Exception $e) {
+
+    $conn->rollback();
+
+    $response['error'] = $e->getMessage();
+
+    print json_encode($response);
+}
 $conn->close();
 ?>
 

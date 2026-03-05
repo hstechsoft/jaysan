@@ -31,7 +31,7 @@ return $data;
 
 
 require __DIR__ . '/bom_correction_check.php';
-if(modify_payment($conn, (int)str_replace("'", "", $bom_id))) {
+if(correction_check_fn($conn, (int)str_replace("'", "", $bom_id))) {
     $conn->close();
     echo "Correction needed";
     exit(0);

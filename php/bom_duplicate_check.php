@@ -4,7 +4,7 @@
 
 
 
-function correction_check_fn(mysqli $conn, int $bom_id)
+function modify_payment(mysqli $conn, int $bom_id)
 {
   $correction_check = false;
 $sql_correction_check = "
@@ -96,7 +96,6 @@ LEFT JOIN bom_correction bom_correction_child
   SELECT TRUE as correction_check
 FROM bom_hi
 WHERE correction_status = 'invalid'
-   OR FIND_IN_SET(input_part_id, path) > 0
 LIMIT 1";
 $result_correction_check = $conn->query($sql_correction_check);
 if ($result_correction_check->num_rows > 0) {
