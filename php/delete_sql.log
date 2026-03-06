@@ -76,3 +76,7 @@
 [2026-02-20 12:59:48] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '66922 '
 [2026-02-20 13:13:57] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '66923 '
 [2026-02-20 13:14:11] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_bom.php | SQL:DELETE from bom_output WHERE bom_id = '66924 '
+[2026-03-06 13:05:08] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 294
+[2026-03-06 13:05:08] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 295
+[2026-03-06 13:05:08] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 296
+[2026-03-06 13:05:08] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 297
