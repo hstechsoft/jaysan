@@ -126,6 +126,8 @@ $(document).ready(function () {
 
     });
 
+    get_assign_order()
+
 });
 
 
@@ -243,6 +245,96 @@ function update_qr_end_time(qr_work_id) {
 
 
 }
+
+
+function get_assign_order() {
+
+    $.ajax({
+        url: "php/get_assign_order.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+                    $("#sale_order").empty();
+                    $("#sale_order").append("<option value='null' disabled selected>Select Sale Order</option>")
+
+
+                    obj.forEach(function (obj) {
+                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
+                        if (obj.order_type === "Emergency") {
+                            label += " 🚨";
+                        }
+                        $("#sale_order").append("<option data-details='" + encodeURIComponent(JSON.stringify(obj)) + "'>" + label + "</option>")
+
+
+
+
+                        var details = `
+                            <div class="card shadow-sm border-0" style="border-radius: 10px;">
+                                <div class="card-body py-1 px-2 d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small">${obj.model}</span>
+                                    <span class="fw-semibold text-primary">${obj.product}</span>
+                                    <span class="badge bg-success">${obj.type}</span>
+                                </div>
+
+                                <div class="card-footer py-0 px-1 bg-light border-0">
+                                    <small class="text-muted">
+                                        ${obj.sub_type}
+                                    </small>
+                                </div>
+                            </div>
+                        `;
+                        $("#arrange_order_tbody").append(`
+                            <tr class='text-center' style=" font-size: 13px"
+                                data-ass_id='${obj.ass_id}'>
+                                <td>${obj.line_no}</td>
+                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
+                                <td>${details}</td>
+                            </tr>
+                        `);
+                        $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">
+                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.line_no}</b></div>
+                            <div class="card-body p-1">
+                                <h6 class="card-title text-info">${obj.cus_name} - ${obj.cus_phone}</h6>
+                                <p class="card-text">${details}</p>
+                            </div>
+                        </div>`)
+                    });
+
+                }
+                else {
+                    $("#sale_order").append("<option >No data exist</option>")
+
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 
 function get_current_qr(emp_id) {

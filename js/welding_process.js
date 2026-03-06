@@ -192,6 +192,35 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0"
       var count = 0;
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+      
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
         var inputParts = $(this).find("td").eq(1).find("li");
@@ -285,6 +314,37 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0";
       var count = 0;
+
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+
+
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
 
@@ -325,7 +385,7 @@ $(document).ready(function () {
 
       $.ajax({
 
-        url: 'php/update_wel_process1.php',
+        // url: 'php/update_wel_process1.php',
         method: 'POST',
         data: {
           allWeldingData: JSON.stringify(allWeldingData),
@@ -1007,7 +1067,7 @@ $(document).ready(function () {
 
             $("#godown_table_data").append(`
             <tr data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
-              <td></td>
+              <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
               <td>${extra_obj.godown_name}</td>
               <td>${extra_obj.dep_name}</td>
               <td>${extra_obj.dep_sec_name}</td>
@@ -1541,7 +1601,7 @@ $(document).ready(function () {
 
         $("#godown_table_data").append(`
         <tr data-godown_id="${godown_id}" data-dept_id="${depart_id}" data-section_id="${section_id}" data-machine_id="${machine_id}">
-          <td></td>
+          <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
           <td>${godown}</td>
           <td>${depart}</td>
           <td>${section}</td>
