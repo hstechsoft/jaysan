@@ -422,7 +422,7 @@ function get_assign_order() {
 
 
                     obj.forEach(function (obj) {
-                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
+                        let label = "("+obj.line_no+") - " +obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
                         if (obj.order_type === "Emergency") {
                             label += " 🚨";
                         }
