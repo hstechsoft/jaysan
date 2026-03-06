@@ -48,7 +48,7 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
     get_assign_order();
 
-
+$('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
     $('#prepared_by').on('input', function () {
         //check the value not empty
         if ($('#prepared_by').val() != "") {
@@ -108,7 +108,7 @@ $(document).ready(function () {
         $("#show_customer").prop("checked", false).trigger("change");
         $("#chase_entry_table").addClass("d-none");
         $("#chase_no").val('');
-        $("#prepared_by").val('');
+        // $("#prepared_by").val('');
         // $("#chase_entry_table").empty();
 
         $("#chase_entry_preview_btn").removeClass('d-none')
@@ -157,10 +157,23 @@ $(document).ready(function () {
             $("#department_val").html("<strong>" + department + "</strong>");
 
             if (details !== null) {
+
+                let product = (details.product || "").trim().toLowerCase();
+
+                if (product !== "baler") {
+                    $(".baler_row").hide();
+                    $(".ridgeplaster_row").show();
+                    $("#row_name").text(details.product);
+                } else {
+                    $(".baler_row").show();
+                    $(".ridgeplaster_row").hide();
+                    $("#row_name").text('');
+                }
+
                 var mcd = details.commitment_date.trim().split(" ");
                 $("#sale_order_no").text(details.order_no || "");
                 $("#customer_name").text(details.cus_name || "")
-                $("#model").text(details.model || ""); 
+                $("#model").text(details.model || "");
                 $("#product").text(details.product || "");
                 $("#type").text(details.type || "");
                 $("#sub_type").text(details.sub_type || "");
@@ -263,6 +276,19 @@ $(document).ready(function () {
         }
 
         if (details !== null) {
+
+            let product = (details.product || "").trim().toLowerCase();
+
+            if (product !== "baler") {
+                $(".baler_row").hide();
+                $(".ridgeplaster_row").show();
+                $("#row_name").text(details.product);
+            } else {
+                $(".baler_row").show();
+                $(".ridgeplaster_row").hide();
+                $("#row_name").text('');
+            }
+
             var mcd = details.commitment_date.trim().split(" ");
             $("#sale_order_no").text(details.order_no || "");
             $("#customer_name").text(details.cus_name || "")
@@ -302,9 +328,9 @@ $(document).ready(function () {
             setTimeout(() => {
                 print();
                 setTimeout(() => {
-                    window.location.reload();
-                }, 800);
-            }, 500);
+                    // window.location.reload();
+                }, 500);
+            }, 800);
 
         }
     })
@@ -472,7 +498,7 @@ function update_assign_product_fd(ass_id, chasis_no, prepared_by) {
 
             ass_id: ass_id,
             chasis_no: chasis_no,
-            prepared_by: prepared_by
+            prepared_by: current_user_id
         },
         success: function (response) {
             console.log(response);
