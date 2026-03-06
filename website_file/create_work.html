@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+ 
+
+
+
+</head>
+<body >
+ 
+
+<div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+    
+
+
+<!-- navbar -->
+    
+<section id="menu_bar" class="d-none d-sm-block">
+   
+</section>
+
+
+<!-- content -->
+
+<div class="modal" id="enquiry_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+       
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class='input-group mb-2'> 
+          <label class='input-group-text' for='lead_source'><span>
+          <i class='fa-solid fa-clipboard h6'></i>
+          </span>
+          </label>
+          <input id='lead_source' list="lead_source_list" type='text' class='form-control' placeholder='lead_source' >
+          <datalist id="lead_source_list">
+            <option >retail outlet </option>
+            <option >customer reference </option>
+              <option >Just dial </option>
+                <option >IndiaMART </option>
+                  <option >exhibition </option>
+                    <option >stalls </option>
+                      <option > campaign </option>
+                        <option >online</option>
+     
+       
+         </datalist>
+          </div>
+
+          <button type="button" id="enquiry_submit_btn" class="btn btn-primary">Ok</button>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="lead_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+       Lead Creation
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       
+      <div class='input-group mb-2'>
+        <div class='input-group-prepend '>
+        <span class='input-group-text ' id='basic-addon1'>
+        <i class='fa-solid fa-clipboard-check h5'></i> </span>
+        
+        </div> 
+        <select class='custom-select form-control' id='cus_need'>
+       <option value='0' selected>Customer need...</option>
+       <option value='sales'>sales</option>
+       <option value='service'>service</option>
+       <option value='spares'>spares</option>
+       <option value='restamping'>restamping</option>
+       
+        
+        </select>
+        </div>
+              <form id="sales_lead_form">
+        <div class='input-group mb-2'>
+          <div class='input-group-prepend '>
+          <span class='input-group-text ' id='basic-addon1'>
+          <i class='fa-solid fa-clipboard-check h5'></i> </span>
+          
+          </div> 
+          <select class='custom-select form-control' name="existing_machine" id='existing_machine'>
+         <option value='0' selected>Existing machine...</option>
+         <option value='yes'>yes</option>
+         <option value='no'>no</option>
+         
+          
+          </select>
+          </div>
+
+          
+
+            <div class='input-group mb-2'> 
+              <label class='input-group-text' for='application'><span>
+              <i class='fa-solid fa-clipboard h6'></i>
+              </span>
+              </label>
+              <input  list="application_list" id='application' name="application" type='text' class='form-control' placeholder='application' >
+              <datalist id="application_list">
+                <option value='grocery shop'>grocery shop</option>
+           <option value='Fruits/Vegetable Shop'>Fruits/Vegetable Shop</option>
+           <option value='Meat/Fish Shop'>Meat/Fish Shop</option>
+           <option value='Supermarket'>Supermarket</option>
+           <option value='Hotels'>Hotels</option>
+           <option value='Hospitals'>Hospitals</option>
+           <option value='Jwellery Shop'>Jwellery Shop</option>
+           <option value='Financial or Banking Sector'>Financial or Banking Sector</option>
+           <option value='Food or Chemical Industries'>Food or Chemical Industries</option>
+           <option value='Weigh bridge Poultry'>Weigh bridge Poultry</option>
+         
+           
+             </datalist>
+              </div>
+
+              <div class='input-group mb-2'> 
+                <label class='input-group-text' for='machine_type'><span>
+                <i class='fa-solid fa-clipboard h6'></i>
+                </span>
+                </label>
+                <input id='machine_type' list="machine_type_list" type='text' name="machine_type" class='form-control' placeholder='machine_type' >
+                <datalist id="machine_type_list">
+                  
+                  <option value='Tabletop scale'>Tabletop scale</option>
+                  <option value='Price Computing scale'>Price Computing scale</option>
+                  <option value='Piece counting scale'>Piece counting scale</option>
+                  <option value='Transportable scale'>Transportable scale</option>
+                  <option value='Platform scale'>Platform scale</option>
+                  <option value='Floor Scale'>Floor Scale</option>
+                  <option value='Animal Weighing Scale'>Animal Weighing Scale</option>
+                  <option value='Bill Printing Scale'>Bill Printing Scale</option>
+                  <option value='Label Printing scale'>Label Printing scale</option>
+                  <option value='Crane Scale'>Crane Scale</option>
+                  <option value='Jewelery scale'>Jewelery scale</option>
+                  <option value='Analytical balance'>Analytical balance</option>
+                  <option value='Cash Counting machine Weigh Bridge'>Cash Counting machine Weigh Bridge</option>
+                  <option value='Human Weighing scale / BMI Customized scale'>Human Weighing scale / BMI Customized scale</option>
+               </datalist>               
+               </div>
+
+               <div class='input-group mb-2'> 
+                <label class='input-group-text' for='platform_size'><span>
+                <i class='fa-solid fa-clipboard h6'></i>
+                </span>
+                </label>
+                <input id='platform_size'  list="platform_size_list" type='text' class='form-control' placeholder='platform_size' >
+                <datalist id="platform_size_list"> 
+                  <option> 250 X 250 mm </option>
+                  <option> 300 X 300 mm </option>
+                  <option>400 X 400 mm </option>
+                  <option> 500 X 500 mm </option>
+                  <option>600 X 600 mm </option>
+                  <option>750  X 750 mm </option>
+                  <option>900   X 900 mm </option>
+                  <option>1000   X 1000 mm </option>
+                  <option> 1200 X 1200 mm </option>
+                  <option>1500 X 1500 mm </option>
+                  <option> 1800 X 1800 mm </option>
+                  <option> 2000  X 2000 mm </option>
+                  <option>175 x25 mm </option> 
+                  <option>250 x 300 mm </option> 
+                  <option>210 X 210 mm </option>
+                </datalist>
+                </div>
+
+                <div class='input-group mb-2'> 
+                  <label class='input-group-text' for='capacity'><span>
+                  <i class='fa-solid fa-clipboard h6'></i>
+                  </span>
+                  </label>
+                  <input id='capacity' list="capacity_list" type='text' class='form-control' placeholder='capacity' >
+                  <datalist id="capacity_list"> 
+                    <option>220 g</option>
+                    <option>600 g</option>
+                    <option>1 kg</option>
+                    <option>2 kg</option>
+                    <option>3 kg</option>
+                    <option>5 kg</option>
+                    <option>10 kg</option>
+                    <option>20 kg</option>
+                    <option>30 kg</option>
+                    <option>50 kg</option>
+                    <option>100 kg</option>
+                    <option>150 kg</option>
+                    <option>200 kg</option> 
+                    <option>300 kg</option> 
+                    <option>500 kg</option>
+                    <option>600 kg</option>
+                    <option>1000 kg</option>
+                    <option>1500 kg</option>
+                    <option>2000 kg</option>
+                    <option>3000 kg</option>
+                    <option>5000 kg</option>
+                  </datalist>
+                  </div>
+
+                  <div class='input-group mb-2'> 
+                    <label class='input-group-text' for='accuracy'><span>
+                    <i class='fa-solid fa-clipboard h6'></i>
+                    </span>
+                    </label>
+                    <input id='accuracy' list="accuracy_list" type='text' class='form-control' placeholder='accuracy' >
+                    <datalist id="accuracy_list"> 
+                      <option value='0.1 mg'>0.1 mg</option>
+                      <option value='1 mg (0.001g)'>1 mg (0.001g)</option>
+                      <option value='10 mg(0.01g)'>10 mg(0.01g)</option>
+                      <option value='100 mg(0.1g)'>100 mg(0.1g)</option>
+                      <option value='0.5'>0.5</option>
+                      <option value='10 g'>10 g</option>
+                      <option value='20 g'>20 g</option>
+                      <option value='50 g'>50 g</option>
+                      <option value='100 g'>100 g</option>
+                      <option value='200 g'>200 g</option>
+                      <option value='500 g'>500 g</option>
+                      <option value='1 kg'>1 kg</option>
+                    </datalist>
+                    </div>
+
+                    <div class='input-group mb-2'> 
+                      <label class='input-group-text' for='min_weight'><span>
+                      <i class='fa-solid fa-clipboard h6'></i>
+                      </span>
+                      </label>
+                      <input id='min_weight' type='text' class='form-control' placeholder='min_weight' >
+                      </div>
+
+                      <div class='input-group mb-2'> 
+                        <label class='input-group-text' for='budget_value'><span>
+                        <i class='fa-solid fa-clipboard h6'></i>
+                        </span>
+                        </label>
+                        <input id='budget_value' type='text' class='form-control' placeholder='budget_value' >
+                        </div>
+
+                        <div class='input-group mb-2'>
+                          <div class='input-group-prepend '>
+                          <span class='input-group-text ' id='basic-addon1'>
+                          <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                          
+                          </div> 
+                          <select class='custom-select form-control' id='urgency'>
+                         <option value='0' selected>Choose Options...</option>
+                         <option value='hot'>hot</option>
+                         <option value='cold'>cold</option>
+                         <option value='warm'>warm</option>
+                         <option value='not fit'>not fit</option>
+                         
+                          
+                          </select>
+                          </div>
+
+                          <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='extra_option'><span>
+                            <i class='fa-solid fa-clipboard h6'></i>
+                            </span>
+                            </label>
+                            <input id='extra_option' list="extra_option_list" type='text' class='form-control' placeholder='extra_option' >
+                            <datalist id="extra_option_list"> 
+                              <option value='RS 232 interface'>RS 232 interface</option>
+                              <option value='bluetooth'>bluetooth</option>
+                              <option value='litre conversion'>litre conversion</option>
+                              <option value='extra display type'>extra display type</option>
+                            </datalist>
+                            </div>
+                          </form>
+
+
+                          <form id="service_lead_form" name="service_lead_form">
+                            <div class='input-group mb-2'> 
+                              <label class='input-group-text' for='complaint_type'><span>
+                              <i class='fa-solid fa-clipboard h6'></i>
+                              </span>
+                              </label>
+                              <input id='complaint_type'  list="complaint_type_list" type='text' class='form-control' placeholder='complaint_type' >
+                              <datalist id="complaint_type_list">
+                                <option >Machine Dead</option>
+                                <option >Display Complaint</option>
+                                <option >Battery Backup Compliant</option>
+                                <option >Charging Complaint</option>
+                                <option >Weight Running Complaint</option>
+                                <option >Weight Difference Complaint</option>
+                              </datalist>
+                              </div>
+
+                              <div class='input-group mb-2'> 
+                                <label class='input-group-text' for='brand_name'><span>
+                                <i class='fa-solid fa-clipboard h6'></i>
+                                </span>
+                                </label>
+                                <input id='brand_name' type='text' class='form-control' placeholder='brand_name' >
+                                </div>
+                                <div class='input-group mb-2'> 
+                                  <label class='input-group-text' for='warranty'><span>
+                                  <i class='fa-solid fa-clipboard h6'></i>
+                                  </span>
+                                  </label>
+                                  <input id='warranty' type='text'  name="warranty"  class='form-control' placeholder='warranty' >
+                                  </div>
+                                  <div class='input-group mb-2'> 
+                                    <label class='input-group-text'  for='amc'><span>
+                                    <i class='fa-solid fa-clipboard h6'></i>
+                                    </span>
+                                    </label>
+                                    <input id='amc' type='text' name="amc" class='form-control' placeholder='amc' >
+                                    </div>
+                                    <div class='input-group mb-2'>
+                                      <div class='input-group-prepend '>
+                                      <span class='input-group-text '  id='basic-addon1'>
+                                      <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                                      
+                                      </div> 
+                                      <select class='custom-select form-control' name="service_type" id='service_type'>
+                                     <option value='0' selected>Service Type...</option>
+                                     <option value='onsite'>onsite</option>
+                                     <option value='showroom'>showroom</option>
+                                     
+                                      
+                                      </select>
+                                      </div>
+                          </form>
+
+                          <form id="restamping_lead_form">
+                            <div class='input-group mb-2'> 
+                              <label class='input-group-text' for='machine_type_r'><span>
+                              <i class='fa-solid fa-clipboard h6'></i>
+                              </span>
+                              </label>
+                              <input id='machine_type_r' list="machine_type_list" type='text' class='form-control' placeholder='machine_type' >
+                              <datalist id="machine_type_list">
+                                <option> Tabletop scale</option>
+                                <option > price counting scale</option>
+                                <option > transportable scale</option>
+                                <option > platform scale</option>
+                                <option > floor scale</option>
+                                <option > animal waking scale</option>
+                                <option > bill printing scale</option>
+                                <option > label printing scale</option>
+                                <option > crane  scale</option>
+                                <option > jewellery scale</option>
+                                <option > analytical balance</option>
+                                <option > cash counting machine</option>
+                                <option > weigh bridge</option>
+                                <option > human weigh scale/BMI</option>
+                                <option >customized scale</option>
+                              </datalist>
+                              </div>
+
+                              <div class='input-group mb-2'> 
+                                <label class='input-group-text' for='platfrom_size'><span>
+                                <i class='fa-solid fa-clipboard h6'></i>
+                                </span>
+                                </label>
+                                <input id='platfrom_size' list="platform_size_list" type='text' class='form-control' placeholder='platfrom_size' >
+                                <datalist id="platfrom_size_list">
+                                  <option> 250 X 250 mm </option>
+                                  <option> 300 X 300 mm </option>
+                                  <option>400 X 400 mm </option>
+                                  <option> 500 X 500 mm </option>
+                                  <option>600 X 600 mm </option>
+                                  <option>750  X 750 mm </option>
+                                  <option>900   X 900 mm </option>
+                                  <option>1000   X 1000 mm </option>
+                                  <option> 1200 X 1200 mm </option>
+                                  <option>1500 X 1500 mm </option>
+                                  <option> 1800 X 1800 mm </option>
+                                  <option> 2000  X 2000 mm </option>
+                                  <option>175 x25 mm </option> 
+                                  <option>250 x 300 mm </option> 
+                                  <option>210 X 210 mm </option>
+                                </datalist>
+                                </div>
+
+                                <div class='input-group mb-2'> 
+                                  <label class='input-group-text' for='capacity_r'><span>
+                                  <i class='fa-solid fa-clipboard h6'></i>
+                                  </span>
+                                  </label>
+                                  <input id='capacity_r' list="capacity_list" type='text' class='form-control' placeholder='capacity' >
+                                  <datalist id="capacity_list">
+                                    <option>220 g</option>
+                                    <option>600 g</option>
+                                    <option>1 kg</option>
+                                    <option>2 kg</option>
+                                    <option>3 kg</option>
+                                    <option>5 kg</option>
+                                    <option>10 kg</option>
+                                    <option>20 kg</option>
+                                    <option>30 kg</option>
+                                    <option>50 kg</option>
+                                    <option>100 kg</option>
+                                    <option>150 kg</option>
+                                    <option>200 kg</option> 
+                                    <option>300 kg</option> 
+                                    <option>500 kg</option>
+                                    <option>600 kg</option>
+                                    <option>1000 kg</option>
+                                    <option>1500 kg</option>
+                                    <option>2000 kg</option>
+                                    <option>3000 kg</option>
+                                    <option>5000 kg</option>
+                                  </datalist>
+                                  </div>
+
+                                  <div class='input-group mb-2'> 
+                                    <label class='input-group-text' for='brand_name_r'><span>
+                                    <i class='fa-solid fa-clipboard h6'></i>
+                                    </span>
+                                    </label>
+                                    <input id='brand_name_r' type='text' class='form-control' placeholder='brand_name' >
+                                    </div>
+<!--                                     
+                                    <div class='input-group mb-2'> 
+                                      <label class='input-group-text' for='stamp_certificate'><span>
+                                      <i class='fa-solid fa-clipboard h6'></i>
+                                      </span>
+                                      </label>
+                                      <input id='stamp_certificate' type='text' class='form-control' placeholder='stamp_certificate' >
+                                      </div> -->
+
+                                      <div class='input-group mb-2'>
+                                        <div class='input-group-prepend '>
+                                        <span class='input-group-text ' id='basic-addon1'>
+                                        <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                                        
+                                        </div> 
+                                        <select class='custom-select form-control' id='stamp_certificate'>
+                                       <option value='0' selected>Stamp Certificate...</option>
+                                       <option value='yes'>yes</option>
+                                       <option value='no'>no</option>
+                                       
+                                        
+                                        </select>
+                                        </div>
+
+                                      <!-- <div class='input-group mb-2'> 
+                                        <label class='input-group-text' for='stamp_plate'><span>
+                                        <i class='fa-solid fa-clipboard h6'></i>
+                                        </span>
+                                        </label>
+                                        <input id='stamp_plate' type='text' class='form-control' placeholder='stamp_plate' >
+                                        </div> -->
+
+                                        <div class='input-group mb-2'>
+                                          <div class='input-group-prepend '>
+                                          <span class='input-group-text ' id='basic-addon1'>
+                                          <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                                          
+                                          </div> 
+                                          <select class='custom-select form-control' id='stamp_plate'>
+                                         <option value='0' selected>stamp_plate</option>
+                                         <option value='yes'>yes</option>
+                                         <option value='no'>no</option>
+                                         
+                                          
+                                          </select>
+                                          </div>
+
+                                          <div class='input-group mb-2'>
+                                            <div class='input-group-prepend '>
+                                            <span class='input-group-text ' id='basic-addon1'>
+                                            <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                                            
+                                            </div> 
+                                            <select class='custom-select form-control' id='need_amc'>
+                                           <option value='0' selected>need_amc</option>
+                                           <option value='yes'>yes</option>
+                                           <option value='no'>no</option>
+                                           
+                                            
+                                            </select>
+                                            </div>
+
+                                            <div class='input-group mb-2'>
+                                              <div class='input-group-prepend '>
+                                              <span class='input-group-text ' id='basic-addon1'>
+                                              <i class='fa-solid fa-clipboard-check h5'></i> </span>
+                                              
+                                              </div> 
+                                              <select class='custom-select form-control' id='need_warranty'>
+                                             <option value='0' selected>need_warranty</option>
+                                             <option value='yes'>yes</option>
+                                             <option value='no'>no</option>
+                                             
+                                              
+                                              </select>
+                                              </div>
+
+
+                                              <div class='input-group mb-2 ' >
+                                                <div class='input-group-prepend '>
+                                                <span class='input-group-text ' >
+                                                Date </span>
+                                                
+                                                </div> 
+                                                <input type='datetime-local' id='stamp_renewal_date' class='form-control' placeholder='Date' >
+                                                
+                                                </div>
+                                          <p class="text-bg-danger fw-bold" id="fine_txt"></p>
+
+                          </form>
+
+
+                          <form id="spares_lead_form">
+                            <div class='input-group mb-2'> 
+                              <label class='input-group-text' for='spares_type'><span>
+                              <i class='fa-solid fa-clipboard h6'></i>
+                              </span>
+                              </label>
+                              <input id='spares_type' type='text' class='form-control' placeholder='spares_type' >
+                              </div>
+                          </form>
+
+                          <button type="button" id="lead_submit_btn" class="btn btn-primary">Ok</button>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="history_model">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">History</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div>
+          <table id="history_table" class="table   table-bordered border-dark border-opacity-50 text-center p" >
+            <thead >
+              <tr>
+              
+                <th  colspan="3" scope="col" class="bg-info bg-opacity-25">Work  History</th>
+              
+              </tr>
+        
+              <tr>
+              
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Comments</th>
+              
+              </tr>
+            </thead>
+            <tbody class="align-middle" id="thist">
+               
+            </tbody>
+          </table>
+        
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="cus_info_model">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Customer Info</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div>
+          <table class="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Details</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Name</th>
+                <td><p id="cus_info_name_txt"></p></td>
+                
+              </tr>
+              <tr>
+                <th scope="row">Phone</th>
+                <td>
+                  <div class="d-flex justify-content-evenly">
+                    <p id="cus_info_phone_txt"></p>
+                    <button type="button" id="cus_info_call_btn" class="btn btn-primary"><span><i class="fa-solid fa-phone"></i></span></button>
+                  </div>
+                 
+
+                 
+                </td>
+                    </tr>
+              <tr>
+                <th scope="row">Address</th>
+                <td><p id="cus_info_addr_txt"></p></td>
+                                </tr>
+              <tr>
+
+                
+                <th scope="row">Map</th>
+                <td><a id="cus_info_map" class="btn btn-primary"  role="button">Map</a></td>
+                
+              </tr>
+
+            </tbody>
+          </table>
+        
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modify_model">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modify Work</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div>
+      
+        
+  <div class="input-group mb-3">
+    <div class="input-group-prepend  ">
+      <span class="input-group-text " id="basic-addon1">
+      <i class="fa-solid fa-clipboard-check h5"></i> </span>
+        
+    </div>   
+    <select class="custom-select  form-control" id="modify_control_in">
+      <option value="0" selected>Choose Modify Options...</option>
+      <option value="1">reschdule(self Assign)</option>
+      <option value="2">Reassign</option>
+      <option value="3">reschdule + Reassign</option>
+      <option value="4">Self assign</option>
+  
+    </select>
+  </div>
+
+  <div class="input-group mb-2 " id="work_date1_na1">
+    <div class="input-group-prepend  ">
+      <span class="input-group-text " id="basic-addon1">
+        <i class="fa-solid fa-calendar-days h5"></i> </span>
+        
+    </div>   
+    <input type="datetime-local" id="work_date1_na"  name="" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1"   >
+   
+  </div>
+
+  <div class="input-group mb-2 " id="">
+                  
+
+    <textarea class="form-control" id="work_remark_text_na" placeholder="Remarks"  rows="2" ></textarea>
+
+   
+   
+  
+  </div>
+
+  <div class="input-group" id="sel_usr_in_na1">
+               
+    <label class="input-group-text" for="sel_usr_in_na1"><span>
+        <i class="fa-solid fa-user-tag h6"></i>
+    </span></label>
+ 
+  <select class="form-select" id="sel_usr_in_na">
+    <option selected value="0">Select User</option>
+  
+  </select>
+</div>
+
+<div class="d-flex justify-content-center mt-3">
+  <button type="button" id="work_submit_btn_na" class="btn btn-primary" type="submit">Submit</button>
+</div>
+
+
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="search_model">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modify Work</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div>
+      
+        
+  <div class="input-group mb-3">
+    <div class="input-group-prepend  ">
+      <span class="input-group-text " id="basic-addon1">
+      <i class="fa-solid fa-clipboard-check h5"></i> </span>
+        
+    </div>   
+    <select class="custom-select  form-control" id="modify_control_in_sa">
+      <option value="0" selected>Choose Modify Options...</option>
+      <option value="1">reschdule(self Assign)</option>
+      <option value="2">Reassign</option>
+      <option value="3">reschdule + Reassign</option>
+    
+  
+    </select>
+  </div>
+
+  <div class="input-group mb-2 " id="work_date1_sa1">
+    <div class="input-group-prepend  ">
+      <span class="input-group-text " id="basic-addon1">
+        <i class="fa-solid fa-calendar-days h5"></i> </span>
+        
+    </div>   
+    <input type="datetime-local" id="work_date1_sa"  name="" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1"   >
+   
+  </div>
+
+  <div class="input-group mb-2 " id="">
+                  
+
+    <textarea class="form-control" id="work_remark_text_sa" placeholder="Remarks"  rows="2" ></textarea>
+
+   
+   
+  
+  </div>
+
+  <div class="input-group" id="sel_usr_in_sa1">
+               
+    <label class="input-group-text" for="sel_usr_in_sa1"><span>
+        <i class="fa-solid fa-user-tag h6"></i>
+    </span></label>
+ 
+  <select class="form-select" id="sel_usr_in_sa">
+    <option selected value="0">Select User</option>
+  
+  </select>
+</div>
+
+<div class="d-flex justify-content-center mt-3">
+  <button type="button" id="work_submit_btn_sa" class="btn btn-primary" type="submit">Submit</button>
+</div>
+
+
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container-fluid mt-3 " >
+  
+
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button h6 text-bg-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+           Create Work
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body p-0 m-0">
+
+            <div class="card m-0 p-0 border-0">
+             
+                <div class="card-body py-0">
+                  <div class="d-sm-flex gap-sm-2   justify-content-center">
+         
+                      <div class="col-12 col-sm-6">
+                        <h5 id="fire_demo" ></h5>
+                          <div class="card">
+                              <div class="card-header text-center text-black h6 ">
+                                Create Task
+                                
+                              </div>
+                  
+                              <form id="task_form"  onsubmit="return false">
+                              <div class="card-body">
+                                  <div class="input-group mb-3">
+                                    
+                                       
+                                        <label class="input-group-text" for="work_for_text"><span>
+                                          <i class="fa-solid fa-user h6"></i>
+                                        </span>
+                                        
+                                      </label>
+                                   
+                                      
+                                      <input id="work_for_text" type="text" class="form-control" placeholder="Work For" aria-label="Username" aria-describedby="basic-addon1" >
+                                      
+                                    </div>
+                                    
+                  
+                                    <div class="input-group mb-3">
+                                     
+                                        <label class="input-group-text" for="work_type_list"><span>
+                                          <i class="fa-solid fa-briefcase h6"></i>
+                                        </span></label>
+                                     
+                                      <select required class="form-select" id="work_type_list">
+                                        <option value=""  selected>Work Type...</option>
+                                      
+                                      </select>
+                                    </div>
+                  
+                                    <div class="input-group my-3 ">
+                                      
+                                      <label class="input-group-text mrequired" for="work_date"><span>
+                                        Date
+                                      </span></label>
+                                      
+                                      <input type="datetime-local" id="work_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1" required  >
+                                      <div class="invalid-feedback "><h6 class="small">Please Enter date</h6></div>
+                                   
+                                    </div>
+                                  
+                                    <div class="card">
+                                      <div class="card-header">
+                                          <div class="form-check">
+                                              <label class="form-check-label" for="assigntoothers_checkbox">
+                                                  Assign to Others
+                                                </label>
+                                              <input class="form-check-input" type="checkbox" value="" id="assigntoothers_checkbox">
+                                             
+                                            </div>
+                                      </div>
+                                    <div class="card-body" id="assign_others_hide">
+                                     <div class = "d-sm-flex justify-content-between">
+                                      <div class=" border border-1 flex-fill">
+                                          <div class="input-group">
+                                 
+                                              <label class="input-group-text" for="sel_usr_in"><span>
+                                                  <i class="fa-solid fa-user-tag h6"></i>
+                                              </span></label>
+                                           
+                                            <select class="form-select" id="sel_usr_in">
+                                              <option selected value="0">Select User</option>
+                                            
+                                            </select>
+                                          </div>
+                                      </div>
+                                      <div class="d-flex mt-2 justify-content-between">
+                                        <div class="">
+                                          <button class="btn btn-primary border-0" type="button"  id="assign_add_button">Add</button>
+     
+                                        </div>
+                                        <div class="col-sm-3 d-sm-flex flex-sm-fill justify-content-center align-items-center border border-1 text-bg-warning ">
+                                            <div class="form-check">
+                                                <label class="form-check-label" for="work_user_selectall_checkbox">
+                                                 Select All
+                                                  </label>
+                                                <input class="form-check-input" type="checkbox" value="" id="work_user_selectall_checkbox">
+                                               
+                                              </div>
+                                        </div>
+                                      </div>
+                                      
+                                     </div>
+                                         
+                                     <div class = "d-flex mt-2">
+                                      <div class="col-8 col-sm-10 border border-1 d-flex align-items-center justify-content-center text-bg-info bg-opacity-25">
+                                       <h6>Selected  Count : <span>
+                                          <h6  class="d-inline" id="selected_user_count_txt">0
+                                          </h6>
+                                       </span></h6>
+                                      </div>
+                                      <div class="col-4 col-sm-2 d-flex justify-content-center align-items-center border border-1">
+                                         
+                                              <button id="selected_clear_btn" class="btn btn-secondary w-100 rounded-0" type="button">Clear</button>
+                                           
+                                          
+                                      </div>
+                                     </div>
+                                      
+                                     <div class=" table-responsive " >
+                    
+                                      <table class="table   table-bordered border-dark border-opacity-50 text-center p" id="work_select_employee_table" >
+                                        <thead >
+                                         
+                                    
+                                          <tr>
+                                          
+                                            <th scope="col">#</th>
+                                            <th scope="col">Employee</th>
+                                            <th scope="col">Id</th>
+                                          
+                                          </tr>
+                                        </thead>
+                                        <tbody class="align-middle" id="work_select_employee">
+                                         
+                                    
+                                    
+                                          
+                                         
+                                        </tbody>
+                                      </table>
+                                    
+                                    </div>
+                                    
+                                    </div>
+                  
+                  
+                               
+                                    </div>
+                  
+                                   
+                  
+                  
+                                    <div class="input-group mt-3 ">
+                                    
+                  
+                                      <textarea class="form-control"  required id="work_textbox" placeholder="Work Description"  rows="2" ></textarea>
+                      
+                                     
+                                    </div>
+                  
+                  
+                                    <div class="py-2" >
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input"  type="radio" name="inlineRadioOptions" id="hot_radio" value="(Hot lead)">
+                                        <label class="form-check-label" for="hot_radio">Hot lead</label>
+                                      </div>
+                            
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="warm_radio" value="(Warm lead)" >
+                                        <label class="form-check-label" for="warm_radio">Warm lead</label>
+                                      </div>
+                            
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="cold_radio" value="(Cold lead)" >
+                                        <label class="form-check-label" for="cold_radio">Cold lead</label>
+                                      </div>
+                            
+                                     
+                            
+                                      
+                                    </div>
+                                    <div class="mt-3">
+                                      
+                                      <input class="form-control" type="file" id="work_attachment" multiple  accept="image/*;capture=camera">
+                                    </div>
+                  
+                                    <div class="input-group mt-3">
+                                     
+                  
+                                      <label class="input-group-text" for="work_location_textbox"><span>
+                                        <i class="fa-solid fa-location-dot h6"></i>
+                                      </span></label>
+                  
+                  
+                                      <input id="work_location_textbox" type="text" class="form-control" placeholder="place link" aria-label="Username" aria-describedby="basic-addon1" > 
+                                      
+                                      <button class="btn btn-outline-primary" type="button" target="_blank" ><span>
+                                        
+                                        <a href="https://www.google.com/maps" target="_blank">map</a>
+                                      </span></button>
+                                    </div>
+                  
+                  <div class="d-flex justify-content-center mt-3">
+                    <button  id="create_work_btn" class="btn btn-primary" type="submit">Submit</button>
+                  </div>
+                                   
+                              </div>
+                        </form>
+                             
+                            </div>
+                        
+                      </div>
+                      <div class="col-12 col-sm-6 mt-2">
+                         
+                            <div class="card p-0">
+                                <div class="card-header text-center text-black h6 ">
+                                 Work Report
+                                </div>
+                    
+                            
+                                <div class="card-body m-0 p-0 table-responsive">
+                                  <table id="emp_work_report_tbl1" class="table table table-responsive  table-bordered border-dark border-opacity-50 text-center " >
+                                      <thead >
+                                       
+                                  
+                                        <tr>
+                                        
+                                          <th scope="col">#</th>
+                                          <th scope="col">Date</th>
+                                          <th scope="col">Work Type</th>
+                                          <th scope="col">Description</th>
+                                         
+                                        
+                                        </tr>
+                                      </thead>
+                                      <tbody class="align-middle " id="emp_work_report_tbl">
+                                        
+                                        
+                                  
+                                        
+                                       
+                                      </tbody>
+                                    </table>  
+                                </div>
+                          
+                               
+                              </div>
+                          
+                        </div>
+                  
+                  </div>
+                </div>
+          </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" >
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button h6 text-bg-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Assigned Work Report
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse " aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+          <div class="accordion-body p-0">
+            <div class="card m-0 p-0 border-0 ">
+             
+              <div class="card-body py-0 ">
+                <div class="d-sm-flex gap-sm-2   justify-content-center">
+       
+                    <div class="col-12 col-sm-6">
+                   
+                      <div class="card m-0 p-0">
+                        <!-- 390 -->
+
+                            
+    <div class="card-header m-0  py-2 d-flex  justify-content-between align-items-center bg-light " >
+      <button class="btn btn-primary"   id="view_history_btn"><i class="fa-solid fa-book-open"></i>  History</button>
+
+      
+      <h6 class="fw-bold m-0 p-0" id="work_type_text">Assigned  Work </h6>
+   
+      <button class="btn btn-primary" id="view_customer_btn"> <i class="fa-solid fa-users"></i> Info</button>
+     
+        </div>
+                        
+            
+                    
+                        <div class="card-body m-0 p-0 table-responsive overflow-auto">
+                          <table id="emp_assign_tbl1" class="table table-bordered border-dark border-opacity-50 text-center overflow-visible" >
+                             
+                              <tbody class="align-middle " id="emp_assign_tbl">
+                               
+                              </tbody>
+                            </table>  
+                        </div>
+                  
+                       
+                      </div>
+                  
+                      
+                    </div>
+                    <div class="col-12 col-sm-6 ">
+                       
+                      <div class="card m-0 p-0">
+                        <!-- 390 -->
+
+                            
+    <div class="card-header m-0  py-2 d-flex  justify-content-between align-items-center bg-light " >
+      <button class="btn btn-primary"   id="view_history_na_btn"><i class="fa-solid fa-book-open"></i>  History</button>
+      <button class="btn btn-outline-danger border-0" id="modify_na_btn"><i class="fa-solid fa-pen-to-square h5"></i> </button>
+      
+      <h6 class="fw-bold m-0 p-0" id="work_type_text">Not Accepted  </h6>
+      <button class="btn btn-primary" id="view_customer_na_btn"> <i class="fa-solid fa-users"></i> Info</button>
+      
+     
+        </div>
+                        
+            
+                    
+                        <div class="card-body m-0 p-0 table-responsive overflow-auto">
+                          <table id="emp_na_tbl1" class="table table-bordered border-dark border-opacity-50 text-center overflow-visible" >
+                             
+                              <tbody class="align-middle " id="emp_na_tbl">
+                               
+                              </tbody>
+                            </table>  
+                        </div>
+                  
+                       
+                      </div>
+                  
+                        
+                      </div>
+                
+                </div>
+              </div>
+              
+        </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="accordion-item" > 
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button h6 text-bg-secondary collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+           Search Work
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse " aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+          <div class="accordion-body p-0 p-1">
+          
+            <div class="m-0 p-0" >
+              <div class=" d-flex gap-3 mb-2">
+
+              
+                <input type="datetime-local" id="search_start_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1"   >
+    
+                <input type="datetime-local" id="search_end_date"  name="sdate_in" class="form-control" placeholder="Date" aria-label="Username" aria-describedby="basic-addon1"   >
+    
+           
+                <!-- <select class="form-select" id="work_type_list">
+                  <option selected>Work Type...</option>
+                
+                </select> -->
+    
+    
+                    
+                  
+    
+                  <button id="report_search_btn" type="button"  class="btn btn-primary">
+                    <i class="fa-solid fa-magnifying-glass pe-1"></i>
+                      </button>
+            </div>
+              <div class="card m-0 p-0">
+               
+                    
+<div class="card-header m-0  py-2 d-flex  justify-content-between align-items-center bg-light gap-sm-5 " >
+<button class="btn btn-primary"   id="view_history_sa_btn"><i class="fa-solid fa-book-open"></i>  History</button>
+<button class="btn btn-outline-danger border-0" id="modify_sa_btn"><i class="fa-solid fa-pen-to-square h5"></i> </button>
+
+<h6 class="fw-bold m-0 p-0 flex-fill text-center" >Work Report </h6>
+<button class="btn btn-primary" id="view_customer_sa_btn"> <i class="fa-solid fa-users"></i> Info</button>
+
+
+</div>
+                
+    
+            
+                <div class="card-body m-0 p-0 table-responsive overflow-auto">
+                  <table id="emp_sa_tbl1" class="table table-bordered border-dark border-opacity-50 text-center overflow-visible" >
+                     
+                      <tbody class="align-middle " id="emp_sa_tbl">
+                       
+                      </tbody>
+                    </table>  
+                </div>
+          
+               
+              </div>
+          
+              
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+</div>
+
+</div>
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/task.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+</body>
+</html>

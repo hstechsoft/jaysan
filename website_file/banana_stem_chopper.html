@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+  <title>Jaysan banana stem chopper</title>
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="slick/slick.css" />
+
+  <link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+</head>
+
+<body >
+  <!-- top bar mobile -->
+  <section class="mobile_welcome">
+    <div class="container-fluid d-sm-none m-0 p-0">
+      <p class=" text-center   py-1 m-0 blink">Welcome to Jaysan Agri Industrial</p>
+    </div>
+  </section>
+
+<!-- top bar web -->
+  <section>
+    <div id="topbar" class="containe-fluid  d-none d-sm-flex justify-content-between align-items-center">
+      <div id="email" class="flex-grow-1">
+        <p>
+          <span>
+            <i class='fa fa-envelope me-1'></i>
+          </span>
+          jaysanagriindustrial@gmail.com
+          <span class="mx-2">|</span>
+          <span>
+            <i class='fa fa-phone me-1'></i>
+          </span>
+         
+          <span class="mx-1"> </span>
+          +91 94435-11997 
+          <span>
+        </p>
+      </div>
+      <div id="select_lan">
+
+       
+
+        <div id='google_translate_element'></div>
+
+       
+      </div>
+
+     
+      <div id="social">
+        <i class='fa fa-facebook me-1'></i>
+        <i class='fa fa-youtube me-1'></i>
+        <i class='fa fa-whatsapp me-1'></i>
+        <i class='fa fa-instagram me-1'></i>
+      </div>
+    </div>
+  </section>
+
+
+<!-- mobile top bar  -->
+
+<!-- main bar section -->
+  <section class="main_top_sec py-0 py-sm-2 ">
+    <div class="d-sm-flex justify-content-between align-items-center">
+    
+      <div class="d-flex d-sm-block justify-content-between align-items-center mobile_topbar">
+        <div>
+          <img src="img/logo.png" alt="" class="img-fluid  mb-2 mb-sm-0 bg-sm-none">
+
+        </div>
+       <!-- mobile  -->
+<div class="d-sm-none ">
+ 
+  <div class="d-flex align-items-center ">
+    <div class="me-3 ">
+      <a href="#" class="nav-link nav-icon iconClass">
+        <i class="fa fa-cart-shopping"></i>
+        <span class="badge bg-danger text-white"><p id="pcart_no" class="m-0 p-0" >5</p></span>
+      </a>
+    </div>
+
+    <div class="dropdown user_login  ">
+      <button type="button" class="btn btn-muted dropdown-toggle" data-bs-toggle="dropdown">
+        <span class="ms-2">
+          <i class='fa-solid fa-user'></i>
+        </span>
+
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="login.html">Login</a></li>
+        <li><a class="dropdown-item" href="dlogin.html">Dealer Login</a></li>
+        <li><a class="dropdown-item" href="elogin.html">Employee Login</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+        
+      </div>
+
+
+
+      <div class="flex-fill">
+
+
+
+        <div class="row height d-flex justify-content-center align-items-center  mx-auto my-2 my-sm-0">
+
+          <div class="col-md-4">
+
+            <div class="search">
+              <i class="fa fa-search"></i>
+              <input id="search_product" type="text" class="form-control" placeholder="Product Search">
+              <button class="btn btn-primary">Search</button>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+
+      <div class="d-flex  justify-content-between align-items-center">
+        <div class="me-3 d-none d-sm-block">
+          <a href="#" class="nav-link nav-icon iconClass">
+            <i class="fa fa-cart-shopping"></i>
+            <span class="badge bg-danger text-white"><p id="pcart_no" class="m-0 p-0" >5</p> </span>
+          </a>
+        </div>
+
+        <div class="dropdown user_login  d-none d-sm-block">
+          <button type="button" class="btn btn-muted dropdown-toggle" data-bs-toggle="dropdown">
+            <span class="ms-2">
+              <i class='fa-solid fa-user'></i>
+            </span>
+
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="login.html">Login</a></li>
+            <li><a class="dropdown-item" href="dlogin.html">Dealer Login</a></li>
+            <li><a class="dropdown-item" href="elogin.html">Employee Login</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Mobile Menu Bar  -->
+<section class="mobile_menu_bar d-sm-none shadow rounded rounded-2 border py-3 sticky-top">
+  <div class="container d-flex justify-content-between align-items-center px-2">
+    <div>
+      <i class="fa-solid fa-bars" data-bs-toggle="offcanvas" data-bs-target="#jaysan_sidebar" aria-controls="jaysan_sidebar"></i>
+
+    
+
+    </div>
+  
+
+    <div>
+    
+      <p class=" my-auto mx-auto text-decoration-underline ">   +91 94435-11997</p>
+    </div>
+    <div>
+      <i class="fa-brands fa-whatsapp blink me-2" id="mobile_wa"></i>
+    </div>
+  </div>
+  
+</section>
+
+
+
+<!-- mobile sidebar  -->
+
+
+<section id="sidebar">
+
+  <div class="container d-sm-none">
+   
+    <div class="offcanvas  offcanvas-start" tabindex="-1" id="jaysan_sidebar" aria-labelledby="offcanvasTopLabel">
+      <div class="offcanvas-header d-flex align-content-center justify-content-between ">
+        <div>
+         <h4 class="my-auto">JAYSAN</h4>
+        </div>
+        <div>
+          <i class='fa fa-facebook me-1'></i>
+          <i class='fa fa-youtube me-1'></i>
+          
+          <i class='fa fa-instagram me-1'></i>
+        </div>
+        <div>
+          <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  
+        </div>
+        
+           </div>
+      <div class="offcanvas-body p-0">
+  
+        <div class="list-group">
+          <a href="index.html" class="list-group-item list-group-item-action " aria-current="true">
+            <span class="me-1">
+              <i class='fa-solid fa-home'></i>
+            </span>
+            Home
+          </a>
+
+          <div class="accordion accordion-flush border-bottom" >
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#aboutus_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                  <span class="me-2">
+                    <i class="fa-solid fa-briefcase"></i>
+                  </span>
+                  About Us 
+                </button>
+              </h2>
+              <div id="aboutus_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body m-0 p-0 mx-1">
+                  <div class="list-group  border border-1 border-warning">
+           
+                    <a href="profile.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Company Profile</a>
+                    <a href="infrastructure.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      infrastructure</a>
+                   <a href="history.html" class="list-group-item list-group-item-action">
+                    <span class="me-1">
+                      <i class="fa-solid fa-angles-right text-success"></i>
+                    </span>
+                    History</a>
+                   <a href="md_msg.html" class="list-group-item list-group-item-action">
+                    <span class="me-1">
+                      <i class="fa-solid fa-angles-right text-success"></i>
+                    </span>
+                    MD's message</a>
+                       </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+           
+          </div>
+
+
+     
+
+
+            <div class="accordion accordion-flush" >
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#product_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <span class="me-2">
+                      <i class="fa-solid fa-tractor"></i>
+                    </span>
+                    Products
+                  </button>
+                </h2>
+                <div id="product_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body m-0 p-0 mx-1">
+                    <div class="list-group  border border-1 border-warning " id="product_menu_mobile">
+             
+                 
+                    
+                         </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+             
+            </div>
+
+          <a href="contact.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-headset me-1"></i></span>
+            Contact Us</a>
+         
+          <a href="blog.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-regular fa-clipboard me-1"></i></span>
+            Blogs</a>
+          <a href="shop.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-cart-plus me-1"></i></span>
+            Online Shop</a>
+          <a href="carrer.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-regular fa-handshake me-1"></i></span>
+            Carrer</a>
+          <a href="dealer_locator.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-location-crosshairs me-1"></i></span>
+            Dealer Locator</a>
+          
+          <div class="accordion accordion-flush" >
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gallery_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                  <span><i class="fa-solid fa-images me-2"></i></span>
+                  Gallery
+                </button>
+              </h2>
+              <div id="gallery_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body m-0 p-0 mx-1">
+                  <div class="list-group  border border-1 border-warning">
+           
+                    <a href="photos.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Photos</a>
+                    <a href="videos.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Videos</a>
+                  
+                       </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+           
+          </div>
+
+
+         <div class="border"></div>
+        </div>
+
+
+        
+        
+
+
+      </div>
+
+
+
+     
+    </div>
+  </div>
+ 
+</section>
+  <!-- menu bar -->
+  <section>
+    <nav class="navbar py-3 navbar-expand-sm navbar-light d-none d-md-block">
+      <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+
+              <a class="nav-link active" aria-current="page" href="index.html">
+                <span class="ms-2">
+                  <i class='fa-solid fa-home'></i>
+                </span>
+                Home</a>
+            </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-briefcase"></i>
+                </span>
+                About Us
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="profile.html">Company Profile</a></li>
+                <li><a class="dropdown-item" href="infrastructure.html">infrastructure</a></li>
+                <li><a class="dropdown-item" href="history.html">History</a></li>
+                <li><a class="dropdown-item" href="md_msg.html">MD's message</a></li>
+               
+              </ul>
+            </li>
+            
+
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-tractor"></i>
+                </span>
+                Products
+              </a>
+              <ul id="product_menu_web" class="dropdown-menu" aria-labelledby="navbarDropdown">
+              
+               
+              </ul>
+            </li>
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">
+                <span>
+                  <i class="fa-solid fa-headset"></i>
+                </span>
+                Contact Us</a>
+            </li>
+
+           
+          
+            <li class="nav-item">
+              <a class="nav-link" href="blog.html">
+                <span>
+                  <i class="fa-regular fa-clipboard"></i>
+                </span>
+                Blogs</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="shop.html">
+                <span>
+                  <i class="fa-solid fa-cart-plus"></i>
+                </span>
+                Online Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="carrer.html">
+                <span>
+                  <i class="fa-regular fa-handshake"></i>
+                </span>
+                career</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="dealer_locator.html">
+                <span>
+                  <i class="fa-solid fa-location-crosshairs"></i>
+                </span>
+                Dealer Locator</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-images"></i>
+                </span>
+                Gallery
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="photos.html">Photos</a></li>
+                <li><a class="dropdown-item" href="videos.html">Videos</a></li>
+              
+               
+              </ul>
+            </li>
+         
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </section>
+  <!-- product -->
+
+
+
+
+<div class="">
+    <h6 class="common_title fw-bold d-sm-none text-bg-danger text-center  py-2">JAYSAN Banana Stem Chopper </h6>
+    <div class="container" >
+        <div class="">
+        
+          <div class="row he" >
+            <div class="col-md-6 ">
+            <div class="tractor-brand-image-slider " >
+    
+         
+            <div class=" slider-for ">
+              <div ><img src="img/product/banana_stem_chopper/banana stemp chopper.jpg" alt="" class="img-fluid he1"></div>
+             
+             
+            </div>
+    
+            <div  class="slider-nav ">
+              <div ><img src="img/product/banana_stem_chopper/banana stemp chopper.jpg" alt="" class="img-fluid he2"></div>
+          
+         
+          </div>
+          
+            </div>
+    
+            <!-- mobile  -->
+            <div class="btn-div-group d-sm-none">
+            <button class="btn btn-danger EnquiryPopup  w-100 mt-2" id="enq_btn" >Enquire Now</button>
+            <div class="mt-2 d-flex mb-4">
+    
+              
+              <button class="btn btn-secondary EnquiryPopup w-50 mx-1" id="acc_btn">accessories</button>
+        
+            <button class="btn btn-secondary EnquiryPopup w-50 mx-1" id="spares_btn" >Spare Parts</button>
+            </div>
+            </div>
+            </div>
+    
+            <div class="col-md-6">
+              <h6 class="common_title fw-bold d-none d-sm-block">JAYSAN banana stem chopper </h6>
+           
+              <div class="tractor-data-table mt-3">
+              <table class="table table-bordered small">
+              <tbody>
+              <tr>
+              <td scope="row"><b>Blade Guards</b></td>
+              <td data-label="">Availblae</td>
+              </tr>
+              <tr>
+              <td scope="row"><b>No.of Blades</b></td>
+              <td data-label="">3</td>
+              </tr>
+              <tr>
+              <td scope="row"><b>Height Adjustment</b></td>
+              <td data-label="">available</td>
+              </tr>
+           
+              <tr>
+              <td scope="row"><b>Blade</b></td>
+              <td data-label="">16mm Straight Axis Blade </td>
+              </tr>
+              
+              
+              </tbody>
+              </table>
+              </div>
+              <button class="btn btn-danger EnquiryPopup  w-100 mt-2 " id="enq_btn" >Enquire Now</button>
+              <div class="mt-2 d-flex mb-4">
+      
+                
+                <button class="btn btn-secondary EnquiryPopup w-50 mx-1" id="acc_btn">accessories</button>
+          
+              <button class="btn btn-secondary EnquiryPopup w-50 mx-1" id="spares_btn">Spare Parts</button>
+              </div>
+    
+    
+            </div>
+        </div>
+        
+          </div>
+      </div>
+    
+  
+  
+          <section class=" pt-3 pb-3 mt-2" id="product_breif">
+              <div class="container">
+              <h6 class="common_title mb-3 fw-bold">BRIEF ABOUT JAYSAN Banana stem chopper </h6>
+              <div class="pagecontent">
+              <p class="small">Banana stem chopper is a mechanical device for cutting Banana stem into small pieces before being mixed together with other forage <strong>Jaysan banana stem chopper</strong>  is one of the most popular stem chopper in India It has the following distinguishing characteristics:
+     </p>
+             
+     <ul class="small">
+      <li> Height and width Adjustment</li>
+      <li> safety back door</li>
+      <li> easy 3 point linkage</li>
+      <li>no need of gripper gear</li>
+      <li>quality Spares</li>
+  </ul>
+              </div>
+              </div>
+              </section>
+  
+  
+  
+              
+  <section class="brochure">
+                  <div class="container bg-light4">
+                      <div class="row align-items-center justify-content-between">
+                          <div class="col-sm-5 text-center text-md-left  p-3 ">
+                              <h6 class="title fw-bold">Brochures & Manuals</h6>
+                              <p class="mb-3 mb-md-0">You can download the informational brochures or the user manuals for
+                                  our products</p>
+                          </div>
+  
+                          <div class="col-sm-5 text-center text-md-left  p-3 d-flex justify-content-end gap-3">
+                            <div class="card w-50 shadow pt-3 rounded rounded-2" >
+                              <img class="card-img-top img-fluid mhi" src="https://www.kent.co.in/images/new-icon/manual-icon.svg" alt="Card image cap">
+                              <div class="card-body ">
+                                <h6 class="card-title my-3 fw-bold">Demo Video</h6>
+                              
+                                <button  id="company_video_btn" class="btn btn-primary my-2 h4"> <span><i class="fa-regular fa-circle-play "></i></span> Play</button>
+                              </div>
+                            </div>
+  
+                            <div class="card w-50 shadow pt-3 rounded rounded-2" >
+                              <img class="card-img-top img-fluid mhi" src="https://www.kent.co.in/images/new-icon/product-brochures.svg" alt="Card image cap">
+                              <div class="card-body ">
+                                <h6 class="card-title my-3 fw-bold">Brochure</h6>
+                              
+                                <a href="download/Jaysan_brochure.pdf" class="btn btn-primary my-2"> <span><i class="fa-solid fa-download"></i></span> Download</a>
+  
+                                  
+          
+                              </div>
+                            </div>
+                         
+  
+  
+                            
+                        </div>
+  
+                        
+                      </div>
+                  </div>
+              </section>
+            
+              <section id="about1" >
+    
+  
+  
+  
+                <div class="position-relative ">
+                  <div id="fade" onClick="lightbox_close();"></div>
+                  <div class="company_video_div position-fixed top-50 start-50 translate-middle">
+                    <a class="boxclose" id="boxclose" onclick="lightbox_close();"></a>
+                    <video id="company_video" no-controls>
+              
+                      <source src="img/product/ALL MACHINE VIDEO.mp4" >
+                      
+                    
+                    </video>
+                  </div>
+                 
+                </div>
+  
+  
+              </section>
+</div>
+    
+
+       
+
+<section id="phone" class=" mt-1  border rounded shadow mb-2 d-none d-sm-block ">
+  <div class="container-fluid m-0 p-0">
+
+   <div class="d-sm-flex justify-content-center  text-white " >
+     <div class="border border-1 border-white my-4 d-sm-none"></div>
+     
+     <div class="card border-0 text-center bg-transparent mx-5" >
+
+        <div class="card-body">
+         <i class="fa-solid fa-headset"></i>
+     
+            <h5 class="m-0  text-white "  id="phone1">+91 94435-11997</h5>
+           
+         <a href="index.html" class=" stretched-link"></a>
+         
+        
+       </div>
+     </div>
+
+
+     <div class="border border-1  my-4"></div>
+
+
+     <div class="card border-0 text-center bg-transparent mx-5" >
+
+       <div class="card-body">
+         <i class="fa-solid fa-envelope"></i>
+    
+           <h5 class="m-0  text-white">jaysanagriindustrial@gmail.com</h5>
+         
+        <a href="index.html" class=" stretched-link"></a>
+        
+       
+      </div>
+    </div>
+
+
+    <div class="border border-1  my-4"></div>
+
+
+
+    <div class="card border-0 text-center bg-transparent mx-5" >
+
+     <div class="card-body">
+       <i class="fa-solid fa-screwdriver-wrench"></i>
+  
+         <h5 class="m-0   " id="phone2">+91 94435-11997</h5>
+        
+      <a href="index.html" class=" stretched-link"></a>
+      
+     
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+   </div>
+     
+      
+
+    
+
+
+   
+     
+   </div>
+  </div>
+
+ </section>
+
+
+<!-- web footer -->
+ <section id="footer" class="d-none d-sm-block">
+   <div class="container-fluid  ">
+
+<div class="row">
+ <div class="col-sm-3 col-12">
+   <div class="card">
+     <div class="card-title">
+       <h5>Contact Us</h5>
+     </div>
+     <div class="card-body">
+      <strong><p>Jaysan Agri Industrial</p>
+      </strong> 
+       <p> 80-1, 1, valiyampalayam,s.s gardan</p>
+        <p>vilankuruchi - post</p>
+       <p>Coimbatore - 641035</p>
+       <p>Tamilnadu,India</p>
+<br>
+      
+       <p>Phone : +91 94435-11997</p>
+       <p>Email : jaysanagriindustrial@gmail.com</p>
+
+    
+   
+       
+     </div>
+   </div>
+  
+ </div>
+
+
+<div class="col-sm-3 col-6">
+ <div class="card product_footer py-1">
+   <div class="card-title">
+     <h5>Products</h5>
+   </div>
+   <div class="card-body">
+     <div id="link"> 
+       <a  href="baler.html">
+        <span>
+         <i class="fa-solid fa-angles-right"></i>
+        </span>
+
+        <span class="hover-underline-animation">
+         Baler
+       </span>
+       </a>
+             
+     </div>
+
+
+     <div id="link"> 
+       <a  href="rotavator.html">
+        <span>
+         <i class="fa-solid fa-angles-right"></i>
+        </span>
+
+        <span class="hover-underline-animation">
+        rotavator
+       </span>
+       </a>
+             
+     </div>
+
+
+     
+     <div id="link"> 
+       <a  href="/shredder.html">
+        <span>
+         <i class="fa-solid fa-angles-right"></i>
+        </span>
+
+        <span class="hover-underline-animation">
+        shredder
+       </span>
+       </a>
+             
+     </div>
+
+
+     <div id="link"> 
+       <a  href="/forage_crop_cutter.html">
+        <span>
+         <i class="fa-solid fa-angles-right"></i>
+        </span>
+
+        <span class="hover-underline-animation">
+        Forage Crop Cutter
+       </span>
+       </a>
+             
+     </div>
+
+
+
+     <div id="link"> 
+       <a  href="/hay_rake.html">
+        <span>
+         <i class="fa-solid fa-angles-right"></i>
+        </span>
+
+        <span class="hover-underline-animation">
+    Hay Rake
+       </span>
+       </a>
+             
+     </div>
+
+ 
+     
+   </div>
+ </div>
+
+</div>
+
+<div class="col-sm-3 col-6">
+ <div class="card quick_links">
+   <div class="card-title">
+     <h5>Quick Links</h5>
+   </div>
+   <div class="card-body">
+     <div id="link"> 
+       <a href="index.html">
+         <span>
+           <i class="fa-solid fa-angles-right"></i>
+         </span> 
+         <span class="hover-underline-animation">
+         Home Page
+              </span>
+       </a>
+             
+     </div>
+
+
+     <div id="link"> 
+       <a href="profile.html">
+         <span>
+           <i class="fa-solid fa-angles-right"></i>
+           
+         </span> 
+         <span class="hover-underline-animation">
+           About Us 
+              </span>
+       </a>
+             
+     </div>
+
+
+
+
+     <div id="link"> 
+       <a href="dealer_locator.html">
+         <span>
+           <i class="fa-solid fa-angles-right"></i>
+         </span> 
+         <span class="hover-underline-animation">
+         Dealer Locator
+              </span>
+       </a>
+             
+     </div>
+
+
+   
+
+ 
+
+     <div id="link"> 
+       <a href="blog.html">
+         <span>
+           <i class="fa-solid fa-angles-right"></i>
+         </span> 
+         <span class="hover-underline-animation">
+         Blogs
+              </span>
+       </a>
+             
+
+
+       <div id="link"> 
+         <a href="photos.html">
+           <span> 
+             <i class="fa-solid fa-angles-right"></i>
+           </span> 
+           <span class="hover-underline-animation">
+         Gallery
+                </span>
+         </a>
+               
+       </div>
+
+     </div>
+
+     
+   </div>
+ </div>
+</div>
+
+
+<div class="col-sm-3">
+ <div class="card about_footer">
+   <div class="card-title">
+     <h5>About Us</h5>
+ 
+   </div>
+   <div class="card-body">
+  
+     <p class="blog_line">We are Jaysan Agri Industrial, a partnership-based entity that began operations in 2015 and specialises in the manufacture of tractor implements under one roof.  </p>
+  <div class="button_footer d-flex flex-column">
+
+   <a  class="btn btn-warning text-black" href="download/Jaysan_brochure.pdf">
+     <span>
+       <i class="fa-solid fa-download"></i>
+     </span> 
+     Download Brochure
+   </a>
+
+   <a  class="btn btn-warning text-dark" href="contact.html">
+     <span>
+       <i class="fa-regular fa-handshake"></i>
+     </span> Become Dealer
+   </a>
+
+   <a  class="btn btn-warning text-black" href="contact.html">
+     <span>
+       <i class="fa-solid fa-screwdriver-wrench"></i>
+     </span> Service/Spares
+   </a>
+  </div>
+ 
+     
+   </div>
+ </div>
+</div>
+
+</div>
+   
+
+
+
+  
+
+
+     
+
+
+
+
+     
+
+
+     
+
+
+    
+
+   </div>
+ </section>
+
+ <!-- mobile fotter -->
+
+ <section id="footer_mobile" class="d-sm-none mt-2">
+   <div class="container  ">
+
+<div class="row px-1">
+ <div class="col-12 my-2 " id="mf_contact">
+   <div class="card shadow border-2 rounded">
+     <div class="card-title text-center py-2 rounded ">
+       <h6 class="my-auto">Contact Us</h6>
+     </div>
+     <div class="card-body  ">
+      <p> <strong> Jaysan Agri Industrial</strong> 
+   <br>
+      80-1, 1, valiyampalayam,s.s gardan
+      <br>
+        vilankuruchi - post
+        <br>
+       Coimbatore - 641035
+       <br>
+       Tamilnadu,India
+<br>
+      <br>
+       Phone : +91 94435-11997
+       <br>
+       Email :  jaysanagriindustrial@gmail.com
+
+     </p>
+   
+       
+     </div>
+   </div>
+  
+ </div>
+
+
+ <div class="col-12 my-2 " id="mf_link">
+   <div class="card shadow border-2 rounded">
+     <div class="card-title text-center py-2 rounded ">
+       <h6 class="my-auto">quick links</h6>
+     </div>
+     <div class="card-body d-flex justify-content-between ">
+<div>
+ <a  href="/baler.html">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   Baler
+
+  </a>
+
+
+
+  <a  href="/rotavator.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   rotavator
+
+  </a>
+  <a  href="/shredder.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   shredder
+
+  </a>
+
+
+  <a  href="/forage_crop_cutter.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+    Crop Cutter
+
+  </a>
+
+
+  <a  href="/hay_rake.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   Hay Rake
+
+  </a>
+  
+ 
+</div>
+
+
+
+
+<div>
+ <a  href="index.html">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   Home Page
+
+  </a>
+
+
+
+  <a  href="profile.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+   About Us
+
+  </a>
+
+  <a  href="dealer_locator.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   Dealer Locator
+
+  </a>
+
+
+ 
+
+
+  <a  href="blog.html" class="d-block my-1">
+   <span>
+     <i class="fa-solid fa-arrow-right me-2"></i>
+   </span>
+
+   Blogs
+
+  </a>
+  
+ 
+</div>
+       
+     </div>
+   </div>
+  
+ </div>
+
+
+<div class="col-sm-3 col-12 my-2" id="mf_about">
+ 
+
+   <div class=" card shadow border-2 rounded">
+     <div class="card-title text-center py-2 rounded">
+       <h6>About Us</h6>
+   
+     </div>
+     <div class="card-body">
+    
+       <p class="blog_line">We are Jaysan Agri Industrial, a partnership-based entity that began operations in 2015 and specialises in the manufacture of tractor implements under one roof.</p>
+    <div class=" d-flex flex-column ">
+ 
+     <a  class="btn btn-warning mb-2" href="download/Jaysan_brochure.pdf">
+       <span>
+         <i class="fa-solid fa-download"></i>
+       </span> 
+       Download Brochure
+     </a>
+ 
+     <a  class="btn btn-warning mb-2"  href="contact.html">
+       <span>
+         <i class="fa-regular fa-handshake"></i>
+       </span> Become Dealer
+     </a>
+ 
+     <a  class="btn btn-warning"  href="contact.html">
+       <span>
+         <i class="fa-solid fa-screwdriver-wrench"></i>
+       </span> Service/Spares
+     </a>
+    </div>
+   
+       
+     </div>
+   </div>
+ 
+</div>
+
+
+<div class="col-sm-3">
+
+</div>
+
+</div>
+   
+
+
+
+  
+
+
+     
+
+
+
+
+     
+
+
+     
+
+
+    
+
+   </div>
+ </section>
+<!-- copyright footer -->
+<section class=" d-sm-block">
+<div class=" container-fluid m-0 p-0 bg-secondary d-flex justify-content-between align-items-center text-white px-sm-4 px-1 py-1 " id="copyright">
+<p class="small m-0 p-0">copyright &#169; Jaysan - 2022</p>
+<p class="small m-0 p-0">Designed By Easytechzone</p>
+</div>
+</section>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="slick/slick.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+  <script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'></script>
+
+  <script src="hari.js"></script>
+
+
+
+</body>
+
+</html>

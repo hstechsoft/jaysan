@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  
+   <!-- bootsttrap icons -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+</head>
+
+<body>
+
+
+  
+      
+    <div class="container-fluid p-0 m-0 ">
+
+   
+
+        <section id="top_bar">
+            <div class=" d-flex justify-content-between align-items-center text-bg-primary p-1">
+
+                <div>
+                    <h6>Welcome <span id="role_name_txt"></span></h6>
+                </div>
+
+                <div>
+
+                    <button class="btn   text-white border-0 " type="button" id="topbar_logout_btn"
+                        aria-expanded="false">
+
+
+                        <i class="fa-solid fa-right-from-bracket   me-2"></i>
+                    </button>
+
+
+                </div>
+
+            </div>
+        </section>
+
+        <div class="d-flex justify-content-between border border-1">
+            <img class="card-img-top img-fluid w-25 " src="img/jaysan_logo.png" alt="Card image cap ">
+            <div class="my-auto">
+
+                <a href="dealer_index.html" type="button"> <i class="fa-solid fa-house" href="add_candidate.html"></i>
+                </a>
+            </div>
+
+            <div class="my-auto">
+                <h6>Dealer Service </h6>
+            </div>
+
+
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-center fw-bold">
+                    Dealer Service Request  Form
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form id="delivery_form"  onsubmit="return false">
+                    <div class="d-flex gap-3 align-items-center my-auto mb-3">
+                        <div class="input-group ">
+                            <label class="input-group-text mrequired" for="chasis_no">
+                                <span>Chasis No</span>
+                            </label>
+                            <input id="chasis_no" required type="text" class="form-control">
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-primary" id="wchk_btn" type="button">Check</button>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                <div class='input-group mb-2'>
+                    <label class='input-group-text mrequired' for='cus_name'><span>
+                            Customer Name
+                        </span>
+                    </label>
+                    <input id='cus_name' required type='text' class='form-control'>
+                </div>
+                <div class='input-group mb-2'>
+                    <label class='input-group-text mrequired' for='cus_phone'><span>
+                        Customer Phone
+                        </span>
+                    </label>
+                    <input id='cus_phone' required type='number' class='form-control'>
+                </div>
+
+                <div class='input-group mb-2 '>
+                    <textarea class='form-control' required id='cus_addr' placeholder='Customer Address' rows='4'></textarea>
+                </div>
+
+              
+
+              
+
+                    <div  class='input-group mb-2'>
+                        <label class='input-group-text mrequired' for='implement'><span>
+                            Implement 
+                            </span>
+                            </label>
+                        <select class="form-select"  id="implement" required>
+                              
+                          <option value="" disabled selected>Select implement...</option>
+                        
+                      </select>
+                      
+                      </div>
+
+                      
+                    <div  class='input-group mb-2'>
+                        <label class='input-group-text mrequired' for='model'><span>
+                            Model 
+                            </span>
+                            </label>
+                        <select class="form-select" required id="model">
+                              
+                          <option value="" disabled selected>Select Model...</option>
+                        
+                      </select>
+                      
+                      </div>
+
+                      <div class='input-group mb-2 '>
+                        <textarea class='form-control' required id='complaint' placeholder='Service complaint' rows='2'></textarea>
+                    </div>
+                    <div class='input-group mb-2 '>
+                        <textarea class='form-control'  id='remark' placeholder='Remarks If any' rows='4'></textarea>
+                    </div>
+                   
+
+                             
+                <div class="card my-2" id="dphoto">
+                    <div class="card-header text-bg-danger text-center">
+                      <h6>Service Photo</h6>
+                          <div class="input-group visually-hidden">
+                              <input type="file" accept="image/*"   class="form-control" id="delivery_photo_up">
+                              <label class="input-group-text" for="delivery_photo_up">Delivery</label>
+                            </div>
+                      </div>
+                   
+                      <div class="card-body m-0 p-0 mx-auto">
+                          <img id="delivery_photo_preview" class="img-fluid"  style="width: 10rem;" src="img/cam.png" alt>
+                      </div>
+                  </div>
+
+                  <div class="d-flex justify-content-around my-3">
+                    <button class='btn btn-primary' id='dsubmit' type='submit'>submit</button>
+                   
+                </div>
+                    </form>       
+            </div>
+
+        </div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-center">
+Delivery
+    </div>
+    <div class="card-body">
+        <div class = "table-responsive">
+        <table id='delivery_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+            <thead >
+            <tr>
+            
+            <th colspan='7' scope='col' class='bg-info bg-opacity-25'>Today delivery</th>
+            
+            </tr>
+            
+            <tr>
+            
+             <th scope='col'>#</th>
+           <th scope='col'>Name</th>
+           <th scope='col'>Implement</th>
+           <th scope='col'>Model</th>
+           <th scope='col'>Chassis No</th>
+           <th scope='col'>Complaint</th>
+           <th scope='col'> Date</th>
+            
+            </tr>
+            </thead>
+            <tbody class='align-middle ' id='delivery_table'>
+            
+            </tbody>
+            </table>
+            </div>
+    </div>
+</div>
+      
+    </div>
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/dealer_warranty.js" type="module"></script>
+
+</body>
+
+</html>

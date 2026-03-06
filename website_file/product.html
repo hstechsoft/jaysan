@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+  <title>Jaysan</title>
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="slick/slick.css" />
+
+  <link rel="stylesheet" type="text/css" href="slick/slick-theme.css" />
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+</head>
+
+<body >
+  <!-- top bar mobile -->
+  <section class="mobile_welcome">
+    <div class="container-fluid d-sm-none m-0 p-0">
+      <p class=" text-center   py-1 m-0 blink">Welcome to Jaysan Agri Industrial</p>
+    </div>
+  </section>
+
+<!-- top bar web -->
+  <section>
+    <div id="topbar" class="containe-fluid  d-none d-sm-flex justify-content-between align-items-center">
+      <div id="email" class="flex-grow-1">
+        <p>
+          <span>
+            <i class='fa fa-envelope me-1'></i>
+          </span>
+          jaysanagriindustrial@gmail.com
+          <span class="mx-2">|</span>
+          <span>
+            <i class='fa fa-phone me-1'></i>
+          </span>
+
+          <span class="mx-1"> </span>
+          +91 94435-11997 
+          <span>
+        </p>
+      </div>
+      <div id="select_lan">
+
+       
+
+        <div id='google_translate_element'></div>
+
+       
+      </div>
+
+     
+      <div id="social">
+        <i class='fa fa-facebook me-1'></i>
+        <i class='fa fa-youtube me-1'></i>
+        <i class='fa fa-whatsapp me-1'></i>
+        <i class='fa fa-instagram me-1'></i>
+      </div>
+    </div>
+  </section>
+
+
+<!-- mobile top bar  -->
+
+<!-- main bar section -->
+  <section class="main_top_sec py-0 py-sm-2 ">
+    <div class="d-sm-flex justify-content-between align-items-center">
+    
+      <div class="d-flex d-sm-block justify-content-between align-items-center mobile_topbar">
+        <div>
+          <img src="img/logo.png" alt="" class="img-fluid  mb-2 mb-sm-0 bg-sm-none">
+
+        </div>
+       <!-- mobile  -->
+<div class="d-sm-none ">
+ 
+  <div class="d-flex align-items-center ">
+    <div class="me-3 ">
+      <a href="#" class="nav-link nav-icon iconClass">
+        <i class="fa fa-cart-shopping"></i>
+        <span class="badge bg-danger text-white"><p id="pcart_no" class="m-0 p-0" >5</p></span>
+      </a>
+    </div>
+
+    <div class="dropdown user_login  ">
+      <button type="button" class="btn btn-muted dropdown-toggle" data-bs-toggle="dropdown">
+        <span class="ms-2">
+          <i class='fa-solid fa-user'></i>
+        </span>
+
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="login.html">Login</a></li>
+        <li><a class="dropdown-item" href="dlogin.html">Dealer Login</a></li>
+        <li><a class="dropdown-item" href="elogin.html">Employee Login</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+        
+      </div>
+
+
+
+      <div class="flex-fill">
+
+
+
+        <div class="row height d-flex justify-content-center align-items-center  mx-auto my-2 my-sm-0">
+
+          <div class="col-md-4">
+
+            <div class="search">
+              <i class="fa fa-search"></i>
+              <input id="search_product" type="text" class="form-control" placeholder="Product Search">
+              <button class="btn btn-primary">Search</button>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+
+      <div class="d-flex  justify-content-between align-items-center">
+        <div class="me-3 d-none d-sm-block">
+          <a href="#" class="nav-link nav-icon iconClass">
+            <i class="fa fa-cart-shopping"></i>
+            <span class="badge bg-danger text-white"><p id="pcart_no" class="m-0 p-0" >5</p> </span>
+          </a>
+        </div>
+
+        <div class="dropdown user_login  d-none d-sm-block">
+          <button type="button" class="btn btn-muted dropdown-toggle" data-bs-toggle="dropdown">
+            <span class="ms-2">
+              <i class='fa-solid fa-user'></i>
+            </span>
+
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="login.html">Login</a></li>
+            <li><a class="dropdown-item" href="dlogin.html">Dealer Login</a></li>
+            <li><a class="dropdown-item" href="elogin.html">Employee Login</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Mobile Menu Bar  -->
+<section class="mobile_menu_bar d-sm-none shadow rounded rounded-2 border py-3 sticky-top">
+  <div class="container d-flex justify-content-between align-items-center px-2">
+    <div>
+      <i class="fa-solid fa-bars" data-bs-toggle="offcanvas" data-bs-target="#jaysan_sidebar" aria-controls="jaysan_sidebar"></i>
+
+    
+
+    </div>
+  
+
+    <div>
+    
+      <p class=" my-auto mx-auto text-decoration-underline ">   +91 94435-11997</p>
+    </div>
+    <div>
+      <i class="fa-brands fa-whatsapp blink me-2" id="mobile_wa"></i>
+    </div>
+  </div>
+  
+</section>
+
+
+
+<!-- mobile sidebar  -->
+
+
+<section id="sidebar">
+
+  <div class="container d-sm-none">
+   
+    <div class="offcanvas  offcanvas-start" tabindex="-1" id="jaysan_sidebar" aria-labelledby="offcanvasTopLabel">
+      <div class="offcanvas-header d-flex align-content-center justify-content-between ">
+        <div>
+         <h4 class="my-auto">JAYSAN</h4>
+        </div>
+        <div>
+          <i class='fa fa-facebook me-1'></i>
+          <i class='fa fa-youtube me-1'></i>
+          
+          <i class='fa fa-instagram me-1'></i>
+        </div>
+        <div>
+          <button type="button" class="btn-close text-reset " data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  
+        </div>
+        
+           </div>
+      <div class="offcanvas-body p-0">
+  
+        <div class="list-group">
+          <a href="index.html" class="list-group-item list-group-item-action " aria-current="true">
+            <span class="me-1">
+              <i class='fa-solid fa-home'></i>
+            </span>
+            Home
+          </a>
+
+          <div class="accordion accordion-flush border-bottom" >
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#aboutus_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                  <span class="me-2">
+                    <i class="fa-solid fa-briefcase"></i>
+                  </span>
+                  About Us 
+                </button>
+              </h2>
+              <div id="aboutus_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body m-0 p-0 mx-1">
+                  <div class="list-group  border border-1 border-warning">
+           
+                    <a href="profile.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Company Profile</a>
+                    <a href="infrastructure.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      infrastructure</a>
+                   <a href="history.html" class="list-group-item list-group-item-action">
+                    <span class="me-1">
+                      <i class="fa-solid fa-angles-right text-success"></i>
+                    </span>
+                    History</a>
+                   <a href="md_msg.html" class="list-group-item list-group-item-action">
+                    <span class="me-1">
+                      <i class="fa-solid fa-angles-right text-success"></i>
+                    </span>
+                    MD's message</a>
+                       </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+           
+          </div>
+
+
+     
+
+
+            <div class="accordion accordion-flush" >
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#product_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                    <span class="me-2">
+                      <i class="fa-solid fa-tractor"></i>
+                    </span>
+                    Products
+                  </button>
+                </h2>
+                <div id="product_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                  <div class="accordion-body m-0 p-0 mx-1">
+                    <div class="list-group  border border-1 border-warning " id="product_menu_mobile">
+             
+                 
+                    
+                         </div>
+                    
+                  </div>
+                </div>
+              </div>
+              
+             
+            </div>
+
+          <a href="contact.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-headset me-1"></i></span>
+            Contact Us</a>
+          <a href="services.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-screwdriver-wrench me-1"></i></span>
+            Services</a>
+          <a href="blog.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-regular fa-clipboard me-1"></i></span>
+            Blogs</a>
+          <a href="shop.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-cart-plus me-1"></i></span>
+            Online Shop</a>
+          <a href="carrer.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-regular fa-handshake me-1"></i></span>
+            Carrer</a>
+          <a href="dealer_locator.html" class="list-group-item list-group-item-action">
+            <span><i class="fa-solid fa-location-crosshairs me-1"></i></span>
+            Dealer Locator</a>
+          
+          <div class="accordion accordion-flush" >
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gallery_col" aria-expanded="false" aria-controls="flush-collapseOne">
+                  <span><i class="fa-solid fa-images me-2"></i></span>
+                  Gallery
+                </button>
+              </h2>
+              <div id="gallery_col" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body m-0 p-0 mx-1">
+                  <div class="list-group  border border-1 border-warning">
+           
+                    <a href="photos.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Photos</a>
+                    <a href="videos.html" class="list-group-item list-group-item-action">
+                      <span class="me-1">
+                        <i class="fa-solid fa-angles-right text-success"></i>
+                      </span>
+                      Videos</a>
+                  
+                       </div>
+                  
+                </div>
+              </div>
+            </div>
+            
+           
+          </div>
+
+
+         <div class="border"></div>
+        </div>
+
+
+        
+        
+
+
+      </div>
+
+
+
+     
+    </div>
+  </div>
+ 
+</section>
+  <!-- menu bar -->
+  <section>
+    <nav class="navbar py-3 navbar-expand-sm navbar-light d-none d-md-block">
+      <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+
+              <a class="nav-link active" aria-current="page" href="index.html">
+                <span class="ms-2">
+                  <i class='fa-solid fa-home'></i>
+                </span>
+                Home</a>
+            </li>
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-briefcase"></i>
+                </span>
+                About Us
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="profile.html">Company Profile</a></li>
+                <li><a class="dropdown-item" href="infrastructure.html">infrastructure</a></li>
+                <li><a class="dropdown-item" href="history.html">History</a></li>
+                <li><a class="dropdown-item" href="md_msg.html">MD's message</a></li>
+               
+              </ul>
+            </li>
+            
+
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-tractor"></i>
+                </span>
+                Products
+              </a>
+              <ul id="product_menu_web" class="dropdown-menu" aria-labelledby="navbarDropdown">
+              
+               
+              </ul>
+            </li>
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">
+                <span>
+                  <i class="fa-solid fa-headset"></i>
+                </span>
+                Contact Us</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="services.html">
+                <span>
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                </span>
+                Services</a>
+            </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="blog.html">
+                <span>
+                  <i class="fa-regular fa-clipboard"></i>
+                </span>
+                Blogs</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="shop.html">
+                <span>
+                  <i class="fa-solid fa-cart-plus"></i>
+                </span>
+                Online Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="carrer.html">
+                <span>
+                  <i class="fa-regular fa-handshake"></i>
+                </span>
+                career</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="dealer_locator.html">
+                <span>
+                  <i class="fa-solid fa-location-crosshairs"></i>
+                </span>
+                Dealer Locator</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span>
+                  <i class="fa-solid fa-images"></i>
+                </span>
+                Gallery
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="photos.html">Photos</a></li>
+                <li><a class="dropdown-item" href="videos.html">Videos</a></li>
+              
+               
+              </ul>
+            </li>
+         
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+  </section>
+  <!-- product -->
+<div class="container w-50">
+  
+</div>
+
+
+
+  <div class=" ">
+    <div class="container" >
+      <div class="">
+        <h6 class="common_title fw-bold d-sm-none">JAYSAN ROTAVATOR </h6>
+        <div class="row he" >
+          <div class="col-md-6 ">
+          <div class="tractor-brand-image-slider " >
+  
+       
+          <div class=" slider-for ">
+            <div ><img src="img/product/1.jpg" alt="" class="img-fluid he1"></div>
+            <div ><img src="img/product/2.jpg" alt="" class="img-fluid he1"></div>
+            <div ><img src="img/product/3.jpg" alt="" class="img-fluid he1"></div>
+            <div ><img src="img/product/4.jpg" alt="" class="img-fluid he1"></div>
+            <div ><img src="img/product/5.jpg" alt="" class="img-fluid he1"></div>
+          </div>
+  
+          <div  class="slider-nav ">
+            <div ><img src="img/product/1.jpg" alt="" class="img-fluid he2"></div>
+        <div ><img src="img/product/2.jpg" alt="" class="img-fluid he2"></div>
+        <div ><img src="img/product/3.jpg" alt="" class="img-fluid he2"></div>
+        <div ><img src="img/product/4.jpg" alt="" class="img-fluid he2"></div>
+        <div ><img src="img/product/5.jpg" alt="" class="img-fluid he2"></div>
+        </div>
+        
+          </div>
+  
+          <!-- mobile  -->
+          <div class="btn-div-group d-sm-none">
+          <button class="btn btn-danger EnquiryPopup  w-100 mt-2" >Enquire Now</button>
+          <div class="mt-2 d-flex mb-4">
+  
+            
+            <button class="btn btn-secondary EnquiryPopup w-50 mx-1" >accessories</button>
+      
+          <button class="btn btn-secondary EnquiryPopup w-50 mx-1" >Spare Parts</button>
+          </div>
+          </div>
+          </div>
+  
+          <div class="col-md-6">
+            <h6 class="common_title fw-bold d-none d-sm-block">JAYSAN ROTAVATOR </h6>
+         
+            <div class="tractor-data-table mt-3">
+            <table class="table table-bordered small">
+            <tbody>
+            <tr>
+            <td scope="row"><b>Blades</b></td>
+            <td data-label="">36</td>
+            </tr>
+            <tr>
+            <td scope="row"><b>Gear</b></td>
+            <td data-label="">Single</td>
+            </tr>
+            <tr>
+            <td scope="row"><b>P.Gear</b></td>
+            <td data-label="">11 x 19</td>
+            </tr>
+            <tr>
+            <td scope="row"><b>3 Point Link</b></td>
+            <td data-label="">Optional </td>
+            </tr>
+            <tr>
+            <td scope="row"><b>Weight</b></td>
+            <td data-label="">340 </td>
+            </tr>
+            
+            
+            </tbody>
+            </table>
+            </div>
+            <button class="btn btn-danger EnquiryPopup  w-100 mt-2 " >Enquire Now</button>
+            <div class="mt-2 d-flex mb-4">
+    
+              
+              <button class="btn btn-secondary EnquiryPopup w-50 mx-1" >accessories</button>
+        
+            <button class="btn btn-secondary EnquiryPopup w-50 mx-1" >Spare Parts</button>
+            </div>
+  
+  
+          </div>
+      </div>
+      
+        </div>
+    </div>
+    <div class=" pt-3 pb-0 ">
+      <div class="container ">
+      <h6 class="common_title mb-3 fw-bold">JAYSAN ROTAVATOR Features</h6>
+      <section id="mobile_features" class ="d-sm-none mx-1 rounded">
+        <div class="card rounded bg-transparent " >
+         <div class="card-title text-center bg-success bg-opacity-25  rounded py-2 m-0 text-dark">
+          <h6>Features</h6>
+         </div>
+          
+          <div class="card-body px-4 m-0">
+            <ul class="list-group  ">
+              <li class="list-group-item border-0 bg-transparent small"> <span><i class="fa-solid fa-check me-2"></i></span> 25+ Products</li>
+
+              <li class="list-group-item border-0  bg-transparent small"><span><i class="fa-solid fa-check me-2"></i></span>Approved SRFMTTI</li>
+
+              <li class="list-group-item border-0  bg-transparent small"><span><i class="fa-solid fa-check me-2"></i></span>50+ Dealers</li>
+
+              <li class="list-group-item border-0  bg-transparent small"><span><i class="fa-solid fa-check me-2"></i></span>100+ service Centers</li>
+
+              <li class="list-group-item border-0  bg-transparent small"><span><i class="fa-solid fa-check me-2"></i></span>10000+ customers</li>
+              
+            </ul>
+          </div>
+        </div>
+      </section>
+    
+      <div class="d-none d-sm-block">
+        <div class="row mt-5 ">
+    
+
+          <div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+  <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+  
+      <div>
+        <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+        </span>
+           </div>
+     
+         <div class = " text-center ">
+        <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+        <p class="mb-0 small feature__gridValue one_line">5</p>
+      </div>
+  </div>
+           
+            </div>
+
+            
+            <div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+              <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+              
+                  <div>
+                    <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+                    </span>
+                       </div>
+                 
+                     <div class = " text-center ">
+                    <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+                    <p class="mb-0 small feature__gridValue one_line">5</p>
+                  </div>
+              </div>
+                       
+                        </div>
+
+
+<div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+  <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+  
+      <div>
+        <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+        </span>
+           </div>
+     
+         <div class = " text-center ">
+        <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+        <p class="mb-0 small feature__gridValue one_line">5</p>
+      </div>
+  </div>
+           
+            </div>
+
+
+            <div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+              <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+              
+                  <div>
+                    <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+                    </span>
+                       </div>
+                 
+                     <div class = " text-center ">
+                    <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+                    <p class="mb-0 small feature__gridValue one_line">5</p>
+                  </div>
+              </div>
+                       
+                        </div>
+                        
+                        
+                        <div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+                          <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+                          
+                              <div>
+                                <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+                                </span>
+                                   </div>
+                             
+                                 <div class = " text-center ">
+                                <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+                                <p class="mb-0 small feature__gridValue one_line">5</p>
+                              </div>
+                          </div>
+                                   
+                                    </div>
+                                    
+                                    
+
+                                    <div class="col-4 col-sm-4 col-md-2 position-relative ">
+
+                                      <div class=" pt-5 pb-2 shadow rounded rounded-3 bg-white ">
+                                      
+                                          <div>
+                                            <span class="position-absolute top-0 start-50 translate-middle badge  rounded-circle bg-dark bg-opacity-10"> <img class="p-1" with="60" height="60" src="https://tractorguru.in/images/icons/cylinder-new.svg" alt="No. of cylinder">
+                                            </span>
+                                               </div>
+                                         
+                                             <div class = " text-center ">
+                                            <p class="mb-1 small feature__gridProperty fw-bold">Width</p>
+                                            <p class="mb-0 small feature__gridValue one_line">5</p>
+                                          </div>
+                                      </div>
+                                               
+                                                </div>                                
+
+  </div>
+      </div>
+    
+
+      </div>
+      </div>
+
+
+        <section class=" pt-3 pb-3 mt-2">
+            <div class="container">
+            <h6 class="common_title mb-3 fw-bold">BRIEF ABOUT JAYSAN ROTAVATOR TRACTOR IN INDIA</h6>
+            <div class="pagecontent">
+            <p class="small">The JAYSAN ROTAVATOR is one of the most popular tractors in India, coming in the 35-40 HP category. This tractor comes in the lower middle price range, i.e. Rs 5-7 Lakhs. The JAYSAN ROTAVATOR has a 4-stroke, direct injection, water-cooled engine that facilitates the functioning of the tractor even in remote areas without interruptions. It has all the features and specifications of an ideal tractor in the price segment. Let’s discuss more about the JAYSAN ROTAVATOR.</p>
+           
+         
+            </div>
+            </div>
+            </section>
+
+<section class="spec">
+
+
+            <div class="container small" >
+                <h6 class="fw-bold mt-3 mb-3">
+                JAYSAN ROTAVATOR Full Specifications
+                </h6>
+                <table class="table table-bordered table-hover table-responsive">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" class=""><p class="common_sub_title mb-0">ENGINE</p></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>HP Category</b></td>
+                <td>40 HP  </td>
+                </tr>
+                <tr>
+                <td><b>Engine Capacity</b></td>
+                <td>2734 cc</td>
+                </tr>
+                <tr>
+                <td><b>Engine Rated RPM</b></td>
+                <td>1800 RPM</td>
+                </tr>
+                <tr>
+                <td><b>No of Cylinder</b></td>
+                <td>3</td>
+                </tr>
+                <tr>
+                <td><b>Air Filter</b></td>
+                <td>3-stage oil bath type</td>
+                </tr>
+                <tr>
+                <td><b>Cooling System</b></td>
+                <td>Water Cooled</td>
+                </tr>
+                </tbody>
+                </table>
+
+                <table class="mt-2 table table-bordered table-responsive table-hover">
+                <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2"><h6 class="fw-bold mb-0 ">TRANSMISSION (GEARBOX)</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>Clutch Type</b></td>
+                <td>Single dry disc friction plate 280mm dia </td>
+                </tr>
+                <tr>
+                <td><b>Speed Min-Max</b></td>
+                <td>2.30  27.80 kmph</td>
+                </tr>
+                <tr>
+                <td><b>Reverse Speed Min - Max</b></td>
+                <td>2.73 - 10.74 kmph </td>
+                </tr>
+                <tr>
+                <td><b>Forward Gears</b></td>
+                <td>8 </td>
+                </tr>
+                <tr>
+                <td><b>Reverse Gears</b></td>
+                <td>2 </td>
+                </tr>
+                </tbody>
+                </table>
+
+                <table class="mt-2 table table-bordered table-hover">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" itemprop="about"><h6 class="common_sub_title mb-0 fw-bold">BRAKES</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>Brake Type</b></td>
+                <td>Dry / Oil Immersed</td>
+                </tr>
+                </tbody>
+                </table>
+
+                <table class="mt-2 table table-bordered table-hover">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" itemprop="about"><h6 class="common_sub_title mb-0 fw-bold">STEERING</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>Steering Type</b></td>
+                <td>Mechanical / Power Steering</td>
+                </tr>
+                <tr>
+                <td><b>Steering Adjustment</b></td>
+                <td>NO</td>
+                </tr>
+                </tbody>
+                </table>
+
+                <table class="mt-2 table table-bordered table-hover">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" itemprop="about"><h6 class="common_sub_title mb-0 fw-bold">POWER TAKE OFF</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>PTO Type</b></td>
+                <td>6 Spline</td>
+                </tr>
+                <tr>
+                <td><b>PTO RPM</b></td>
+                <td>540, 1000</td>
+                </tr>
+                <tr>
+                <td><b>PTO POWER</b></td>
+                <td>32.6 HP</td>
+                 </tr>
+                </tbody>
+                </table>
+
+
+             
+
+
+
+                <table class="mt-2 table table-bordered table-hover">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" itemprop="about"><h6 class="common_sub_title mb-0 fw-bold">TYRE SIZE</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>Front</b></td>
+                <td>6 X 16</td>
+                 </tr>
+                <tr>
+                <td><b>Rear</b></td>
+                <td>12.4 X 28 / 13.6 X 28</td>
+                </tr>
+                </tbody>
+                </table>
+
+
+
+
+
+                <table class="mt-2 table table-bordered table-hover ">
+                  <thead class="bg-success bg-opacity-25 text-center">
+                <tr>
+                <th scope="col" colspan="2" itemprop="about"><h6 class="common_sub_title fw-bold mb-0">WARRANTY</h6></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><b>Warranty</b></td>
+                <td>2000 hr/2 year </td>
+                </tr>
+                </tbody>
+                </table>
+
+
+
+                </div>
+            </section>
+
+            
+<section class="brochure">
+                <div class="container bg-light4">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-sm-5 text-center text-md-left  p-3 ">
+                            <h6 class="title fw-bold">Brochures & Manuals</h6>
+                            <p class="mb-3 mb-md-0">You can download the informational brochures or the user manuals for
+                                our products</p>
+                        </div>
+
+                        <div class="col-sm-5 text-center text-md-left  p-3 d-flex justify-content-end gap-3">
+                          <div class="card w-50 shadow pt-3 rounded rounded-2" >
+                            <img class="card-img-top img-fluid mhi" src="https://www.kent.co.in/images/new-icon/manual-icon.svg" alt="Card image cap">
+                            <div class="card-body ">
+                              <h6 class="card-title my-3 fw-bold">Demo Video</h6>
+                            
+                              <button  id="company_video_btn" class="btn btn-primary my-2 h4"> <span><i class="fa-regular fa-circle-play "></i></span> Play</button>
+                            </div>
+                          </div>
+
+                          <div class="card w-50 shadow pt-3 rounded rounded-2" >
+                            <img class="card-img-top img-fluid mhi" src="https://www.kent.co.in/images/new-icon/product-brochures.svg" alt="Card image cap">
+                            <div class="card-body ">
+                              <h6 class="card-title my-3 fw-bold">Brochure</h6>
+                            
+                              <a href="#" class="btn btn-primary my-2"> <span><i class="fa-solid fa-download"></i></span> Download</a>
+
+                                
+        
+                            </div>
+                          </div>
+                       
+
+
+                          
+                      </div>
+
+                      
+                    </div>
+                </div>
+            </section>
+          
+            <section id="about1" >
+  
+
+
+
+              <div class="position-relative ">
+                <div id="fade" onClick="lightbox_close();"></div>
+                <div class="company_video_div position-fixed top-50 start-50 translate-middle">
+                  <a class="boxclose" id="boxclose" onclick="lightbox_close();"></a>
+                  <video id="company_video" no-controls>
+            
+                    <source src="img/AGRI INTEK PPT.mp4" >
+                    
+                  
+                  </video>
+                </div>
+               
+              </div>
+
+
+            </section>
+
+       
+
+  <section id="phone" class=" mt-1  border rounded shadow mb-2 d-none d-sm-block ">
+   <div class="container-fluid m-0 p-0">
+ 
+    <div class="d-sm-flex justify-content-center  text-white " >
+      <div class="border border-1 border-white my-4 d-sm-none"></div>
+      
+      <div class="card border-0 text-center bg-transparent mx-5" >
+ 
+         <div class="card-body">
+          <i class="fa-solid fa-headset"></i>
+      
+             <h5 class="m-0  text-white ">+91 9626025240</h5>
+            
+          <a href="index.html" class=" stretched-link"></a>
+          
+         
+        </div>
+      </div>
+
+
+      <div class="border border-1  my-4"></div>
+
+
+      <div class="card border-0 text-center bg-transparent mx-5" >
+ 
+        <div class="card-body">
+          <i class="fa-solid fa-envelope"></i>
+     
+            <h5 class="m-0  text-white">jaysanagriindustrial@gmail.com</h5>
+          
+         <a href="index.html" class=" stretched-link"></a>
+         
+        
+       </div>
+     </div>
+
+
+     <div class="border border-1  my-4"></div>
+
+
+
+     <div class="card border-0 text-center bg-transparent mx-5" >
+ 
+      <div class="card-body">
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+   
+          <h5 class="m-0   ">+91 9626025240</h5>
+         
+       <a href="index.html" class=" stretched-link"></a>
+       
+      
+     </div>
+   </div>
+
+
+
+
+ 
+
+
+
+    </div>
+      
+       
+
+     
+
+
+    
+      
+    </div>
+   </div>
+
+  </section>
+
+
+<!-- web footer -->
+  <section id="footer" class="d-none d-sm-block">
+    <div class="container-fluid  ">
+
+<div class="row">
+  <div class="col-sm-3 col-12">
+    <div class="card">
+      <div class="card-title">
+        <h5>Contact Us</h5>
+      </div>
+      <div class="card-body">
+       <strong><p>Jaysan Agri Industrial</p>
+       </strong> 
+        <p> 80-1, 1, valiyampalayam,s.s gardan</p>
+         <p>vilankuruchi - post</p>
+        <p>Coimbatore - 641035</p>
+        <p>Tamilnadu,India</p>
+<br>
+       
+        <p>Phone : +91 9626025240</p>
+        <p>Email : nklharish1@gmail.com</p>
+
+     
+    
+        
+      </div>
+    </div>
+   
+  </div>
+
+
+<div class="col-sm-3 col-6">
+  <div class="card product_footer py-1">
+    <div class="card-title">
+      <h5>Products</h5>
+    </div>
+    <div class="card-body">
+      <div id="link"> 
+        <a  href="product/baler.html">
+         <span>
+          <i class="fa-solid fa-angles-right"></i>
+         </span>
+
+         <span class="hover-underline-animation">
+          Baler
+        </span>
+        </a>
+              
+      </div>
+
+
+      <div id="link"> 
+        <a  href="product/rotavator.html">
+         <span>
+          <i class="fa-solid fa-angles-right"></i>
+         </span>
+
+         <span class="hover-underline-animation">
+         rotavator
+        </span>
+        </a>
+              
+      </div>
+
+
+      
+      <div id="link"> 
+        <a  href="product/shredder.html">
+         <span>
+          <i class="fa-solid fa-angles-right"></i>
+         </span>
+
+         <span class="hover-underline-animation">
+         shredder
+        </span>
+        </a>
+              
+      </div>
+
+
+      <div id="link"> 
+        <a  href="product/forge_crop_cutter.html">
+         <span>
+          <i class="fa-solid fa-angles-right"></i>
+         </span>
+
+         <span class="hover-underline-animation">
+         Forge Crop Cutter
+        </span>
+        </a>
+              
+      </div>
+
+
+
+      <div id="link"> 
+        <a  href="product/hey_rake.html">
+         <span>
+          <i class="fa-solid fa-angles-right"></i>
+         </span>
+
+         <span class="hover-underline-animation">
+     Hey Rake
+        </span>
+        </a>
+              
+      </div>
+
+  
+      
+    </div>
+  </div>
+
+</div>
+
+<div class="col-sm-3 col-6">
+  <div class="card quick_links">
+    <div class="card-title">
+      <h5>Quick Links</h5>
+    </div>
+    <div class="card-body">
+      <div id="link"> 
+        <a href="index.html">
+          <span>
+            <i class="fa-solid fa-angles-right"></i>
+          </span> 
+          <span class="hover-underline-animation">
+          Home Page
+               </span>
+        </a>
+              
+      </div>
+
+
+      <div id="link"> 
+        <a href="profile.html">
+          <span>
+            <i class="fa-solid fa-angles-right"></i>
+            
+          </span> 
+          <span class="hover-underline-animation">
+            About Us 
+               </span>
+        </a>
+              
+      </div>
+
+
+
+
+      <div id="link"> 
+        <a href="dealer_locator.html">
+          <span>
+            <i class="fa-solid fa-angles-right"></i>
+          </span> 
+          <span class="hover-underline-animation">
+          Dealer Locator
+               </span>
+        </a>
+              
+      </div>
+
+
+      <div id="link"> 
+        <a href="services.html">
+          <span>
+            <i class="fa-solid fa-angles-right"></i>
+          </span> 
+          <span class="hover-underline-animation">
+         Services
+               </span>
+        </a>
+              
+      </div>
+
+  
+
+      <div id="link"> 
+        <a href="blog.html">
+          <span>
+            <i class="fa-solid fa-angles-right"></i>
+          </span> 
+          <span class="hover-underline-animation">
+          Blogs
+               </span>
+        </a>
+              
+
+
+        <div id="link"> 
+          <a href="photos.html">
+            <span> 
+              <i class="fa-solid fa-angles-right"></i>
+            </span> 
+            <span class="hover-underline-animation">
+          Gallery
+                 </span>
+          </a>
+                
+        </div>
+
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="col-sm-3">
+  <div class="card about_footer">
+    <div class="card-title">
+      <h5>About Us</h5>
+  
+    </div>
+    <div class="card-body">
+   
+      <p>Got commenced in the year 2015, we are Jaysan Agri Industrial its a Partnership based entity, engrossed as the manufacturer of Hydralic Cylinder Kit, Agriculture Baler, Hydraulic Cylinder and Grass Baler Machine</p>
+   <div class="button_footer d-flex flex-column">
+
+    <button  class="btn btn-warning">
+      <span>
+        <i class="fa-solid fa-download"></i>
+      </span> 
+      Download Brochure
+    </button>
+
+    <button  class="btn btn-warning">
+      <span>
+        <i class="fa-regular fa-handshake"></i>
+      </span> Become Dealer
+    </button>
+
+    <button  class="btn btn-warning">
+      <span>
+        <i class="fa-solid fa-screwdriver-wrench"></i>
+      </span> Service/Spares
+    </button>
+   </div>
+  
+      
+    </div>
+  </div>
+</div>
+
+</div>
+    
+
+
+
+   
+
+
+      
+
+
+
+
+      
+
+
+      
+
+
+     
+
+    </div>
+  </section>
+
+  <!-- mobile fotter -->
+
+  <section id="footer_mobile" class="d-sm-none mt-2">
+    <div class="container  ">
+
+<div class="row px-1">
+  <div class="col-12 my-2 " id="mf_contact">
+    <div class="card shadow border-2 rounded">
+      <div class="card-title text-center py-2 rounded ">
+        <h6 class="my-auto">Contact Us</h6>
+      </div>
+      <div class="card-body  ">
+       <p> <strong> Jaysan Agri Industrial</strong> 
+    <br>
+       80-1, 1, valiyampalayam,s.s gardan
+       <br>
+         vilankuruchi - post
+         <br>
+        Coimbatore - 641035
+        <br>
+        Tamilnadu,India
+<br>
+       <br>
+        Phone : +91 9626025240
+        <br>
+        Email : nklharish1@gmail.com
+
+      </p>
+    
+        
+      </div>
+    </div>
+   
+  </div>
+
+
+  <div class="col-12 my-2 " id="mf_link">
+    <div class="card shadow border-2 rounded">
+      <div class="card-title text-center py-2 rounded ">
+        <h6 class="my-auto">quick links</h6>
+      </div>
+      <div class="card-body d-flex justify-content-between ">
+<div>
+  <a  href="product/baler.html">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    Baler
+ 
+   </a>
+
+
+
+   <a  href="product/rotavator.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    rotavator
+ 
+   </a>
+   <a  href="product/shredder.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    shredder
+ 
+   </a>
+
+
+   <a  href="product/forge_crop_cutter.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+     Crop Cutter
+ 
+   </a>
+
+
+   <a  href="product/hey_rake.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    Hey Rake
+ 
+   </a>
+   
+  
+</div>
+
+
+
+
+<div>
+  <a  href="index.html">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    Home Page
+ 
+   </a>
+
+
+
+   <a  href="profile.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+    About Us
+ 
+   </a>
+   <a  href="dealer_locator.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    Dealer Locator
+ 
+   </a>
+
+
+   <a  href="services.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+    Services
+ 
+   </a>
+
+
+   <a  href="blog.html" class="d-block my-1">
+    <span>
+      <i class="fa-solid fa-arrow-right me-2"></i>
+    </span>
+
+    Blogs
+ 
+   </a>
+   
+  
+</div>
+        
+      </div>
+    </div>
+   
+  </div>
+
+
+<div class="col-sm-3 col-12 my-2" id="mf_about">
+  
+
+    <div class=" card shadow border-2 rounded">
+      <div class="card-title text-center py-2 rounded">
+        <h6>About Us</h6>
+    
+      </div>
+      <div class="card-body">
+     
+        <p class="">Got commenced in the year 2015, we are Jaysan Agri Industrial its a Partnership based entity, engrossed as the manufacturer of Hydralic Cylinder Kit, Agriculture Baler, Hydraulic Cylinder and Grass Baler Machine</p>
+     <div class=" d-flex flex-column ">
+  
+      <button  class="btn btn-warning mb-2">
+        <span>
+          <i class="fa-solid fa-download"></i>
+        </span> 
+        Download Brochure
+      </button>
+  
+      <button  class="btn btn-warning mb-2">
+        <span>
+          <i class="fa-regular fa-handshake"></i>
+        </span> Become Dealer
+      </button>
+  
+      <button  class="btn btn-warning">
+        <span>
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+        </span> Service/Spares
+      </button>
+     </div>
+    
+        
+      </div>
+    </div>
+  
+</div>
+
+
+<div class="col-sm-3">
+ 
+</div>
+
+</div>
+    
+
+
+
+   
+
+
+      
+
+
+
+
+      
+
+
+      
+
+
+     
+
+    </div>
+  </section>
+<!-- copyright footer -->
+<section class=" d-sm-block">
+<div class=" container-fluid m-0 p-0 bg-secondary d-flex justify-content-between align-items-center text-white px-sm-4 px-1 py-1 " id="copyright">
+<p class="small m-0 p-0">copyright &#169; Jaysan - 2022</p>
+<p class="small m-0 p-0">Designed By Easytechzone</p>
+</div>
+</section>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript" src="slick/slick.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+  <script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'></script>
+
+  <script src="hari.js"></script>
+
+
+
+</body>
+
+</html>

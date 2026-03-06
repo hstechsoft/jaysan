@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <!-- bootsttrap icons -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+  
+  <!-- external css -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+   
+  
+
+
+
+</head>
+<body onload=" ">
+    <section>
+   
+      </section>
+<div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+
+
+
+<!-- navbar -->
+    
+<section id="menu_bar">
+  
+</section>
+
+
+<div class="container-fluid small">
+    <div class="row row-cols-2 row-cols-sm-5  gap-sm-2 p-1">
+        <div class="card p-0 m-0 small">
+<div class="card-header text-bg-light text-center p-1 m-0">
+    <p class="m-0 p-1">Task</p>
+</div>
+<div class="card-body px-3 m-0 ">
+   
+    
+
+    <p class="m-0  text-center text-muted p-0">Today Works : <span id="emp_today_no">0</span></p> 
+<p class="m-0  text-center text-danger p-0">Pending Works : <span id="emp_pending_no">0</span></p>
+
+
+    
+    </div>
+    <div class="card-footer m-0 p-0">
+        <button class="w-100 btn btn-secondary" id="task_btn">view</button>
+    </div>
+        </div>
+
+        <div class="card p-0 m-0 small">
+            <div class="card-header text-bg-light text-center p-1 m-0">
+                <p class="m-0 p-1">Attendance</p>
+            </div>
+            <div class="card-body px-3 m-0">
+               
+                
+            
+                <p class="m-0  text-center text-muted p-0 " id="att_sum"> </p> 
+            <p class=" text-center  p-0 mt-1" id="att_sts">Present</p>
+            
+            
+                
+                </div>
+                <div class="card-footer m-0 p-0 small">
+                    <button class="w-100 btn btn-secondary"  id="att_btn">view</button>
+                </div>
+                    </div>
+    
+                    <div class="card p-0 mt-2 mt-sm-0">
+                        <div class="card-header text-bg-light text-center p-1 m-0">
+                            <p class="m-0 p-1">Leave Approval</p>
+                        </div>
+                        <div class="card-body px-3 m-0">
+                           
+                            
+                        
+                            <p class="m-0  text-center text-muted p-0">Leave Requset : <span id="leave_no"></span></p> 
+                       
+                        
+                        
+                            
+                            </div>
+                            <div class="card-footer m-0 p-0 ">
+                                <button class="w-100 btn btn-secondary "  id="leave_btn">view</button>
+                            </div>
+                                </div>
+
+                                <div class="card p-0 mt-2 mt-sm-0 small">
+                                    <div class="card-header text-bg-light text-center p-1 m-0">
+                                        <p class="m-0 p-1">Tour Approval</p>
+                                    </div>
+                                    <div class="card-body px-3 m-0">
+                                       
+                                        
+                                    
+                                        <p class="m-0  text-center text-muted p-0">Tour Requset : <span id="tour_no"></span> </p> 
+                                   
+                                    
+                                    
+                                        
+                                        </div>
+                                        <div class="card-footer m-0 p-0">
+                                            <button class="w-100 btn btn-secondary"  id="tour_btn">view</button>
+                                        </div>
+                                            </div>
+
+                                            <div class="card p-0 mt-2 mt-sm-0 small">
+                                                <div class="card-header text-bg-light text-center p-1 m-0">
+                                                    <p class="m-0 p-1">Expenses</p>
+                                                </div>
+                                                <div class="card-body px-3 m-0">
+                                                   
+                                                    
+                                                
+                                                    <p class="m-0  text-center text-muted p-0">UnApproved : <span id="exp_unapprove"></span> </p> 
+                                               
+                                                
+                                                
+                                                    
+                                                    </div>
+                                                    <div class="card-footer m-0 p-0">
+                                                        <button class="w-100 btn btn-secondary"  id="exp_btn">view</button>
+                                                    </div>
+                                                        </div>
+              
+
+        </div>
+        
+    </div>
+    
+
+
+        
+</div>
+
+<!-- content -->
+
+
+
+   
+<!-- jquery -->
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <!-- bootstrap include -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<!-- font awesome -->
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<!-- external js -->
+<script src="js/emp_single_detail.js" type="module"></script>
+<script src="js/menu.js" type="module"></script>
+</body>
+</html>

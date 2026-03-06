@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.5/rateit.css" integrity="sha512-UBZiEmhvSN+QLmroxtPWf4f1SsvHlDTAKqMfRw8g9vxALzXsPd/pkwgULarTBp28QRW+L70bAU6Z5Noh0A+OIg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+  
+  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  
+
+  <title>Document</title>
+
+<!-- external css -->
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+
+</head>
+<body>
+  
+<div class="container-fluid p-0 m-0 ">
+   
+
+
+<section id="top_bar">
+    <div class=" d-flex justify-content-between align-items-center text-bg-primary p-1" >
+  
+        <div>
+            <h6>Welcome <span id="role_name_txt"></span></h6>
+        </div>
+  
+        <div>
+      
+            <button class="btn   text-white border-0 " type="button" id="topbar_logout_btn"  aria-expanded="false">  
+              
+            
+                <i class="fa-solid fa-right-from-bracket   me-2"></i>
+            </button>
+           
+        
+        </div>
+       
+    </div>
+  </section>
+
+<div class="d-flex justify-content-between border border-1">
+    <img class="card-img-top img-fluid w-25 " src="img/jaysan_logo.png" alt="Card image cap ">
+    <div  class="my-auto">
+      
+        <a  href = "dealer_index.html" type="button"> <i class="fa-solid fa-house" href = "add_candidate.html"></i> </a>
+    </div>
+   
+    <div class="my-auto">
+        <h6>Dealer Dasboard</h6>
+    </div>
+
+   
+</div>
+
+
+  <div class="card">
+
+    <div class="card-header d-flex justify-content-center">
+      Service Review
+    </div>
+    <form id="review_form"  onsubmit="return false">
+  
+    <div class="card-body">
+
+        <div class='input-group mb-2'> 
+            <label class='input-group-text mrequired' for='cus_name'><span>
+            Name
+            </span>
+            </label>
+            <input id='cus_name' required type='text' class='form-control'  >
+            </div>
+    
+    
+            <div class='input-group mb-2'> 
+                <label class='input-group-text mrequired' for='cus_phone'><span>
+                Phone 
+                </span>
+                </label>
+                <input id='cus_phone' required type='number' class='form-control'  >
+                </div>
+
+                <div class='input-group mb-2'> 
+                  <label class='input-group-text mrequired' for='cus_place'><span>
+                  Place
+                  </span>
+                  </label>
+                  <input id='cus_place' required type='text' class='form-control'  >
+                  </div>
+    
+                <div class='input-group mb-2 ' >
+                    <textarea class='form-control' id='cus_addr' placeholder='cus_addr' rows='2' ></textarea>
+                    </div>
+    
+                    <div class='input-group mb-2'> 
+                        <label class='input-group-text' for='chasis_no'><span>
+                        Chasis No 
+                        </span>
+                        </label>
+                        <input id='chasis_no' type='text' class='form-control'  >
+                        </div>
+
+
+                        
+                    <div class='input-group mb-2'> 
+                        <label class='input-group-text' for='implement'><span>
+              Implement
+                        </span>
+                        </label>
+                        <input id='implement' type='text' class='form-control'  >
+                        </div>
+                        
+                        <div class='input-group mb-2'> 
+                            <label class='input-group-text' for='dealer_name'><span>
+                            Dealer Name 
+                            </span>
+                            </label>
+                            <input id='dealer_name' disabled type='text' class='form-control'  >
+                            </div>
+                        
+                                
+                               
+                                    
+                                       
+                                <div class='input-group mb-2'> 
+                                    <label class='input-group-text' for='service_person_name'><span>
+                                    Service Person name 
+                                    </span>
+                                    </label>
+                                    <input id='service_person_name' type='text' class='form-control'  >
+                                    </div> 
+
+                                    <div class="d-flex justify-content-between gap-2 border border-1 mb-2">
+
+
+                                    <div class="d-flex justify-content-start gap-2">
+                                        <label class='input-group-text' for='rating_service'><span>
+                                            Service Rating 
+                                            </span>
+                                            </label>
+
+                                            <div class="rateit align-self-center" id="rating_service" style="font-size:30px" data-rateit-mode="font" data-rateit-resetable="false">
+                                    </div>
+
+
+                       
+                                   
+    </div>
+
+    <button type="button" class="btn btn-primary">
+        <span id="service_rno">0</span>/5 
+      </button>
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-between gap-2 border border-1 mb-2">
+
+
+                                        <div class="d-flex justify-content-start gap-2">
+                                            <label class='input-group-text' for='rating_dealer'><span>
+                                                Dealer Rating 
+                                                </span>
+                                                </label>
+
+                                                <div class="rateit align-self-center" id="rating_dealer" style="font-size:30px" data-rateit-mode="font" data-rateit-resetable="false">
+                                        </div>
+
+
+                           
+                                       
+        </div>
+
+        <button type="button" class="btn btn-primary">
+            <span id="dealer_rno">0</span>/5 
+          </button>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <button class="btn btn-primary" type="submit" id="review_submit_btn">
+                                        submit
+                                            </button>
+                                        </div>
+ </div>
+
+</form>
+
+</div>  
+<div class="card">
+    <div class="card-header d-flex justify-content-center">
+service
+    </div>
+    <div class="card-body">
+        <table id='service_table1' class='table table-bordered border-dark border-opacity-50 text-center ' >
+            <thead >
+            <tr>
+            
+            <th colspan='6' scope='col' class='bg-info bg-opacity-25'>Today service</th>
+            
+            </tr>
+            
+            <tr>
+            
+             <th scope='col'>#</th>
+           <th scope='col'>Customer Name</th>
+           <th scope='col'>service Person Name</th>
+          
+           <th scope='col'>Chassis No</th>
+           <th scope='col'> Date</th>
+            
+            </tr>
+            </thead>
+            <tbody class='align-middle ' id='service_table'>
+            
+            </tbody>
+            </table>
+    </div>
+</div>
+</div>
+
+
+   
+<  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+<script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'></script>
+
+<!-- Sweet alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.rateit/1.1.5/jquery.rateit.min.js" integrity="sha512-ttBgr7TNuS+00BFNY+TkWU9chna3buySaRKoA9IMmk+ueesPbUfyEsWdn5mrXB+cG+ziRdEXMHmsJjGmzBZJYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- external js -->
+<script src="js/dealer_service.js" type="module"></script>
+
+</body>
+</html>
