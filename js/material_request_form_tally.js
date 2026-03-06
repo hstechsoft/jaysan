@@ -369,6 +369,7 @@ uom1 = " " + obj.uom;
 
 
 
+
 $("#details").text( $("#details").text() + uom1);
 $('#physical_stock_info').append("<tr><td>"+count+"</td><td>"+obj.godown_name+"</td><td>"+obj.qty+"</td></tr>")
 $("#last_purchase_date").text("last Purchase  : " + obj.last_purchase_date + " (Qty :" + obj.last_purchase_qty + ")");
@@ -568,6 +569,7 @@ $('#material_requset_form_tally_table').append(
   function get_material_request_form_list(sts_array, emp_id, field_name)
    {
     
+   console.log(emp_id, JSON.stringify(sts_array)  );
    
    $.ajax({
      url: "php/get_material_request_form_list.php",
