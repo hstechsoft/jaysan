@@ -192,6 +192,35 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0"
       var count = 0;
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+      
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
         var inputParts = $(this).find("td").eq(1).find("li");
@@ -285,6 +314,37 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0";
       var count = 0;
+
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+
+
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
 
@@ -325,7 +385,7 @@ $(document).ready(function () {
 
       $.ajax({
 
-        url: 'php/update_wel_process1.php',
+        // url: 'php/update_wel_process1.php',
         method: 'POST',
         data: {
           allWeldingData: JSON.stringify(allWeldingData),
@@ -1007,7 +1067,7 @@ $(document).ready(function () {
 
             $("#godown_table_data").append(`
             <tr data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
-              <td></td>
+              <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
               <td>${extra_obj.godown_name}</td>
               <td>${extra_obj.dep_name}</td>
               <td>${extra_obj.dep_sec_name}</td>
@@ -1492,7 +1552,7 @@ $(document).ready(function () {
     var max = $("#max_time").val();
     var cost = $("#cost").val();
     console.log(machine_id, section_id);
-    
+
 
     if ($('#welding_table td.tbl_selected').length > 0) {
       var a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
@@ -1541,7 +1601,7 @@ $(document).ready(function () {
 
         $("#godown_table_data").append(`
         <tr data-godown_id="${godown_id}" data-dept_id="${depart_id}" data-section_id="${section_id}" data-machine_id="${machine_id}">
-          <td></td>
+          <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
           <td>${godown}</td>
           <td>${depart}</td>
           <td>${section}</td>
@@ -1686,7 +1746,7 @@ function get_dep_sec_machine(sec_id) {
 }
 function insert_dep_sec_machine(sec_id, mach_name) {
   console.log(sec_id, mach_name);
-  
+
   $.ajax({
     url: "php/insert_dep_sec_machine.php",
     type: "get", //send it through get method
@@ -2858,6 +2918,7 @@ function update_input(partId, processId, change_input_id, qty) {
 
 function insert_new_part() {
 
+  var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
   $.ajax({
     url: "php/insert_new_part.php",
@@ -2865,7 +2926,8 @@ function insert_new_part() {
     data: {
       newPartName: $('#newPartName').val(),
       newPartNo: $('#newPartNo').val(),
-      newPartDes: $('#newPartDes').val()
+      newPartDes: $('#newPartDes').val(),
+      sub_ass: sub_ass,
 
     },
     success: function (response) {

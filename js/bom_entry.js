@@ -1143,6 +1143,7 @@ function get_title() {
 
 function insert_new_part() {
 
+  var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
   $.ajax({
     url: "php/insert_new_part.php",
@@ -1157,6 +1158,7 @@ function insert_new_part() {
       category: $('#category').val(),
       baseunits: $('#baseunits').val(),
       gstrate: $('#gstrate').val(),
+      sub_ass: sub_ass,
     },
     success: function (response) {
       console.log(response);

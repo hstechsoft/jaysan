@@ -200,6 +200,60 @@
 
                     </div>
                 </div>
+
+
+
+                <div class="card shadow-sm  mt-3">
+                    <div class="card-body p-0 d-none d-md-block">
+
+                        <div class="table-responsive " style="max-height: 50vh; overflow-y: auto;">
+                            <table class="table table-bordered table-striped align-middle">
+
+                                <thead class="table-primary text-center"
+                                    style="position: sticky; top: 0; z-index: 5; font-size: 14px; text-align: center;  background: #cfe2ff;">
+                                    <tr>
+                                        <th style="width: 10%;">Line/No</i>
+                                        </th>
+
+                                        <th style="width: 50%;">
+
+                                            <div class="d-flex justify-content-between">
+                                                <!-- Customer Label -->
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa-solid fa-user-group me-1"></i>
+                                                    <span>Customer</span>
+                                                </div>
+                                                <div class="input-group input-group-sm" style="width: 180px;">
+                                                    <span class="input-group-text bg-white border-0">
+                                                        <i class="fa fa-search text-muted"></i>
+                                                    </span>
+                                                    <input type="text" id="production_line_search"
+                                                        class="form-control border-0 bg-white" placeholder="Search...">
+                                                </div>
+                                            </div>
+
+                                        </th>
+
+                                        <th style="width: 40%;">
+                                            <i class="fa-solid fa-industry me-1"></i> Machine Details
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="arrange_order_tbody">
+                                    <!-- JS Inserts Rows Here -->
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="card-body d-block d-md-none p-2 text-center" style="max-height: 50vh; overflow-y: auto;">
+                        <b class=" p-1">Upcoming Machines</b>
+                        <div id="mobile_view_arrange_order_tbody">
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
@@ -227,7 +281,7 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
     <!-- Sweet alert -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 

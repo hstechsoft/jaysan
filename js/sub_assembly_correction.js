@@ -876,7 +876,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#cancle_btn").click(function(){
+    $("#cancle_btn").click(function () {
         window.location.reload();
     })
     // get_jaysan_model_subtype_list()
@@ -1260,7 +1260,7 @@ function get_bom(part_id, component_cat, mat) {
                                                 </td>
 
                                                 <td>
-                                                    ${item.sub_ass_qty}
+                                                    ${item.qty}
                                                 </td>
                                                 <td>
                                                     <button class='btn btn-outline-danger border-0' value='${item.bom_in_id}' disabled>
@@ -1358,28 +1358,31 @@ function get_bom(part_id, component_cat, mat) {
 
                                     $("#update_btn").val(item.bom_id);
 
-                                    $('#bom_table').append(`
-                                    <tr class='small'>
-                                        <td>${count}</td>
+                                    if (item.corrected_qty > 0) {
+                                        $('#bom_table').append(`
+                                            <tr class='small'>
+                                                <td>${count}</td>
 
-                                        <td data-part-id="${item.input_part}">
-                                            <div class="bom-line fw-semibold">
-                                                ${item.inpart_name} ${sub_ass}
-                                            </div>
-                                            ${subHTML} ${Number(item.corrected_qty) > 0 ? `<span class='badge blink bg-danger ms-2'>Need ${Math.abs(item.corrected_qty)}</span>` : ""}
-                                        </td>
+                                                <td data-part-id="${item.input_part}">
+                                                    <div class="bom-line fw-semibold">
+                                                        ${item.inpart_name} ${sub_ass}
+                                                    </div>
+                                                    ${subHTML}
+                                                </td>
 
-                                        <td contenteditable='true' class='qty-editable'>
-                                            ${item.corrected_qty > 0 ? 0 : item.corrected_qty}
-                                        </td>
+                                                <td contenteditable='true' class='qty-editable'>
+                                                    ${item.corrected_qty > 0 ? item.corrected_qty : 0}
+                                                </td>
 
-                                        <td>
-                                            <button class='btn btn-outline-danger border-0'  value='${item.bom_in_id}'>
-                                                <i class='fa fa-trash'></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                `);
+                                                <td>
+                                                    <button class='btn btn-outline-danger border-0'  value='${item.bom_in_id}'>
+                                                        <i class='fa fa-trash'></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        `);
+                                    }
+
 
                                 });
 
@@ -1482,6 +1485,7 @@ function get_title() {
 
 function insert_new_part() {
 
+    var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
     $.ajax({
         url: "php/insert_new_part.php",
@@ -1496,6 +1500,8 @@ function insert_new_part() {
             category: $('#category').val(),
             baseunits: $('#baseunits').val(),
             gstrate: $('#gstrate').val(),
+            gstrate: $('#gstrate').val(),
+            sub_ass: sub_ass,
         },
         success: function (response) {
             console.log(response);
