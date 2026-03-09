@@ -152,7 +152,9 @@ $(document).ready(function () {
     $("#submit_btn").on("click", function () {
 
         var material_id = $("#material").data("material_id");
-        var godown_id = $("#godown").data("godown_id");
+        var godown_id = $("#stock_godown").data("godown_id");
+        var dept_id = $("#stock_department").data("dept_id");
+        var sec_id = $("#stock_section").data("sec_id");
         var day = $("#day_required").val();
         var unit = $("#unit").val();
         var priority = $("#priority").val();
@@ -265,7 +267,7 @@ $(document).ready(function () {
 
         $("#update_btn, #clear_form").addClass("d-none");
         $("#submit_btn").removeClass("d-none");
-         $("#update_btn").prop("disabled", false);
+        $("#update_btn").prop("disabled", false);
 
     })
 
@@ -292,13 +294,323 @@ $(document).ready(function () {
         });
     })
 
+
+
+    $('#stock_godown').on('input', function () {
+        $(this).data("godown_id", '');
+        $('#stock_department').val('').data('dept_id', '');
+        $('#stock_section').val('').data("sec_id", '');
+        $("#unit_add_btn").removeClass("d-none");
+        $("#dep_add_btn").addClass("d-none");
+        $("#sec_add_btn").addClass("d-none");
+        //check the value not empty
+        if ($('#stock_godown').val() != "") {
+            $('#stock_godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    if ($(this).data("godown_id") != '') {
+                        $("#unit_add_btn").addClass("d-none");
+                        $("#dep_add_btn").removeClass("d-none");
+                    }
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#unit_add_btn").on("click", function () {
+        var unit = $("#stock_godown").val();
+        if (unit !== '') {
+            insert_creditors(unit);
+        }
+    })
+
+    $("#dep_add_btn").on("click", function () {
+        var go_id = $('#stock_godown').data("godown_id");
+        var dept_name = $('#stock_department').val();
+        if (go_id == undefined || dept_name == '') {
+            salert('Warning', "Data Missing", "warning");
+            return;
+        }
+        insert_department(go_id, dept_name);
+    })
+
+    $('#stock_department').on('input', function () {
+        console.log($("#stock_godown").data("godown_id"));
+
+        $(this).data("dept_id", '');
+        $('#stock_section').val('').data("sec_id", '');
+        $("#dep_add_btn").removeClass('d-none')
+        $("#sec_add_btn").addClass("d-none");
+
+        //check the value not empty
+        if ($('#stock_department').val() != "") {
+
+            $('#stock_department').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_departments_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            godown_id: $("#stock_godown").data("godown_id"),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.dep_name,
+                                    value: item.dep_name,
+                                    id: item.dep_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("dept_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    if ($(this).data("dept_id") != '') {
+                        $("#dep_add_btn").addClass('d-none')
+                        $("#sec_add_btn").removeClass('d-none')
+                    }
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#sec_add_btn").on("click", function () {
+
+        var dept_id = $('#stock_department').data("dept_id");
+        console.log(dept_id);
+
+        var sec_name = $('#stock_section').val();
+        if (dept_id == undefined || sec_name == '') {
+            salert('Warning', "Data Missing", "warning");
+            return;
+        }
+        insert_dep_section(dept_id, sec_name);
+    })
+
+    $('#stock_section').on('input', function () {
+
+
+        $(this).data("sec_id", '');
+        $("#sec_add_btn").removeClass('d-none')
+        //check the value not emptyFF
+        if ($('#stock_section').val() != "") {
+            $('#stock_section').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            dep_id: $("#stock_department").data("dept_id"),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    if ($(this).data("sec_id") != '') {
+                        $("#sec_add_btn").addClass('d-none')
+                    }
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 });
 
 
 
 
 
+function insert_creditors(unit) {
 
+    $.ajax({
+        url: "php/insert_creditors.php",
+        type: "get", //send it through get method
+        data: {
+            creditor_name: unit,
+            creditor_phone: "",
+            creditor_gst: "",
+            creditors_email: "",
+
+        },
+        success: function (response) {
+
+
+            if (response.trim() > 0) {
+                $("#stock_godown").data("godown_id", response);
+                $("#unit_add_btn").addClass("d-none");
+                $("#dep_add_btn").removeClass("d-none")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function insert_department(go_id, dept_name) {
+    console.log(go_id);
+
+    $.ajax({
+        url: "php/insert_department.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: go_id,
+            dep_name: dept_name,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() > 0) {
+                $("#stock_department").data("dept_id", response);
+                shw_toast("success", "Department Added")
+                $("#dep_add_btn").addClass("d-none")
+                $("#sec_add_btn").removeClass("d-none")
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
+function insert_dep_section(dept_id, sec_name) {
+    $.ajax({
+        url: "php/insert_dep_section.php",
+        type: "get", //send it through get method
+        data: {
+            dep_id: dept_id,
+            sec_name: sec_name,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() > 0) {
+                $("#stock_section").data("sec_id", response);
+                shw_toast("success", "Section Added");
+                $("#sec_add_btn").addClass("d-none");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
 
 function insert_finished_godown_master(material_id, PartsData) {
     console.log(material_id, PartsData);

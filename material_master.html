@@ -49,11 +49,11 @@
         <!-- top bar -->
 
 
-        <div class=" page-wrapper mt-3">
+        <div class=" page-wrapper mt-5">
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-5 order-2 order-sm-0">
 
                     <div class="table-responsive" style="height: 78vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
@@ -82,7 +82,7 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3  order-sm-1 order-1">
                     <div class="card">
                         <div class="card-header d-flex gap-1">
                             <b class="text-primary small fs-7">Material Mapped List</b>
@@ -90,8 +90,8 @@
                                 <span class="input-group-text bg-white border-0">
                                     <i class="fa fa-search text-muted"></i>
                                 </span>
-                                <input type="text" id="material_search"
-                                    class="form-control border-0 bg-white" placeholder="Search...">
+                                <input type="text" id="material_search" class="form-control border-0 bg-white"
+                                    placeholder="Search...">
                             </div>
                         </div>
 
@@ -102,16 +102,40 @@
                     </ul>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-4  order-0 order-sm-2">
                     <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
                         onsubmit="return false">
                         <div class="form-floating mb-2">
                             <input type="text" class="form-control rounded-3" id="material" placeholder="">
                             <label for="material">Material</label>
                         </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="godown" placeholder="">
-                            <label for="godown">Godown</label>
+                        <div class="d-flex align-items-end gap-1">
+                            <span style="width: 100%;">
+                                <label class="form-label mb-0 small">
+                                    <i class="bi bi-warehouse"></i> Unit
+                                </label>
+                                <input type="text" class="form-control form-control-sm mb-1" id="stock_godown"></span>
+                            <button type="button" class="btn btn-primary btn-sm " id="unit_add_btn">+</button>
+                        </div>
+                        <div class="d-flex align-items-end gap-1">
+                            <span style="width: 100%;"><label class="form-label mb-0 small">
+                                    <i class="bi bi-building"></i> Department
+                                </label>
+                                <input type="text" class="form-control form-control-sm mb-1"
+                                    id="stock_department"></span>
+                            <button type="button" class="btn btn-primary btn-sm d-none" id="dep_add_btn">+</button>
+                        </div>
+                        <div class="d-flex  align-items-end gap-1">
+                            <span style="width: 100%;">
+                                <label class="form-label mb-0 small">
+                                    <i class="bi bi-diagram-3"></i> Section
+                                </label>
+                                <input type="text" class="form-control form-control-sm mb-1" id="stock_section">
+                            </span>
+
+                            <button type="button" class="btn btn-primary btn-sm d-none" id="sec_add_btn">
+                                +
+                            </button>
                         </div>
                         <!-- <div  class="card p-3 small mb-2">
 
@@ -168,13 +192,17 @@
                             </div>
 
                         </div> -->
-                        <div class="form-floating mb-2 d-flex">
-                            <input type="number" class="form-control rounded-3" id="day_required" placeholder="">
-                            <label for="day_required">Time Period </label>
-                            <select class="form-select" id="unit">
-                                <option value="minutes">Minutes</option>
-                                <option selected value="hours">Hours</option>
-                            </select>
+                        <div class="d-flex gap-1">
+                            <div class="form-floating mb-2" style="width: 50%;">
+                                <input type="number" class="form-control rounded-3" id="day_required" placeholder="">
+                                <label for="day_required">Time Period </label>
+                            </div>
+                            <div class="form-floating mb-2" style="width: 50%;">
+                                <select class="form-select" id="unit">
+                                    <option value="minutes">Minutes</option>
+                                    <option selected value="hours">Hours</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-floating mb-3">
                             <select class="form-select" id="priority">
@@ -184,10 +212,11 @@
                                 <option value="p3">P3</option>
                             </select>
                             <label for="priority">Priority</label>
+                        </div>
 
-                            <button type="submit" class="btn btn-primary " id="submit_btn">Submit</button>
-                            <button type="submit" class="btn btn-warning d-none" id="update_btn">Update</button>
-                            <button type="submit" class="btn btn-secondary d-none" id="clear_form">Clear</button>
+                        <button type="submit" class="btn btn-primary " id="submit_btn">Submit</button>
+                        <button type="submit" class="btn btn-warning d-none" id="update_btn">Update</button>
+                        <button type="submit" class="btn btn-secondary d-none" id="clear_form">Clear</button>
                     </form>
                 </div>
 

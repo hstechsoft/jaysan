@@ -130,6 +130,8 @@ $(document).ready(function () {
         $("#u_min_max").addClass("d-none");
         $("#dep_add_btn").addClass("d-none");
         $("#sec_add_btn").addClass("d-none");
+        $("#unit_add_btn").removeClass("d-none");
+
         //check the value not empty
         if ($('#stock_godown').val() != "") {
             $("#stock_unit_min_qty").val("");
@@ -174,6 +176,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("godown_id") != '') {
                         $("#u_min_max").removeClass("d-none");
+                        $("#unit_add_btn").addClass("d-none");
                         $("#dep_add_btn").removeClass("d-none");
                     }
                     console.log(ui.item.min, ui.item.max);
@@ -220,6 +223,7 @@ $(document).ready(function () {
         $("#d_min_max").addClass("d-none");
         $("#s_min_max").addClass("d-none");
         $("#sec_add_btn").addClass("d-none");
+        $("#dep_add_btn").removeClass('d-none')
 
         //check the value not empty
         if ($('#stock_department').val() != "") {
@@ -305,6 +309,8 @@ $(document).ready(function () {
 
         $(this).data("sec_id", '');
         $("#s_min_max").addClass("d-none");
+        $("#sec_add_btn").removeClass('d-none');
+
         //check the value not empty
         if ($('#stock_section').val() != "") {
             $("#stock_section_min_qty").val('');

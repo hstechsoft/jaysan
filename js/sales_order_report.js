@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var sub_type_box_value = '';
+var objj = '';
 $(document).ready(function () {
 
 
@@ -475,6 +476,84 @@ $(document).ready(function () {
       $("#" + pricesummary).addClass("d-none");
       $("#" + pricedetails).removeClass("d-none");
     }
+  });
+
+  $("#excel_btn").on("click", function () {
+
+    let table = `
+    <table border="1">
+        <tr>
+            <th>#</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Employee</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Order Qty</th>
+            <th>Status</th>
+            <th>Production Date</th>
+            <th>Delivered Qty</th>
+            <th>Balance Qty</th>
+        </tr>
+    `;
+
+    objj.forEach((order, i) => {
+
+      let products = JSON.parse(order.product);
+
+      products.forEach(p => {
+
+        let production_date = "";
+        let assigntype_total_count = "";
+        let assign_type = "";
+
+        if (p.assign_info && p.assign_info[0] && p.assign_info[0].assign_details[0]) {
+          production_date = p.assign_info[0].assign_details[0].production_date || "";
+          assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
+          assign_type = p.assign_info[0].assign_type || "";
+        }
+
+        table += `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${order.order_no}</td>
+                <td>${order.sale_order_date}</td>
+                <td>${order.emp_name}</td>
+                <td>${order.cus_name}</td>
+                <td>${p.product}</td>
+                <td>${p.model_name}</td>
+                <td>${p.type_name}</td>
+                <td>${p.sub_type}</td>
+                <td>${p.required_qty}</td>
+                <td>${assign_type}</td>
+                <td>${production_date}</td>
+                <td>${assign_type == "Delivered" ? assigntype_total_count : ""}</td>
+                <td>${p.remain_dcf}</td>
+            </tr>
+            `;
+      });
+
+    });
+
+    table += `</table>`;
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
+
+    let filename = `Sale_Order_Report_${dd}-${mm}-${yyyy}.xls`;
+
+    let blob = new Blob([table], { type: "application/vnd.ms-excel" });
+
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+
   });
 });
 
@@ -1078,10 +1157,10 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
         $('#order_table').empty()
         if (response.trim() != "0 result") {
 
-          var obj = JSON.parse(response);
+          objj = JSON.parse(response);
           var count = 0
 
-          obj.forEach(function (obj) {
+          objj.forEach(function (obj) {
             count = count + 1;
 
             var pro = '';
@@ -1344,7 +1423,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
 
 
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd )+ " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd) + " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 

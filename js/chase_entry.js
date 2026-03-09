@@ -48,7 +48,7 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
     get_assign_order();
 
-$('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
+    $('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
     $('#prepared_by').on('input', function () {
         //check the value not empty
         if ($('#prepared_by').val() != "") {
@@ -228,6 +228,13 @@ $('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
     // })
     $("#chase_entry_btn").on("click", function (event) {
 
+        $("#sale_order_no").text("");
+        $("#customer_name").text("")
+        $("#model").text("");
+        $("#product").text("");
+        $("#type").text( "");
+        $("#sub_type").text("");
+
         print();
         setTimeout(() => {
             window.location.reload();
@@ -290,18 +297,18 @@ $('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
             }
 
             var mcd = details.commitment_date.trim().split(" ");
-            $("#sale_order_no").text(details.order_no || "");
-            $("#customer_name").text(details.cus_name || "")
-            $("#product").text(details.product || "");
-            $("#model").text(details.model || "");
-            $("#type").text(details.type || "");
-            $("#sub_type").text(details.sub_type || "");
+            // $("#sale_order_no").text(details.order_no || "");
+            // $("#customer_name").text(details.cus_name || "")
+            // $("#product").text(details.product || "");
+            // $("#model").text(details.model || "");
+            // $("#type").text(details.type || "");
+            // $("#sub_type").text(details.sub_type || "");
             $("#mcd").text(mcd[0] || "");
             $("#marketing_person_name").text(details.emp_name || "");
             $("#line_no").text(details.line_no || "");
             $("#pcd").text(details.date_f || "");
             $("#prepared_by_val").text(details.prepared_by || "");
-            $("#sale_order_no").text(details.order_no || "");
+            // $("#sale_order_no").text(details.order_no || "");
             $("#line_no").text(details.qr_no || "");
             $("#transport_type").text(details.loading_type || "");
             $("#chase_no_val").text(details.chasis_no || "");
@@ -422,7 +429,7 @@ function get_assign_order() {
 
 
                     obj.forEach(function (obj) {
-                        let label = "("+obj.line_no+") - " +obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
+                        let label = "(" + obj.line_no + ") - " + obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
                         if (obj.order_type === "Emergency") {
                             label += " 🚨";
                         }
