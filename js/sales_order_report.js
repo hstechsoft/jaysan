@@ -480,25 +480,25 @@ $(document).ready(function () {
 
   $("#excel_btn").on("click", function () {
 
-    let table = `
-    <table border="1">
-        <tr>
-            <th>#</th>
-            <th>Order No</th>
-            <th>Order Date</th>
-            <th>Employee</th>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Model</th>
-            <th>Type</th>
-            <th>Description</th>
-            <th>Order Qty</th>
-            <th>Status</th>
-            <th>Production Date</th>
-            <th>Delivered Qty</th>
-            <th>Balance Qty</th>
-        </tr>
-    `;
+    let data = [];
+
+    // Header row
+    data.push([
+      "#",
+      "Order No",
+      "Order Date",
+      "Employee",
+      "Customer",
+      "Product",
+      "Model",
+      "Type",
+      "Description",
+      "Order Qty",
+      "Status",
+      "Production Date",
+      "Delivered Qty",
+      "Balance Qty"
+    ]);
 
     objj.forEach((order, i) => {
 
@@ -511,56 +511,51 @@ $(document).ready(function () {
         let assign_type = "";
 
         if (p.assign_info && p.assign_info[0]) {
+
           if (p.assign_info[0].assign_details[0]) {
             production_date = p.assign_info[0].assign_details[0].production_date || "";
           }
+
           assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
           assign_type = p.assign_info[0].assign_type || "";
         }
 
-        table += `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${order.order_no}</td>
-                <td>${order.sale_order_date}</td>
-                <td>${order.emp_name}</td>
-                <td>${order.cus_name}</td>
-                <td>${p.product}</td>
-                <td>${p.model_name}</td>
-                <td>${p.type_name}</td>
-                <td>${Array.isArray(p.sub_type) ? p.sub_type.join(", ") : p.sub_type}</td>
-                <td>${p.required_qty}</td>
-                <td>${assign_type}</td>
-                <td>${production_date}</td>
-                <td>${assign_type == "Delivered" ? assigntype_total_count : ""}</td>
-                <td>${p.remain_dcf}</td>
-            </tr>
-            `;
+        data.push([
+          i + 1,
+          order.order_no,
+          order.sale_order_date,
+          order.emp_name,
+          order.cus_name,
+          p.product,
+          p.model_name,
+          p.type_name,
+          Array.isArray(p.sub_type) ? p.sub_type.join(", ") : p.sub_type,
+          p.required_qty,
+          assign_type,
+          production_date,
+          assign_type == "Delivered" ? assigntype_total_count : "",
+          p.remain_dcf
+        ]);
+
       });
 
     });
 
-    table += `</table>`;
+    // Create worksheet
+    let ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Create workbook
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sale Order Report");
 
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth() + 1).padStart(2, '0');
     let yyyy = today.getFullYear();
 
-    let filename = `Sale_Order_Report_${dd}-${mm}-${yyyy}.xls`;
+    let filename = `Sale_Order_Report_${dd}-${mm}-${yyyy}.xlsx`;
 
-    // ✅ FIXED MIME TYPE
-    let blob = new Blob(['\ufeff', table], {
-      type: "application/vnd.ms-excel;charset=utf-8;"
-    });
-
-    let link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    XLSX.writeFile(wb, filename);
 
   });
 });
