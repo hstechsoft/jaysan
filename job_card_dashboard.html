@@ -122,18 +122,23 @@
                         <div class="card-header bg-success-subtle text-success fw-semibold text-center">
                             <i class="fa-solid fa-location-crosshairs me-2"></i>
                             Job Card Tracker
+                            <div class="form-check form-switch float-end">
+                                <input class="form-check-input" type="checkbox" id="view_btn">
+                                <label class="form-check-label" for="view_btn">View</label>
+                            </div>
                         </div>
+
 
                         <div class="card-body p-0">
 
-                            <div class="table-responsive dashboard-table">
+                            <div class="table-responsive dashboard-table" id="normal">
                                 <table class="table table-hover align-middle mb-0 small">
 
                                     <thead class="dashboard-thead text-center">
                                         <tr>
                                             <th scope="col">
                                                 <div class="d-flex justify-content-between">
-                                                     <div>Line/No</div>
+                                                    <div>Line/No</div>
                                                     <div class="input-group input-group-sm" style="width: 180px;">
                                                         <span class="input-group-text bg-white border-0">
                                                             <i class="fa fa-search text-muted"></i>
@@ -157,8 +162,42 @@
                                 </table>
                             </div>
 
+                            <div class="table-responsive mt-2 d-none" id="gowthami"
+                                style="height: 50vh; overflow-y: auto;">
+                                <table class="table caption-top table-bordered table-striped ">
+                                    <thead class="small text-center align-middle"
+                                        style="position: sticky; z-index: 5; top: 0; background-color: #cfe2ff;">
+
+                                        <tr>
+                                            <th scope="col">
+                                                <div class="d-flex justify-content-between">
+                                                    <div>Line/No</div>
+                                                    <div class="input-group input-group-sm" style="width: 180px;">
+                                                        <span class="input-group-text bg-white border-0">
+                                                            <i class="fa fa-search text-muted"></i>
+                                                        </span>
+                                                        <input type="text" id="scanned_product_search"
+                                                            class="form-control border-0 bg-white"
+                                                            placeholder="Search...">
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th scope="col">Marketing Person Name</th>
+                                            <th scope="col" style="width: 30%;">Product Details</th>
+                                            <th scope="col">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="scanned_data_tbody" class="small">
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
                         </div>
                     </div>
+
 
                 </div>
 

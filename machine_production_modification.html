@@ -19,6 +19,11 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
     <style>
+        @media (max-width: 1023px) {
+            table tr{
+                font-size: 12px !important;
+            }
+        }
         .fc-daygrid-day.fc-day-selected {
             background-color: gainsboro !important;
             /* Example blue color for selected date */
@@ -281,7 +286,7 @@
         <div class="page-wrapper">
             <!-- content -->
             <div class="row py-1">
-                <div class="col-md-2 mx-auto">
+                <div class="col-lg-2 mx-auto">
 
                     <div class="card shadow-sm rounded-3 styled-card">
                         <h5 class="m-0 text-center bg-dark text-light rounded-top py-2">
@@ -459,11 +464,11 @@
 
 
 
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     <!-- RESULT TABLE -->
                     <div class="card shadow-sm">
                         <h5 class="text-center py-2 m-0 border-bottom bg-light">Machine Production Report</h5>
-                        <div class="card-body p-2">
+                        <div class="card-body p-1">
                             <div class="table-responsive" style='height:85vh; overflow-y:auto'>
                                 <table class="table table-bordered table-striped table-sm" id="production_table">
                                     <thead class="table-light">
@@ -483,7 +488,7 @@
 
 
 
-                <div class="col-md-4">
+                <div class="col-lg-4">
                     <div class="card calender" id="calender_card">
                         <h4 class="text-center" style="font-size: 15px;">Calender Report</h4>
                         <div class="card-body p-0" id="calender">

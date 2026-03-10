@@ -40,11 +40,83 @@ $(document).ready(function () {
     get_current_qr_list();
 
     get_assigned_order_db();
+    get_assigned_order();
 
+    $("#view_btn").on("click", function () {
+        if ($(this).is(":checked")) {
+            $("#gowthami").removeClass("d-none");
+            $("#normal").addClass("d-none");
+        }
+        else {
 
+            $("#gowthami").addClass("d-none");
+            $("#normal").removeClass("d-none");
+        }
+    })
 });
 
 
+
+function get_assigned_order() {
+    $.ajax({
+        url: "php/get_assigned_order.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                $("#scanned_data_tbody").empty();
+                if (response.trim() != '0 result') {
+
+
+                    var obj = JSON.parse(response);
+
+
+                    obj.forEach(function (obj) {
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                            <div class="small">
+                                <div class="fw-semibold">
+                                    ${obj.product}
+                                    <span class="text-muted">${obj.model}</span>
+                                    <span class="badge bg-info text-dark ms-1">${obj.type}</span>
+                                </div>
+
+                                <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">
+                                    ${obj.sub_type}
+                                </div>
+                            </div>
+                        </td><td class='text-center align-middle'><button class='btn btn-outline-primary  qr_f_print' data-all_data="${encodeURIComponent(JSON.stringify(obj))}"><i class="fa-solid fa-print"></i></button></td></tr>`)
+                    });
+
+                }
+                else {
+                    $("#scanned_data_tbody").append(`<tr><td colspan='4' class="text-center text-danger">No Product Assigned</td></tr>`)
+
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
