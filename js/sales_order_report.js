@@ -528,7 +528,7 @@ $(document).ready(function () {
                 <td>${p.product}</td>
                 <td>${p.model_name}</td>
                 <td>${p.type_name}</td>
-                <td>${p.sub_type}</td>
+                <td>${Array.isArray(p.sub_type) ? p.sub_type.join(", ") : p.sub_type}</td>
                 <td>${p.required_qty}</td>
                 <td>${assign_type}</td>
                 <td>${production_date}</td>
@@ -549,12 +549,18 @@ $(document).ready(function () {
 
     let filename = `Sale_Order_Report_${dd}-${mm}-${yyyy}.xls`;
 
-    let blob = new Blob([table], { type: "application/vnd.ms-excel" });
+    // ✅ FIXED MIME TYPE
+    let blob = new Blob(['\ufeff', table], {
+      type: "application/vnd.ms-excel;charset=utf-8;"
+    });
 
     let link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = filename;
+
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 
   });
 });
