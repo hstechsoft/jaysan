@@ -4170,20 +4170,40 @@ function get_sales_order_approval(approve_sts) {
                         `;
 
 
-            let proText = obj.pro;
+            let proText = obj.pro.toLowerCase();
+            console.log(proText);
+
+            let ddu = "d-none";
 
             let match = proText.match(/\d{4}-\d{2}-\d{2}/);
-            let ddu = 'd-none';
+
+            let productionDate = null;
 
             if (match) {
-              let productionDate = new Date(match[0]);
-              let today = new Date();
-              today.setHours(0, 0, 0, 0);
+              productionDate = new Date(match[0]);
               productionDate.setHours(0, 0, 0, 0);
-                //  "2026-03-05" <= "2026-03-03"
-              if (productionDate <= today) {
+            }
+
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+
+            if (proText.includes("production")) {
+
+              if (productionDate && productionDate <= today) {
                 ddu = "";
+              } else {
+                ddu = "d-none";
               }
+
+            }
+
+            else if (proText.includes("unassigned") || proText.includes("waiting")) {
+              ddu = "d-none";
+            }
+
+            else if (proText.includes("finshed") || proText.includes("delivered")) {
+              ddu = "";
             }
 
             $("#payment_add_btn_m").data("cus_id", obj.customer_id);
@@ -4233,7 +4253,7 @@ function get_sales_order_approval(approve_sts) {
 
                           <button type="button"
                               value="${obj.oid}"
-                              class="btn btn-outline-primary btn-sm dcf_btn border-0 flex-fill">
+                              class="btn btn-outline-primary btn-sm dcf_btn border-0 flex-fill ${ddu}">
                               <i class="fa-regular fa-file"></i>
                           </button>
 
