@@ -510,8 +510,10 @@ $(document).ready(function () {
         let assigntype_total_count = "";
         let assign_type = "";
 
-        if (p.assign_info && p.assign_info[0] && p.assign_info[0].assign_details[0]) {
-          production_date = p.assign_info[0].assign_details[0].production_date || "";
+        if (p.assign_info && p.assign_info[0]) {
+          if (p.assign_info[0].assign_details[0]) {
+            production_date = p.assign_info[0].assign_details[0].production_date || "";
+          }
           assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
           assign_type = p.assign_info[0].assign_type || "";
         }
