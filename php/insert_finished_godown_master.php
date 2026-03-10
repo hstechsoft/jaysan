@@ -23,7 +23,9 @@ if (count($PartsData) === 0) {
     $time_taken = test_input($partdata['time_taken']);
     $godown_id = test_input($partdata['godown_id']);
     $category = test_input($partdata['category']);
-    $sql = "INSERT INTO finished_godown_master ( part_id,time_taken,godown_id,category) VALUES ($part_id,$time_taken,$godown_id,$category)";
+    $dep_id = test_input($partdata['dep_id']);
+    $dep_sec_id = test_input($partdata['dep_sec_id']);
+    $sql = "INSERT INTO finished_godown_master ( part_id,time_taken,godown_id,category,dep_id,dep_sec_id) VALUES ($part_id,$time_taken,$godown_id,$category,$dep_id,$dep_sec_id)";
 
   if ($conn->query($sql) === TRUE) {
 
