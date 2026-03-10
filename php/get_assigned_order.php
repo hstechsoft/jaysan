@@ -1,11 +1,6 @@
 <?php
  include 'db_head.php';
 
-
-
-
- 
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -33,7 +28,7 @@ customer.cus_phone,jaysan_model_type.type_name as type,line_no as qr_no,prepared
         FROM
             assign_product
         INNER JOIN sales_order_product ON sales_order_product.opid = assign_product.opid
-        inner join machine_production_taken on machine_production_taken.ass_id = assign_product.ass_id where assign_type = "production" and dcf_id = 0 
+        inner join machine_production_taken on machine_production_taken.ass_id = assign_product.ass_id where assign_type = "production"  
     ) AS hs
 INNER JOIN sales_order_form ON hs.oid = sales_order_form.oid
 ) AS hs1
