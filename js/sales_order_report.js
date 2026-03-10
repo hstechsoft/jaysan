@@ -482,7 +482,6 @@ $(document).ready(function () {
 
     let data = [];
 
-    // Header row
     data.push([
       "#",
       "Order No",
@@ -541,10 +540,10 @@ $(document).ready(function () {
 
     });
 
-    // Create worksheet
+    
     let ws = XLSX.utils.aoa_to_sheet(data);
 
-    // Create workbook
+    
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sale Order Report");
 

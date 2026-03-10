@@ -135,60 +135,85 @@
       <div id="ap">
         <div class="row ">
           <div class="col-8  pe-0">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between m-0 p-0 p-1">
-                <p class="m-0 p-0"> Production Part</p>
+            <div class="d-flex justify-content-between mb-2 gap-2">
+                <input type="text" class="form-control rounded-3" id="godown_filter" placeholder="Godown">
+              
+                <input type="text" class="form-control rounded-3" id="department_filter" placeholder="Department">
+              
+                <input type="text" class="form-control rounded-3" id="section_filter" placeholder="Section">
+              
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="card">
+                <div class="card-header d-flex justify-content-between m-0 p-0 p-1">
+                  <p class="m-0 p-0"> Production Part</p>
 
-                <button class="btn btn-danger btn-sm" onclick="window.open('sub_assembly_bom_entry.html', '_blank')">
-                  Sub
-                  Assembly</button>
-                <button class="btn btn-outline-danger border-0  btn-sm" id="reload_btn" title="Reload"
-                  onclick="location.reload();"> <i class="fa-solid fa-rotate-right"></i></button>
+                  <button class="btn btn-danger btn-sm" onclick="window.open('sub_assembly_bom_entry.html', '_blank')">
+                    Sub
+                    Assembly</button>
+                  <button class="btn btn-outline-danger border-0  btn-sm" id="reload_btn" title="Reload"
+                    onclick="location.reload();"> <i class="fa-solid fa-rotate-right"></i></button>
+
+
+                </div>
+                <div class="card-body d-flex justify-content-between">
+                  <div class="w-50 ">
+                    <div class='input-group '>
+
+                      <input id='part_name_out' type='text' class='form-control' placeholder="Part Name">
+                    </div>
+                    <p class=" p-0 m-0">(or)</p>
+                    <div class='input-group p-0 m-0'>
+
+                      <input id='part_no_out' type='text' class='form-control' placeholder="part No">
+                    </div>
+                  </div>
+
+                  <div class="card" style="min-width: 25vw;">
+                    <select class='form-select form-control' id='bom_list_select'>
+                      <option disabled selected>Bom List</option>
+
+                    </select>
+
+                    <div class='input-group mb-2'>
+
+
+                    </div>
+                    <div class="card-body m-0 p-0" style="max-height: 25vh; overflow-y: auto;">
+
+                      <ul class="list-group p-1 small" id="bom_list_item">
+
+
+                      </ul>
+                    </div>
+                  </div>
+
+
+                  <div class=" my-auto mx-3">
+                    <button class='btn  btn-sm btn-primary' id='add_new_out_part_btn' type=''> <i class="fa fa-plus"
+                        aria-hidden="true"></i></button>
+
+                  </div>
+
+                </div>
 
 
               </div>
-              <div class="card-body d-flex justify-content-between">
-                <div class="w-50 ">
-                  <div class='input-group '>
 
-                    <input id='part_name_out' type='text' class='form-control' placeholder="Part Name">
-                  </div>
-                  <p class=" p-0 m-0">(or)</p>
-                  <div class='input-group p-0 m-0'>
-
-                    <input id='part_no_out' type='text' class='form-control' placeholder="part No">
-                  </div>
+              <div class="card">
+                <div class="card-header">
+                  Process
                 </div>
-
-                <div class="card" style="min-width: 25vw;">
-                  <select class='form-select form-control' id='bom_list_select'>
-                    <option disabled selected>Bom List</option>
-
-                  </select>
-
-                  <div class='input-group mb-2'>
+                <div class="card-body" style="max-height: 38vh; overflow-y: auto;">
 
 
-                  </div>
-                  <div class="card-body m-0 p-0" style="max-height: 25vh; overflow-y: auto;">
-
-                    <ul class="list-group p-1 small" id="bom_list_item">
+                <ul class="list-group small" id="process_list">
 
 
-                    </ul>
-                  </div>
-                </div>
-
-
-                <div class=" my-auto mx-3">
-                  <button class='btn  btn-sm btn-primary' id='add_new_out_part_btn' type=''> <i class="fa fa-plus"
-                      aria-hidden="true"></i></button>
-
-                </div>
+                </ul>
 
               </div>
-
-
+              </div>
             </div>
 
             <div class="accordion" id="accordionExample">
@@ -454,7 +479,7 @@
                   <div class="col-6">
                     <div class="form-floating mb-2">
                       <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
-                      <label for="max_time">Max Time 
+                      <label for="max_time">Max Time
                         <span class="text-danger">in hrs*</span> </label>
 
                       <div class="invalid-feedback">

@@ -14,6 +14,7 @@ var process_id_array = [];
 var sel_comp_cat = ""
 var extra_bom = [];
 let editingRow = null;
+var place_filter = 0;
 $(document).ready(function () {
   //   $('[id]').each(function(){
 
@@ -220,7 +221,7 @@ $(document).ready(function () {
       // })
 
       // console.log(extra_bomm);
-      
+
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
         var inputParts = $(this).find("td").eq(1).find("li");
@@ -921,7 +922,167 @@ $(document).ready(function () {
 
 
 
+  $('#godown_filter').on('input', function () {
+    // if ($(this).val().trim() === '') {
+    //   $(this).removeData("godown_id");
+    // }
+    $(this).removeData("godown_id");
+    $('#department_filter').val('').removeData("dept_id");
+    $('#section_filter').val('').removeData("section_id");
 
+    //check the value not empty
+    if ($('#godown_filter').val() != "") {
+      $('#godown_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_creditors_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.creditor_name,
+                  value: item.creditor_name,
+                  id: item.creditor_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("godown_id", ui.item.id);
+          place_filter = ui.item.id;
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
+  $('#department_filter').on('input', function () {
+
+    $(this).removeData("dept_id");
+    $('#section_filter').val('').removeData("section_id");
+    //check the value not empty
+    if ($('#department_filter').val() != "") {
+      $('#department_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_departments_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+              godown_id: $("#godown_filter").data("godown_id")
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.dep_name,
+                  value: item.dep_name,
+                  id: item.dep_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("dept_id", ui.item.id);
+          place_filter = ui.item.id;
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
+  $('#section_filter').on('input', function () {
+
+    //check the value not empty     
+    $(this).removeData("sec_id");
+
+    if ($('#section_filter').val() != "") {
+      $('#section_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_sections_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+              dep_id: $("#department_filter").data("dept_id")
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.sec_name,
+                  value: item.sec_name,
+                  id: item.dep_sec_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("sec_id", ui.item.id);
+          place_filter = ui.item.id;
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
 
 
 
@@ -1251,8 +1412,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("godown_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_department(ui.item.id);
           $("#department_add_btn").removeClass("d-none");
 
@@ -1319,8 +1478,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("dept_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_dep_section(ui.item.id);
           $("#department_add_btn").addClass("d-none");
           $("#section_add_btn").removeClass("d-none");
@@ -1409,8 +1566,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("sec_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_dep_sec_machine(ui.item.id);
           $("#section_add_btn").addClass("d-none");
           $("#machine_add_btn").removeClass("d-none");
@@ -1497,8 +1652,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("mach_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           // get_dep_section(ui.item.id)
           $("#machine_add_btn").addClass("d-none");
 
