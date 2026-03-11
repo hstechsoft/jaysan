@@ -26,7 +26,7 @@ parts_tbl.part_name,
 parts_tbl.sub_ass,
 bom_input.bom_id,
 parts_tbl.part_no,
- JSON_ARRAYAGG(JSON_OBJECT('process',jaysan_process.process_name))
+ JSON_ARRAYAGG(JSON_OBJECT('process',jaysan_process.process_name,'process_id',process_wel_tbl.process_id)) as process_details
 
 from bom_input 
 
