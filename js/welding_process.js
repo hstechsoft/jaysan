@@ -803,6 +803,7 @@ $(document).ready(function () {
         var partId = $('#part_no').data('selected-part_id');
         var qty = $('#qty').val();
         var process_id = $(this).val();
+        var process = process_id ? `(${ $(this).data("process") })` : "";
 
 
 
@@ -811,7 +812,7 @@ $(document).ready(function () {
 
 
         {
-          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-process_id="+process_id+">  <p class='my-auto'>" + $('#part_name').val() + " <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
+          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-process_id=" + process_id + ">  <p class='my-auto'>" + $('#part_name').val() + " <b class='bg-warning'>" + process + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
         }
 
 
@@ -830,6 +831,8 @@ $(document).ready(function () {
 
       }
       else {
+        console.log($('#part_no').val() , $('#part_name').val() , $('#qty').val() , $('#part_name').data('selected-part_id'));
+        
         shw_toast("Insert", "Kindly insert qty or select part from autocomplete")
       }
     }
@@ -1285,6 +1288,7 @@ $(document).ready(function () {
     $("#process_list").empty();
     var part_id = $(this).data('part_id');
     var process_details = [];
+    var process_availble = $(this).data("process_availble");
 
     try {
       process_details = JSON.parse($(this).attr("data-process_details"));
@@ -1292,12 +1296,17 @@ $(document).ready(function () {
       process_details = [];
     }
 
-    $("#process_modal").modal("show");
-    console.log(process_details);
-    $("#process_title").text($(this).data('part_name'));
-    process_details.forEach(function (obj) {
-      $("#process_list").append("<li class='list-group-item' data-process_id=" + obj.process_id + ">" + obj.process + "</li>")
-    })
+    if (Number(process_availble) > 0) {
+      $("#process_modal").modal("show");
+      console.log(process_details);
+      $("#process_title").text($(this).data('part_name'));
+      process_details.forEach(function (obj) {
+        $("#process_list").append("<li class='list-group-item' data-process_id=" + obj.process_id + ">" + obj.process + "</li>")
+      })
+    } else {
+      $("#add_part_btn").val('').data("process", '').trigger("click");
+    }
+
     console.log($(this).data('part_qty'));
 
     console.log(part_id);
@@ -1317,7 +1326,7 @@ $(document).ready(function () {
   });
 
   $("#process_list").on("dblclick", "li", function () {
-    $("#add_part_btn").val($(this).data("process_id")).trigger("click");
+    $("#add_part_btn").val($(this).data("process_id")).data("process", $(this).text().trim()).trigger("click");
     $("#process_modal").modal("hide");
   })
 
@@ -2784,7 +2793,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li  data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-process_details='" + obj.process_details + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
