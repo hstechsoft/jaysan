@@ -495,6 +495,8 @@ $(document).ready(function () {
       "Order Qty",
       "Status",
       "Production Date",
+      "DCF Status",
+      "DCF Qty",
       "Delivered Qty",
       "Balance Qty"
     ]);
@@ -508,6 +510,8 @@ $(document).ready(function () {
         let production_date = "";
         let assigntype_total_count = "";
         let assign_type = "";
+        let dcf_status = "";
+        // let dcf_count = "";
 
         if (p.assign_info && p.assign_info[0]) {
 
@@ -517,6 +521,10 @@ $(document).ready(function () {
 
           assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
           assign_type = p.assign_info[0].assign_type || "";
+
+          if(p.dcf_details && p.dcf_details[0]){
+            dcf_status = p.dcf_details[0].dc_sts || "";
+          }
         }
 
         data.push([
@@ -532,6 +540,8 @@ $(document).ready(function () {
           p.required_qty,
           assign_type,
           production_date,
+          dcf_status,
+          p.dcf_count || "",
           assign_type == "Delivered" ? assigntype_total_count : "",
           p.remain_dcf
         ]);

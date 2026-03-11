@@ -232,7 +232,8 @@ $(document).ready(function () {
           inputPartsArr.push({
             part_id: $(this).data('part-id'),
 
-            part_qty: $(this).data('part-qty')
+            part_qty: $(this).data('part-qty'),
+            pre_process_id: $(this).data('process_id')
           });
         });
 
@@ -386,7 +387,7 @@ $(document).ready(function () {
 
       $.ajax({
 
-        // url: 'php/update_wel_process1.php',
+        url: 'php/update_wel_process1.php',
         method: 'POST',
         data: {
           allWeldingData: JSON.stringify(allWeldingData),
@@ -800,7 +801,8 @@ $(document).ready(function () {
       if ($('#part_no').val() && $('#part_name').val() && $('#qty').val() && $('#part_name').data('selected-part_id')) {
         issaved = 'no'
         var partId = $('#part_no').data('selected-part_id');
-        var qty = $('#qty').val()
+        var qty = $('#qty').val();
+        var process_id = $(this).val();
 
 
 
@@ -809,7 +811,7 @@ $(document).ready(function () {
 
 
         {
-          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + ">  <p class='my-auto'>" + $('#part_name').val() + " <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
+          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-process_id="+process_id+">  <p class='my-auto'>" + $('#part_name').val() + " <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
         }
 
 
@@ -965,7 +967,8 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("godown_id", ui.item.id);
-          place_filter = ui.item.id;
+          get_part_dept_wise('', ui.item.id, '', '');
+
 
         },
 
@@ -982,6 +985,7 @@ $(document).ready(function () {
 
     $(this).removeData("dept_id");
     $('#section_filter').val('').removeData("section_id");
+
     //check the value not empty
     if ($('#department_filter').val() != "") {
       $('#department_filter').autocomplete({
@@ -1017,7 +1021,7 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("dept_id", ui.item.id);
-          place_filter = ui.item.id;
+          get_part_dept_wise('', $("#godown_filter").data("godown_id"), ui.item.id, '');
 
 
         },
@@ -1070,7 +1074,8 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("sec_id", ui.item.id);
-          place_filter = ui.item.id;
+          get_part_dept_wise('', $("#godown_filter").data("godown_id"), $("#department_filter").data("dept_id"), ui.item.id);
+
 
 
         },
@@ -1277,7 +1282,22 @@ $(document).ready(function () {
 
 
   $("#bom_list").on("click", "li", function () {
+    $("#process_list").empty();
     var part_id = $(this).data('part_id');
+    var process_details = [];
+
+    try {
+      process_details = JSON.parse($(this).attr("data-process_details"));
+    } catch (e) {
+      process_details = [];
+    }
+
+    $("#process_modal").modal("show");
+    console.log(process_details);
+    $("#process_title").text($(this).data('part_name'));
+    process_details.forEach(function (obj) {
+      $("#process_list").append("<li class='list-group-item' data-process_id=" + obj.process_id + ">" + obj.process + "</li>")
+    })
     console.log($(this).data('part_qty'));
 
     console.log(part_id);
@@ -1289,13 +1309,17 @@ $(document).ready(function () {
 
     $('#qty').val($(this).data('part_qty'));
 
-    $("#add_part_btn").trigger("click");
+    // $("#add_part_btn").trigger("click");
     $('#process_name').focus();
 
     // Change the color of the clicked item
     $(this).addClass("text-bg-secondary")
   });
 
+  $("#process_list").on("dblclick", "li", function () {
+    $("#add_part_btn").val($(this).data("process_id")).trigger("click");
+    $("#process_modal").modal("hide");
+  })
 
   $("#bom_recent_list").on("click", "li", function () {
     var part_id = $(this).data('part_id');
@@ -1849,7 +1873,75 @@ $(document).ready(function () {
   });
 
 
+  get_part_dept_wise('', '', '', '');
+
+  $("#dept_wise_list").on("dblclick", "li a", function () {
+    var partId = $(this).data("part_id");
+    var part_name = $(this).text();
+
+    alert(partId)
+    selectAutocompleteByPartId(partId)
+  })
+
 });
+
+
+
+
+
+
+
+
+
+function get_part_dept_wise(part_id, godown_id, dep_id, dep_sec_id) {
+
+  $.ajax({
+    url: "php/get_part_dept_wise.php",
+    type: "get", //send it through get method
+    data: {
+      part_id: part_id,
+      godown_id: godown_id,
+      dep_id: dep_id,
+      dep_sec_id: dep_sec_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() != "error") {
+        $("#dept_wise_list").empty();
+        if (response.trim() != "0 result") {
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+
+          obj.forEach(function (obj) {
+            count = count + 1;
+
+            $("#dept_wise_list").append("<li class='list-group-item'><a class='dropdown-item' data-part_id=" + obj.part_id + ">" + obj.part_name + "</a></li>")
+
+          });
+
+
+        }
+        else {
+          // $("#machine_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+
+        }
+      }
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+}
+
 
 
 function get_dep_sec_machine(sec_id) {
@@ -2656,11 +2748,12 @@ function get_bom_list_comp(part_id) {
 
 function get_bom(part_id, component_cat) {
 
-  console.log(component_cat);
+  console.log(part_id, component_cat);
 
 
   $.ajax({
-    url: "php/get_bom.php",
+    // url: "php/get_bom.php",
+    url: "php/get_bom_list_process.php",
     type: "get", //send it through get method
     data: {
       part_id: part_id,
@@ -2691,7 +2784,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li  data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li  data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-process_details='" + obj.process_details + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 

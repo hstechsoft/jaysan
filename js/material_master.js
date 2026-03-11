@@ -95,59 +95,6 @@ $(document).ready(function () {
     });
 
 
-    $('#godown').on('input', function () {
-        //check the value not empty
-        if ($('#godown').val() != "") {
-            $('#godown').autocomplete({
-                //get data from databse return as array of object which contain label,value
-
-                source: function (request, response) {
-                    $.ajax({
-                        url: "php/get_creditors_auto.php",
-                        type: "get", //send it through get method
-                        data: {
-
-                            term: $('#godown').val(),
-
-                        },
-                        dataType: "json",
-                        success: function (data) {
-
-                            console.log(data);
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.creditor_name,
-                                    value: item.creditor_name,
-                                    id: item.creditor_id,
-                                    // part_name: item.part_name
-                                };
-                            }));
-
-                        }
-
-                    });
-                },
-                minLength: 2,
-                cacheLength: 0,
-                select: function (event, ui) {
-
-                    $(this).data("godown_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
-                    //  get_bom(ui.item.id)
-
-
-                },
-
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div>" + item.label + "</div>")
-                    .appendTo(ul);
-            };
-        }
-
-    });
-
 
     $("#submit_btn").on("click", function () {
 
@@ -162,7 +109,9 @@ $(document).ready(function () {
         var PartsData = [];
         var converted_day = day;
 
-        if (!material_id || !godown_id || !day || !priority) {
+        if (!material_id || !godown_id || !day || !priority || !dept_id || !sec_id) {
+            console.log();
+            
             salert("Warning", "Fill All the Fields!", "warning");
             return;
         }
@@ -174,7 +123,9 @@ $(document).ready(function () {
         PartsData.push({
             time_taken: parseFloat(converted_day),
             godown_id: godown_id,
-            category: priority
+            category: priority,
+            dep_id: dept_id,
+            dep_sec_id: sec_id
         });
 
         if (PartsData.length > 0) {
@@ -206,11 +157,15 @@ $(document).ready(function () {
         var master_id = $(this).data("master_id");
         var part_id = $(this).data("part_id");
         var godown_id = $(this).data("godown_id");
+        var dept_id = $(this).data("dept_id");
+        var sec_id = $(this).data("sec_id");
         var time_taken = $(this).data("time_taken");
         var priority = $(this).data("priority");
 
         $('#material').val(row.find("td").eq(1).text()).data("material_id", part_id);
-        $('#godown').val(row.find("td").eq(2).text()).data("godown_id", godown_id);
+        $('#stock_godown').val(row.find("td").eq(2).text()).data("godown_id", godown_id);
+        $('#stock_department').val(row.find("td").eq(3).text()).data("dept_id", dept_id);
+        $('#stock_section').val(row.find("td").eq(4).text()).data("sec_id", sec_id);
         $('#day_required').val(time_taken);
         $('#priority').val(priority).prop("selected", true);
         $("#update_btn").val(master_id);
@@ -224,7 +179,9 @@ $(document).ready(function () {
 
         var master_id = $(this).val();
         var material_id = $("#material").data("material_id");
-        var godown_id = $("#godown").data("godown_id");
+        var godown_id = $("#stock_godown").data("godown_id");
+        var dept_id = $("#stock_department").data("dept_id");
+        var sec_id = $("#stock_section").data("sec_id");
         var day = $("#day_required").val();
         var unit = $("#unit").val();
         var priority = $("#priority").val();
@@ -252,7 +209,9 @@ $(document).ready(function () {
             parseFloat(converted_day),
             godown_id,
             priority,
-            master_id
+            master_id,
+            dept_id,
+            sec_id
         );
 
     });
@@ -260,7 +219,9 @@ $(document).ready(function () {
     $("#clear_form").on("click", function () {
 
         $('#material').val('').data("material_id", '');
-        $('#godown').val('').data("godown_id", '');
+        $('#stock_godown').val('').data("godown_id", '');
+        $('#stock_department').val('').data("dept_id", '');
+        $('#stock_section').val('').data("sec_id", '');
         $('#day_required').val('');
         $('#priority').val("null").prop("selected", true);
         $('#unit').val("hours").prop("selected", true);
@@ -677,8 +638,8 @@ function delete_finished_godown_master(master_id, part_id) {
     });
 }
 
-function update_finished_godown_master(material_id, converted_day, godown_id, priority, master_id) {
-    console.log(material_id, converted_day, godown_id, priority, master_id);
+function update_finished_godown_master(material_id, converted_day, godown_id, priority, master_id, dept_id, sec_id) {
+    console.log(material_id, converted_day, godown_id, priority, master_id, dept_id, sec_id);
 
     $.ajax({
         url: "php/update_finished_godown_master.php",
@@ -690,6 +651,8 @@ function update_finished_godown_master(material_id, converted_day, godown_id, pr
             godown_id: godown_id,
             category: priority,
             master_id: master_id,
+            dep_id: dept_id,
+            dep_sec_id: sec_id
         },
         success: function (response) {
 
@@ -766,6 +729,8 @@ function get_finished_godown_master_list() {
 }
 
 function get_finished_godown_master_details(material_id) {
+    console.log(material_id);
+    
     $.ajax({
         url: "php/get_finished_godown_master_details.php",
         type: "get", //send it through get method
@@ -787,7 +752,7 @@ function get_finished_godown_master_details(material_id) {
 
                     obj.forEach(function (obj) {
                         count++
-                        $("#material_tbody").append(`<tr><td>${count}</td><td>${obj.part_name}</td><td>${obj.creditor_name}</td><td>${obj.time_taken}</td><td>${obj.category}</td><td class='d-flex gap-2'><button class='btn btn-outline-warning edit' data-part_id='${obj.part_id}' data-godown_id='${obj.godown_id}' data-time_taken='${obj.time_taken}' data-priority='${obj.category}' data-master_id='${obj.master_id}'><i class='fa fa-edit'></i></button><button class='btn btn-outline-danger trash' value='${obj.part_id}' data-master_id='${obj.master_id}'><i class='fa fa-trash'></i></button></td></tr>`);
+                        $("#material_tbody").append(`<tr><td>${count}</td><td>${obj.part_name}</td><td>${obj.creditor_name}</td><td>${obj.dep_name}</td><td>${obj.sec_name}</td><td>${obj.time_taken}</td><td>${obj.category}</td><td class='d-flex gap-2'><button class='btn btn-outline-warning edit' data-part_id='${obj.part_id}' data-godown_id='${obj.godown_id}' data-dept_id='${obj.dep_id}' data-sec_id='${obj.dep_sec_id}' data-time_taken='${obj.time_taken}' data-priority='${obj.category}' data-master_id='${obj.master_id}'><i class='fa fa-edit'></i></button><button class='btn btn-outline-danger trash' value='${obj.part_id}' data-master_id='${obj.master_id}'><i class='fa fa-trash'></i></button></td></tr>`);
 
 
                     });
@@ -816,65 +781,7 @@ function get_finished_godown_master_details(material_id) {
     });
 }
 
-// function get_creditors_auto() {
-//     $.ajax({
-//         url: "php/get_creditors_auto.php",
-//         type: "get", //send it through get method
-//         data: {
-//             term: '',
 
-
-//         },
-//         success: function (response) {
-
-
-//             if (response.trim() != "error") {
-//                 $("#godown_list").empty();
-//                 if (response.trim() != "0 result") {
-
-//                     var obj = JSON.parse(response);
-
-
-//                     console.log(response);
-//                     var godown = `<div class="row">`
-
-//                     obj.forEach(function (obj) {
-
-//                         godown += `
-//                         <div class="col-6">
-//                             <div class="form-check">
-//                                 <input class="form-check-input" type="radio" name="" data-godown_id='${obj.creditor_id}' id="godown${obj.creditor_id}">
-//                                 <label class="form-check-label" for="godown${obj.creditor_id}">
-//                                     ${obj.creditor_name}
-//                                 </label>
-//                             </div>
-//                         </div>`
-//                     });
-
-//                     godown += `</div>`
-//                     $("#godown_list").append(godown);
-
-//                 }
-//                 else {
-//                     $("#godown_list").append("No Godown Found.");
-//                 }
-
-
-//                 //    get_sales_order()
-//             }
-
-//             else {
-//                 salert("Error", "User ", "error");
-//             }
-
-
-
-//         },
-//         error: function (xhr) {
-//             //Do Something to handle error
-//         }
-//     });
-// }
 
 function insert_new_process(processId) {
 

@@ -136,12 +136,12 @@
         <div class="row ">
           <div class="col-8  pe-0">
             <div class="d-flex justify-content-between mb-2 gap-2">
-                <input type="text" class="form-control rounded-3" id="godown_filter" placeholder="Godown">
-              
-                <input type="text" class="form-control rounded-3" id="department_filter" placeholder="Department">
-              
-                <input type="text" class="form-control rounded-3" id="section_filter" placeholder="Section">
-              
+              <input type="text" class="form-control rounded-3" id="godown_filter" placeholder="Godown">
+
+              <input type="text" class="form-control rounded-3" id="department_filter" placeholder="Department">
+
+              <input type="text" class="form-control rounded-3" id="section_filter" placeholder="Section">
+
             </div>
             <div class="d-flex justify-content-between">
               <div class="card">
@@ -202,17 +202,17 @@
 
               <div class="card">
                 <div class="card-header">
-                  Process
+                  Department Wise Part
                 </div>
                 <div class="card-body" style="max-height: 38vh; overflow-y: auto;">
 
 
-                <ul class="list-group small" id="process_list">
+                  <ul class="list-group small" id="dept_wise_list">
 
 
-                </ul>
+                  </ul>
 
-              </div>
+                </div>
               </div>
             </div>
 
@@ -581,6 +581,28 @@
     </div>
 
 
+  </div>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="process_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>From Previous Process</h5>
+          <button type="button" class="btn-close d-none" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" >
+          <ul class='list-group' id="process_list"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary d-none" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary d-none">Understood</button>
+        </div>
+      </div>
+    </div>
   </div>
 
 
