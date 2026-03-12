@@ -88,7 +88,8 @@ GROUP BY
         (SELECT jp.process_name from jaysan_process jp WHERE jp.process_id = prev_pwt.process) as wel_pr,
         iwp.id,
         prev_pwt.process_id,
-        
+        JSON_ARRAYAGG(JSON_OBJECT('process',jaysan_process.process_name,'process_id',process_wel_tbl.process_id)) as process_details,
+        ifnull(count(process_wel_tbl.process_id),0) as process_availble,
         prev_pwt.previous_process_id,
         prev_pwt.process,
         iwp.qty,
@@ -100,8 +101,9 @@ GROUP BY
     INNER JOIN process_wel_tbl prev_pwt ON prev_pwt.process_id = pw.previous_process_id
     INNER JOIN input_wel_parts iwp ON iwp.process_id = prev_pwt.process_id
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
+    LEFT JOIN process_wel_tbl ON iwp.input_part_id = process_wel_tbl.output_part AND process_wel_tbl.cat = 'out'
 )
-SELECT   DISTINCT id,part_name,input_part_id,qty,process,wel_pr,process_id as pid,LEVEL  FROM process_wel) as re_fn GROUP by level ORDER by LEVEL DESC
+SELECT   DISTINCT id,part_name,input_part_id,qty,process,wel_pr,process_id as pid,LEVEL  FROM process_wel group by  iwp.id) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
 
 
