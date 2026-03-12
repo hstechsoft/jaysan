@@ -72,6 +72,7 @@ GROUP BY
         pwt.process,
         iwp.qty,
         iwp.input_part_id,
+               iwp.previous_process_id as in_previous_process_id,
         pt.part_name,
     1 as level
     FROM 
