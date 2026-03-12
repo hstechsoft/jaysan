@@ -104,7 +104,7 @@ GROUP BY
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
    
 )
-SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL
+SELECT   DISTINCT in_previous_process_id,process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL
 FROM process_wel) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
 
