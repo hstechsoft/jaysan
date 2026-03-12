@@ -113,22 +113,26 @@ $(document).ready(function () {
   get_std_spec()
   check_login();
   $('#add_vendor_submit').hide();
-  $('#add_part_submit').hide();
+  // $('#add_part_submit').hide();
   $('#inprocess_btn').hide();
   $('#pending_btn').hide();
   $('#spec_itemacc').hide();
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $('#part_photo_preview').click(function () {
-
-    if (part_id != 0 && part_image_addr == "")
+    if (part_id > 0) {
       $("#part_photo_up").trigger("click");
+    }
+    else {
+      salert("Warning", "Select The Part First", "warning");
+    }
 
 
   });
 
   $('#add_part_submit').click(function () {
     if ($('#part_name').val() != "" && $('#part_no').val() != "") {
+      $(this).hide();
       insert_new_part()
     }
     else {
@@ -198,6 +202,10 @@ $(document).ready(function () {
   });
 
   $('#part_name').on('input', function () {
+    $('#add_part_submit').show();
+    $(this).data("selected-part_id", '');
+    $("#part_no").val("").data("selected-part_id", '');
+    $('#part_photo_preview').attr("src", "img/insert-image-icon.png");
     //check the value not empty
     if ($('#part_name').val() != "") {
       $('#part_name').autocomplete({
@@ -241,6 +249,9 @@ $(document).ready(function () {
           $('#spec_itemacc').show();
           part_id = ui.item.id;
           part_image_addr = ui.item.img_addr
+          if (ui.item.id) {
+            $('#add_part_submit').hide();
+          }
           if (part_image_addr != "" && part_image_addr != null) {
             console.log(part_image_addr);
 
@@ -248,6 +259,7 @@ $(document).ready(function () {
             $('#part_photo_preview').attr("src", "attachment/parts/" + part_id + "/" + part_image_addr + "?" + timestamp);
 
           }
+
           get_part_spec()
           get_sts()
           get_spec_details(ui.item.id)
@@ -264,6 +276,11 @@ $(document).ready(function () {
   });
 
   $('#part_no').on('input', function () {
+
+    $('#add_part_submit').show();
+    $(this).data("selected-part_id", '');
+    $("#part_name").val('').data("selected-part_id", '');
+    $('#part_photo_preview').attr("src", "img/insert-image-icon.png");
     //check the value not empty
     if ($('#part_no').val() != "") {
       $('#part_no').autocomplete({
@@ -307,6 +324,10 @@ $(document).ready(function () {
           $('#spec_itemacc').show();
           part_id = ui.item.id;
           part_image_addr = ui.item.img_addr
+
+          if (ui.item.id) {
+            $('#add_part_submit').hide();
+          }
           if (part_image_addr != "") {
             var timestamp = new Date().getTime(); // Get current timestamp
             $('#part_photo_preview').attr("src", "attachment/parts/" + part_id + "/" + part_image_addr + "?" + timestamp);
@@ -324,7 +345,11 @@ $(document).ready(function () {
 
   });
 
-
+  $("#clear_btn").on("click", function () {
+    $('#add_part_submit').show();
+    $("#part_no, #part_name").val("").data("selected-part_id", '');
+    $('#part_photo_preview').attr("src", "img/insert-image-icon.png");
+  })
   $('#vendor_phone').on('input', function () {
     //check the value not empty
 
@@ -690,7 +715,7 @@ $(document).ready(function () {
   $("#head_fixed-row").on("click", "#fa-edit", function () {
 
     $('html, body').animate({
-        scrollTop: $("#add_vendor_btn").offset().top
+      scrollTop: $("#add_vendor_btn").offset().top
     }, 300);
 
     $(".spec_add_btn").addClass("d-none");
@@ -1495,7 +1520,7 @@ function get_vendor() {
           obj.forEach(function (obj) {
             count = count + 1;
             $('#vendor_name').val(obj.creditor_name)
-            $('#vendor_phone').val(obj.creditor_phone ? obj.creditor_phone: obj.creditor_mobile)
+            $('#vendor_phone').val(obj.creditor_phone ? obj.creditor_phone : obj.creditor_mobile)
             $('#vendor_gst').val(obj.creditor_gst)
             $('#vendor_addr').val(obj.creditors_addr)
 
