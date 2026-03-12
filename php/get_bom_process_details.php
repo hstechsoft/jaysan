@@ -102,6 +102,7 @@ GROUP BY
     INNER JOIN input_wel_parts iwp ON iwp.process_id = prev_pwt.process_id
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
     LEFT JOIN process_wel_tbl ON iwp.input_part_id = process_wel_tbl.output_part AND process_wel_tbl.cat = 'out'
+    LEFT JOIN jaysan_process ON process_wel_tbl.process = jaysan_process.process_id
 )
 SELECT   DISTINCT id,part_name,input_part_id,qty,process,wel_pr,process_id as pid,LEVEL  FROM process_wel group by  iwp.id) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
