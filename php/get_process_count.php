@@ -21,7 +21,7 @@ ifnull(count(pwt.process_id),0) as process_availble,
  JSON_ARRAYAGG(JSON_OBJECT('process',jp.process_name,'process_id',pwt.process_id)) as process_details
 FROM process_wel_tbl pwt
 
-LEFT join jaysan_process jp on pwt.process = jp.process_name
+LEFT join jaysan_process jp on pwt.process = jp.process_id
 
 WHERE pwt.cat = 'out' and pwt.output_part = $part_id GROUP by pwt.output_part";
 
