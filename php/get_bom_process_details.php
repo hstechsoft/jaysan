@@ -102,7 +102,7 @@ GROUP BY
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
    
 )
-SELECT   DISTINCT id,part_name,input_part_id,qty,process_wel.process,wel_pr,process_id as pid,LEVEL, 
+SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL, 
   JSON_ARRAYAGG(JSON_OBJECT('process',jaysan_process.process_name,'process_id',process_wel_tbl.process_id)) as process_details,
         ifnull(count(process_wel_tbl.process_id),0) as process_availble 
 
