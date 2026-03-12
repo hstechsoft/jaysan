@@ -90,9 +90,11 @@ foreach ($data as $row) {
     $last_insert_id = $conn->insert_id;
  {
    foreach ($row['input_parts'] as $input) {
+    $in_pre_id = 0;
       $part_id = isset($input['part_id']) ? $input['part_id'] : '0';
       $part_qty = isset($input['part_qty']) ? $input['part_qty'] : '';
-$in_pre_id = 0;
+         $in_pre_id = isset($input['pre_process_id']) ? $input['pre_process_id'] : '0';
+
 if($part_id == 0)
 $in_pre_id = $pre_process_id;
 
