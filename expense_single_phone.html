@@ -123,117 +123,119 @@
 </head>
 
 <body onload=" ">
+  <!-- top bar -->
+
+
+
+  <!-- navbar -->
+
+
+
+  <div class="modal modal-lg " id="history_model">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">History</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body overflow-scroll">
+          <div>
+            <table id="exp_payment_tbl1" class="table   table-bordered border-dark border-opacity-50 text-center ">
+              <thead>
+                <tr>
+
+                  <th colspan="3" scope="col" class="bg-info bg-opacity-25">Employee Payment History</th>
+
+                </tr>
+                <tr>
+
+                </tr>
+                <tr>
+
+                  <th scope="col">#</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Amount</th>
+
+
+
+
+                </tr>
+              </thead>
+              <tbody class="align-middle " id="exp_payment_tbl">
+
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal modal-lg " id="emp_pay_model">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Payment</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body overflow-scroll">
+          <div>
+
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="emp_pay_amount"><span>
+                  <i class="fa-solid fa-indian-rupee-sign"></i>
+                </span>
+              </label>
+              <input id="emp_pay_amount" type="number" class="form-control" placeholder="Amount" aria-label="Username"
+                aria-describedby="basic-addon1">
+            </div>
+
+
+            <div class="input-group my-3 ">
+
+              <label class="input-group-text" for="pay_date"><span>
+                  <i class="fa-solid fa-calendar-days h6"></i>
+                </span></label>
+              <input type="datetime-local" id="pay_date" class="form-control" aria-label="Username"
+                aria-describedby="basic-addon1" required>
+            </div>
+            <button type="button" id="submit_emp_btn" class="btn btn-primary float-end"><i class="fa-solid fa-plus"></i>
+              Submit</button>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
   <section id="menu_bar">
 
   </section>
   <div class="container-fluid mb-2">
     <!-- top bar -->
 
-
-
-    <!-- navbar -->
-
-
-
-    <div class="modal modal-lg " id="history_model">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">History</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body overflow-scroll">
-            <div>
-              <table id="exp_payment_tbl1" class="table   table-bordered border-dark border-opacity-50 text-center ">
-                <thead>
-                  <tr>
-
-                    <th colspan="3" scope="col" class="bg-info bg-opacity-25">Employee Payment History</th>
-
-                  </tr>
-                  <tr>
-
-                  </tr>
-                  <tr>
-
-                    <th scope="col">#</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Amount</th>
-
-
-
-
-                  </tr>
-                </thead>
-                <tbody class="align-middle " id="exp_payment_tbl">
-
-
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <div class="modal modal-lg " id="emp_pay_model">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">Payment</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body overflow-scroll">
-            <div>
-
-              <div class="input-group mb-3">
-                <label class="input-group-text" for="emp_pay_amount"><span>
-                    <i class="fa-solid fa-indian-rupee-sign"></i>
-                  </span>
-                </label>
-                <input id="emp_pay_amount" type="number" class="form-control" placeholder="Amount" aria-label="Username"
-                  aria-describedby="basic-addon1">
-              </div>
-
-
-              <div class="input-group my-3 ">
-
-                <label class="input-group-text" for="pay_date"><span>
-                    <i class="fa-solid fa-calendar-days h6"></i>
-                  </span></label>
-                <input type="datetime-local" id="pay_date" class="form-control" aria-label="Username"
-                  aria-describedby="basic-addon1" required>
-              </div>
-              <button type="button" id="submit_emp_btn" class="btn btn-primary float-end"><i
-                  class="fa-solid fa-plus"></i> Submit</button>
-            </div>
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid p-0 m-0 page-wrapper">
+    <div class="page-wrapper mt-5">
 
 
       <div class=" card mt-3 ">
@@ -490,7 +492,7 @@
 
   </div>
 
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
 
   <!-- jquery -->
