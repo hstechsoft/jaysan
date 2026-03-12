@@ -3,7 +3,6 @@
 
  $part_name = test_input($_GET['part_name']);
 $part_no = test_input($_GET['part_no']);
-$new_part = test_input($_GET['new_part']);
 
 
  
@@ -17,7 +16,7 @@ return $data;
 }
 
 
-$sql = "INSERT INTO parts_tbl (part_name,part_no,new_part) VALUES ($part_name,$part_no,$new_part)";
+$sql = "INSERT INTO parts_tbl (part_name,part_no) VALUES ($part_name,$part_no)";
 
   if ($conn->query($sql) === TRUE) {
     echo  $conn->insert_id;
