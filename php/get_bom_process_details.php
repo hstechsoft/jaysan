@@ -107,9 +107,9 @@ SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id
         ifnull(count(process_wel_tbl.process_id),0) as process_availble 
 
 FROM process_wel
- LEFT JOIN process_wel_tbl ON iwp.input_part_id = process_wel_tbl.output_part AND process_wel_tbl.cat = 'out'
+ LEFT JOIN process_wel_tbl ON process_wel.input_part_id = process_wel_tbl.output_part AND process_wel_tbl.cat = 'out'
     LEFT JOIN jaysan_process ON process_wel_tbl.process = jaysan_process.process_id
- group by  iwp.id) as re_fn GROUP by level ORDER by LEVEL DESC
+ group by  process_wel.id) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
 
 
