@@ -15,7 +15,7 @@ return $data;
 }
   
 $sql = <<<SQL
-SELECT  GROUP_CONCAT(  concat('<li class=\"list-group-item d-flex justify-content-between\" data-in_previous_process_id=\"',in_previous_process_id,'\" data-part-id = \"',input_part_id,'\" data-part-qty=\"',qty,'\">  
+SELECT  GROUP_CONCAT(  concat('<li class=\"list-group-item d-flex justify-content-between\" data-part-id = \"',input_part_id,'\" data-part-qty=\"',qty,'\">  
             <p class=\"m-0 p-0  \">',ifnull(part_name,concat('process - <span class=\"pr_no\">', @rownum := @rownum + 1)),'</span><span class = \"fw-bold ms-2 mark\"> Qty : <span contenteditable=\"true\" class= \" m-0 p-0 px-1 qty-editable\">',qty,'</span></span></p><button' ,if(part_name IS null , ' disabled',''), ' class=\"btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></button>') separator '') as in_tbl,  concat('<li class=\"list-group-item\" data-process-id=',process,' data-pid=',pid,'> <p class=\"m-0 p-0\">',wel_pr,'</p></li>')   as pr_tbl,input_part_id,part_name,qty,process,wel_pr,pid,LEVEL,(SELECT
     JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -72,7 +72,6 @@ GROUP BY
         pwt.process,
         iwp.qty,
         iwp.input_part_id,
-               iwp.previous_process_id as in_previous_process_id,
         pt.part_name,
     1 as level
     FROM 
@@ -94,7 +93,6 @@ GROUP BY
         prev_pwt.process,
         iwp.qty,
         iwp.input_part_id,
-        iwp.previous_process_id as in_previous_process_id,
         pt.part_name,
     LEVEL+1 as LEVEL
     FROM 
@@ -104,7 +102,7 @@ GROUP BY
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
    
 )
-SELECT   DISTINCT in_previous_process_id,process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL
+SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL
 FROM process_wel) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
 
