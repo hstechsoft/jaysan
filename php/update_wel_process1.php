@@ -9,12 +9,49 @@ $did =  $_POST['did'];
 $component_cat =  $_POST['component_cat'];
 
 $totalRows = count($data); 
+
+if ($totalRows == 0) {
+  echo "No data to process.";
+  $conn->close();
+  exit;
+}
+$conn->begin_transaction();
+ try
+ {
+
 $output_part ="0";
 $pre_process_id = "0";
 $cat = "" ;// Initialize pre_process_id to 0
 
+// check if input_wel_parts has refenced this as previous_process_id if yes do not proceed with delete query 
+$out_process_id = 0;
+foreach ($did as $row) {
+
+// get that n process  cat is out
+
+$sql_check_ou = "SELECT 1 FROM process_wel_tbl WHERE process_id = $row AND cat = 'out' " ;
+$result_check_ou = $conn->query($sql_check_ou);
+if ($result_check_ou->num_rows > 0) {
+    // There are rows with cat 'out', do not proceed with delete
+ 
+$sql_check_input = "SELECT 1 FROM input_wel_parts WHERE previous_process_id = $row " ;
+$result_check_input = $conn->query($sql_check_input);
+if ($result_check_input->num_rows > 0) {
+    // There are rows in input_wel_parts referencing this process, do not proceed with delete
+    $conn->rollback();
+    echo "Cannot delete process with ID $row because it is referenced in input_wel_parts.";
+    exit; 
+}
+
+
+}
+}
+
 
 foreach ($did as $row) {
+
+
+
 
 
 $sql = "DELETE from process_wel_tbl WHERE process_id = $row" ;
@@ -29,6 +66,7 @@ if ($conn->query($sql) === TRUE) {
   }
 
 }
+
 foreach ($data as $row) {
 
 
@@ -66,7 +104,7 @@ $in_pre_id = $pre_process_id;
       if ($conn->query($sql_input) === TRUE) {
       } 
       else {
-        echo "Error: " . $sql_input . "<br>" . $conn->error;
+        throw new Exception($conn->error);
       }
 
    }
@@ -94,7 +132,7 @@ if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID
    
 } else {
-    echo "Error: " . $insert_part . "<br>" . $conn->error;
+     throw new Exception($conn->error);
 }
            
     }
@@ -110,7 +148,7 @@ if ($conn->query($insert_part) === TRUE) {
 
 
  } else {
-   echo "Error: " . $sql_process . "<br>" . $conn->error;
+ throw new Exception($conn->error);
  }
 
 
@@ -118,6 +156,12 @@ if ($conn->query($insert_part) === TRUE) {
 
    
 }
+ $conn->commit();
+ }catch(Exception $e)
+ {
+   $conn->rollback();
+    echo $e->getMessage();
+ }
 
 
 $conn->close();
