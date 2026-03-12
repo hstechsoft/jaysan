@@ -15,7 +15,7 @@ return $data;
 }
   
 $sql = <<<SQL
-SELECT * FROM `process_wel_tbl` pwt
+SELECT pwt.*,jp.process_name  FROM `process_wel_tbl` pwt
 
 inner join jaysan_process jp  on pwt.process = jp.process_id  WHERE pwt.output_part = $part_id and pwt.component_cat = $component_cat
 
