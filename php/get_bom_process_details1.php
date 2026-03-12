@@ -50,9 +50,30 @@ inner join process_wel on process_wel.previous_process_id = pwt.process_id
   
    
    
-)
-SELECT 
+),
+in_wel as ( SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'input_part_id',
+            iwp.input_part_id,
+            'part_name',
+            inpart.part_name,
+            'previous_process_id',
+            iwp.previous_process_id,
+            'qty',
+            iwp.qty
+        )) AS input_parts,
 
+process_name, 
+pw.process_id,  
+LEVEL  FROM process_wel  pw
+inner  join input_wel_parts iwp on iwp.process_id = pw.process_id
+left join parts_tbl  inpart on iwp.input_part_id = inpart.part_id
+ GROUP BY pw.process_id
+  ORDER by LEVEL DESC)
+
+
+SELECT 
+input_parts,
  JSON_ARRAYAGG(
         JSON_OBJECT(
             'godown_id',
@@ -83,31 +104,25 @@ SELECT
         )
     ) AS process_details,
 
-JSON_ARRAYAGG(
-        JSON_OBJECT(
-            'input_part_id',
-            iwp.input_part_id,
-            'part_name',
-            inpart.part_name,
-            'previous_process_id',
-            iwp.previous_process_id,
-            'qty',
-            iwp.qty
-        )) AS input_parts,
+
 
 process_name, 
-pw.process_id, 
+in_wel.process_id, 
 LEVEL,
 count(wtm.wtid) AS total_extra
-FROM process_wel  pw
-inner  join input_wel_parts iwp on iwp.process_id = pw.process_id
-left join parts_tbl  inpart on iwp.input_part_id = inpart.part_id
-left join work_time_master wtm on wtm.ori_process_id = pw.process_id
+FROM in_wel  
+
+left join work_time_master wtm on wtm.ori_process_id = in_wel.process_id
 left JOIN creditors ON creditors.creditor_id = wtm.godown_id
 LEFT JOIN department ON department.dep_id = wtm.dep_id
 LEFT JOIN dep_section ON dep_section.dep_sec_id = wtm.dep_sec_id
-LEFT JOIN  jaysan_machine ON  jaysan_machine.jmid = wtm.machine_id   GROUP BY pw.process_id
-  ORDER by LEVEL DESC;
+LEFT JOIN  jaysan_machine ON  jaysan_machine.jmid = wtm.machine_id   GROUP BY in_wel.process_id
+  ORDER by LEVEL DESC
+
+
+
+
+  ;
 SQL;
 
 $result = $conn->query($sql);
