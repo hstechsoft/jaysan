@@ -7,6 +7,7 @@ $data = json_decode($_POST['allWeldingData'], true);
 
 $output_part_pr =  $_POST['output_part'];
 $component_cat =  $_POST['component_cat'];
+$process_title =  $_POST['process_title'];
 
 $totalRows = count($data); 
 $output_part ="0";
@@ -19,12 +20,13 @@ foreach ($data as $row) {
     {
       $output_part =$output_part_pr;
       $cat = 'out';
+      
     }
  
 
    
-   $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat)
-   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat')";
+   $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title)
+   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title')";
  
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;

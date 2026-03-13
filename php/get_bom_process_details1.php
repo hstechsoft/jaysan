@@ -64,7 +64,8 @@ in_wel as ( SELECT JSON_ARRAYAGG(
         )) AS input_parts,
 
 process_name, 
-pw.process_id,  
+pw.process_id,
+pw.process,  
 LEVEL  FROM process_wel  pw
 inner  join input_wel_parts iwp on iwp.process_id = pw.process_id
 left join parts_tbl  inpart on iwp.input_part_id = inpart.part_id
@@ -107,6 +108,7 @@ input_parts,
 
 
 process_name, 
+inwel.process,
 in_wel.process_id, 
 LEVEL,
 count(wtm.wtid) AS total_extra

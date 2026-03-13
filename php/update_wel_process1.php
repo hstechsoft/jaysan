@@ -7,6 +7,7 @@ $data = json_decode($_POST['allWeldingData'], true);
 $output_part_pr =  $_POST['output_part'];
 $did =  $_POST['did'];
 $component_cat =  $_POST['component_cat'];
+$process_title =  $_POST['process_title'];
 
 $totalRows = count($data); 
 
