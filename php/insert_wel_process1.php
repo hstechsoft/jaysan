@@ -1,7 +1,10 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 include 'db_head.php';
 
+try {
 
+$conn->begin_transaction();
 
 $data = json_decode($_POST['allWeldingData'], true);
 
@@ -48,7 +51,7 @@ $in_pre_id = $pre_process_id;
       if ($conn->query($sql_input) === TRUE) {
       } 
       else {
-        echo "Error: " . $sql_input . "<br>" . $conn->error;
+       throw new Exception($conn->error);
       }
 
    }
@@ -76,7 +79,7 @@ if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID
    
 } else {
-    echo "Error: " . $insert_part . "<br>" . $conn->error;
+    throw new Exception($conn->error);
 }
            
     }
@@ -84,7 +87,7 @@ if ($conn->query($insert_part) === TRUE) {
 
    if ($row === end($data))
    {
-    echo "ok";
+
    }
 
        }
@@ -92,13 +95,24 @@ if ($conn->query($insert_part) === TRUE) {
 
 
  } else {
-   echo "Error: " . $sql_process . "<br>" . $conn->error;
+   throw new Exception($conn->error);
  }
 
 
 
 
    
+}
+$conn->commit();
+    echo "ok";
+}
+
+ catch (Exception $e) {
+
+$conn->rollback();
+
+echo "Error: " . $e->getMessage();
+
 }
 
 
