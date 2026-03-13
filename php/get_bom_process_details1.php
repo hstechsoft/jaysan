@@ -108,7 +108,7 @@ input_parts,
 
 
 process_name, 
-inwel.process,
+in_wel.process,
 in_wel.process_id, 
 LEVEL,
 count(wtm.wtid) AS total_extra
