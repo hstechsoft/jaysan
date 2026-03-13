@@ -2670,7 +2670,7 @@ function get_bom_process_details1(process_id) {
             var input_p = JSON.parse(obj.input_parts);
 
             input_p.forEach(function (item) {
-              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + item.previous_process_id + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
+              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + (item.input_process_title ?? "") + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
             })
             console.log(obj.in_tbl);
 
@@ -3098,7 +3098,23 @@ function get_bom_process_details_summary(part_id, component_cat) {
         else {
           get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
+          $("#welding_table").empty();
+          if ($("#update_btn").hasClass("d-none") == false)
+            $("#update_btn").addClass("d-none")
 
+          if ($("#del_btn").hasClass("d-none") == false)
+            $("#del_btn").addClass("d-none")
+
+          if ($("#submit_btn").hasClass("d-none"))
+            $("#submit_btn").removeClass("d-none")
+
+          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+            $("#godown_data").removeClass("d-none");
+          }
+          else {
+            $("#godown_data").addClass("d-none");
+          }
         }
       }
 
