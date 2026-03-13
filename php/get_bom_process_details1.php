@@ -74,7 +74,7 @@ left join  process_wel_tbl pwt1 on pwt1.process_id = iwp.previous_process_id and
 left join parts_tbl  inpart on iwp.input_part_id = inpart.part_id
  GROUP BY pw.process_id
   ORDER by LEVEL DESC)
-
+    
 
 SELECT 
 input_parts,
