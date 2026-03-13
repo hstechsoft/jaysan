@@ -21,13 +21,14 @@ return $data;
 }
 
 
+echo "godwon_id: " . $godwon_id . ", department_id: " . $department_id . ", section_id: " . $section_id;
 $part  = "%" .  $part ."%";
 
 
 if($term == 'no')
 {
 
-if($godwon_id != 'null' || $department_id != 'null' || $section_id != 'null')
+if($godwon_id != 'NULL' || $department_id != 'NULL' || $section_id != 'NULL')
     $sql = "SELECT part_name,part_no,parts_tbl.part_id FROM `parts_tbl` 
 inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id and fm.godown_id = $godwon_id and fm.dep_id = $department_id and fm.dep_sec_id = $section_id
  WHERE part_no 
@@ -41,7 +42,7 @@ inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id
 
 else 
     {
-if($godwon_id != 'null' || $department_id != 'null' || $section_id != 'null')
+if($godwon_id != 'NULL' || $department_id != 'NULL' || $section_id != 'NULL')
  $sql = "SELECT part_name,part_no,parts_tbl.part_id FROM parts_tbl 
  inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id and fm.godown_id = $godwon_id and fm.dep_id = $department_id and fm.dep_sec_id = $section_id
  WHERE part_name LIKE  '$part'";
