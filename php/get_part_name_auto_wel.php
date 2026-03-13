@@ -21,7 +21,7 @@ return $data;
 }
 
 
-echo "godwon_id: " . $godwon_id . ", department_id: " . $department_id . ", section_id: " . $section_id;
+
 $part  = "%" .  $part ."%";
 
 
@@ -51,7 +51,7 @@ if($godwon_id != 'NULL' || $department_id != 'NULL' || $section_id != 'NULL')
 
     }
 
-echo $sql;
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
