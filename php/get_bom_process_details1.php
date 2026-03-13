@@ -60,7 +60,9 @@ in_wel as ( SELECT JSON_ARRAYAGG(
             'previous_process_id',
             iwp.previous_process_id,
             'qty',
-            iwp.qty
+            iwp.qty,
+            'input_process_title',
+            pwt1.process_title
         )) AS input_parts,
 
 process_name, 
@@ -68,6 +70,7 @@ pw.process_id,
 pw.process,  
 LEVEL  FROM process_wel  pw
 inner  join input_wel_parts iwp on iwp.process_id = pw.process_id
+left join  process_wel_tbl pwt1 on pwt1.process_id = iwp.previous_process_id
 left join parts_tbl  inpart on iwp.input_part_id = inpart.part_id
  GROUP BY pw.process_id
   ORDER by LEVEL DESC)
