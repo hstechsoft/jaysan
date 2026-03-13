@@ -8,6 +8,8 @@ $output_part_pr =  $_POST['output_part'];
 $did =  $_POST['did'];
 $component_cat =  $_POST['component_cat'];
 $process_title =  $_POST['process_title'];
+$is_default =  $_POST['is_default'];
+
 
 $totalRows = count($data); 
 
@@ -71,7 +73,8 @@ if ($conn->query($sql) === TRUE) {
 foreach ($data as $row) {
 
 
-
+$process_title1 = "";
+$is_default1 = 0;
 
 
 
@@ -81,11 +84,20 @@ foreach ($data as $row) {
     {
       $output_part =$output_part_pr;
       $cat = 'out';
+       $process_title1 = $process_title;
+      $is_default1 = $is_default;
     }
+     else
+      {
+      
+        $process_title1 = "";
+        $is_default1 = 0;
+      }
+ 
  
 
-    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat)
-   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat')";
+    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
+   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title1','$is_default1')";
  
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;

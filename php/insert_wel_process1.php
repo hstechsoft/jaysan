@@ -11,6 +11,7 @@ $data = json_decode($_POST['allWeldingData'], true);
 $output_part_pr =  $_POST['output_part'];
 $component_cat =  $_POST['component_cat'];
 $process_title =  $_POST['process_title'];
+$is_default =  $_POST['is_default'];
 
 $totalRows = count($data); 
 $output_part ="0";
@@ -18,18 +19,26 @@ $pre_process_id = "0";
 $cat = "" ;// Initialize pre_process_id to 0
 foreach ($data as $row) {
    $process_id = $row['process']['process_id'];
-
+$process_title1 = "";
+$is_default1 = 0;
    if ($row === end($data))
     {
       $output_part =$output_part_pr;
       $cat = 'out';
-      
+      $process_title1 = $process_title;
+      $is_default1 = $is_default;
     }
+    else
+      {
+      
+        $process_title1 = "";
+        $is_default1 = 0;
+      }
  
 
    
-   $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title)
-   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title')";
+   $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
+   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title','$is_default')";
  
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;
