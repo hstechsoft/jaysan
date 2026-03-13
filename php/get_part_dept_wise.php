@@ -23,20 +23,13 @@ $dep_sec_id = sql_nullable($dep_sec_id);
 
 
 
-if($godown_id === 'NULL' && $dep_id === 'NULL' && $dep_sec_id === 'NULL') {
-    $sql = "SELECT finished_godown_master.part_id,part_name FROM finished_godown_master 
- inner join parts_tbl on finished_godown_master.part_id = parts_tbl.part_id
- where 1
- group by finished_godown_master.part_id";
 
-}
-else{
  $sql = "SELECT finished_godown_master.part_id,part_name FROM finished_godown_master 
  inner join parts_tbl on finished_godown_master.part_id = parts_tbl.part_id
  where finished_godown_master.godown_id = $godown_id and finished_godown_master.dep_id = $dep_id and finished_godown_master.dep_sec_id = $dep_sec_id
  group by finished_godown_master.part_id";
 
-}
+
 
 
 
