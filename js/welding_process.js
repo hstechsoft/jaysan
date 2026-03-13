@@ -545,6 +545,9 @@ $(document).ready(function () {
             data: {
               term: "no",
               part: request.term,
+              godwon_id: $("#godown_filter").data("godown_id"),
+              department_id: $("#department_filter").data("dept_id"),
+              section_id: $("#section_filter").data("sec_id"),
 
 
             },
@@ -597,6 +600,9 @@ $(document).ready(function () {
             data: {
               term: "name",
               part: request.term,
+              godwon_id: $("#godown_filter").data("godown_id"),
+              department_id: $("#department_filter").data("dept_id"),
+              section_id: $("#section_filter").data("sec_id"),
             },
             dataType: "json",
             success: function (data) {
@@ -735,7 +741,12 @@ $(document).ready(function () {
     $('#addNewProcessModal').modal('show');
   });
 
-
+$("#set_btn").click(function(){
+  $("#godown_filter, #department_filter, #section_filter").prop("disabled", true);
+})
+$("#refresh_btn").click(function(){
+  window.location.reload();
+})
 
 
 
