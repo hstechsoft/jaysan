@@ -16,7 +16,7 @@ return $data;
 
 
 
- $sql = "SELECT * FROM  process_wel_tbl WHERE  process_wel_tbl.	output_part =$part_id  group by process_wel_tbl.component_cat";
+ $sql = "SELECT process_wel_tbl.*,ifnull(count(process_id),0) as process_count FROM  process_wel_tbl WHERE  process_wel_tbl.	output_part =$part_id  group by process_wel_tbl.component_cat";
 
 $result = $conn->query($sql);
 

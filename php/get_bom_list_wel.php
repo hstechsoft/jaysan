@@ -15,7 +15,9 @@ return $data;
 }
 
 
- $sql = "SELECT bom_output.component_cat,COUNT(pwt.process_id),JSON_ARRAYAGG(JSON_OBJECT(
+ $sql = "SELECT bom_output.component_cat,
+ ifnull(COUNT(pwt.process_id),0) as process_count,
+ JSON_ARRAYAGG(JSON_OBJECT(
         'process_title',process_title,
         'is_default',pwt.is_default,
             'process_name',jp.process_name,
