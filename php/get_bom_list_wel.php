@@ -16,12 +16,12 @@ return $data;
 
 
  $sql = "SELECT bom_output.component_cat,
- bom_output.part_id,
+ bom_output.part_id,   
  ifnull(COUNT(pwt.process_id),0) as process_count,
  JSON_ARRAYAGG(JSON_OBJECT(
         'process_title',process_title,
         'is_default',pwt.is_default,
-            'process_name',jp.process_name,
+            'process',jp.process_name,
 'process_id',pwt.process_id)) as bom_list
     
 FROM bom_output 
