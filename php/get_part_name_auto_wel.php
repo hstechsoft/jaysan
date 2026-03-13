@@ -50,7 +50,7 @@ if($godwon_id != 'null' || $department_id != 'null' || $section_id != 'null')
 
     }
 
-
+echo $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
