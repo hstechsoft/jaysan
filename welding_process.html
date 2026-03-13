@@ -27,6 +27,107 @@
       margin-left: 3px;
 
     }
+
+    /* Global Compact UI */
+    #ap .card {
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    #ap .card-header {
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    #ap .card-body {
+      padding: 8px;
+    }
+
+    /* Inputs */
+    #ap input,
+    #ap select {
+      /* height: 32px; */
+      font-size: 13px;
+    }
+
+    /* Buttons */
+    #ap .btn {
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+
+    /* Table */
+    #welding_table1 {
+      font-size: 13px;
+    }
+
+    #welding_table1 th {
+      padding: 5px;
+    }
+
+    #welding_table1 td {
+      padding: 4px;
+    }
+
+    /* List groups */
+    .list-group-item {
+      padding: 5px 8px;
+      font-size: 13px;
+    }
+
+    /* Reduce accordion size */
+    .accordion-button {
+      padding: 6px;
+      font-size: 13px;
+    }
+
+    /* Right panel */
+    #godown_form input {
+      height: 34px;
+    }
+
+    /* remove big gaps */
+    #ap .row {
+      --bs-gutter-x: 8px;
+    }
+
+    /* Scroll areas */
+    .card-body {
+      /* overflow: auto; */
+    }
+
+    /* Mark highlight */
+    .mark {
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .form-floating>label {
+      padding: 0.4rem;
+    }
+
+    #godown_table_data td,
+    #godown_table_data th {
+      padding: 4px 6px;
+      vertical-align: middle;
+      font-size: 12px;
+    }
+
+    #godown_table_data button {
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    .table thead th {
+      padding: 6px;
+      font-size: 12px;
+    }
+
+    #godown_table_data .btn {
+      padding: 2px 5px;
+      font-size: 11px;
+    }
   </style>
 
 
@@ -47,7 +148,7 @@
 
 
 
-    <div class="page-wrapper mt-5">
+    <div class="page-wrapper mt-5 mt-md-2">
       <!-- Add New Process Modal -->
 
       <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -132,16 +233,22 @@
 
 
       </div>
+
       <div id="ap">
         <div class="row ">
           <div class="col-8  pe-0">
-            <div class="d-flex justify-content-between mb-2 gap-2">
-              <input type="text" class="form-control rounded-3" id="godown_filter" placeholder="Godown">
+            <div class="row g-2 mb-2">
+              <div class="col">
+                <input type="text" class="form-control rounded-3" id="godown_filter" placeholder="Godown">
+              </div>
 
-              <input type="text" class="form-control rounded-3" id="department_filter" placeholder="Department">
+              <div class="col">
+                <input type="text" class="form-control rounded-3" id="department_filter" placeholder="Department">
+              </div>
 
-              <input type="text" class="form-control rounded-3" id="section_filter" placeholder="Section">
-
+              <div class="col">
+                <input type="text" class="form-control rounded-3" id="section_filter" placeholder="Section">
+              </div>
             </div>
             <div class="d-flex justify-content-between">
               <div class="card">
@@ -156,7 +263,7 @@
 
 
                 </div>
-                <div class="card-body d-flex justify-content-between">
+                <div class="card-body d-flex g-2">
                   <div class="w-50 ">
                     <div class='input-group '>
 
@@ -199,12 +306,11 @@
 
 
               </div>
-
               <div class="card">
                 <div class="card-header">
                   Department Wise Part
                 </div>
-                <div class="card-body" style="max-height: 38vh; overflow-y: auto;">
+                <div class="card-body" style="max-height: 100%; overflow-y: auto;">
 
 
                   <ul class="list-group small" id="dept_wise_list">
@@ -323,7 +429,23 @@
                           </div>
 
                         </th>
+                      </tr>
+                      <tr class="small">
+                        <th colspan="7" scope="col" class="small align-middle bg-info bg-opacity-25">
+                          <div class="d-flex justify-content-center gap-5 align-items-center">
 
+                            <input type="text" placeholder="Process Title" id="process_title"
+                              class="border border-3 border-danger fw-bold">
+
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="process_default" >
+                              <label class="form-check-label" for="process_default">
+                                Is Default Process?
+                              </label>
+                            </div>
+
+                          </div>
+                        </th>
                       </tr>
 
                       <tr class="small">
@@ -502,12 +624,11 @@
                 </div>
               </form>
 
-              <div class="pt-3">
+              <div class="mt-1">
                 <div class="table-responsive">
-                  <table class="table caption-top table-bordered table-striped ">
+                  <table class="table table-sm caption-top table-bordered table-striped mb-0">
                     <caption></caption>
                     <thead class="small">
-
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Godown</th>
@@ -517,15 +638,11 @@
                         <th scope="col">Time</th>
                         <th scope="col">Cost</th>
                         <th scope="col">Action</th>
-
                       </tr>
                     </thead>
                     <tbody class="small" id="godown_table_data">
 
-
                     </tbody>
-
-
                   </table>
                 </div>
               </div>
@@ -592,9 +709,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>From Previous Process</h5>
-          <button type="button" class="btn-close d-none" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" >
+        <div class="modal-body">
           <ul class='list-group' id="process_list"></ul>
         </div>
         <div class="modal-footer">
@@ -605,7 +722,48 @@
     </div>
   </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="process_modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>From Previous Process</h5>
+          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class='list-group' id="process_list1"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary d-none" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary d-none">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Modal -->
+  <div class="modal fade" id="multi_process" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>Multiple Process</h5>
+          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group small" id="multi_process_list">
+
+
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Add New Process</button>
+          <button type="button" class="btn btn-primary d-none">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div id='footer' class="mt-auto"></div>
 
   <!-- content -->

@@ -15,6 +15,7 @@ var sel_comp_cat = ""
 var extra_bom = [];
 let editingRow = null;
 var place_filter = 0;
+var html_li = ""
 $(document).ready(function () {
   //   $('[id]').each(function(){
 
@@ -173,16 +174,26 @@ $(document).ready(function () {
     $('#submit_btn').prop('disabled', true);
     var processData = []
     var inputPartsData = [];
+    var process_title = $("#process_title").val();
+    var is_default = '';
     var tbl_valid = true;
+
+    if ($("#process_default").is(":checked")) {
+      is_default = 1;
+    }
+    else {
+      is_default = 0;
+    }
     $("#welding_table tr").each(function () {
 
       if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
+        $('#submit_btn').prop('disabled', false);
         shw_toast("Warning", "Invalid/Missing Data")
         tbl_valid = false
       }
     })
 
-    if (tbl_valid == true) {
+    if (tbl_valid === true && process_title && process_title.trim() !== '') {
 
 
 
@@ -233,7 +244,7 @@ $(document).ready(function () {
             part_id: $(this).data('part-id'),
 
             part_qty: $(this).data('part-qty'),
-            pre_process_id: $(this).data('process_id')
+            pre_process_id: $(this).data('in_previous_process_id')
           });
         });
 
@@ -266,6 +277,8 @@ $(document).ready(function () {
           allWeldingData: JSON.stringify(allWeldingData),
           output_part: output_part,
           component_cat: sel_comp_cat,
+          process_title: process_title,
+          is_default: is_default,
           // inputPartsData: inputPartsData,
 
         },
@@ -280,6 +293,11 @@ $(document).ready(function () {
 
 
 
+    }
+    else {
+      $('#submit_btn').prop('disabled', false);
+      $("#process_title").focus();
+      shw_toast("Warning", "Fill Process Title")
     }
 
 
@@ -297,15 +315,30 @@ $(document).ready(function () {
     $('#update_btn').prop('disabled', true);
     var del_process_list = [];
     var tbl_valid = true;
+    var is_default = '';
+    var process_title = $("#process_title").val();
+
+
+    if ($("#process_default").is(":checked")) {
+      is_default = 1;
+    }
+    else {
+      is_default = 0;
+    }
     $("#welding_table tr").each(function () {
 
       if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
+        $('#update_btn').prop('disabled', false);
+        console.log(process_title);
+
         shw_toast("Warning", "Invalid/Missing Data")
         tbl_valid = false
       }
     })
+    // alert(process_title)
+    console.log(process_title);
 
-    if (tbl_valid == true) {
+    if (tbl_valid === true && process_title && process_title.trim() !== '') {
 
 
 
@@ -358,7 +391,8 @@ $(document).ready(function () {
           inputPartsArr.push({
             part_id: $(this).data('part-id'),
 
-            part_qty: $(this).data('part-qty')
+            part_qty: $(this).data('part-qty'),
+            pre_process_id: $(this).data('in_previous_process_id'),
           });
         });
 
@@ -368,7 +402,7 @@ $(document).ready(function () {
         };
 
 
-        del_process_list.push(processPart.data('pid') || 0)
+        del_process_list.push(processPart.data('tr_process') || 0)
 
 
         if (inputPartsArr.length > 0 || processData.output_part) {
@@ -384,6 +418,8 @@ $(document).ready(function () {
       });
 
       console.log(allWeldingData);
+      console.log(del_process_list);
+      console.log(sel_comp_cat);
 
       $.ajax({
 
@@ -394,6 +430,8 @@ $(document).ready(function () {
           output_part: output_part,
           did: del_process_list,
           component_cat: sel_comp_cat,
+          process_title: process_title,
+          is_default: is_default,
           // inputPartsData: inputPartsData,
 
         },
@@ -410,16 +448,38 @@ $(document).ready(function () {
 
     }
 
+    else {
+      $('#update_btn').prop('disabled', false);
+      $("#process_title").focus();
+      shw_toast("Warning", "Fill Process Title")
+    }
 
 
 
   });
 
 
+  $("#welding_table").on("dblclick", "li", function () {
 
+    let part_id = $(this).data("part-id");
+
+    if (part_id !== undefined && part_id !== "") {
+      html_li = $(this);
+      get_process_count(part_id);
+
+
+
+    } else {
+      salert("Warning", "Part ID Missing!, Try Later", "warning");
+    }
+
+
+
+  });
 
   $('#part_no_out').on('input', function () {
     //check the value not empty
+    clear();
     if ($('#part_no_out').val() != "") {
       $('#part_no_out').autocomplete({
         //get data from databse return as array of object which contain label,value
@@ -456,6 +516,7 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("selected-part_id", ui.item.id);
+          console.log(ui.item.id)
           $('#part_name_out').data("selected-part_id", ui.item.id);
           $('#part_name_out').val(ui.item.part_name)
           get_bom_list(ui.item.id)
@@ -525,6 +586,7 @@ $(document).ready(function () {
 
   $('#part_name_out').on('input', function () {
     //check the value not empty
+    clear();
     if ($('#part_name_out').val() != "") {
       $('#part_name_out').autocomplete({
         //get data from database return as array of object which contain label,value
@@ -556,6 +618,8 @@ $(document).ready(function () {
           $(this).data("selected-part_id", ui.item.id);
           $('#part_no_out').data("selected-part_id", ui.item.id);
           $('#part_no_out').val(ui.item.part_no);
+          console.log(ui.item.id)
+
           get_bom_list(ui.item.id);
           get_bom_list_comp(ui.item.id);
         },
@@ -701,7 +765,7 @@ $(document).ready(function () {
       },
       error: function () {
         // Handle error response
-        alert('Error adding process');
+        // alert('Error adding process');
       }
     });
   });
@@ -797,13 +861,13 @@ $(document).ready(function () {
   $('#add_part_btn').on('click', function () {
 
     {
-
+      // alert(1)
       if ($('#part_no').val() && $('#part_name').val() && $('#qty').val() && $('#part_name').data('selected-part_id')) {
         issaved = 'no'
         var partId = $('#part_no').data('selected-part_id');
         var qty = $('#qty').val();
         var process_id = $(this).val();
-        var process = process_id ? `(${ $(this).data("process") })` : "";
+        var process = process_id ? `(${$(this).data("process")})` : "";
 
 
 
@@ -812,7 +876,7 @@ $(document).ready(function () {
 
 
         {
-          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-process_id=" + process_id + ">  <p class='my-auto'>" + $('#part_name').val() + " <b class='bg-warning'>" + process + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
+          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-in_previous_process_id=" + process_id + ">  <p class='my-auto'>" + $('#part_name').val() + " <b class='bg-warning'>" + process + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
         }
 
 
@@ -831,8 +895,8 @@ $(document).ready(function () {
 
       }
       else {
-        console.log($('#part_no').val() , $('#part_name').val() , $('#qty').val() , $('#part_name').data('selected-part_id'));
-        
+        console.log($('#part_no').val(), $('#part_name').val(), $('#qty').val(), $('#part_name').data('selected-part_id'));
+
         shw_toast("Insert", "Kindly insert qty or select part from autocomplete")
       }
     }
@@ -1109,6 +1173,8 @@ $(document).ready(function () {
 
       var in_length = $(this).closest('tr').find("td").eq(1).find("li").length
       var prs_length = $(this).closest('tr').find("td").eq(2).find("li").length
+      console.log(in_length, prs_length);
+
       if (in_length > 0 && prs_length > 0) {
         var prs_count = parseInt($("#welding_table tr").length) + 1
         var pre_count = prs_count - 1
@@ -1296,21 +1362,7 @@ $(document).ready(function () {
       process_details = [];
     }
 
-    if (Number(process_availble) > 0) {
-      $("#process_modal").modal("show");
-      console.log(process_details);
-      $("#process_title").text($(this).data('part_name'));
-      process_details.forEach(function (obj) {
-        $("#process_list").append("<li class='list-group-item' data-process_id=" + obj.process_id + ">" + obj.process + "</li>")
-      })
-    } else {
-      $("#add_part_btn").val('').data("process", '').trigger("click");
-    }
 
-    console.log($(this).data('part_qty'));
-
-    console.log(part_id);
-    console.log($(this).data('part_no'));
     $('#part_no').val($(this).data('part_no') == null ? 'no' : $(this).data('part_no'));
     $('#part_no').data('selected-part_id', part_id);
     $('#part_name').val($(this).data('part_name'));
@@ -1323,21 +1375,49 @@ $(document).ready(function () {
 
     // Change the color of the clicked item
     $(this).addClass("text-bg-secondary")
+
+
+    if (Number(process_availble) > 0) {
+      $("#process_modal").modal("show");
+      console.log(process_details);
+      $("#process_title").text($(this).data('part_name'));
+      process_details.forEach(function (obj) {
+        $("#process_list").append("<li class='list-group-item' data-in_previous_process_id=" + obj.process_id + ">" + obj.process + "</li>")
+      })
+    } else {
+      $("#add_part_btn").val('').data("process", '').trigger("click");
+    }
+
+    console.log($(this).data('part_qty'));
+
+    console.log(part_id);
+    console.log($(this).data('part_no'));
+
   });
 
   $("#process_list").on("dblclick", "li", function () {
-    $("#add_part_btn").val($(this).data("process_id")).data("process", $(this).text().trim()).trigger("click");
+    $("#add_part_btn").val($(this).data("in_previous_process_id")).data("process", $(this).text().trim()).trigger("click");
     $("#process_modal").modal("hide");
   })
 
+
+  $("#process_list1").on("dblclick", "li", function () {
+
+    // alert()
+    html_li.attr("data-in_previous_process_id", $(this).data("in_previous_process_id"));
+
+    $("#process_modal1").modal("hide");
+
+  });
   $("#bom_recent_list").on("click", "li", function () {
     var part_id = $(this).data('part_id');
     var component_cat = $(this).data('cat');
     sel_comp_cat = component_cat
     $("#godown_data").addClass("d-none");
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
-    get_bom_process_details(part_id, component_cat)
-    get_bom(part_id, component_cat)
+    get_bom_process_details_summary(part_id, component_cat)
+    // get_bom_process_details(part_id, component_cat)
+    // get_bom(part_id, component_cat)
   });
 
 
@@ -1352,14 +1432,42 @@ $(document).ready(function () {
     else {
       $("#godown_data").addClass("d-none");
     }
+
+    get_bom_process_details_summary($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     console.log($('#bom_list_select').find(':selected').val());
-    get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
-    get_bom_process_details($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
+    // get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
+    // get_bom_process_details($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     sel_comp_cat = $('#bom_list_select').find(':selected').val()
-    $('html, body').animate({
-      scrollTop: $('#welding_table').offset().top
-    }, 800);
+    // $('html, body').animate({
+    //   scrollTop: $('#welding_table').offset().top
+    // }, 800);
   });
+
+  $('#multi_process_list').on("click", "li", function () {
+    var part_id = $(this).data("part_id");
+    var component_cat = $(this).data("component_cat");
+    var process_id = $(this).data("process_id");
+    var is_default = $(this).data("is_default");
+
+
+    if (part_id && component_cat) {
+      $("#multi_process").modal("hide")
+      $("#process_title").val($(this).data("process_title"))
+      if (Number(is_default) > 0) {
+        $("#process_default").prop("checked", true)
+
+      } else {
+        $("#process_default").prop("checked", false)
+
+      }
+      get_bom(part_id, component_cat)
+      get_bom_process_details1(process_id)
+
+    }
+    else {
+      shw_toast("Warning", "Required Data Missing")
+    }
+  })
 
   $("#search_process").on("keyup", function () {
     var value = $(this).val().toLowerCase();
@@ -1888,7 +1996,7 @@ $(document).ready(function () {
     var partId = $(this).data("part_id");
     var part_name = $(this).text();
 
-    alert(partId)
+    // alert(partId)
     selectAutocompleteByPartId(partId)
   })
 
@@ -1897,6 +2005,96 @@ $(document).ready(function () {
 
 
 
+
+
+function clear() {
+  $("#welding_table").empty();
+  if ($("#update_btn").hasClass("d-none") == false)
+    $("#update_btn").addClass("d-none")
+
+  if ($("#del_btn").hasClass("d-none") == false)
+    $("#del_btn").addClass("d-none")
+
+  if ($("#submit_btn").hasClass("d-none"))
+    $("#submit_btn").removeClass("d-none")
+
+  $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+  if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+    $("#godown_data").removeClass("d-none");
+  }
+  else {
+    $("#godown_data").addClass("d-none");
+  }
+
+  $("#bom_list").empty();
+  $("#godown_table_data").empty();
+  $("#multi_process_list").empty();
+}
+
+function get_process_count(part_id) {
+
+  $.ajax({
+    url: "php/get_process_count.php",
+    type: "get", //send it through get method
+    data: {
+      part_id: part_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() != "error") {
+        $("#process_list1").empty()
+        if (response.trim() != "0 results") {
+
+          var obj = JSON.parse(response);
+
+          obj.forEach(function (item) {
+
+            if (Number(item.process_availble) > 0) {
+
+              let process_details = [];
+
+              try {
+                process_details = JSON.parse(item.process_details);
+              } catch (e) {
+                console.error("Invalid JSON:", item.process_details);
+                process_details = [];
+              }
+
+              $("#process_modal1").modal("show");
+
+              process_details.forEach(function (obj) {
+
+                $("#process_list1").append(
+                  "<li class='list-group-item' data-in_previous_process_id='" + obj.process_id + "'>" + obj.process + "</li>"
+                );
+              });
+
+
+
+            } else {
+              shw_toast("Happy", "No Process Available");
+            }
+
+          });
+        }
+        else {
+          // $("#machine_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+
+        }
+      }
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+}
 
 
 
@@ -2220,8 +2418,8 @@ function del_process_list() {
 
 
 
-    $("#welding_table tr").each(function () {
 
+    $("#welding_table tr").each(function () {
 
 
       var processPart = $(this).find("td").eq(2).find("li");
@@ -2430,6 +2628,108 @@ function get_machine(process_id) {
 
 }
 
+function get_bom_process_details1(process_id) {
+
+
+  $.ajax({
+    url: "php/get_bom_process_details1.php",
+    type: "get", //send it through get method
+    data: {
+      process_id: process_id,
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() != "error") {
+
+        $("#welding_table").empty()
+        extra_bom = [];
+        $("#update_btn").removeClass("d-none");
+        if (response.trim() != "0 result") {
+
+          if ($("#submit_btn").hasClass("d-none") == false)
+            $("#submit_btn").addClass("d-none")
+
+          if ($("#del_btn").hasClass("d-none"))
+            $("#del_btn").removeClass("d-none")
+
+          if ($("#update_btn").hasClass("d-none"))
+            $("#update_btn").removeClass("d-none")
+
+
+          var obj1 = JSON.parse(response);
+          var count = 0
+
+
+
+          obj1.forEach(function (obj) {
+            count = count + 1;
+            var in_tbl = '';
+
+            var input_p = JSON.parse(obj.input_parts);
+
+            input_p.forEach(function (item) {
+              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + item.previous_process_id + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
+            })
+            console.log(obj.in_tbl);
+
+            const extra = encodeURIComponent(obj.process_details || "[]");
+            $("#welding_table").append("<tr class='small'><td class='' data-extra= " + extra + ">" + count + "</td><td > <ul class='list-group small'>" + in_tbl + " </ul></td><td><ul class='list-group small'><li class='list-group-item' data-process-id=" + obj.process + " data-tr_process=" + obj.process_id + ">" + obj.process_name + "</ul></td><td><ul class='list-group small'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
+
+            let parsedExtra = [];
+            try {
+              parsedExtra = JSON.parse(decodeURIComponent(obj.process_details || "[]"));
+            } catch (e) {
+              parsedExtra = [];
+            }
+            extra_bom[count - 1] = parsedExtra;
+
+          });
+
+          if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+            $("#godown_data").removeClass("d-none");
+          }
+          else {
+            $("#godown_data").addClass("d-none");
+          }
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+          if ($("#update_btn").hasClass("d-none") == false)
+            $("#update_btn").addClass("d-none")
+
+          if ($("#del_btn").hasClass("d-none") == false)
+            $("#del_btn").addClass("d-none")
+
+          if ($("#submit_btn").hasClass("d-none"))
+            $("#submit_btn").removeClass("d-none")
+
+          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+            $("#godown_data").removeClass("d-none");
+          }
+          else {
+            $("#godown_data").addClass("d-none");
+          }
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function get_bom_process_details(part_id, component_cat) {
 
@@ -2468,6 +2768,8 @@ function get_bom_process_details(part_id, component_cat) {
 
           obj1.forEach(function (obj) {
             count = count + 1;
+            console.log(obj.in_tbl);
+
             const extra = encodeURIComponent(obj.extra || "[]");
             $("#welding_table").append("<tr class='small'><td class='' data-extra=" + extra + ">" + count + "</td><td > <ul class='list-group'>" + obj.in_tbl + " </ul></td><td><ul class='list-group'>" + obj.pr_tbl + "</ul></td><td><ul class='list-group'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
 
@@ -2636,7 +2938,7 @@ function get_bom_list(part_id) {
 
 
   $.ajax({
-    url: "php/get_bom_list.php",
+    url: "php/get_bom_list_wel.php",
     type: "get", //send it through get method
     data: {
       part_id: part_id
@@ -2723,7 +3025,7 @@ function get_bom_list_comp(part_id) {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $("#bom_list_item").append("<li  data-bom_id='" + obj.bom_id + "' data-part_id='" + obj.part_id + " ' class=' list-group-item text-bg-success'>" + obj.component_cat + "</li>")
+            $("#bom_list_item").append("<li  data-process='" + obj.process + "' data-part_id='" + obj.part_id + " ' class=' list-group-item text-bg-success'>" + obj.component_cat + "<span class='ms-5 badge bg-white text-dark blink'>" + obj.process_count + "</span></li>")
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
 
@@ -2754,6 +3056,67 @@ function get_bom_list_comp(part_id) {
 
 
 }
+
+
+function get_bom_process_details_summary(part_id, component_cat) {
+
+  console.log(part_id, component_cat);
+
+
+  $.ajax({
+    // url: "php/get_bom.php",
+    url: "php/get_bom_process_details_summary.php",
+    type: "get", //send it through get method
+    data: {
+      part_id: part_id,
+      component_cat: component_cat
+    },
+    success: function (response) {
+      console.log(response);
+      if (response.trim() != "error") {
+
+        $('#multi_process_list').empty()
+        if (response.trim() != "0 result") {
+
+
+          $("#multi_process").modal("show")
+
+
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+          obj.forEach(function (obj) {
+
+            count = count + 1;
+            $("#multi_process_list").append("<li data-part_id='" + obj.output_part + "' data-component_cat='" + obj.component_cat + "' data-process_id='" + obj.process_id + "' data-process_title='" + obj.process_title + "' data-is_default='" + obj.is_default + "' class='list-group-item'>" + component_cat + "(" + obj.process_title + ")" + (obj.is_default > 0 ? "<span class='badge bg-primary blink'>Default</span>" : "") + "</li>")
+
+
+
+          });
+        }
+        else {
+          get_bom(part_id, component_cat)
+          $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
 
 function get_bom(part_id, component_cat) {
 
@@ -2793,7 +3156,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
