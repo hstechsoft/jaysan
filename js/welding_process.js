@@ -1361,6 +1361,7 @@ $(document).ready(function () {
     } catch (e) {
       process_details = [];
     }
+    console.log(process_availble, process_details);
 
 
     $('#part_no').val($(this).data('part_no') == null ? 'no' : $(this).data('part_no'));
@@ -1432,6 +1433,7 @@ $(document).ready(function () {
     else {
       $("#godown_data").addClass("d-none");
     }
+
 
     get_bom_process_details_summary($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     console.log($('#bom_list_select').find(':selected').val());
@@ -2964,7 +2966,7 @@ function get_bom_list(part_id) {
           obj.forEach(function (obj) {
             count = count + 1;
             //  $("#bom_list_item").append("<li  data-bom_id='"+ obj.bom_id+"' data-part_id='"+obj.part_id+" ' class=' list-group-item'>"+obj.component_cat + "</li>")
-            $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "'>" + obj.component_cat + "</option>")
+            $("#bom_list_select").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "' data-process_count='" + obj.process_count + "' data-bom_list='" + obj.bom_list + "'>" + obj.component_cat + "</option>")
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
 
@@ -3172,13 +3174,19 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + JSON.stringify(obj.process_details) + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
 
 
           });
+
+          let main_material =
+            count = count + 1;
+          $("#bom_list").append("<li data-part_id='" + $("#bom_list_select").find("option:selected").data("part_id") + "' data-part_no='"+$("#part_no_out").val()+"' data-part_name='"+$("#part_name_out").val()+"' data-part_qty='" + 1 + "' data-bal-qty=' ' data-process_details='" + JSON.stringify($("#bom_list_select").find("option:selected").data("bom_list")) + "'  data-process_availble='" + $("#bom_list_select").find("option:selected").data("process_count") + "' class='list-group-item bold text-bg-info'>" + $("#part_name_out").val() + " - <span class='fw-bold'>" + 1 + "</span></span></li>")
+
+
           $('#outpart_txt').text(pname + "(" + component_cat + ")")
           $("#ma_name").text(pname + "(" + component_cat + ")")
         }
