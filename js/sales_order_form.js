@@ -3968,6 +3968,7 @@ function get_sales_order_approval(approve_sts) {
       $("#mobile_approved_order_card").empty()
       if (response.trim() != "error") {
 
+        
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
