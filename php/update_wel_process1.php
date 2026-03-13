@@ -63,9 +63,9 @@ $sql = "DELETE from process_wel_tbl WHERE process_id = $row" ;
 
 log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
-   echo "deleted".$row;
+   
   } else {
-    
+    throw new Exception($conn->error);
   }
 
 }
