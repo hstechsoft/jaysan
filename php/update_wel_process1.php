@@ -94,7 +94,16 @@ $is_default1 = 0;
         $is_default1 = 0;
       }
  
- 
+//  if is_default is 1 then set all other is_default to 0 for same part,companent_cat and cat
+if($is_default1 == 1)
+  {
+    $sql_update_default = "UPDATE process_wel_tbl SET is_default = 0 WHERE output_part = '$output_part' AND component_cat = '$component_cat' AND cat = '$cat'";
+    if ($conn->query($sql_update_default) === TRUE) {
+        // Default updated successfully
+    } else {
+        throw new Exception($conn->error);
+    }
+  }
 
     $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
    VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title1','$is_default1')";
