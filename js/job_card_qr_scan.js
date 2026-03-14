@@ -97,6 +97,14 @@ $(document).ready(function () {
         }
     })
 
+    $("#production_line_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#arrange_order_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     $("#timing_section").on("click", "#end_work", function () {
 
         let qrValue = $(this).val();
@@ -247,7 +255,7 @@ function update_qr_end_time(qr_work_id) {
 }
 
 
-function get_assigned_order() {
+function get_assign_order() {
     $.ajax({
         url: "php/get_assigned_order.php",
         type: "get", //send it through get method
@@ -260,97 +268,15 @@ function get_assigned_order() {
 
 
             if (response.trim() != 'error') {
-                $("#scanned_data_tbody").empty();
+                $("#arrange_order_tbody").empty();
+                $("#mobile_view_arrange_order_tbody").empty();
                 if (response.trim() != '0 result') {
 
 
                     var obj = JSON.parse(response);
 
-                    $("#arrange_order_tbody").append(`
-                            <tr class='text-center' style=" font-size: 13px"
-                                data-ass_id='${obj.ass_id}'>
-                                <td>${obj.line_no}</td>
-                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
-                                <td>${details}</td>
-                            </tr>
-                        `);
-                    $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">
-                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.line_no}</b></div>
-                            <div class="card-body p-1">
-                                <h6 class="card-title text-info">${obj.cus_name} - ${obj.cus_phone}</h6>
-                                <p class="card-text">${details}</p>
-                            </div>
-                        </div>`)
-                    obj.forEach(function (obj) {
-                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
-                            <div class="small">
-                                <div class="fw-semibold">
-                                    ${obj.product}
-                                    <span class="text-muted">${obj.model}</span>
-                                    <span class="badge bg-info text-dark ms-1">${obj.type}</span>
-                                </div>
-
-                                <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">
-                                    ${obj.sub_type}
-                                </div>
-                            </div>
-                        </td><td class='text-center align-middle'><button class='btn btn-outline-primary  qr_f_print' data-all_data="${encodeURIComponent(JSON.stringify(obj))}"><i class="fa-solid fa-print"></i></button></td></tr>`)
-                    });
-
-                }
-                else {
-                    $("#scanned_data_tbody").append(`<tr><td colspan='4' class="text-center text-danger">No Product Assigned</td></tr>`)
-
-                }
-
-
-
-            }
-
-
-
-
-
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
-
-
-
-
-}
-
-function get_assign_order() {
-
-    $.ajax({
-        url: "php/get_assign_order.php",
-        type: "get", //send it through get method
-        data: {
-
-        },
-        success: function (response) {
-            console.log(response);
-
-
-
-            if (response.trim() != 'error') {
-                if (response.trim() != '0 result') {
-
-                    var obj = JSON.parse(response);
-                    $("#sale_order").empty();
-                    $("#sale_order").append("<option value='null' disabled selected>Select Sale Order</option>")
-
 
                     obj.forEach(function (obj) {
-                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
-                        if (obj.order_type === "Emergency") {
-                            label += " 🚨";
-                        }
-                        $("#sale_order").append("<option data-details='" + encodeURIComponent(JSON.stringify(obj)) + "'>" + label + "</option>")
-
-
 
 
                         var details = `
@@ -368,12 +294,27 @@ function get_assign_order() {
                                 </div>
                             </div>
                         `;
-
+                        $("#arrange_order_tbody").append(`
+                            <tr class='text-center' style=" font-size: 13px"
+                                data-ass_id='${obj.ass_id}'>
+                                <td>${obj.qr_no}</td>
+                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
+                                <td>${details}</td>
+                            </tr>
+                        `);
+                        $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">
+                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.qr_no}</b></div>
+                            <div class="card-body p-1">
+                                <p class="card-title text-info">${obj.cus_name}</p>
+                                <h6 class="card-text">${details}</h6>
+                            </div>
+                        </div>`)
                     });
 
                 }
                 else {
-                    $("#sale_order").append("<option >No data exist</option>")
+                    $("#arrange_order_tbody").append(`<tr><td colspan='4' class="text-center text-danger">No Product Assigned</td></tr>`);
+                    $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">No Product Assigned</div>`);
 
                 }
 
@@ -395,6 +336,8 @@ function get_assign_order() {
 
 
 }
+
+
 
 
 
@@ -451,12 +394,26 @@ function get_current_qr(emp_id) {
 
                                 </div>
 
-                                <div class="card-footer text-center">
+                                <div class="card-footer d-flex text-center gap-2">
 
                                     <button type="button"
-                                        class="btn btn-danger px-4 fw-bold shadow-sm "
+                                        class="btn btn-danger px-2 fw-bold shadow-sm "
                                         id="end_work" value='${item.qr_work_id}'>
                                         ⏹ End Work
+                                    </button>
+
+
+                                    <button type="button"
+                                        class="btn btn-primary px-2 fw-bold shadow-sm "
+                                        id="resume_work" value='${item.qr_work_id}'>
+                                        ⏸ Resume Work
+                                    </button>
+
+
+                                    <button type="button"
+                                        class="btn btn-warning px-2 fw-bold shadow-sm "
+                                        id="pause_work" value='${item.qr_work_id}'>
+                                        ▶ Pause Work
                                     </button>
 
                                 </div>

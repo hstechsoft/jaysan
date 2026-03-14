@@ -109,7 +109,7 @@ $(document).ready(function () {
         var PartsData = [];
         var converted_day = day;
 
-        if (!material_id || !godown_id || !day || !priority || !dept_id || !sec_id) {
+        if (!material_id || !godown_id) {
             console.log();
             
             salert("Warning", "Fill All the Fields!", "warning");
@@ -188,7 +188,7 @@ $(document).ready(function () {
 
         var converted_day = day;
 
-        if (!master_id || !material_id || !godown_id || !day || !priority) {
+        if (!master_id || !material_id || !godown_id) {
             salert("Warning", "Fill All the Fields!", "warning");
             return;
         }

@@ -1395,6 +1395,8 @@ $(document).ready(function () {
       $("#process_title").text($(this).data('part_name'));
       process_details.forEach(function (obj) {
         $("#process_list").append("<li class='list-group-item' data-in_previous_process_id=" + obj.process_id + ">" + obj.process + "</li>")
+
+        $("#close_btn").data({ "part_no": $(this).data('part_no'), "part_id": part_id, "part_name": $(this).data('part_name') })
       })
     } else {
       $("#add_part_btn").val('').data("process", '').trigger("click");
@@ -1412,6 +1414,16 @@ $(document).ready(function () {
     $("#process_modal").modal("hide");
   })
 
+  $("#close_btn").click(function () {
+    var part_id = $(this).data('part_id');
+
+    $('#part_no').val($(this).data('part_no') == null ? 'no' : $(this).data('part_no'));
+    $('#part_no').data('selected-part_id', part_id);
+    $('#part_name').val($(this).data('part_name'));
+    $('#part_name').data('selected-part_id', part_id);
+    $("#add_part_btn").val('').data("process", '').trigger("click");
+
+  })
 
   $("#process_list1").on("dblclick", "li", function () {
 
@@ -1429,7 +1441,10 @@ $(document).ready(function () {
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
-    get_bom(part_id, component_cat)
+    setTimeout(() =>{
+
+      get_bom(part_id, component_cat)
+    }, 500)
   });
 
 
