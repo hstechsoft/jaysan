@@ -92,7 +92,7 @@ $(document).ready(function () {
         if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0) {
             insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val());
         }
-        else{
+        else {
             salert("Warning", "Data missing, try later", "warning");
         }
     })
@@ -247,6 +247,81 @@ function update_qr_end_time(qr_work_id) {
 }
 
 
+function get_assigned_order() {
+    $.ajax({
+        url: "php/get_assigned_order.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                $("#scanned_data_tbody").empty();
+                if (response.trim() != '0 result') {
+
+
+                    var obj = JSON.parse(response);
+
+                    $("#arrange_order_tbody").append(`
+                            <tr class='text-center' style=" font-size: 13px"
+                                data-ass_id='${obj.ass_id}'>
+                                <td>${obj.line_no}</td>
+                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
+                                <td>${details}</td>
+                            </tr>
+                        `);
+                    $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">
+                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.line_no}</b></div>
+                            <div class="card-body p-1">
+                                <h6 class="card-title text-info">${obj.cus_name} - ${obj.cus_phone}</h6>
+                                <p class="card-text">${details}</p>
+                            </div>
+                        </div>`)
+                    obj.forEach(function (obj) {
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                            <div class="small">
+                                <div class="fw-semibold">
+                                    ${obj.product}
+                                    <span class="text-muted">${obj.model}</span>
+                                    <span class="badge bg-info text-dark ms-1">${obj.type}</span>
+                                </div>
+
+                                <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">
+                                    ${obj.sub_type}
+                                </div>
+                            </div>
+                        </td><td class='text-center align-middle'><button class='btn btn-outline-primary  qr_f_print' data-all_data="${encodeURIComponent(JSON.stringify(obj))}"><i class="fa-solid fa-print"></i></button></td></tr>`)
+                    });
+
+                }
+                else {
+                    $("#scanned_data_tbody").append(`<tr><td colspan='4' class="text-center text-danger">No Product Assigned</td></tr>`)
+
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 function get_assign_order() {
 
     $.ajax({
@@ -293,21 +368,7 @@ function get_assign_order() {
                                 </div>
                             </div>
                         `;
-                        $("#arrange_order_tbody").append(`
-                            <tr class='text-center' style=" font-size: 13px"
-                                data-ass_id='${obj.ass_id}'>
-                                <td>${obj.line_no}</td>
-                                <td>${obj.cus_name} - ${obj.cus_phone} <span class='badge bg-primary small'>Sale Order/No: ${obj.order_no}</span></td>
-                                <td>${details}</td>
-                            </tr>
-                        `);
-                        $("#mobile_view_arrange_order_tbody").append(`<div class="card border-info mb-3" style=" font-size: 10px;">
-                            <div class="card-header">Line no: <b class=' float-end badge bg-danger'>${obj.line_no}</b></div>
-                            <div class="card-body p-1">
-                                <h6 class="card-title text-info">${obj.cus_name} - ${obj.cus_phone}</h6>
-                                <p class="card-text">${details}</p>
-                            </div>
-                        </div>`)
+
                     });
 
                 }
