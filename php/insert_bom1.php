@@ -1,6 +1,11 @@
-    <?php
-    include 'db_head.php';
 
+<?php
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    include 'db_head.php';
+try {
+
+$conn->begin_transaction();
 
     $inputPartsData = $_POST['inputPartsData']; // This should be an array of data for input_parts
     $output_part = $_POST['output_part']; 
@@ -28,14 +33,14 @@
               if ($conn->query($sql_input) === TRUE) {
               } 
               else {
-                echo "Error: " . $sql_input . "<br>" . $conn->error;
+                throw new Exception($conn->error);
               }
         }
 
         
       
     } else {
-      echo "Error: " . $sql_process . "<br>" . $conn->error;
+      throw new Exception($conn->error);
     }
 
 // check outpart is sub assembly or not
@@ -46,6 +51,7 @@ if($is_sub_ass)
   {
     // output part is sub assembly so no need to update main  because no other bom created using this
     echo "ok";
+     $conn->commit();
      $conn->close();
      exit();
 
@@ -78,7 +84,7 @@ if($is_sub_ass)
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
-            CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS VARCHAR(500))
+            CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS CHAR)
 
 
             FROM bom_output boc
@@ -198,9 +204,20 @@ sub_ass_qty = VALUES(sub_ass_qty)");
                  "Excess Qty: " . $row['excess_qty'] . "<br><br>";
           }
         } else {
-          echo "ok";
+          
         }
-      
+      $conn->commit();
+      echo "ok";
+
+}
+
+catch (Exception $e) {
+
+$conn->rollback();
+echo $e->getMessage();
+exit;
+}
+
 
     $conn->close();
     ?>
