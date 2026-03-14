@@ -741,12 +741,12 @@ $(document).ready(function () {
     $('#addNewProcessModal').modal('show');
   });
 
-$("#set_btn").click(function(){
-  $("#godown_filter, #department_filter, #section_filter").prop("disabled", true);
-})
-$("#refresh_btn").click(function(){
-  window.location.reload();
-})
+  $("#set_btn").click(function () {
+    $("#godown_filter, #department_filter, #section_filter").prop("disabled", true);
+  })
+  $("#refresh_btn").click(function () {
+    window.location.reload();
+  })
 
 
 
@@ -1480,6 +1480,11 @@ $("#refresh_btn").click(function(){
     else {
       shw_toast("Warning", "Required Data Missing")
     }
+  })
+  $(".add_new_process_btnnnn").click(function () {
+
+    get_bom($(this).data("part_id"), $(this).data("component_cat"));
+
   })
 
   $("#search_process").on("keyup", function () {
@@ -3107,6 +3112,7 @@ function get_bom_process_details_summary(part_id, component_cat) {
 
 
           });
+          $(".add_new_process_btnnnn").data({ "part_id": part_id, "component_cat": component_cat });
         }
         else {
           get_bom(part_id, component_cat)
@@ -3195,7 +3201,7 @@ function get_bom(part_id, component_cat) {
 
           let main_material =
             count = count + 1;
-          $("#bom_list").append("<li data-part_id='" + $("#bom_list_select").find("option:selected").data("part_id") + "' data-part_no='"+$("#part_no_out").val()+"' data-part_name='"+$("#part_name_out").val()+"' data-part_qty='" + 1 + "' data-bal-qty=' ' data-process_details='" + JSON.stringify($("#bom_list_select").find("option:selected").data("bom_list")) + "'  data-process_availble='" + $("#bom_list_select").find("option:selected").data("process_count") + "' class='list-group-item bold text-bg-info'>" + $("#part_name_out").val() + " - <span class='fw-bold'>" + 1 + "</span></span></li>")
+          $("#bom_list").append("<li data-part_id='" + $("#bom_list_select").find("option:selected").data("part_id") + "' data-part_no='" + $("#part_no_out").val() + "' data-part_name='" + $("#part_name_out").val() + "' data-part_qty='" + 1 + "' data-bal-qty=' ' data-process_details='" + JSON.stringify($("#bom_list_select").find("option:selected").data("bom_list")) + "'  data-process_availble='" + $("#bom_list_select").find("option:selected").data("process_count") + "' class='list-group-item bold text-bg-info'>" + $("#part_name_out").val() + " - <span class='fw-bold'>" + 1 + "</span></span></li>")
 
 
           $('#outpart_txt').text(pname + "(" + component_cat + ")")
