@@ -1429,7 +1429,7 @@ $(document).ready(function () {
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
-    // get_bom(part_id, component_cat)
+    get_bom(part_id, component_cat)
   });
 
 
@@ -1448,7 +1448,7 @@ $(document).ready(function () {
 
     get_bom_process_details_summary($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     console.log($('#bom_list_select').find(':selected').val());
-    // get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
+    get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     // get_bom_process_details($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     sel_comp_cat = $('#bom_list_select').find(':selected').val()
     // $('html, body').animate({
@@ -1473,7 +1473,7 @@ $(document).ready(function () {
         $("#process_default").prop("checked", false)
 
       }
-      get_bom(part_id, component_cat)
+      // get_bom(part_id, component_cat)
       get_bom_process_details1(process_id)
 
     }
@@ -1481,11 +1481,11 @@ $(document).ready(function () {
       shw_toast("Warning", "Required Data Missing")
     }
   })
-  $(".add_new_process_btnnnn").click(function () {
+  // $(".add_new_process_btnnnn").click(function () {
 
-    get_bom($(this).data("part_id"), $(this).data("component_cat"));
+  //   get_bom($(this).data("part_id"), $(this).data("component_cat"));
 
-  })
+  // })
 
   $("#search_process").on("keyup", function () {
     var value = $(this).val().toLowerCase();
@@ -3112,10 +3112,10 @@ function get_bom_process_details_summary(part_id, component_cat) {
 
 
           });
-          $(".add_new_process_btnnnn").data({ "part_id": part_id, "component_cat": component_cat });
+          // $(".add_new_process_btnnnn").data({ "part_id": part_id, "component_cat": component_cat });
         }
         else {
-          get_bom(part_id, component_cat)
+          // get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
           $("#welding_table").empty();
           if ($("#update_btn").hasClass("d-none") == false)
