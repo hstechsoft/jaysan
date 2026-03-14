@@ -367,7 +367,7 @@ function get_assigned_order() {
 
 
                     obj.forEach(function (obj) {
-                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span><br>  Chase No: <b>${obj.chasis_no}</b></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
                             <div class="small">
                                 <div class="fw-semibold">
                                     ${obj.product}
