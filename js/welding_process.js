@@ -3191,7 +3191,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + JSON.stringify(obj.process_details) + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
