@@ -27,7 +27,7 @@ return $data;
 FROM bom_output 
 LEFT join process_wel_tbl pwt on pwt.output_part = bom_output.part_id and pwt.component_cat = bom_output.component_cat and pwt.cat = 'out'
 left join jaysan_process jp on pwt.process = jp.process_id
-WHERE bom_output.part_id =   $part_id  group by pwt.output_part,pwt.component_cat";
+WHERE bom_output.part_id =   $part_id  group by pwt.output_part,pwt.component_cat,bom_output.bom_id";
 
 $result = $conn->query($sql);
 
