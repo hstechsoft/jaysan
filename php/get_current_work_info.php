@@ -1,28 +1,58 @@
 <?php
- include 'db_head.php';
-
-$work_done_id = test_input($_POST['work_done_id']);
 
 
 
 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
+
+function current_info(mysqli $conn, int $emp_id)
+{
+// get work done id from emp id
+$work_done_id = null;
+$start_time= null;
+$sql_work_done = "SELECT work_id,start_date from work_done_table where emp_id = $emp_id and end_date is null limit 1 ";
+$result_work_done = $conn->query($sql_work_done);
+if ($result_work_done->num_rows > 0) {
+    $row_work_done = $result_work_done->fetch_assoc();
+    $work_done_id = $row_work_done['work_id'];
+    $start_time= $row_work_done['start_date'];
+} else {
+   return (array("start_time" => $start_time, "work_done_id" => $work_done_id));
 }
 
 
-$sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "SELECT if(count(*) > 0, qr.start_time, (SELECT if(count(*) > 0, qr.end_time, (SELECT start_date FROM work_done_table WHERE work_id = 1860)) from  qr_work_entry qr where qr.work_done_id = 1860 and qr.work_sts = 'finished' and qr.production_id is null ORDER BY qr.qr_work_id DESC limit 1
-)) as in_process_exists from  qr_work_entry qr where qr.work_done_id = 1860 and production_id is null ORDER BY qr.qr_work_id DESC limit 1";
+$sql = "SELECT qr.end_time  from qr_work_entry qr
+where
+    qr.work_done_id = $work_done_id
+    and qr.production_id is null
+ORDER BY qr.qr_work_id DESC
+limit 1";
 
-$result = $conn->multi_query($sql);
+$result = $conn->query($sql);
+// if its empty result there is no work entry for this work done id
+if ($result) {
+    $res = $conn->store_result();
+    if ($res->num_rows > 0) {
+        // fetch end time
+        $row = $res->fetch_assoc();
+        $start_time= $row['end_time'];
+    } 
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
 
-$conn->close();
+
+return (array("start_time" => $start_time, "work_done_id" => $work_done_id));
+
+
+
+
+}
+
+
+
+
+
 
 
  ?>
