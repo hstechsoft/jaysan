@@ -131,6 +131,79 @@
             transform: scale(1.08);
             box-shadow: 0 6px 18px rgba(220, 203, 53, 0.4);
         }
+
+        .start-bg {
+            background: linear-gradient(135deg, #66ceea, #794ba2);
+        }
+
+        .start-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .start-icon {
+            font-size: 40px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: auto;
+            color: white;
+        }
+
+        .quote-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px 18px;
+            font-style: italic;
+            color: #444;
+            position: relative;
+        }
+
+        .quote-mark {
+            font-size: 20px;
+            color: #999;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: 0.25s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-icon {
+            font-size: 40px;
+            display: inline-block;
+            animation: pop 0.6s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0
+            }
+
+            70% {
+                transform: scale(1.2)
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
     </style>
 
 
@@ -160,7 +233,66 @@
 
         <div class=" page-wrapper mt-5">
 
-            <div class="container py-4">
+            <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center start-bg"
+                id="star_screen">
+
+                <div class="col-xl-4 col-lg-5 col-md-7 col-11">
+
+                    <div class="start-card text-center p-4 p-md-5">
+
+                        <!-- Icon -->
+                        <div class="mb-3">
+                            <div class="start-icon">
+                                🚀
+                            </div>
+                        </div>
+
+                        <!-- Title -->
+                        <h2 class="fw-bold mb-2">Start Your Work Day</h2>
+
+                        <p class="text-muted small mb-4">
+                            Select your section and begin today's work
+                        </p>
+
+                        <!-- Quote -->
+                        <div class="quote-box mb-4">
+
+                            <div class="d-flex justify-content-end mb-2">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="lang_toggle">
+                                    <label class="form-check-label small">English</label>
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-2">
+                                <span id="quote_icon" class="quote-icon">🔥</span>
+                            </div>
+
+                            <p id="quote_text" class="mb-0 text-center"></p>
+
+                        </div>
+
+                        <!-- Section Select -->
+                        <div class="form-floating mb-4">
+                            <select class="form-select" id="section_select">
+                                <option selected disabled value="null">Choose Section</option>
+                            </select>
+                            <label>Select Section</label>
+                        </div>
+
+                        <!-- Button -->
+                        <button class="btn start-btn w-100 py-3 fw-semibold" id="start_day_btn">
+                            Start My Day
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="container py-4 d-none" id="after_star">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-5" id="scan_section">
 
@@ -211,6 +343,54 @@
 
                     <div class="col-12 col-md-6 col-lg-4 d-none" id="timing_section">
 
+                    </div>
+                </div>
+
+
+
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#work_completed_list" aria-expanded="true"
+                                aria-controls="work_completed_list">
+                                Work Completed List
+                            </button>
+                        </h2>
+                        <div id="work_completed_list" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="card shadow-sm  mt-3">
+                                    <div class="card-body p-0 ">
+
+                                        <div class="table-responsive " style="max-height: 50vh; overflow-y: auto;">
+                                            <table class="table table-bordered table-striped align-middle">
+
+                                                <thead class="table-primary text-center small"
+                                                    style="position: sticky; top: 0; z-index: 5; font-size: 14px; text-align: center;  background: #cfe2ff;">
+                                                    <tr>
+                                                        <th>#</th>
+
+                                                        <th>Part Name</th>
+
+                                                        <th>Qty</th>
+
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody id="work_compeleted_tbody" class="small">
+
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -327,7 +507,8 @@
                                             <label for="worked_qty">qty </label>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary " id="add_work_entry_btn">Add Work</button>
+                                        <button type="submit" class="btn btn-primary " id="add_work_entry_btn">Add
+                                            Work</button>
                                     </div>
                                 </div>
 
@@ -347,6 +528,38 @@
 
     </div>
 
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="pause_workModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="pause_workModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pause_workModalLabel">Do You Need to Pause the Work?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control rounded-3" placeholder="" id="pause_reason" required
+                                style="height: 120px"></textarea>
+                            <label for="pause_reason">Reason</label>
+                            <span class="text-danger">*</span>
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="pause_work_btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id='footer' class="mt-auto"></div>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

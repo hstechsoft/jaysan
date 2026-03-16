@@ -3969,6 +3969,7 @@ function get_sales_order_approval(approve_sts) {
       if (response.trim() != "error") {
 
         
+        
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);

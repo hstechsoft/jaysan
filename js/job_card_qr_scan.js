@@ -136,6 +136,173 @@ $(document).ready(function () {
 
     get_assign_order()
 
+
+    $("#timing_section").on("click", "#pause_work", function () {
+        $("#pause_workModal").modal("show")
+    })
+
+    $("#pause_work_btn").on("click", function () {
+        $("#pause_work").addClass("d-none");
+        $("#resume_work").removeClass("d-none");
+        $("#pause_workModal").modal("hide")
+    })
+
+    $("#timing_section").on("click", "#resume_work", function () {
+        $(this).addClass("d-none");
+        $("#pause_work").removeClass("d-none");
+
+    })
+
+    const quotes = [
+
+        {
+            ta: "வெற்றி அடைவோர் வாய்ப்புகளை காத்திருக்க மாட்டார்கள், அவர்கள் வேலை செய்து வெற்றியை உருவாக்குவார்கள்.",
+            en: "Success usually comes to those who are too busy to be looking for it.",
+            icon: "🚀"
+        },
+
+        {
+            ta: "முன்னேறுவதற்கான ரகசியம் தொடங்குவதில்தான் உள்ளது.",
+            en: "The secret of getting ahead is getting started.",
+            icon: "🏁"
+        },
+
+        {
+            ta: "கடிகாரத்தை பார்த்துக் கொண்டிருக்காதே; அது போல நீயும் தொடர்ந்து செய்.",
+            en: "Don’t watch the clock; do what it does. Keep going.",
+            icon: "⏰"
+        },
+
+        {
+            ta: "சிறிய முன்னேற்றமும் முன்னேற்றம்தான்.",
+            en: "Small progress is still progress.",
+            icon: "📈"
+        },
+
+        {
+            ta: "உன் எதிர்காலம் இன்று நீ செய்கிற செயல்களால் உருவாகிறது.",
+            en: "Your future is created by what you do today.",
+            icon: "🌟"
+        },
+
+        {
+            ta: "உன்னை நீ தள்ளிச் செலுத்து; வேறு யாரும் அதை செய்யமாட்டார்கள்.",
+            en: "Push yourself, because no one else will do it for you.",
+            icon: "🔥"
+        },
+
+        {
+            ta: "சிறந்த விஷயங்கள் சுகப்பிரதேசத்திலிருந்து வராது.",
+            en: "Great things never come from comfort zones.",
+            icon: "💎"
+        },
+
+        {
+            ta: "பெரிதாக கனவு காண். சிறியதாக தொடங்கு. உடனே செய்.",
+            en: "Dream big. Start small. Act now.",
+            icon: "🌠"
+        },
+
+        {
+            ta: "ஒழுக்கம் என்பது இப்போது வேண்டியது மற்றும் மிகவும் வேண்டியது என்பதற்கிடையிலான தேர்வு.",
+            en: "Discipline is choosing between what you want now and what you want most.",
+            icon: "🎯"
+        },
+
+        {
+            ta: "வாய்ப்புகள் நடக்காது; நீயே உருவாக்க வேண்டும்.",
+            en: "Opportunities don't happen. You create them.",
+            icon: "⚡"
+        },
+
+        {
+            ta: "திறமை வேலை செய்யாவிட்டால் கடின உழைப்பு அதை வெல்லும்.",
+            en: "Hard work beats talent when talent doesn't work hard.",
+            icon: "💪"
+        },
+
+        {
+            ta: "நல்ல எண்ணத்துடன் கடினமாக உழைத்து வெற்றி பெறு.",
+            en: "Stay positive, work hard, make it happen.",
+            icon: "✨"
+        },
+
+        {
+            ta: "ஒவ்வொரு நாளும் சிறிய முயற்சிகள் சேர்ந்து வெற்றியை உருவாக்கும்.",
+            en: "Success is the sum of small efforts repeated daily.",
+            icon: "📊"
+        },
+
+        {
+            ta: "இடையூறுகளை அல்ல இலக்கை நோக்கி கவனம் செலுத்து.",
+            en: "Focus on the goal, not the obstacles.",
+            icon: "🎯"
+        },
+
+        {
+            ta: "உன் மனமே உன் எல்லை.",
+            en: "Your only limit is your mind.",
+            icon: "🧠"
+        },
+
+        {
+            ta: "அமைதியாக உழை; வெற்றி சத்தம் செய்யட்டும்.",
+            en: "Work hard in silence, let success make the noise.",
+            icon: "🔔"
+        },
+
+        {
+            ta: "ஒவ்வொரு நாளும் உன்னை மேம்படுத்த ஒரு புதிய வாய்ப்பு.",
+            en: "Every day is a new chance to improve yourself.",
+            icon: "🌅"
+        },
+
+        {
+            ta: "நீ பெருமை படும் வரை நிறுத்தாதே.",
+            en: "Don’t stop until you’re proud.",
+            icon: "🏆"
+        },
+
+        {
+            ta: "முழுமை அல்ல முன்னேற்றம் முக்கியம்.",
+            en: "Progress, not perfection.",
+            icon: "📈"
+        },
+
+        {
+            ta: "நீ முடியும் என்று நம்பு; பாதி வெற்றி அங்கேயே.",
+            en: "Believe you can and you're halfway there.",
+            icon: "💫"
+        }
+
+    ];
+
+    let lang = "ta";
+
+    function rotateQuotes() {
+
+        let randomIndex = Math.floor(Math.random() * quotes.length);
+        let quote = quotes[randomIndex];
+
+        $("#quote_icon").fadeOut(150, function () {
+            $(this).text(quote.icon).fadeIn(150);
+        });
+
+        $("#quote_text").fadeOut(200, function () {
+            $(this).text(lang === "ta" ? quote.ta : quote.en).fadeIn(200);
+        });
+
+    }
+
+    $("#lang_toggle").on("change", function () {
+
+        lang = this.checked ? "en" : "ta";
+        rotateQuotes();
+
+    });
+
+    rotateQuotes();
+    setInterval(rotateQuotes, 40000);
 });
 
 
@@ -394,7 +561,7 @@ function get_current_qr(emp_id) {
 
                                 </div>
 
-                                <div class="card-footer d-flex text-center gap-2">
+                                <div class="card-footer d-flex text-center justify-content-between">
 
                                     <button type="button"
                                         class="btn btn-danger px-2 fw-bold shadow-sm "
@@ -404,7 +571,7 @@ function get_current_qr(emp_id) {
 
 
                                     <button type="button"
-                                        class="btn btn-primary px-2 fw-bold shadow-sm "
+                                        class="btn btn-primary px-2 fw-bold shadow-sm d-none"
                                         id="resume_work" value='${item.qr_work_id}'>
                                         ⏸ Resume Work
                                     </button>
