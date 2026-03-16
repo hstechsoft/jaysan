@@ -133,76 +133,124 @@
         }
 
         .start-bg {
-            background: linear-gradient(135deg, #66ceea, #794ba2);
-        }
-
-        .start-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .start-icon {
-            font-size: 40px;
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            width: 70px;
-            height: 70px;
+            background: linear-gradient(225deg, #1f88ff, #93d7ff9c);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            margin: auto;
-            color: white;
         }
+
+        .start-wrapper {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        /* header */
+
+        .start-header h1 {
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .start-header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .rocket {
+            font-size: 50px;
+            animation: rocketFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes rocketFloat {
+            0% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-8px)
+            }
+
+            100% {
+                transform: translateY(0)
+            }
+        }
+
+        /* quote */
 
         .quote-box {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px 18px;
-            font-style: italic;
-            color: #444;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f5f7fb;
+            text-align: center;
             position: relative;
         }
 
-        .quote-mark {
-            font-size: 20px;
-            color: #999;
-        }
-
-        .start-btn {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: 0.25s;
-        }
-
-        .start-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        .lang-switch {
+            position: absolute;
+            right: 10px;
+            top: 10px;
         }
 
         .quote-icon {
             font-size: 40px;
-            display: inline-block;
-            animation: pop 0.6s ease;
+            margin-top: 10px;
+            animation: iconPulse 2s infinite;
         }
 
-        @keyframes pop {
+        @keyframes iconPulse {
             0% {
-                transform: scale(0.5);
-                opacity: 0
+                transform: scale(1)
             }
 
-            70% {
-                transform: scale(1.2)
+            50% {
+                transform: scale(1.15)
             }
 
             100% {
-                transform: scale(1);
-                opacity: 1
+                transform: scale(1)
             }
+        }
+
+        .quote-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* button */
+
+        .start-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(226deg, #ea66dc, #764ba2);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all .3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        /* responsive */
+
+        @media(max-width:480px) {
+
+            .start-wrapper {
+                padding: 30px 25px;
+            }
+
+            .quote-text {
+                font-size: 15px;
+            }
+
         }
     </style>
 
@@ -233,59 +281,47 @@
 
         <div class=" page-wrapper mt-5">
 
-            <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center start-bg"
-                id="star_screen">
+            <div class="container-fluid start-bg min-vh-100 d-flex align-items-center justify-content-center">
 
-                <div class="col-xl-4 col-lg-5 col-md-7 col-11">
+                <div class="start-wrapper">
 
-                    <div class="start-card text-center p-4 p-md-5">
+                    <!-- Header -->
+                    <div class="start-header text-center">
+                        <div class="rocket">🚀</div>
+                        <h1>Start Your Day</h1>
+                        <p>Select your section and begin today's work</p>
+                    </div>
 
-                        <!-- Icon -->
-                        <div class="mb-3">
-                            <div class="start-icon">
-                                🚀
+                    <!-- Quote Box -->
+                    <div class="quote-box">
+
+                        <div class="lang-switch">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="lang_toggle">
+                                <label class="form-check-label">English</label>
                             </div>
                         </div>
 
-                        <!-- Title -->
-                        <h2 class="fw-bold mb-2">Start Your Work Day</h2>
+                        <div class="quote-icon" id="quote_icon">🔥</div>
 
-                        <p class="text-muted small mb-4">
-                            Select your section and begin today's work
-                        </p>
-
-                        <!-- Quote -->
-                        <div class="quote-box mb-4">
-
-                            <div class="d-flex justify-content-end mb-2">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="lang_toggle">
-                                    <label class="form-check-label small">English</label>
-                                </div>
-                            </div>
-
-                            <div class="text-center mb-2">
-                                <span id="quote_icon" class="quote-icon">🔥</span>
-                            </div>
-
-                            <p id="quote_text" class="mb-0 text-center"></p>
-
+                        <div class="quote-text" id="quote_text">
+                            Motivation quote appears here
                         </div>
-
-                        <!-- Section Select -->
-                        <div class="form-floating mb-4">
-                            <select class="form-select" id="section_select">
-                                <option selected disabled value="null">Choose Section</option>
-                            </select>
-                            <label>Select Section</label>
-                        </div>
-
-                        <!-- Button -->
-                        <button class="btn start-btn w-100 py-3 fw-semibold" id="start_day_btn">
-                            Start My Day
-                        </button>
 
                     </div>
+
+                    <!-- Section Select -->
+                    <div class="form-floating mt-4">
+                        <select class="form-select" id="day_section_select">
+                            <option selected disabled value="null">Choose Section</option>
+                        </select>
+                        <label>Select Section</label>
+                    </div>
+
+                    <!-- Button -->
+                    <button class="start-btn w-100 mt-4" id="start_day_btn">
+                        Start My Day
+                    </button>
 
                 </div>
 

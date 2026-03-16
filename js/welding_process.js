@@ -1353,13 +1353,14 @@ $(document).ready(function () {
 
   });
 
-  if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
-    $("#godown_data").removeClass("d-none");
-  }
-  else {
-    $("#godown_data").addClass("d-none");
-  }
-
+  $("#welding_table").on("click", "tr td", function () {
+    if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+      $("#godown_data").removeClass("d-none");
+    }
+    else {
+      $("#godown_data").addClass("d-none");
+    }
+  })
 
   $("#bom_list").on("click", "li", function () {
     $("#process_list").empty();
@@ -1441,7 +1442,7 @@ $(document).ready(function () {
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
-    setTimeout(() =>{
+    setTimeout(() => {
 
       get_bom(part_id, component_cat)
     }, 500)

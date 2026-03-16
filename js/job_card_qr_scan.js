@@ -156,7 +156,13 @@ $(document).ready(function () {
     const quotes = [
 
         {
-            ta: "வெற்றி அடைவோர் வாய்ப்புகளை காத்திருக்க மாட்டார்கள், அவர்கள் வேலை செய்து வெற்றியை உருவாக்குவார்கள்.",
+            ta: "சுதந்திரம் என்பது கொடுப்பதல்ல. அது எடுக்கப்பட்டது.",
+            en: "Freedom is not give. It's taken.",
+            icon: "🚩"
+        },
+
+        {
+            ta: "வெற்றி அடைவோர் வாய்ப்புகளுக்காக காத்திருக்க மாட்டார்கள், அவர்கள் வேலை செய்து வெற்றியை உருவாக்குவார்கள்.",
             en: "Success usually comes to those who are too busy to be looking for it.",
             icon: "🚀"
         },
@@ -168,7 +174,7 @@ $(document).ready(function () {
         },
 
         {
-            ta: "கடிகாரத்தை பார்த்துக் கொண்டிருக்காதே; அது போல நீயும் தொடர்ந்து செய்.",
+            ta: "கடிகாரத்தை பார்த்துக் கொண்டிருக்காதே; அது போல நீயும் தொடர்ந்து செயல்பட்டு.",
             en: "Don’t watch the clock; do what it does. Keep going.",
             icon: "⏰"
         },
@@ -186,55 +192,55 @@ $(document).ready(function () {
         },
 
         {
-            ta: "உன்னை நீ தள்ளிச் செலுத்து; வேறு யாரும் அதை செய்யமாட்டார்கள்.",
-            en: "Push yourself, because no one else will do it for you.",
+            ta: "வெற்றியை நோக்கி உங்களை நீங்களே தள்ளுங்கள், ஏனென்றால் வேறு யாரும் அதை உங்களுக்காக செய்ய மாட்டார்கள்.",
+            en: "Push yourself towards success, because no one else will do it for you.",
             icon: "🔥"
         },
 
         {
-            ta: "சிறந்த விஷயங்கள் சுகப்பிரதேசத்திலிருந்து வராது.",
+            ta: "சிறந்த விஷயங்கள் ஒருபோதும் ஆறுதல் மண்டலங்களிலிருந்து வருவதில்லை.",
             en: "Great things never come from comfort zones.",
             icon: "💎"
         },
 
         {
-            ta: "பெரிதாக கனவு காண். சிறியதாக தொடங்கு. உடனே செய்.",
+            ta: "பெரிய கனவு காணுங்கள். சிறியதாகத் தொடங்குங்கள். இப்போதே செயல்படுங்கள்.",
             en: "Dream big. Start small. Act now.",
             icon: "🌠"
         },
 
         {
-            ta: "ஒழுக்கம் என்பது இப்போது வேண்டியது மற்றும் மிகவும் வேண்டியது என்பதற்கிடையிலான தேர்வு.",
+            ta: "ஒழுக்கம் என்பது நீங்கள் இப்போது விரும்புவதற்கும் நீங்கள் அதிகம் விரும்புவதற்கும் இடையில் தேர்ந்தெடுப்பதாகும்.",
             en: "Discipline is choosing between what you want now and what you want most.",
             icon: "🎯"
         },
 
         {
-            ta: "வாய்ப்புகள் நடக்காது; நீயே உருவாக்க வேண்டும்.",
+            ta: "வாய்ப்புகள் அமையாது. நீங்கள் அவற்றை உருவாக்குங்கள்.",
             en: "Opportunities don't happen. You create them.",
             icon: "⚡"
         },
 
         {
-            ta: "திறமை வேலை செய்யாவிட்டால் கடின உழைப்பு அதை வெல்லும்.",
+            ta: "திறமை கடினமாக உழைக்காதபோது கடின உழைப்பு திறமையை வெல்லும்.",
             en: "Hard work beats talent when talent doesn't work hard.",
             icon: "💪"
         },
 
         {
-            ta: "நல்ல எண்ணத்துடன் கடினமாக உழைத்து வெற்றி பெறு.",
+            ta: "நேர்மறையாக இருங்கள், கடினமாக உழைக்கவும், அதைச் சாத்தியமாக்குங்கள்.",
             en: "Stay positive, work hard, make it happen.",
             icon: "✨"
         },
 
         {
-            ta: "ஒவ்வொரு நாளும் சிறிய முயற்சிகள் சேர்ந்து வெற்றியை உருவாக்கும்.",
+            ta: "வெற்றி என்பது தினமும் மீண்டும் மீண்டும் செய்யப்படும் சிறிய முயற்சிகளின் கூட்டுத்தொகை.",
             en: "Success is the sum of small efforts repeated daily.",
             icon: "📊"
         },
 
         {
-            ta: "இடையூறுகளை அல்ல இலக்கை நோக்கி கவனம் செலுத்து.",
+            ta: "தடைகளில் அல்ல, இலக்கில் கவனம் செலுத்துங்கள்.",
             en: "Focus on the goal, not the obstacles.",
             icon: "🎯"
         },
@@ -278,14 +284,14 @@ $(document).ready(function () {
     ];
 
     let lang = "ta";
+    let currentQuoteIndex = 0;
 
-    function rotateQuotes() {
+    function showQuote(index) {
 
-        let randomIndex = Math.floor(Math.random() * quotes.length);
-        let quote = quotes[randomIndex];
+        let quote = quotes[index];
 
-        $("#quote_icon").fadeOut(150, function () {
-            $(this).text(quote.icon).fadeIn(150);
+        $("#quote_icon").fadeOut(200, function () {
+            $(this).text(quote.icon).fadeIn(200);
         });
 
         $("#quote_text").fadeOut(200, function () {
@@ -294,15 +300,34 @@ $(document).ready(function () {
 
     }
 
+    function rotateQuotes() {
+
+        let newIndex;
+
+        do {
+            newIndex = Math.floor(Math.random() * quotes.length);
+        }
+        while (newIndex === currentQuoteIndex);
+
+        currentQuoteIndex = newIndex;
+
+        showQuote(currentQuoteIndex);
+    }
+
+
     $("#lang_toggle").on("change", function () {
 
         lang = this.checked ? "en" : "ta";
-        rotateQuotes();
+
+        showQuote(currentQuoteIndex);
 
     });
 
-    rotateQuotes();
-    setInterval(rotateQuotes, 40000);
+
+    currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+    showQuote(currentQuoteIndex);
+
+    setInterval(rotateQuotes, 300000);
 });
 
 
@@ -651,6 +676,7 @@ function get_dep_section() {
 
             if (response.trim() != "error") {
                 $("#section_select").empty();
+                $("#day_section_select").empty();
                 if (response.trim() != "0 result") {
 
 
@@ -660,12 +686,14 @@ function get_dep_section() {
                     var obj = JSON.parse(response);
                     var count = 0
                     $("#section_select").append("<option class='' value='null'> select section...  </option>")
+                    $("#day_section_select").append("<option class='' value='null'> select section...  </option>")
 
                     obj.forEach(function (obj) {
                         count = count + 1;
 
 
                         $("#section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
+                        $("#day_section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
 
 
                     });
