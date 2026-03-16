@@ -4,6 +4,7 @@
  $emp_id = test_input($_POST['emp_id']);
 $qr_code = test_input($_POST['qr_code']);
 $sec_id = test_input($_POST['sec_id']);
+$work_done_id = test_input($_POST['work_done_id']);
 
 
 
@@ -18,7 +19,7 @@ return $data;
 }
 
 
- $sql = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id) VALUES ($emp_id, $qr_code, $sec_id)";
+ $sql = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id,work_done_id,work_sts) VALUES ($emp_id, $qr_code, $sec_id,$work_done_id,'in-process')";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
