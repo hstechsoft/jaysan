@@ -769,7 +769,7 @@ $(document).ready(function () {
       success: function (response) {
         // Handle success response
         shw_toast("Success", "Successfully Inserted")
-        // $('#addNewProcessModal').modal('hide');
+        $('#addNewProcessModal').modal('hide');
         // Optionally, refresh the process table or perform other actions
         $('#processName').val('');
         $('#processDes').val('');

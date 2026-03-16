@@ -380,6 +380,7 @@ $(document).ready(function () {
 
   $('#bom_table').on('click', 'button', function () {
 
+    var bom_in_id = $(this).val() || 0;
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this imaginary file!",
@@ -390,12 +391,30 @@ $(document).ready(function () {
     })
       .then((willDelete) => {
         if (willDelete) {
+console.log(bom_in_id);
 
+          if (Number(bom_in_id) > 0) {
+            $.ajax({
 
-          // Get the closest row (tr) to the clicked button
-          var row = $(this).closest('tr');
-          // Remove the row from the table
-          row.remove();
+              url: 'php/delete_bom_input.php',
+              method: 'POST',
+              data: {
+
+                bom_in_id: bom_in_id,
+              },
+              success: function (response) {
+                console.log(response);
+                if (response.trim() == "ok") {
+                  get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+                }
+              }
+            });
+          } else {
+            // Get the closest row (tr) to the clicked button
+            var row = $(this).closest('tr');
+            // Remove the row from the table
+            row.remove();
+          }
         } else {
           swal("Your imaginary file is safe!");
         }
@@ -481,8 +500,8 @@ $(document).ready(function () {
           bom_id: $('#update_part_btn').val(),
         },
         success: function (response) {
-          console.log(response);
-          if (response.trim() == "ok") {
+          console.log(response.bom_qty_check);
+          if (response.bom_qty_check.trim() == "No excess quantity found") {
 
             get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
             console.log($('#bom_list_select').val());
@@ -1044,7 +1063,7 @@ function get_bom(part_id, component_cat) {
 
             $("#update_btn, #update_part_btn").val(obj.bom_id)
 
-            $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + obj.part_id + ">" + obj.part_name + sub_ass + "</td> <td contenteditable='true' class='qty-editable'>" + obj.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
+            $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + obj.part_id + ">" + obj.part_name + sub_ass + "</td> <td contenteditable='true' class='qty-editable'>" + obj.qty + "</td> <td><button class='btn btn-outline-danger border-0' value=" + obj.bom_in_id + "><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
 
 
           });
