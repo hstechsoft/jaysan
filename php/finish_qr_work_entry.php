@@ -1,8 +1,8 @@
 <?php
  include 'db_head.php';
 
-// $qr_work_id = test_input($_POST['qr_work_id']);
-// $work_update_sts = test_input($_POST['work_update_sts']);
+$qr_work_id = test_input($_POST['qr_work_id']);
+$work_update_sts = test_input($_POST['work_update_sts']);
 
 
 // if($work_update_sts != 'in-process' || $work_update_sts != 'paused'  || $qr_work_id == '' || $work_update_sts == ''){
