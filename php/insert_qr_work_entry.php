@@ -6,7 +6,12 @@ $qr_code = test_input($_POST['qr_code']);
 $sec_id = test_input($_POST['sec_id']);
 $work_done_id = test_input($_POST['work_done_id']);
 
-
+if(!$emp_id || !$work_done_id) {
+    echo "Error: Missing required fields.";
+    $conn->close();
+    exit;
+    
+}
 
  
  
