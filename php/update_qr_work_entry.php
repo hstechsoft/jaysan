@@ -3,6 +3,7 @@
 
 $qr_work_id = test_input($_POST['qr_work_id']);
 $work_update_sts = test_input($_POST['work_update_sts']);
+$reason = test_input($_POST['reason']);
 
 
 if($work_update_sts != 'in-process' || $work_update_sts != 'paused'  || $qr_work_id == '' || $work_update_sts == ''){
@@ -39,7 +40,7 @@ return $data;
 }
 
 
- $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW() WHERE qr_work_id = $qr_work_id";
+ $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
 
   if ($conn->query($sql_update_sts) === TRUE) {
    echo "ok";

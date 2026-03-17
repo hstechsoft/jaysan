@@ -40,6 +40,7 @@ if ($result_start_time->num_rows > 0) {
 $sql_paused_works = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
         'start_time', qr.start_time,
         'end_time', qr.end_time,
+        'reason', qr.reason,
         'production_id', qr.production_id,
         'work_sts', qr.work_sts,
         'work_id', qr.work_done_id,
