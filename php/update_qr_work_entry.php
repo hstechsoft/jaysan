@@ -6,7 +6,7 @@ $work_update_sts = test_input($_POST['work_update_sts']);
 $reason = test_input($_POST['reason']);
 
 
-if($work_update_sts != 'in-process' || $work_update_sts != 'paused'  || $qr_work_id == '' || $work_update_sts == ''){
+if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_work_id == "''" || $work_update_sts == "''"){
     echo "Error: Invalid input.";
     $conn->close();
     exit; 
@@ -19,7 +19,7 @@ if ($result_check_work_sts->num_rows > 0) {
     $row = $result_check_work_sts->fetch_assoc();
     $current_work_sts = $row['work_sts'];
     
-    if (($work_update_sts == 'paused' && $current_work_sts != 'in-process') || ($work_update_sts == 'in-process' && $current_work_sts != 'paused')) {
+    if (($work_update_sts == "'paused'" && $current_work_sts != 'in-process') || ($work_update_sts == "'in-process'" && $current_work_sts != 'paused')) {
         echo "Error: Invalid work status transition.";
         $conn->close();
         exit; 
