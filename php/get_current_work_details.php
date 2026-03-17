@@ -5,7 +5,7 @@
 
 
 
- 
+ $result_display = array();
  
 function test_input($data) {
 $data = trim($data);
@@ -18,28 +18,26 @@ return $data;
 require __DIR__ . '/get_current_work_info.php';
 
 $work_done_id = (int) (current_info($conn,(int) $emp_id)['work_done_id'] ?? 0);
+$result_display['work_done_id'] = $work_done_id;
 
 
+// get start time from work_done_table if work_done_id is available
+if ($work_done_id) {
+$sql_start_time = "SELECT start_date FROM work_done_table WHERE work_id = $work_done_id";
+$result_start_time = $conn->query($sql_start_time);
+if ($result_start_time->num_rows > 0) {
+    $row = $result_start_time->fetch_assoc();
+    $result_display['start_time'] = $row['start_date'];
+} else {
+    $result_display['start_time'] = null;
+}
+} else {
+    $result_display['start_time'] = null;
+}
 
+// paused work entries
 
- $sql = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
-        'start_time', qr.start_time,
-        'end_time', qr.end_time,
-        'production_id', qr.production_id,
-        'work_sts', qr.work_sts,
-        'work_id', wd.work_id,
-        'current_work_id', qr.qr_work_id 
-    )) as work_entries,qr.work_sts
-FROM work_done_table wd 
-
-left join qr_work_entry qr on wd.work_id = qr.work_done_id
-
-WHERE   wd.work_id = $work_done_id and qr.work_sts <> 'paused'  GROUP BY qr.work_sts
-
-
-union all
-
-SELECT JSON_ARRAYAGG(JSON_OBJECT(
+$sql_paused_works = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
         'start_time', qr.start_time,
         'end_time', qr.end_time,
         'production_id', qr.production_id,
@@ -47,21 +45,58 @@ SELECT JSON_ARRAYAGG(JSON_OBJECT(
         'work_id', qr.work_done_id,
         'current_work_id', qr.qr_work_id 
     )) as work_entries,qr.work_sts
-FROM  qr_work_entry qr 
-
-WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
-
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
+FROM  qr_work_entry qr WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
+$result_paused_works= $conn->query($sql_paused_works);
+if ($result_paused_works->num_rows > 0) {
     $rows = array();
-    while($r = mysqli_fetch_assoc($result)) {
+    while($r = mysqli_fetch_assoc($result_paused_works)) {
         $rows[] = $r;
     }
-    print json_encode($rows);
-} else {
-  echo "0 result";
+    $result_display['paused_work_entries'] = $rows;
+  
+}else {
+    $result_display['paused_work_entries'] = [];
 }
+
+
+ $sql_finished_entries = "SELECT  qr.start_time,qr.end_time,qr.production_id,qr.qr_work_id 
+FROM work_done_table wd left join qr_work_entry qr on wd.work_id = qr.work_done_id
+WHERE   wd.work_id = $work_done_id and qr.work_sts  =  'finished' ";
+
+$result_finished_entries = $conn->query($sql_finished_entries);
+
+if ($result_finished_entries->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result_finished_entries)) {
+        $rows[] = $r;
+    }
+    $result_display['finished_work_entries'] = $rows;
+    
+} else {
+ $result_display['finished_work_entries'] = [];
+   
+}
+
+
+ $sql_process_entries = "SELECT  qr.start_time,qr.end_time,qr.production_id,qr.qr_work_id 
+FROM work_done_table wd left join qr_work_entry qr on wd.work_id = qr.work_done_id
+WHERE   wd.work_id = $work_done_id and qr.work_sts  =  'in-process' ";
+
+$result_process_entries = $conn->query($sql_process_entries);
+
+if ($result_process_entries->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result_process_entries)) {
+        $rows[] = $r;
+    }
+    $result_display['in_process_work_entries'] = $rows;
+    
+} else {
+ $result_display['in_process_work_entries'] = [];
+   
+}
+
+ print json_encode($result_display);
 $conn->close();
 
  ?>
