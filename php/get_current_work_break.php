@@ -24,10 +24,29 @@ if (!$start_time) {
     exit;
 }
 
-$start_time_only = date('H:i:s', strtotime($start_time));
 
 
- $sql = "SELECT * FROM extra_time_master WHERE start_time >= '$start_time_only' AND end_time <= now() and ex_type = 'break'; ";
+
+ $sql = "WITH RECURSIVE dates AS (
+    SELECT DATE('$start_time') AS dt
+    UNION ALL
+    SELECT dt + INTERVAL 1 DAY
+    FROM dates
+    WHERE dt < now()
+)
+SELECT 
+d.dt as dates,
+JSON_ARRAYAGG(JSON_OBJECT('ex_time',ex_time,
+                             
+                          'ex_name',ex_name,
+                          'start_datetime',TIMESTAMP(d.dt, b.start_time),
+                          'end_datetime', TIMESTAMP(d.dt, b.end_time) 
+                         ))  as break_details
+  
+FROM dates d
+CROSS JOIN extra_time_master b
+WHERE TIMESTAMP(d.dt, b.start_time) >= '$start_time'
+  AND TIMESTAMP(d.dt, b.end_time)   <= now() and b.ex_type = 'break' GROUP by dt ; ";
 
 $result = $conn->query($sql);
 

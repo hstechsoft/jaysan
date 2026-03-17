@@ -27,7 +27,8 @@ $work_done_id = (int) (current_info($conn,(int) $emp_id)['work_done_id'] ?? 0);
         'end_time', qr.end_time,
         'production_id', qr.production_id,
         'work_sts', qr.work_sts,
-        'work_id', wd.work_id
+        'work_id', wd.work_id,
+        'current_work_id', qr.qr_work_id 
     )) as work_entries,qr.work_sts
 FROM work_done_table wd 
 
