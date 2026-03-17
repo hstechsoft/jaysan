@@ -60,8 +60,8 @@ if ($result_paused_works->num_rows > 0) {
 
 
  $sql_finished_entries = "SELECT  qr.start_time,qr.end_time,qr.production_id,qr.qr_work_id 
-FROM work_done_table wd left join qr_work_entry qr on wd.work_id = qr.work_done_id
-WHERE   wd.work_id = $work_done_id and qr.work_sts  =  'finished' ";
+FROM  qr_work_entry qr 
+WHERE   qr.work_done_id = $work_done_id and qr.work_sts  =  'finished' ";
 
 $result_finished_entries = $conn->query($sql_finished_entries);
 
@@ -78,9 +78,14 @@ if ($result_finished_entries->num_rows > 0) {
 }
 
 
- $sql_process_entries = "SELECT  qr.start_time,qr.end_time,qr.production_id,qr.qr_work_id 
-FROM work_done_table wd left join qr_work_entry qr on wd.work_id = qr.work_done_id
-WHERE   wd.work_id = $work_done_id and qr.work_sts  =  'in-process' ";
+ $sql_process_entries = "with qr_report as(SELECT date_time_only(qr.start_time) as start_time_formated,qr.sec_id,qr.start_time,qr.production_id, qr.qr_work_id, machine_production_taken.ass_id  
+FROM qr_work_entry  qr
+INNER JOIN machine_production_taken ON qr.production_id = machine_production_taken.production_id 
+WHERE qr.work_done_id = $work_done_id AND qr.work_sts = 'in-process'),
+ass_details as (
+    SELECT qr_report.*,assign_product.opid,assign_product.assign_type,date_only(assign_product.dated) as production_date,assign_product.emergency_order FROM assign_product inner join qr_report on assign_product.ass_id = qr_report.ass_id
+)
+SELECT * FROM ass_details  inner join sales_order_info_view on ass_details.opid = sales_order_info_view.opid  ";
 
 $result_process_entries = $conn->query($sql_process_entries);
 
@@ -88,12 +93,13 @@ if ($result_process_entries->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result_process_entries)) {
         $rows[] = $r;
+         $result_display['current_sts'] = 'in-process'; 
     }
     $result_display['in_process_work_entries'] = $rows;
     
 } else {
  $result_display['in_process_work_entries'] = [];
-   
+    $result_display['current_sts'] = 'not-in-process'; 
 }
 
  print json_encode($result_display);
