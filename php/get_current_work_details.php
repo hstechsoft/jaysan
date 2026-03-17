@@ -34,7 +34,22 @@ FROM work_done_table wd
 
 left join qr_work_entry qr on wd.work_id = qr.work_done_id
 
-WHERE   wd.work_id = $work_done_id GROUP BY qr.work_sts";
+WHERE   wd.work_id = $work_done_id and qr.work_sts <> 'paused'  GROUP BY qr.work_sts
+
+
+union all
+
+SELECT JSON_ARRAYAGG(JSON_OBJECT(
+        'start_time', qr.start_time,
+        'end_time', qr.end_time,
+        'production_id', qr.production_id,
+        'work_sts', qr.work_sts,
+        'work_id', qr.work_done_id,
+        'current_work_id', qr.qr_work_id 
+    )) as work_entries,qr.work_sts
+FROM  qr_work_entry qr 
+
+WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
 
 $result = $conn->query($sql);
 
