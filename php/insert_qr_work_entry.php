@@ -13,7 +13,15 @@ if(!$emp_id || !$work_done_id) {
     
 }
 
- 
+//  check there is in-processentry for emp
+$sql_check_in_process = "SELECT * FROM qr_work_entry WHERE emp_id = $emp_id AND work_sts = 'in-process'";
+$result_check_in_process = $conn->query($sql_check_in_process);
+if ($result_check_in_process->num_rows > 0) {
+    echo "Error: There is already an in-process entry for this employee.";
+    $conn->close();
+    exit;
+}
+
  
 function test_input($data) {
 $data = trim($data);
