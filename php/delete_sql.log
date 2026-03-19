@@ -1,0 +1,4 @@
+[2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2682
+[2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2683
+[2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2684
+[2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2685

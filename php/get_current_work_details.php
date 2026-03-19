@@ -23,7 +23,7 @@ $result_display['work_done_id'] = $work_done_id;
 
 // get start time from work_done_table if work_done_id is available
 if ($work_done_id) {
-$sql_start_time = "SELECT start_date FROM work_done_table WHERE work_id = $work_done_id";
+$sql_start_time = "SELECT date_time_only(start_date) as start_date FROM work_done_table WHERE work_id = $work_done_id";
 $result_start_time = $conn->query($sql_start_time);
 if ($result_start_time->num_rows > 0) {
     $row = $result_start_time->fetch_assoc();
@@ -60,7 +60,7 @@ if ($result_paused_works->num_rows > 0) {
 }
 
 
- $sql_finished_entries = "SELECT  qr.start_time,qr.end_time,qr.production_id,qr.qr_work_id 
+ $sql_finished_entries = "SELECT  date_time_only(qr.start_time) as start_time,date_time_only(qr.end_time) as end_time,qr.production_id,qr.qr_work_id 
 FROM  qr_work_entry qr 
 WHERE   qr.work_done_id = $work_done_id and qr.work_sts  =  'finished' ";
 
@@ -84,7 +84,7 @@ FROM qr_work_entry  qr
 INNER JOIN machine_production_taken ON qr.production_id = machine_production_taken.production_id 
 WHERE qr.work_done_id = $work_done_id AND qr.work_sts = 'in-process'),
 ass_details as (
-    SELECT qr_report.*,assign_product.opid,assign_product.assign_type,date_only(assign_product.dated) as production_date,assign_product.emergency_order FROM assign_product inner join qr_report on assign_product.ass_id = qr_report.ass_id
+    SELECT qr_report.*,assign_product.chasis_no,assign_product.opid,assign_product.assign_type,date_only(assign_product.dated) as production_date,assign_product.emergency_order FROM assign_product inner join qr_report on assign_product.ass_id = qr_report.ass_id
 )
 SELECT * FROM ass_details  inner join sales_order_info_view on ass_details.opid = sales_order_info_view.opid  ";
 
