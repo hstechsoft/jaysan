@@ -89,6 +89,9 @@ $total_work_duration_minutes = $totalMinutes - $total_break_duration_minutes;
 echo json_encode(array("total_work_minutes" => $total_work_duration_minutes, "total_break_minutes" => $total_break_duration_minutes));
     }
 
+    // update stock based on bom 
+    
+
 
 
  

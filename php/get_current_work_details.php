@@ -42,11 +42,14 @@ $sql_paused_works = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
         'end_time', qr.end_time,
         'reason', qr.reason,
         'production_id', qr.production_id,
+        'chasis_no',(select chasis_no from assign_product where assign_product.ass_id = mpt.ass_id),
         'work_sts', qr.work_sts,
         'work_id', qr.work_done_id,
         'current_work_id', qr.qr_work_id 
     )) as work_entries,qr.work_sts
-FROM  qr_work_entry qr WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
+FROM  qr_work_entry qr
+left join machine_production_taken mpt on qr.production_id = mpt.production_id
+ WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
 $result_paused_works= $conn->query($sql_paused_works);
 if ($result_paused_works->num_rows > 0) {
     $rows = array();
