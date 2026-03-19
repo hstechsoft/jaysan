@@ -29,16 +29,14 @@ limit 1";
 
 $result = $conn->query($sql);
 // if its empty result there is no work entry for this work done id
-if ($result) {
-    $res = $conn->store_result();
-    if ($res->num_rows > 0) {
+if ($result->num_rows > 0) {
+  
+   
         // fetch end time
-        $row = $res->fetch_assoc();
+        $row = $result->fetch_assoc();
         $start_time= $row['end_time'];
-    } 
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
+    
+} 
 
 
 
