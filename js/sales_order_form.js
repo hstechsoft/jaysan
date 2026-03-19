@@ -350,6 +350,8 @@ $(document).ready(function () {
     }
     else if ($(this).hasClass('pay_btn')) {
       oid = $(this).val()
+      var cus_id = $(this).data("cus_id");
+      $("#payment_add_btn_m").data("cus_id", cus_id);
       get_sales_advance_m($(this).data("cus_id"));
       setTimeout(function () {
 
@@ -419,6 +421,7 @@ $(document).ready(function () {
 
   $('#app_order_table, #mobile_approved_order_card').on("click", "button", function () {
     var order_no = $(this).val();
+    var cus_id = $(this).data("cus_id");
     if ($(this).hasClass('download')) {
       get_order_details(order_no)
 
@@ -428,7 +431,7 @@ $(document).ready(function () {
         if (count > 0) {
 
 
-          window.open("dispatch_clearance_form.html?phone_id=" + phone_id + "&oid=" + order_no, "_blank");
+          window.open("dispatch_clearance_form.html?phone_id=" + phone_id + "&oid=" + order_no + "&cus_id=" + cus_id, "_blank");
 
         }
         else
@@ -439,7 +442,10 @@ $(document).ready(function () {
     }
     else if ($(this).hasClass('pay_btn')) {
       oid = $(this).val()
+      var cus_id = $(this).data("cus_id");
       $('#sales_pay').modal('show')
+      var cus_id = $(this).data("cus_id");
+      $("#payment_add_btn_m").data("cus_id", cus_id);
       oid = $(this).val()
       get_sales_advance_m($(this).data("cus_id"));
       setTimeout(function () {
@@ -1124,6 +1130,8 @@ $(document).ready(function () {
     var advance_id = $("#amount_m").data("advance_id");
     var payment_id = $("#amount_m").data("payment_id");
     if (advance_id !== undefined && advance_id !== 'null' && advance_id !== "" && payment_id !== undefined && payment_id !== 'null' && payment_id !== "") {
+      console.log(cus_id);
+      alert()
       insert_sale_payment_advance(payment_id, advance_id, $('#amount_m').val(), oid, cus_id);
     }
     else {
@@ -2438,6 +2446,7 @@ function insert_sales_pay(cus_id) {
 
 function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id) {
 
+  console.log(payment_id, advance_id, amount, oid, cus_id);
 
   $.ajax({
     url: "php/insert_sale_payment_advance.php",
@@ -2466,9 +2475,9 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
         $('#amount, #amount_m').data({ "advance_id": "", "payment_id": "" })
         $('#payment_date, #payment_date_m').val("")
         $("#extra_payment, #extra_payment_m").val(0);
-        get_sales_advance_m(cus_id)
-        get_jaysan_sales_payment_m(oid)
-        get_sales_order_single(oid)
+        // get_sales_advance_m(cus_id)
+        // get_jaysan_sales_payment_m(oid)
+        // get_sales_order_single(oid)
 
 
       }
@@ -3408,8 +3417,7 @@ function get_sales_order(approve_sts) {
               bd = "disabled"
             }
             //console.logobj.pay_sts);
-
-            $("#payment_add_btn_m").data("cus_id", obj.customer_id);
+            
             $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' data-cus_id='" + obj.customer_id + "' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  " + bd + " type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td></tr>")
 
 
@@ -3968,8 +3976,8 @@ function get_sales_order_approval(approve_sts) {
       $("#mobile_approved_order_card").empty()
       if (response.trim() != "error") {
 
-        
-        
+
+
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
@@ -4208,8 +4216,8 @@ function get_sales_order_approval(approve_sts) {
               ddu = "";
             }
 
-            $("#payment_add_btn_m").data("cus_id", obj.customer_id);
-            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0 " + ddu + "'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "'  data-cus_id='" + obj.customer_id + "'  class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
+
+            $('#app_order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' data-cus_id='" + obj.customer_id + "' value='" + obj.oid + "' class='dcf_btn btn btn-outline-primary border-0 " + ddu + "'><i class='fa-regular fa-file'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "'  data-cus_id='" + obj.customer_id + "'  class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
 
             $("#mobile_approved_order_card").append(`
               <div class="card mb-2 shadow-sm border-0 rounded-3" data-oid="${obj.oid}">
@@ -4254,7 +4262,7 @@ function get_sales_order_approval(approve_sts) {
                           </button>
 
                           <button type="button"
-                              value="${obj.oid}"
+                              value="${obj.oid}" data-cus_id="${obj.customer_id}" 
                               class="btn btn-outline-primary btn-sm dcf_btn border-0 flex-fill ${ddu}">
                               <i class="fa-regular fa-file"></i>
                           </button>

@@ -2,8 +2,10 @@
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
+// var current_user_id = 231
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+var current_work = 0;
 $(document).ready(function () {
 
 
@@ -28,7 +30,7 @@ $(document).ready(function () {
 
     check_login();
     get_dep_section();
-    get_current_qr(current_user_id);
+    get_current_work_details(current_user_id);
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -89,8 +91,8 @@ $(document).ready(function () {
 
     $("#start_work").click(function () {
 
-        if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0) {
-            insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val());
+        if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0 && Number($("#day_start_time").data("work_done_id") || 0)) {
+            insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val(), $("#day_start_time").data("work_done_id"));
         }
         else {
             salert("Warning", "Data missing, try later", "warning");
@@ -139,12 +141,34 @@ $(document).ready(function () {
 
     $("#timing_section").on("click", "#pause_work", function () {
         $("#pause_workModal").modal("show")
+        $("#pause_work_btn").val($(this).val())
     })
 
+    $("#pause_select").on("change", function () {
+        var select_reason = $(this).val();
+
+        if (select_reason == "No Stock" || select_reason == "Rework") {
+            $(".pause_reason").removeClass("d-none");
+            $("#pause_reason").val("");
+        } else {
+            $(".pause_reason").addClass("d-none");
+            $("#pause_reason").val(select_reason);
+        }
+
+    })
     $("#pause_work_btn").on("click", function () {
-        $("#pause_work").addClass("d-none");
-        $("#resume_work").removeClass("d-none");
-        $("#pause_workModal").modal("hide")
+        var qr_work_id = $(this).val() || 0
+        var select_reason = $("#pause_select").val();
+        var ent_reason = $("#pause_reason").val();
+        if (Number(qr_work_id) > 0 && ent_reason != '') {
+
+            var reason = select_reason + " : " + ent_reason;
+            $(this).prop("disabled", true);
+            update_qr_work_entry(qr_work_id, "paused", reason);
+        }
+        else {
+            salert("Warning", "Enter The Reason Or Data Missing!, Try Later", "warning");
+        }
     })
 
     $("#timing_section").on("click", "#resume_work", function () {
@@ -153,24 +177,26 @@ $(document).ready(function () {
 
     })
 
+
+    // Day Start 
     const quotes = [
 
         {
-            ta: "சுதந்திரம் என்பது கொடுப்பதல்ல. அது எடுக்கப்பட்டது.",
+            ta: "சுதந்திரம் என்பது கொடுப்பதல்ல. அது எடுக்கப்படவேண்டியது.",
             en: "Freedom is not give. It's taken.",
-            icon: "🚩"
+            icon: "⚔️"
         },
 
         {
             ta: "வெற்றி அடைவோர் வாய்ப்புகளுக்காக காத்திருக்க மாட்டார்கள், அவர்கள் வேலை செய்து வெற்றியை உருவாக்குவார்கள்.",
             en: "Success usually comes to those who are too busy to be looking for it.",
-            icon: "🚀"
+            icon: "🧑‍💻"
         },
 
         {
             ta: "முன்னேறுவதற்கான ரகசியம் தொடங்குவதில்தான் உள்ளது.",
             en: "The secret of getting ahead is getting started.",
-            icon: "🏁"
+            icon: "🚩"
         },
 
         {
@@ -192,7 +218,7 @@ $(document).ready(function () {
         },
 
         {
-            ta: "வெற்றியை நோக்கி உங்களை நீங்களே தள்ளுங்கள், ஏனென்றால் வேறு யாரும் அதை உங்களுக்காக செய்ய மாட்டார்கள்.",
+            ta: "வெற்றியை நோக்கி உங்களை நீங்களே தாலிக்கொள்ளுங்க, ஏனென்றால் வேறு யாரும் அதை உங்களுக்காக செய்ய மாட்டார்கள்.",
             en: "Push yourself towards success, because no one else will do it for you.",
             icon: "🔥"
         },
@@ -204,15 +230,22 @@ $(document).ready(function () {
         },
 
         {
+            ta: "சிறந்த பணியைச் செய்வதற்கான ஒரே வழி, நீங்கள் செய்வதை நேசிப்பதுதான்.",
+            en: "The only way to do great work is to love what you do.",
+            icon: "🛠️"
+        },
+
+
+        {
             ta: "பெரிய கனவு காணுங்கள். சிறியதாகத் தொடங்குங்கள். இப்போதே செயல்படுங்கள்.",
             en: "Dream big. Start small. Act now.",
             icon: "🌠"
         },
 
         {
-            ta: "ஒழுக்கம் என்பது நீங்கள் இப்போது விரும்புவதற்கும் நீங்கள் அதிகம் விரும்புவதற்கும் இடையில் தேர்ந்தெடுப்பதாகும்.",
+            ta: "ஒழுக்கம் என்பது, உங்களுக்கு இப்போது என்ன வேண்டும் என்பதற்கும், நீங்கள் மிகவும் விரும்புவது என்பதற்கும் இடையே தேர்வு செய்வதாகும்.",
             en: "Discipline is choosing between what you want now and what you want most.",
-            icon: "🎯"
+            icon: "⏳"
         },
 
         {
@@ -240,6 +273,12 @@ $(document).ready(function () {
         },
 
         {
+            ta: "ஒருவன் தனியாக இருக்கும்போது அவனுடைய சிந்தனைகளிலும். அவன் கூடத்தில் இருக்கும்போது அவனுடை வார்த்தைகளிலும் கவனமாக இருக்க வேண்டும்.",
+            en: "One should be careful of his thoughts when he is alone and of his words when he is in crowd.",
+            icon: "💬"
+        },
+
+        {
             ta: "தடைகளில் அல்ல, இலக்கில் கவனம் செலுத்துங்கள்.",
             en: "Focus on the goal, not the obstacles.",
             icon: "🎯"
@@ -255,6 +294,12 @@ $(document).ready(function () {
             ta: "அமைதியாக உழை; வெற்றி சத்தம் செய்யட்டும்.",
             en: "Work hard in silence, let success make the noise.",
             icon: "🔔"
+        },
+
+        {
+            ta: "உங்கள் தொழிலில் நீங்கள் எவ்வளவு அதிக எதிர்ப்புகளைச் சந்திக்கிறீர்களோ, அவ்வளவு வெற்றிக்கு அருகில் இருக்கிறீர்கள்.",
+            en: "The more resistance you face in your profession, the closer you are to success.",
+            icon: "⛰️"
         },
 
         {
@@ -279,7 +324,19 @@ $(document).ready(function () {
             ta: "நீ முடியும் என்று நம்பு; பாதி வெற்றி அங்கேயே.",
             en: "Believe you can and you're halfway there.",
             icon: "💫"
-        }
+        },
+
+        {
+            ta: "சில சமயங்களில், உண்மையை தைரியமாகச் சொல்வதே மற்றவர்களின் பார்வையில் உங்களை ஒரு வில்லனாகக் காட்டப் போதுமானது.",
+            en: "Sometimes, telling the truth boldly is enough to make you the villain in others’ eyes.",
+            icon: "📣"
+        },
+
+        {
+            ta: "மனிதனை ஒழுக்கத்தின் பெயரால் தான்  உயர்ந்தவர் என மரியாதை கொடுக்க வேண்டுமே தவிர சாதியால் அல்ல.",
+            en: "A person should be respected as superior in the name of morality, not because of caste.",
+            icon: "⚖️"
+        },
 
     ];
 
@@ -328,10 +385,144 @@ $(document).ready(function () {
     showQuote(currentQuoteIndex);
 
     setInterval(rotateQuotes, 300000);
+
+
+    $("#start_day_btn").on("click", function () {
+        var sec_id = $("#day_section_select").val() || 0;
+        if (Number(sec_id) > 0 && Number(current_user_id) > 0) {
+            insert_work_done_table(current_user_id);
+        }
+        else {
+            salert("Warning", "select The Section Or Data Missing!, Try Later.", "warning");
+        }
+    })
+
+    $("#paused_work_tbody").on("click", "#resume_work", function () {
+        if (current_work > 0) {
+            salert("Warning", "Pause/ End The Current Work", "warning");
+            return;
+        }
+        var qr_work_id = $(this).val() || 0;
+
+        if (Number(qr_work_id) > 0) {
+            update_qr_work_entry(qr_work_id, "in-process", '');
+        } else {
+            salert("Warning", "Data Missing!, Try Later", "warning");
+        }
+    })
+
+
+    $('#worked_unit').on('change', function () {
+
+        $('#worked_dept').val('').trigger("change");
+        $("#Worked_parts_tbody").empty();
+        $(".Worked_parts_table").addClass("d-none");
+
+        var unit_id = $(this).val();
+        get_department_work(unit_id);
+
+    });
+
+    $("#worked_dept").on("change", function () {
+        var dep_id = $(this).val();
+        $('#worked_section').val('').trigger("change");
+        $("#Worked_parts_tbody").empty();
+        $(".Worked_parts_table").addClass("d-none");
+        get_dep_section_work(dep_id);
+    })
+
+    $("#worked_section").on("change", function () {
+        var sec_id = $(this).val();
+        $('#machine').val('').trigger("change");
+        $("#Worked_parts_tbody").empty();
+        $(".Worked_parts_table").addClass("d-none");
+        get_section_machine_work($("#worked_unit").val(), $("#worked_dept").val(), sec_id);
+    })
+
+    $("#worked_machine").on("change", function () {
+        var mach_id = $(this).val();
+        get_section_wise_process($("#worked_unit").val(), $("#worked_dept").val(), $("#worked_section").val(), mach_id);
+    })
+
+
+
+    // Day End Button
+
+    $("#summay_btn").on("click", function () {
+        get_current_work_break(current_user_id);
+    })
+
+    $("#chase_entry_btn").on("click", function(){
+        var chasis_no = $("#chase_no").val();
+        
+        if(chasis_no){
+
+        }
+        else{
+            salert("Warning", "Please Enter the Chasis No", "warning");
+        }
+    })
 });
 
 
 
+
+
+function get_current_work_break(emp_id) {
+    $.ajax({
+        url: "php/get_current_work_break.php",
+        type: "get", //send it through get method
+        data: {
+            emp_id: emp_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                $("#break_time_list").empty();
+                $("#breakTimeModal").modal("show");
+                if (response.trim() != '0 result') {
+
+
+                    var obj = JSON.parse(response);
+
+
+                    obj.forEach(function (obj) {
+
+                        var break_details = JSON.parse(obj.break_details);
+                        $("#break_time_list").append(`<li class='list-group-item bg-info text-dark'>${obj.dates} </li>`)
+                        break_details.forEach(function (item) {
+                            $("#break_time_list").append(`<li class='list-group-item'>${item.ex_name} <input class="form-check-input float-end" type="checkbox" value="${item.ex_time}" id="" checked></li>`)
+                        })
+
+                    });
+
+                }
+                else {
+
+                    $("#break_time_list").append(`<li class='list-group-item bg-secondary'>No Braek Between This Time Period</li>`)
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function insert_new_process(processId) {
@@ -373,27 +564,25 @@ function insert_new_process(processId) {
 
 }
 
-
-
-function insert_qr_work_entry(emp_id, qr_code, sec_id) {
+function insert_work_done_table(current_user_id) {
 
     $.ajax({
-        url: "php/insert_qr_work_entry.php",
-        type: "post", //send it through get method
+        url: "php/insert_work_done_table.php",
+        type: "get", //send it through get method
         data: {
 
-            emp_id: emp_id,
-            qr_code: qr_code,
-            sec_id: sec_id,
+            emp_id: current_user_id,
         },
         success: function (response) {
             console.log(response);
 
 
 
-            if (response.trim() == "ok") {
-                $("#start_work").prop("disabled", true).text("Time Started");
-                get_current_qr(current_user_id)
+            if (response.trim() == 'ok') {
+
+                $("#start_section").addClass("d-none");
+                $("#after_start").removeClass("d-none");
+                get_current_work_details(current_user_id);
             }
 
 
@@ -411,6 +600,86 @@ function insert_qr_work_entry(emp_id, qr_code, sec_id) {
 
 }
 
+function insert_qr_work_entry(emp_id, qr_code, sec_id, work_done_id) {
+
+    $.ajax({
+        url: "php/insert_qr_work_entry.php",
+        type: "post", //send it through get method
+        data: {
+
+            emp_id: emp_id,
+            qr_code: qr_code,
+            sec_id: sec_id,
+            work_done_id: work_done_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                $("#start_work").prop("disabled", true).text("Time Started");
+                get_current_work_details(current_user_id);
+                // get_current_work_break(current_user_id);
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function update_qr_work_entry(qr_work_id, work_update_sts, reason) {
+    console.log(qr_work_id, work_update_sts, reason);
+
+    $.ajax({
+        url: "php/update_qr_work_entry.php",
+        type: "post", //send it through get method
+        data: {
+
+            qr_work_id: qr_work_id,
+            work_update_sts: work_update_sts,
+            reason: reason
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                $("#pause_work_btn").prop("disabled", false);
+                $("#pause_select, #pause_reason").val("");
+                $("#pause_workModal").modal("hide")
+                $("#end_work").prop("disabled", true)
+                get_current_work_details(current_user_id);
+            }
+            else {
+                salert("Error", response, "error");
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function update_qr_end_time(qr_work_id) {
 
@@ -533,24 +802,49 @@ function get_assign_order() {
 
 
 
-function get_current_qr(emp_id) {
+function get_current_work_details(emp_id) {
 
     $.ajax({
-        url: "php/get_current_qr.php",
+        url: "php/get_current_work_details.php",
         type: "get",
         data: {
             emp_id: emp_id,
         },
         success: function (response) {
             if (response.trim() != "error") {
-                $("#timing_section").empty();
+                console.log(response);
+
+                $("#timing_section, #paused_work_tbody, #work_compeleted_tbody").empty();
                 if (response.trim() != "0 result") {
+                    $("#start_section").addClass("d-none");
+                    $("#after_start").removeClass("d-none");
                     $("#scan_section").addClass("d-none");
                     $("#timing_section").removeClass("d-none");
-
+                    current_work = 1;
                     var obj = JSON.parse(response);
 
-                    obj.forEach(function (item) {
+                    if (Number(obj.work_done_id) <= 0) {
+
+                        $("#start_section").removeClass("d-none");
+                        $("#after_start").addClass("d-none");
+                    }
+                    if (obj.current_sts == "not-in-process") {
+
+
+                        current_work = 0;
+                        $("#scan_section").removeClass("d-none");
+                        $("#timing_section").addClass("d-none");
+                    }
+
+                    $("#day_start_time").text(obj.start_time).data("work_done_id", obj.work_done_id);
+
+                    let in_process_work_entries = Array.isArray(obj.in_process_work_entries) ? obj.in_process_work_entries : [];
+                    in_process_work_entries.forEach(function (item) {
+
+                        if (item.chasis_no) {
+                            $("#chase_entry_btn").val()
+                            $("#chase_entry_modal").modal("show");
+                        }
 
                         $("#timing_section").append(`
                             <div class="card machine-card">
@@ -574,14 +868,17 @@ function get_current_qr(emp_id) {
 
                                 <div class="card-body text-center">
 
-                                    <div class="motivation-box mb-3">
-                                        🚀 <strong>Production in Progress</strong><br>
-                                        Precision today, perfection tomorrow.
+                                    <div class="motivation-box mb-1">
+                                        🚀 <strong>Consistency is Progress</strong><br>
+                                        I fear not the man who has practiced 10,000 kicks once, but i fear the man who has practiced one kick 10,000 times ~ Bruce Lee.
                                     </div>
 
                                     <div class="time-box">
                                         <i class="fa-solid fa-clock text-success"></i>
-                                        Started at: <strong>${item.start_time}</strong>
+                                        Started at: <strong>${item.start_time_formated}</strong>
+                                    </div>
+                                    <div class="bg-secondary">
+                                        Chasis No: <strong>${item.chasis_no}</strong>
                                     </div>
 
                                 </div>
@@ -596,15 +893,8 @@ function get_current_qr(emp_id) {
 
 
                                     <button type="button"
-                                        class="btn btn-primary px-2 fw-bold shadow-sm d-none"
-                                        id="resume_work" value='${item.qr_work_id}'>
-                                        ⏸ Resume Work
-                                    </button>
-
-
-                                    <button type="button"
                                         class="btn btn-warning px-2 fw-bold shadow-sm "
-                                        id="pause_work" value='${item.qr_work_id}'>
+                                        id="pause_work" value='${item.qr_work_id}' data-current_sts='${item.current_sts}' data-sec_id='${item.sec_id}'>
                                         ▶ Pause Work
                                     </button>
 
@@ -614,6 +904,29 @@ function get_current_qr(emp_id) {
                         `);
                     });
 
+                    let paused_work_entries = Array.isArray(obj.paused_work_entries) ? obj.paused_work_entries : [];
+                    paused_work_entries.forEach(function (pause) {
+
+                        var work_entries = JSON.parse(pause.work_entries);
+                        work_entries.forEach(function (we, index) {
+                            $("#paused_work_tbody").append(`<tr><td>${index + 1}</td><td><span class='badge bg-info  text-dark'>${we.start_time}</span><span class='badge bg-warning text-dark'>${we.end_time}</span></td><td>${we.reason}</td><td>Chasis/No: ${we.chasis_no} <br> QR/No: ${we.production_id}</td><td><button type="button" class="btn btn-outline-primary "id="resume_work" value='${we.current_work_id}' style="font-size: 10px; ">⏸Resume </button></td></tr>`)
+                        })
+                    });
+
+                    let finished_work_entries = Array.isArray(obj.finished_work_entries) ? obj.finished_work_entries : [];
+                    finished_work_entries.forEach(function (finish) {
+
+
+                        $("#work_compeleted_tbody").append(`<tr><td></td><td></td><td></td></tr>`);
+
+
+                    })
+
+                }
+                else {
+
+                    $("#start_section").removeClass("d-none");
+                    $("#after_start").addClass("d-none");
                 }
             }
         },
@@ -719,6 +1032,237 @@ function get_dep_section() {
 
 }
 
+
+function get_department_work(godown_id) {
+
+    $.ajax({
+        url: "php/get_department.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: godown_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#worked_dept").empty();
+                if (response.trim() != "0 result") {
+
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    $("#worked_dept").append("<option class='' value='null'> select department...  </option>")
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        $("#worked_dept").append("<option class='' value=" + obj.dep_id + " >" + obj.dep_name + "</option>")
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#department_da").append("<li disabled><a class='dropdown-item'  >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+function get_dep_section_work(dept_id) {
+
+    $.ajax({
+        url: "php/get_dep_section.php",
+        type: "get", //send it through get method
+        data: {
+            dep_id: dept_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#worked_section").empty();
+                if (response.trim() != "0 result") {
+
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    $("#worked_section").append("<option class='' value='null'> select section...  </option>")
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        $("#worked_section").append("<option class='' value=" + obj.dep_sec_id + " >" + obj.sec_name + "</option>")
+
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+function get_section_machine_work(godown_id, dep_id, sec_id) {
+
+    console.log(godown_id, dep_id, sec_id);
+
+    $.ajax({
+        url: "php/get_section_machine.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: godown_id,
+            dep_id: dep_id,
+            sec_id: sec_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#worked_machine").empty();
+                if (response.trim() != "0 result") {
+
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+                    $("#worked_machine").append("<option class='' value='null'> select machine...  </option>")
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+
+                        $("#worked_machine").append("<option class='' value=" + obj.machine_id + " >" + obj.machine_name + "</option>")
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+function get_section_wise_process(godown_id, dep_id, sec_id, machine_id) {
+
+    console.log(godown_id, dep_id, sec_id, machine_id);
+
+    $.ajax({
+        url: "php/get_section_wise_process.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: godown_id,
+            dep_id: dep_id,
+            sec_id: sec_id,
+            machine_id: machine_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#Worked_parts_tbody").empty();
+                $(".Worked_parts_table").removeClass("d-none");
+                if (response.trim() != "0 result") {
+
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    obj.forEach(function (obj, index) {
+                        count = count + 1;
+
+
+                        $("#Worked_parts_tbody").append(`<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td contenteditable=true>0</td><td><button class='btn btn-outline-primary small'>Add</button></td></tr>`)
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+                    $("#worked_machine").append(`<tr><td colspan='5' class='text-center text-danger'> No data Found</td></tr>`)
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
 
 
 

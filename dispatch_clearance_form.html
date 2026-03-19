@@ -452,6 +452,7 @@
                     <div class="card mb-2">
                         <div class="card-header">
                             Product
+                            <button type='submit' class='btn btn-success float-end ' data-bs-toggle="modal" data-bs-target="#extraProductModal" >+</button>
                         </div>
                         <div class="card-body" style="overflow-x: auto;">
                             <table id='sales_pro_table1'
@@ -923,7 +924,7 @@
                 </table>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive d-none">
                 <table class="table caption-top table-bordered table-striped ">
                     <caption></caption>
                     <thead>
@@ -946,7 +947,7 @@
                 </table>
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive d-none">
                 <table class="table caption-top table-bordered table-striped ">
                     <caption></caption>
                     <thead>
@@ -975,13 +976,12 @@
 
 
 
-    <div class="modal fade" id="extraProductModal" tabindex="-1" aria-labelledby="extraProductModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="extraProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="extraProductModalLabel">Add Products</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="close_modal_btn" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-floating mb-2">

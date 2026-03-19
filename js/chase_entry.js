@@ -139,7 +139,6 @@ $(document).ready(function () {
     $("#chase_entry_preview_btn").on("click", function () {
         if (
             $("#sale_order").val() !== null &&
-            $("#chase_no").val() !== "" &&
             $("#prepared_by").val() !== "" &&
             $("#department").val() !== "" &&
             $("#prepared_by").data("emp_id") !== "" &&

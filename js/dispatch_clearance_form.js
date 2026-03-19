@@ -3,6 +3,7 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var narration = urlParams.get('narration') || '';
 var oid = urlParams.get('oid');
+var customer_id = urlParams.get('cus_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var ass_id = [];
@@ -10,6 +11,7 @@ var spare_id = [];
 var oid_arr = []
 
 $(document).ready(function () {
+
   $("#loader-overlay").hide();
 
   $("#menu_bar").load('menu.html',
@@ -274,28 +276,75 @@ $(document).ready(function () {
 
   get_sale_statement()
 
-  $("#sales_pro_table").on("click", "#modal_btn", function () {
-
-    $("#add_extra").data({ "oid": $(this).data("oid"), "cus_id": $(this).data("cus_id") });
-    $("#extraProductModal").modal("show");
-  })
-
   $("#add_extra").on("click", function () {
-    var amount = $("#amount").val() || 0;
-    var qno = $("#quotation_no").val() || "";
-    var oid = $(this).data("oid") || 0;
-    var customer_id = $(this).data("cus_id") || 0;
+
+    var qno = $("#quotation_no").val();
+    var amount = $("#amount").val();
     var remark = $("#remark").val();
 
-    if (amount != 0 && qno != '' && oid != 0 && customer_id != 0) {
-      insert_sale_order_spares(oid, qno, remark, amount, "null", customer_id)
-    }
-    else {
-      salert("Warning", "Fill the required field", "warning");
+    if (oid && qno && remark && amount && customer_id) {
+      $(this).prop("disabled", true)
+      insert_sale_order_spares_dcf(oid, qno, remark, amount, "null", customer_id);
+
+    } else {
+      console.log(oid, qno, remark, amount, dcf_no, customer_id);
+      salert("Warning", "Fill All Feilds/Data Missing!, Try Later", "warning");
     }
   })
+
+
 });
 
+
+
+
+function insert_sale_order_spares_dcf(oid, qno, remark, amount, dcf_no, customer_id) {
+
+  console.log(oid, qno, remark, amount, dcf_no, customer_id);
+
+
+  $.ajax({
+    url: "php/insert_sale_order_spares.php",
+    type: "post", //send it through get method
+    data: {
+      oid: oid,
+      qno: qno,
+      remark: remark,
+      amount: amount,
+      dcf_no: dcf_no,
+      customer_id: customer_id,
+
+
+    },
+    success: function (response) {
+
+      //console.log
+
+      if (response.toString().includes("ok")) {
+
+        $("#quotation_no").val('');
+        $("#amount").val("")
+        $("#remark").val("")
+        $("#close_modal_btn").trigger("click");
+        shw_toast("Success", "Spares Updated", "success")
+        window.location.reload();
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //console.logxhr.responseText)
+    }
+  });
+
+
+
+
+}
 
 function print() {
 
@@ -541,7 +590,7 @@ function insert_dcf() {
         $("#dcf_no").text(response.trim());
         setTimeout(() => {
           // console.log($("#dcf_print").html());
-          
+
           update_dcf($("#dcf_print").html(), response.trim())
         }, 100);
       }
@@ -581,7 +630,7 @@ function update_dcf(dcf_report, dcf_id) {
       console.log(response);
 
       if (response.trim() == "ok") {
-          $("#print_btn").trigger("click");
+        $("#print_btn").trigger("click");
       }
 
 
@@ -799,7 +848,7 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td class='d-flex justify-content-between'>" + obj.rtd + "<button type='submit' class='btn btn-success float-end ' id='modal_btn' data-oid='" + obj.oid + "' dat a-cus_id='" + obj.customer_id + "'>+</button></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td class=''>" + obj.rtd + "</td></tr>")
 
           });
           get_sale_order_spares()
@@ -850,7 +899,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td>" + obj.qno + " - " + obj.amount + " - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='" + obj.spares_id + "'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td> Qno: <b class='text-primary'>" + obj.qno +"</b> - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='" + obj.spares_id + "'></input></td></tr>")
 
           });
 
