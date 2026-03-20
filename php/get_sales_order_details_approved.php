@@ -43,7 +43,7 @@ with final as (SELECT
                     '</td><td>',
                     IF(
                         jaysan_payment.sts = 'not_approve',
-                        'no',
+                        IF(jaysan_payment.sts = 'decline', 'decline', 'no'),
                         'yes'
                     ),
                     '</td>'
