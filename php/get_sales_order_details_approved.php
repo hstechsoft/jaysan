@@ -43,8 +43,8 @@ with final as (SELECT
                     '</td><td>',
                     IF(
                         jaysan_payment.sts = 'not_approve',
-                        IF(jaysan_payment.sts = 'decline', 'decline', 'no'),
-                        'yes'
+                            'no',
+                        IF(jaysan_payment.sts = 'decline', 'decline', 'yes')
                     ),
                     '</td>'
                 ) SEPARATOR '</tr>'
