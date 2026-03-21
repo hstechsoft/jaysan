@@ -18,7 +18,7 @@ return $data;
 }
 
 
-// get all customer details
+// get all customer details    
 
 $sql_get_customer = "SELECT sof.customer_id,customer.cus_name,cus_email,cus_phone FROM jaysan_payment jp 
 inner join sales_order_form  sof on jp.oid = sof.oid
