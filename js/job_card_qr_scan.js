@@ -2,7 +2,7 @@
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
-// var current_user_id = 231
+var current_user_id = 231
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var current_work = 0;
@@ -452,13 +452,16 @@ $(document).ready(function () {
         get_current_work_break(current_user_id);
     })
 
-    $("#chase_entry_btn").on("click", function(){
+    $("#chase_entry_btn").on("click", function () {
         var chasis_no = $("#chase_no").val();
-        
-        if(chasis_no){
+        var ass_id = $(this).val();
 
+        if (chasis_no && ass_id) {
+            console.log(ass_id, chasis_no);
+            
+            update_chasis_no(ass_id, chasis_no);
         }
-        else{
+        else {
             salert("Warning", "Please Enter the Chasis No", "warning");
         }
     })
@@ -466,7 +469,39 @@ $(document).ready(function () {
 
 
 
+function update_chasis_no(ass_id, chasis_no) {
 
+    $.ajax({
+        url: "php/update_chasis_no.php",
+        type: "post", //send it through get method
+        data: {
+
+            ass_id: ass_id,
+            chasis_no: chasis_no,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                window.location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function get_current_work_break(emp_id) {
     $.ajax({
@@ -841,8 +876,8 @@ function get_current_work_details(emp_id) {
                     let in_process_work_entries = Array.isArray(obj.in_process_work_entries) ? obj.in_process_work_entries : [];
                     in_process_work_entries.forEach(function (item) {
 
-                        if (item.chasis_no) {
-                            $("#chase_entry_btn").val()
+                        if (!item.chasis_no) {
+                            $("#chase_entry_btn").val(item.ass_id)
                             $("#chase_entry_modal").modal("show");
                         }
 
@@ -877,7 +912,7 @@ function get_current_work_details(emp_id) {
                                         <i class="fa-solid fa-clock text-success"></i>
                                         Started at: <strong>${item.start_time_formated}</strong>
                                     </div>
-                                    <div class="bg-secondary">
+                                    <div class="bg-secondary text-white rounded mt-1">
                                         Chasis No: <strong>${item.chasis_no}</strong>
                                     </div>
 
@@ -909,7 +944,7 @@ function get_current_work_details(emp_id) {
 
                         var work_entries = JSON.parse(pause.work_entries);
                         work_entries.forEach(function (we, index) {
-                            $("#paused_work_tbody").append(`<tr><td>${index + 1}</td><td><span class='badge bg-info  text-dark'>${we.start_time}</span><span class='badge bg-warning text-dark'>${we.end_time}</span></td><td>${we.reason}</td><td>Chasis/No: ${we.chasis_no} <br> QR/No: ${we.production_id}</td><td><button type="button" class="btn btn-outline-primary "id="resume_work" value='${we.current_work_id}' style="font-size: 10px; ">⏸Resume </button></td></tr>`)
+                            $("#paused_work_tbody").append(`<tr><td>${index + 1}</td><td><span class='badge bg-info  text-dark'>${we.start_time}</span><span class='badge bg-warning text-dark'>${we.end_time}</span></td><td>${we.reason}</td><td> ${we.chasis_no} <br> QR/No: ${we.production_id}</td><td><button type="button" class="btn btn-outline-primary "id="resume_work" value='${we.current_work_id}' style="font-size: 10px; ">⏸Resume </button></td></tr>`)
                         })
                     });
 

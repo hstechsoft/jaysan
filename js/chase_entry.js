@@ -227,8 +227,8 @@ $(document).ready(function () {
     // })
     $("#chase_entry_btn").on("click", function (event) {
 
-        $("#sale_order_no").text("");
-        $("#customer_name").text("")
+        // $("#sale_order_no").text("");
+        // $("#customer_name").text("")
         $("#model").text("");
         $("#product").text("");
         $("#type").text( "");
@@ -296,8 +296,8 @@ $(document).ready(function () {
             }
 
             var mcd = details.commitment_date.trim().split(" ");
-            // $("#sale_order_no").text(details.order_no || "");
-            // $("#customer_name").text(details.cus_name || "")
+            $("#sale_order_no").text(details.order_no || "");
+            $("#customer_name").text(details.cus_name || "")
             // $("#product").text(details.product || "");
             // $("#model").text(details.model || "");
             // $("#type").text(details.type || "");
