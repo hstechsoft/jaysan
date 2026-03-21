@@ -22,7 +22,7 @@ inner join employee on qr_work_entry.emp_id = employee.emp_id
 left join dep_section on qr_work_entry.sec_id = dep_section.dep_sec_id
 GROUP BY qr_work_entry.production_id),
 ass_details as (
-    SELECT qr_report.*,,assign_product.chasis_no,assign_product.opid,assign_product.assign_type,date_only(assign_product.dated) as production_date,assign_product.emergency_order FROM assign_product inner join qr_report on assign_product.ass_id = qr_report.ass_id
+    SELECT qr_report.*,assign_product.chasis_no,assign_product.opid,assign_product.assign_type,date_only(assign_product.dated) as production_date,assign_product.emergency_order FROM assign_product inner join qr_report on assign_product.ass_id = qr_report.ass_id
 )
 SELECT * FROM ass_details  inner join sales_order_info_view on ass_details.opid = sales_order_info_view.opid
 ";
