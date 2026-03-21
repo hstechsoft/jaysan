@@ -78,7 +78,7 @@ function get_assigned_order() {
 
 
                     obj.forEach(function (obj) {
-                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span><br> Chasis/No: ${obj.chasis_no}</td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
                             <div class="small">
                                 <div class="fw-semibold">
                                     ${obj.product}
@@ -185,6 +185,7 @@ function get_current_qr_list() {
                                     <span class="text-muted">${obj.model_name}</span>
                                     <span class="badge bg-info text-dark ms-1">${obj.type_name}</span>
                                     <span class="badge bg-secondary ms-1">Sale Order/No: ${obj.order_no}</span>
+                                    <span class="badge bg-warning text-dark ms-1">Chasis/No: ${obj.chasis_no}</span>
                                 </div>
 
                                 <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">

@@ -869,53 +869,137 @@ $(document).ready(function () {
   // });
 
 
+  // $('#add_part_btn').on('click', function () {
+
+  //   {
+  //     // alert(1)
+  //     if ($('#part_no').val() && $('#part_name').val() && $('#qty').val() && $('#part_name').data('selected-part_id')) {
+  //       issaved = 'no'
+  //       var partId = $('#part_no').data('selected-part_id');
+  //       var qty = $('#qty').val();
+  //       var process_id = $(this).val();
+  //       var process = process_id ? `(${$(this).data("process")})` : "";
+
+
+
+
+
+
+
+  //       {
+  //         $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-in_previous_process_id=" + process_id + ">  <p class='my-auto'>" + $('#part_name').val() + " <b class='bg-warning'>" + process + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
+  //       }
+
+
+
+
+  //       $('#process_name').val('')
+  //       $('#part_no').val('');
+  //       $('#part_name').val('');
+
+  //       $('#qty').val('');
+
+
+  //       $('#part_no').removeData('part-id');
+
+
+
+  //     }
+  //     else {
+  //       console.log($('#part_no').val(), $('#part_name').val(), $('#qty').val(), $('#part_name').data('selected-part_id'));
+
+  //       shw_toast("Insert", "Kindly insert qty or select part from autocomplete")
+  //     }
+  //   }
+
+  // });
   $('#add_part_btn').on('click', function () {
 
-    {
-      // alert(1)
-      if ($('#part_no').val() && $('#part_name').val() && $('#qty').val() && $('#part_name').data('selected-part_id')) {
-        issaved = 'no'
-        var partId = $('#part_no').data('selected-part_id');
-        var qty = $('#qty').val();
-        var process_id = $(this).val();
-        var process = process_id ? `(${$(this).data("process")})` : "";
+    if ($('#part_no').val() && $('#part_name').val() && $('#qty').val() && $('#part_name').data('selected-part_id')) {
 
+      var partId = $('#part_no').data('selected-part_id');
+      var bomQty = parseFloat($('#qty').attr("data-original")) || parseFloat($('#qty').val());
+      var newQty = parseFloat($('#qty').val());
 
+      let usedQty = getUsedQty(partId);
+      newQty = newQty-usedQty
+      let remaining = bomQty - usedQty;
 
-
-
-
-
-        {
-          $('#welding_table .tbl_selected').parent().find("td").eq(1).find("ul").append(" <li class='list-group-item d-flex justify-content-between' data-part-id=" + partId + " data-part-qty=" + qty + " data-in_previous_process_id=" + process_id + ">  <p class='my-auto'>" + $('#part_name').val() + " <b class='bg-warning'>" + process + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>")
-        }
-
-
-
-
-        $('#process_name').val('')
-        $('#part_no').val('');
-        $('#part_name').val('');
-
-        $('#qty').val('');
-
-
-        $('#part_no').removeData('part-id');
-
-
-
+      alert(usedQty+" "+remaining)
+      if (remaining <= 0) {
+        salert("Warning", "No quantity remaining for this part");
+        return;
       }
-      else {
-        console.log($('#part_no').val(), $('#part_name').val(), $('#qty').val(), $('#part_name').data('selected-part_id'));
 
-        shw_toast("Insert", "Kindly insert qty or select part from autocomplete")
+      if (newQty > remaining) {
+        salert("Warning", "Only " + remaining + " quantity available");
+        return;
       }
+
+      var process_id = $(this).val();
+      var process = process_id ? `(${$(this).data("process")})` : "";
+
+      $('#welding_table .tbl_selected')
+        .parent()
+        .find("td")
+        .eq(1)
+        .find("ul")
+        .append(`
+        <li class='list-group-item d-flex justify-content-between'
+            data-part-id="${partId}"
+            data-part-qty="${newQty}"
+            data-in_previous_process_id="${process_id}">
+          <p class='my-auto'>
+            ${$('#part_name').val()} 
+            <b class='bg-warning'>${process}</b><br>
+            Qty : <span contenteditable='true' class='px-2 qty-editable'>${newQty}</span>
+          </p>
+          <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'>
+            <i class='fa fa-trash'></i>
+          </button>
+        </li>
+      `);
+
+      // clear
+      $('#part_no, #part_name, #qty').val('');
     }
-
+    else {
+      shw_toast("Insert", "Kindly insert qty or select part");
+    }
   });
 
 
 
+  
+  $('#add_process_btn').on('click', function () {
+
+
+
+
+    {
+      if ($('#process_name').val() && $('#process_name').data('selected-process_id')) {
+        issaved = 'no'
+
+
+        {
+
+          $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").empty()
+          $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").append("<li class='list-group-item' data-process-id=" + $('#process_name').data('selected-process_id') + "> <p class='m-0 p-0'>" + $('#process_name').val() + "</p></li>")
+          get_machine($('#process_name').data('selected-process_id'))
+
+        }
+
+        $('#process_name').val('')
+
+        $('#process_name').removeData('selected-process_id');
+      }
+      else {
+        shw_toast("Insert", "Kindly select Process from autocomplete")
+      }
+    }
+
+
+  });
   // $('#add_process_btn').on('click', function() {
 
   //   var input_count =  $('#input_part_tbl .card').length;
@@ -969,35 +1053,7 @@ $(document).ready(function () {
   // });
 
 
-  $('#add_process_btn').on('click', function () {
 
-
-
-
-    {
-      if ($('#process_name').val() && $('#process_name').data('selected-process_id')) {
-        issaved = 'no'
-
-
-        {
-
-          $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").empty()
-          $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").append("<li class='list-group-item' data-process-id=" + $('#process_name').data('selected-process_id') + "> <p class='m-0 p-0'>" + $('#process_name').val() + "</p></li>")
-          get_machine($('#process_name').data('selected-process_id'))
-
-        }
-
-        $('#process_name').val('')
-
-        $('#process_name').removeData('selected-process_id');
-      }
-      else {
-        shw_toast("Insert", "Kindly select Process from autocomplete")
-      }
-    }
-
-
-  });
 
 
 
@@ -1430,6 +1486,7 @@ $(document).ready(function () {
 
     // alert()
     html_li.attr("data-in_previous_process_id", $(this).data("in_previous_process_id"));
+    html_li.find("b").text($(this).text())
 
     $("#process_modal1").modal("hide");
 
@@ -2034,11 +2091,56 @@ $(document).ready(function () {
     selectAutocompleteByPartId(partId)
   })
 
+
+  $(document).on("focusout", ".qty-editable", function () {
+    let span = $(this);
+    let li = span.closest("li");
+
+    let partId = li.data("part-id");
+    let bomQty = parseFloat($("#bom_list li[data-part_id='" + partId + "']").data("part_qty")) || 0;
+
+    let newQty = parseFloat(span.text()) || 0;
+
+    let usedQty = getUsedQty(partId);
+    let currentQty = parseFloat(li.attr("data-part-qty")) || 0;
+
+    usedQty = usedQty - newQty;
+    let remaining = bomQty - usedQty;
+
+    if (newQty > remaining) {
+      salert("Warning", "Only " + bomQty + " allowed");
+      span.text(currentQty);
+      return;
+    }
+
+    if (newQty <= 0) {
+      salert("Warning", "Invalid quantity");
+      span.text(currentQty);
+      return;
+    }
+
+    li.attr("data-part-qty", newQty);
+  });
 });
 
 
 
+function getUsedQty(partId) {
+  let total = 0;
 
+  $("#welding_table tr").each(function () {
+    $(this).find("td").eq(1).find("li").each(function () {
+      let pid = $(this).data("part-id");
+      let qty = parseFloat($(this).find(".qty-editable").text()) || 0;
+
+      if (pid == partId) {
+        total += qty;
+      }
+    });
+  });
+
+  return total;
+}
 
 
 function clear() {
