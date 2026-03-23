@@ -2,7 +2,7 @@
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
-var current_user_id = 231
+var current_user_id = 2310
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var current_work = 0;
@@ -29,20 +29,20 @@ $(document).ready(function () {
 
 
     check_login();
-    get_dep_section();
+    // get_dep_section();
     get_current_work_details(current_user_id);
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-    if ($("#section_select").val() != null) {
+    if ($("#worked_section").val() != null) {
         $(".qr_section").removeClass("d-none");
     }
     else {
         $(".qr_section").addClass("d-none");
     }
 
-    $("#section_select").on("change", function () {
-        if ($("#section_select").val() != null) {
+    $("#worked_section").on("change", function () {
+        if ($("#worked_section").val() != null) {
             $(".qr_section").removeClass("d-none");
         }
         else {
@@ -91,8 +91,8 @@ $(document).ready(function () {
 
     $("#start_work").click(function () {
 
-        if ($("#job_ass_id").val() > 0 && $("#section_select").val() > 0 && Number($("#day_start_time").data("work_done_id") || 0)) {
-            insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#section_select").val(), $("#day_start_time").data("work_done_id"));
+        if ($("#job_ass_id").val() > 0 && $("#worked_section").val() > 0 && Number($("#day_start_time").data("work_done_id") || 0)) {
+            insert_qr_work_entry(current_user_id, $("#job_ass_id").val(), $("#worked_section").val(), $("#day_start_time").data("work_done_id"));
         }
         else {
             salert("Warning", "Data missing, try later", "warning");
@@ -180,6 +180,12 @@ $(document).ready(function () {
 
     // Day Start 
     const quotes = [
+
+        {
+            ta: "பயிற்சியில் நீங்கள் எவ்வளவு அதிகமாக வியர்வை சிந்துகிறீர்களோ, போர்க்களத்தில் அவ்வளவு குறைவாகவே இரத்தம் சிந்துவீர்கள்.",
+            en: "The more you sweat in practice, the less you bleed in battle.",
+            icon: "🛡️"
+        },
 
         {
             ta: "சுதந்திரம் என்பது கொடுப்பதல்ல. அது எடுக்கப்படவேண்டியது.",
@@ -388,8 +394,8 @@ $(document).ready(function () {
 
 
     $("#start_day_btn").on("click", function () {
-        var sec_id = $("#day_section_select").val() || 0;
-        if (Number(sec_id) > 0 && Number(current_user_id) > 0) {
+        // var sec_id = $("#day_section_select").val() || 0;
+        if ( Number(current_user_id) > 0) {
             insert_work_done_table(current_user_id);
         }
         else {
@@ -1009,63 +1015,63 @@ function fetchJobDetails(jobId) {
 }
 
 
-function get_dep_section() {
+// function get_dep_section() {
 
-    $.ajax({
-        url: "php/get_dep_section.php",
-        type: "get", //send it through get method
-        data: {
-            dep_id: 29,
+//     $.ajax({
+//         url: "php/get_dep_section.php",
+//         type: "get", //send it through get method
+//         data: {
+//             dep_id: 29,
 
-        },
-        success: function (response) {
-            console.log(response);
-
-
-            if (response.trim() != "error") {
-                $("#section_select").empty();
-                $("#day_section_select").empty();
-                if (response.trim() != "0 result") {
+//         },
+//         success: function (response) {
+//             console.log(response);
 
 
-
-
-
-                    var obj = JSON.parse(response);
-                    var count = 0
-                    $("#section_select").append("<option class='' value='null'> select section...  </option>")
-                    $("#day_section_select").append("<option class='' value='null'> select section...  </option>")
-
-                    obj.forEach(function (obj) {
-                        count = count + 1;
-
-
-                        $("#section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
-                        $("#day_section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
-
-
-                    });
-
-
-                }
-                else {
-                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
-
-                }
-            }
+//             if (response.trim() != "error") {
+//                 $("#section_select").empty();
+//                 $("#day_section_select").empty();
+//                 if (response.trim() != "0 result") {
 
 
 
 
 
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
+//                     var obj = JSON.parse(response);
+//                     var count = 0
+//                     $("#section_select").append("<option class='' value='null'> select section...  </option>")
+//                     $("#day_section_select").append("<option class='' value='null'> select section...  </option>")
+
+//                     obj.forEach(function (obj) {
+//                         count = count + 1;
 
 
-}
+//                         $("#section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
+//                         $("#day_section_select").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
+
+
+//                     });
+
+
+//                 }
+//                 else {
+//                     // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+//                 }
+//             }
+
+
+
+
+
+//         },
+//         error: function (xhr) {
+//             //Do Something to handle error
+//         }
+//     });
+
+
+// }
 
 
 function get_department_work(godown_id) {

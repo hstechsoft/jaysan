@@ -41,7 +41,7 @@ $(document).ready(function () {
 
 
 
-  get_all_bom()
+  get_all_bom(1);
 
   $("#excle_btn").click(function () {
 
@@ -311,8 +311,8 @@ $(document).ready(function () {
     var cus_id = $(this).data("cus_id");
 
     var amount = 0;
-    if(Number(enter_amount)>0){
-       amount = remaining - enter_amount
+    if (Number(enter_amount) > 0) {
+      amount = remaining - enter_amount
 
     }
     if (Number(amount) > 0 && cus_id) {
@@ -321,12 +321,21 @@ $(document).ready(function () {
       salert("Warning", "Enter The Valid Amount/Data Miss Try Later", "warning")
     }
   })
+
+
+  $("#summary_filter").on("change", function () {
+    if ($(this).is(":checked")) {
+      get_all_bom();
+    } else {
+      get_all_bom(1);
+    }
+  })
 });
 
 
 
 
-function get_all_bom() {
+function get_all_bom(red) {
 
   $.ajax({
     url: "php/get_sales_statement.php",
@@ -340,9 +349,40 @@ function get_all_bom() {
       allBomData = data;
       $("#all_bom_table").empty();
 
-      data.forEach((item, index) => {
+      if (red > 0) {
+        var count = 0
+        data.forEach((item, index) => {
 
-        $("#all_bom_table").append(`
+          if (item.sales_statement.remaining_balance > 0) {
+            count += 1;
+            $("#all_bom_table").append(`
+          <tr>
+            <td>${count}</td>
+            <td>${item.customer_name}</td>
+            <td>${item.customer_phone}</td>
+            <td>${item.sales_statement.total_product_amount}</td>
+            <td>${item.sales_statement.total_spares_amount}</td>
+            <td>${item.sales_statement.total_paid_amount}</td>
+            <td class="color_jay">${item.sales_statement.remaining_balance > 0 ? item.sales_statement.remaining_balance : '-'}</td>
+            <td 
+              data-cus_id="${item.customer_id}" 
+              data-remaining="${item.sales_statement.remaining_balance}" 
+              ${item.sales_statement.remaining_balance <= 0 ? 'contenteditable="false" class="bg-light text-muted"' : 'contenteditable="true"'}>
+            </td>
+            <td>
+              <button type="button"   class="btn btn-outline-primary summary_btn"  disabled data-index="${index}">  <i class="fa fa-eye"></i></button>
+            </td>
+          </tr>
+        `);
+
+          }
+
+
+        });
+      } else {
+        data.forEach((item, index) => {
+
+          $("#all_bom_table").append(`
           <tr>
             <td>${index + 1}</td>
             <td>${item.customer_name}</td>
@@ -363,7 +403,10 @@ function get_all_bom() {
         `);
 
 
-      });
+
+
+        });
+      }
 
     },
     error: function (xhr) {

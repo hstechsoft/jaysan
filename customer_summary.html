@@ -45,10 +45,11 @@
       color: #ff9800 !important;
     }
 
-    .color_jay{
+    .color_jay {
       background-color: #bee7ff !important;
     }
-    .color_cus{
+
+    .color_cus {
       background-color: #f1b99f !important;
     }
   </style>
@@ -87,14 +88,22 @@
           <i class="fa fa-file-excel me-1"></i> Download Excel
         </button>
 
+
         <!-- Search -->
-        <div class="input-group input-group-sm w-100 w-md-auto border border-primary rounded-2" style="max-width: 250px;">
+        <div class="input-group input-group-sm w-100 w-md-auto border border-primary rounded-2"
+          style="max-width: 250px;">
           <span class="input-group-text bg-white border-0">
             <i class="fa fa-search text-muted"></i>
           </span>
           <input type="text" id="summary_search" class="form-control border-0 bg-white" placeholder="Search...">
         </div>
 
+        <!-- Filter -->
+        <div class="form-check form-switch mb-4">
+          <input class="form-check-input" type="checkbox" id="summary_filter">
+          <label class="form-check-label" for="summary_filter">
+          </label>
+        </div>
       </div>
 
       <div class="table-responsive">

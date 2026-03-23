@@ -305,7 +305,7 @@
                     <div class="start-header text-center">
                         <div class="rocket">🚀</div>
                         <h1>Start Your Day</h1>
-                        <p>Select your section and begin today's work</p>
+                        <p>Kickstart Your Day with AD’s Favorite Quotes</p>
                     </div>
 
                     <!-- Quote Box -->
@@ -327,12 +327,12 @@
                     </div>
 
                     <!-- Section Select -->
-                    <div class="form-floating mt-4">
+                    <!-- <div class="form-floating mt-4">
                         <select class="form-select" id="day_section_select">
                             <option selected disabled value="null">Choose Section</option>
                         </select>
                         <label>Select Section</label>
-                    </div>
+                    </div> -->
 
                     <!-- Button -->
                     <button class="start-btn w-100 mt-4" id="start_day_btn">
@@ -348,9 +348,90 @@
                 <h6 class="text-center">Your Day Started At <b id="day_start_time" class="badge bg-success"></b></h6>
 
                 <div class="row justify-content-center">
-                    <div class="col-12 col-md-8 col-lg-5" id="scan_section">
 
-                        <div class="card shadow-lg border-0 rounded-4">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h6 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#work_entry" aria-expanded="true" aria-controls="work_entry">
+                                    Add Work Entry
+                                </button>
+                            </h6>
+                            <div id="work_entry" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body p-2 text-center">
+
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="worked_unit">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value="1166">Jaysan Branch-1 (Assembly)</option>
+                                                    <option value="359">Jaysan Branch-2 (Welding)</option>
+                                                    <option disabled value="">Jaysan Branch-3 (Fabrication)</option>
+                                                </select>
+                                                <label for="worked_unit">Unit</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="worked_dept">
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="worked_dept">Department</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="worked_section">
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="worked_section">Section</label>
+                                            </div>
+
+                                            <div class="form-floating mb-3">
+                                                <select class="form-select" id="worked_machine">
+                                                    <option selected disabled value="">Choose...</option>
+                                                </select>
+                                                <label for="worked_machine">Machine</label>
+                                            </div>
+
+                                            <div class="table-responsive d-none Worked_parts_table">
+                                                <table class="table caption-top table-bordered table-striped ">
+                                                    <caption></caption>
+                                                    <thead>
+
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Part Name</th>
+                                                            <th scope="col">Process</th>
+                                                            <th scope="col">Qty</th>
+                                                            <th scope="col">Action</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="Worked_parts_tbody">
+
+
+                                                    </tbody>
+
+
+                                                </table>
+                                            </div>
+
+                                            <!-- <button type="submit" class="btn btn-primary " id="add_work_entry_btn">Add
+                                            Work</button> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-5 mt-2" id="scan_section">
+
+
+
+
+                        <div class="card shadow-lg border-0 rounded-4  d-none qr_section">
 
                             <div class="card-header bg-primary text-white text-center rounded-top-4">
                                 <h5 class="mb-0">📦 Production QR Scanner</h5>
@@ -359,15 +440,15 @@
                             <div class="card-body p-4">
 
                                 <!-- Section Select -->
-                                <div class="form-floating mb-3">
+                                <!-- <div class="form-floating mb-3">
                                     <select class="form-select" id="section_select">
                                         <option selected disabled value="null">Choose Section</option>
                                     </select>
                                     <label>Select Section</label>
-                                </div>
+                                </div> -->
 
                                 <!-- Scan Button -->
-                                <div class="d-grid mb-3 d-none qr_section">
+                                <div class="d-grid mb-3">
 
                                     <!-- Plus Box -->
                                     <div class="add-box mb-3">
@@ -545,83 +626,6 @@
                 </div>
 
 
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h6 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#work_entry" aria-expanded="true" aria-controls="work_entry">
-                                Add Work Entry
-                            </button>
-                        </h6>
-                        <div id="work_entry" class="accordion-collapse collapse " aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="card shadow-sm">
-                                    <div class="card-body p-2 text-center">
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="worked_unit">
-                                                <option selected disabled value="">Choose...</option>
-                                                <option value="1166">Jaysan Branch-1 (Assembly)</option>
-                                                <option value="359">Jaysan Branch-2 (Welding)</option>
-                                                <option disabled value="">Jaysan Branch-3 (Fabrication)</option>
-                                            </select>
-                                            <label for="worked_unit">Unit</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="worked_dept">
-                                                <option selected disabled value="">Choose...</option>
-                                            </select>
-                                            <label for="worked_dept">Department</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="worked_section">
-                                                <option selected disabled value="">Choose...</option>
-                                            </select>
-                                            <label for="worked_section">Section</label>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                            <select class="form-select" id="worked_machine">
-                                                <option selected disabled value="">Choose...</option>
-                                            </select>
-                                            <label for="worked_machine">Machine</label>
-                                        </div>
-
-                                        <div class="table-responsive d-none Worked_parts_table">
-                                            <table class="table caption-top table-bordered table-striped ">
-                                                <caption></caption>
-                                                <thead>
-
-                                                    <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">Part Name</th>
-                                                        <th scope="col">Process</th>
-                                                        <th scope="col">Qty</th>
-                                                        <th scope="col">Action</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="Worked_parts_tbody">
-
-
-                                                </tbody>
-
-
-                                            </table>
-                                        </div>
-
-                                        <!-- <button type="submit" class="btn btn-primary " id="add_work_entry_btn">Add
-                                            Work</button> -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="d-flex justify-content-center mt-1">
                     <button type="button" class="btn btn-danger " id="summay_btn">Day End</button>
