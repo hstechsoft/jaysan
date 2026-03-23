@@ -42,33 +42,6 @@ foreach($customer_arr as $customer){
     $customer_email = $customer['cus_email'];
     $customer_phone = $customer['cus_phone'];
 
-// WITH product_price AS (
-//     SELECT 
-//         JSON_ARRAYAGG(JSON_OBJECT(
-//             'ass_id', ap.ass_id,
-//             'chasis_no', ap.chasis_no,
-//             'billing_amount', sop.billing_amount,
-//             'price', sop.price,
-//             'sub_type', sop.sub_type,
-//             'type_name', (SELECT jt.type_name FROM jaysan_model_type jt WHERE jt.mtid = sop.type_id),
-//             'model_name', (SELECT jm.model_name FROM jaysan_product_model jm WHERE jm.model_id = sop.model_id),
-//             'product_name', (SELECT product_name FROM jaysan_final_product 
-//                             WHERE product_id = (SELECT jpm.product_id 
-//                                                   FROM jaysan_product_model jpm 
-//                                                   WHERE model_id = sop.model_id)),
-//             'order_no', (SELECT order_no FROM sales_order_form WHERE oid = sop.oid)
-//         )) AS product_details,
-//         SUM(price)  total_product_price,
-//         ap.dcf_id,
-//         (SELECT DATE_ONLY(dcf.dated) FROM dcf WHERE dcf_id = ap.dcf_id) AS dcf_date
-//     FROM assign_product ap
-//     INNER JOIN sales_order_product sop ON ap.opid = sop.opid
-//     inner join sales_order_form sof on sof.oid = sop.oid
-//     WHERE ap.dcf_id > 0 
-//       and sof.customer_id = $customer_id
-//     GROUP BY ap.dcf_id
-// ),
-
 
 
 $sql_sales_statement = "WITH product_price AS (
@@ -82,18 +55,19 @@ $sql_sales_statement = "WITH product_price AS (
              sop.model_id,
              sop.type_id,
              sof.order_no,
-             (SELECT jt.type_name FROM jaysan_model_type jt WHERE jt.mtid = sop.type_id) as type_name,
-             (SELECT jm.model_name FROM jaysan_product_model jm WHERE jm.model_id = sop.model_id) as model_name,
-             (SELECT product_name FROM jaysan_final_product 
-                            WHERE product_id = (SELECT jpm.product_id 
-                                                  FROM jaysan_product_model jpm 
-                                                  WHERE model_id = sop.model_id)) as product_name
+             jmt.type_name as type_name,
+             jpm.model_name as model_name,
+             jfp.product_name as product_name
       
+
           
        
 
     FROM  sales_order_product sop 
     inner join sales_order_form sof on sof.oid = sop.oid
+     INNER JOIN jaysan_product_model jpm ON jpm.model_id = sop.model_id
+    INNER JOIN jaysan_final_product jfp ON jfp.product_id = jpm.product_id
+    INNER JOIN jaysan_model_type jmt ON jmt.mtid = sop.type_id
     WHERE  sof.customer_id =  $customer_id
     ),
 
