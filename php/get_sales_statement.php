@@ -94,7 +94,7 @@ $sql_sales_statement = "WITH product_price AS (
 
     FROM  sales_order_product sop 
     inner join sales_order_form sof on sof.oid = sop.oid
-    WHERE  sof.customer_id =  $customer_query
+    WHERE  sof.customer_id =  $customer_id
     ),
 
     product_summary as(
@@ -121,12 +121,12 @@ spares_details AS (
     SELECT 
         JSON_ARRAYAGG(JSON_OBJECT('details', sos.qno)) AS spares_details,
         SUM(sos.amount) AS amount,
-        sos.dcf_no AS dcf_id,
-        (SELECT DATE_ONLY(dcf.dated) FROM dcf WHERE dcf_id = sos.dcf_no) AS dcf_date
+        sof.order_no
+    
     FROM sale_order_spares sos
     inner join sales_order_form sof on sof.oid = sos.oid
-    WHERE sof.customer_id =  $customer_query
-    GROUP BY sos.dcf_no
+    WHERE sof.customer_id =  $customer_id
+    GROUP BY sos.oid
 ),
 
 jaysan_payment_details AS (
@@ -137,7 +137,7 @@ jaysan_payment_details AS (
         jp.utr_no
     FROM jaysan_payment jp 
     inner join sales_order_form sof on jp.oid = sof.oid
-    WHERE sof.customer_id =  $customer_query
+    WHERE sof.customer_id =  $customer_id
       AND jp.amount > 0
       AND jp.sts = 'approved'
 
@@ -170,24 +170,23 @@ SELECT  JSON_OBJECT(
         SELECT JSON_ARRAYAGG(JSON_OBJECT(
             'spares_details', spares_details,
             'amount', amount,
-            'dcf_id', dcf_id,
-            'dcf_date', dcf_date
+            'order_no', order_no
         ))
         FROM spares_details
     ),
-    'remaining_balance', ( (SELECT COALESCE(SUM(amount), 0) FROM jaysan_payment_details) -
-        (SELECT COALESCE(SUM(total_price), 0) FROM product_summary) +
-        (SELECT COALESCE(SUM(amount), 0) FROM spares_details) 
+    'remaining_balance', ( (SELECT ifnull(SUM(amount), 0) FROM jaysan_payment_details) -
+        (SELECT ifnull(SUM(total_price), 0) FROM product_summary) +
+        (SELECT ifnull(SUM(amount), 0) FROM spares_details) 
        
     ),
     'total_paid_amount', (
-        SELECT COALESCE(SUM(amount), 0) FROM jaysan_payment_details
+        SELECT ifnull(SUM(amount), 0) FROM jaysan_payment_details
     ),
     'total_product_amount', (
-        SELECT COALESCE(SUM(total_price), 0) FROM product_summary
+        SELECT ifnull(SUM(total_price), 0) FROM product_summary
     ),
     'total_spares_amount', (
-        SELECT COALESCE(SUM(amount), 0) FROM spares_details
+        SELECT ifnull(SUM(amount), 0) FROM spares_details
     )
 ) AS full_result;";
 
