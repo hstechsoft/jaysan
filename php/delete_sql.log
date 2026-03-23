@@ -2,8 +2,3 @@
 [2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2683
 [2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2684
 [2026-03-18 03:56:20] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2685
-[2026-03-21 08:54:21] | USER:236 | IP:::1 | FILE:/jaysan/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2732
-[2026-03-21 08:59:38] | USER:236 | IP:::1 | FILE:/jaysan/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2733
-[2026-03-21 08:59:51] | USER:236 | IP:::1 | FILE:/jaysan/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2734
-[2026-03-21 09:02:19] | USER:236 | IP:::1 | FILE:/jaysan/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2735
-[2026-03-21 09:47:47] | USER:236 | IP:::1 | FILE:/jaysan/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2736
