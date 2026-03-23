@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+let allBomData = [];
 $(document).ready(function () {
 
 
@@ -25,6 +26,13 @@ $(document).ready(function () {
   );
 
 
+  $("#summary_search").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+
+    $("#all_bom_table tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
 
   check_login();
 
@@ -96,22 +104,23 @@ $(document).ready(function () {
 
   get_all_bom()
 
-  $("#excle_btn").click(function () {
+  // $("#excle_btn").click(function () {
 
-    let table = document.querySelector("table");
-    let html = table.outerHTML;
+  //   let table = document.querySelector("table");
+  //   let html = table.outerHTML;
 
-    let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
+  //   let url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
 
-    let link = document.createElement("a");
-    link.href = url;
-    link.download = "BOM_Report.xls";
+  //   let link = document.createElement("a");
+  //   link.href = url;
+  //   link.download = "BOM_Report.xls";
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
 
-  });
+  // });
+
 
 });
 
@@ -170,11 +179,12 @@ function get_all_bom() {
     success: function (response) {
 
       let data = JSON.parse(response);
+      allBomData = data;
       $("#all_bom_table").empty();
 
       data.forEach((item, index) => {
 
-          $("#all_bom_table").append(`
+        $("#all_bom_table").append(`
           <tr>
             <td>${index + 1}</td>
             <td>${item.customer_name}</td>
@@ -185,6 +195,9 @@ function get_all_bom() {
             <td>${item.sales_statement.reamining_balance}</td>
             <td></td>
             <td></td>
+            <td>
+              <button type="button"   class="btn btn-outline-primary summary_btn"  data-index="${index}">  <i class="fa fa-eye"></i></button>
+            </td>
           </tr>
         `);
 
