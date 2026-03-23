@@ -94,7 +94,7 @@ $sql_sales_statement = "WITH product_price AS (
 
     FROM  sales_order_product sop 
     inner join sales_order_form sof on sof.oid = sop.oid
-    WHERE  sof.customer_id = 13658
+    WHERE  sof.customer_id =  $customer_query
     ),
 
     product_summary as(
@@ -125,7 +125,7 @@ spares_details AS (
         (SELECT DATE_ONLY(dcf.dated) FROM dcf WHERE dcf_id = sos.dcf_no) AS dcf_date
     FROM sale_order_spares sos
     inner join sales_order_form sof on sof.oid = sos.oid
-    WHERE sof.customer_id = 13658
+    WHERE sof.customer_id =  $customer_query
     GROUP BY sos.dcf_no
 ),
 
@@ -137,7 +137,7 @@ jaysan_payment_details AS (
         jp.utr_no
     FROM jaysan_payment jp 
     inner join sales_order_form sof on jp.oid = sof.oid
-    WHERE sof.customer_id = 13658
+    WHERE sof.customer_id =  $customer_query
       AND jp.amount > 0
       AND jp.sts = 'approved'
 
