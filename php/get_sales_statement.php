@@ -149,8 +149,8 @@ SELECT  JSON_OBJECT(
         FROM spares_details
     ),
     'remaining_balance', ( (SELECT ifnull(SUM(amount), 0) FROM jaysan_payment_details) -
-        (SELECT ifnull(SUM(total_price), 0) FROM product_summary) +
-        (SELECT ifnull(SUM(amount), 0) FROM spares_details) 
+        ((SELECT ifnull(SUM(total_price), 0) FROM product_summary) +
+        (SELECT ifnull(SUM(amount), 0) FROM spares_details) )
        
     ),
     'total_paid_amount', (
