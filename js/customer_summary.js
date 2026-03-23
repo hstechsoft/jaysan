@@ -39,7 +39,7 @@ $(document).ready(function () {
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
- 
+
 
   get_all_bom()
 
@@ -61,70 +61,95 @@ $(document).ready(function () {
   });
 
 
-
   $("#all_bom_table").on("click", ".summary_btn", function () {
+
     let index = $(this).data("index");
     let item = allBomData[index];
 
     let sales = item.sales_statement || {};
     let products = sales.products || [];
-    let spares = sales.spares || [];
+    let spares = sales.spares || [];   // safe even if null
+    let payments = sales.payments || [];
 
     let html = `
-    <div class="container-fluid small">
+  <div class="container-fluid small">
 
-      <!-- HEADER -->
-      <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
-        <div>
-          <h6 class="mb-1 fw-bold">${item.customer_name}</h6>
-          <div class="text-muted">📞 ${item.customer_phone}</div>
-        </div>
-        <div class="text-end">
-          <div><b>Total Paid:</b> ₹${sales.total_paid_amount || 0}</div>
-          <div class="text-danger"><b>Balance:</b> ₹${sales.reamining_balance || 0}</div>
-        </div>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+      <div>
+        <h6 class="mb-1 fw-bold">${item.customer_name}</h6>
+        <div class="text-muted">📞 ${item.customer_phone}</div>
       </div>
+      <div class="text-end">
+        <div><b>Total Paid:</b> ₹${sales.total_paid_amount || 0}</div>
+        <div class="text-danger"><b>Balance:</b> ₹${sales.remaining_balance || 0}</div>
+      </div>
+    </div>
 
-      <!-- PRODUCTS -->
-      <div class="mb-2">
-        <div class="fw-bold text-primary border-bottom mb-1">Products</div>
+    <!-- PRODUCTS -->
+    <div class="mb-2">
+      <div class="fw-bold text-primary border-bottom mb-1">Products</div>
   `;
-
-
-
 
     if (products.length > 0) {
       products.forEach(p => {
 
-        let details = p.product_details || [];
+        let details = p.product_details || "";
+        let rowHtml = "";
 
-        html += `<div class="border rounded p-2 mb-2 bg-light">`;
-
-        details.forEach(d => {
-          html += `
-          <div class="d-flex justify-content-between">
-            <div>
-              <b>${d.product_name || "-"}</b>
-              <div class="text-muted">
-                Model: ${d.model_name || "-"} | Order: ${d.order_no || "-"}
-              </div>
-              <div class="text-muted">
-                Type: ${d.type_name || "N/A"} | Subtype: ${d.sub_type || "N/A"}
-              </div>
-            </div>
-          </div>
-        `;
+        details.forEach((d, index) => {
+          rowHtml += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${d.order_no || "-"}</td>
+          <td>${d.sub_type || "N/A"}</td>
+          <td>${d.required_qty || 0}</td>
+          <td>₹${d.price || 0}</td>
+          <td>₹${d.total_price || 0}</td>
+        </tr>
+      `;
         });
 
         html += `
-        <div class="d-flex justify-content-between">
-        <div class="fw-bold text-dark mt-1">
-          DCF: ${p.dcf_id ?? "N/A"} | ${p.dcf_date ?? "N/A"}
+      <div class="mb-3">
+
+        <!-- PRODUCT HEADER -->
+        <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded border mb-1">
+          <div>
+            <div class="fw-bold text-primary">
+              ${p.product_name} (${p.type_name})
+            </div>
+            <div class="small text-muted">
+              Model: ${p.model_name}
+            </div>
+          </div>
+          <div class="text-end">
+            <div class="small">Qty: <b>${p.total_required_qty}</b></div>
+            <div class="fw-bold text-success">₹${p.total_product_price}</div>
+          </div>
         </div>
-        <div class="text-end fw-bold">₹${p.total_product_price || 0}</div>
+
+        <!-- DETAILS TABLE -->
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Order</th>
+                <th>Sub Type</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowHtml}
+            </tbody>
+          </table>
         </div>
+
       </div>
-      `;
+    `;
       });
     } else {
       html += `<div class="text-muted">No product data</div>`;
@@ -135,96 +160,118 @@ $(document).ready(function () {
     </div>
     <div class="mb-2">
       <div class="fw-bold text-success border-bottom mb-1">Spares</div>
+      <div class="table-responsive mb-2">
+        <table class="table table-sm table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Details</th>
+              <th>Order/No</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
   `;
 
-    if (spares.length > 0) {
-      spares.forEach(s => {
+    if (spares && spares.length > 0) {
+      let count = 0;
 
-        html += `<div class="border rounded p-2 mb-2 bg-light">`;
+      spares.forEach((s) => {
 
         let details = s.spares_details || [];
 
-        details.forEach(d => {
-          html += `<div>${d.details || "-"}</div>`;
+        details.forEach(function (sd) {
+          count++;
+          html += `
+          <tr>
+            <td>${count}</td>
+            <td>${sd.details || "-"}</td>
+            <td>${s.order_no || "-"}</td>
+            <td>₹${s.amount || 0}</td>
+          </tr>
+        `;
         });
 
-        html += `
-        <div class="d-flex justify-content-between">
-        <div class="fw-bold text-dark mt-1">
-          DCF: ${s.dcf_id ?? "N/A"} | ${s.dcf_date ?? "N/A"}
-        </div>
-        <div class="text-end fw-bold">₹${s.amount || 0}</div>
-        </div>
-      </div>
-      `;
       });
+
+      html += `</tbody></table></div>`;
     } else {
-      html += `<div class="text-muted">No spares data</div>`;
+      html += `<tr><td colspan="4" class="text-muted text-center">No spares data</td></tr></tbody></table></div>`;
     }
 
-
-    //  PAYMENTS LIST
-    let payments = sales.payments || [];
-
+    // PAYMENTS
     html += `
-      </div>
-      <div class="mb-2">
-        <div class="fw-bold text-warning border-bottom mb-1">Payments</div>
-      `;
+    </div>
+    <div class="mb-2">
+      <div class="fw-bold text-warning border-bottom mb-1">Payments</div>
+  `;
 
     if (payments.length > 0) {
 
-      html += `<div class="border rounded p-2 bg-light">`;
+      html += `
+      <div class="table-responsive mb-2">
+        <table class="table table-sm table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>UTR</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
 
       payments.forEach((pay, i) => {
         html += `
-      <div class="d-flex justify-content-between border-bottom py-1">
-        <div>
-          <div><b>#${i + 1}</b> ₹${pay.credit || 0}</div>
-          <div class="text-muted small">
-            📅 ${pay.dated || "N/A"}
-          </div>
-        </div>
-        <div class="text-end small">
-          UTR: ${pay.utr_no || "N/A"}
-        </div>
-      </div>
-    `;
+        <tr>
+          <td>${i + 1}</td>
+          <td>₹${pay.credit || 0}</td>
+          <td>${pay.dated || "N/A"}</td>
+          <td>${pay.utr_no || "N/A"}</td>
+        </tr>
+      `;
       });
 
-      html += `</div>`;
+      html += `</tbody></table></div>`;
 
     } else {
       html += `<div class="text-muted">No payment records</div>`;
     }
 
-
-    // PAYMENT DETAILS
+    // PAYMENT SUMMARY
     html += `
     </div>
     <div class="mb-2">
-      <div class="fw-bold text-dark border-bottom mb-1">Payment Summary</div>
-      <div class="d-flex justify-content-between">
-        <span>Product Total</span>
-        <span>₹${sales.total_product_amount || 0}</span>
+
+      <div class="fw-bold text-dark border-bottom mb-2">Payment Summary</div>
+
+      <div class="bg-light rounded p-2">
+
+        <div class="d-flex justify-content-between small py-1">
+          <span>Product Total</span>
+          <span>₹${sales.total_product_amount || 0}</span>
+        </div>
+
+        <div class="d-flex justify-content-between small py-1">
+          <span>Spares Total</span>
+          <span>₹${sales.total_spares_amount || 0}</span>
+        </div>
+
+        <div class="d-flex justify-content-between small py-1">
+          <span>Paid</span>
+          <span class="text-success">₹${sales.total_paid_amount || 0}</span>
+        </div>
+
+        <div class="d-flex justify-content-between fw-bold border-top pt-2 mt-1">
+          <span>Remaining</span>
+          <span class="text-danger">₹${sales.remaining_balance || 0}</span>
+        </div>
+
       </div>
-      <div class="d-flex justify-content-between">
-        <span>Spares Total</span>
-        <span>₹${sales.total_spares_amount || 0}</span>
-      </div>
-      <div class="d-flex justify-content-between">
-        <span>Paid</span>
-        <span class="text-success">₹${sales.total_paid_amount || 0}</span>
-      </div>
-      <div class="d-flex justify-content-between fw-bold border-top mt-1 pt-1">
-        <span>Remaining</span>
-        <span class="text-danger">₹${sales.reamining_balance || 0}</span>
-      </div>
-    </div>
 
     </div>
-  `;
-
+    `;
     $("#summary_content").html(html);
     $("#summary_modal").modal("show");
   });
@@ -256,6 +303,24 @@ $(document).ready(function () {
       html2pdf().set(opt).from(element).save();
     }, 300);
   });
+
+
+  $("#all_bom_table").on("focusout", "td[contenteditable]", function () {
+    var enter_amount = $(this).text();
+    var remaining = $(this).data("remaining");
+    var cus_id = $(this).data("cus_id");
+
+    var amount = 0;
+    if(Number(enter_amount)>0){
+       amount = remaining - enter_amount
+
+    }
+    if (Number(amount) > 0 && cus_id) {
+      insert_temp_spares(amount, cus_id);
+    } else {
+      salert("Warning", "Enter The Valid Amount/Data Miss Try Later", "warning")
+    }
+  })
 });
 
 
@@ -285,9 +350,12 @@ function get_all_bom() {
             <td>${item.sales_statement.total_product_amount}</td>
             <td>${item.sales_statement.total_spares_amount}</td>
             <td>${item.sales_statement.total_paid_amount}</td>
-            <td>${item.sales_statement.reamining_balance}</td>
-            <td></td>
-            <td></td>
+            <td class="color_jay">${item.sales_statement.remaining_balance > 0 ? item.sales_statement.remaining_balance : '-'}</td>
+            <td 
+              data-cus_id="${item.customer_id}" 
+              data-remaining="${item.sales_statement.remaining_balance}" 
+              ${item.sales_statement.remaining_balance <= 0 ? 'contenteditable="false" class="bg-light text-muted"' : 'contenteditable="true"'}>
+            </td>
             <td>
               <button type="button"   class="btn btn-outline-primary summary_btn"  data-index="${index}">  <i class="fa fa-eye"></i></button>
             </td>
@@ -305,7 +373,40 @@ function get_all_bom() {
 
 }
 
+function insert_temp_spares(amount, cus_id) {
+  console.log(amount, cus_id);
 
+  $.ajax({
+    url: "php/insert_temp_spares.php",
+    type: "post", //send it through get method
+    data: {
+
+      customer_id: cus_id,
+      amount: amount,
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim() == "ok") {
+        location.reload();
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 
 

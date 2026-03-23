@@ -3199,7 +3199,7 @@ function get_sales_order(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: '',
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Sales"
     },
@@ -3964,7 +3964,7 @@ function get_sales_order_approval(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: '',
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Sales"
     },
@@ -4310,7 +4310,7 @@ function get_req_order(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: '',
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Requirement"
     },
