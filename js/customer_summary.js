@@ -357,7 +357,7 @@ function get_all_bom() {
               ${item.sales_statement.remaining_balance <= 0 ? 'contenteditable="false" class="bg-light text-muted"' : 'contenteditable="true"'}>
             </td>
             <td>
-              <button type="button"   class="btn btn-outline-primary summary_btn"  data-index="${index}">  <i class="fa fa-eye"></i></button>
+              <button type="button"   class="btn btn-outline-primary summary_btn"  disabled data-index="${index}">  <i class="fa fa-eye"></i></button>
             </td>
           </tr>
         `);
