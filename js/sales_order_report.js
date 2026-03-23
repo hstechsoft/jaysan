@@ -393,6 +393,7 @@ $(document).ready(function () {
 
   $('#order_table').on("click", "button", function () {
     var order_no = $(this).val();
+    var cus_id = $(this).data("cus_id");
     if ($(this).hasClass('download')) {
       get_order_details(order_no)
       console.log(order_no);
@@ -403,7 +404,7 @@ $(document).ready(function () {
       get_dispatch_count(order_no, function (count) {
         if (count > 0) {
           if (current_user_id == emp_id_dcf)
-            window.open("dispatch_clearance_form.html?phone_id=" + phone_id + "&oid=" + order_no, "_blank");
+            window.open("dispatch_clearance_form.html?phone_id=" + phone_id + "&oid=" + order_no + "&cus_id=" + cus_id, "_blank");
           else {
             var narration = prompt("Enter Reason for DCF Creation:");
 
@@ -416,7 +417,7 @@ $(document).ready(function () {
               window.open(
                 "dispatch_clearance_form.html?phone_id=" + phone_id +
                 "&oid=" + order_no +
-                "&narration=" + narration,
+                "&narration=" + narration + "&cus_id=" + cus_id,
                 "_blank"
               );
             }
@@ -522,7 +523,7 @@ $(document).ready(function () {
           assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
           assign_type = p.assign_info[0].assign_type || "";
 
-          if(p.dcf_details && p.dcf_details[0]){
+          if (p.dcf_details && p.dcf_details[0]) {
             dcf_status = p.dcf_details[0].dc_sts || "";
           }
         }
@@ -550,10 +551,10 @@ $(document).ready(function () {
 
     });
 
-    
+
     let ws = XLSX.utils.aoa_to_sheet(data);
 
-    
+
     let wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sale Order Report");
 
@@ -1361,9 +1362,20 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
                     proText.setHours(0, 0, 0, 0);
                     //  "2026-03-05" <= "2026-03-03"
 
-                    if (proText <= today) {
+                    if (ass.assign_type == "Production") {
+                      if (proText <= today) {
+                        ddd = "";
+                        block_count += 1;
+                      }
+                      else {
+                        ddd = "d-none";
+                      }
+                    }
+                    else if ( ass.assign_type == "Waiting" || ass.assign_type == "unassigned") {
+                      ddd = "d-none";
+                    }
+                    else if (ass.assign_type == "Finshed" || ass.assign_type == "Delivered") {
                       ddd = "";
-                      block_count += 1;
                     }
                     if (ass.assign_type == "Production") {
 
@@ -1435,7 +1447,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
 
 
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd) + " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' data-cus_id='" + obj.customer_id + "' class='dcf_btn " + (block_count > 0 ? "" : ddd) + " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 
