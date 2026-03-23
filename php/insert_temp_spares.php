@@ -43,7 +43,7 @@ if ($result_last_dcf->num_rows > 0) {
 
 
 
-$sql_insert_spares = "nsert into sale_order_spares (qno, amount, oid, dcf_no,remark) values ('qno', $amount, '$last_order_id', '$last_dcf_id', 'inserted for customer $customer_id');";
+$sql_insert_spares = "insert into sale_order_spares (qno, amount, oid, dcf_no,remark) values ('qno', $amount, '$last_order_id', '$last_dcf_id', 'inserted for customer $customer_id');";
   
   if ($conn->query($sql_insert_spares) === TRUE) {
     
