@@ -4,6 +4,19 @@ $emp_id = test_input($_POST['emp_id']);
 $qr_work_id = test_input($_POST['qr_work_id']);
 $break_time_array = json_decode($_POST['break_time_array'], true);
 $process_part_array = json_decode($_POST['process_part_array'], true);
+$godown_id = test_input($_POST['godown_id']);
+$dep_id = test_input($_POST['dep_id']);
+$sec_id = test_input($_POST['sec_id']);
+
+
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+
+return $data;
+}
+
 
 // check break_time_array is array and not empty
 if(!is_array($break_time_array) || empty($break_time_array)) {
@@ -88,20 +101,122 @@ echo "Total Minutes: " . $totalMinutes;
 $total_work_duration_minutes = $totalMinutes - $total_break_duration_minutes;
 echo json_encode(array("total_work_minutes" => $total_work_duration_minutes, "total_break_minutes" => $total_break_duration_minutes));
     }
+$consumption = [];
 
-    // update stock based on bom 
+// check there enough bom stock for the process part
+foreach($process_part_array as $process_part) {
+    $part_id = $process_part['part_id'];
+    $required_qty = $process_part['required_qty'];
+    $process_id = $process_part['process_id'];
+    $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty,   js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
+inner join input_wel_parts iwp on iwp.process_id = pwt.process_id
+inner join jaysan_process jp on jp.process_id = pwt.process
+left join jaysan_stock js on pwt.process_id = js.process_id and iwp.input_part_id = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
+ WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
+    $result_check_stock = $conn->query($sql_check_stock);
+    if ($result_check_stock->num_rows > 0) {
+      
+        while($row = $result_check_stock->fetch_assoc()){
+            $consume_qty = $row['qty'] * $required_qty;
+            $remaining = $row['total_stock_qty'] - $consume_qty;
+       $consumption[] = [
+        "part_id" => $row['input_part_id'],
+        "previous_process_id" => $row['previous_process_id'],
+        "qty" => $consume_qty
+    ];
+
+        if($remaining < 0) {
+            echo json_encode(array("message" => "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty'])));
+            $conn->close();
+            exit;
+        }
+
+        }
+    } else {
+        echo json_encode(array("message" => "No stock information found for part ID: $part_id."));
+        $conn->close();
+        exit;
+    }
+
+}
+
+// bom stock check  done. now reduce bom input and add output to stock based on process_part_array and process_id
+
+
+    foreach ($consumption as $consume) {
+        $part_id = $consume['part_id'];
+        $qty_to_consume = $consume['qty'];
+        $previous_process_id = $consume['previous_process_id'];
+    //  find sec wise stock details
+    $sql_sec_stock = "select stock_id, qty,sec, from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and process_id = $previous_process_id and qty > 0 order by stock_id";
+    $result_sec_stock = $conn->query($sql_sec_stock);
+
+    if ($result_sec_stock->num_rows > 0) {
+    while($row = $result_sec_stock->fetch_assoc()) {
+
+        if($remaining <= 0) break;
+
+        $available = $row['qty'];
+        $take_qty = min($available, $remaining);
+
+        // 🔥 reduce stock (insert negative entry with SAME section)
+   $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = " . $row['stock_id'];
+    if ($conn->query($sql_update_stock) === TRUE) {
+    } else {
+        echo json_encode(array("message" => "Error updating stock: " . $conn->error));
     
+    }
+
+        $remaining -= $take_qty;
+    
+
+    }
+
+    
+    }
+    }
+
+
+    try{
+$conn->begin_transaction();
+  foreach($process_part_array as $process_part) {
+        $part_id = $process_part['part_id'];
+        $required_qty = $process_part['required_qty'];
+        $process_id = $process_part['process_id'];
+       
+$batch_id = "j".$work_done_id;
+    // insert output stock for the process part
+    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty,batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $consume_qty, '$batch_id')";
+
+    if ($conn->query($sql_insert_output) === TRUE) {
+
+    } else {
+        echo json_encode(array("message" => "Error inserting output stock: " . $conn->error));
+        $conn->rollback();
+        $conn->close();
+        exit;
+        
+    
+
+    }
+    }
+    $conn->commit();
+    }
+
+     catch(Exception $e) {
+        $conn->rollback();
+        echo json_encode(array("message" => "Transaction failed: " . $e->getMessage()));
+        $conn->close();
+        exit;
+    }
+  
+
+
+
 
 
 
  
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-
-return $data;
-}
 
 
 
