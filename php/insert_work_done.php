@@ -17,6 +17,7 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
+$result_json = array();
 
 // check break_time_array is array and not empty
 if(!is_array($break_time_array) || empty($break_time_array)) {
@@ -26,7 +27,8 @@ if(!is_array($break_time_array) || empty($break_time_array)) {
 // check process_part_array is array and not empty
 if(!is_array($process_part_array) || empty($process_part_array)) {
   $conn->close();
-    echo json_encode(array("message" => "Process part array is required and should be a non-empty array."));
+  $result_json['message'] = "Process part array is required and should be a non-empty array.";
+    echo json_encode($result_json);
     exit;
 }
 require __DIR__ . '/get_current_work_info.php';
@@ -34,13 +36,15 @@ $curent_work_info = current_info($conn, $emp_id);
 
 if(!$curent_work_info['start_time']) {
      $conn->close();
-    echo json_encode(array("message" => "No active work found for the employee."));
+    $result_json['message'] = "No active work found for the employee.";
+    echo json_encode($result_json);
     exit;
 }
 
 $work_done_id = $curent_work_info['work_done_id'];
 $day_start_time = $curent_work_info['start_time'];
-echo json_encode($curent_work_info);
+$result_json['current_work_info'] = $curent_work_info;
+
 $production_id = 0;
 // if qr_work_id is not null then get current sts 
 if($qr_work_id > 0) {
@@ -49,7 +53,8 @@ $result_qr_sts = $conn->query($sql_get_sts_qr);
 if ($result_qr_sts->num_rows > 0) {
    $production_id = $result_qr_sts->fetch_assoc()['production_id'];
 } else {
-   echo json_encode(array("message" => "No active work entry found for the given QR work ID."));
+   $result_json['message'] = "No active work entry found for the given QR work ID.";
+   echo json_encode($result_json);
    $conn->close();
    exit;
 }
@@ -70,7 +75,8 @@ WHERE production_id = $production_id;";
             $total_work_duration_minutes = $row['total_duration_minutes']; // Convert minutes to seconds
         }
     }
-    echo json_encode(array("total_minutes" => $total_work_duration_minutes )); // Convert back to seconds
+    $result_json['total_minutes'] = $total_work_duration_minutes; // Convert back to seconds
+  
 }
 // qr_work_id not available so calculate break time from break_time_array 
 else
@@ -96,10 +102,12 @@ $interval = $day_start->diff($now);
 
 $totalMinutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i + ($interval->s / 60);
 
-echo "Total Minutes: " . $totalMinutes;
+$result_json['total_minutes'] = $totalMinutes;
 
 $total_work_duration_minutes = $totalMinutes - $total_break_duration_minutes;
-echo json_encode(array("total_work_minutes" => $total_work_duration_minutes, "total_break_minutes" => $total_break_duration_minutes));
+$result_json['total_work_minutes'] = $total_work_duration_minutes;
+$result_json['total_break_minutes'] = $total_break_duration_minutes;
+
     }
 $consumption = [];
 
@@ -129,14 +137,16 @@ left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) a
     ];
 
         if($remaining < 0) {
-            echo json_encode(array("message" => "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty'])));
+            $result_json['message'] = "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty']);
+            echo json_encode($result_json);
             $conn->close();
             exit;
         }
 
         }
     } else {
-        echo json_encode(array("message" => "No stock information found for part ID: $part_id."));
+        $result_json['message'] = "No stock information found for part ID: $part_id.";
+        echo json_encode($result_json);
         $conn->close();
         exit;
     }
@@ -170,7 +180,8 @@ $remaining = $qty_to_consume;
 
     if ($conn->query($sql_update_stock) === TRUE) {
     } else {
-        echo json_encode(array("message" => "Error updating stock: " . $conn->error));
+        $result_json['message'] = "Error updating stock: " . $conn->error;
+      
     
     }
 
@@ -198,7 +209,8 @@ $batch_id = "j".$work_done_id;
     if ($conn->query($sql_insert_output) === TRUE) {
 
     } else {
-        echo json_encode(array("message" => "Error inserting output stock: " . $conn->error));
+        $result_json['message'] = "Error inserting output stock: " . $conn->error;
+        echo json_encode($result_json);
         $conn->rollback();
         $conn->close();
         exit;
@@ -208,12 +220,14 @@ $batch_id = "j".$work_done_id;
     }
     }
     $conn->commit();
-    echo json_encode(array("message" => "Work done entry and stock updates successful."));
+    $result_json['message'] = "Work done entry and stock updates successful.";
+    echo json_encode($result_json);
     }
 
      catch(Exception $e) {
         $conn->rollback();
-        echo json_encode(array("message" => "Transaction failed: " . $e->getMessage()));
+        $result_json['message'] = "Transaction failed: " . $e->getMessage();
+        echo json_encode($result_json);
         $conn->close();
         exit;
     }
