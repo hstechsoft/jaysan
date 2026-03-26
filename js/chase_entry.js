@@ -119,6 +119,8 @@ $(document).ready(function () {
         if (encodedDetails) {
 
             details = JSON.parse(decodeURIComponent(encodedDetails));
+            get_assign_order_modal_view(details.order_no, details.line_no);
+
             $("#customer").val(details.cus_name);
             console.log(" Details loaded:", details);
         } else {
@@ -231,7 +233,7 @@ $(document).ready(function () {
         // $("#customer_name").text("")
         $("#model").text("");
         $("#product").text("");
-        $("#type").text( "");
+        $("#type").text("");
         $("#sub_type").text("");
 
         print();
@@ -340,6 +342,7 @@ $(document).ready(function () {
 
         }
     })
+
 });
 
 
@@ -493,6 +496,128 @@ function get_assign_order() {
 
 
 }
+
+function get_assign_order_modal_view(order_id, line_no) {
+
+    $.ajax({
+        url: "php/get_assign_order.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                $("#product_model_view").empty();
+                $("#product_model_view_modal").modal("show");
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+
+                    let isMatchFound = false;
+
+                    obj.forEach(function (item) {
+
+                        if (order_id == Number(item.order_no) && line_no == Number(item.line_no)) {
+
+                            isMatchFound = true;
+
+                            var details = `
+                                <div class="card border-0 shadow-sm mb-2" style="border-radius:12px;">
+                                    
+                                    <div class="card-body py-2 px-3">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="text-muted small">${item.model}</span>
+                                            <span class="badge bg-success px-2 py-1">${item.type}</span>
+                                        </div>
+
+                                        <div class="fw-semibold text-dark" style="font-size:14px;">
+                                            ${item.product}
+                                        </div>
+
+                                        <div class="text-muted small mt-1">
+                                            ${item.sub_type}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            `;
+
+                            $("#product_model_view").append(`
+                                <div class="mb-3 p-2 border rounded bg-light" style="border-radius:10px;"
+                                    data-ass-id="${item.ass_id}">
+
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+
+                                        <span class="badge bg-secondary">
+                                            Line: ${item.line_no}
+                                        </span>
+
+                                        <span class="badge bg-primary">
+                                            Order: ${item.order_no}
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center p-2">
+
+
+                                        <span class="small text-muted">Order BY: 
+                                            <b>${item.emp_name}</b>
+                                        </span>
+                                    
+                                        <span class="small text-muted">
+                                            ${item.cus_name}
+                                        </span>
+
+                                        <span class="small text-muted">
+                                            📞 ${item.cus_phone}
+                                        </span>
+
+
+                                    </div>
+
+                                    ${details}
+
+                                </div>
+                            `);
+                        }
+                    });
+
+                    if (!isMatchFound) {
+                        $("#product_model_view_modal").modal("hide");
+                        salert("Warning", "Data Doesn't Match", "warning");
+                    }
+
+                }
+                else {
+                    // $("#product_model_view").append("<div class='text-center text-danger'>No Data Found</div>")
+
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 function update_assign_product_fd(ass_id, chasis_no, prepared_by) {
     console.log(ass_id, prepared_by);

@@ -4926,6 +4926,7 @@ function get_jaysan_sales_payment(oid) {
 }
 
 function get_jaysan_sales_payment_m(oid) {
+console.log(oid);
 
 
   $.ajax({
@@ -4957,6 +4958,9 @@ function get_jaysan_sales_payment_m(oid) {
             received_details.forEach(function (payment) {
               if (payment.sts == "approved") {
                 sts = "<i class='fa-solid fa-thumbs-up'></i>"
+              }
+              else if (payment.sts == "decline") {
+                sts = "<i class='fa-solid fa-thumbs-down'></i>"
               }
               else
                 sts = "<i class='fa-solid fa-hourglass-half'></i>"

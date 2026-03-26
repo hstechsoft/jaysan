@@ -2,7 +2,7 @@
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
-var current_user_id = 2310
+// var current_user_id = 2310
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var current_work = 0;
@@ -395,7 +395,7 @@ $(document).ready(function () {
 
     $("#start_day_btn").on("click", function () {
         // var sec_id = $("#day_section_select").val() || 0;
-        if ( Number(current_user_id) > 0) {
+        if (Number(current_user_id) > 0) {
             insert_work_done_table(current_user_id);
         }
         else {
@@ -464,16 +464,102 @@ $(document).ready(function () {
 
         if (chasis_no && ass_id) {
             console.log(ass_id, chasis_no);
-            
+
             update_chasis_no(ass_id, chasis_no);
         }
         else {
             salert("Warning", "Please Enter the Chasis No", "warning");
         }
     })
+
+    $("#Worked_parts_tbody").on("click", "td button", function () {
+
+        var part_id = $(this).data("part_id");
+        var process_id = $(this).data("process_id");
+        var req_qty = $(this).closest("tr").find("td").eq(3).text();
+        var process_part_array = [];
+
+        if (!req_qty || req_qty <= 0) {
+            salert("Warning", "Enter Valid Qty", "warning");
+        }
+        else if (!part_id || !process_id) {
+            salert("Warning", "Data Missing Try Later", "warning");
+        }
+        else {
+            process_part_array.push({ part_id: part_id, process_id: process_id, required_qty: req_qty })
+        }
+        console.log(process_part_array)
+        var se = sec_details()
+        if (se.godown_id && se.dep_id && se.sec_id && process_part_array.length > 0) {
+            insert_work_done(current_user_id, '', '', JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id)
+        }
+
+    });
+
 });
 
 
+function sec_details() {
+    var godown_id = $("#worked_unit").val();
+    var dep_id = $("#worked_dept").val();
+    var sec_id = $("#worked_section").val();
+
+    return { godown_id, dep_id, sec_id };
+}
+
+function insert_work_done(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id) {
+
+    console.log(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id);
+
+    $.ajax({
+        url: "php/insert_work_done.php",
+        type: "post", //send it through get method
+        data: {
+
+            emp_id: emp_id,
+            qr_work_id: qr_work_id,
+            break_time_array: break_time_array,
+            process_part_array: process_part_array,
+            godown_id: godown_id,
+            dep_id: dep_id,
+            sec_id: sec_id
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                get_current_work_details(current_user_id)
+            }
+            else {
+                let msg = "Something went wrong";
+
+                try {
+                    let match = response.match(/"message":"([^"]+)"/);
+                    if (match && match[1]) {
+                        msg = match[1];
+                    }
+                } catch (e) {
+                    console.log("Error parsing message", e);
+                }
+
+                salert( msg);
+            }
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function update_chasis_no(ass_id, chasis_no) {
 
@@ -1278,7 +1364,7 @@ function get_section_wise_process(godown_id, dep_id, sec_id, machine_id) {
                         count = count + 1;
 
 
-                        $("#Worked_parts_tbody").append(`<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td contenteditable=true>0</td><td><button class='btn btn-outline-primary small'>Add</button></td></tr>`)
+                        $("#Worked_parts_tbody").append(`<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td contenteditable=true>0</td><td><button class='btn btn-outline-primary small' data-part_id=${obj.outpart} data-process_id=${obj.process_id} >Add</button></td></tr>`)
 
 
                     });

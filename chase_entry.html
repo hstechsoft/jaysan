@@ -35,6 +35,11 @@
                 font-size: 5px;
             }
         }
+
+        .card:hover {
+            transform: translateY(-2px);
+            transition: 0.2s ease;
+        }
     </style>
 
 </head>
@@ -470,7 +475,7 @@
                                         <tr>
                                             <th scope="col">
                                                 <div class="d-flex justify-content-between">
-                                                     <div>Line/No</div>
+                                                    <div>Line/No</div>
                                                     <div class="input-group input-group-sm" style="width: 180px;">
                                                         <span class="input-group-text bg-white border-0">
                                                             <i class="fa fa-search text-muted"></i>
@@ -507,6 +512,27 @@
 
 
     </div>
+
+
+    <div class="modal fade" id="product_model_view_modal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="product_model_view_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="product_model_view_modalLabel">Selected Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="product_model_view">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+                    <!-- <button type="button" class="btn btn-primary">OK</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id='footer' class="mt-auto"></div>
 
