@@ -66,7 +66,7 @@ WHERE production_id = $production_id;";
   
     if ($result_qr_time->num_rows > 0) {
         while($row = $result_qr_time->fetch_assoc()) {
-           echo json_encode($row);
+    
             $total_work_duration_minutes = $row['total_duration_minutes']; // Convert minutes to seconds
         }
     }
@@ -111,12 +111,15 @@ foreach($process_part_array as $process_part) {
     $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty,   js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
 inner join input_wel_parts iwp on iwp.process_id = pwt.process_id
 inner join jaysan_process jp on jp.process_id = pwt.process
-left join jaysan_stock js on pwt.process_id = js.process_id and iwp.input_part_id = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
+left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) and iwp.input_part_id = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
  WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
+
     $result_check_stock = $conn->query($sql_check_stock);
     if ($result_check_stock->num_rows > 0) {
+
       
         while($row = $result_check_stock->fetch_assoc()){
+          
             $consume_qty = $row['qty'] * $required_qty;
             $remaining = $row['total_stock_qty'] - $consume_qty;
        $consumption[] = [
@@ -146,11 +149,14 @@ left join jaysan_stock js on pwt.process_id = js.process_id and iwp.input_part_i
     foreach ($consumption as $consume) {
         $part_id = $consume['part_id'];
         $qty_to_consume = $consume['qty'];
-        $previous_process_id = $consume['previous_process_id'];
+    $previous_process_id_query = ($consume['previous_process_id'] == 0) 
+    ? 'process_id is null' 
+    : "process_id = " . $consume['previous_process_id'];
     //  find sec wise stock details
-    $sql_sec_stock = "select stock_id, qty,sec, from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and process_id = $previous_process_id and qty > 0 order by stock_id";
+    $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query and qty > 0 order by stock_id";
+   
     $result_sec_stock = $conn->query($sql_sec_stock);
-
+$remaining = $qty_to_consume;
     if ($result_sec_stock->num_rows > 0) {
     while($row = $result_sec_stock->fetch_assoc()) {
 
@@ -161,6 +167,7 @@ left join jaysan_stock js on pwt.process_id = js.process_id and iwp.input_part_i
 
         // 🔥 reduce stock (insert negative entry with SAME section)
    $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = " . $row['stock_id'];
+
     if ($conn->query($sql_update_stock) === TRUE) {
     } else {
         echo json_encode(array("message" => "Error updating stock: " . $conn->error));
@@ -186,7 +193,7 @@ $conn->begin_transaction();
        
 $batch_id = "j".$work_done_id;
     // insert output stock for the process part
-    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty,batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $consume_qty, '$batch_id')";
+    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
 
     if ($conn->query($sql_insert_output) === TRUE) {
 
@@ -201,6 +208,7 @@ $batch_id = "j".$work_done_id;
     }
     }
     $conn->commit();
+    echo json_encode(array("message" => "Work done entry and stock updates successful."));
     }
 
      catch(Exception $e) {
