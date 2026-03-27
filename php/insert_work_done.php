@@ -167,7 +167,8 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id
 
 }
 
-
+    try{
+$conn->begin_transaction();
 // get min and max time for the process and multiply with required qty then reduce total_work_duration_minutes
 $total_min_time = 0;
 $total_max_time = 0;
@@ -192,6 +193,7 @@ if ($result_process_time->num_rows > 0) {
     $total_max_time += $row['max_time'] * $required_qty;
 }
 else {
+    $conn->rollback();
     $result_json['message'] = "No time information found for process ID: $process_id.";
     echo json_encode($result_json);
     $conn->close();
@@ -199,6 +201,8 @@ else {
 }
 
 if($total_work_duration_minutes < $total_min_time) {
+    $conn->rollback();
+
     $result_json['message'] = "Total work duration is less than the minimum required time for the processes. Total work duration: $total_work_duration_minutes minutes, Minimum required time: $total_min_time minutes.";
     echo json_encode($result_json);
     $conn->close();
@@ -214,6 +218,7 @@ if($total_work_duration_minutes > $total_max_time) {
     $pr_time = $process_time['max_time'];
     $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit) VALUES ($work_done_id,$pr_id, $pr_time)";
     if ($conn->query($insert_work_process_sql) !== TRUE) {
+        $conn->rollback();
         $result_json['message'] = "Error inserting work process: " . $conn->error;
         echo json_encode($result_json);
         $conn->close();
@@ -232,6 +237,7 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
         $pr_time = $process_time['min_time'] + $time_to_distribute;
         $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit) VALUES ($work_done_id,$pr_id, $pr_time)";
         if ($conn->query($insert_work_process_sql) !== TRUE) {
+            $conn->rollback();
             $result_json['message'] = "Error inserting work process: " . $conn->error;
             echo json_encode($result_json);
             $conn->close();
@@ -247,6 +253,7 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
 if($qr_work_id > 0) {
     $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
     if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
+        $conn->rollback();
         $result_json['message'] = "Error updating QR work entry: " . $conn->error;
         echo json_encode($result_json);
         $conn->close();
@@ -260,6 +267,7 @@ else {
     $result_json['sql'] = $sql_insert_qr_work_entry;
 
     if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
+        $conn->rollback();
         $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
         echo json_encode($result_json);
         $conn->close();
@@ -296,7 +304,10 @@ $remaining = $qty_to_consume;
     } else {
         $result_json['message'] = "Error updating stock: " . $conn->error;
         echo json_encode($result_json);
-    
+        $conn->rollback();
+        $conn->close();
+        exit;
+
     }
 
         $remaining -= $take_qty;
@@ -309,8 +320,7 @@ $remaining = $qty_to_consume;
     }
 
 
-    try{
-$conn->begin_transaction();
+
   foreach($process_part_array as $process_part) {
         $part_id = $process_part['part_id'];
         $required_qty = $process_part['required_qty'];
