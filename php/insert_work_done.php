@@ -242,8 +242,9 @@ if($qr_work_id > 0) {
 }
 else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
-    
+    echo $process_id;
     $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
+    echo $sql_insert_qr_work_entry;
     if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
         $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
         echo json_encode($result_json);
