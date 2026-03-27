@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
  include 'db_head.php';
 $emp_id = test_input($_POST['emp_id']);
 $qr_work_id = test_input($_POST['qr_work_id']) ;
@@ -68,6 +68,7 @@ if ($result_qr_sts->num_rows > 0) {
 }
   $total_work_duration_minutes = 0;
   $total_break_duration_minutes = 0;
+  $totalMinutes = 0;
 // if production_id > 0 all time for that production 
 if($production_id > 0 && $production_id != 'NULL') {
     $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
@@ -128,11 +129,13 @@ foreach($process_part_array as $process_part) {
     $required_qty = $process_part['required_qty'];
     $process_id = $process_part['process_id'];
     $machine_id = $process_part['machine_id'];
-    $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
+    $sql_check_stock = "SELECT concat(ifnull(jpre_process.process_name, ''), ' -> ', pt.part_name) as part_name, ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
 inner join input_wel_parts iwp on iwp.process_id = pwt.process_id
+inner join parts_tbl pt on pt.part_id = iwp.input_part_id
 inner join jaysan_process jp on jp.process_id = pwt.process
 left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) and iwp.input_part_id = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
 left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.machine_id = $machine_id
+left join jaysan_process jpre_process on jpre_process.process_id = iwp.previous_process_id
  WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
 
     $result_check_stock = $conn->query($sql_check_stock);
@@ -146,7 +149,7 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.ma
  
 
         if($remaining < 0) {
-            $result_json['message'] = "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty']);
+            $result_json['message'] = "Not enough stock for part name: " . $row['part_name'] . " (part ID: " . $row['input_part_id'] . "). Required: $consume_qty, Available: " . ($row['total_stock_qty']);
            
             echo json_encode($result_json);
             $conn->close();
@@ -155,7 +158,7 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.ma
 
         }
     } else {
-        $result_json['message'] = "No stock information found for part ID: $part_id.";
+        $result_json['message'] = "No stock information found for part name: " . $row['part_name'] . " (part ID: " . $row['input_part_id'] . ").";
         echo json_encode($result_json);
         $conn->close();
         exit;
@@ -204,15 +207,19 @@ if($total_work_duration_minutes < $total_min_time) {
     $conn->close();
     exit; 
 }
+    $work_array = [];
+    $current_process_work_time = 0;
 if($total_work_duration_minutes > $total_max_time) {
     // now total work time greater then max time so we assigin process time as max time and calulate extra time as total work time - max time
     
     $free_time = $total_work_duration_minutes - $total_max_time;
-    $work_array = [];
+
     foreach($process_time_array as $process_time) {
     //  insert into work_process
     $pr_id = $process_time['process_id'];
     $pr_time = $process_time['max_time'];
+    $required_qty1 = $process_time['required_qty'];
+    $current_process_work_time += $pr_time * $required_qty1;
     // get process_name 
     $sql_process_name = "SELECT process_name,$pr_time FROM process_wel_tbl inner join jaysan_process on process_wel_tbl.process = jaysan_process.process_id WHERE process_wel_tbl.process_id = $pr_id";
     $result_process_name = $conn->query($sql_process_name);
@@ -220,7 +227,7 @@ if($total_work_duration_minutes > $total_max_time) {
       $work_array[] = [
           "process_id" => $pr_id,
           "process_name" => $result_process_name->fetch_assoc()['process_name'],
-          "process_time" => $pr_time
+          "process_time" => $pr_time * $required_qty1
       ];
     }
     
@@ -268,18 +275,105 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
     }
 }
 }
+$total_process_entry_time = 0;
+$total_break_entry_time = 0;
 
-echo json_encode($result_json);
+ $sql_finished_entries = "SELECT  date_time_only(qr.start_time) as start_time,date_time_only(qr.end_time) as end_time,qr.production_id,qr.qr_work_id,TIMESTAMPDIFF(MINUTE, qr.start_time, qr.end_time) AS time_diff_minutes 
+FROM  qr_work_entry qr 
+WHERE   qr.work_done_id = $work_done_id and qr.work_sts  =  'finished' ";
 
+$result_finished_entries = $conn->query($sql_finished_entries);
+
+if ($result_finished_entries->num_rows > 0) {
+    $rows = array();
+    $rows1 = array();
+    while($r = mysqli_fetch_assoc($result_finished_entries)) {
+        
+        
+   
+
+
+        $rows[] = $r;
+         $total_process_entry_time += $r['time_diff_minutes'];
+    }
+    $result_json['finished_work_entries'] = $rows;
+
+    
+} else {
+ $result_json['finished_work_entries'] = [];
+   
+}
+
+// get total break time entered
+$sql_break_entries = "SELECT  sum(break_time) as total_break_time
+FROM  work_break
+WHERE   work_done_id = $work_done_id";
+$result_break_entries = $conn->query($sql_break_entries);
+if ($result_break_entries->num_rows > 0) {
+    $row = $result_break_entries->fetch_assoc();
+    $total_break_entry_time = $row['total_break_time'];
+}
+
+
+
+
+
+
+// get full process entered in work process table
+$tpt = 0;
+$sql_get_work_process = "SELECT   wp.qty,wp.process_id,wp.work_time_per_unit,p.process_name,pt.part_name FROM work_process wp 
+left join parts_tbl pt on pt.part_id = wp.part_id
+left join process_wel_tbl pwt on pwt.process_id = wp.process_id
+left join jaysan_process p on p.process_id = pwt.process
+ where wp.work_id = $work_done_id";
+$result_work_process = $conn->query($sql_get_work_process);
+if ($result_work_process->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result_work_process)) {
+        $rows[] = $r;
+        $tpt += $r['work_time_per_unit'] * $r['qty'];
+    }
+    $result_json['work_process'] = $rows;
+    
+} else {
+ $result_json['work_process'] = [];
+   
+}
  
 
   
+$total_wtime = $total_process_entry_time + $totalMinutes;
+$total_btime = $total_break_entry_time + $total_break_duration_minutes;
+
+$actual_work_time = $total_wtime - $total_btime;
+
+$result_json['total_entry_time'] = $total_process_entry_time;
+$result_json['total_current_work_time'] = $totalMinutes;
+$result_json['total_break_entry_time'] = $total_break_entry_time;
+$result_json['total_current_break_time'] = $total_btime;
+$result_json['total_work_time'] = $total_wtime;
+$result_json['total_break_time'] = $total_btime;
+$result_json['total_process_entry_time'] = $tpt;
+$result_json['actual_work_time'] = $actual_work_time;
 
 
+if($actual_work_time < $tpt) {
+    $result_json['final_status'] = "less_time ";
+    $result_json['time_info'] = 0;
 
+} else if($actual_work_time > $tpt) {
+    $free_time = $actual_work_time - $tpt;
+    $result_json['final_status'] = "free time";
+    $result_json['time_info'] = $free_time;
+} else {
+    $result_json['final_status'] = "on_time";
+     $result_json['time_info'] = 0;
+}
 
-
-
+$result_json['message'] = "success";
+http_response_code(200);
+echo json_encode($result_json);
+$conn->close();
  
 
 
