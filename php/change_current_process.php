@@ -1,14 +1,11 @@
 <?php
  include 'db_head.php';
 
-
-$emp_id = test_input($_POST['emp_id']);
+$work_id  = test_input($_POST['work_id']);
 $current_process_id = test_input($_POST['current_process_id']);
 $current_machine_id = test_input($_POST['current_machine_id']);
 
 
- 
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -18,13 +15,17 @@ return $data;
 }
 
 
- $sql = "INSERT INTO work_done_table (emp_id,start_date,current_process_id,current_machine_id) VALUES ($emp_id, NOW(), $current_process_id, $current_machine_id)";
 
-  if ($conn->query($sql) === TRUE) {
-   echo "ok";
-  } else {
+$sql = "UPDATE work_done_table SET  current_process_id = $current_process_id, current_machine_id = $current_machine_id WHERE work_id= $work_id";
+  if ( $conn->query($sql) === TRUE) {
+  } 
+   else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
+
+
+
+
 $conn->close();
 
  ?>

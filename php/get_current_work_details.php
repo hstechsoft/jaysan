@@ -16,9 +16,11 @@ return $data;
 }
 
 require __DIR__ . '/get_current_work_info.php';
-
-$work_done_id = (int) (current_info($conn,(int) $emp_id)['work_done_id'] ?? 0);
+$curent_work_info = current_info($conn, $emp_id);
+$work_done_id = (int) ($curent_work_info['work_done_id'] ?? 0);
 $result_display['work_done_id'] = $work_done_id;
+$result_display['current_process_id'] = (int) ($curent_work_info['current_process_id'] ?? 0);
+$result_display['current_machine_id'] = (int) ($curent_work_info['current_machine_id'] ?? 0);
 
 
 // get start time from work_done_table if work_done_id is available
