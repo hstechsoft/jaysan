@@ -264,7 +264,7 @@ else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
     
     $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
-    $result_json['sql'] = $sql_insert_qr_work_entry;
+  
 
     if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
         $conn->rollback();
@@ -329,7 +329,7 @@ $remaining = $qty_to_consume;
 $batch_id = "j".$work_done_id;
     // insert output stock for the process part
     $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
-$result_json['sql_insert_output'] = $sql_insert_output;
+
     if ($conn->query($sql_insert_output) === TRUE) {
 
     } else {
