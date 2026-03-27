@@ -23,6 +23,7 @@ if ($result_work_done->num_rows > 0) {
     $current_machine_id = $row_work_done['current_machine_id'];
 } else {
    return (array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
+   echo json_encode(array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
 }
 
 

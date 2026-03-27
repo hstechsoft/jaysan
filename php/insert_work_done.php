@@ -1,12 +1,18 @@
 <?php
+
  include 'db_head.php';
 $emp_id = test_input($_POST['emp_id']);
-$qr_work_id = test_input($_POST['qr_work_id']);
+$qr_work_id = test_input($_POST['qr_work_id']) ;
 $break_time_array = json_decode($_POST['break_time_array'], true);
-$process_part_array = json_decode($_POST['process_part_array'], true);
 $godown_id = test_input($_POST['godown_id']);
+$process_part_array = json_decode($_POST['process_part_array'], true);
 $dep_id = test_input($_POST['dep_id']);
 $sec_id = test_input($_POST['sec_id']);
+
+if($qr_work_id == '')
+{
+    $qr_work_id = 0;
+}
 
 
 function test_input($data) {
@@ -28,7 +34,7 @@ if(!is_array($break_time_array) || empty($break_time_array)) {
 if(!is_array($process_part_array) || empty($process_part_array)) {
   $conn->close();
   $result_json['message'] = "Process part array is required and should be a non-empty array.";
-    echo json_encode($result_json);
+   echo json_encode($result_json);
     exit;
 }
 require __DIR__ . '/get_current_work_info.php';
@@ -46,7 +52,7 @@ $day_start_time = $curent_work_info['day_start_time'];
 $current_process_start_time = $curent_work_info['start_time'];
 $result_json['current_work_info'] = $curent_work_info;
 
-$production_id = 0;
+$production_id = 'NULL';
 // if qr_work_id is not null then get current sts 
 if($qr_work_id > 0) {
 $sql_get_sts_qr = "SELECT production_id from qr_work_entry where qr_work_id = $qr_work_id and production_id is not null and work_sts = 'in-process'";
@@ -63,11 +69,13 @@ if ($result_qr_sts->num_rows > 0) {
   $total_work_duration_minutes = 0;
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
-if($production_id > 0) {
+if($production_id > 0 && $production_id != 'NULL') {
     $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id;";
+$result_json['sql_get_all_qr_time'] = $sql_get_all_qr_time;
+$result_json['production_id'] = $production_id;
     $result_qr_time = $conn->query($sql_get_all_qr_time);
   
     if ($result_qr_time->num_rows > 0) {
@@ -98,7 +106,9 @@ if(count($break_time_array) > 0) {
 // calcaulate total work time with break
 $day_start =  new DateTime($current_process_start_time);
 $now = new DateTime();
-
+$result_json['current_process_start_time'] = $current_process_start_time;
+$result_json['now'] = $now->format('Y-m-d H:i:s');
+$result_json['time_zone'] = date_default_timezone_get();
 $interval = $day_start->diff($now);
 
 $totalMinutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i + ($interval->s / 60);
@@ -141,6 +151,7 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id
 
         if($remaining < 0) {
             $result_json['message'] = "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty']);
+           
             echo json_encode($result_json);
             $conn->close();
             exit;
@@ -167,14 +178,16 @@ foreach($process_part_array as $process_part) {
      $required_qty = $process_part['required_qty'];
    
 $get_proess_time_sql = "SELECT min_time, max_time FROM work_time_master WHERE ori_process_id = $process_id";
+
 $result_process_time = $conn->query($get_proess_time_sql);
 if ($result_process_time->num_rows > 0) {
+     $row = $result_process_time->fetch_assoc();
     $process_time_array[] = [
         "process_id" => $process_id,
-        "min_time" => $result_process_time->fetch_assoc()['min_time'],
-        "max_time" => $result_process_time->fetch_assoc()['max_time']
+        "min_time" => $row['min_time'],
+        "max_time" => $row['max_time']
     ];
-    $row = $result_process_time->fetch_assoc();
+   
     $total_min_time += $row['min_time'] * $required_qty;
     $total_max_time += $row['max_time'] * $required_qty;
 }
@@ -242,9 +255,10 @@ if($qr_work_id > 0) {
 }
 else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
-    echo $process_id;
+    
     $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
-    echo $sql_insert_qr_work_entry;
+    $result_json['sql'] = $sql_insert_qr_work_entry;
+
     if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
         $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
         echo json_encode($result_json);
