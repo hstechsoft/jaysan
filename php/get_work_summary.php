@@ -70,12 +70,13 @@ if ($result_qr_sts->num_rows > 0) {
   $total_break_duration_minutes = 0;
   $totalMinutes = 0;
 // if production_id > 0 all time for that production 
+// if production id is above 0 then its qr work now there is no break time so we calculate all time as work time
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT JSON_ARRAYAGG(JSON_OBJECT('start_time',start_time,'end_time',ifnull(end_time, now()),'duration_minutes', TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW())),'work_sts', work_sts)) AS qr_time_array, sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id;";
-$result_json['sql_get_all_qr_time'] = $sql_get_all_qr_time;
+
 $result_json['production_id'] = $production_id;
     $result_qr_time = $conn->query($sql_get_all_qr_time);
   
@@ -122,8 +123,10 @@ $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
     }
 
-
+// now we have total work time ,total break time, total time
 // check there enough bom stock for the process part
+$stock_zero_count = 0;
+$stcok_zero_array = [];
 foreach($process_part_array as $process_part) {
   
     $required_qty = $process_part['required_qty'];
@@ -149,23 +152,41 @@ left join jaysan_process jpre_process on jpre_process.process_id = iwp.previous_
  
 
         if($remaining < 0) {
-            $result_json['message'] = "Not enough stock for part name: " . $row['part_name'] . " (part ID: " . $row['input_part_id'] . "). Required: $consume_qty, Available: " . ($row['total_stock_qty']);
-           
-            echo json_encode($result_json);
-            $conn->close();
-            exit;
+            $stock_zero_count++;
+$stcok_zero_array[] = [
+    "process_name" => $row['inprocess'],
+    "part_name" => $row['part_name'],
+    "part_id" => $row['input_part_id'],
+    "required_qty" => $consume_qty,
+    "available_qty" => $row['total_stock_qty']
+];
+            
         }
 
         }
     } else {
-        $result_json['message'] = "No stock information found for part name: " . $row['part_name'] . " (part ID: " . $row['input_part_id'] . ").";
-        echo json_encode($result_json);
-        $conn->close();
-        exit;
+        $stock_zero_count++;
+        $stcok_zero_array[] = [
+    "process_name" => $row['inprocess'],
+    "part_name" => $row['part_name'],
+    "part_id" => $row['input_part_id'],
+    "required_qty" => $consume_qty,
+    "available_qty" => 0
+];
+       
     }
 
 
     
+}
+
+
+if($stock_zero_count > 0) {
+    $result_json['message'] = "Insufficient stock for some parts.";
+    $result_json['stock_issue'] = $stcok_zero_array;
+    echo json_encode($result_json);
+    $conn->close();
+    exit;
 }
 
 $total_min_time = 0;
@@ -238,15 +259,7 @@ if($total_work_duration_minutes > $total_max_time) {
 
  
 
-    // $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit) VALUES ($work_done_id,$pr_id, $pr_time)";
-    // if ($conn->query($insert_work_process_sql) !== TRUE) {
-    //     
-    //     $result_json['message'] = "Error inserting work process: " . $conn->error;
-    //     echo json_encode($result_json);
-    //     $conn->close();
-    //     exit; 
 
-    // }
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
@@ -348,11 +361,11 @@ $total_btime = $total_break_entry_time + $total_break_duration_minutes;
 $actual_work_time = $total_wtime - $total_btime;
 
 $result_json['total_entry_time'] = $total_process_entry_time;
-$result_json['total_current_work_time'] = $totalMinutes;
+$result_json['total_current_work_time'] = $total_work_duration_minutes;
 $result_json['total_break_entry_time'] = $total_break_entry_time;
-$result_json['total_current_break_time'] = $total_btime;
-$result_json['total_work_time'] = $total_wtime;
-$result_json['total_break_time'] = $total_btime;
+$result_json['total_current_break_time'] = $total_break_duration_minutes;
+$result_json['total_work_time_both'] = $total_wtime;
+$result_json['total_break_time_both'] = $total_btime;
 $result_json['total_process_entry_time'] = $tpt;
 $result_json['actual_work_time'] = $actual_work_time;
 

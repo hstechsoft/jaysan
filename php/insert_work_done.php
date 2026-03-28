@@ -175,6 +175,35 @@ $total_min_time = 0;
 $total_max_time = 0;
 $free_time = 0;
 $process_time_array = [];
+$current_work_id = 0;
+
+if($qr_work_id > 0) {
+    $current_work_id = $qr_work_id;
+    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
+    if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
+        $conn->rollback();
+        $result_json['message'] = "Error updating QR work entry: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->close();
+        exit; 
+    }
+}
+else {
+    // insert new entry in qr_work_entry with work sts as finished and end time as now
+   
+    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
+   $current_work_id = $conn->insert_id;
+
+    if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
+        $conn->rollback();
+        $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->close();
+        exit; 
+    }
+}
+
+
 foreach($process_part_array as $process_part) {
     $process_id = $process_part['process_id'];
      $required_qty = $process_part['required_qty'];
@@ -220,7 +249,7 @@ if($total_work_duration_minutes > $total_max_time) {
     $pr_id = $process_time['process_id'];
     $pr_time = $process_time['max_time'];
     $required_qty1 = $process_time['required_qty'];
-    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1)";
+    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
     if ($conn->query($insert_work_process_sql) !== TRUE) {
         $conn->rollback();
         $result_json['message'] = "Error inserting work process: " . $conn->error;
@@ -240,7 +269,7 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
         $pr_id = $process_time['process_id'];
         $pr_time = $process_time['min_time'] + $time_to_distribute;
         $required_qty1 = $process_time['required_qty'];
-        $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1)";
+        $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
         if ($conn->query($insert_work_process_sql) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error inserting work process: " . $conn->error;
@@ -255,30 +284,7 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
 }
 
 // update or insert qr_work_entry with end time and work sts as completed for the given qr_work_id
-if($qr_work_id > 0) {
-    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
-    if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
-        $conn->rollback();
-        $result_json['message'] = "Error updating QR work entry: " . $conn->error;
-        echo json_encode($result_json);
-        $conn->close();
-        exit; 
-    }
-}
-else {
-    // insert new entry in qr_work_entry with work sts as finished and end time as now
-    
-    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
-  
 
-    if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
-        $conn->rollback();
-        $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
-        echo json_encode($result_json);
-        $conn->close();
-        exit; 
-    }
-}
 
 // bom stock check  done. now reduce bom input and add output to stock based on process_part_array and process_id
 
