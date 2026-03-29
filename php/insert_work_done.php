@@ -192,15 +192,18 @@ else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
    
     $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
-   $current_work_id = $conn->insert_id;
-
-    if ($conn->query($sql_insert_qr_work_entry) !== TRUE) {
+      if ($conn->query($sql_insert_qr_work_entry) === TRUE) {
+           $current_work_id = $conn->insert_id;
+           $result_json['current_work_id'] = $current_work_id;
+      }
+   else {
         $conn->rollback();
         $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
         echo json_encode($result_json);
         $conn->close();
         exit; 
     }
+    
 }
 
 
@@ -282,6 +285,95 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
     }
 }
 }
+
+
+if($production_id > 0 && $production_id != 'NULL')
+    {
+$sql_get_time = "with work_details as (SELECT
+    qr_work_entry.*,
+    work_process.qty,
+    work_process.work_time_per_unit,
+    sum(
+        work_process.qty * work_process.work_time_per_unit
+    ) as total_process_time,
+    TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) as process_duration
+ 
+FROM qr_work_entry
+    left join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
+WHERE
+    production_id = $production_id
+GROUP BY
+    qr_work_entry.qr_work_id),
+    summary as(SELECT work_details.*,
+    sum(total_process_time) over (PARTITION BY production_id) as cumulative_process_time,
+    sum(process_duration) over (ORDER  BY qr_work_id) as running_process_time
+     FROM work_details ORDER BY qr_work_id),
+
+    summary1 as(SELECT summary.*,cumulative_process_time-(running_process_time-process_duration) as ftf FROM summary)
+     SELECT summary1.qr_work_id,if(ftf > 0, if(cumulative_process_time - running_process_time > 0 ,0,  running_process_time - cumulative_process_time),process_duration) as free_time FROM summary1";
+$result_time = $conn->query($sql_get_time);
+if ($result_time->num_rows > 0) {
+    while($row = $result_time->fetch_assoc()) {
+        $qr_id = $row['qr_work_id'];
+        $free_time = $row['free_time'];
+        if($free_time < 0) {
+            $free_time = 0;
+        }
+        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        if ($conn->query($sql_update_free_time) !== TRUE) {
+            $conn->rollback();
+            $result_json['message'] = "Error updating free time: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->close();
+            exit; 
+        }
+    }
+}
+    }
+    else
+        {
+$sql_get_time = "  SELECT  TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) as process_duration,qr_work_entry.qr_work_id,
+    sum(work_time_per_unit*qty) as total_work_time, 
+    if(TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) - sum(work_time_per_unit*qty) > 0,  (TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time FROM qr_work_entry 
+     LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
+     WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
+$result_time = $conn->query($sql_get_time);
+if ($result_time->num_rows > 0) {
+    while($row = $result_time->fetch_assoc()) {
+        $qr_id = $row['qr_work_id'];
+        $free_time = $row['free_time'];
+        if($free_time < 0) {
+            $free_time = 0;
+        }
+        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        if ($conn->query($sql_update_free_time) !== TRUE) {
+            $conn->rollback();
+            $result_json['message'] = "Error updating free time: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->close();
+            exit; 
+        }
+    }
+}
+
+
+        }
 
 // update or insert qr_work_entry with end time and work sts as completed for the given qr_work_id
 
