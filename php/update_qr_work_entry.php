@@ -5,7 +5,14 @@ $qr_work_id = test_input($_POST['qr_work_id']);
 $work_update_sts = test_input($_POST['work_update_sts']);
 $reason = test_input($_POST['reason']);
 
-
+ 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+$data = "'".$data."'";
+return $data;
+}
 if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_work_id == "''" || $work_update_sts == "''"){
     echo "Error: Invalid input.";
     $conn->close();
@@ -36,21 +43,23 @@ if ($result_check_work_sts->num_rows > 0) {
     exit; 
 }
 
- 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
+// check if there is in-process entry for emp and work_done_id
+
+$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE ` work_done_id = $work_done_id and work_sts = 'in-process'";
+$result_check_work_sts = $conn->query($sql_check_work_sts);
+if ($result_check_work_sts->num_rows > 0 && $work_update_sts == "'in-process'") {
+    echo "Error: There is already an in-process entry for this work done.";
+    $conn->close();
+    exit;
 }
+
  $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
  
 if($work_update_sts == "'in-process'") {
     $sql_update_sts = "insert into qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time) values ($emp_id, $production_id, $sec_id, $work_done_id, 'in-process', NOW())";
 }
  
-    echo $sql_update_sts;
+   
  
   if ($conn->query($sql_update_sts) === TRUE) {
    echo "ok";
