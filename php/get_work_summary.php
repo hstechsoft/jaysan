@@ -536,7 +536,7 @@ $result_json['report'] = $rows;
 $total_wtime = $total_process_entry_time;
 $total_btime = $total_break_entry_time ;
 
-$actual_work_time = $total_wtime - $total_btime - $total_qr_time;
+$actual_work_time = $total_wtime - ($total_btime + $total_qr_time);
 
 $result_json['total_entry_time'] = $total_process_entry_time;
 
