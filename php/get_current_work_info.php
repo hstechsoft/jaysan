@@ -12,7 +12,12 @@ $start_time= null;
 $day_start_time = null;
 $current_process_id = null;
 $current_machine_id = null;
-$sql_work_done = "SELECT work_id,start_date,current_process_id,current_machine_id from work_done_table where emp_id = $emp_id and end_date is null limit 1 ";
+$part_id = null;
+$godown_id = null;
+$dep_id = null;
+$sec_id = null;
+
+$sql_work_done = "SELECT * from work_done_table where emp_id = $emp_id and end_date is null limit 1 ";
 $result_work_done = $conn->query($sql_work_done);
 if ($result_work_done->num_rows > 0) {
     $row_work_done = $result_work_done->fetch_assoc();
@@ -21,9 +26,14 @@ if ($result_work_done->num_rows > 0) {
     $day_start_time = $row_work_done['start_date'];
     $current_process_id = $row_work_done['current_process_id'];
     $current_machine_id = $row_work_done['current_machine_id'];
+    $part_id = $row_work_done['part_id'];
+    $godown_id = $row_work_done['godown_id'];
+    $dep_id = $row_work_done['dep_id'];
+    $sec_id = $row_work_done['sec_id'];
+
 } else {
-   return (array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
-   echo json_encode(array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
+   return (array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id,"day_start_time" => $day_start_time, "part_id" => $part_id, "godown_id" => $godown_id, "dep_id" => $dep_id, "sec_id" => $sec_id));
+//    echo json_encode(array("start_time" => $start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
 }
 
 
@@ -47,7 +57,7 @@ if ($result->num_rows > 0) {
 
 
 
-return (array("start_time" => $start_time, "day_start_time" => $day_start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id));
+return (array("start_time" => $start_time, "day_start_time" => $day_start_time, "work_done_id" => $work_done_id, "current_process_id" => $current_process_id, "current_machine_id" => $current_machine_id, "part_id" => $part_id, "godown_id" => $godown_id, "dep_id" => $dep_id, "sec_id" => $sec_id));
 
 
 

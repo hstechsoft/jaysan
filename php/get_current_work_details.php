@@ -21,26 +21,32 @@ $work_done_id = (int) ($curent_work_info['work_done_id'] ?? 0);
 $result_display['work_done_id'] = $work_done_id;
 $result_display['current_process_id'] = (int) ($curent_work_info['current_process_id'] ?? 0);
 $result_display['current_machine_id'] = (int) ($curent_work_info['current_machine_id'] ?? 0);
+$result_display['part_id'] = (int) ($curent_work_info['part_id'] ?? 0);
+$result_display['godown_id'] = (int) ($curent_work_info['godown_id'] ?? 0);
+$result_display['dep_id'] = (int) ($curent_work_info['dep_id'] ?? 0);
+$result_display['sec_id'] = (int) ($curent_work_info['sec_id'] ?? 0);
+$result_display['day_start_time'] = $curent_work_info['day_start_time'] ?? null;
+$result_display['start_time'] = $curent_work_info['start_time'] ?? null;
 
 
 // get start time from work_done_table if work_done_id is available
-if ($work_done_id) {
-$sql_start_time = "SELECT date_time_only(start_date) as start_date FROM work_done_table WHERE work_id = $work_done_id";
-$result_start_time = $conn->query($sql_start_time);
-if ($result_start_time->num_rows > 0) {
-    $row = $result_start_time->fetch_assoc();
-    $result_display['start_time'] = $row['start_date'];
-} else {
-    $result_display['start_time'] = null;
-}
-} else {
-    $result_display['start_time'] = null;
-}
+// if ($work_done_id) {
+// $sql_start_time = "SELECT date_time_only(start_date) as start_date FROM work_done_table WHERE work_id = $work_done_id";
+// $result_start_time = $conn->query($sql_start_time);
+// if ($result_start_time->num_rows > 0) {
+//     $row = $result_start_time->fetch_assoc();
+//     $result_display['start_time'] = $row['start_date'];
+// } else {
+//     $result_display['start_time'] = null;
+// }
+// } else {
+//     $result_display['start_time'] = null;
+// }
 
 // paused work entries
 
 $sql_paused_works = "with paused_summary as (
-    SELECT max(qr_work_id) as qr_work_id  from qr_work_entry where work_sts = 'paused' and emp_id = $emp_id and work_done_id = $work_done_id and production_id  not in (SELECT production_id FROM qr_work_entry WHERE work_sts = 'in-process' AND emp_id = $emp_id AND work_done_id = $work_done_id) GROUP BY production_id
+    SELECT max(qr_work_id) as qr_work_id  from qr_work_entry where work_sts = 'paused' and emp_id = $emp_id and work_done_id = $work_done_id and production_id  not in (SELECT production_id FROM qr_work_entry WHERE (work_sts = 'in-process' or work_sts = 'finished') AND emp_id = $emp_id AND work_done_id = $work_done_id AND production_id is not null) GROUP BY production_id
 )
 
 SELECT JSON_ARRAYAGG(JSON_OBJECT(
