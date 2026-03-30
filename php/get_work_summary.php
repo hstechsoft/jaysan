@@ -154,9 +154,10 @@ foreach($process_part_array as $process_part) {
     $process_id = $process_part['process_id'];
     $machine_id = $process_part['machine_id'];
     $part_id = $process_part['part_id'];
-    $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,if(iwp.input_part_id = 0,$part_id,iwp.input_part_id) as input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
+    $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,if(iwp.input_part_id = 0,$part_id,iwp.input_part_id) as input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess,jp_in.process_name as pre_process FROM process_wel_tbl pwt 
 inner join input_wel_parts iwp on iwp.process_id = pwt.process_id
 inner join jaysan_process jp on jp.process_id = pwt.process
+left join jaysan_process jp_in on jp_in.process_id = iwp.previous_process_id
 left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) and if(iwp.input_part_id = 0,$part_id,iwp.input_part_id) = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
 left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.machine_id = $machine_id
  WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
@@ -179,7 +180,7 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.ma
               if($remaining < 0) {
             $stock_zero_count++;
 $stcok_zero_array[] = [
-    "process_name" => $row['inprocess'],
+    "process_name" => $row['pre_process'],
     "part_name" => $row['part_name'],
     "part_id" => $row['input_part_id'],
     "required_qty" => $consume_qty,
@@ -192,7 +193,7 @@ $stcok_zero_array[] = [
     } else {
         $stock_zero_count++;
         $stcok_zero_array[] = [
-    "process_name" => $row['inprocess'],
+    "process_name" => $row['pre_process'],
     "part_name" => $row['part_name'],
     "part_id" => $row['input_part_id'],
     "required_qty" => $consume_qty,
