@@ -110,7 +110,7 @@ if(count($break_time_array) > 0) {
     $total_break_duration_minutes += $mins;
     }
 }
- $result_json['total_work_duration_minutes11'] = $total_work_duration_minutes;
+ $result_json['total_work_duration_minutes11'] = $total_break_duration_minutes;
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
 $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
