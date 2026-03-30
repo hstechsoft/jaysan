@@ -39,7 +39,11 @@ if ($result_start_time->num_rows > 0) {
 
 // paused work entries
 
-$sql_paused_works = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
+$sql_paused_works = "with paused_summary as (
+    SELECT max(qr_work_id) as qr_work_id  from qr_work_entry where work_sts = 'paused' and emp_id = $emp_id and work_done_id = $work_done_id GROUP BY production_id
+)
+
+SELECT JSON_ARRAYAGG(JSON_OBJECT(
         'start_time', qr.start_time,
         'end_time', qr.end_time,
         'reason', qr.reason,
@@ -51,7 +55,8 @@ $sql_paused_works = "SELECT JSON_ARRAYAGG(JSON_OBJECT(
     )) as work_entries,qr.work_sts
 FROM  qr_work_entry qr
 left join machine_production_taken mpt on qr.production_id = mpt.production_id
- WHERE   work_sts = 'paused'    and  qr.emp_id = $emp_id GROUP BY qr.work_sts";
+inner join paused_summary on qr.qr_work_id = paused_summary.qr_work_id
+ WHERE   work_sts = 'paused'     GROUP BY qr.work_sts";
 $result_paused_works= $conn->query($sql_paused_works);
 if ($result_paused_works->num_rows > 0) {
     $rows = array();
