@@ -186,7 +186,8 @@ $stcok_zero_array[] = [
     "part_name" => $row['part_name'],
     "part_id" => $row['input_part_id'],
     "required_qty" => $consume_qty,
-    "available_qty" => $row['total_stock_qty']
+    "available_qty" => $row['total_stock_qty'],
+    "previous_process_id" => $row['previous_process_id']
 ];
             
         }
@@ -199,7 +200,8 @@ $stcok_zero_array[] = [
     "part_name" => $row['part_name'],
     "part_id" => $row['input_part_id'],
     "required_qty" => $consume_qty,
-    "available_qty" => 0
+    "available_qty" => 0,
+    "previous_process_id" => $row['previous_process_id']
 ];
        
     }
