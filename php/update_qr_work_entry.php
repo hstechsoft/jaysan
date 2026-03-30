@@ -46,7 +46,7 @@ return $data;
 }
  $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
  
-if($work_update_sts == "'in-process'"){ {
+if($work_update_sts == "'in-process'") {
     $sql_update_sts = "insert into qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time) values ($emp_id, $production_id, $sec_id, $work_done_id, 'in-process', NOW())";
 }
  
