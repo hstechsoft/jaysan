@@ -409,24 +409,24 @@ if ($result_time->num_rows > 0) {
 
 
     // insert breaks 
-    if($production_id > 0)
-        {
-    foreach($break_time_array as $break_time) {
-       $break_miutes = $break_time['break_minutes'];
-        $break_id = $break_time['break_id'] ?? 'NULL';
-        $sql_insert_break = "INSERT INTO work_break (ext_id, break_time, current_work_id,work_id) VALUES ($break_id, $break_miutes, $current_work_id, $work_done_id)";
+    // if($production_id > 0)
+    //     {
+    // foreach($break_time_array as $break_time) {
+    //    $break_miutes = $break_time['break_minutes'];
+    //     $break_id = $break_time['break_id'] ?? 'NULL';
+    //     $sql_insert_break = "INSERT INTO work_break (ext_id, break_time, current_work_id,work_id) VALUES ($break_id, $break_miutes, $current_work_id, $work_done_id)";
         
-        if ($conn->query($sql_insert_break) === TRUE) {
-        } else {
-            $result_json['message'] = "Error inserting break time: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
+    //     if ($conn->query($sql_insert_break) === TRUE) {
+    //     } else {
+    //         $result_json['message'] = "Error inserting break time: " . $conn->error;
+    //         echo json_encode($result_json);
+    //         $conn->rollback();
+    //         $conn->close();
+    //         exit;
 
-        }
-    }
-        }
+    //     }
+    // }
+    //     }
 
 
 
