@@ -143,6 +143,7 @@ $result_json['total_work_minutes'] = $total_work_duration_minutes;
 $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
     }
+    $result_json['total_work_duration_minutes11'] = $total_work_duration_minutes;
 $consumption = [];
 $stock_zero_count = 0;
 $stcok_zero_array = [];
@@ -413,7 +414,7 @@ if ($result_time->num_rows > 0) {
         if($free_time < 0) {
             $free_time = 0;
         }
-        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        $sql_update_free_time = "update qr_work_entry set free_t    ime = $free_time where qr_work_id = $qr_id";
         if ($conn->query($sql_update_free_time) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error updating free time: " . $conn->error;
