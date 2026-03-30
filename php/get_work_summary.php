@@ -411,7 +411,7 @@ if ($result_time->num_rows > 0) {
        $break_miutes = $break_time['break_minutes'];
         $break_id = $break_time['break_id'] ?? 'NULL';
         $sql_insert_break = "INSERT INTO work_break (ext_id, break_time, current_work_id,work_id) VALUES ($break_id, $break_miutes, $current_work_id, $work_done_id)";
-        $result_json['sql_insert_break'] = $sql_insert_break;
+        
         if ($conn->query($sql_insert_break) === TRUE) {
         } else {
             $result_json['message'] = "Error inserting break time: " . $conn->error;

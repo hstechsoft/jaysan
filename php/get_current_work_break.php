@@ -37,7 +37,7 @@ if (!$start_time) {
 SELECT 
 d.dt as dates,
 JSON_ARRAYAGG(JSON_OBJECT('ex_time',ex_time,
-                             
+                             'ex_id',ext_id,
                           'ex_name',ex_name,
                           'start_datetime',TIMESTAMP(d.dt, b.start_time),
                           'end_datetime', TIMESTAMP(d.dt, b.end_time) 
