@@ -270,6 +270,7 @@ if($total_work_duration_minutes > $total_max_time) {
     // now total work time greater then max time so we assigin process time as max time and calulate extra time as total work time - max time
     
     $free_time = $total_work_duration_minutes - $total_max_time;
+    $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
     //  insert into work_process
     $pr_id = $process_time['process_id'];
@@ -290,6 +291,7 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
     // this is correct on time  so we sum all min time and that time we reduce from total work time then we calulate excess time and distubute to all process
     $excess_time = $total_work_duration_minutes - $total_min_time;
     $time_to_distribute = $excess_time/count($process_time_array);
+    $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
         //  insert into work_process
         $pr_id = $process_time['process_id'];
