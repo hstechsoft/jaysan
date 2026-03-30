@@ -44,14 +44,14 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
-
+ $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
+ 
 if($work_update_sts == "'in-process'") {
     $sql_check_work_sts = "insert into qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time) values ($emp_id, $production_id, $sec_id, $work_done_id, 'in-process', NOW())";
 }
-   else {
-    $sql_check_work_sts = "update qr_work_entry set work_sts = 'paused', end_time = NOW() where qr_work_id = $qr_work_id";
- $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
-   }
+ 
+    
+ 
   if ($conn->query($sql_update_sts) === TRUE) {
    echo "ok";
   } else {
