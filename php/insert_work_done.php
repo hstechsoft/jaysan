@@ -66,6 +66,17 @@ if ($result_qr_sts->num_rows > 0) {
    exit;
 }
 }
+else{
+    // qr id not there so this is normal work before that is ther any qr work in process
+$sql_get_sts_qr = "SELECT 1 from qr_work_entry where work_done_id = $work_done_id and production_id is not null and work_sts = 'in-process' order by qr_work_id desc limit 1";
+$result_qr_sts = $conn->query($sql_get_sts_qr);
+if ($result_qr_sts->num_rows > 0) {
+    $result_json['message'] = "There is an active QR work entry for this work done ID. Please complete that work entry before submitting this work.";
+    echo json_encode($result_json);
+    $conn->close();
+    exit;
+}
+}
   $total_work_duration_minutes = 0;
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
@@ -103,6 +114,16 @@ if(count($break_time_array) > 0) {
     }
 }
 
+$total_qr_time = 0;
+// get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
+$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null";
+$result_production_entry_time = $conn->query($sql_get_production_entry_time);
+if ($result_production_entry_time->num_rows > 0) {
+    while($row = $result_production_entry_time->fetch_assoc()) {
+        $total_qr_time += $row['total_qr_time']; // Convert minutes to seconds
+    }
+}
+
 // calcaulate total work time with break
 $day_start =  new DateTime($current_process_start_time);
 $now = new DateTime();
@@ -115,7 +136,7 @@ $totalMinutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i
 
 $result_json['total_minutes'] = $totalMinutes;
 
-$total_work_duration_minutes = $totalMinutes - $total_break_duration_minutes;
+$total_work_duration_minutes = $totalMinutes - ($total_break_duration_minutes + $total_qr_time);
 $result_json['total_work_minutes'] = $total_work_duration_minutes;
 $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
