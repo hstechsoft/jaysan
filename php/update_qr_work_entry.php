@@ -45,7 +45,7 @@ if ($result_check_work_sts->num_rows > 0) {
 
 // check if there is in-process entry for emp and work_done_id
 
-$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE ` work_done_id = $work_done_id and work_sts = 'in-process'";
+$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE  work_done_id = $work_done_id and work_sts = 'in-process'";
 $result_check_work_sts = $conn->query($sql_check_work_sts);
 if ($result_check_work_sts->num_rows > 0 && $work_update_sts == "'in-process'") {
     echo "Error: There is already an in-process entry for this work done.";
