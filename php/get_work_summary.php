@@ -68,15 +68,13 @@ if ($result_qr_sts->num_rows > 0) {
 }
   $total_work_duration_minutes = 0;
   $total_break_duration_minutes = 0;
-  $totalMinutes = 0;
 // if production_id > 0 all time for that production 
-// if production id is above 0 then its qr work now there is no break time so we calculate all time as work time
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT JSON_ARRAYAGG(JSON_OBJECT('start_time',start_time,'end_time',ifnull(end_time, now()),'duration_minutes', TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW())),'work_sts', work_sts)) AS qr_time_array, sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id;";
-
+$result_json['sql_get_all_qr_time'] = $sql_get_all_qr_time;
 $result_json['production_id'] = $production_id;
     $result_qr_time = $conn->query($sql_get_all_qr_time);
   
@@ -122,23 +120,19 @@ $result_json['total_work_minutes'] = $total_work_duration_minutes;
 $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
     }
+$consumption = [];
 
-// now we have total work time ,total break time, total time
 // check there enough bom stock for the process part
-$stock_zero_count = 0;
-$stcok_zero_array = [];
 foreach($process_part_array as $process_part) {
   
     $required_qty = $process_part['required_qty'];
     $process_id = $process_part['process_id'];
     $machine_id = $process_part['machine_id'];
-    $sql_check_stock = "SELECT concat(ifnull(jpre_process.process_name, ''), ' -> ', pt.part_name) as part_name, ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
+    $sql_check_stock = "SELECT ifnull(SUM(js.qty), 0) as total_stock_qty, wtm.min_time,wtm.max_time, js.godown,js.dep,js.sec, pwt.process_id,iwp.input_part_id,iwp.previous_process_id,iwp.qty,jp.process_name as inprocess FROM process_wel_tbl pwt 
 inner join input_wel_parts iwp on iwp.process_id = pwt.process_id
-inner join parts_tbl pt on pt.part_id = iwp.input_part_id
 inner join jaysan_process jp on jp.process_id = pwt.process
 left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) and iwp.input_part_id = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
 left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.machine_id = $machine_id
-left join jaysan_process jpre_process on jpre_process.process_id = iwp.previous_process_id
  WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
 
     $result_check_stock = $conn->query($sql_check_stock);
@@ -149,50 +143,70 @@ left join jaysan_process jpre_process on jpre_process.process_id = iwp.previous_
           
             $consume_qty = $row['qty'] * $required_qty;
             $remaining = $row['total_stock_qty'] - $consume_qty;
- 
+       $consumption[] = [
+        "part_id" => $row['input_part_id'],
+        "previous_process_id" => $row['previous_process_id'],
+        "qty" => $consume_qty,
+       
+    ];
 
         if($remaining < 0) {
-            $stock_zero_count++;
-$stcok_zero_array[] = [
-    "process_name" => $row['inprocess'],
-    "part_name" => $row['part_name'],
-    "part_id" => $row['input_part_id'],
-    "required_qty" => $consume_qty,
-    "available_qty" => $row['total_stock_qty']
-];
-            
+            $result_json['message'] = "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty']);
+           
+            echo json_encode($result_json);
+            $conn->close();
+            exit;
         }
 
         }
     } else {
-        $stock_zero_count++;
-        $stcok_zero_array[] = [
-    "process_name" => $row['inprocess'],
-    "part_name" => $row['part_name'],
-    "part_id" => $row['input_part_id'],
-    "required_qty" => $consume_qty,
-    "available_qty" => 0
-];
-       
+        $result_json['message'] = "No stock information found for part ID: $part_id.";
+        echo json_encode($result_json);
+        $conn->close();
+        exit;
     }
 
-
-    
 }
 
-
-if($stock_zero_count > 0) {
-    $result_json['message'] = "Insufficient stock for some parts.";
-    $result_json['stock_issue'] = $stcok_zero_array;
-    echo json_encode($result_json);
-    $conn->close();
-    exit;
-}
-
+    try{
+$conn->begin_transaction();
+// get min and max time for the process and multiply with required qty then reduce total_work_duration_minutes
 $total_min_time = 0;
 $total_max_time = 0;
 $free_time = 0;
 $process_time_array = [];
+$current_work_id = 0;
+
+if($qr_work_id > 0) {
+    $current_work_id = $qr_work_id;
+    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
+    if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
+        $conn->rollback();
+        $result_json['message'] = "Error updating QR work entry: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->close();
+        exit; 
+    }
+}
+else {
+    // insert new entry in qr_work_entry with work sts as finished and end time as now
+   
+    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
+      if ($conn->query($sql_insert_qr_work_entry) === TRUE) {
+           $current_work_id = $conn->insert_id;
+           $result_json['current_work_id'] = $current_work_id;
+      }
+   else {
+        $conn->rollback();
+        $result_json['message'] = "Error inserting QR work entry: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->close();
+        exit; 
+    }
+    
+}
+
+
 foreach($process_part_array as $process_part) {
     $process_id = $process_part['process_id'];
      $required_qty = $process_part['required_qty'];
@@ -206,14 +220,15 @@ if ($result_process_time->num_rows > 0) {
     $process_time_array[] = [
         "process_id" => $process_id,
         "min_time" => $row['min_time'],
-        "max_time" => $row['max_time']
+        "max_time" => $row['max_time'],
+        "required_qty" => $required_qty
     ];
    
     $total_min_time += $row['min_time'] * $required_qty;
     $total_max_time += $row['max_time'] * $required_qty;
 }
 else {
-    
+    $conn->rollback();
     $result_json['message'] = "No time information found for process ID: $process_id.";
     echo json_encode($result_json);
     $conn->close();
@@ -221,45 +236,31 @@ else {
 }
 
 if($total_work_duration_minutes < $total_min_time) {
-    
+    $conn->rollback();
 
     $result_json['message'] = "Total work duration is less than the minimum required time for the processes. Total work duration: $total_work_duration_minutes minutes, Minimum required time: $total_min_time minutes.";
     echo json_encode($result_json);
     $conn->close();
     exit; 
 }
-    $work_array = [];
-    $current_process_work_time = 0;
 if($total_work_duration_minutes > $total_max_time) {
     // now total work time greater then max time so we assigin process time as max time and calulate extra time as total work time - max time
     
     $free_time = $total_work_duration_minutes - $total_max_time;
-
     foreach($process_time_array as $process_time) {
     //  insert into work_process
     $pr_id = $process_time['process_id'];
     $pr_time = $process_time['max_time'];
     $required_qty1 = $process_time['required_qty'];
-    $current_process_work_time += $pr_time * $required_qty1;
-    // get process_name 
-    $sql_process_name = "SELECT process_name,$pr_time FROM process_wel_tbl inner join jaysan_process on process_wel_tbl.process = jaysan_process.process_id WHERE process_wel_tbl.process_id = $pr_id";
-    $result_process_name = $conn->query($sql_process_name);
-    if ($result_process_name->num_rows > 0) {
-      $work_array[] = [
-          "process_id" => $pr_id,
-          "process_name" => $result_process_name->fetch_assoc()['process_name'],
-          "process_time" => $pr_time * $required_qty1
-      ];
+    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
+    if ($conn->query($insert_work_process_sql) !== TRUE) {
+        $conn->rollback();
+        $result_json['message'] = "Error inserting work process: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->close();
+        exit; 
+
     }
-    
-    $result_json['free_time'] = $free_time;
-    $result_json['work_status'] = "excess_time";
-    $result_json['work_array'] = $work_array;
-
-
- 
-
-
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
@@ -270,24 +271,154 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
         //  insert into work_process
         $pr_id = $process_time['process_id'];
         $pr_time = $process_time['min_time'] + $time_to_distribute;
-         $sql_process_name = "SELECT process_name,$pr_time FROM process_wel_tbl inner join jaysan_process on process_wel_tbl.process = jaysan_process.process_id WHERE process_wel_tbl.process_id = $pr_id";
-    $result_process_name = $conn->query($sql_process_name);
-    if ($result_process_name->num_rows > 0) {
-      $work_array[] = [
-          "process_id" => $pr_id,
-          "process_name" => $result_process_name->fetch_assoc()['process_name'],
-          "process_time" => $pr_time
-      ];
-    }
-    
-    $result_json['free_time'] = 0;
-    $result_json['work_status'] = "on_time";
-    $result_json['work_array'] = $work_array;
+        $required_qty1 = $process_time['required_qty'];
+        $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
+        if ($conn->query($insert_work_process_sql) !== TRUE) {
+            $conn->rollback();
+            $result_json['message'] = "Error inserting work process: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->close();
+            exit; 
+        }
 
      
     }
 }
 }
+
+
+if($production_id > 0 && $production_id != 'NULL')
+    {
+$sql_get_time = "with work_details as (SELECT
+    qr_work_entry.*,
+    work_process.qty,
+    work_process.work_time_per_unit,
+    sum(
+        work_process.qty * work_process.work_time_per_unit
+    ) as total_process_time,
+    TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) as process_duration
+ 
+FROM qr_work_entry
+    left join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
+WHERE
+    production_id = $production_id
+GROUP BY
+    qr_work_entry.qr_work_id),
+    summary as(SELECT work_details.*,
+    sum(total_process_time) over (PARTITION BY production_id) as cumulative_process_time,
+    sum(process_duration) over (ORDER  BY qr_work_id) as running_process_time
+     FROM work_details ORDER BY qr_work_id),
+
+    summary1 as(SELECT summary.*,cumulative_process_time-(running_process_time-process_duration) as ftf FROM summary)
+     SELECT summary1.qr_work_id,if(ftf > 0, if(cumulative_process_time - running_process_time > 0 ,0,  running_process_time - cumulative_process_time),process_duration) as free_time FROM summary1";
+$result_time = $conn->query($sql_get_time);
+if ($result_time->num_rows > 0) {
+    while($row = $result_time->fetch_assoc()) {
+        $qr_id = $row['qr_work_id'];
+        $free_time = $row['free_time'];
+        if($free_time < 0) {
+            $free_time = 0;
+        }
+        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        if ($conn->query($sql_update_free_time) !== TRUE) {
+            $conn->rollback();
+            $result_json['message'] = "Error updating free time: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->close();
+            exit; 
+        }
+    }
+}
+    }
+    else
+        {
+$sql_get_time = "  SELECT  TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) as process_duration,qr_work_entry.qr_work_id,
+    sum(work_time_per_unit*qty) as total_work_time, 
+    if(TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) - sum(work_time_per_unit*qty) > 0,  (TIMESTAMPDIFF(
+        MINUTE,
+        qr_work_entry.start_time,
+        qr_work_entry.end_time
+    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time FROM qr_work_entry 
+     LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
+     WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
+$result_time = $conn->query($sql_get_time);
+if ($result_time->num_rows > 0) {
+    while($row = $result_time->fetch_assoc()) {
+        $qr_id = $row['qr_work_id'];
+        $free_time = $row['free_time'];
+        if($free_time < 0) {
+            $free_time = 0;
+        }
+        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        if ($conn->query($sql_update_free_time) !== TRUE) {
+            $conn->rollback();
+            $result_json['message'] = "Error updating free time: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->close();
+            exit; 
+        }
+    }
+}
+
+
+        }
+
+// update or insert qr_work_entry with end time and work sts as completed for the given qr_work_id
+
+
+// bom stock check  done. now reduce bom input and add output to stock based on process_part_array and process_id
+
+
+
+
+    // insert breaks 
+    if($production_id > 0)
+        {
+    foreach($break_time_array as $break_time) {
+       $break_miutes = $break_time['break_minutes'];
+        $break_id = $break_time['break_id'] ?? 'NULL';
+        $sql_insert_break = "INSERT INTO work_break (ext_id, break_time, current_work_id,work_id) VALUES ($break_id, $break_miutes, $current_work_id, $work_done_id)";
+        if ($conn->query($sql_insert_break) === TRUE) {
+        } else {
+            $result_json['message'] = "Error inserting break time: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->rollback();
+            $conn->close();
+            exit;
+
+        }
+    }
+        }
+
+
+
+
+   
+    $result_json['message'] = "Work done entry and stock updates successful.";
+    
+    }
+
+     catch(Exception $e) {
+        $conn->rollback();
+        $result_json['message'] = "Transaction failed: " . $e->getMessage();
+        echo json_encode($result_json);
+        $conn->close();
+        exit;
+    }
+
+
 
 // get inserted entry
 $sql_report = "WITH qr_summary as (SELECT qr_work_entry.qr_work_id,qr_work_entry.emp_id, qr_work_entry.start_time, qr_work_entry.end_time,qr_work_entry.free_time,qr_work_entry.production_id,qr_work_entry.reason,qr_work_entry.work_sts,
@@ -363,11 +494,11 @@ if($actual_work_time < $tpt) {
 $result_json['message'] = "success";
 http_response_code(200);
 echo json_encode($result_json);
-$conn->close();
+
  
+ $conn->rollback();
 
-
-
+$conn->close();
 
  ?>
 
