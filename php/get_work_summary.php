@@ -144,6 +144,8 @@ $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
     }
 $consumption = [];
+$stock_zero_count = 0;
+$stcok_zero_array = [];
 
 // check there enough bom stock for the process part
 foreach($process_part_array as $process_part) {
@@ -173,22 +175,38 @@ left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.ma
        
     ];
 
-        if($remaining < 0) {
-            $result_json['message'] = "Not enough stock for part ID: " . $row['input_part_id'] . ". Required: $consume_qty, Available: " . ($row['total_stock_qty']);
-           
-            echo json_encode($result_json);
-            $conn->close();
-            exit;
+              if($remaining < 0) {
+            $stock_zero_count++;
+$stcok_zero_array[] = [
+    "process_name" => $row['inprocess'],
+    "part_name" => $row['part_name'],
+    "part_id" => $row['input_part_id'],
+    "required_qty" => $consume_qty,
+    "available_qty" => $row['total_stock_qty']
+];
+            
         }
 
         }
     } else {
-        $result_json['message'] = "No stock information found for part ID: $part_id.";
-        echo json_encode($result_json);
-        $conn->close();
-        exit;
+        $stock_zero_count++;
+        $stcok_zero_array[] = [
+    "process_name" => $row['inprocess'],
+    "part_name" => $row['part_name'],
+    "part_id" => $row['input_part_id'],
+    "required_qty" => $consume_qty,
+    "available_qty" => 0
+];
+       
     }
+}
 
+if($stock_zero_count > 0) {
+    $result_json['message'] = "Insufficient stock for some parts.";
+    $result_json['stock_issue'] = $stcok_zero_array;
+    echo json_encode($result_json);
+    $conn->close();
+    exit;
 }
 
     try{
