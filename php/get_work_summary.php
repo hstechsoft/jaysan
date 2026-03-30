@@ -26,6 +26,7 @@ return $data;
 $result_json = array();
 
 $result_json['process_part_array'] = $process_part_array;
+$result_json['break_time_array'] = $break_time_array;
 // check break_time_array is array and not empty
 if(!is_array($break_time_array) || empty($break_time_array)) {
     $break_time_array = array();
