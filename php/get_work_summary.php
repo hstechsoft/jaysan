@@ -70,7 +70,7 @@ if ($result_qr_sts->num_rows > 0) {
 }
 else{
     // qr id not there so this is normal work before that is ther any qr work in process
-$sql_get_sts_qr = "SELECT 1 from qr_work_entry where work_done_id = $work_done_id and production_id is not null and work_sts = 'in-process' order by qr_work_id desc limit 1";
+$sql_get_sts_qr = "SELECT 1 from qr_work_entry where work_done_id = $work_done_id and production_id is not null and work_sts = 'in-process'   order by qr_work_id desc limit 1";
 $result_qr_sts = $conn->query($sql_get_sts_qr);
 if ($result_qr_sts->num_rows > 0) {
     $result_json['message'] = "There is an active QR work entry for this work done ID. Please complete that work entry before submitting this work.";
@@ -86,7 +86,7 @@ if($production_id > 0 && $production_id != 'NULL') {
     $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
 
 FROM qr_work_entry 
-WHERE production_id = $production_id;";
+WHERE production_id = $production_id and work_done_id = $work_done_id;";
 $result_json['sql_get_all_qr_time'] = $sql_get_all_qr_time;
 $result_json['production_id'] = $production_id;
     $result_qr_time = $conn->query($sql_get_all_qr_time);
@@ -118,7 +118,7 @@ if(count($break_time_array) > 0) {
 
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
-$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null";
+$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
@@ -471,7 +471,7 @@ if ($result_time->num_rows > 0) {
     
     $total_qr_time = 0;
 
-    $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null";
+    $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
