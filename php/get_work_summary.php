@@ -463,17 +463,17 @@ if ($result_report->num_rows > 0) {
 $result_json['report'] = $rows;
 
   
-$total_wtime = $total_process_entry_time + $totalMinutes;
-$total_btime = $total_break_entry_time + $total_break_duration_minutes;
+$total_wtime = $total_process_entry_time ;
+$total_btime = $total_break_entry_time ;
 
 $actual_work_time = $total_wtime - $total_btime;
 
 $result_json['total_entry_time'] = $total_process_entry_time;
-$result_json['total_current_work_time'] = $total_work_duration_minutes;
+
 $result_json['total_break_entry_time'] = $total_break_entry_time;
-$result_json['total_current_break_time'] = $total_break_duration_minutes;
-$result_json['total_work_time_both'] = $total_wtime;
-$result_json['total_break_time_both'] = $total_btime;
+
+$result_json['total_work_time'] = $total_wtime;
+$result_json['total_break_time'] = $total_btime;
 $result_json['total_process_entry_time'] = $tpt;
 $result_json['actual_work_time'] = $actual_work_time;
 
