@@ -423,6 +423,8 @@ $remaining = $qty_to_consume;
     }
 
     // insert breaks 
+    if($production_id > 0)
+        {
     foreach($break_time_array as $break_time) {
        $break_miutes = $break_time['break_minutes'];
         $break_id = $break_time['break_id'] ?? 'NULL';
@@ -437,6 +439,7 @@ $remaining = $qty_to_consume;
 
         }
     }
+        }
 
 
 
