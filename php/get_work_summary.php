@@ -474,12 +474,13 @@ $actual_work_time = $total_wtime - $total_btime;
 
 $result_json['total_entry_time'] = $total_process_entry_time;
 
-$result_json['total_break_entry_time'] = $total_break_entry_time;
+
 
 $result_json['total_work_time'] = $total_wtime;
 $result_json['total_break_time'] = $total_btime;
-$result_json['total_process_entry_time'] = $tpt;
 $result_json['actual_work_time'] = $actual_work_time;
+$result_json['total_process_entry_time'] = $tpt;
+
 $result_json['total_free_time'] = $total_free_time;
 $result_json['total_day_time'] = $total_work_duration;
 
