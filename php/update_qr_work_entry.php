@@ -50,7 +50,7 @@ if($work_update_sts == "'paused'") {
     $sql_update_sts = "insert into qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time) values ($emp_id, $production_id, $sec_id, $work_done_id, 'in-process', NOW())";
 }
  
-    
+    echo $sql_update_sts;
  
   if ($conn->query($sql_update_sts) === TRUE) {
    echo "ok";
