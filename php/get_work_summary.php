@@ -408,7 +408,7 @@ $result_time = $conn->query($sql_get_time);
 if ($result_time->num_rows > 0) {
     while($row = $result_time->fetch_assoc()) {
         $qr_id = $row['qr_work_id'];
-        $free_time = $row['free_time'] - $row['total_qr_time'];
+        $free_time = $row['free_time'] - ($row['total_qr_time'] + $total_break_duration_minutes);
         if($free_time < 0) {
             $free_time = 0;
         }
