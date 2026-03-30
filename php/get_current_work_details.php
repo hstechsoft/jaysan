@@ -40,7 +40,7 @@ if ($result_start_time->num_rows > 0) {
 // paused work entries
 
 $sql_paused_works = "with paused_summary as (
-    SELECT max(qr_work_id) as qr_work_id  from qr_work_entry where work_sts = 'paused' and emp_id = $emp_id and work_done_id = $work_done_id GROUP BY production_id
+    SELECT max(qr_work_id) as qr_work_id  from qr_work_entry where work_sts = 'paused' and emp_id = $emp_id and work_done_id = $work_done_id and production_id  not in (SELECT production_id FROM qr_work_entry WHERE work_sts = 'in-process' AND emp_id = $emp_id AND work_done_id = $work_done_id) GROUP BY production_id
 )
 
 SELECT JSON_ARRAYAGG(JSON_OBJECT(
