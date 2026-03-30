@@ -288,71 +288,48 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
     }
 }
 }
-$total_process_entry_time = 0;
-$total_break_entry_time = 0;
 
- $sql_finished_entries = "SELECT  date_time_only(qr.start_time) as start_time,date_time_only(qr.end_time) as end_time,qr.production_id,qr.qr_work_id,TIMESTAMPDIFF(MINUTE, qr.start_time, qr.end_time) AS time_diff_minutes 
-FROM  qr_work_entry qr 
-WHERE   qr.work_done_id = $work_done_id and qr.work_sts  =  'finished' ";
+// get inserted entry
+$sql_report = "WITH qr_summary as (SELECT qr_work_entry.qr_work_id,qr_work_entry.emp_id, qr_work_entry.start_time, qr_work_entry.end_time,qr_work_entry.free_time,qr_work_entry.production_id,qr_work_entry.reason,qr_work_entry.work_sts,
+JSON_ARRAYAGG(JSON_OBJECT('part_id',work_process.part_id,'qty',work_process.qty,'work_time_per_unit',work_process.work_time_per_unit,'total_time',work_process.qty * work_process.work_time_per_unit,'process_id',work_process.process_id,'process_name',jaysan_process.process_name,'part_name',parts_tbl.part_name)) as process_data,
+JSON_ARRAYAGG(JSON_OBJECT('break_time',work_break.break_time,'ext_id',work_break.ext_id,'ex_name',extra_time_master.ex_name)) as break_data,
+sum(work_process.qty * work_process.work_time_per_unit) as total_process_time,
+sum(work_break.break_time) as total_break_time,
+TIMESTAMPDIFF(MINUTE,qr_work_entry.start_time,qr_work_entry.end_time) as total_time,
+COUNT(work_process.process_id) as total_processes,
+pv.worked_process_data,
+if(pv.production_id>0,JSON_OBJECT('worked_process_data',pv.worked_process_data,'process_total_time',pv.process_total_time,'process_total_time',pv.process_total_time,'production_entry_data',pv.production_entry_data,'total_free_time',pv.total_free_time,'total_proess_count',pv.total_proess_count,'total_qr_work_time',pv.total_qr_work_time,'total_work_count',pv.total_work_count),null) as production_data
 
-$result_finished_entries = $conn->query($sql_finished_entries);
 
-if ($result_finished_entries->num_rows > 0) {
+FROM qr_work_entry
+
+    left join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
+    left join work_break on qr_work_entry.qr_work_id = work_break.current_work_id
+    left join process_wel_tbl on work_process.process_id = process_wel_tbl.process_id
+    left join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
+    LEFT join parts_tbl on work_process.part_id = parts_tbl.part_id
+    left join extra_time_master on work_break.ext_id = extra_time_master.ext_id
+    left join production_details_view pv on qr_work_entry.production_id = pv.production_id
+    WHERE
+   qr_work_entry.work_done_id = $work_done_id group by qr_work_entry.qr_work_id)
+SELECT qr_work_id, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data, total_process_time, total_break_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
+left  join machine_production_taken mpt on qr_summary.production_id = mpt.production_id
+left join assign_product ap on mpt.ass_id = ap.ass_id";
+$result_report = $conn->query($sql_report);
     $rows = array();
-    $rows1 = array();
-    while($r = mysqli_fetch_assoc($result_finished_entries)) {
-        
-        
-   
-
-
-        $rows[] = $r;
-         $total_process_entry_time += $r['time_diff_minutes'];
+    $total_process_entry_time = 0;
+    $total_break_entry_time = 0;
+    $tpt = 0;
+if ($result_report->num_rows > 0) {
+    while($row = $result_report->fetch_assoc()) {
+        $rows[] = $row;
+        $total_process_entry_time += $row['total_time'];
+        $total_break_entry_time += $row['total_break_time'];
+        $tpt += $row['total_process_time'];
     }
-    $result_json['finished_work_entries'] = $rows;
-
-    
-} else {
- $result_json['finished_work_entries'] = [];
-   
 }
 
-// get total break time entered
-$sql_break_entries = "SELECT  sum(break_time) as total_break_time
-FROM  work_break
-WHERE   work_done_id = $work_done_id";
-$result_break_entries = $conn->query($sql_break_entries);
-if ($result_break_entries->num_rows > 0) {
-    $row = $result_break_entries->fetch_assoc();
-    $total_break_entry_time = $row['total_break_time'];
-}
-
-
-
-
-
-
-// get full process entered in work process table
-$tpt = 0;
-$sql_get_work_process = "SELECT   wp.qty,wp.process_id,wp.work_time_per_unit,p.process_name,pt.part_name FROM work_process wp 
-left join parts_tbl pt on pt.part_id = wp.part_id
-left join process_wel_tbl pwt on pwt.process_id = wp.process_id
-left join jaysan_process p on p.process_id = pwt.process
- where wp.work_id = $work_done_id";
-$result_work_process = $conn->query($sql_get_work_process);
-if ($result_work_process->num_rows > 0) {
-    $rows = array();
-    while($r = mysqli_fetch_assoc($result_work_process)) {
-        $rows[] = $r;
-        $tpt += $r['work_time_per_unit'] * $r['qty'];
-    }
-    $result_json['work_process'] = $rows;
-    
-} else {
- $result_json['work_process'] = [];
-   
-}
- 
+$result_json['report'] = $rows;
 
   
 $total_wtime = $total_process_entry_time + $totalMinutes;
