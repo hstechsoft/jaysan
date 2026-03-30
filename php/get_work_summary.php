@@ -106,13 +106,8 @@ else
       
 if(count($break_time_array) > 0) {
     foreach($break_time_array as $break_time) {
-         $start = new DateTime($break_time['start_time']);
-    $end = new DateTime($break_time['end_time']);
-
-    $interval = $start->diff($end);
-
-    $minutes = ($interval->h * 60) + $interval->i + ($interval->s / 60);
-    $total_break_duration_minutes += $minutes;
+    $mins = $break_time['break_minutes'];
+    $total_break_duration_minutes += $mins;
     }
 }
  $result_json['total_work_duration_minutes11'] = $total_work_duration_minutes;
