@@ -438,7 +438,16 @@ if ($result_time->num_rows > 0) {
         $conn->close();
         exit;
     }
+    $total_qr_time = 0;
 
+    $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null";
+$result_production_entry_time = $conn->query($sql_get_production_entry_time);
+if ($result_production_entry_time->num_rows > 0) {
+    while($row = $result_production_entry_time->fetch_assoc()) {
+        $total_qr_time += $row['total_qr_time']; // Convert minutes to seconds
+    }
+}
+$result_json['total_qr_time'] = $total_qr_time;
 
 
 // get inserted entry
@@ -487,11 +496,10 @@ if ($result_report->num_rows > 0) {
 
 $result_json['report'] = $rows;
 
-  
-$total_wtime = $total_process_entry_time ;
+$total_wtime = $total_process_entry_time;
 $total_btime = $total_break_entry_time ;
 
-$actual_work_time = $total_wtime - $total_btime;
+$actual_work_time = $total_wtime - $total_btime - $total_qr_time;
 
 $result_json['total_entry_time'] = $total_process_entry_time;
 
