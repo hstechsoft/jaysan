@@ -13,11 +13,17 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
 }
 
 //  check work sts if in-process it can be pausedd or if pausedd it can be in-processd
-$sql_check_work_sts = "SELECT work_sts FROM qr_work_entry WHERE qr_work_id = $qr_work_id and work_sts IN ('in-process', 'paused')";
+$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE qr_work_id = $qr_work_id and work_sts IN ('in-process', 'paused')";
 $result_check_work_sts = $conn->query($sql_check_work_sts);
 if ($result_check_work_sts->num_rows > 0) {
     $row = $result_check_work_sts->fetch_assoc();
     $current_work_sts = $row['work_sts'];
+    $emp_id = $row['emp_id'];
+    $work_done_id = $row['work_done_id'];
+    $production_id = $row['production_id'];
+    $sec_id = $row['sec_id'];
+
+
     
     if (($work_update_sts == "'paused'" && $current_work_sts != 'in-process') || ($work_update_sts == "'in-process'" && $current_work_sts != 'paused')) {
         echo "Error: Invalid work status transition.";
@@ -39,9 +45,13 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+if($work_update_sts == "'in-process'") {
+    $sql_check_work_sts = "insert into qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time) values ($emp_id, $production_id, $sec_id, $work_done_id, 'in-process', NOW())";
+}
+   else {
+    $sql_check_work_sts = "update qr_work_entry set work_sts = 'paused', end_time = NOW() where qr_work_id = $qr_work_id";
  $sql_update_sts = "UPDATE qr_work_entry SET work_sts = $work_update_sts,end_time = NOW(),reason = $reason WHERE qr_work_id = $qr_work_id";
-
+   }
   if ($conn->query($sql_update_sts) === TRUE) {
    echo "ok";
   } else {
