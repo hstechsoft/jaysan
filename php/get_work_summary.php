@@ -115,7 +115,7 @@ if(count($break_time_array) > 0) {
     $total_break_duration_minutes += $minutes;
     }
 }
-
+ $result_json['total_work_duration_minutes11'] = $total_work_duration_minutes;
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
 $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
@@ -143,7 +143,6 @@ $result_json['total_work_minutes'] = $total_work_duration_minutes;
 $result_json['total_break_minutes'] = $total_break_duration_minutes;
 
     }
-    $result_json['total_work_duration_minutes11'] = $total_work_duration_minutes;
 $consumption = [];
 $stock_zero_count = 0;
 $stcok_zero_array = [];
@@ -414,7 +413,7 @@ if ($result_time->num_rows > 0) {
         if($free_time < 0) {
             $free_time = 0;
         }
-        $sql_update_free_time = "update qr_work_entry set free_t    ime = $free_time where qr_work_id = $qr_id";
+        $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
         if ($conn->query($sql_update_free_time) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error updating free time: " . $conn->error;
