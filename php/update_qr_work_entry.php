@@ -18,6 +18,11 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
     $conn->close();
     exit; 
 }
+$emp_id =  0;
+$work_done_id = 0;
+$production_id = 0;
+$sec_id = 0;
+
 
 //  check work sts if in-process it can be pausedd or if pausedd it can be in-processd
 $sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE qr_work_id = $qr_work_id and work_sts IN ('in-process', 'paused')";
@@ -41,6 +46,17 @@ if ($result_check_work_sts->num_rows > 0) {
     echo "Error: Work entry not found.";
     $conn->close();
     exit; 
+}
+
+// check  $production_id is finished
+if($production_id) {
+$sql_check_production_finished = "SELECT * FROM qr_work_entry WHERE production_id = $production_id and work_sts = 'finished' and work_done_id = $work_done_id";
+$result_check_production_finished = $conn->query($sql_check_production_finished);
+if ($result_check_production_finished->num_rows > 0) {
+    echo "Error: This production is already finished.";
+    $conn->close();
+    exit; 
+}
 }
 
 // check if there is in-process entry for emp and work_done_id
