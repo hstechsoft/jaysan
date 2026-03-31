@@ -305,18 +305,22 @@ if($total_work_duration_minutes > $total_max_time) {
         $conn->close();
         exit; 
 
+
+        
+
     }
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
     // this is correct on time  so we sum all min time and that time we reduce from total work time then we calulate excess time and distubute to all process
-    $excess_time = $total_work_duration_minutes - $total_min_time;
-    $time_to_distribute = $excess_time/count($process_time_array);
+  $excess_time = $total_work_duration_minutes - $total_min_time;
+  $time_to_distribute = ($excess_time + $total_min_time )/$required_qty;
+
     $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
         //  insert into work_process
         $pr_id = $process_time['process_id'];
-        $pr_time = $process_time['min_time'] + $time_to_distribute;
+        $pr_time =  $time_to_distribute;
         $required_qty1 = $process_time['required_qty'];
         $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
         if ($conn->query($insert_work_process_sql) !== TRUE) {
