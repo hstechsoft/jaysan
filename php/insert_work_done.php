@@ -297,7 +297,8 @@ if($total_work_duration_minutes > $total_max_time) {
     $pr_id = $process_time['process_id'];
     $pr_time = $process_time['max_time'];
     $required_qty1 = $process_time['required_qty'];
-    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
+    $part_id = $process_time['part_id'];
+    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id, part_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id, $part_id)";
     if ($conn->query($insert_work_process_sql) !== TRUE) {
         $conn->rollback();
         $result_json['message'] = "Error inserting work process: " . $conn->error;
@@ -322,7 +323,8 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
         $pr_id = $process_time['process_id'];
         $pr_time =  $time_to_distribute;
         $required_qty1 = $process_time['required_qty'];
-        $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id)";
+            $part_id = $process_time['part_id'];
+        $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id, part_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id, $part_id)";
         if ($conn->query($insert_work_process_sql) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error inserting work process: " . $conn->error;
