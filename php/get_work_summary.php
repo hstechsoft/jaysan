@@ -545,7 +545,7 @@ $result_json['break_time'] = $total_break_entry_time;
 $result_json['total_process_time'] = $tpt;
 $total_free_time = 0;
 $total_free_time = $total_work_duration - ( $total_break_entry_time + $total_qr_time + $tpt);
-
+$result_json['free_time'] = $total_free_time;
 
 // $total_wtime = $total_process_entry_time;
 // $total_btime = $total_break_entry_time ;
