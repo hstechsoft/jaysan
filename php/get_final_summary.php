@@ -93,38 +93,15 @@ if ($result_report->num_rows > 0) {
     }
 }
 
+
 $result_json['report'] = $rows;
-
-$total_wtime = $total_process_entry_time;
-$total_btime = $total_break_entry_time ;
-
-$actual_work_time = $total_wtime - ($total_btime + $total_qr_time);
-$result_json['ref'] = 'total_time-'.$total_wtime.'-'.$total_btime.'-'.$total_qr_time;
-$result_json['total_entry_time'] = $total_process_entry_time;
-
-
-
-$result_json['total_work_time'] = $total_wtime;
-$result_json['total_break_time'] = $total_btime;
-$result_json['actual_work_time'] = $actual_work_time;
-$result_json['total_process_entry_time'] = $tpt;
-
-$result_json['total_free_time'] = $total_free_time;
 $result_json['total_day_time'] = $total_work_duration;
-
-
-if($actual_work_time < $tpt) {
-    $result_json['final_status'] = "less_time ";
-    $result_json['time_info'] = 0;
-
-} else if($actual_work_time > $tpt) {
-    $free_time = $actual_work_time - $tpt;
-    $result_json['final_status'] = "free time";
-    $result_json['time_info'] = $free_time;
-} else {
-    $result_json['final_status'] = "on_time";
-     $result_json['time_info'] = 0;
-}
+$result_json['paused_time'] = $total_qr_time;
+$result_json['break_time'] = $total_break_entry_time;
+$result_json['total_process_time'] = $tpt;
+$total_free_time = 0;
+$total_free_time = $total_work_duration - ( $total_break_entry_time + $total_qr_time + $tpt);
+$result_json['free_time'] = $total_free_time;
 print json_encode($result_json);
 $conn->close();
 

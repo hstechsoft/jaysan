@@ -564,31 +564,31 @@ $result_json['free_time'] = $total_free_time;
 // $result_json['total_free_time'] = $total_free_time;
 
 
-if(($total_free_time > 0) && ($total_free_time < 15)) {
-    $result_json['final_status'] = "free_time";
-    $result_json['time_info'] = $total_free_time;
-} else if($total_free_time >= 15) {
-    $result_json['final_status'] = "excess_free_time";
-    $result_json['time_info'] = $total_free_time;
-}
-else {
-     $result_json['final_status'] = "on_time";
-    $result_json['time_info'] = 0;
-}
+// if(($total_free_time > 0) && ($total_free_time < 15)) {
+//     $result_json['final_status'] = "free_time";
+//     $result_json['time_info'] = $total_free_time;
+// } else if($total_free_time >= 15) {
+//     $result_json['final_status'] = "excess_free_time";
+//     $result_json['time_info'] = $total_free_time;
+// }
+// else {
+//      $result_json['final_status'] = "on_time";
+//     $result_json['time_info'] = 0;
+// }
 
 
-if($actual_work_time < $tpt) {
-    $result_json['final_status'] = "less_time ";
-    $result_json['time_info'] = 0;
+// if($actual_work_time < $tpt) {
+//     $result_json['final_status'] = "less_time ";
+//     $result_json['time_info'] = 0;
 
-} else if($actual_work_time > $tpt) {
-    $free_time = $actual_work_time - $tpt;
-    $result_json['final_status'] = "free time";
-    $result_json['time_info'] = $free_time;
-} else {
-    $result_json['final_status'] = "on_time";
-     $result_json['time_info'] = 0;
-}
+// } else if($actual_work_time > $tpt) {
+//     $free_time = $actual_work_time - $tpt;
+//     $result_json['final_status'] = "free time";
+//     $result_json['time_info'] = $free_time;
+// } else {
+//     $result_json['final_status'] = "on_time";
+//      $result_json['time_info'] = 0;
+// }
 
 $result_json['message'] = "success";
 http_response_code(200);
