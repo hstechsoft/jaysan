@@ -265,7 +265,8 @@ if ($result_process_time->num_rows > 0) {
         "process_id" => $process_id,
         "min_time" => $row['min_time'],
         "max_time" => $row['max_time'],
-        "required_qty" => $required_qty
+        "required_qty" => $required_qty,
+        "part_id" => $process_part['part_id']
     ];
    
     $total_min_time += $row['min_time'] * $required_qty;
