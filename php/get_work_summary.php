@@ -541,7 +541,7 @@ if ($result_report->num_rows > 0) {
 $result_json['report'] = $rows;
 $result_json['total_day_time'] = $total_work_duration;
 $result_json['paused_time'] = $total_qr_time;
-$result_json['break_time'] = $total_btime;
+$result_json['break_time'] = $total_break_entry_time;
 $result_json['total_process_time'] = $tpt;
 $total_free_time = 0;
 $total_free_time = $total_work_duration - ( $total_break_entry_time + $total_qr_time + $tpt);
