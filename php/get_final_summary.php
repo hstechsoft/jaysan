@@ -28,12 +28,17 @@ $day_start_time = $curent_work_info['day_start_time'];
 $current_process_start_time = $curent_work_info['start_time'];
 $result_json['current_work_info'] = $curent_work_info;
 
+    
     $total_qr_time = 0;
 
-    $sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
-$result_production_entry_time = $conn->query($sql_get_production_entry_time);
-if ($result_production_entry_time->num_rows > 0) {
-    while($row = $result_production_entry_time->fetch_assoc()) {
+
+// get total break time for the current work done id on;y unfinished entry
+$get_total_qr_unfinished = "SELECT ifnull(sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)), 0) as total_qr_time FROM qr_work_entry 
+
+WHERE production_id > 0 and end_time is not null and work_done_id = $work_done_id and production_id not in (select production_id from qr_work_entry where work_done_id = $work_done_id and production_id > 0 and work_sts = 'finished' and end_time is not null)";
+$result_qr_unfinished = $conn->query($get_total_qr_unfinished);
+if ($result_qr_unfinished->num_rows > 0) {
+    while($row = $result_qr_unfinished->fetch_assoc()) {
         $total_qr_time += $row['total_qr_time']; // Convert minutes to seconds
     }
 }
