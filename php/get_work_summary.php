@@ -545,7 +545,16 @@ if ($result_report->num_rows > 0) {
         $total_extra_work_time = $row['total_extra_work_time'];
 
     }
-}
+} 
+     else {
+    echo "Error: " . $sql_report . "<br>" . $conn->error;
+  }
+
+  
+
+
+
+
 
 $result_json['report'] = $rows;
 $result_json['total_day_time'] = $total_work_duration;
