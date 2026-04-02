@@ -554,7 +554,7 @@ if ($result_report->num_rows > 0) {
         $tpt += $row['total_process_time'];
         $total_free_time += $row['free_time'];
         $total_work_duration = $row['total_work_duration'];
-        $total_extra_work_time = $row['total_extra_work_time'];
+        $total_extra_work_time += $row['total_extra_work_time'];
 
     }
 } 
