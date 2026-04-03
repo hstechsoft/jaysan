@@ -3417,7 +3417,7 @@ function get_sales_order(approve_sts) {
               bd = "disabled"
             }
             //console.logobj.pay_sts);
-            
+
             $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td>><td class = 'small' style='max-width: 100px;'>" + obj.dated + "</td> <td class = 'small'>" + obj.emp + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus + "</td><td style='max-width: 250px;'><div>" + obj.pro + "</div></td> <td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary edit_btn border-0' id='fa-edit'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='delete_btn btn btn-outline-danger border-0' id='fa-trash'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='" + obj.oid + "' data-cus_id='" + obj.customer_id + "' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  " + bd + " type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0' id='fa-download'><i class='fa-solid fa-download'></i></button></td></tr>")
 
 
@@ -4865,7 +4865,9 @@ function get_jaysan_sales_payment(oid) {
             var received_details = obj.received_details ? JSON.parse(obj.received_details) : [];
             received_details.forEach(function (payment) {
               count = count + 1;
-              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + payment.formatted_datetime + "</td> <td><button class='btn btn-outline-warning btn-sm border-0 fa_edit' type='button' value='" + payment.payment_id + "' data-oid='" + obj.oid + "' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + obj.oid + "' data-payment_id='" + payment.payment_id + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              let formattedDate = formatDateTime(payment.payment_date);
+
+              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + formattedDate + "</td> <td><button class='btn btn-outline-warning btn-sm border-0 fa_edit' type='button' value='" + payment.payment_id + "' data-oid='" + obj.oid + "' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + obj.oid + "' data-payment_id='" + payment.payment_id + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount += Number(payment.amount)
             });
 
@@ -4925,8 +4927,31 @@ function get_jaysan_sales_payment(oid) {
 
 }
 
+
+function formatDateTime(dateTimeStr) {
+
+  if (!dateTimeStr) return "";
+
+  let parts = dateTimeStr.split(/[- :]/);
+
+  let year = parts[0];
+  let month = parts[1];
+  let day = parts[2];
+
+  let hours = parseInt(parts[3]);
+  let minutes = parts[4];
+
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  hours = String(hours).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}${ampm}`;
+}
 function get_jaysan_sales_payment_m(oid) {
-console.log(oid);
+  console.log(oid);
 
 
   $.ajax({
@@ -4964,9 +4989,9 @@ console.log(oid);
               }
               else
                 sts = "<i class='fa-solid fa-hourglass-half'></i>"
-
+              let formattedDate = formatDateTime(payment.payment_date);
               count = count + 1;
-              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\" style='width: 10%'>" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.oid + "' data-payment_id='" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\" style='width: 10%'>" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + formattedDate + "</td><td>" + sts + "</td><td><button value  = '" + obj.oid + "' data-payment_id='" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount = total_amount + Number(payment.amount)
             });
 

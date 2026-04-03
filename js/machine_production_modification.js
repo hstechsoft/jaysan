@@ -911,7 +911,7 @@ function get_sale_order_mreport(sale_date, production_date) {
                                 }
 
                                 let assignHtml = `
-                                                <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex justify-content-between align-items-center px-3">
                                                     <span>${assignLabel}</span>
                                                     <input class="form-check-input ass-check order-${order.oid}"
                                                         type="checkbox"

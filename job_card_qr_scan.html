@@ -71,7 +71,7 @@
             transform: scale(1.05);
         }
 
-        .machine-card {
+        .part-card {
             border-radius: 20px;
             overflow: hidden;
             border: none;
@@ -80,17 +80,26 @@
             transition: all 0.35s ease;
         }
 
-        .machine-card:hover {
+        .part-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
         }
 
         /* Header Gradient */
-        .machine-card .card-header {
-            background: linear-gradient(135deg, #0d6efd, #198754);
+        .part-card .card-header {
+            background: linear-gradient(136deg, #000000, #0084e1);
             padding: 10px;
             color: white;
         }
+
+        .part-card .card-body {
+            background: linear-gradient(300deg, #9ed7ff, #0084e1, #9ed7ff);
+        }
+
+        .part-card .card-footer {
+            background: linear-gradient(136deg, #0084e1, #000000);
+        }
+
 
         /* Status Badge */
         .status-badge {
@@ -193,10 +202,15 @@
             }
         }
 
+        /* break */
+        #break_time_list li{
+            font-size: 12px;
+            padding: 5px;
+        }
         /* quote */
 
         .quote-box {
-            margin-top: 25px;
+            margin: 10px;
             padding: 20px;
             border-radius: 15px;
             background: #f5f7fb;
@@ -211,7 +225,7 @@
         }
 
         .quote-icon {
-            font-size: 40px;
+            font-size: 30px;
             margin-top: 10px;
             animation: iconPulse 2s infinite;
         }
@@ -260,13 +274,159 @@
         @media(max-width:480px) {
 
             .start-wrapper {
-                padding: 30px 25px;
+                padding: 10px 5px;
             }
 
             .quote-text {
-                font-size: 15px;
+                font-size: 13px;
             }
 
+        }
+
+        .blink {
+            animation: blinkAnim 1s infinite;
+        }
+
+        @keyframes blinkAnim {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+
+        /* Graph Animation */
+
+
+        .icon-work {
+            display: inline-block;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        .icon-extra {
+            display: inline-block;
+            animation: flicker 0.8s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        .icon-free {
+            display: inline-block;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+
+        .icon-paused {
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+
+        .wave-box {
+            position: relative;
+            height: 6px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .wave-fill {
+            height: 100%;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-fill::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: -50%;
+            opacity: 0.4;
+            background: repeating-linear-gradient(-45deg,
+                    rgba(255, 255, 255, 0.4),
+                    rgba(255, 255, 255, 0.4) 10px,
+                    transparent 10px,
+                    transparent 20px);
+            animation: waveMove 1.5s linear infinite;
+        }
+
+        @keyframes waveMove {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(50%);
+            }
         }
     </style>
 
@@ -299,11 +459,11 @@
             <div class="container-fluid start-bg min-vh-100 d-flex align-items-center justify-content-center"
                 id="start_section">
 
-                <div class="start-wrapper">
+                <div class="start-wrapper my-2">
 
                     <!-- Header -->
                     <div class="start-header text-center">
-                        <div class="rocket">🚀</div>
+                        <div class="rocket d-none">🚀</div>
                         <h1>Start Your Day</h1>
                         <p>Kickstart Your Day with AD’s Favorite Quotes</p>
                     </div>
@@ -326,13 +486,60 @@
 
                     </div>
 
-                    <!-- Section Select -->
-                    <!-- <div class="form-floating mt-4">
-                        <select class="form-select" id="day_section_select">
-                            <option selected disabled value="null">Choose Section</option>
+                    <div class="form-floating my-3">
+                        <select class="form-select" id="start_worked_unit">
+                            <option selected disabled value="">Choose...</option>
+                            <option value="1166">Jaysan Branch-1 (Assembly)</option>
+                            <option value="359">Jaysan Branch-2 (Welding)</option>
+                            <option disabled value="">Jaysan Branch-3 (Fabrication)</option>
                         </select>
-                        <label>Select Section</label>
-                    </div> -->
+                        <label for="start_worked_unit">Unit</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="start_worked_dept">
+                            <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="start_worked_dept">Department</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="start_worked_section">
+                            <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="start_worked_section">Section</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="start_worked_machine">
+                            <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="start_worked_machine">Machine</label>
+                    </div>
+
+                    <div class="table-responsive d-none start_Worked_parts_table"
+                        style="max-height: 25vh; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Part Name</th>
+                                    <th scope="col">Process</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="start_Worked_parts_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
 
                     <!-- Button -->
                     <button class="start-btn w-100 mt-4" id="start_day_btn">
@@ -345,23 +552,36 @@
 
 
             <div class="container py-2 d-none" id="after_start">
-                <h6 class="text-center">Your Day Started At <b id="day_start_time" class="badge bg-success"></b></h6>
+                <div class="d-flex justify-content-between" style="font-size: 12px;">
+                    <p class="text-center">Your Day Started At <b id="day_start_time" class="badge bg-success"></b>
+                    </p>
+                    <p class="text-center">Your Batch ID <b id="batch_id" class="badge bg-primary"></b>
+                    </p>
+                </div>
 
                 <div class="row justify-content-center">
 
-                    <div class="accordion" id="accordionExample">
+                    <div class="accordion mb-3" id="accordionExample">
                         <div class="accordion-item">
-                            <h6 class="accordion-header" id="headingOne">
+                            <h6 class="accordion-header" id="headingOne1">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#work_entry" aria-expanded="true" aria-controls="work_entry">
                                     Add Work Entry
                                 </button>
+
                             </h6>
-                            <div id="work_entry" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            <div id="work_entry" class="accordion-collapse collapse show" aria-labelledby="headingOne1"
                                 data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="card shadow-sm">
-                                        <div class="card-body p-2 text-center">
+                                        <div class="card-body p-2 text-center" style="font-size: 13px;">
+                                            <div class="form-check">
+                                                <input class="form-check-input " type="checkbox" value=""
+                                                    id="set_main_process">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Do You Want To Change Default Section?
+                                                </label>
+                                            </div>
 
                                             <div class="form-floating mb-3">
                                                 <select class="form-select" id="worked_unit">
@@ -394,16 +614,17 @@
                                                 <label for="worked_machine">Machine</label>
                                             </div>
 
-                                            <div class="table-responsive d-none Worked_parts_table">
+                                            <div class="table-responsive d-none Worked_parts_table"
+                                                style="max-height: 25vh; overflow-y: auto;">
                                                 <table class="table caption-top table-bordered table-striped ">
                                                     <caption></caption>
-                                                    <thead>
+                                                    <thead
+                                                        style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
 
                                                         <tr>
                                                             <th scope="col">#</th>
                                                             <th scope="col">Part Name</th>
                                                             <th scope="col">Process</th>
-                                                            <th scope="col">Qty</th>
                                                             <th scope="col">Action</th>
 
                                                         </tr>
@@ -417,8 +638,44 @@
                                                 </table>
                                             </div>
 
-                                            <!-- <button type="submit" class="btn btn-primary " id="add_work_entry_btn">Add
-                                            Work</button> -->
+                                            <div class="table-responsive d-none" id="setting_part_table">
+                                                <table class="table caption-top table-bordered table-striped ">
+                                                    <caption></caption>
+                                                    <thead>
+
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Part Name</th>
+                                                            <th scope="col">Process</th>
+                                                            <th scope="col">Qty</th>
+                                                            <th scope="col">Action</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="setting_part_tbody">
+
+
+                                                    </tbody>
+
+
+                                                </table>
+                                                <button type="submit" class="btn btn-primary "
+                                                    id="add_setting_part_btn">Add
+                                                    Work</button>
+
+                                                <div class="card shadow p-3 mt-2">
+                                                    <h4 class="text-center mb-3">Employee Work Summary</h4>
+                                                    <canvas id="workChart"></canvas>
+                                                    <div id="workSummaryCards"></div>
+
+                                                </div>
+
+                                                <!-- Drill Down -->
+                                                <div id="workDetails" class="mt-3"></div>
+                                                <button type="button" class="btn btn-success mt-2 d-none"
+                                                    id="complete_work">Complete</button>
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -426,6 +683,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-8 col-lg-5 mt-2" id="scan_section">
 
 
@@ -481,10 +739,11 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+
+                <div class="table-responsive my-2" style="max-height: 25vh; overflow-y: auto;">
                     <table class="table caption-top table-bordered table-striped ">
                         <caption class="text-danger" style="font-size: 12px">Paused Works</caption>
-                        <thead>
+                        <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
 
                             <tr>
                                 <th scope="col">#</th>
@@ -507,14 +766,14 @@
 
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
-                        <h6 class="accordion-header" id="headingOne">
+                        <h6 class="accordion-header" id="headingOne2">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#work_completed_list" aria-expanded="true"
                                 aria-controls="work_completed_list">
                                 Work Completed List
                             </button>
                         </h6>
-                        <div id="work_completed_list" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                        <div id="work_completed_list" class="accordion-collapse collapse " aria-labelledby="headingOne2"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="card shadow-sm">
@@ -530,9 +789,13 @@
 
                                                         <th>Part Name</th>
 
+                                                        <th>Process</th>
+
+                                                        <th>Chasis/No</th>
+
                                                         <th>Qty</th>
 
-                                                        <th>Action</th>
+                                                        <th>Time</th>
                                                     </tr>
                                                 </thead>
 
@@ -626,9 +889,23 @@
                 </div>
 
 
+                <div class="card shadow p-3 mt-2 d-none" id="final_summary">
+                    <div>
+                        <button type="button" class="btn btn-outline-success" id="pdf_summary_btn"><i
+                                class="fa-solid fa-file-pdf"></i></button>
+                    </div>
+                    <div id="pdfContent">
+                        <h4 class="text-center mb-3" id="emp_name_summary">Employee Work Summary</h4>
 
+                        <canvas id="finalWorkChart"></canvas>
+                        <div id="finalWorkSummaryCards"></div>
+                    </div>
+                    <div id="finalWorkDetails" class="mt-3"></div>
+
+                </div>
                 <div class="d-flex justify-content-center mt-1">
-                    <button type="button" class="btn btn-danger " id="summay_btn">Day End</button>
+                    <button type="button" class="btn btn-secondary " id="summay_btn">Work Summary</button>
+                    <button type="button" class="btn btn-success d-none" id="last_end_btn">End Day</button>
                 </div>
 
             </div>
@@ -671,7 +948,7 @@
                         <div class="form-floating mb-3 d-none pause_reason">
 
                             <textarea class="form-control rounded-3 " placeholder="" id="pause_reason" required
-                                style="height: 120px"></textarea>
+                                style="max-height: 120px"></textarea>
                             <label for="pause_reason">Reason / Material Name</label>
                             <span class="text-danger">*</span>
                             <div class="invalid-feedback">
@@ -699,6 +976,45 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="accordion" id="accordionExample1">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne3">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Add Extra Work
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne3"
+                                data-bs-parent="#accordionExample1">
+                                <div class="accordion-body">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="extra_work_select">
+                                            <option selected disabled value="">Choose...</option>
+                                        </select>
+                                        <label for="extra_work_select">Extra Work</label>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <div class="form-floating mb-2">
+                                            <input type="number" class="form-control rounded-3" id="extra_work_time"
+                                                placeholder="">
+                                            <label for="extra_work_time">Work Time</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="extra_work_time_type">
+                                                <option value="hrs">Hours</option>
+                                                <option selected value="minutes">Mins</option>
+                                            </select>
+                                            <label for="extra_work_time_type">Hrs/Minutes</label>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-primary " id="add_extra_work_btn">Add</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card">
                         <ul class="list-group" id="break_time_list"></ul>
 
@@ -766,7 +1082,11 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- QR Code Scanning -->
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- external js -->
     <script src="js/job_card_qr_scan.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>

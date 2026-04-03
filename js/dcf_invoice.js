@@ -99,7 +99,7 @@ function submit_dcf_invoice() {
       if (response.trim() == "ok") {
         $("#approve_button").prop("disabled", true);
         get_dcf()
-        shw_toast("Success", "DCF Approved", "success")
+        shw_toast("Success", "Invoice Updated", "success")
         $('#invoice_no').val("")
         $('#transport_driver').val("")
         $('#transport_vno').val("")
