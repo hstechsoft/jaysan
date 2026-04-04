@@ -292,6 +292,9 @@ $(document).ready(function () {
     }
   })
 
+  $(".fa-pencil").on("click", function(){
+    $("#buyer, #buy_gst, #buy_contact").prop("disabled", false);
+  })
 
 });
 

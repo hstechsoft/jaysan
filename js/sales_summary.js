@@ -43,9 +43,103 @@ $(document).ready(function () {
   get_company_report('', '', '', '', '', '');
 
 
+
+  $("#thead_price").on("dblclick", function () {
+
+    let rows = $("#sales_summary_tbody tr");
+
+    if (rows.length > 0) {
+
+      let total_price = 0;
+
+      rows.each(function () {
+        let priceText = $(this).find("td").eq(3).text().trim();
+
+
+        priceText = priceText.replace(/₹|,/g, '');
+
+        let price = Number(priceText) || 0;
+
+        total_price += price;
+      });
+
+      let formatted = "₹ " + total_price.toLocaleString('en-IN');
+
+      $("#priceTotalCard").text("Total Amount: " + formatted);
+      $("#priceTotalCard").fadeIn(200);
+
+      setTimeout(() => {
+        $("#priceTotalCard").fadeOut(300);
+      }, 20000);
+
+    } else {
+      salert("Warning", "No Data Found.", "warning");
+    }
+  });
+
+
+  $('#employee').on('input', function () {
+    //check the value not empty
+    if ($(this).val() != "") {
+      $('#employee').data("emp_id", '');
+
+      $(this).autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_employee_auto.php",
+            type: "get", //send it through get method
+            data: {
+
+              emp_name: request.term,
+
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.emp_name,
+                  value: item.emp_name,
+                  id: item.emp_id,
+                  // phone: item.cus_phone,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $('#employee').data("emp_id", ui.item.id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          //  get_bom(ui.item.id)
+
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div style='font-size:12px;'><strong>" + item.label + "</strong></div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
   $('#customer').on('input', function () {
     //check the value not empty
     if ($('#customer').val() != "") {
+      $(this).data("cus_id", "");
       $('#customer').autocomplete({
         //get data from databse return as array of object which contain label,value
 
@@ -55,7 +149,7 @@ $(document).ready(function () {
             type: "get", //send it through get method
             data: {
 
-              cus_name: $('#customer').val(),
+              cus_name: $('#customer').val() + '%',
 
             },
             dataType: "json",
@@ -96,90 +190,6 @@ $(document).ready(function () {
 
   });
 
-  $("#thead_price").on("dblclick", function () {
-
-    let rows = $("#sales_summary_tbody tr");
-
-    if (rows.length > 0) {
-
-      let total_price = 0;
-
-      rows.each(function () {
-        let priceText = $(this).find("td").eq(3).text().trim();
-
-
-        priceText = priceText.replace(/₹|,/g, '');
-
-        let price = Number(priceText) || 0;
-
-        total_price += price;
-      });
-
-      let formatted = "₹ " + total_price.toLocaleString('en-IN');
-
-      $("#priceTotalCard").text("Total Amount: " + formatted);
-      $("#priceTotalCard").fadeIn(200);
-
-      setTimeout(() => {
-        $("#priceTotalCard").fadeOut(300);
-      }, 20000);
-
-    } else {
-      salert("Warning", "No Data Found.", "warning");
-    }
-  });
-
-  $(function () {
-
-    $('#employee').autocomplete({
-
-      minLength: 2,
-
-      source: function (request, response) {
-
-        $.ajax({
-          url: "php/get_employee_auto.php",
-          type: "GET",
-          dataType: "json",
-          data: {
-            emp_name: request.term
-          },
-
-          success: function (data) {
-
-            response($.map(data, function (item) {
-              return {
-                label: item.emp_name,
-                value: item.emp_name,
-                emp_id: item.emp_id,
-              };
-            }));
-
-          }
-        });
-      },
-
-      select: function (event, ui) {
-        $('#employee').data("emp_id", ui.item.emp_id);
-      }
-
-    })
-
-
-      .autocomplete("instance")._renderItem = function (ul, item) {
-        return $("<li>")
-          .append(`
-        <div style="font-size:12px;">
-          <strong>${item.label}</strong>
-        </div>
-      `)
-          .appendTo(ul);
-      };
-
-  });
-
-
-
   $("#product").on("change", function () {
     var product_id = $(this).val();
     $("#model, #type").val(0)
@@ -210,21 +220,19 @@ $(document).ready(function () {
     var f_date = $("#f_date").val();
     var e_date = $("#e_date").val();
 
-    // ✅ normalize "0" and "" to null
+
     if (product_id === "0") product_id = null;
     if (model_id === "") model_id = null;
     if (type_id === "") type_id = null;
 
-    // ✅ date handling
     var sale_order_date = null;
-    if (f_date && e_date) {
-      sale_order_date = {
-        from: f_date,
-        to: e_date
-      };
+    if (f_date || e_date) {
+      sale_order_date = "'" + f_date + "'" + " and " + "'" + e_date + "'";
+
     }
 
-    // ✅ STRICT CHECK
+
+
     let hasFilter =
       emp_id !== null ||
       cus_id !== null ||
@@ -232,11 +240,6 @@ $(document).ready(function () {
       model_id !== null ||
       type_id !== null ||
       sale_order_date !== null;
-
-    if (!hasFilter) {
-      salert("Warning", "Fill At least one filter", "warning");
-      return;
-    }
 
     console.log({
       emp_id,
@@ -246,6 +249,12 @@ $(document).ready(function () {
       type_id,
       sale_order_date
     });
+    if (!hasFilter) {
+      salert("Warning", "Fill At least one filter", "warning");
+      return;
+    }
+
+
 
     get_company_report(emp_id, sale_order_date, cus_id, product_id, type_id, model_id);
   });
@@ -462,9 +471,9 @@ function get_company_report(emp_id, sale_order_date, customer_id, product_id, ty
                     <div class="card shadow-sm border-0 rounded-4 p-2 product-card">
 
                       <div class="d-flex justify-content-between align-items-center mb-1">
-                        <span class="badge bg-light text-dark fw-semibold px-2 py-1">${item.product}</span>
-                        <span class="fw-bold text-primary">${item.model_name}</span>
-                        <span class="badge bg-success-subtle text-success px-2 py-1">${item.type_name}</span>
+                        <span class="badge bg-light text-dark fw-semibold px-2 py-1" style='font-size: 10px'>${item.product}</span>
+                        <span class="fw-bold text-primary" style='font-size: 10px'>${item.model_name}</span>
+                        <span class="badge bg-success-subtle text-success px-2 py-1" style='font-size: 10px'>${item.type_name}</span>
                       </div>
                     </div>
                 </td>
@@ -474,6 +483,10 @@ function get_company_report(emp_id, sale_order_date, customer_id, product_id, ty
             })
 
 
+
+            month.sort((a, b) => {
+              return new Date(a.month) - new Date(b.month);
+            });
 
             let monthLabels = month.map(m => m.month);
             let monthValues = month.map(m => m.total_amount);
