@@ -208,7 +208,7 @@ if($stock_zero_count > 0) {
 // if stock not available insert into stock requset table
 foreach ($stcok_zero_array as $zero_stock)
 {
-    $pre_process_id = null;
+    $pre_process_id = 'NULL';
     if($zero_stock['previous_process_id'] > 0) {
         $pre_process_id = $zero_stock['previous_process_id'];
     }
