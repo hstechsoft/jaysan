@@ -208,9 +208,12 @@ if($stock_zero_count > 0) {
 // if stock not available insert into stock requset table
 foreach ($stcok_zero_array as $zero_stock)
 {
-    
+    $pre_process_id = null;
+    if($zero_stock['previous_process_id'] > 0) {
+        $pre_process_id = $zero_stock['previous_process_id'];
+    }
 
-    $sql_insert_stock_requset = "INSERT  INTO stock_request (part_id, previous_process_id, qty, godown, dep, sec, emp_id,updated_at) VALUES ( {$zero_stock['part_id']},  {$zero_stock['previous_process_id']},   {$zero_stock['required_qty']} - {$zero_stock['available_qty']} , $godown_id, $dep_id, $sec_id, $emp_id, NOW()) on duplicate key update updated_at = NOW(), qty = qty + (  {$zero_stock['required_qty']} - {$zero_stock['available_qty']})";
+    $sql_insert_stock_requset = "INSERT  INTO stock_request (part_id, previous_process_id, qty, godown, dep, sec, emp_id,updated_at) VALUES ( {$zero_stock['part_id']},  $pre_process_id,   {$zero_stock['required_qty']} - {$zero_stock['available_qty']} , $godown_id, $dep_id, $sec_id, $emp_id, NOW()) on duplicate key update updated_at = NOW(), qty = qty + (  {$zero_stock['required_qty']} - {$zero_stock['available_qty']})";
     if ($conn->query($sql_insert_stock_requset) !== TRUE) {
         $result_json['message'] = "Error inserting stock request: " . $conn->error;
         echo json_encode($result_json);
