@@ -26,15 +26,16 @@ $(document).ready(function () {
   );
 
 
-  $("#summary_search").on("keyup", function () {
+  $("#dealer_search").on("keyup", function () {
     var value = $(this).val().toLowerCase();
 
-    $("#all_bom_table tr").filter(function () {
+    $("#dealer_list li").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
 
   check_login();
+  get_customer_dealer_autocomplete();
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -46,7 +47,7 @@ $(document).ready(function () {
 
 
     if (salary && number_cal) {
-      tarket_amount = Number(salary) * Number(number_cal);
+      tarket_amount = Number(salary) * 12 * Number(number_cal);
     }
 
     $("#tarket_amount").val(tarket_amount).trigger("focusout");
@@ -58,7 +59,7 @@ $(document).ready(function () {
     var tarket_amount = 0;
 
     if (salary && number_cal) {
-      tarket_amount = Number(salary) * Number(number_cal);
+      tarket_amount = Number(salary) * 12 * Number(number_cal);
     }
 
     $("#tarket_amount").val(tarket_amount).trigger("focusout");
@@ -107,6 +108,7 @@ $(document).ready(function () {
 });
 
 
+
 function quarter_calculation(tarket_amount, individual_quarter, id) {
 
   var tarket_amount = tarket_amount;
@@ -129,7 +131,7 @@ function quarter_calculation(tarket_amount, individual_quarter, id) {
     case (2):
       var one = $("#tarket_amount_one").val();
       if (tarket_amount > 0 && individual_quarter > 0) {
-        quarter = (Number(tarket_amount) - (Number(individual_quarter)+ Number(one))) / 2;
+        quarter = (Number(tarket_amount) - (Number(individual_quarter) + Number(one))) / 2;
       }
       $("#tarket_amount_three, #tarket_amount_four").val(quarter);
       break;
@@ -138,7 +140,7 @@ function quarter_calculation(tarket_amount, individual_quarter, id) {
       var one = $("#tarket_amount_one").val();
       var two = $("#tarket_amount_two").val();
       if (tarket_amount > 0 && individual_quarter > 0) {
-        quarter = Number(tarket_amount) -( Number(individual_quarter)+ Number(one)+ Number(two));
+        quarter = Number(tarket_amount) - (Number(individual_quarter) + Number(one) + Number(two));
       }
       $("#tarket_amount_four").val(quarter);
       break;
@@ -148,6 +150,41 @@ function quarter_calculation(tarket_amount, individual_quarter, id) {
 
 
   }
+}
+
+function get_customer_dealer_autocomplete() {
+  $.ajax({
+    url: "php/get_all_customerName.php",
+    type: "get", //send it through get method
+    data: {
+
+      term: '',
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim() != "error") {
+        if (response.trim() != "0result") {
+
+          var obj = JSON.parse(response);
+
+          obj.forEach(function (obj) {
+            $("#dealer_list").append(`<li class="list-group-item p-1"><input class="form-check-input float-end" type="checkbox" value="${obj.cus_id}" id="dealer_id_${obj.cus_id}" ><label class="form-check-label" for="dealer_id_${obj.cus_id}">${obj.cus_name}</label></li>`)
+          })
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
 }
 
 

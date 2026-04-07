@@ -150,25 +150,39 @@
 
                         <h5 class="mb-3"><i class="fa-solid fa-users"></i> Team Setup</h5>
 
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="team_name">
-                            <label>Team Name</label>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="team_name">
+                                    <label>Team Name</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="member_name">
+                                    <label>Member Name</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="position">
+                                        <option disabled selected>Select Position</option>
+                                        <option>Marketing Head</option>
+                                        <option>Telecaller</option>
+                                        <option>Marketing Person</option>
+                                    </select>
+                                    <label>Position</label>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header p-1">Select Dealers <input type="text" class="float-end" id="dealer_search"></div>
+                                <div class="card-body p-1">
+                                    <ul class="list-group" id="dealer_list" style="height: 20vh; overflow-y: auto;">
+
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="member_name">
-                            <label>Member Name</label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="position">
-                                <option disabled selected>Select Position</option>
-                                <option>Marketing Head</option>
-                                <option>Telecaller</option>
-                                <option>Marketing Person</option>
-                            </select>
-                            <label>Position</label>
-                        </div>
 
                         <div class="d-flex gap-2 flex-mobile">
                             <div class="form-floating mb-3 w-100">

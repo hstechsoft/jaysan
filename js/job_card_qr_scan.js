@@ -240,6 +240,12 @@ $(document).ready(function () {
     const quotes = [
 
         {
+            ta: "தவறைத் தவறு என்று உங்களால் சொல்ல முடியாவிட்டால், நீங்கள் அடிமைத்தனத்தின் இறுதிக் கட்டத்தில் இருக்கிறீர்கள்.",
+            en: "If you can't say wrong as wrong, you are in last stage of slavery.",
+            icon: "⛓️"
+        },
+
+        {
             ta: "பயிற்சியில் நீங்கள் எவ்வளவு அதிகமாக வியர்வை சிந்துகிறீர்களோ, போர்க்களத்தில் அவ்வளவு குறைவாகவே இரத்தம் சிந்துவீர்கள்.",
             en: "The more you sweat in practice, the less you bleed in battle.",
             icon: "🛡️"
@@ -568,8 +574,14 @@ $(document).ready(function () {
 
     $("#summay_btn").on("click", function () {
 
-        $("#final_summary").removeClass("d-none");
-        get_final_summary();
+        if ($("#paused_work_tbody tr").length <= 0) {
+            $("#final_summary").removeClass("d-none");
+            get_final_summary();
+        }
+        else{
+            salert("Warning", "First Complete all the paused work.", "warning");
+        }
+
 
     })
 
@@ -1277,7 +1289,7 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
                         else if (item.extra_work_data && item.extra_work_data !== "null" && label === "Extra Time") {
 
                             try {
-                                let processes = JSON.parse(item.extra_work_data).filter(p=>p !== null );
+                                let processes = JSON.parse(item.extra_work_data).filter(p => p !== null);
 
                                 processes.forEach(p => {
 
@@ -1300,7 +1312,7 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
                         else if (item.break_data && item.break_data !== "null" && label === "Break Time") {
 
                             try {
-                                let processes = JSON.parse(item.break_data).filter(p=>p !== null);
+                                let processes = JSON.parse(item.break_data).filter(p => p !== null);
 
                                 processes.forEach(p => {
 
@@ -1461,191 +1473,191 @@ function get_final_summary() {
 
             // ======= TIME CALCULATION =======
             let totalDayWork = Number(data.total_day_time || 0);
-                let totalWork = Number(data.total_process_time || 0);
-                let freeTime = Number(data.free_time || 0);
-                let pausedTime = Number(data.paused_time || 0);
-                let extraWork = Number(data.total_extra_work_time || 0);
+            let totalWork = Number(data.total_process_time || 0);
+            let freeTime = Number(data.free_time || 0);
+            let pausedTime = Number(data.paused_time || 0);
+            let extraWork = Number(data.total_extra_work_time || 0);
 
-                // Extra Work Logic
-                let breakTime = Number(data.break_time || 0);
-                // let extraWork = data.work_status === "excess_time" ? totalWork - freeTime : 0;
-                if (extraWork < 0) extraWork = 0;
-
-
-                // ======= TIME FORMAT FUNCTION =======
-                function formatMinutes(mins) {
-                    let h = Math.floor(mins / 60);
-                    let m = mins % 60;
-                    return h + "h " + m + "m";
-                }
+            // Extra Work Logic
+            let breakTime = Number(data.break_time || 0);
+            // let extraWork = data.work_status === "excess_time" ? totalWork - freeTime : 0;
+            if (extraWork < 0) extraWork = 0;
 
 
-                // ======= CHART =======
-                const ctx = document.getElementById('finalWorkChart').getContext('2d');
-
-                // Gradient colors
-                let grad1 = ctx.createLinearGradient(0, 0, 0, 300);
-                grad1.addColorStop(0, "#4CAF50");
-                grad1.addColorStop(1, "#81C784");
-
-                let grad2 = ctx.createLinearGradient(0, 0, 0, 300);
-                grad2.addColorStop(0, "#FF9800");
-                grad2.addColorStop(1, "#FFB74D");
-
-                let grad3 = ctx.createLinearGradient(0, 0, 0, 300);
-                grad3.addColorStop(0, "#F44336");
-                grad3.addColorStop(1, "#E57373");
-
-                let grad4 = ctx.createLinearGradient(0, 0, 0, 300);
-                grad4.addColorStop(0, "#36def4");
-                grad4.addColorStop(1, "#73d4e5");
-
-                let grad5 = ctx.createLinearGradient(0, 0, 0, 300);
-                grad5.addColorStop(0, "#f4e136");
-                grad5.addColorStop(1, "#e5da73");
+            // ======= TIME FORMAT FUNCTION =======
+            function formatMinutes(mins) {
+                let h = Math.floor(mins / 60);
+                let m = mins % 60;
+                return h + "h " + m + "m";
+            }
 
 
-                // ===== FIX: DESTROY OLD CHART =====
-                if (window.workChartInstance) {
-                    window.workChartInstance.destroy();
-                }
+            // ======= CHART =======
+            const ctx = document.getElementById('finalWorkChart').getContext('2d');
 
-                // ======= CHART =======
-                // const ctx = document.getElementById('workChart').getContext('2d');
+            // Gradient colors
+            let grad1 = ctx.createLinearGradient(0, 0, 0, 300);
+            grad1.addColorStop(0, "#4CAF50");
+            grad1.addColorStop(1, "#81C784");
 
-                // Center text plugin
-                const centerTextPlugin = {
-                    id: 'centerText',
-                    beforeDraw(chart) {
+            let grad2 = ctx.createLinearGradient(0, 0, 0, 300);
+            grad2.addColorStop(0, "#FF9800");
+            grad2.addColorStop(1, "#FFB74D");
 
-                        const { ctx } = chart;
+            let grad3 = ctx.createLinearGradient(0, 0, 0, 300);
+            grad3.addColorStop(0, "#F44336");
+            grad3.addColorStop(1, "#E57373");
 
-                        const meta = chart.getDatasetMeta(0);
-                        const centerX = meta.data[0].x;
-                        const centerY = meta.data[0].y;
+            let grad4 = ctx.createLinearGradient(0, 0, 0, 300);
+            grad4.addColorStop(0, "#36def4");
+            grad4.addColorStop(1, "#73d4e5");
 
-                        ctx.save();
-
-                        ctx.textAlign = "center";
-                        ctx.textBaseline = "middle";
-
-                        let efficiency = (totalWork + extraWork) / (totalDayWork);
-                        ctx.fillText((efficiency * 100).toFixed(0) + "%", centerX, centerY + 0);
+            let grad5 = ctx.createLinearGradient(0, 0, 0, 300);
+            grad5.addColorStop(0, "#f4e136");
+            grad5.addColorStop(1, "#e5da73");
 
 
-                        let title = "😴 Lazy Day";
-                        let color = "#c62828";
+            // ===== FIX: DESTROY OLD CHART =====
+            if (window.workChartInstance) {
+                window.workChartInstance.destroy();
+            }
 
-                        if (efficiency > 0.85) {
-                            title = "🔥 Highly Productive";
-                            color = "#1b5e20";
-                        } else if (efficiency > 0.65) {
-                            title = "💪 Work Day";
-                            color = "#2e7d32";
-                        } else if (efficiency > 0.35) {
-                            title = "⚠️ Average";
-                            color = "#f9a825";
-                        }
+            // ======= CHART =======
+            // const ctx = document.getElementById('workChart').getContext('2d');
 
-                        ctx.fillStyle = color;
-                        // let isGood = totalWork > freeTime;
-                        // let title = isGood ? "💪 Work Day" : "😴 Lazy Day";
+            // Center text plugin
+            const centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw(chart) {
+
+                    const { ctx } = chart;
+
+                    const meta = chart.getDatasetMeta(0);
+                    const centerX = meta.data[0].x;
+                    const centerY = meta.data[0].y;
+
+                    ctx.save();
+
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    let efficiency = (totalWork + extraWork) / (totalDayWork);
+                    ctx.fillText((efficiency * 100).toFixed(0) + "%", centerX, centerY + 0);
 
 
-                        ctx.font = "bold 9px sans-serif";
-                        // ctx.fillStyle = isGood ? "#2e7d32" : "#c62828";
-                        ctx.fillText(title, centerX, centerY - 15);
+                    let title = "😴 Lazy Day";
+                    let color = "#c62828";
 
-
-                        ctx.font = "bold 12px sans-serif";
-                        ctx.fillStyle = "#0d31ff";
-                        ctx.fillText(formatMinutes(totalDayWork), centerX, centerY + 12);
-
-                        ctx.restore();
+                    if (efficiency > 0.85) {
+                        title = "🔥 Highly Productive";
+                        color = "#1b5e20";
+                    } else if (efficiency > 0.65) {
+                        title = "💪 Work Day";
+                        color = "#2e7d32";
+                    } else if (efficiency > 0.35) {
+                        title = "⚠️ Average";
+                        color = "#f9a825";
                     }
-                };
 
-                // ===== CREATE CHART =====
-                window.workChartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['💪 Work Time', '😎 Extra Time', '⏸️ Paused Time', '☕ Break Time', '😴 Free Time'],
-                        datasets: [{
-                            data: [totalWork, extraWork, pausedTime, breakTime, freeTime],
-                            backgroundColor: [grad1, grad2, grad4, grad5, grad3],
-                            borderRadius: 10,
-                            hoverOffset: 15,
-                            borderWidth: 2,
-                            borderColor: "#fff"
-                        }]
+                    ctx.fillStyle = color;
+                    // let isGood = totalWork > freeTime;
+                    // let title = isGood ? "💪 Work Day" : "😴 Lazy Day";
+
+
+                    ctx.font = "bold 9px sans-serif";
+                    // ctx.fillStyle = isGood ? "#2e7d32" : "#c62828";
+                    ctx.fillText(title, centerX, centerY - 15);
+
+
+                    ctx.font = "bold 12px sans-serif";
+                    ctx.fillStyle = "#0d31ff";
+                    ctx.fillText(formatMinutes(totalDayWork), centerX, centerY + 12);
+
+                    ctx.restore();
+                }
+            };
+
+            // ===== CREATE CHART =====
+            window.workChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['💪 Work Time', '😎 Extra Time', '⏸️ Paused Time', '☕ Break Time', '😴 Free Time'],
+                    datasets: [{
+                        data: [totalWork, extraWork, pausedTime, breakTime, freeTime],
+                        backgroundColor: [grad1, grad2, grad4, grad5, grad3],
+                        borderRadius: 10,
+                        hoverOffset: 15,
+                        borderWidth: 2,
+                        borderColor: "#fff"
+                    }]
+                },
+                options: {
+                    responsive: true,
+
+                    cutout: '65%',
+
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                        duration: 1800,
+                        easing: 'easeOutElastic' // more visible than bounce
                     },
-                    options: {
-                        responsive: true,
 
-                        cutout: '65%',
-
-                        animation: {
-                            animateRotate: true,
-                            animateScale: true,
-                            duration: 1800,
-                            easing: 'easeOutElastic' // more visible than bounce
-                        },
-
-                        transitions: {
-                            active: {
-                                animation: {
-                                    duration: 400
-                                }
+                    transitions: {
+                        active: {
+                            animation: {
+                                duration: 400
                             }
+                        }
+                    },
+
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
                         },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let percent = ((context.raw / totalDayWork) * 100).toFixed(1);
 
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        let percent = ((context.raw / totalDayWork) * 100).toFixed(1);
-
-                                        return ` ${formatMinutes(context.raw)} (${percent}%)`;
-                                    }
-                                }
-                            }
-                        },
-
-                        onClick: (evt, elements) => {
-                            if (elements.length > 0) {
-
-                                let index = elements[0].index;
-                                let label = window.workChartInstance.data.labels[index];
-
-                                if (label.includes("Work Time")) {
-                                    showWorkDetails(data.report, "Work Time");
-                                }
-                                else if (label.includes("Extra Time")) {
-                                    showWorkDetails(data.report, "Extra Time");
-                                }
-                                else if (label.includes("Break Time")) {
-                                    showWorkDetails(data.report, "Break Time");
-                                }
-                                else {
-                                    document.getElementById("finalWorkDetails").innerHTML = '';
+                                    return ` ${formatMinutes(context.raw)} (${percent}%)`;
                                 }
                             }
                         }
                     },
-                    plugins: [centerTextPlugin]
-                });
+
+                    onClick: (evt, elements) => {
+                        if (elements.length > 0) {
+
+                            let index = elements[0].index;
+                            let label = window.workChartInstance.data.labels[index];
+
+                            if (label.includes("Work Time")) {
+                                showWorkDetails(data.report, "Work Time");
+                            }
+                            else if (label.includes("Extra Time")) {
+                                showWorkDetails(data.report, "Extra Time");
+                            }
+                            else if (label.includes("Break Time")) {
+                                showWorkDetails(data.report, "Break Time");
+                            }
+                            else {
+                                document.getElementById("finalWorkDetails").innerHTML = '';
+                            }
+                        }
+                    }
+                },
+                plugins: [centerTextPlugin]
+            });
 
 
-                let workPer = ((totalWork / totalDayWork) * 100) || 0;
-                let extraPer = ((extraWork / totalDayWork) * 100) || 0;
-                let freePer = ((freeTime / totalDayWork) * 100) || 0;
-                let pausedPer = ((pausedTime / totalDayWork) * 100) || 0;
-                let breakPer = ((breakTime / totalDayWork) * 100) || 0;
-                // ===== FUN SUMMARY CARDS =====
-                let funSummary = `
+            let workPer = ((totalWork / totalDayWork) * 100) || 0;
+            let extraPer = ((extraWork / totalDayWork) * 100) || 0;
+            let freePer = ((freeTime / totalDayWork) * 100) || 0;
+            let pausedPer = ((pausedTime / totalDayWork) * 100) || 0;
+            let breakPer = ((breakTime / totalDayWork) * 100) || 0;
+            // ===== FUN SUMMARY CARDS =====
+            let funSummary = `
                     <div class="row mt-3 text-center g-1">
 
                         <div class="col">
@@ -1711,14 +1723,14 @@ function get_final_summary() {
                     </div>
                     `;
 
-                document.getElementById("finalWorkSummaryCards").innerHTML = funSummary;
+            document.getElementById("finalWorkSummaryCards").innerHTML = funSummary;
 
 
-                // ======= DRILL DOWN TABLE =======
-                function showWorkDetails(report, label) {
-                    document.getElementById("finalWorkDetails").innerHTML = '';
+            // ======= DRILL DOWN TABLE =======
+            function showWorkDetails(report, label) {
+                document.getElementById("finalWorkDetails").innerHTML = '';
 
-                    let html = `
+                let html = `
                         <div class="card shadow">
                             <div class="card-header bg-primary text-white">
                                 Work Details
@@ -1738,7 +1750,7 @@ function get_final_summary() {
                                     <tbody>
                     `;
 
-                    let html1 = `
+                let html1 = `
                         <div class="card shadow">
                             <div class="card-header bg-primary text-white">
                                 Extra Work / Break Details
@@ -1756,20 +1768,20 @@ function get_final_summary() {
                     `;
 
 
-                    let count = 1;
+                let count = 1;
 
-                    report.forEach(item => {
+                report.forEach(item => {
 
-                        if (item.work_sts === "finished" && item.process_data && item.process_data !== "null" && label === "Work Time") {
+                    if (item.work_sts === "finished" && item.process_data && item.process_data !== "null" && label === "Work Time") {
 
-                            try {
-                                let processes = JSON.parse(item.process_data);
-                                let parsedData = item.assign_product_data ? JSON.parse(item.assign_product_data) : [];
-                                processes.forEach(p => {
+                        try {
+                            let processes = JSON.parse(item.process_data);
+                            let parsedData = item.assign_product_data ? JSON.parse(item.assign_product_data) : [];
+                            processes.forEach(p => {
 
-                                    if (!p.process_name) return;
+                                if (!p.process_name) return;
 
-                                    html += `
+                                html += `
                                         <tr>
                                             <td>${count++}</td>
                                             <td>${p.part_name}</td>
@@ -1779,86 +1791,86 @@ function get_final_summary() {
                                             <td>${p.total_time || 0} min</td>
                                         </tr>
                                     `;
-                                });
+                            });
 
-                            } catch (e) {
-                                console.log("Parse error", e);
-                            }
+                        } catch (e) {
+                            console.log("Parse error", e);
                         }
+                    }
 
-                        else if (item.extra_work_data && item.extra_work_data !== "null" && label === "Extra Time") {
+                    else if (item.extra_work_data && item.extra_work_data !== "null" && label === "Extra Time") {
 
-                            try {
-                                let processes = JSON.parse(item.extra_work_data).filter(p=>p !== null);
+                        try {
+                            let processes = JSON.parse(item.extra_work_data).filter(p => p !== null);
 
-                                processes.forEach(p => {
+                            processes.forEach(p => {
 
-                                    if (!p.ex_name) return;
+                                if (!p.ex_name) return;
 
-                                    html1 += `
+                                html1 += `
                                         <tr>
                                             <td>${count++}</td>
                                             <td>${p.ex_name}</td>
                                             <td>${p.break_time || 0} min</td>
                                         </tr>
                                     `;
-                                });
+                            });
 
-                            } catch (e) {
-                                console.log("Parse error", e);
-                            }
+                        } catch (e) {
+                            console.log("Parse error", e);
                         }
+                    }
 
-                        else if (item.break_data && item.break_data !== "null" && label === "Break Time") {
+                    else if (item.break_data && item.break_data !== "null" && label === "Break Time") {
 
-                            try {
-                                let processes = JSON.parse(item.break_data).filter(p=>p !== null);
+                        try {
+                            let processes = JSON.parse(item.break_data).filter(p => p !== null);
 
-                                processes.forEach(p => {
+                            processes.forEach(p => {
 
-                                    if (!p.ex_name) return;
+                                if (!p.ex_name) return;
 
-                                    html1 += `
+                                html1 += `
                                         <tr>
                                             <td>${count++}</td>
                                             <td>${p.ex_name}</td>
                                             <td>${p.break_time || 0} min</td>
                                         </tr>
                                     `;
-                                });
+                            });
 
-                            } catch (e) {
-                                console.log("Parse error", e);
-                            }
+                        } catch (e) {
+                            console.log("Parse error", e);
                         }
-                    });
-
-                    if (count === 1) {
-                        html1 += `<tr><td colspan="4" class="text-center text-muted">No Break TIme</td></tr>`;
                     }
+                });
 
-                    html += `
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                        `;
-
-                    html1 += `
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                        `;
-
-                    if (label === "Extra Time" || label === "Break Time" ) {
-
-                        document.getElementById("finalWorkDetails").innerHTML = html1;
-                    } else {
-
-                        document.getElementById("finalWorkDetails").innerHTML = html;
-                    }
+                if (count === 1) {
+                    html1 += `<tr><td colspan="4" class="text-center text-muted">No Break TIme</td></tr>`;
                 }
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                        `;
+
+                html1 += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                        `;
+
+                if (label === "Extra Time" || label === "Break Time") {
+
+                    document.getElementById("finalWorkDetails").innerHTML = html1;
+                } else {
+
+                    document.getElementById("finalWorkDetails").innerHTML = html;
+                }
+            }
 
 
 
@@ -1887,7 +1899,7 @@ function work_day_end(work_done_id) {
 
 
 
-            if (response.trim() == "ok") {
+            if (response.trim() == "ok" || response.trim() == "Work ended successfully") {
                 window.location.reload();
                 // get_current_work_details(current_user_id)
             }
@@ -2441,6 +2453,8 @@ function get_current_work_details(emp_id) {
                 if (response.trim() != "0 result") {
 
 
+                    $("#start_work").prop("disabled", false);
+                    $("#job_ass_id").val("");
                     $("#start_section").addClass("d-none");
                     $("#after_start").removeClass("d-none");
                     $("#scan_section").addClass("d-none");
@@ -2567,8 +2581,8 @@ function get_current_work_details(emp_id) {
 
                         let process_data = Array.isArray(finish.process_data) ? finish.process_data : JSON.parse(finish.process_data);
 
-                        process_data.forEach(function (item) {
-                            $("#work_compeleted_tbody").append(`<tr><td>${index + 1}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
+                        process_data.forEach(function (item, i) {
+                            $("#work_compeleted_tbody").append(`<tr><td>${i + 1}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
 
                         })
 
