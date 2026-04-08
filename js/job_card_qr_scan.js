@@ -2517,6 +2517,7 @@ function get_current_work_details(emp_id) {
                                         </span>
                                     </div>
                                 </div>
+                                
 
                                 <div class="card-body text-center p-2">
 
