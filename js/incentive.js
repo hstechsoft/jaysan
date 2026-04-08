@@ -36,6 +36,7 @@ $(document).ready(function () {
 
   check_login();
   get_customer_dealer_autocomplete();
+  get_all_customer_group_percentage();
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -187,6 +188,45 @@ function get_customer_dealer_autocomplete() {
   });
 }
 
+function get_all_customer_group_percentage() {
+  $.ajax({
+    url: "php/get_all_customer_group.php",
+    type: "get", //send it through get method
+    data: {
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim() != "error") {
+        $("#customer_type").empty();
+        if (response.trim() != "0result") {
+
+          $("#customer_type").append(`<option selected disabled value="">Choose...</option>`);
+
+          var obj = JSON.parse(response);
+
+          obj.forEach(function (obj) {
+            $("#customer_type").append(`<option value=${obj.group_id}>${obj.group_name}</option>`)
+          })
+        }
+        else {
+          $("#customer_type").append(`<option selected disabled value='' class='text-danger'>No Data Found</option>`)
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
 
 
 

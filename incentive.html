@@ -148,33 +148,33 @@
                 <div class="col-lg-5">
                     <div class="card card-modern p-4">
 
-                        <h5 class="mb-3"><i class="fa-solid fa-users"></i> Team Setup</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="mb-3"><i class="fa-solid fa-users fa-beat-fade"></i> Team Setup</h5>
+                            <button type="button" class="btn btn-secondary " id="percentage_btn" data-bs-toggle="modal"
+                                data-bs-target="#percentage"><i class="fa-regular fa-paper-plane fa-flip"></i></button>
+                        </div>
 
                         <div class="d-flex justify-content-between">
                             <div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="team_name">
-                                    <label>Team Name</label>
+                                    <input type="text" class="form-control" id="telecaller_name">
+                                    <label>Telecaller</label>
                                 </div>
 
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="member_name">
-                                    <label>Member Name</label>
+                                    <input type="text" class="form-control" id="marketing_person">
+                                    <label>Marketing Person</label>
                                 </div>
 
                                 <div class="form-floating mb-3">
-                                    <select class="form-select" id="position">
-                                        <option disabled selected>Select Position</option>
-                                        <option>Marketing Head</option>
-                                        <option>Telecaller</option>
-                                        <option>Marketing Person</option>
-                                    </select>
-                                    <label>Position</label>
+                                    <input type="text" class="form-control" id="marketing_head">
+                                    <label>Marketing Head</label>
                                 </div>
                             </div>
-                            
+
                             <div class="card mb-3">
-                                <div class="card-header p-1">Select Dealers <input type="text" class="float-end" id="dealer_search"></div>
+                                <div class="card-header p-1">Select Customer <input type="text" class="float-end"
+                                        id="dealer_search"></div>
                                 <div class="card-body p-1">
                                     <ul class="list-group" id="dealer_list" style="height: 20vh; overflow-y: auto;">
 
@@ -183,6 +183,18 @@
                             </div>
                         </div>
 
+                        <div class="text-center mb-2">
+                            <button type="submit" class="btn btn-primary " id="team_btn">Create</button>
+                        </div>
+
+                        <hr class="mt-0 mb-3">
+
+                        <h5 class="mb-3"><i class="fa-solid fa-universal-access fa-shake"></i> Individual Target</h5>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="employee">
+                            <label>Employee</label>
+                        </div>
 
                         <div class="d-flex gap-2 flex-mobile">
                             <div class="form-floating mb-3 w-100">
@@ -358,7 +370,48 @@
     </div>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="percentage" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="percentageLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="percentageLabel">Set Incentive Percentage</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="customer_type">
+                            <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="customer_type">Customer Type</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control rounded-3" id="telecaller_percentage" placeholder="">
+                        <label for="telecaller_percentage">Telecaller's % </label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control rounded-3" id="markenting_persong_percentage"
+                            placeholder="">
+                        <label for="markenting_persong_percentage">Marketing Person's % </label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control rounded-3" id="marketing_head_percentage" placeholder="">
+                        <label for="marketing_head_percentage">Marketing Head's % </label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="percentage_add_btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div id='footer' class="mt-auto"></div>
