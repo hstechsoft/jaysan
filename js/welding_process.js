@@ -925,7 +925,7 @@ $(document).ready(function () {
       newQty = newQty-usedQty
       let remaining = bomQty - usedQty;
 
-      alert(usedQty+" "+remaining)
+      // alert(usedQty+" "+remaining)
       if (remaining <= 0) {
         salert("Warning", "No quantity remaining for this part");
         return;
