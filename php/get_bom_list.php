@@ -22,7 +22,7 @@ return $data;
         WHERE pwl.output_part COLLATE utf8mb4_unicode_ci = 
               bom_output.part_id COLLATE utf8mb4_unicode_ci
           AND pwl.component_cat COLLATE utf8mb4_unicode_ci = 
-              bom_output.component_cat COLLATE utf8mb4_unicode_ci
+              bom_output.component_cat COLLATE utf8mb4_unicode_ci group by pwl.output_part, pwl.component_cat
        ) AS process
 FROM bom_output
 WHERE bom_output.part_id = $part_id ";
