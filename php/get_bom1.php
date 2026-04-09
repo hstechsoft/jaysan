@@ -54,7 +54,7 @@ return $data;
            
             h.level + 1,
             boc.component_cat,
-        CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS VARCHAR(500))
+        CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS CHAR(500))
 
 
         FROM bom_output boc
