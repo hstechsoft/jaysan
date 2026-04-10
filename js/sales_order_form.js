@@ -80,13 +80,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
   });
 
+
 });
 
 
 $(document).ready(function () {
 
   $("#openCalendarBtn").on("click", function () {
-    calendar.render();
+    $('#calenderModal').on('shown.bs.modal', function () {
+      setTimeout(() => {
+        calendar.render();
+        calendar.updateSize();
+      }, 200);
+    });
   });
   $("#commitment_date").on("change", function () {
     $("#openCalendarBtn").trigger("click")
