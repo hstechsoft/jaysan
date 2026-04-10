@@ -22,8 +22,8 @@ $conn->begin_transaction();
  try
  {
 
-$output_part ="0";
-$pre_process_id = "0";
+$output_part =null;
+$pre_process_id =null;
 $cat = "" ;// Initialize pre_process_id to 0
 
 // check if input_wel_parts has refenced this as previous_process_id if yes do not proceed with delete query 
@@ -105,24 +105,23 @@ if($is_default1 == 1)
     }
   }
 
-    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
-   VALUES ('$process_id','$output_part','$pre_process_id','$cat','$component_cat','$process_title1','$is_default1')";
+      $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
+   VALUES ('$process_id', " . sql_nullable($output_part) . ", " . sql_nullable($pre_process_id) . ", '$cat', '$component_cat', '$process_title', '$is_default')";
  
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;
  {
    foreach ($row['input_parts'] as $input) {
-    $in_pre_id = 0;
-      $part_id = isset($input['part_id']) ? $input['part_id'] : '0';
+    $in_pre_id = null;
+      $part_id = isset($input['part_id']) ? $input['part_id'] : null;
       $part_qty = isset($input['part_qty']) ? $input['part_qty'] : '';
-         $in_pre_id = isset($input['pre_process_id']) ? $input['pre_process_id'] : '0';
+         $in_pre_id = isset($input['pre_process_id']) ? $input['pre_process_id'] : null;
 
-if($part_id == 0)
+if($part_id === null)
 $in_pre_id = $pre_process_id;
 
-     
-   $sql_input= "INSERT INTO  input_wel_parts  (process_id, input_part_id, previous_process_id, qty)
-   VALUES ('$last_insert_id',' $part_id','$in_pre_id',' $part_qty')";
+  $sql_input= "INSERT INTO  input_wel_parts  (process_id, input_part_id, previous_process_id, qty)
+   VALUES ('$last_insert_id', " . sql_nullable($part_id) . ", " . sql_nullable($in_pre_id) . ", " . sql_nullable($part_qty) . ")";
     
      
       if ($conn->query($sql_input) === TRUE) {

@@ -6,3 +6,12 @@
 [2026-04-09 11:34:46] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2728
 [2026-04-09 11:39:51] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2729
 [2026-04-09 11:40:47] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2728
+[2026-04-10 10:05:05] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2753
+[2026-04-10 10:16:15] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2753
+[2026-04-10 10:22:44] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:22:44] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:23:17] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:23:17] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
+[2026-04-10 10:25:15] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2753
