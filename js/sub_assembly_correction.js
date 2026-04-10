@@ -677,6 +677,8 @@ $(document).ready(function () {
         }
     });
     $("#bom_recent_list").on("click", "li", function () {
+
+        $("#only_bom_materials").prop("checked", false)
         var part_id = $(this).data('part_id')
         var component_cat = $(this).data('cat');
         $('#part_no_out').val($(this).data('part_no'))
@@ -686,7 +688,7 @@ $(document).ready(function () {
 
         $("#outpart_txt").text($(this).text())
 
-        selectAutocompleteByPartId(part_id);
+        selectAutocompleteByPartId(part_id, component_cat);
         get_bom(part_id, component_cat)
     });
 
@@ -1037,7 +1039,7 @@ function update_jaysan_model_subtype_bom(part_id, bom_id) {
 
 
 
-function selectAutocompleteByPartId(partId) {
+function selectAutocompleteByPartId(partId, component_cat) {
     let input = $('#part_name_out');
 
     // Trigger input to initiate autocomplete search
@@ -1078,6 +1080,11 @@ function selectAutocompleteByPartId(partId) {
             }
         });
     }, 200); // Adjust timeout if needed
+
+    setTimeout(function () {
+        $('#bom_list_select').val(component_cat)
+
+    }, 1000)
 }
 
 function get_bom_list(part_id) {
@@ -1206,7 +1213,6 @@ function get_bom_recent() {
 function get_bom(part_id, component_cat, mat) {
     console.log(part_id, component_cat);
 
-
     $.ajax({
         url: "php/get_bom1.php",
         type: "get", //send it through get method
@@ -1240,6 +1246,7 @@ function get_bom(part_id, component_cat, mat) {
 
                     var obj = JSON.parse(response);
                     var count = 0;
+
                     if (mat == 11) {
 
                         obj.forEach(function (obj) {
@@ -1249,14 +1256,15 @@ function get_bom(part_id, component_cat, mat) {
                                 bom_data.forEach(function (item) {
 
 
-                                    if (item.sub_ass == 0) {
-                                        count++;
-                                        $('#bom_table').append(`
+                                    // if (item.sub_ass == 0) {
+                                    count++;
+                                    $('#bom_table').append(`
                                             <tr class='small'>
                                                 <td>${count}</td>
 
                                                 <td data-part-id="${item.input_part}">
-                                                        ${item.inpart_name} 
+                                                  ${item.inpart_name} - ${item.sub_ass == 1 ? `<span class='badge bg-secondary'>Sub Ass</span>` : ''}
+
                                                 </td>
 
                                                 <td>
@@ -1269,7 +1277,7 @@ function get_bom(part_id, component_cat, mat) {
                                                 </td>
                                             </tr>
                                         `);
-                                    }
+                                    // }
 
 
                                 });
@@ -1278,6 +1286,7 @@ function get_bom(part_id, component_cat, mat) {
 
                     }
                     else {
+
 
 
                         // Build BOM map

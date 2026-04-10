@@ -104,10 +104,423 @@
       }
     }
 
-    #part_autocomplete_suggestions{
+    #part_autocomplete_suggestions {
       position: relative;
       z-index: 1000;
     }
+
+
+    table tr {
+      font-size: 15px;
+      padding: 1px;
+    }
+
+    .btn-outline-primary {
+      font-size: 10px;
+      padding: 3px;
+    }
+
+
+    #accordionExample .accordion-header button {
+      font-size: 15px;
+    }
+
+    .accordion-item:first-of-type .accordion-button,
+    .accordion-body {
+      padding: 10px;
+    }
+
+    .add-box {
+      border: 2px dashed #0d6efd;
+      border-radius: 12px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+      transition: 0.3s;
+    }
+
+    .add-box:hover {
+      background-color: #e7f1ff;
+    }
+
+    .add-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      background-color: #0d6efd;
+      color: white;
+      font-size: 24px;
+      transition: 0.3s;
+    }
+
+    .add-btn:hover {
+      background-color: #0b5ed7;
+      transform: scale(1.05);
+    }
+
+    .part-card {
+      border-radius: 20px;
+      overflow: hidden;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.35s ease;
+    }
+
+    .part-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Header Gradient */
+    .part-card .card-header {
+      background: linear-gradient(136deg, #000000, #0084e1);
+      padding: 10px;
+      color: white;
+    }
+
+    .part-card .card-body {
+      background: linear-gradient(300deg, #9ed7ff, #0084e1, #9ed7ff);
+    }
+
+    .part-card .card-footer {
+      background: linear-gradient(136deg, #0084e1, #000000);
+    }
+
+
+    /* Status Badge */
+    .status-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Motivation Box */
+    .motivation-box {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 15px;
+      border-radius: 15px;
+      font-size: 14px;
+      color: #333;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Time Box */
+    .time-box {
+      background: #e6f4ea;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #0f5132;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    #start_work,
+    #end_work,
+    #pause_work {
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      font-size: 10px;
+    }
+
+    #start_work:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 18px rgba(25, 135, 84, 0.4);
+    }
+
+    #end_work:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 18px rgba(220, 53, 69, 0.4);
+    }
+
+
+
+    #pause_work:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 18px rgba(220, 203, 53, 0.4);
+    }
+
+    .start-bg {
+      background: linear-gradient(225deg, #1f88ff, #93d7ff9c);
+      display: flex;
+    }
+
+    .start-wrapper {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 40px 35px;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    /* header */
+
+    .start-header h1 {
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .start-header p {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .rocket {
+      font-size: 50px;
+      animation: rocketFloat 3s infinite ease-in-out;
+    }
+
+    @keyframes rocketFloat {
+      0% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-8px)
+      }
+
+      100% {
+        transform: translateY(0)
+      }
+    }
+
+    /* break */
+    #break_time_list li {
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    /* quote */
+
+    .quote-box {
+      margin: 10px;
+      padding: 20px;
+      border-radius: 15px;
+      background: #f5f7fb;
+      text-align: center;
+      position: relative;
+    }
+
+    .lang-switch {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .quote-icon {
+      font-size: 30px;
+      margin-top: 10px;
+      animation: iconPulse 2s infinite;
+    }
+
+    @keyframes iconPulse {
+      0% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.15)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    .quote-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    /* button */
+
+    .start-btn {
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(226deg, #ea66dc, #764ba2);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all .3s;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    /* responsive */
+
+    @media(max-width:480px) {
+
+      .start-wrapper {
+        padding: 10px 5px;
+      }
+
+      .quote-text {
+        font-size: 13px;
+      }
+
+    }
+
+    .blink {
+      animation: blinkAnim 1s infinite;
+    }
+
+    @keyframes blinkAnim {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+
+    /* Graph Animation */
+
+
+    .icon-work {
+      display: inline-block;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+
+    .icon-extra {
+      display: inline-block;
+      animation: flicker 0.8s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+
+    .icon-free {
+      display: inline-block;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+
+    .icon-paused {
+      display: inline-block;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+
+    .wave-box {
+      position: relative;
+      height: 6px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .wave-fill {
+      height: 100%;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wave-fill::before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      top: 0;
+      left: -50%;
+      opacity: 0.4;
+      background: repeating-linear-gradient(-45deg,
+          rgba(255, 255, 255, 0.4),
+          rgba(255, 255, 255, 0.4) 10px,
+          transparent 10px,
+          transparent 20px);
+      animation: waveMove 1.5s linear infinite;
+    }
+
+    @keyframes waveMove {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(50%);
+      }
+    }
+
+       
   </style>
 
 
@@ -198,9 +611,10 @@
           </form>
 
 
-          <div class="table-responsive mt-4">
-            <table class="table table-hover table-bordered text-center small" id="extra_time_table">
-              <thead class="table-primary">
+          <div class=" mt-4">
+            <table class="table table-hover table-bordered text-center small" id="extra_time_table"
+              style="font-size: 15px;">
+              <thead class="table-primary small">
                 <tr>
                   <th>#</th>
                   <th>Name</th>
@@ -212,7 +626,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody class="small"></tbody>
             </table>
           </div>
         </div>
@@ -339,15 +753,21 @@
     <div class="page-wrapper mt-5 mt-md-0">
 
       <div class="row ">
-        <div class="col-sm-8 col-12 m-0 p-0">
-          <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="work_time_form" novalidate
+        <div class="col-sm-6 col-12 m-0 p-0">
+          <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="work_time_formm" novalidate
             onsubmit="return false">
 
             <!-- content -->
             <div class="mb-2">
-              <label class="form-label d-block">
-                <i class="fa fa-user me-1 text-primary"></i> Employee <span class="text-danger">*</span>
-              </label>
+              <div class="d-flex justify-content-between p-2">
+                <label class="form-label d-block">
+                  <i class="fa fa-user me-1 text-primary"></i> Employee <span class="text-danger">*</span>
+                </label> <button type="button" class="btn btn-success " data-bs-toggle="modal"
+                  data-bs-target="#extra_time_master">
+                  <i class="fa-solid fa-mug-hot me-1"></i> Add New
+
+                </button>
+              </div>
               <div class="d-flex gap-2 align-items-center">
                 <div class="form-floating flex-grow-1">
                   <select class="form-select" id="emp" required>
@@ -358,14 +778,6 @@
                     Kindly select valid employee
                   </div>
                 </div>
-                <button id="openProcessModalBtn" type="button" class="btn btn-success" data-bs-toggle="modal"
-                  data-bs-target="#employeeProcessModal" disabled>
-                  <i class="fa fa-plus"></i>
-                </button>
-
-                <button id="printProcessBtn" type="button" class="btn btn-success " disabled>
-                  <i class="fa fa-print"></i>
-                </button>
 
               </div>
             </div>
@@ -377,40 +789,7 @@
 
 
 
-            <div class="d-sm-flex  justify-content-between gap-1 align-content-center">
 
-              <div class="flex-fill">
-
-                <div class="form-floating mb-2">
-                  <input type="datetime-local" class="form-control rounded-3" id="start_date" placeholder="" required>
-                  <label for="datetimelocal"><i class="fa fa-calendar me-1 text-primary" aria-hidden="true"></i> Start
-                    Date
-                    <span class="text-danger">*</span> </label>
-
-                  <div class="invalid-feedback">
-                    Kindly Enter Vaild Data
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="flex-fill">
-
-                <div class="form-floating mb-2">
-                  <input type="datetime-local" class="form-control rounded-3" id="end_date" placeholder="" required>
-                  <label for="datetimelocal"><i class="fa fa-calendar me-1 text-primary me-1" aria-hidden="true"></i>
-                    End
-                    Date
-                    <span class="text-danger">*</span> </label>
-
-                  <div class="invalid-feedback">
-                    Kindly Enter Vaild Data
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
             <div class="my-auto">
 
               <button type="submit" class="btn btn-primary w-100 rounded rounded-3" id="ok_btn"><i
@@ -420,10 +799,49 @@
 
           </form>
         </div>
-        <div class="col-sm-4 col-12  m-0 p-0">
+        <div class="col-sm-6 col-12  m-0 p-0">
           <div class="card shadow-sm ">
             <div class="card-header">
-              <h5 class="card-title"><i class="fa fa-book text-primary me-2" aria-hidden="true"></i> Recent Entry </h5>
+
+              <div class="text-center">
+                <h5 class="card-title"><i class="fa fa-book text-primary me-2" aria-hidden="true"></i> Recent Entry
+                </h5>
+              </div>
+              <div class="d-sm-flex  justify-content-between gap-1 align-content-center">
+
+
+                <div class="flex-fill">
+
+                  <div class="form-floating mb-2">
+                    <input type="datetime-local" class="form-control rounded-3" id="start_date" placeholder="" required>
+                    <label for="datetimelocal"><i class="fa fa-calendar me-1 text-primary" aria-hidden="true"></i> Start
+                      Date
+                      <span class="text-danger">*</span> </label>
+
+                    <div class="invalid-feedback">
+                      Kindly Enter Vaild Data
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="flex-fill">
+
+                  <div class="form-floating mb-2">
+                    <input type="datetime-local" class="form-control rounded-3" id="end_date" placeholder="" required>
+                    <label for="datetimelocal"><i class="fa fa-calendar me-1 text-primary me-1" aria-hidden="true"></i>
+                      End
+                      Date
+                      <span class="text-danger">*</span> </label>
+
+                    <div class="invalid-feedback">
+                      Kindly Enter Vaild Data
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
             </div>
             <div class="card-body" style="max-height: 33vh; overflow-y: auto;">
 
@@ -440,13 +858,13 @@
 
       </div>
 
-      <ul class="list-group mt-3" id="duplicate_entry_list"></ul>
+      <!-- <ul class="list-group mt-3" id="duplicate_entry_list"></ul>
 
 
-      <p class="text-muted my-2 small">Total Time : <span id="total_time_text"></span></p>
+      <p class="text-muted my-2 small">Total Time : <span id="total_time_text"></span></p> -->
 
 
-      <div id="part1" class="">
+      <!-- <div id="part1" class="">
         <div class="accordion " id="acc_extra">
           <div class="accordion-item">
             <div class="d-flex">
@@ -560,7 +978,7 @@
                 </div>
               </div>
 
-              <!-- Machine Dropdown -->
+              
               <div class="flex-fill d-none">
                 <div class="form-floating mb-2 mb-sm-0">
                   <select class="form-select" id="machine">
@@ -625,11 +1043,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
 
-      <div id="part2" class="d-none">
+      <!-- <div id="part2" class="d-none">
         <div class="card">
           <div class="card-header d-flex justify-content-between" id="process_sts">
             <p class="p-0 m-0">Good Work</p>
@@ -677,12 +1095,614 @@
               class="fa fa-rocket me-2" aria-hidden="true"></i> Submit</button>
 
         </div>
+      </div> -->
+
+
+      <div class="container-fluid start-bg min-vh-100 d-flex align-items-center justify-content-center d-none"
+        id="start_section">
+
+        <div class="start-wrapper my-2">
+
+          <!-- Header -->
+          <div class="start-header text-center">
+            <div class="rocket d-none">🚀</div>
+            <h1>Start Your Day</h1>
+            <p>Kickstart Your Day with AD’s Favorite Quotes</p>
+          </div>
+
+          <!-- Quote Box -->
+          <div class="quote-box">
+
+            <div class="lang-switch">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="lang_toggle">
+                <label class="form-check-label">English</label>
+              </div>
+            </div>
+
+
+            <div class="quote-icon" id="quote_icon">🔥</div>
+
+            <div class="quote-text" id="quote_text">
+              Motivation quote appears here
+            </div>
+
+          </div>
+
+          <div class="form-floating my-3">
+            <select class="form-select" id="start_worked_unit">
+              <option selected disabled value="">Choose...</option>
+              <option value="1166">Jaysan Branch-1 (Assembly)</option>
+              <option value="359">Jaysan Branch-2 (Welding)</option>
+              <option disabled value="">Jaysan Branch-3 (Fabrication)</option>
+            </select>
+            <label for="start_worked_unit">Unit</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <select class="form-select" id="start_worked_dept">
+              <option selected disabled value="">Choose...</option>
+            </select>
+            <label for="start_worked_dept">Department</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <select class="form-select" id="start_worked_section">
+              <option selected disabled value="">Choose...</option>
+            </select>
+            <label for="start_worked_section">Section</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <select class="form-select" id="start_worked_machine">
+              <option selected disabled value="">Choose...</option>
+            </select>
+            <label for="start_worked_machine">Machine</label>
+          </div>
+
+          <div class="table-responsive d-none start_Worked_parts_table" style="max-height: 25vh; overflow-y: auto;">
+            <table class="table caption-top table-bordered table-striped ">
+              <caption></caption>
+              <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
+
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Part Name</th>
+                  <th scope="col">Process</th>
+                  <th scope="col">Action</th>
+
+                </tr>
+              </thead>
+              <tbody id="start_Worked_parts_tbody">
+
+
+              </tbody>
+
+
+            </table>
+          </div>
+
+
+          <!-- Button -->
+          <button class="start-btn w-100 mt-4" id="start_day_btn">
+            Start My Day
+          </button>
+
+        </div>
+
       </div>
 
+
+      <div class="container py-2 d-none" id="after_start">
+        <div class="d-flex justify-content-between" style="font-size: 15px;">
+          <p class="text-center">Your Day Started At <b id="day_start_time" class="badge bg-success"></b>
+          </p>
+          <p class="text-center">Your Batch ID <b id="batch_id" class="badge bg-primary"></b>
+          </p>
+        </div>
+
+        <div class="row justify-content-center">
+
+          <div class="accordion mb-3" id="accordionExample">
+            <div class="accordion-item">
+              <h6 class="accordion-header" id="headingOne1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#work_entry"
+                  aria-expanded="true" aria-controls="work_entry">
+                  Add Work Entry
+                </button>
+
+              </h6>
+              <div id="work_entry" class="accordion-collapse collapse show" aria-labelledby="headingOne1"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <div class="card shadow-sm">
+                    <div class="card-body p-2 text-center" style="font-size: 15px;">
+                      <div class="form-check">
+                        <input class="form-check-input " type="checkbox" value="" id="set_main_process">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Do You Want To Change Default Section?
+                        </label>
+                      </div>
+
+                      <div class="form-floating mb-3">
+                        <select class="form-select" id="worked_unit">
+                          <option selected disabled value="">Choose...</option>
+                          <option value="1166">Jaysan Branch-1 (Assembly)</option>
+                          <option value="359">Jaysan Branch-2 (Welding)</option>
+                          <option disabled value="">Jaysan Branch-3 (Fabrication)</option>
+                        </select>
+                        <label for="worked_unit">Unit</label>
+                      </div>
+
+                      <div class="form-floating mb-3">
+                        <select class="form-select" id="worked_dept">
+                          <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="worked_dept">Department</label>
+                      </div>
+
+                      <div class="form-floating mb-3">
+                        <select class="form-select" id="worked_section">
+                          <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="worked_section">Section</label>
+                      </div>
+
+                      <div class="form-floating mb-3">
+                        <select class="form-select" id="worked_machine">
+                          <option selected disabled value="">Choose...</option>
+                        </select>
+                        <label for="worked_machine">Machine</label>
+                      </div>
+
+                      <div class="table-responsive d-none Worked_parts_table"
+                        style="max-height: 25vh; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                          <caption></caption>
+                          <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
+
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Part Name</th>
+                              <th scope="col">Process</th>
+                              <th scope="col">Action</th>
+
+                            </tr>
+                          </thead>
+                          <tbody id="Worked_parts_tbody">
+
+
+                          </tbody>
+
+
+                        </table>
+                      </div>
+
+                      <div class="table-responsive d-none" id="setting_part_table">
+                        <table class="table caption-top table-bordered table-striped ">
+                          <caption></caption>
+                          <thead>
+
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Part Name</th>
+                              <th scope="col">Process</th>
+                              <th scope="col">Qty</th>
+                              <th scope="col">Action</th>
+
+                            </tr>
+                          </thead>
+                          <tbody id="setting_part_tbody">
+
+
+                          </tbody>
+
+
+                        </table>
+                        <button type="submit" class="btn btn-primary " id="add_setting_part_btn">Add
+                          Work</button>
+
+                        <div class="card shadow p-3 mt-2 text-center report-card">
+                          <h4 class="text-center mb-3">Employee Work Summary</h4>
+                          <div class="chart-wrapper">
+                            <canvas id="workChart"></canvas>
+                          </div>
+                          <div id="workSummaryCards"></div>
+                        </div>
+
+                        <!-- Drill Down -->
+                        <div id="workDetails" class="mt-3"></div>
+                        <button type="button" class="btn btn-success mt-2 d-none" id="complete_work">Complete</button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-8 col-lg-5 mt-2" id="scan_section">
+
+
+
+
+            <div class="card shadow-lg border-0 rounded-4  d-none qr_section">
+
+              <div class="card-header bg-primary text-white text-center rounded-top-4">
+                <h5 class="mb-0">📦 Production QR Scanner</h5>
+              </div>
+
+              <div class="card-body p-4">
+
+                <!-- Section Select -->
+                <!-- <div class="form-floating mb-3">
+                                    <select class="form-select" id="section_select">
+                                        <option selected disabled value="null">Choose Section</option>
+                                    </select>
+                                    <label>Select Section</label>
+                                </div> -->
+
+                <!-- Scan Button -->
+                <div class="d-grid mb-3">
+
+                  <!-- Plus Box -->
+                  <div class="add-box mb-3">
+                    <button type="button" class="add-btn" id="openScannerBtn">
+                      <i class="fa-solid fa-plus"></i>
+                    </button>
+                  </div>
+
+                  <!-- ID Input -->
+                  <div class="form-floating mb-2">
+                    <input type="text" class="form-control rounded-3" id="job_ass_id" placeholder="">
+                    <label for="job_ass_id">ID</label>
+                  </div>
+
+                  <button type="button" class="btn btn-success px-4 me-2 fw-bold shadow-sm" id="start_work">
+                    ▶ Start Work
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-12 col-md-6 col-lg-4 d-none" id="timing_section">
+
+          </div>
+        </div>
+
+
+        <div class="table-responsive my-2" style="max-height: 25vh; overflow-y: auto;">
+          <table class="table caption-top table-bordered table-striped ">
+            <caption class="text-danger" style="font-size: 15px">Paused Works</caption>
+            <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
+
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Timing</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Chasis/No</th>
+                <th scope="col">Action</th>
+
+              </tr>
+            </thead>
+            <tbody id="paused_work_tbody">
+
+
+            </tbody>
+
+
+          </table>
+        </div>
+
+
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h6 class="accordion-header" id="headingOne2">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#work_completed_list" aria-expanded="true" aria-controls="work_completed_list">
+                Work Completed List
+              </button>
+            </h6>
+            <div id="work_completed_list" class="accordion-collapse collapse " aria-labelledby="headingOne2"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="card shadow-sm">
+                  <div class="card-body p-0 ">
+
+                    <div class="table-responsive " style="max-height: 50vh; overflow-y: auto;">
+                      <table class="table table-bordered table-striped align-middle">
+
+                        <thead class="table-primary text-center small"
+                          style="position: sticky; top: 0; z-index: 5; font-size: 15px; text-align: center;  background: #cfe2ff;">
+                          <tr>
+                            <th>#</th>
+
+                            <th>Part Name</th>
+
+                            <th>Process</th>
+
+                            <th>Chasis/No</th>
+
+                            <th>Qty</th>
+
+                            <th>Time</th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="work_compeleted_tbody" class="small">
+
+                        </tbody>
+
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h6 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#upcoming_machine" aria-expanded="true" aria-controls="upcoming_machine">
+                Upcoming Machines
+              </button>
+            </h6>
+            <div id="upcoming_machine" class="accordion-collapse collapse " aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="card shadow-sm">
+                  <div class="card-body p-0 d-none d-md-block">
+
+                    <div class="table-responsive " style="max-height: 50vh; overflow-y: auto;">
+                      <table class="table table-bordered table-striped align-middle">
+
+                        <thead class="table-primary text-center"
+                          style="position: sticky; top: 0; z-index: 5; font-size: 15px; text-align: center;  background: #cfe2ff;">
+                          <tr>
+                            <th style="width: 10%;">Line/No</i>
+                            </th>
+
+                            <th style="width: 50%;">
+
+                              <div class="d-flex justify-content-between">
+                                <!-- Customer Label -->
+                                <div class="d-flex align-items-center">
+                                  <i class="fa-solid fa-user-group me-1"></i>
+                                  <span>Customer</span>
+                                </div>
+                                <div class="input-group input-group-sm" style="width: 180px;">
+                                  <span class="input-group-text bg-white border-0">
+                                    <i class="fa fa-search text-muted"></i>
+                                  </span>
+                                  <input type="text" id="production_line_search" class="form-control border-0 bg-white"
+                                    placeholder="Search...">
+                                </div>
+                              </div>
+
+                            </th>
+
+                            <th style="width: 40%;">
+                              <i class="fa-solid fa-industry me-1"></i> Machine Details
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="arrange_order_tbody">
+                          <!-- JS Inserts Rows Here -->
+                        </tbody>
+
+                      </table>
+                    </div>
+
+                  </div>
+                  <div class="card-body d-block d-md-none p-2 text-center" style="max-height: 50vh; overflow-y: auto;">
+                    <!-- <b class=" p-1">Upcoming Machines</b> -->
+                    <div id="mobile_view_arrange_order_tbody">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card shadow p-3 mt-2 d-none" id="final_summary">
+          <div>
+            <button type="button" class="btn btn-outline-success" id="pdf_summary_btn"><i
+                class="fa-solid fa-file-pdf"></i></button>
+          </div>
+          <div id="pdfContent">
+            <h4 class="text-center mb-3" id="emp_name_summary">Employee Work Summary</h4>
+
+            <canvas id="finalWorkChart"></canvas>
+            <div id="finalWorkSummaryCards"></div>
+          </div>
+          <div id="finalWorkDetails" class="mt-3"></div>
+
+        </div>
+        <div class="d-flex justify-content-center mt-1">
+          <button type="button" class="btn btn-secondary " id="summay_btn">Work Summary</button>
+          <button type="button" class="btn btn-success d-none" id="last_end_btn">End Day</button>
+        </div>
+
+      </div>
+
+
+      <div class="d-none" id="viwe_work">
+        <div class="row">
+          <div class="col-md-6">
+            <button type="button" class="btn btn-outline-success" id="pdf_summary_btnn"><i
+                class="fa-solid fa-file-pdf"></i></button>
+            <div class="card shadow p-3 mt-2">
+              <div id="pdfContentt">
+                <h4 class="text-center mb-3" id="emp_name_summary">Employee Work Summary</h4>
+                <canvas id="workChart_report"></canvas>
+                <div id="workSummaryCards_report"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div id="workDetails_report" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-<div id='footer' class="mt-auto"></div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="pause_workModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="pause_workModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pause_workModalLabel">Do You Need to Pause the Work?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="pause_select" required>
+                <option selected disabled value="">Choose...</option>
+                <option value="Rework">Rework</option>
+                <option value="No Stock">No Stock</option>
+                <option value="Break">Break</option>
+                <option value="Lunch">Lunch</option>
+              </select>
+              <label for="pause_select">Select Reason</label>
+              <div class="invalid-feedback">
+                Kindly Select Vaild
+              </div>
+            </div>
+            <div class="form-floating mb-3 d-none pause_reason">
+
+              <textarea class="form-control rounded-3 " placeholder="" id="pause_reason" required
+                style="max-height: 120px"></textarea>
+              <label for="pause_reason">Reason / Material Name</label>
+              <span class="text-danger">*</span>
+              <div class="invalid-feedback">
+                Kindly Enter Vaild
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="pause_work_btn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="breakTimeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="breakTimeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="breakTimeModalLabel">Break Time List <i class="fa-solid fa-mug-hot"></i>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="accordion" id="accordionExample1">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne3">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">
+                  Add Extra Work
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne3"
+                data-bs-parent="#accordionExample1">
+                <div class="accordion-body">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" id="extra_work_select">
+                      <option selected disabled value="">Choose...</option>
+                    </select>
+                    <label for="extra_work_select">Extra Work</label>
+                  </div>
+
+                  <div class="d-flex">
+                    <div class="form-floating mb-2">
+                      <input type="number" class="form-control rounded-3" id="extra_work_time" placeholder="">
+                      <label for="extra_work_time">Work Time</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <select class="form-select" id="extra_work_time_type">
+                        <option value="hrs">Hours</option>
+                        <option selected value="minutes">Mins</option>
+                      </select>
+                      <label for="extra_work_time_type">Hrs/Minutes</label>
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn btn-primary " id="add_extra_work_btn">Add</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <ul class="list-group" id="break_time_list"></ul>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="end_day_work">End Day</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="chase_entry_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="chase_entry_modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="chase_entry_modalLabel">Enter the Chase No
+          </h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-2">
+            <input type="number" class="form-control rounded-3" id="chase_no" placeholder="">
+            <label for="chase_no">Chase No
+              <span class="text-danger">*</span> </label>
+
+            <div class="invalid-feedback">
+              Kindly Enter Vaild Data
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+          <button type="button" class="btn btn-primary" id="chase_entry_btn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id='footer' class="mt-auto"></div>
 
 
 
@@ -704,11 +1724,18 @@
 
   <!-- font awesome -->
   <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Sweet alert -->
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
+  <!-- QR Code Scanning -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <!-- external js -->
   <script src="js/work_entry.js" type="module"></script>
