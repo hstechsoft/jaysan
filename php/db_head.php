@@ -53,7 +53,7 @@ $username = "u333142350_db_user";
 $password = ":wi9x57Ci2";
 $dbname = "u333142350_jaysan";
 
-// $servername = "192.168.0.160";
+// $servername = "192.168.0.70";
 // $username = "erpuser";
 // $password = "";
 // $dbname = "u333142350_jaysan";
