@@ -360,6 +360,165 @@
             word-break: break-all;
             white-space: normal;
         }
+
+
+
+
+        .fc-daygrid-day.fc-day-selected {
+            background-color: gainsboro !important;
+            /* Example blue color for selected date */
+
+        }
+
+
+        .no_qty .fc-event-title {
+            font-weight: bolder;
+            color: green;
+        }
+
+        .above_qty .fc-event-title {
+            font-weight: normal;
+            color: red;
+        }
+
+        .below_qty .fc-event-title {
+            font-weight: bold;
+            color: coral;
+        }
+
+        .date-picker-container {
+            max-width: 400px;
+            margin: 0px auto;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label::after {
+            content: '*';
+            color: red;
+            margin-left: 2px;
+        }
+
+        /* Set a fixed height for each row in the month view */
+
+
+        /* Align content to fit smaller rows */
+        .fc-daygrid-day-frame {
+            padding: 0.5px !important;
+            /* Adjust padding */
+            display: flex;
+            align-items: center;
+            /* Vertically center the content */
+            justify-content: center;
+            /* Horizontally center the content */
+        }
+
+        /* Adjust date number font size */
+        .fc-daygrid-day-top {
+            font-size: 12px !important;
+            /* Smaller date numbers */
+        }
+
+        /* Make event text smaller and more compact */
+        .fc-event {
+            font-size: 10px !important;
+            /* Smaller font for event text */
+            padding: 0.5px !important;
+            /* Reduce padding for events */
+            display: flex;
+            align-items: center;
+            /* Vertically center the content */
+            justify-content: center;
+            /* Horizontally center the content */
+
+        }
+
+        .fc-col-header-cell {
+            font-size: 12px !important;
+            /* Adjust to desired font size */
+            padding: 5px !important;
+            /* Optional: Reduce padding if needed */
+        }
+
+        /* Optional: Adjust the header row height */
+        .fc-col-header {
+            height: 30px !important;
+            /* Reduce the overall header row height */
+        }
+
+        .fc-toolbar-title {
+            font-size: 14px !important;
+            /* Adjust the font size */
+            font-weight: bold;
+            /* Make it bold (if desired) */
+            padding: 5px;
+            /* Adjust padding for spacing */
+            text-align: center;
+            /* Center the title */
+        }
+
+        .fc-prev-button,
+        .fc-next-button,
+        .fc-today-button {
+
+            font-size: 14px !important;
+            /* Adjust font size of buttons */
+            padding: 3px 3px !important;
+            /* Adjust padding for buttons */
+            background-color: #007bff;
+            /* Change background color */
+            color: #ffffff;
+            /* Change text color */
+            border: none;
+            /* Remove default border */
+            border-radius: 4px;
+            /* Add rounded corners */
+            cursor: pointer;
+            /* Change cursor on hover */
+        }
+
+        #sub_type_div input[type="checkbox"]:disabled {
+            color: black;
+            opacity: 1;
+            /* Override default opacity for the disabled state */
+            cursor: not-allowed;
+            /* Optional: keeps the pointer style consistent */
+        }
+
+
+        .custom-fixed-table {
+            height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .custom-fixed-table table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .custom-fixed-table th,
+        .custom-fixed-table td {
+            width: 10vw;
+            /* Fixed width for all cells */
+            word-wrap: break-word;
+        }
+
+        .custom-fixed-table thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            z-index: 10;
+        }
+
+        .custom-fixed-table tbody tr.fixed-row td {
+            position: sticky;
+            top: 38px;
+            background-color: #ffffff;
+            z-index: 5;
+        }
     </style>
 
 
@@ -573,11 +732,17 @@
                         <div class="float-center">
                             Order form
                         </div>
-
-                            <button type="button" class="btn btn-outline-success float-end d-none"
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary float-end" data-bs-toggle="modal"
+                                data-bs-target="#calenderModal" id="openCalendarBtn">
+                                <i class="fa-regular fa-calendar-days fa-bounce" style="color: rgb(230, 99, 127);"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-success float-end d-norne"
                                 onclick="window.location.href='/individual_sales_summary.html'">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </button>
+                        </div>
+
                     </div>
 
 
@@ -1749,6 +1914,25 @@
         </div>
 
 
+        <!-- Modal -->
+        <div class="modal fade" id="calenderModal" tabindex="-1" aria-labelledby="calenderModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="calenderModalLabel">Assigned Production Date</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="calendar"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- jQuery -->
@@ -1767,6 +1951,9 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
 
+         <script src="
+https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
+"></script>
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 

@@ -500,8 +500,9 @@ console.log(bom_in_id);
           bom_id: $('#update_part_btn').val(),
         },
         success: function (response) {
-          console.log(response.bom_qty_check);
-          if (response.bom_qty_check.trim() == "No excess quantity found") {
+          var res = JSON.parse(response)
+          console.log(res.bom_qty_check);
+          if (res.bom_qty_check.trim() == "No excess quantity found") {
 
             get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
             console.log($('#bom_list_select').val());

@@ -3093,7 +3093,7 @@ function get_final_summary() {
       document.getElementById("finalWorkDetails").innerHTML = '';
 
 
-      $("#emp_name_summary").text(current_user_name + " Work Summary" ?? "Employee Work Summary")
+      $("#emp_name_summary").text($("#emp").find("option:selected").text() + " Work Summary" ?? "Employee Work Summary")
 
       // ======= TIME CALCULATION =======
       let totalDayWork = Number(data.total_day_time || 0);
