@@ -1979,6 +1979,52 @@ $(document).ready(function () {
     });
   });
 
+  $("#image_summary_btnn").on("click", function () {
+
+    const element = document.getElementById("pdfContentt");
+
+    html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    }).then(canvas => {
+
+      // ✅ Generate file name (same as PDF)
+      let today = new Date();
+
+      let day = String(today.getDate()).padStart(2, '0');
+      let month = String(today.getMonth() + 1).padStart(2, '0');
+      let year = today.getFullYear();
+
+      let formattedDate = `${day}-${month}-${year}`;
+
+      let employeeName = $("#emp").val()
+        ? $("#emp").find("option:selected").text().replace(/\s+/g, "_").toLowerCase()
+        : "employee";
+
+      let fileName = `${employeeName}_work_summary_${formattedDate}.png`;
+
+      // ✅ Convert to image & download
+      canvas.toBlob(function (blob) {
+
+        let link = document.createElement("a");
+        link.download = fileName;
+
+        if (blob) {
+          link.href = URL.createObjectURL(blob);
+        } else {
+          // fallback (rare case)
+          link.href = canvas.toDataURL("image/png");
+        }
+
+        link.click();
+
+      }, "image/png");
+
+    });
+
+  });
+
   $("#pdf_summary_btn").on("click", function () {
 
     const element = document.getElementById("pdfContent");
