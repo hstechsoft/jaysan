@@ -1979,7 +1979,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#image_summary_btnn").on("click", function () {
+  $("#images_summary_btnn").on("click", function () {
 
     const element = document.getElementById("pdfContentt");
 
