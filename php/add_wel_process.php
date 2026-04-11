@@ -84,7 +84,7 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 
 
 $conn->commit();
-echo "ok";
+echo  $new_process_id;
 } catch (Exception $e) {
     $conn->rollback();
     echo "Error: " . $e->getMessage();

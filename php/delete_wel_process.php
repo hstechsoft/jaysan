@@ -67,6 +67,7 @@ else {
     throw new Exception("Error: " . $delete_process_sql . "<br>" . $conn->error);
 }
 
+$new_process_id = $previous_process_id;
 
 // check if cat = out and output_part is not null then we update 
 if($cat == 'out' && $output_part != null && $output_part != '' && $output_part != 'null' && $output_part != 'NULL'){
@@ -81,7 +82,7 @@ if($cat == 'out' && $output_part != null && $output_part != '' && $output_part !
   }
 }
 
-     echo "ok";
+     echo $new_process_id;
      $conn->commit();
 
 }
