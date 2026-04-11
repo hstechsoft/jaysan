@@ -16,9 +16,9 @@ return $data;
 
 
 // 1st get previous process id of deleted process_id
-$previous_process_id = null;
+$previous_process_id = "null";
 $cat = '';
-$output_part = null;
+$output_part = "null";
 $component_cat = '';
 $process_title = '';
 $get_previous_process_id_sql = "select previous_process_id,cat,output_part,component_cat,process_title from process_wel_tbl where process_id = $process_id;";
