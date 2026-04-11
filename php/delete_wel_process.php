@@ -78,7 +78,7 @@ if($cat == 'out' && $output_part != null && $output_part != '' && $output_part !
  $update_output_part_sql = "update process_wel_tbl set output_part = $output_part , cat = 'out', component_cat = '$component_cat' where process_id = $previous_process_id;";
 
  if ($conn->query($update_output_part_sql) === TRUE) {
-     echo "ok";
+
  }
 
   else {
@@ -86,5 +86,6 @@ if($cat == 'out' && $output_part != null && $output_part != '' && $output_part !
   }
 }
 
+     echo "ok";
 $conn->close();
 ?>
