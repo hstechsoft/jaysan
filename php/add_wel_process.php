@@ -27,9 +27,9 @@ $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 $row_previous_process_id = $result_previous_process_id->fetch_assoc();
 $previous_process_id = $row_previous_process_id['previous_process_id'];
 $cat = $row_previous_process_id['cat'];
-$output_part = $row_previous_process_id['output_part'];
-$component_cat = $row_previous_process_id['component_cat'];
-$process_title = $row_previous_process_id['process_title'];
+$output_part = sql_nullable($row_previous_process_id['output_part']);
+$component_cat = sql_nullable($row_previous_process_id['component_cat']);
+$process_title = sql_nullable($row_previous_process_id['process_title']);
 
 
 // insert new process id
