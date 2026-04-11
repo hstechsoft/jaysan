@@ -13,7 +13,8 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+try {
+    $conn->begin_transaction();
 
 // 1st get previous process id of deleted process_id
 $previous_process_id = "null";
@@ -38,8 +39,11 @@ echo $update_old_process_sql;
 if ($conn->query($update_old_process_sql) === TRUE) {
 } else {
     echo "Error: " . $update_old_process_sql . "<br>" . $conn->error;
+    $conn->rollback();
     $conn->close();
+
     exit();
+
 }
 
 // insert new process i
@@ -49,6 +53,7 @@ if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
 } else {
     echo "Error: " . $insert_process_sql . "<br>" . $conn->error;
+    $conn->rollback();
     $conn->close();
     exit();
 }
@@ -59,6 +64,9 @@ echo $insert_input_wel_parts_sql;
 if ($conn->query($insert_input_wel_parts_sql) === TRUE) {
 } else {
     echo "Error: " . $insert_input_wel_parts_sql . "<br>" . $conn->error;
+    $conn->rollback();
+    $conn->close();
+    exit();
 }
 
 
@@ -70,6 +78,9 @@ if ($conn->query($update_previous_process_id_sql) === TRUE) {
 
 } else {
     echo "Error: " . $update_previous_process_id_sql . "<br>" . $conn->error;
+    $conn->rollback();
+    $conn->close();
+    exit();
 }
 // 3rd  also update input_wel_parts table pre_process_id
 $update_input_wel_parts_sql = "update input_wel_parts set previous_process_id = $new_process_id where previous_process_id = $process_id and process_id != $new_process_id;";
@@ -78,6 +89,9 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 
 } else {
     echo "Error: " . $update_input_wel_parts_sql . "<br>" . $conn->error;
+    $conn->rollback();
+    $conn->close();
+    exit();
 }
 
 
@@ -85,5 +99,10 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 
 
 
+$conn->commit();
+} catch (Exception $e) {
+    $conn->rollback();
+    echo "Error: " . $e->getMessage();
+}
 $conn->close();
 ?>
