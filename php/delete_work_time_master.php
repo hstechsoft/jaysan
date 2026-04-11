@@ -3,7 +3,7 @@
 
  $wtid  = test_input($_GET['wtid']);
 
-
+// delete 
  
  
 function test_input($data) {
