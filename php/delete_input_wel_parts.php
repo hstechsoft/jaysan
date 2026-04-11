@@ -21,6 +21,15 @@ if ($result_check->num_rows == 0) {
     exit();
 }
 
+// also check inpuut count of that process_id if it is 1 then we cannot delete it because it will cause error in process_wel_tbl
+$sql_check_input_count = "select * from input_wel_parts where previous_process_id = (select previous_process_id from input_wel_parts where id = $id) and id != $id;";
+$result_check_input_count = $conn->query($sql_check_input_count);
+if ($result_check_input_count->num_rows == 0) {
+    echo "Error: cannot delete the only input part for this process";
+    $conn->close();
+    exit();
+}
+
  $sql =  "delete from input_wel_parts where id = $id;";
 
   if ($conn->query($sql) === TRUE) {

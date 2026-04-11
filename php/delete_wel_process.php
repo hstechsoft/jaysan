@@ -26,7 +26,7 @@ if ($result_check->num_rows > 0) {
 $previous_process_id = null;
 $cat = '';
 $output_part = null;
-$get_previous_process_id_sql = "select previous_process_id from process_wel_tbl where process_id = $process_id;";
+$get_previous_process_id_sql = "select previous_process_id,cat,output_part from process_wel_tbl where process_id = $process_id;";
 $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 
 $row_previous_process_id = $result_previous_process_id->fetch_assoc();
