@@ -66,6 +66,7 @@ GROUP BY
     SELECT 
     (SELECT jp.process_name from jaysan_process jp WHERE jp.process_id = pwt.process) as wel_pr,
     iwp.id,
+    iwp.previous_process_id as in_previous_process_id,
         pwt.process_id,
           
         pwt.previous_process_id,
@@ -87,6 +88,7 @@ GROUP BY
     SELECT 
         (SELECT jp.process_name from jaysan_process jp WHERE jp.process_id = prev_pwt.process) as wel_pr,
         iwp.id,
+        iwp.previous_process_id as in_previous_process_id,
         prev_pwt.process_id,
       
         prev_pwt.previous_process_id,
@@ -102,7 +104,7 @@ GROUP BY
     LEFT JOIN parts_tbl pt ON pt.part_id = iwp.input_part_id
    
 )
-SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,LEVEL
+SELECT   DISTINCT process_wel.id,process_wel.part_name,process_wel.input_part_id,process_wel.qty,process_wel.process,wel_pr,process_wel.process_id as pid,process_wel.in_previous_process_id,LEVEL
 FROM process_wel) as re_fn GROUP by level ORDER by LEVEL DESC
 SQL;
 
