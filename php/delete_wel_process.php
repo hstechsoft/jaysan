@@ -26,7 +26,8 @@ if ($result_check->num_rows > 0) {
 $previous_process_id = 'NULL';
 $cat = '';
 $output_part = 'NULL';
-$get_previous_process_id_sql = "select previous_process_id,cat,output_part from process_wel_tbl where process_id = $process_id;";
+$component_cat = '';
+$get_previous_process_id_sql = "select previous_process_id,cat,output_part,component_cat from process_wel_tbl where process_id = $process_id;";
 echo $get_previous_process_id_sql;
 $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 
@@ -34,6 +35,7 @@ $row_previous_process_id = $result_previous_process_id->fetch_assoc();
 $previous_process_id = $row_previous_process_id['previous_process_id'];
 $cat = $row_previous_process_id['cat'];
 $output_part = $row_previous_process_id['output_part'];
+$component_cat = $row_previous_process_id['component_cat'];
 if($previous_process_id == null || $previous_process_id == '' || $previous_process_id == 'null' || $previous_process_id ==   'NULL'){
     echo "Error: previous process id not found";
 
@@ -73,7 +75,7 @@ else {
 
 // check if cat = out and output_part is not null then we update 
 if($cat == 'out' && $output_part != null && $output_part != '' && $output_part != 'null' && $output_part != 'NULL'){
- $update_output_part_sql = "update process_wel_tbl set output_part = $output_part , cat = 'out' where process_id = $previous_process_id;";
+ $update_output_part_sql = "update process_wel_tbl set output_part = $output_part , cat = 'out', component_cat = $component_cat where process_id = $previous_process_id;";
  echo $update_output_part_sql;
  if ($conn->query($update_output_part_sql) === TRUE) {
      echo "ok";
