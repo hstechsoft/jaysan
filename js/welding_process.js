@@ -170,6 +170,48 @@ $(document).ready(function () {
   //  shw_toast("Enter Required" , "Kindly enter all required ")
 
   //   });
+  $("#process_default").on("change", function () {
+
+    var component_cat = $("#ma_name").data("component_cat");
+    var output_part = $("#ma_name").data("part_id");
+    var process_id = $("#ma_name").data("pro_id");
+
+    alert(output_part)
+    if ($(this).is(":checked")) {
+      if (component_cat && process_id && output_part) {
+        update_wel_process_default(output_part, component_cat, 1, process_id);
+      } else {
+        salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+      }
+    } else {
+      if (component_cat && process_id && output_part) {
+        update_wel_process_default(output_part, component_cat, 0, process_id);
+      } else {
+        salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+      }
+    }
+  });
+
+  //  $("#process_title").on("focusout", function () {
+
+  //   var component_cat = $("#ma_name").data("component_cat");
+  //   var output_part = $("#ma_name").data("output_part");
+  //   var process_id = $("#ma_name").data("pro_id");
+  //   if ($(this).val()) {
+  //     if (component_cat && process_id && output_part) {
+  //       update_wel_process_default(output_part, component_cat, 1, process_id);
+  //     } else {
+  //       salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+  //     }
+  //   } else {
+  //     if (component_cat && process_id && output_part) {
+  //       update_wel_process_default(output_part, component_cat, 0, process_id);
+  //     } else {
+  //       salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+  //     }
+  //   }
+  // });
+
   $('#submit_btn').on('click', function () {
     $('#submit_btn').prop('disabled', true);
     var processData = []
@@ -311,152 +353,152 @@ $(document).ready(function () {
 
 
 
-  $('#update_btn').on('click', function () {
-    $('#update_btn').prop('disabled', true);
-    var del_process_list = [];
-    var tbl_valid = true;
-    var is_default = '';
-    var process_title = $("#process_title").val();
+  // $('#update_btn').on('click', function () {
+  //   $('#update_btn').prop('disabled', true);
+  //   var del_process_list = [];
+  //   var tbl_valid = true;
+  //   var is_default = '';
+  //   var process_title = $("#process_title").val();
 
 
-    if ($("#process_default").is(":checked")) {
-      is_default = 1;
-    }
-    else {
-      is_default = 0;
-    }
-    $("#welding_table tr").each(function () {
+  //   if ($("#process_default").is(":checked")) {
+  //     is_default = 1;
+  //   }
+  //   else {
+  //     is_default = 0;
+  //   }
+  //   $("#welding_table tr").each(function () {
 
-      if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
-        $('#update_btn').prop('disabled', false);
-        console.log(process_title);
+  //     if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
+  //       $('#update_btn').prop('disabled', false);
+  //       console.log(process_title);
 
-        shw_toast("Warning", "Invalid/Missing Data")
-        tbl_valid = false
-      }
-    })
-    // alert(process_title)
-    console.log(process_title);
+  //       shw_toast("Warning", "Invalid/Missing Data")
+  //       tbl_valid = false
+  //     }
+  //   })
+  //   // alert(process_title)
+  //   console.log(process_title);
 
-    if (tbl_valid === true && process_title && process_title.trim() !== '') {
-
-
-
+  //   if (tbl_valid === true && process_title && process_title.trim() !== '') {
 
 
 
 
-      var allWeldingData = [];
-      var output_part = "0";
-      var count = 0;
-
-      // var newObj = {}
-      // var extra_bomm = []
-      // $("#godown_table_data tr").each(function () {
-      //   var is_default = 0
-      //   if($(this).find("td").find("input").is(":checked")){
-      //     is_default = 1
-      //   }
-      //   var text = $(this).find("td").eq(5).text().trim();
-
-      //   var parts = text.split(" ");
-
-      //   var min = parts[0];
-      //   var max = parts[1];
-
-      //   newObj = {
-      //     godown_id: $(this).data("godown_id"),
-      //     dep_id: $(this).data("dept_id"),
-      //     dep_sec_id: $(this).data("section_id"),
-      //     dep_sec_machine_id: $(this).data("machine_id"),
-      //     min_time: min,
-      //     max_time: max,
-      //     cost: $(this).find("td").eq(6).text(),
-      //     is_default: is_default
-      //   };
-      //   extra_bomm.push(newObj)
-      // })
-
-      // console.log(extra_bomm);
-
-
-      $("#welding_table tr").each(function () {
-        var inputPartsArr = [];
-
-        var inputParts = $(this).find("td").eq(1).find("li");
-        var processPart = $(this).find("td").eq(2).find("li");
-        var process_time = $(this).find("td").eq(3).find("li");
-        output_part = $("#part_no_out").data('selected-part_id')
-        inputParts.each(function () {
-          inputPartsArr.push({
-            part_id: $(this).data('part-id'),
-
-            part_qty: $(this).data('part-qty'),
-            pre_process_id: $(this).data('in_previous_process_id'),
-          });
-        });
-
-        var processData = {
-          process_id: processPart.data('process-id'),
-
-        };
-
-
-        del_process_list.push(processPart.data('tr_process') || 0)
-
-
-        if (inputPartsArr.length > 0 || processData.output_part) {
-          allWeldingData.push({
-            input_parts: inputPartsArr,
-            process: processData,
-            extra_details: extra_bom[count] ? extra_bom[count] : extra_bom[count] = []
-
-
-          });
-        }
-        count++;
-      });
-
-      console.log(allWeldingData);
-      console.log(del_process_list);
-      console.log(sel_comp_cat);
-
-      $.ajax({
-
-        url: 'php/update_wel_process1.php',
-        method: 'POST',
-        data: {
-          allWeldingData: JSON.stringify(allWeldingData),
-          output_part: output_part,
-          did: del_process_list,
-          component_cat: sel_comp_cat,
-          process_title: process_title,
-          is_default: is_default,
-          // inputPartsData: inputPartsData,
-
-        },
-        success: function (response) {
-          console.log(response);
-          if (response.trim() == "ok") {
-            issaved = "yes"
-            location.reload()
-          }
-        }
-      });
 
 
 
-    }
+  //     var allWeldingData = [];
+  //     var output_part = "0";
+  //     var count = 0;
 
-    else {
-      $('#update_btn').prop('disabled', false);
-      $("#process_title").focus();
-      shw_toast("Warning", "Fill Process Title")
-    }
+  //     // var newObj = {}
+  //     // var extra_bomm = []
+  //     // $("#godown_table_data tr").each(function () {
+  //     //   var is_default = 0
+  //     //   if($(this).find("td").find("input").is(":checked")){
+  //     //     is_default = 1
+  //     //   }
+  //     //   var text = $(this).find("td").eq(5).text().trim();
+
+  //     //   var parts = text.split(" ");
+
+  //     //   var min = parts[0];
+  //     //   var max = parts[1];
+
+  //     //   newObj = {
+  //     //     godown_id: $(this).data("godown_id"),
+  //     //     dep_id: $(this).data("dept_id"),
+  //     //     dep_sec_id: $(this).data("section_id"),
+  //     //     dep_sec_machine_id: $(this).data("machine_id"),
+  //     //     min_time: min,
+  //     //     max_time: max,
+  //     //     cost: $(this).find("td").eq(6).text(),
+  //     //     is_default: is_default
+  //     //   };
+  //     //   extra_bomm.push(newObj)
+  //     // })
+
+  //     // console.log(extra_bomm);
+
+
+  //     $("#welding_table tr").each(function () {
+  //       var inputPartsArr = [];
+
+  //       var inputParts = $(this).find("td").eq(1).find("li");
+  //       var processPart = $(this).find("td").eq(2).find("li");
+  //       var process_time = $(this).find("td").eq(3).find("li");
+  //       output_part = $("#part_no_out").data('selected-part_id')
+  //       inputParts.each(function () {
+  //         inputPartsArr.push({
+  //           part_id: $(this).data('part-id'),
+
+  //           part_qty: $(this).data('part-qty'),
+  //           pre_process_id: $(this).data('in_previous_process_id'),
+  //         });
+  //       });
+
+  //       var processData = {
+  //         process_id: processPart.data('process-id'),
+
+  //       };
+
+
+  //       del_process_list.push(processPart.data('tr_process') || 0)
+
+
+  //       if (inputPartsArr.length > 0 || processData.output_part) {
+  //         allWeldingData.push({
+  //           input_parts: inputPartsArr,
+  //           process: processData,
+  //           extra_details: extra_bom[count] ? extra_bom[count] : extra_bom[count] = []
+
+
+  //         });
+  //       }
+  //       count++;
+  //     });
+
+  //     console.log(allWeldingData);
+  //     console.log(del_process_list);
+  //     console.log(sel_comp_cat);
+
+  //     $.ajax({
+
+  //       url: 'php/update_wel_process1.php',
+  //       method: 'POST',
+  //       data: {
+  //         allWeldingData: JSON.stringify(allWeldingData),
+  //         output_part: output_part,
+  //         did: del_process_list,
+  //         component_cat: sel_comp_cat,
+  //         process_title: process_title,
+  //         is_default: is_default,
+  //         // inputPartsData: inputPartsData,
+
+  //       },
+  //       success: function (response) {
+  //         console.log(response);
+  //         if (response.trim() == "ok") {
+  //           issaved = "yes"
+  //           location.reload()
+  //         }
+  //       }
+  //     });
 
 
 
-  });
+  //   }
+
+  //   else {
+  //     $('#update_btn').prop('disabled', false);
+  //     $("#process_title").focus();
+  //     shw_toast("Warning", "Fill Process Title")
+  //   }
+
+
+
+  // });
 
 
   $("#welding_table").on("dblclick", "li", function () {
@@ -920,11 +962,23 @@ $(document).ready(function () {
       var partId = $('#part_no').data('selected-part_id');
       var bomQty = parseFloat($('#qty').attr("data-original")) || parseFloat($('#qty').val());
       var newQty = parseFloat($('#qty').val());
+      var available_part_ids = $(this).data("available_part_ids");
+      if (available_part_ids.includes(partId)) {
+        salert("Warning", "Part Is Already There. If Qty Available Update The Qty.", "warning");
+        return;
+      }
 
       let usedQty = getUsedQty(partId);
-      newQty = newQty-usedQty
+      newQty = newQty - usedQty
       let remaining = bomQty - usedQty;
+      let cla = 'd-none';
 
+      let rows = $('#welding_table tr');
+
+      if (rows.length >= 1 && available_part_ids) {
+        alert()
+        cla = '';
+      }
       // alert(usedQty+" "+remaining)
       if (remaining <= 0) {
         salert("Warning", "No quantity remaining for this part");
@@ -957,6 +1011,11 @@ $(document).ready(function () {
           <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'>
             <i class='fa fa-trash'></i>
           </button>
+          <button class='btn btn-sm btn-outline-success border-0 m-0 p-0 px-3 fa-plus ${cla}' data-part-id="${partId}"
+            data-part-qty="${newQty}"
+            data-in_previous_process_id="${process_id}">
+            <i class="fa-solid fa-plus fa-bounce"></i>
+          </button>
         </li>
       `);
 
@@ -970,7 +1029,7 @@ $(document).ready(function () {
 
 
 
-  
+
   $('#add_process_btn').on('click', function () {
 
 
@@ -1236,13 +1295,21 @@ $(document).ready(function () {
   $("#welding_table").on("click", "button", function (event) {
 
     if ($(this).hasClass("add_pr")) {
+
+      var ori_process_id = $(this).data("ori_process-id");
+
       console.log($(this).closest('tr').find("td").eq(1).find("ul").length);
 
       var in_length = $(this).closest('tr').find("td").eq(1).find("li").length
       var prs_length = $(this).closest('tr').find("td").eq(2).find("li").length
       console.log(in_length, prs_length);
 
-      if (in_length > 0 && prs_length > 0) {
+
+      if (ori_process_id) {
+
+        add_wel_process(ori_process_id);
+      }
+      else if (in_length > 0 && prs_length > 0) {
         var prs_count = parseInt($("#welding_table tr").length) + 1
         var pre_count = prs_count - 1
         $("#welding_table .tbl_selected").removeClass("tbl_selected")
@@ -1265,8 +1332,26 @@ $(document).ready(function () {
         shw_toast("invalid", "Kindly add input and process part first")
       }
     }
+    else if ($(this).hasClass("fa-plus")) {
+
+      var part_id = $(this).data("part-id");
+      var part_qty = $(this).closest("li").find("span").text();
+      var previous_process_id = $(this).data("in_previous_process_id");
+      var process_id = $(this).closest("ul").data("ori_process-id");
+
+      console.log(part_id, part_qty, previous_process_id, process_id);
+      if (part_id && part_qty && process_id) {
+        update_input_wel_parts(part_id, part_qty, previous_process_id, process_id);
+      }
+      else {
+        console.log(part_id, part_qty, previous_process_id, process_id);
+        salert("Warning", "Data Missing! Try Again.", "warning");
+      }
+    }
     else if ($(this).hasClass("delete_pr")) {
       var selected_li = $(this)
+      var process_id = $(this).data("ori_process-id")
+
       {
         swal({
           title: "Are you sure - delete? ",
@@ -1279,27 +1364,34 @@ $(document).ready(function () {
           dangerMode: true,
         }).then(function (isConfirm) {
           if (isConfirm) {
-            selected_li.closest("tr").remove();
+
+            if (process_id) {
+              delete_wel_process(process_id);
+            }
+            else {
+              selected_li.closest("tr").remove();
 
 
 
-            // Traverse through all list items and log their data attributes
-            $("#bom_list li").each(function () {
+              // Traverse through all list items and log their data attributes
+              $("#bom_list li").each(function () {
 
-              if (selected_li.data('part-id') == $(this).data('part_id')) {
-                $(this).removeClass("text-bg-secondary");
-              }
-            });
+                if (selected_li.data('part-id') == $(this).data('part_id')) {
+                  $(this).removeClass("text-bg-secondary");
+                }
+              });
 
 
-            $("#welding_table .pr_no").each(function (index) {
-              $(this).text(index + 1);
+              $("#welding_table .pr_no").each(function (index) {
+                $(this).text(index + 1);
 
-            })
-            $("#welding_table tr").each(function (index) {
-              $(this).find("td").eq(0).text(index + 1);
+              })
+              $("#welding_table tr").each(function (index) {
+                $(this).find("td").eq(0).text(index + 1);
 
-            })
+              })
+            }
+
 
 
 
@@ -1316,6 +1408,9 @@ $(document).ready(function () {
     else {
       console.log("delete");
       var selected_li = $(this).closest('li')
+      var id = $(this).data("id");
+      var process_id = $(this).data("ori_process-id");
+
       {
         swal({
           title: "Are you sure - delete? ",
@@ -1328,17 +1423,22 @@ $(document).ready(function () {
           dangerMode: true,
         }).then(function (isConfirm) {
           if (isConfirm) {
-            selected_li.remove();
-            console.log(selected_li.data('part-id'));
+            if (id) {
+              delete_input_wel_parts(id);
+            }
+            else {
+              selected_li.remove();
+              console.log(selected_li.data('part-id'));
 
 
-            // Traverse through all list items and log their data attributes
-            $("#bom_list li").each(function () {
+              // Traverse through all list items and log their data attributes
+              $("#bom_list li").each(function () {
 
-              if (selected_li.data('part-id') == $(this).data('part_id')) {
-                $(this).removeClass("text-bg-secondary");
-              }
-            });
+                if (selected_li.data('part-id') == $(this).data('part_id')) {
+                  $(this).removeClass("text-bg-secondary");
+                }
+              });
+            }
 
 
           }
@@ -1350,6 +1450,7 @@ $(document).ready(function () {
 
   $("#welding_table").on("click", "tr td", function () {
     console.log($(this).index());
+    let available_part_ids = [];
     $("#godown_form")[0].reset();
     $("#godown_table_data").empty();
     if ($(this).index() == 0) {
@@ -1367,23 +1468,36 @@ $(document).ready(function () {
           // show table rows
           extra_data.forEach(function (extra_obj) {
 
-            $("#godown_table_data").append(`
-            <tr data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
-              <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
-              <td>${extra_obj.godown_name}</td>
-              <td>${extra_obj.dep_name}</td>
-              <td>${extra_obj.dep_sec_name}</td>
-              <td>${extra_obj.dep_sec_machine_name}</td>
-              <td>${extra_obj.min_time} ${extra_obj.max_time}</td>
-              <td>${extra_obj.cost}</td>
-              <td>
-                <i class='fa fa-pen pe-2 text-warning edit_extra btn'></i>
-                <i class='fa fa-trash text-danger delete_extra btn'></i>
-              </td>
-            </tr>
-          `);
+            if (extra_obj.wtid > 0) {
+              $("#godown_table_data").append(`
+                <tr data-wtid=${extra_obj.wtid} data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
+                  <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
+                  <td>${extra_obj.godown_name}</td>
+                  <td>${extra_obj.dep_name}</td>
+                  <td>${extra_obj.dep_sec_name}</td>
+                  <td>${extra_obj.dep_sec_machine_name}</td>
+                  <td>${extra_obj.min_time} ${extra_obj.max_time}</td>
+                  <td>${extra_obj.cost}</td>
+                  <td>
+                    <i class='fa fa-pen pe-2 text-warning edit_extra btn' data-wtid=${extra_obj.wtid}></i>
+                    <i class='fa fa-trash text-danger delete_extra btn' data-wtid=${extra_obj.wtid}></i>
+                  </td>
+                </tr>
+              `);
+            }
+
           });
 
+          var row = $(this).closest("tr");
+          var li = row.find("td").eq(1).find("ul");
+
+          li.find("li").each(function () {
+            available_part_ids.push("part_id", $(this).data("part-id"))
+          })
+
+          console.log(available_part_ids);
+
+          $("#add_part_btn").data("available_part_ids", available_part_ids)
           $("#godown_data").removeClass("d-none");
         } catch (err) {
           console.error("Error parsing extra data:", err);
@@ -1406,12 +1520,39 @@ $(document).ready(function () {
 
     }
 
+    var id = $(this).closest("li").data("part-id");
+    var part_qty = $(this).text().trim();
+
+    console.log(id, part_qty);
+    if (id && part_qty) {
+      update_input_wel_parts_qty(id, part_qty);
+    }
+    else {
+      console.log(part_id, part_qty, previous_process_id, process_id);
+      salert("Warning", "Data Missing! Try Again.", "warning");
+    }
+
+
+
 
   });
 
   $("#welding_table").on("click", "tr td", function () {
     if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
+
+      var process_id = $(this).data("process-id");
+      var ori_process_id = $(this).data("ori_process-id");
+      $(".form_godown_update_btn").data("process_id", process_id);
+      $(".form_godown_update_btn").data("ori_process_id", ori_process_id);
       $("#godown_data").removeClass("d-none");
+
+      if (process_id && ori_process_id) {
+        $(".form_godown_btn").addClass('d-none');
+        $(".form_godown_update_btn").removeClass('d-none');
+      } else {
+        $(".form_godown_update_btn").addClass('d-none');
+        $(".form_godown_btn").removeClass('d-none');
+      }
     }
     else {
       $("#godown_data").addClass("d-none");
@@ -1547,6 +1688,9 @@ $(document).ready(function () {
 
       }
       // get_bom(part_id, component_cat)
+      $("#ma_name").data("pro_id", process_id)
+      $("#ma_name").data("part_id", part_id)
+      $("#ma_name").data("component_cat", component_cat)
       get_bom_process_details1(process_id)
 
     }
@@ -2010,10 +2154,36 @@ $(document).ready(function () {
     $("#department_add_btn, #section_add_btn, #machine_add_btn").addClass("d-none");
   });
 
+  $(".form_godown_update_btn").on("click", function () {
+
+    var process_id = $(this).data("process_id");
+    var ori_process_id = $(this).data("ori_process_id");
+    var wtid = $(this).data("wtid") || 0;
+
+    var godown_id = $("#godown").data("godown_id");
+    var depart_id = $("#department").data("dept_id") || null;
+    var section_id = $("#section").data("sec_id") || null;
+    var machine_id = $("#machine").data("mach_id") || null;
+    var min = $("#min_time").val();
+    var max = $("#max_time").val();
+    var cost = $("#cost").val();
+
+
+    if (godown_id && process_id && ori_process_id) {
+
+      console.log(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost);
+
+      update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid)
+
+    } else {
+      salert("Warning", "Fill the fields/Requied Data Missing.", "warning");
+    }
+  })
 
   $("#godown_table_data").on("click", "i.fa-trash", function () {
 
     const icon = $(this);
+    const wtid = $(this).data("wtid");
 
     swal({
       title: "Are you sure - delete? ",
@@ -2027,21 +2197,27 @@ $(document).ready(function () {
     }).then(function (isConfirm) {
       if (isConfirm) {
 
-        const row = icon.closest("tr");
-
-        const index = row.index();
-
-        const a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
-
-        if (extra_bom[a] && extra_bom[a][index] !== undefined) {
-          extra_bom[a].splice(index, 1);
+        if (wtid) {
+          delete_work_time_master(wtid)
         }
-
-        row.remove();
-
-        console.log("Deleted entry from extra_bom:", extra_bom[a]);
+        else {
 
 
+          const row = icon.closest("tr");
+
+          const index = row.index();
+
+          const a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
+
+          if (extra_bom[a] && extra_bom[a][index] !== undefined) {
+            extra_bom[a].splice(index, 1);
+          }
+
+          row.remove();
+
+          console.log("Deleted entry from extra_bom:", extra_bom[a]);
+
+        }
       }
 
     })
@@ -2053,6 +2229,7 @@ $(document).ready(function () {
     // get_department();
 
     editingRow = $(this).closest("tr");
+    $(".form_godown_update_btn").data("wtid", $(this).data("wtid"))
 
     let value = $(this).closest("tr").find("td").eq(5).text().trim();
     let parts = value.split(" ");
@@ -2145,8 +2322,8 @@ function getUsedQty(partId) {
 
 function clear() {
   $("#welding_table").empty();
-  if ($("#update_btn").hasClass("d-none") == false)
-    $("#update_btn").addClass("d-none")
+  // if ($("#update_btn").hasClass("d-none") == false)
+  //   $("#update_btn").addClass("d-none")
 
   if ($("#del_btn").hasClass("d-none") == false)
     $("#del_btn").addClass("d-none")
@@ -2232,7 +2409,301 @@ function get_process_count(part_id) {
 
 }
 
+function update_wel_process_default(output_part, component_cat, is_default, process_id) {
 
+  console.log(output_part, component_cat, is_default, process_id);
+
+
+  $.ajax({
+    url: "php/update_wel_process_default.php",
+    type: "post", //send it through get method
+    data: {
+      output_part: output_part,
+      component_cat: component_cat,
+      is_default: is_default,
+      process_id: process_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_input_wel_parts_qty(id, part_qty) {
+
+  console.log(id, part_qty);
+
+
+  $.ajax({
+    url: "php/update_input_wel_parts_qty.php",
+    type: "post", //send it through get method
+    data: {
+      id: id,
+      qty: part_qty,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid) {
+
+  console.log(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid);
+
+
+  $.ajax({
+    url: "php/update_work_time_master1.php",
+    type: "post", //send it through get method
+    data: {
+      min_time: min,
+      max_time: max,
+      process_id: process_id,
+      machine_id: machine_id,
+      dep_id: depart_id,
+      dep_sec_id: section_id,
+      cost: cost,
+      godown_id: godown_id,
+      ori_process_id: ori_process_id,
+      wtid: wtid,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function delete_work_time_master(wtid) {
+
+  console.log(wtid);
+
+
+  $.ajax({
+    url: "php/delete_work_time_master.php",
+    type: "post", //send it through get method
+    data: {
+      wtid: wtid,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+        if (response.trim() > 0) {
+          get_bom_process_details1(response.trim())
+        }
+        else {
+          get_bom_process_details1($("#ma_name").data("pro_id"))
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function add_wel_process(process_id) {
+
+  console.log(process_id);
+
+
+  $.ajax({
+    url: "php/add_wel_process.php",
+    type: "post", //send it through get method
+    data: {
+      process_id: process_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() >= 0) {
+
+        if (response.trim() > 0) {
+          $("#ma_name").data("pro_id", response.trim());
+          get_bom_process_details1(response.trim());
+        }
+        else {
+          get_bom_process_details1($("#ma_name").data("pro_id"))
+
+        }
+      } else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function delete_wel_process(process_id) {
+
+  console.log(process_id);
+
+
+  $.ajax({
+    url: "php/delete_wel_process.php",
+    type: "post", //send it through get method
+    data: {
+      process_id: process_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() >= 0) {
+
+        if (response.trim() > 0) {
+          $("#ma_name").data("pro_id", response.trim());
+          get_bom_process_details1(response.trim())
+        }
+        else {
+          get_bom_process_details1($("#ma_name").data("pro_id"))
+
+        }
+      }
+      else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_input_wel_parts(part_id, part_qty, previous_process_id, process_id) {
+
+  console.log(part_id, part_qty, previous_process_id, process_id);
+
+
+  $.ajax({
+    url: "php/update_input_wel_parts.php",
+    type: "post", //send it through get method
+    data: {
+      process_id: process_id,
+      input_part_id: part_id,
+      previous_process_id: previous_process_id,
+      qty: part_qty,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function delete_input_wel_parts(id) {
+
+  console.log(id);
+
+
+  $.ajax({
+    url: "php/delete_input_wel_parts.php",
+    type: "post", //send it through get method
+    data: {
+      id: id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+      else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
 
 
 
@@ -2765,6 +3236,7 @@ function get_machine(process_id) {
 }
 
 function get_bom_process_details1(process_id) {
+  console.log(process_id);
 
 
   $.ajax({
@@ -2781,7 +3253,7 @@ function get_bom_process_details1(process_id) {
 
         $("#welding_table").empty()
         extra_bom = [];
-        $("#update_btn").removeClass("d-none");
+        // $("#update_btn").removeClass("d-none");
         if (response.trim() != "0 result") {
 
           if ($("#submit_btn").hasClass("d-none") == false)
@@ -2790,8 +3262,8 @@ function get_bom_process_details1(process_id) {
           if ($("#del_btn").hasClass("d-none"))
             $("#del_btn").removeClass("d-none")
 
-          if ($("#update_btn").hasClass("d-none"))
-            $("#update_btn").removeClass("d-none")
+          // if ($("#update_btn").hasClass("d-none"))
+          //   $("#update_btn").removeClass("d-none")
 
 
           var obj1 = JSON.parse(response);
@@ -2806,12 +3278,12 @@ function get_bom_process_details1(process_id) {
             var input_p = JSON.parse(obj.input_parts);
 
             input_p.forEach(function (item) {
-              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + (item.input_process_title ?? "") + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3'><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
+              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + (item.input_process_title ?? "") + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3' data-id=" + item.id + " data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
             })
             console.log(obj.in_tbl);
 
             const extra = encodeURIComponent(obj.process_details || "[]");
-            $("#welding_table").append("<tr class='small'><td class='' data-extra= " + extra + ">" + count + "</td><td > <ul class='list-group small'>" + in_tbl + " </ul></td><td><ul class='list-group small'><li class='list-group-item' data-process-id=" + obj.process + " data-tr_process=" + obj.process_id + ">" + obj.process_name + "</ul></td><td><ul class='list-group small'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
+            $("#welding_table").append("<tr class='small'><td class='' data-extra= " + extra + " data-process-id=" + obj.process + " data-ori_process-id=" + obj.process_id + ">" + count + "</td><td > <ul class='list-group small' data-ori_process-id=" + obj.process_id + ">" + in_tbl + " </ul></td><td><ul class='list-group small'><li class='list-group-item' data-process-id=" + obj.process + " data-tr_process=" + obj.process_id + ">" + obj.process_name + "</ul></td><td><ul class='list-group small'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
 
             let parsedExtra = [];
             try {
@@ -2833,8 +3305,8 @@ function get_bom_process_details1(process_id) {
         }
         else {
           // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
-          if ($("#update_btn").hasClass("d-none") == false)
-            $("#update_btn").addClass("d-none")
+          // if ($("#update_btn").hasClass("d-none") == false)
+          //   $("#update_btn").addClass("d-none")
 
           if ($("#del_btn").hasClass("d-none") == false)
             $("#del_btn").addClass("d-none")
@@ -2893,8 +3365,8 @@ function get_bom_process_details(part_id, component_cat) {
           if ($("#del_btn").hasClass("d-none"))
             $("#del_btn").removeClass("d-none")
 
-          if ($("#update_btn").hasClass("d-none"))
-            $("#update_btn").removeClass("d-none")
+          // if ($("#update_btn").hasClass("d-none"))
+          //   $("#update_btn").removeClass("d-none")
 
 
           var obj1 = JSON.parse(response);
@@ -2929,8 +3401,8 @@ function get_bom_process_details(part_id, component_cat) {
         }
         else {
           // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
-          if ($("#update_btn").hasClass("d-none") == false)
-            $("#update_btn").addClass("d-none")
+          // if ($("#update_btn").hasClass("d-none") == false)
+          //   $("#update_btn").addClass("d-none")
 
           if ($("#del_btn").hasClass("d-none") == false)
             $("#del_btn").addClass("d-none")
@@ -3236,8 +3708,8 @@ function get_bom_process_details_summary(part_id, component_cat) {
           // get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
           $("#welding_table").empty();
-          if ($("#update_btn").hasClass("d-none") == false)
-            $("#update_btn").addClass("d-none")
+          // if ($("#update_btn").hasClass("d-none") == false)
+          //   $("#update_btn").addClass("d-none")
 
           if ($("#del_btn").hasClass("d-none") == false)
             $("#del_btn").addClass("d-none")

@@ -251,7 +251,8 @@
               </div>
               <div class="col d-flex gap-2">
                 <button type="button" class="btn btn-primary " id="set_btn">Set</button>
-                <button type="button" class="btn btn-warning " id="refresh_btn"><i class="fa-solid fa-arrows-rotate"></i></button>
+                <button type="button" class="btn btn-warning " id="refresh_btn"><i
+                    class="fa-solid fa-arrows-rotate"></i></button>
               </div>
             </div>
             <div class="d-flex justify-content-between">
@@ -442,7 +443,7 @@
                               class="border border-3 border-success fw-bold">
 
                             <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="process_default" >
+                              <input class="form-check-input" type="checkbox" id="process_default">
                               <label class="form-check-label" for="process_default">
                                 Is Default Process?
                               </label>
@@ -595,7 +596,7 @@
                     <div class="form-floating mb-2">
                       <input type="text" class="form-control rounded-3" id="min_time" placeholder="">
                       <label for="min_time">Min Time
-                        <span class="text-danger">in hrs*</span> </label>
+                        <span class="text-danger">in Mins*</span> </label>
 
                       <div class="invalid-feedback">
                         Kindly Enter Vaild Data
@@ -606,7 +607,7 @@
                     <div class="form-floating mb-2">
                       <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
                       <label for="max_time">Max Time
-                        <span class="text-danger">in hrs*</span> </label>
+                        <span class="text-danger">in Mins*</span> </label>
 
                       <div class="invalid-feedback">
                         Kindly Enter Vaild Data
@@ -624,7 +625,10 @@
                       </div>
                     </div>
                   </div>
-                  <button type="submit" id="" class="btn btn-primary form_godown_btn">Add</button>
+                  <div class="d-flex justify-content-between">
+                    <button type="submit" id="" class="btn btn-primary form_godown_btn">Add</button>
+                    <button type="submit" id="" class="btn btn-warning form_godown_update_btn d-none">Update</button>
+                  </div>
                 </div>
               </form>
 
@@ -762,7 +766,8 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary add_new_process_btnnnn" data-bs-dismiss="modal">Add New Process</button>
+          <button type="button" class="btn btn-secondary add_new_process_btnnnn" data-bs-dismiss="modal">Add New
+            Process</button>
           <button type="button" class="btn btn-primary d-none">Understood</button>
         </div>
       </div>
