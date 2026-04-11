@@ -1,15 +1,15 @@
 <?php
  include 'db_head.php';
 
- $min_time = test_input($_GET['min_time']);
-$max_time = test_input($_GET['max_time']);
-$process_id = test_input($_GET['process_id']);
-$machine_id = test_input($_GET['machine_id']);
-$dep_id = test_input($_GET['dep_id']);
-$dep_sec_id = test_input($_GET['dep_sec_id']);
-$cost = test_input($_GET['cost']);
-$godown_id = test_input($_GET['godown_id']);
-$ori_process_id = test_input($_GET['ori_process_id']);
+ $min_time = test_input($_POST['min_time']);
+$max_time = test_input($_POST['max_time']);
+$process_id = test_input($_POST['process_id']);
+$machine_id = test_input($_POST['machine_id']);
+$dep_id = test_input($_POST['dep_id']);
+$dep_sec_id = test_input($_POST['dep_sec_id']);
+$cost = test_input($_POST['cost']);
+$godown_id = test_input($_POST['godown_id']);
+$ori_process_id = test_input($_POST['ori_process_id']);
 
 
  

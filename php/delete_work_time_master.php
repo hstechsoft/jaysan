@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- $wtid  = test_input($_GET['wtid']);
+ $wtid  = test_input($_POST['wtid']);
 
 // delete 
  
