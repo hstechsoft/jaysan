@@ -41,13 +41,17 @@ if ($conn->query($update_old_process_sql) === TRUE) {
    throw new Exception("Error: " . $update_old_process_sql . "<br>" . $conn->error);
 
 }
-$new_process_id = $process_id;
+$new_process_id_display = $process_id;
 // insert new process i
 $insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,$component_cat,$process_title);";
 
 if ($conn->query($insert_process_sql) === TRUE) {
+      $new_process_id = $conn->insert_id;
     if($cat == 'out')
-    $new_process_id = $conn->insert_id;
+        {
+            $new_process_id_display =$new_process_id;
+        }
+  
 } else {
    throw new Exception("Error: " . $insert_process_sql . "<br>" . $conn->error);
 }
