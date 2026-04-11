@@ -29,7 +29,7 @@ $output_part = $row_previous_process_id['output_part'];
 
 
 // insert new process id
-$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process) values ($process_id,'$cat',$output_part,'null');";
+$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process) values ($process_id,'$cat',$output_part,null);";
 echo $insert_process_sql;
 if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
