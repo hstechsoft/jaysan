@@ -66,6 +66,8 @@ if($cat == 'out' && $output_part != null && $output_part != '' && $output_part !
   }
 }
 
+ 
+
 // 4th now there is no process refernced this process as previous process so we can delete it
 $delete_process_sql = "delete from process_wel_tbl where process_id = $process_id;";
 if ($conn->query($delete_process_sql) === TRUE) {
