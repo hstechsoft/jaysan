@@ -2,7 +2,7 @@
  include 'db_head.php';
 
 
- $id =test_input($_GET['id']);
+ $id =test_input($_POST['id']);
 
  $qty = sql_nullable(test_input($_GET['qty']));
  

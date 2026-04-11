@@ -2,10 +2,10 @@
  include 'db_head.php';
 
 
- $process_id =test_input($_GET['process_id']);
- $input_part_id =test_input($_GET['input_part_id']);
- $previous_process_id =test_input($_GET['previous_process_id']);
- $qty =test_input($_GET['qty']);
+ $process_id =test_input($_POST['process_id']);
+ $input_part_id =test_input($_POST['input_part_id']);
+ $previous_process_id =test_input($_POST['previous_process_id']);
+ $qty =test_input($_POST['qty']);
 
 
 function test_input($data) {
