@@ -28,7 +28,7 @@ $cat = '';
 $output_part = 'NULL';
 $component_cat = '';
 $get_previous_process_id_sql = "select previous_process_id,cat,output_part,component_cat from process_wel_tbl where process_id = $process_id;";
-echo $get_previous_process_id_sql;
+
 $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 
 $row_previous_process_id = $result_previous_process_id->fetch_assoc();
