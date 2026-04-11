@@ -32,6 +32,16 @@ $component_cat = sql_nullable($row_previous_process_id['component_cat']);
 $process_title = sql_nullable($row_previous_process_id['process_title']);
 
 
+// update cat = '' and output_part = null for old process id
+$update_old_process_sql = "update process_wel_tbl set cat = '', output_part = null where process_id = $process_id;";
+echo $update_old_process_sql;
+if ($conn->query($update_old_process_sql) === TRUE) {
+} else {
+    echo "Error: " . $update_old_process_sql . "<br>" . $conn->error;
+    $conn->close();
+    exit();
+}
+
 // insert new process i
 $insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,$component_cat,$process_title);";
 echo $insert_process_sql;
@@ -51,15 +61,7 @@ if ($conn->query($insert_input_wel_parts_sql) === TRUE) {
     echo "Error: " . $insert_input_wel_parts_sql . "<br>" . $conn->error;
 }
 
-// update cat = '' and output_part = null for old process id
-$update_old_process_sql = "update process_wel_tbl set cat = '', output_part = null where process_id = $process_id;";
-echo $update_old_process_sql;
-if ($conn->query($update_old_process_sql) === TRUE) {
-} else {
-    echo "Error: " . $update_old_process_sql . "<br>" . $conn->error;
-    $conn->close();
-    exit();
-}
+
 
 // 2nd update all process which have previous_process_id = deleted process_id to previous_process_id = previous_process_id of deleted process_id
 $update_previous_process_id_sql = "update process_wel_tbl set previous_process_id = $new_process_id where previous_process_id = $process_id and process_id != $new_process_id;";
