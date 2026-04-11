@@ -33,7 +33,7 @@ $process_title = $row_previous_process_id['process_title'];
 
 
 // insert new process id
-$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,'$component_cat','$process_title');";
+$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat','$output_part',1,'$component_cat','$process_title');";
 echo $insert_process_sql;
 if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
@@ -45,6 +45,7 @@ if ($conn->query($insert_process_sql) === TRUE) {
 
 // insert input_wel_parts for new process id
 $insert_input_wel_parts_sql = "insert into input_wel_parts (previous_process_id,input_part_id,qty,process_id) values ($process_id,null,1,$new_process_id);";
+echo $insert_input_wel_parts_sql;
 if ($conn->query($insert_input_wel_parts_sql) === TRUE) {
 } else {
     echo "Error: " . $insert_input_wel_parts_sql . "<br>" . $conn->error;
