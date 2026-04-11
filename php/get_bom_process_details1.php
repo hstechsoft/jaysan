@@ -69,7 +69,7 @@ in_wel as ( SELECT JSON_ARRAYAGG(
             jp.process_name
         )) AS input_parts,
 
-process_name, 
+pw.process_name, 
 pw.process_id,
 pw.process,  
 LEVEL  FROM process_wel  pw
