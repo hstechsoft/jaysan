@@ -14,9 +14,9 @@ return $data;
 }
 // check if input_part_id is null if yes stop the process
 $sql_check = "select * from input_wel_parts where id = $id and input_part_id is null;";
-echo $sql_check;
+
 $result_check = $conn->query($sql_check);
-if ($result_check->num_rows == 0) {
+if ($result_check->num_rows > 0) {
     echo "Error: cannot delete previous processed part";
     $conn->close();
     exit();
