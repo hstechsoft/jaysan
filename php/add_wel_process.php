@@ -41,6 +41,7 @@ if ($conn->query($insert_process_sql) === TRUE) {
 
 // update cat = '' and output_part = null for old process id
 $update_old_process_sql = "update process_wel_tbl set cat = '', output_part = null where process_id = $process_id;";
+echo $update_old_process_sql;
 if ($conn->query($update_old_process_sql) === TRUE) {
 } else {
     echo "Error: " . $update_old_process_sql . "<br>" . $conn->error;
@@ -50,6 +51,7 @@ if ($conn->query($update_old_process_sql) === TRUE) {
 
 // 2nd update all process which have previous_process_id = deleted process_id to previous_process_id = previous_process_id of deleted process_id
 $update_previous_process_id_sql = "update process_wel_tbl set previous_process_id = $new_process_id where previous_process_id = $process_id;";
+echo $update_previous_process_id_sql;
 if ($conn->query($update_previous_process_id_sql) === TRUE) {
 
 } else {
@@ -57,6 +59,7 @@ if ($conn->query($update_previous_process_id_sql) === TRUE) {
 }
 // 3rd  also update input_wel_parts table pre_process_id
 $update_input_wel_parts_sql = "update input_wel_parts set previous_process_id = $new_process_id where previous_process_id = $process_id;";
+echo $update_input_wel_parts_sql;
 if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 
 } else {
