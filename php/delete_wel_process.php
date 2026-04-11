@@ -67,7 +67,7 @@ else {
     throw new Exception("Error: " . $delete_process_sql . "<br>" . $conn->error);
 }
 
-$new_process_id = $process_id;
+$new_process_id = 0;
 
 // check if cat = out and output_part is not null then we update 
 if($cat == 'out' && $output_part != null && $output_part != '' && $output_part != 'null' && $output_part != 'NULL'){
