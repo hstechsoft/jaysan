@@ -19,17 +19,21 @@ return $data;
 $previous_process_id = null;
 $cat = '';
 $output_part = null;
-$get_previous_process_id_sql = "select previous_process_id,cat,output_part from process_wel_tbl where process_id = $process_id;";
+$component_cat = '';
+$process_title = '';
+$get_previous_process_id_sql = "select previous_process_id,cat,output_part,component_cat,process_title from process_wel_tbl where process_id = $process_id;";
 $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 
 $row_previous_process_id = $result_previous_process_id->fetch_assoc();
 $previous_process_id = $row_previous_process_id['previous_process_id'];
 $cat = $row_previous_process_id['cat'];
 $output_part = $row_previous_process_id['output_part'];
+$component_cat = $row_previous_process_id['component_cat'];
+$process_title = $row_previous_process_id['process_title'];
 
 
 // insert new process id
-$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process) values ($process_id,'$cat',$output_part,1);";
+$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,'$component_cat','$process_title');";
 
 if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
