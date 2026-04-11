@@ -101,7 +101,9 @@ input_parts,
             'max_time',
             max_time,
             'cost',
-            wtm.cost
+            wtm.cost,
+            'wtid',
+            wtm.wtid
 
             
             
