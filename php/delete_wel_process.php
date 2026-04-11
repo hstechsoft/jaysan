@@ -64,7 +64,7 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 // 4th now there is no process refernced this process as previous process so we can delete it
 $delete_process_sql = "delete from process_wel_tbl where process_id = $process_id;";
 if ($conn->query($delete_process_sql) === TRUE) {
-  echo "ok";
+
 }
 else {
     echo "Error: " . $delete_process_sql . "<br>" . $conn->error;
@@ -73,7 +73,7 @@ else {
 
 // check if cat = out and output_part is not null then we update 
 if($cat == 'out' && $output_part != null && $output_part != '' && $output_part != 'null' && $output_part != 'NULL'){
- $update_output_part_sql = "update process_wel_tbl set output_part =$output_part and cat = 'out' where process_id = $previous_process_id;";
+ $update_output_part_sql = "update process_wel_tbl set output_part = $output_part , cat = 'out' where process_id = $previous_process_id;";
  echo $update_output_part_sql;
  if ($conn->query($update_output_part_sql) === TRUE) {
  }
