@@ -29,7 +29,7 @@ $output_part = $row_previous_process_id['output_part'];
 
 
 // insert new process id
-$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process) values ($process_id,'$cat',$output_part,null);";
+$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process) values ($process_id,'$cat',$output_part,1);";
 
 if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
@@ -65,7 +65,7 @@ if ($conn->query($update_previous_process_id_sql) === TRUE) {
     echo "Error: " . $update_previous_process_id_sql . "<br>" . $conn->error;
 }
 // 3rd  also update input_wel_parts table pre_process_id
-$update_input_wel_parts_sql = "update input_wel_parts set previous_process_id = $new_process_id where previous_process_id = $process_id;";
+$update_input_wel_parts_sql = "update input_wel_parts set previous_process_id = $new_process_id where previous_process_id = $process_id and process_id != $new_process_id;";
 echo $update_input_wel_parts_sql;
 if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 
