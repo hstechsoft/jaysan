@@ -23,9 +23,9 @@ if ($result_check->num_rows > 0) {
 }
 // if not proceed to delete
 // 1st get previous process id of deleted process_id
-$previous_process_id = null;
+$previous_process_id = 'NULL';
 $cat = '';
-$output_part = null;
+$output_part = 'NULL';
 $get_previous_process_id_sql = "select previous_process_id,cat,output_part from process_wel_tbl where process_id = $process_id;";
 $result_previous_process_id = $conn->query($get_previous_process_id_sql);
 
@@ -59,6 +59,7 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 // check if cat = out and output_part is not null then we update 
 if($cat == 'out' && $output_part != null && $output_part != '' && $output_part != 'null' && $output_part != 'NULL'){
  $update_output_part_sql = "update process_wel_tbl set output_part =$output_part and cat = 'out' where process_id = $previous_process_id;";
+ echo $update_output_part_sql;
  if ($conn->query($update_output_part_sql) === TRUE) {
  }
   else {
