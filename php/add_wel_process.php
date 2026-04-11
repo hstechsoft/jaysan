@@ -3,7 +3,7 @@ include 'db_head.php';
 
 
 
-$process_id = test_input($_GET['process_id']);
+$process_id = test_input($_POST['process_id']);
 
 function test_input($data) {
 $data = trim($data);
