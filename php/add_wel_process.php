@@ -32,8 +32,8 @@ $component_cat = sql_nullable($row_previous_process_id['component_cat']);
 $process_title = sql_nullable($row_previous_process_id['process_title']);
 
 
-// insert new process id
-$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat','$output_part',1,'$component_cat','$process_title');";
+// insert new process i
+$insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,$component_cat,$process_title);";
 echo $insert_process_sql;
 if ($conn->query($insert_process_sql) === TRUE) {
     $new_process_id = $conn->insert_id;
