@@ -41,7 +41,7 @@ if ($conn->query($update_old_process_sql) === TRUE) {
    throw new Exception("Error: " . $update_old_process_sql . "<br>" . $conn->error);
 
 }
-$new_process_id_display = $process_id;
+$new_process_id_display = 0;
 // insert new process i
 $insert_process_sql = "insert into process_wel_tbl (previous_process_id,cat,output_part,process,component_cat,process_title) values ($process_id,'$cat',$output_part,1,$component_cat,$process_title);";
 
