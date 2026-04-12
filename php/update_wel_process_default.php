@@ -2,10 +2,11 @@
  include 'db_head.php';
 
 
- $output_part =test_input($_GET['output_part']);
- $component_cat =test_input($_GET['component_cat']);
- $is_default =test_input($_GET['is_default']);
- $process_id =test_input($_GET['process_id']);
+ $output_part =test_input($_POST['output_part']);
+ $component_cat =test_input($_POST['component_cat']);
+ $is_default =test_input($_POST['is_default']);
+ $process_id =test_input($_POST['process_id']);
+
 
  
 

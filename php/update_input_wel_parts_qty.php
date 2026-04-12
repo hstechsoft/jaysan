@@ -4,7 +4,7 @@
 
  $id =test_input($_POST['id']);
 
- $qty = sql_nullable(test_input($_GET['qty']));
+ $qty = sql_nullable(test_input($_POST['qty']));
  
 
 
