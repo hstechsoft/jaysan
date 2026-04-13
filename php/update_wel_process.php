@@ -2,8 +2,8 @@
  include 'db_head.php';
 
 
- $process_id =test_input($_GET['process_id']);
- $process =test_input($_GET['process']);
+ $process_id =test_input($_POST['process_id']);
+ $process =test_input($_POST['process']);
  
 
 
