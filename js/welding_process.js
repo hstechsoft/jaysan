@@ -1474,7 +1474,7 @@ $(document).ready(function () {
                   <td>${extra_obj.dep_name}</td>
                   <td>${extra_obj.dep_sec_name}</td>
                   <td>${extra_obj.dep_sec_machine_name}</td>
-                  <td>${extra_obj.min_time} ${extra_obj.max_time}</td>
+                  <td><span class='badge bg-secondary'>${extra_obj.min_time}</span> <span class='badge bg-primary'>${extra_obj.max_time}</span></td>
                   <td>${extra_obj.cost}</td>
                   <td>
                     <i class='fa fa-pen pe-2 text-warning edit_extra btn' data-wtid=${extra_obj.wtid}></i>
@@ -1648,9 +1648,10 @@ $(document).ready(function () {
 
     $("#process_title").val('');
     $('#process_default').prop("checked", false);
-
+    $("#welding_table").find("tr").eq(0).find('td:first-child').trigger("click")
     setTimeout(() => {
 
+      $("#welding_table").find("tr").eq(0).find('td:first-child').trigger("click")
       get_bom(part_id, component_cat)
     }, 500)
   });
@@ -1680,6 +1681,10 @@ $(document).ready(function () {
   });
 
   $('#multi_process_list').on("click", "li", function () {
+
+    $("#ma_name").data("pro_id", '')
+    $("#ma_name").data("part_id", '')
+    $("#ma_name").data("component_cat", '')
     var part_id = $(this).data("part_id");
     var component_cat = $(this).data("component_cat");
     var process_id = $(this).data("process_id");
@@ -2353,7 +2358,7 @@ function clear() {
   if ($("#submit_btn").hasClass("d-none"))
     $("#submit_btn").removeClass("d-none")
 
-  $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+  $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td>  <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
   if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
     $("#godown_data").removeClass("d-none");
   }
@@ -2450,7 +2455,11 @@ function update_input_wel_parts_pre_process(id, previous_process_id) {
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2483,7 +2492,11 @@ function update_wel_process(process, process_id) {
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2516,7 +2529,11 @@ function update_wel_process_title(process_id, process_title) {
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2551,7 +2568,11 @@ function update_wel_process_default(output_part, component_cat, is_default, proc
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2584,7 +2605,11 @@ function update_input_wel_parts_qty(id, part_qty) {
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2625,7 +2650,11 @@ function update_work_time_master1(process_id, ori_process_id, godown_id, depart_
 
       if (response.trim() == "ok") {
 
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2657,12 +2686,17 @@ function delete_work_time_master(wtid) {
 
       if (response.trim() == "ok") {
         if (response.trim() > 0) {
-          get_bom_process_details1(response.trim())
+          shw_toast("Success", "Deleted Successfully!");
+          get_bom_process_details1(response.trim());
         }
         else {
-          get_bom_process_details1($("#ma_name").data("pro_id"))
+          shw_toast("Success", "Deleted Successfully!");
+          get_bom_process_details1($("#ma_name").data("pro_id"));
 
         }
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2696,9 +2730,11 @@ function add_wel_process(process_id) {
 
         if (response.trim() > 0) {
           $("#ma_name").data("pro_id", response.trim());
+          shw_toast("Success", "Added Successfully!");
           get_bom_process_details1(response.trim());
         }
         else {
+          shw_toast("Success", "Added Successfully!");
           get_bom_process_details1($("#ma_name").data("pro_id"))
 
         }
@@ -2737,10 +2773,12 @@ function delete_wel_process(process_id) {
 
         if (response.trim() > 0) {
           $("#ma_name").data("pro_id", response.trim());
+          shw_toast("Success", "Deleted Successfully!");
           get_bom_process_details1(response.trim())
         }
         else {
-          get_bom_process_details1($("#ma_name").data("pro_id"))
+          shw_toast("Success", "Deleted Successfully!");
+          get_bom_process_details1($("#ma_name").data("pro_id"));
 
         }
       }
@@ -2778,7 +2816,12 @@ function update_input_wel_parts(part_id, part_qty, previous_process_id, process_
 
 
       if (response.trim() == "ok") {
-        get_bom_process_details1($("#ma_name").data("pro_id"))
+
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
       }
 
 
@@ -2809,6 +2852,7 @@ function delete_input_wel_parts(id) {
 
 
       if (response.trim() == "ok") {
+        shw_toast("Success", "Deleted Successfully!");
         get_bom_process_details1($("#ma_name").data("pro_id"))
       }
       else {
@@ -3404,7 +3448,7 @@ function get_bom_process_details1(process_id) {
             console.log(obj.in_tbl);
 
             const extra = encodeURIComponent(obj.process_details || "[]");
-            $("#welding_table").append("<tr class='small'><td class='' data-extra= " + extra + " data-process-id=" + obj.process + " data-ori_process-id=" + obj.process_id + ">" + count + "</td><td > <ul class='list-group small' data-ori_process-id=" + obj.process_id + ">" + in_tbl + " </ul></td><td><ul class='list-group small'><li class='list-group-item' data-process-id=" + obj.process + " data-tr_process=" + obj.process_id + ">" + obj.process_name + "</ul></td><td><ul class='list-group small'><li class='list-group-item' > <button class='btn btn-primary btn-sm view_btn' value='" + obj.process + "'> View </button></li></ul></td><td><button class='btn btn-outline-success border-0 add_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
+            $("#welding_table").append("<tr class='small'><td class='' data-extra= " + extra + " data-process-id=" + obj.process + " data-ori_process-id=" + obj.process_id + ">" + count + "</td><td > <ul class='list-group small' data-ori_process-id=" + obj.process_id + ">" + in_tbl + " </ul></td><td><ul class='list-group small'><li class='list-group-item' data-process-id=" + obj.process + " data-tr_process=" + obj.process_id + ">" + obj.process_name + "</ul></td><td><button class='btn btn-outline-success border-0 add_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td><td><button class='btn btn-outline-danger border-0 delete_pr' data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>");
 
             let parsedExtra = [];
             try {
@@ -3435,7 +3479,7 @@ function get_bom_process_details1(process_id) {
           if ($("#submit_btn").hasClass("d-none"))
             $("#submit_btn").removeClass("d-none")
 
-          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td>  <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
           if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
             $("#godown_data").removeClass("d-none");
           }
@@ -3531,7 +3575,7 @@ function get_bom_process_details(part_id, component_cat) {
           if ($("#submit_btn").hasClass("d-none"))
             $("#submit_btn").removeClass("d-none")
 
-          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td>  <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
           if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
             $("#godown_data").removeClass("d-none");
           }
@@ -3840,7 +3884,7 @@ function get_bom_process_details_summary(part_id, component_cat) {
           if ($("#submit_btn").hasClass("d-none"))
             $("#submit_btn").removeClass("d-none")
 
-          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td> <td> <ul class='list-group'> </ul> </td> <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          $("#welding_table").append(" <tr class='small'> <td class='tbl_selected'> 1 </td> <td > <ul class='list-group'> </ul> </td> <td><ul class='list-group'> </ul></td>  <td><button class='btn btn-outline-success border-0 add_pr'><i class='fa fa-plus-circle ' aria-hidden='true'></i></button></td> <td><button class='btn btn-outline-danger border-0 delete_pr'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
           if ($('#welding_table').find("tr td:first-child").hasClass("tbl_selected")) {
             $("#godown_data").removeClass("d-none");
           }
