@@ -71,6 +71,14 @@ $in_pre_id = $pre_process_id;
        throw new Exception($conn->error);
       }
 
+      // check if there is any loop in process flow after insertion of new process id
+include 'bom_process_loop_check.php'; 
+$no_loop = correction_check_fn($conn);
+if(!$no_loop){
+
+    throw new Exception("Error: Loop detected in process flow after insertion of new process. Please check the process flow and try again.");
+}
+
    }
 
 
