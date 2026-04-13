@@ -16,7 +16,7 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
-$sql = "UPDATE process_wel_tbl SET previous_process_id = $previous_process_id WHERE id = $id;";
+$sql = "UPDATE input_wel_parts SET previous_process_id = $previous_process_id WHERE id = $id;";
 
   if ($conn->query($sql) === TRUE) {
     echo "ok";
