@@ -179,21 +179,21 @@ $(document).ready(function () {
     if ($(this).is(":checked")) {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 1, process_id);
-      } 
+      }
       // else {
       //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
       // }
     } else {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 0, process_id);
-      } 
+      }
       // else {
       //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
       // }
     }
   });
 
-   $("#process_title").on("focusout", function () {
+  $("#process_title").on("focusout", function () {
 
     var process_id = $("#ma_name").data("pro_id");
     if ($(this).val()) {
@@ -201,7 +201,7 @@ $(document).ready(function () {
         update_wel_process_title(process_id, $(this).val());
       }
     } else {
-        salert("Warning", "Name Overall Tittle", "warning");
+      salert("Warning", "Name Overall Tittle", "warning");
     }
   });
 
@@ -1644,6 +1644,11 @@ $(document).ready(function () {
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
+
+
+    $("#process_title").val('');
+    $('#process_default').prop("checked", false);
+
     setTimeout(() => {
 
       get_bom(part_id, component_cat)
@@ -3824,6 +3829,8 @@ function get_bom_process_details_summary(part_id, component_cat) {
           // get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
           $("#welding_table").empty();
+          $("#process_title").val('');
+          $('#process_default').prop("checked", false);
           // if ($("#update_btn").hasClass("d-none") == false)
           //   $("#update_btn").addClass("d-none")
 
