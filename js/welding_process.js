@@ -19,7 +19,7 @@ var html_li = "";
 let available_part_ids = [];
 
 $(document).ready(function () {
-  
+
   //   $('[id]').each(function(){
 
   //     var elementId = $(this).attr('id');
@@ -173,7 +173,7 @@ $(document).ready(function () {
   //  shw_toast("Enter Required" , "Kindly enter all required ")
 
   //   });
-  
+
   $("#process_default").on("change", function () {
 
     var component_cat = $("#ma_name").data("component_cat");
@@ -2335,6 +2335,23 @@ $(document).ready(function () {
 
     li.attr("data-part-qty", newQty);
   });
+
+  $("#default_btn").on("click", function () {
+
+    var output_part = $(this).data("output_part");
+    var component_cat = $(this).data("component_cat");
+    let process_id = $(".default_process_list input:checked").val() || 0;
+
+    console.log(output_part, component_cat, process_id);
+
+
+    if (output_part && component_cat && process_id > 0) {
+      update_wel_process_default(output_part, component_cat, 1, process_id)
+    }
+    else {
+      salert("Warning", "Data Missing! Try Later.", "warning");
+    }
+  })
 });
 
 
@@ -2582,7 +2599,35 @@ function update_wel_process_default(output_part, component_cat, is_default, proc
         get_bom_process_details1($("#ma_name").data("pro_id"));
       }
       else {
-        salert("Warning", response, "warning");
+        let res = JSON.parse(response);
+
+        if (res.processes) {
+
+          $("#default_btn").data("output_part", output_part);
+          $("#default_btn").data("component_cat", component_cat);
+          $(".default_process_list").empty(); // clear old list
+          $("#defaultProcess").modal("show");
+
+          res.processes.forEach(function (item) {
+            $(".default_process_list").append(`
+                      <li data-id="${item.process_id}" class="d-flex justify-content-between">
+                        <label class="form-check-label" for="process_${item.process_id}">
+                          ${item.process_title}
+                        </label>
+                        <input 
+                          class="form-check-input" 
+                          type="radio" 
+                          name="flexRadioDefault" 
+                          id="process_${item.process_id}" 
+                          value="${item.process_id}">
+                      </li>
+                    `);
+          });
+
+        } else {
+          $("#defaultProcess").modal("hide");
+          salert("Warning", response, "warning");
+        }
       }
 
 
