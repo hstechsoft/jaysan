@@ -16,15 +16,30 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
+try {
+    $conn->begin_transaction();
 $sql = "UPDATE input_wel_parts SET previous_process_id = $previous_process_id WHERE id = $id;";
 
   if ($conn->query($sql) === TRUE) {
-    echo "ok";
+
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+   throw new Exception("Error: " . $sql . "<br>" . $conn->error);
   }
+  // check if there is any loop in process flow after update of previous_process_id
+include 'bom_process_loop_check.php';
+$no_loop = correction_check_fn($conn);
+if(!$no_loop){
+    throw new Exception("Error: Loop detected in process flow after update of previous process id. Please check the process flow and try again.");
+}
+
+
     
-  
+  $conn->commit();  
+      echo "ok";
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+    $conn->rollback();
+}
 
 
 
