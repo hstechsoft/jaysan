@@ -21,7 +21,7 @@ try {
 $sql = "UPDATE input_wel_parts SET previous_process_id = $previous_process_id WHERE id = $id;";
 
   if ($conn->query($sql) === TRUE) {
-    echo "ok";
+
   } else {
    throw new Exception("Error: " . $sql . "<br>" . $conn->error);
   }
@@ -35,6 +35,7 @@ if(!$no_loop){
 
     
   $conn->commit();  
+      echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();

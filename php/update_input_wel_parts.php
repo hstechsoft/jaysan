@@ -21,7 +21,7 @@ try {
 $sql_insert = "INSERT INTO input_wel_parts (process_id,input_part_id,previous_process_id,qty) VALUES ($process_id,$input_part_id,$previous_process_id,$qty);";
 
   if ($conn->query($sql_insert) === TRUE) {
-    echo "ok";
+   
   } else {
    throw new Exception("Error: " . $sql_insert . "<br>" . $conn->error);
   }
@@ -34,6 +34,7 @@ if(!$no_loop){
 }
 
   $conn->commit();
+   echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();
