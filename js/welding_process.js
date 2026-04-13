@@ -176,19 +176,20 @@ $(document).ready(function () {
     var output_part = $("#ma_name").data("part_id");
     var process_id = $("#ma_name").data("pro_id");
 
-    alert(output_part)
     if ($(this).is(":checked")) {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 1, process_id);
-      } else {
-        salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
-      }
+      } 
+      // else {
+      //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+      // }
     } else {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 0, process_id);
-      } else {
-        salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
-      }
+      } 
+      // else {
+      //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
+      // }
     }
   });
 
@@ -963,7 +964,7 @@ $(document).ready(function () {
       var partId = $('#part_no').data('selected-part_id');
       var bomQty = parseFloat($('#qty').attr("data-original")) || parseFloat($('#qty').val());
       var newQty = parseFloat($('#qty').val());
-      var available_part_ids = $(this).data("available_part_ids");
+      var available_part_ids = $(this).data("available_part_ids") || [];
       if (available_part_ids.includes(partId)) {
         salert("Warning", "Part Is Already There. If Qty Available Update The Qty.", "warning");
         return;
@@ -976,8 +977,7 @@ $(document).ready(function () {
 
       let rows = $('#welding_table tr');
 
-      if (rows.length >= 1 && available_part_ids) {
-        alert()
+      if (rows.length >= 1 && available_part_ids.length > 0) {
         cla = '';
       }
       // alert(usedQty+" "+remaining)
@@ -1046,7 +1046,11 @@ $(document).ready(function () {
           $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").empty()
           $("#welding_table .tbl_selected").parent().find("td").eq(2).find("ul").append("<li class='list-group-item' data-process-id=" + $('#process_name').data('selected-process_id') + "> <p class='m-0 p-0'>" + $('#process_name').val() + "</p></li>")
           get_machine($('#process_name').data('selected-process_id'));
-          update_wel_process($('#process_name').data('selected-process_id'), $("#welding_table .tbl_selected").parent().find("td").eq(0).data("ori_process-id"));
+
+          if ($("#welding_table .tbl_selected").parent().find("td").eq(0).data("ori_process-id")) {
+            update_wel_process($('#process_name').data('selected-process_id'), $("#welding_table .tbl_selected").parent().find("td").eq(0).data("ori_process-id"));
+          }
+
 
         }
 
@@ -1628,10 +1632,10 @@ $(document).ready(function () {
   $("#process_list1").on("dblclick", "li", function () {
 
     // alert()
-    if($(this).data("in_previous_process_id") && $(this).data("id")){
+    if ($(this).data("in_previous_process_id") && $(this).data("id")) {
       update_input_wel_parts_pre_process($(this).data("id"), $(this).data("in_previous_process_id"));
     }
-    else{
+    else {
       shw_toast("Warning", "Data Missing! Try Later");
     }
     html_li.attr("data-in_previous_process_id", $(this).data("in_previous_process_id"));
@@ -2430,9 +2434,9 @@ function get_process_count(part_id, id) {
 
 }
 
-function update_input_wel_parts_pre_process( id, previous_process_id) {
+function update_input_wel_parts_pre_process(id, previous_process_id) {
 
-  console.log( id, previous_process_id);
+  console.log(id, previous_process_id);
 
 
   $.ajax({
@@ -2463,9 +2467,9 @@ function update_input_wel_parts_pre_process( id, previous_process_id) {
   });
 }
 
-function update_wel_process( process, process_id) {
+function update_wel_process(process, process_id) {
 
-  console.log( process, process_id);
+  console.log(process, process_id);
 
 
   $.ajax({
