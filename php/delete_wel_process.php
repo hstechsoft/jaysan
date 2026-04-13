@@ -55,7 +55,7 @@ if ($conn->query($update_input_wel_parts_sql) === TRUE) {
 }
 
 // check if there is any loop in process flow after deletion of process id
-include 'bom_process_loop_check.php';
+ include_once 'bom_process_loop_check.php';
 $no_loop = correction_check_fn($conn);
 if(!$no_loop){
     throw new Exception("Error: Loop detected in process flow after deletion of process. Please check the process flow and try again.");

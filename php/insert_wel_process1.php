@@ -51,6 +51,9 @@ if($is_default1 == 1)
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;
  {
+  include_once 'bom_process_loop_check.php';
+
+
    foreach ($row['input_parts'] as $input) {
     $in_pre_id = null;
       $part_id = isset($input['part_id']) ? $input['part_id'] : null;
@@ -72,7 +75,7 @@ $in_pre_id = $pre_process_id;
       }
 
       // check if there is any loop in process flow after insertion of new process id
-include 'bom_process_loop_check.php'; 
+
 $no_loop = correction_check_fn($conn);
 if(!$no_loop){
 
