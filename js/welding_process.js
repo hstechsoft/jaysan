@@ -2346,6 +2346,7 @@ $(document).ready(function () {
 
 
     if (output_part && component_cat && process_id > 0) {
+      $("#defaultProcess").modal("hide");
       update_wel_process_default(output_part, component_cat, 1, process_id)
     }
     else {
