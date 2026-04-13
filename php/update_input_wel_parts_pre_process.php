@@ -2,9 +2,9 @@
  include 'db_head.php';
 
 
- $id =test_input($_GET['id']);
+ $id =test_input($_POST['id']);
 
- $previous_process_id = sql_nullable(test_input($_GET['previous_process_id']));
+ $previous_process_id = sql_nullable(test_input($_POST['previous_process_id']));
  
 
 
