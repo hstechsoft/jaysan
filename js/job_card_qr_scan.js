@@ -2,7 +2,7 @@
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
-// var current_user_id = 2310
+var current_user_id = 2310
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var current_work = 0;
@@ -267,6 +267,24 @@ $(document).ready(function () {
             ta: "முன்னேறுவதற்கான ரகசியம் தொடங்குவதில்தான் உள்ளது.",
             en: "The secret of getting ahead is getting started.",
             icon: "🚩"
+        },
+
+        {
+            ta: "உங்கள் வார்த்தைகளால் அதிகாரத்தை அசைக்க முடியுமானால், அதை உரக்கச் சொல்லுங்கள்.",
+            en: "If your words can shake power, say them louder.",
+            icon: "💥"
+        },
+
+        {
+            ta: "மௌனத்தைப் போல அதிகாரத்தை வலுப்படுத்துவது வேறு எதுவும் இல்லை.",
+            en: "Nothing strengthens authority so much as silence.",
+            icon: "🤐"
+        },
+
+        {
+            ta: "தவறு என்பது தவறுதான் — அது தலைமையாகவே இருந்தாலும் சரி.",
+            en: "Wrong is wrong — even when it comes from leadership.",
+            icon: "✍️"
         },
 
         {
@@ -1472,14 +1490,14 @@ function get_final_summary() {
             $("#emp_name_summary").text(current_user_name + " Work Summary" ?? "Employee Work Summary")
 
             // ======= TIME CALCULATION =======
-                let totalDayWork = Number(data.total_day_time || 0);
-                let totalWork = Number(data.total_process_time || 0).toFixed(1);
-                let freeTime = Number(data.free_time || 0).toFixed(1);
-                let pausedTime = Number(data.paused_time || 0).toFixed(1);
-                let extraWork = Number(data.total_extra_work_time || 0).toFixed(1);
+            let totalDayWork = Number(data.total_day_time || 0);
+            let totalWork = Number(data.total_process_time || 0).toFixed(1);
+            let freeTime = Number(data.free_time || 0).toFixed(1);
+            let pausedTime = Number(data.paused_time || 0).toFixed(1);
+            let extraWork = Number(data.total_extra_work_time || 0).toFixed(1);
 
-                // Extra Work Logic
-                let breakTime = Number(data.break_time || 0).toFixed(1);
+            // Extra Work Logic
+            let breakTime = Number(data.break_time || 0).toFixed(1);
             // let extraWork = data.work_status === "excess_time" ? totalWork - freeTime : 0;
             if (extraWork < 0) extraWork = 0;
 

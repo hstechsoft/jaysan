@@ -1343,6 +1343,24 @@ $(document).ready(function () {
     },
 
     {
+      ta: "உங்கள் வார்த்தைகளால் அதிகாரத்தை அசைக்க முடியுமானால், அதை உரக்கச் சொல்லுங்கள்.",
+      en: "If your words can shake power, say them louder.",
+      icon: "💥"
+    },
+
+    {
+      ta: "மௌனத்தைப் போல அதிகாரத்தை வலுப்படுத்துவது வேறு எதுவும் இல்லை.",
+      en: "Nothing strengthens authority so much as silence.",
+      icon: "🤐"
+    },
+
+    {
+      ta: "தவறு என்பது தவறுதான் — அது தலைமையாகவே இருந்தாலும் சரி.",
+      en: "Wrong is wrong — even when it comes from leadership.",
+      icon: "✍️"
+    },
+
+    {
       ta: "கடிகாரத்தை பார்த்துக் கொண்டிருக்காதே; அது போல நீயும் தொடர்ந்து செயல்பட்டு.",
       en: "Don’t watch the clock; do what it does. Keep going.",
       icon: "⏰"
