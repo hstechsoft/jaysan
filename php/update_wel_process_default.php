@@ -29,10 +29,10 @@ $result_check_occurance = $conn->query($sql_check_occurance);
 $row_check_occurance = $result_check_occurance->fetch_assoc();
 // there is more then one process so need to print its process id,title and ask user to select one to be default
 if($row_check_occurance['count'] > 1){
-  $result['processes'] = json_decode($row_check_occurance['processes']);
+  $result['processes'] = ($row_check_occurance['processes']);
   $result['status'] = 'select';
   $conn->close();
-  echo json_encode($result);
+  print json_encode($result);
   exit();
 }
 // here there is only one process so we do not allow to update default to 0 because there must be one default process
