@@ -24,6 +24,7 @@ $result = array();
 
 if($is_default == '0'){
 $sql_check_occurance = "select JSON_ARRAYAGG((JSON_OBJECT('process_id', process_id, 'process_title', process_title))) as processes, count(*) as count from process_wel_tbl where  output_part = $output_part and component_cat = $component_cat and cat = 'out';";
+echo $sql_check_occurance;
 $result_check_occurance = $conn->query($sql_check_occurance);
 $row_check_occurance = $result_check_occurance->fetch_assoc();
 // there is more then one process so need to print its process id,title and ask user to select one to be default
