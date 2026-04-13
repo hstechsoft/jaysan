@@ -179,39 +179,31 @@ $(document).ready(function () {
     if ($(this).is(":checked")) {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 1, process_id);
-      } 
+      }
       // else {
       //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
       // }
     } else {
       if (component_cat && process_id && output_part) {
         update_wel_process_default(output_part, component_cat, 0, process_id);
-      } 
+      }
       // else {
       //   salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
       // }
     }
   });
 
-  //  $("#process_title").on("focusout", function () {
+  $("#process_title").on("focusout", function () {
 
-  //   var component_cat = $("#ma_name").data("component_cat");
-  //   var output_part = $("#ma_name").data("output_part");
-  //   var process_id = $("#ma_name").data("pro_id");
-  //   if ($(this).val()) {
-  //     if (component_cat && process_id && output_part) {
-  //       update_wel_process_default(output_part, component_cat, 1, process_id);
-  //     } else {
-  //       salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
-  //     }
-  //   } else {
-  //     if (component_cat && process_id && output_part) {
-  //       update_wel_process_default(output_part, component_cat, 0, process_id);
-  //     } else {
-  //       salert("Warning", "output_part, component_cat & Process_id Missing! Try later.", "warning");
-  //     }
-  //   }
-  // });
+    var process_id = $("#ma_name").data("pro_id");
+    if ($(this).val()) {
+      if (process_id) {
+        update_wel_process_title(process_id, $(this).val());
+      }
+    } else {
+      salert("Warning", "Name Overall Tittle", "warning");
+    }
+  });
 
   $('#submit_btn').on('click', function () {
     $('#submit_btn').prop('disabled', true);
@@ -1652,6 +1644,11 @@ $(document).ready(function () {
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
+
+
+    $("#process_title").val('');
+    $('#process_default').prop("checked", false);
+
     setTimeout(() => {
 
       get_bom(part_id, component_cat)
@@ -2478,6 +2475,39 @@ function update_wel_process(process, process_id) {
     data: {
       process_id: process_id,
       process: process,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        get_bom_process_details1($("#ma_name").data("pro_id"))
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_wel_process_title(process_id, process_title) {
+
+  console.log(process_id, process_title);
+
+
+  $.ajax({
+    url: "php/update_wel_process_title.php",
+    type: "post", //send it through get method
+    data: {
+      process_id: process_id,
+      process_title: process_title,
 
     },
     success: function (response) {
@@ -3799,6 +3829,8 @@ function get_bom_process_details_summary(part_id, component_cat) {
           // get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
           $("#welding_table").empty();
+          $("#process_title").val('');
+          $('#process_default').prop("checked", false);
           // if ($("#update_btn").hasClass("d-none") == false)
           //   $("#update_btn").addClass("d-none")
 
