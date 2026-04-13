@@ -23,8 +23,8 @@ $result = array();
 // check changed default is 0 if yes need to update 1 to other process title if there is more then one process
 
 if($is_default == '0'){
-$sql_check_occurance = "select JSON_ARRAYAGG((JSON_OBJECT('process_id', process_id, 'process_title', process_title))) as processes, count(*) as count from process_wel_tbl where  output_part = $output_part and component_cat = $component_cat and cat = 'out';";
-echo $sql_check_occurance;
+$sql_check_occurance = "select JSON_ARRAYAGG((JSON_OBJECT('process_id', process_id, 'process_title', process_title))) as processes, count(*) as count from process_wel_tbl where  output_part = $output_part and component_cat = '$component_cat' and cat = 'out';";
+
 $result_check_occurance = $conn->query($sql_check_occurance);
 $row_check_occurance = $result_check_occurance->fetch_assoc();
 // there is more then one process so need to print its process id,title and ask user to select one to be default
@@ -45,7 +45,7 @@ else{
 }
 else if ($is_default == '1'){
   // here we need to update all other process default to 0 because only one process can be default
-  $sql_update_all = "update process_wel_tbl set is_default = '0' where output_part = $output_part and component_cat = $component_cat and cat = 'out';";
+  $sql_update_all = "update process_wel_tbl set is_default = '0' where output_part = $output_part and component_cat = '$component_cat' and cat = 'out';";
   if ($conn->query($sql_update_all) === TRUE) {
 $sql_update = "update process_wel_tbl set is_default = $is_default where process_id = $process_id;";
 
