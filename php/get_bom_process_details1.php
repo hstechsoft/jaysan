@@ -53,6 +53,8 @@ inner join process_wel on process_wel.previous_process_id = pwt.process_id
 ),
 in_wel as ( SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
+            'is_default',
+            is_default,
             'id',
             iwp.id,    
             'input_part_id',
