@@ -55,7 +55,7 @@ if($is_default1 == 1)
 
    
    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
-   VALUES ('$process_id', " . sql_nullable($output_part) . ", " . sql_nullable($pre_process_id) . ", '$cat', '$component_cat', '$process_title', '$is_default')";
+   VALUES ('$process_id', " . sql_nullable($output_part) . ", " . sql_nullable($pre_process_id) . ", '$cat', '$component_cat', '$process_title', '$is_default1')";
 
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;
