@@ -88,7 +88,8 @@ if(!$no_loop){
      if (count($row['extra_details']) > 0 ) 
   {
     foreach ($row['extra_details'] as $extra) {
-            $godown_id = isset($extra['godown_id']) ? $extra['godown_id'] : '';
+
+        $godown_id = isset($extra['godown_id']) ? $extra['godown_id'] : '';
             $dep_id = isset($extra['dep_id']) ? $extra['dep_id'] : '';
             $dep_sec_id = isset($extra['dep_sec_id']) ? $extra['dep_sec_id'] : '';
             $dep_sec_machine_id = isset($extra['dep_sec_machine_id']) ? $extra['dep_sec_machine_id'] : '';
@@ -100,8 +101,33 @@ if(!$no_loop){
             $dep_id = sql_nullable($dep_id);
             $dep_sec_id = sql_nullable($dep_sec_id);
             $dep_sec_machine_id = sql_nullable($dep_sec_machine_id);
+            $is_default_extra = isset($extra['is_default']) ? $extra['is_default'] : 0;
 
-            $insert_part = "INSERT INTO `work_time_master` ( `godown_id`, `dep_id`, `dep_sec_id`, `machine_id`, `min_time`, `max_time`, `process_id`, `cost`,ori_process_id) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$process_id', '$cost', '$last_insert_id');";
+               if($is_default_extra == "0")
+{
+  $sql = "SELECT * FROM work_time_master WHERE ori_process_id = $ori_process_id and is_default = 1";
+  $result = $conn->query($sql);
+  if ($result->num_rows == 0) {
+    $is_default_extra = "1";
+  }
+}
+// if is default is 1 then set all other default to 0 for that ori_process_id
+else if($is_default_extra == "1")
+  {
+    $sql = "UPDATE work_time_master SET is_default = 0 WHERE ori_process_id = $ori_process_id";
+    if ($conn->query($sql) === TRUE) {
+     // echo "ok";
+    } else {
+      echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+  }
+  else
+  {
+    $is_default_extra = "0";
+  }
+     
+
+            $insert_part = "INSERT INTO `work_time_master` ( `godown_id`, `dep_id`, `dep_sec_id`, `machine_id`, `min_time`, `max_time`, `process_id`, `cost`,ori_process_id,is_default) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$process_id', '$cost', '$last_insert_id', '$is_default_extra');";
 
 if ($conn->query($insert_part) === TRUE) {
     // Retrieve the last inserted ID
