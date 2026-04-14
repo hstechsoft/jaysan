@@ -27,6 +27,14 @@ $is_default1 = 0;
       $cat = 'out';
       $process_title1 = $process_title;
       $is_default1 = $is_default;
+      if($is_default == "0")
+      {
+        $sql = "SELECT * FROM process_wel_tbl WHERE output_part = '$output_part' AND component_cat = '$component_cat' AND cat = '$cat' AND is_default = 1";
+        $result = $conn->query($sql);
+        if ($result->num_rows == 0) {
+          $is_default1 = "1";
+        }
+      }
     }
     else
       {
@@ -44,6 +52,7 @@ if($is_default1 == 1)
         throw new Exception($conn->error);
     }
   }
+
    
    $sql_process = "INSERT  INTO  process_wel_tbl (process,output_part,previous_process_id,cat,component_cat,process_title,is_default)
    VALUES ('$process_id', " . sql_nullable($output_part) . ", " . sql_nullable($pre_process_id) . ", '$cat', '$component_cat', '$process_title', '$is_default')";
