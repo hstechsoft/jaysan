@@ -121,11 +121,7 @@ else if($is_default_extra == "1")
       echo "Error: " . $sql . "<br>" . $conn->error;
     }
   }
-  else
-  {
-    $is_default_extra = "0";
-  }
-     
+ 
 
             $insert_part = "INSERT INTO `work_time_master` ( `godown_id`, `dep_id`, `dep_sec_id`, `machine_id`, `min_time`, `max_time`, `process_id`, `cost`,ori_process_id,is_default) VALUES ( '$godown_id', $dep_id,  $dep_sec_id ,  $dep_sec_machine_id, '$min_time', '$max_time', '$process_id', '$cost', '$last_insert_id', '$is_default_extra');";
 

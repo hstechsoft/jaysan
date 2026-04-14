@@ -43,9 +43,10 @@ else if($is_default == "1")
       echo "Error: " . $sql . "<br>" . $conn->error;
     }
   }
-  else
-  {
-    $is_default = "0";
+  else{
+    echo "Error: Invalid value for is_default. Must be '0' or '1'.";
+    $conn->close();
+    exit;
   }
 
 if($wtid == "0")
