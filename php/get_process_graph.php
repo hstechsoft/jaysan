@@ -22,7 +22,8 @@ WITH RECURSIVE process_details AS (
       JSON_ARRAYAGG(
         JSON_OBJECT(
           'process_availble',
-            (SELECT 1 FROM process_wel_tbl WHERE process_wel_tbl.output_part =  ip.input_part_id  and cat = "out"),
+            (SELECT 1 FROM process_wel_tbl WHERE process_wel_tbl.output_part =  ip.input_part_id  and cat = "out" group by process_wel_tbl.output_part) 
+            )
             'part_id',
             ip.input_part_id,
             'part_name',
