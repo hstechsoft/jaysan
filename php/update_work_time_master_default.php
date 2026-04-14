@@ -3,7 +3,7 @@
 
 $wtid  = test_input($_POST['wtid']);
 $is_default = test_input($_POST['is_default']);
-
+$ori_process_id = test_input($_POST['process_id']);
 
  
  
@@ -14,6 +14,7 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
+
 
 // if is default is 0  check there is atleat one deafult = 1 for that ori_process_id if not set this as 1 instead of 0
 if($is_default == "0")
