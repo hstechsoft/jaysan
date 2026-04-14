@@ -1,11 +1,7 @@
 <?php
  include 'db_head.php';
 
- 
-
- $part_id = test_input($_GET['part_id']);
- $component_cat = test_input($_GET['component_cat']);
- $process_title = test_input($_GET['process_title']);
+$process_id = test_input($_GET['process_id']);
  
 function test_input($data) {
 $data = trim($data);
@@ -17,8 +13,8 @@ return $data;
   
 $sql = <<<SQL
 WITH RECURSIVE process_details AS (
-    SELECT process_wel_tbl.*, 1 as level from process_wel_tbl WHERE output_part =  $part_id and cat = "out" and component_cat =  $component_cat and process_title = $process_title
-    UNION ALL 
+    SELECT process_wel_tbl.*, 1 as level from process_wel_tbl WHERE process_id =  $process_id
+    UNION ALL
     SELECT pwl.*,level+1 as level from process_wel_tbl pwl  join process_details on  pwl.process_id = process_details.previous_process_id WHERE 1),
     
 extra as (SELECT pd.process as pid, wtm.*, COUNT(wtm.ori_process_id) over (PARTITION by wtm.wtid) as  a from process_details  pd LEFT join work_time_master wtm on pd.process_id = wtm.ori_process_id)
