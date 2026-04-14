@@ -16,7 +16,7 @@ return $data;
   
 $sql = <<<SQL
 WITH RECURSIVE process_details AS (
-    SELECT process_wel_tbl.*, 1 as level from process_wel_tbl WHERE output_part =  $part_id  and cat = "out" and component_cat =  $component_cat
+    SELECT process_wel_tbl.*, 1 as level from process_wel_tbl WHERE output_part =  $part_id  and cat = "out" and component_cat =  $component_cat and is_default = 1
     UNION ALL 
     SELECT pwl.*,level+1 as level from process_wel_tbl pwl  join process_details on  pwl.process_id = process_details.previous_process_id WHERE 1),
     
