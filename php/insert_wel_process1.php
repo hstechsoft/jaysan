@@ -114,7 +114,7 @@ if(!$no_loop){
 
                if($is_default_extra == "0")
 {
-  $sql = "SELECT * FROM work_time_master WHERE ori_process_id = $ori_process_id and is_default = 1";
+  $sql = "SELECT * FROM work_time_master WHERE ori_process_id = $last_insert_id and is_default = 1";
   $result = $conn->query($sql);
   if ($result->num_rows == 0) {
     $is_default_extra = "1";
@@ -123,7 +123,7 @@ if(!$no_loop){
 // if is default is 1 then set all other default to 0 for that ori_process_id
 else if($is_default_extra == "1")
   {
-    $sql = "UPDATE work_time_master SET is_default = 0 WHERE ori_process_id = $ori_process_id";
+    $sql = "UPDATE work_time_master SET is_default = 0 WHERE ori_process_id = $last_insert_id";
     if ($conn->query($sql) === TRUE) {
      // echo "ok";
     } else {
