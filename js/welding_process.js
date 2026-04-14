@@ -1476,7 +1476,7 @@ $(document).ready(function () {
             if (extra_obj.wtid > 0) {
               $("#godown_table_data").append(`
                 <tr data-wtid=${extra_obj.wtid} data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
-                  <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
+                  <td> <input class="form-check-input" data-wtid=${extra_obj.wtid} ${extra_obj.is_default == 1 ? "checked" : ''} type="radio" name="flexRadioDefault" id="default_godown" ></td>
                   <td>${extra_obj.godown_name}</td>
                   <td>${extra_obj.dep_name}</td>
                   <td>${extra_obj.dep_sec_name}</td>
@@ -1514,6 +1514,10 @@ $(document).ready(function () {
 
     }
   });
+
+  $("#godown_table_data").on("change", "#default_godown", function(){
+    update_work_time_master_default($(this).data("wtid"), 1, $(".form_godown_update_btn").data("ori_process_id"));
+  })
 
   $("#welding_table").on("blur", ".qty-editable", function () {
     let newQty = $(this).text().trim();
@@ -1755,6 +1759,8 @@ $(document).ready(function () {
 
 
   $('#godown').on('input', function () {
+    $(".form_godown_update_btn").removeData("wtid")
+    $(this).removeData("godown_id");
     if ($(this).val().trim() === '') {
       $(this).removeData("godown_id");
     }
@@ -1825,6 +1831,8 @@ $(document).ready(function () {
   });
 
   $('#department').on('input', function () {
+
+    $(this).data("dept_id", "");
     $("#department_add_btn").removeClass("d-none");
     $('#section').val('').removeData("section_id");
     $('#machine').val('').removeData("machine_id");
@@ -1916,6 +1924,8 @@ $(document).ready(function () {
 
   $('#section').on('input', function () {
     $("#section_add_btn").removeClass("d-none");
+    $(this).data("sec_id", "");
+
 
     $('#machine').val('').removeData("machine_id");
     $('#min_time').val('');
@@ -2007,6 +2017,8 @@ $(document).ready(function () {
   $('#machine').on('input', function () {
 
     $("#machine_add_btn").removeClass("d-none");
+        $(this).data("mach_id", "");
+
 
     $('#min_time').val('');
     $('#max_time').val('');
@@ -2101,6 +2113,8 @@ $(document).ready(function () {
     var min = $("#min_time").val();
     var max = $("#max_time").val();
     var cost = $("#cost").val();
+
+    var is_default = $("#is_default").is("checked") ? 1 : 0;
     console.log(machine_id, section_id);
 
 
@@ -2117,7 +2131,8 @@ $(document).ready(function () {
         dep_sec_machine_id: machine_id,
         min_time: min,
         max_time: max,
-        cost
+        cost,
+        is_default: is_default,
       };
 
       if (editingRow) {
@@ -2151,7 +2166,7 @@ $(document).ready(function () {
 
         $("#godown_table_data").append(`
         <tr data-godown_id="${godown_id}" data-dept_id="${depart_id}" data-section_id="${section_id}" data-machine_id="${machine_id}">
-          <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
+          <td> <input class="form-check-input" type="radio" name="flexRadioDefault" id="default_godown" ></td>
           <td>${godown}</td>
           <td>${depart}</td>
           <td>${section}</td>
@@ -2189,12 +2204,13 @@ $(document).ready(function () {
     var max = $("#max_time").val();
     var cost = $("#cost").val();
 
+    var is_default = $("#is_default").is(":checked") ? 1 : 0;
 
     if (godown_id && process_id && ori_process_id) {
 
       console.log(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost);
 
-      update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid)
+      update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid, is_default)
 
     } else {
       salert("Warning", "Fill the fields/Requied Data Missing.", "warning");
@@ -2679,9 +2695,9 @@ function update_input_wel_parts_qty(id, part_qty) {
   });
 }
 
-function update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid) {
+function update_work_time_master1(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid, is_default) {
 
-  console.log(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid);
+  console.log(process_id, ori_process_id, godown_id, depart_id, section_id, machine_id, min, max, cost, wtid, is_default);
 
 
   $.ajax({
@@ -2698,6 +2714,7 @@ function update_work_time_master1(process_id, ori_process_id, godown_id, depart_
       godown_id: godown_id,
       ori_process_id: ori_process_id,
       wtid: wtid,
+      is_default: is_default,
 
     },
     success: function (response) {
@@ -2926,6 +2943,43 @@ function delete_input_wel_parts(id) {
   });
 }
 
+function update_work_time_master_default(wtid, is_default, process_id) {
+
+  console.log(wtid, is_default, process_id);
+
+
+  $.ajax({
+    url: "php/update_work_time_master_default.php",
+    type: "post", //send it through get method
+    data: {
+      wtid: wtid,
+      is_default: is_default,
+      process_id: process_id,
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
 
 
 function get_part_dept_wise(part_id, godown_id, dep_id, dep_sec_id) {

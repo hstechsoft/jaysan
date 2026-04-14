@@ -259,6 +259,13 @@
         .summary-row:last-child {
             border-bottom: none;
         }
+
+        .active-card {
+            border: 2px solid #ff85de;
+            box-shadow: 0 8px 20px rgb(255 172 194) !important;
+            transform: scale(1.03);
+            transition: all 0.3s ease;
+        }
     </style>
 
 </head>
@@ -279,7 +286,7 @@
             </div>
         </div>
     </div>
-        <section id="menu_bar"></section>
+    <section id="menu_bar"></section>
     <div class="container-fluid" style="height: 100%; overflow-y: auto;">
         <!-- top bar -->
 
@@ -343,10 +350,10 @@
                 </div>
 
                 <div class="col-md-7 d-none" id="bom_process_table">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb" id="back">
-                            </ol>
-                        </nav>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb" id="back">
+                        </ol>
+                    </nav>
                     <div class="card " id="">
                         <div class="card-header text-center" id="bom_process_table_cardHeader">
 
@@ -379,36 +386,63 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="multi_process" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>Multiple Process
+                        </h5>
+                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group small" id="multi_process_list">
+
+
+                        </ul>
+                    </div>
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary add_new_process_btnnnn"
+                            data-bs-dismiss="modal">Add New
+                            Process</button>
+                        <button type="button" class="btn btn-primary d-none">Understood</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
     </div>
-    
 
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div id='footer' class="mt-auto"></div>
 
-        <!-- jQuery UI -->
-        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <!-- jQuery UI CSS -->
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-        <!-- bootstrap include -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-            crossorigin="anonymous"></script>
+    <!-- jQuery UI CSS -->
 
-        <!-- font awesome -->
-        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
 
-        <!-- Sweet alert -->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-        <!-- external js -->
-        <script src="js/bom_map.js" type="module"></script>
-        <script src="js/menu.js" type="module"></script>
-        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+    <!-- external js -->
+    <script src="js/bom_map.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

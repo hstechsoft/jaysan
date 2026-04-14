@@ -104,15 +104,30 @@ $(document).ready(function () {
 
 
     $("#bom_list_table_body").on("click", "li", function () {
+        
         var part_id = $(this).data("part_id");
         var component_cat = $(this).data("component_cat");
         if ($(this).data("process") == 1) {
             $("#back").append(`<li class="breadcrumb-item" data-part_id='${part_id}'><a href="#">${$('#bom_part_search').val()}</a></li>`);
             $("#bom_process_table_cardHeader").empty();
-            get_process_graph(part_id, component_cat);
-            get_process_summary(part_id, component_cat);
-            get_bom(part_id, component_cat);
+            get_bom_process_summary(part_id, component_cat)
         }
+        else {
+            get_bom_process_summary(part_id, component_cat)
+        }
+    })
+
+    $("#multi_process_list").on("click", "li", function () {
+
+        var part_id = $(this).data("part_id");
+        var component_cat = $(this).data("component_cat");
+        var process_title = $(this).data("process_title");
+        var process_id = $(this).data("process_id");
+        $(".breadcrumb-item").data("process_id", process_id)
+        $("#multi_process").modal("hide");
+        get_process_graph(part_id, component_cat, process_id, process_title);
+        get_process_summary(process_id);
+        get_bom(part_id, component_cat);
     })
 
 
@@ -137,6 +152,7 @@ $(document).ready(function () {
 
     $("#back").on("click", "li", function () {
         var part_id = $(this).data("part_id");
+        var process_id = $(this).data("process_id");
         if (part_id !== undefined) {
 
 
@@ -154,11 +170,26 @@ $(document).ready(function () {
 
             $("#bom_part_search").val($(this).text());
             $("#bom_part_search").data("part_id", part_id);
-            get_bom_list(part_id);
+            get_bom_list(part_id, process_id);
 
         }
     })
 
+
+    $("#processFlow").on("click", ".flow-title", function () {
+
+        var title = $(this).text().trim();
+        $(".process-card").removeClass("active-card");
+
+        $("#bom_process_summary_table .process-card").each(function () {
+            var heading = $(this).find("h6").find("i").text().trim();
+
+
+            if (title === heading) {
+                $(this).addClass("active-card");
+            }
+        });
+    });
 
 
 });
@@ -171,11 +202,11 @@ $(document).ready(function () {
 
 
 
-function get_process_summary(part_id, component_cat) {
+function get_process_summary(process_id) {
     $.ajax({
         url: "php/get_process_summary.php",
         type: "get",
-        data: { part_id, component_cat },
+        data: { process_id },
 
         success: function (response) {
 
@@ -190,6 +221,8 @@ function get_process_summary(part_id, component_cat) {
                 ).removeClass("d-none");
                 return;
             }
+            console.log(response);
+
 
             const data = JSON.parse(response);
             let html = `<div class="card shadow-sm p-1">`;
@@ -202,9 +235,9 @@ function get_process_summary(part_id, component_cat) {
 
                 const extraItems = JSON.parse(p.extra);
 
-                totalCost += parseFloat(p.cost);
-                totalMinTime += parseFloat(p.min_time);
-                totalMaxTime += parseFloat(p.max_time);
+                totalCost += parseFloat(p.cost ?? 0);
+                totalMinTime += parseFloat(p.min_time ?? 0);
+                totalMaxTime += parseFloat(p.max_time ?? 0);
 
                 html += `
                     <div class="process-card shadow-sm rounded p-1 mb-2">
@@ -212,26 +245,26 @@ function get_process_summary(part_id, component_cat) {
                         <!-- TITLE + EXTRA COUNT -->
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="process-title m-0">
-                                <span class="step-index">${index + 1}.</span> ${p.process_name}
+                                <span class="step-index">${index + 1}.</span> <i>${p.process_name ?? ''}</i>
                             </h6>
 
                             <span class="badge bg-danger rounded-pill px-2 py-1">
-                                ${p.process_extra_count}
+                                ${p.process_extra_count ?? ''}
                             </span>
                         </div>
 
                         <!-- COST + TIME -->
                         <div class="small mt-2">
                             <div class="d-flex justify-content-between mb-1">
-                                <span class="label">Cost <span class="value text-success fw-bold">₹${p.cost}</span></span>
+                                <span class="label">Cost <span class="value text-success fw-bold">₹${p.cost ?? 0}</span></span>
                                 
-                                <span class="label">Time <span class="value text-primary fw-bold">${p.min_time} – ${p.max_time} mins</span></span>
+                                <span class="label">Time <span class="value text-primary fw-bold">${p.min_time ?? 0} – ${p.max_time ?? 0} mins</span></span>
                                 
                             </div>
 
 
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="label">Creditor <span class="value fw-semibold">${p.creditor_name}</span></span>
+                                <span class="label">Creditor <span class="value fw-semibold">${p.creditor_name ?? ''}</span></span>
 
                                 <button class="btn btn-sm btn-outline-primary toggle-details rounded-pill ms-2 px-3"
                                     data-target="#details-${index}">
@@ -245,8 +278,8 @@ function get_process_summary(part_id, component_cat) {
 
                             <div class="fw-semibold text-secondary mb-0  text-center">Process Details</div>
 
-                            <div class="detail-item"><b>Department:</b> ${p.dep_name}</div>
-                            <div class="detail-item d-flex justify-content-between"><div><b>Section:</b> ${p.sec_name}</div><div> <b>Machine:</b> ${p.machine_name}</div></div>
+                            <div class="detail-item"><b>Department:</b> ${p.dep_name ?? ''}</div>
+                            <div class="detail-item d-flex justify-content-between"><div><b>Section:</b> ${p.sec_name ?? ''}</div><div> <b>Machine:</b> ${p.machine_name ?? ''}</div></div>
 
                             <!-- EXTRA PROCESS -->
                             ${extraItems.length > 0 ? `
@@ -256,8 +289,8 @@ function get_process_summary(part_id, component_cat) {
                             .map(
                                 ex => `
                                     <li class="list-group-item extra-item">
-                                        <div class="fw-bold">${ex.creditor_name}</div>
-                                        <small>${ex.dep_name} • ${ex.sec_name} • ${ex.machine_name} • <span class="text-primary fw-semibold">${ex.min_time}–${ex.max_time} mins</span> • <span class="text-success fw-bold ms-2">₹${ex.cost}</span></small>
+                                        <div class="fw-bold">${ex.creditor_name ?? ''}</div>
+                                        <small>${ex.dep_name ?? ''} • ${ex.sec_name ?? ''} • ${ex.machine_name ?? ''} • <span class="text-primary fw-semibold">${ex.min_time ?? 0}–${ex.max_time ?? 0} mins</span> • <span class="text-success fw-bold ms-2">₹${ex.cost ?? 0}</span></small>
                                     </li>`
                             )
                             .join("")}
@@ -293,20 +326,21 @@ function get_process_summary(part_id, component_cat) {
             $(".toggle-details").on("click", function () {
                 let target = $(this).data("target");
                 $(target).toggleClass("d-none");
-                $(this).text($(target).hasClass("d-none") ? "Show Details" : "Hide Details");
+                $(this).text($(target).hasClass("d-none") ? "Details" : "Hide Details");
             });
         }
     });
 }
 
 
-function get_process_graph(part_id, component_cat) {
+function get_process_graph(part_id, component_cat, process_id, process_title) {
+    console.log(part_id, component_cat, process_id);
+
     $.ajax({
         url: "php/get_process_graph.php",
         type: "get", //send it through get method
         data: {
-            part_id: part_id,
-            component_cat: component_cat,
+            process_id: process_id,
 
 
         },
@@ -316,7 +350,7 @@ function get_process_graph(part_id, component_cat) {
             console.log(response);
 
             if (response.trim() != "error") {
-                $("#bom_process_table_cardHeader").text($("#bom_part_search").val() + " - " + component_cat + " process flow")
+                $("#bom_process_table_cardHeader").text($("#bom_part_search").val() +" - " + component_cat +  " ( " + (process_title ?? '') +  " ) process flow")
 
                 $("#bom_process_table_body").empty();
                 if (response.trim() != "0 result") {
@@ -428,6 +462,63 @@ function get_process_graph(part_id, component_cat) {
     });
 }
 
+function get_bom_process_summary(part_id, component_cat) {
+
+    console.log(part_id, component_cat);
+
+
+    $.ajax({
+        // url: "php/get_bom.php",
+        url: "php/get_bom_process_details_summary.php",
+        type: "get", //send it through get method
+        data: {
+            part_id: part_id,
+            component_cat: component_cat
+        },
+        success: function (response) {
+            console.log(response);
+            if (response.trim() != "error") {
+
+                $('#multi_process_list').empty()
+                if (response.trim() != "0 result") {
+
+
+                    $("#multi_process").modal("show")
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    obj.forEach(function (obj) {
+
+                        count = count + 1;
+                        $("#multi_process_list").append("<li data-part_id='" + obj.output_part + "' data-component_cat='" + obj.component_cat + "' data-process_id='" + obj.process_id + "' data-process_title='" + obj.process_title + "' data-is_default='" + obj.is_default + "' class='list-group-item'>" + component_cat + "(" + obj.process_title + ")" + (obj.is_default > 0 ? "<span class='badge bg-primary blink'>Default</span>" : "") + "</li>")
+
+
+
+                    });
+                    // $(".add_new_process_btnnnn").data({ "part_id": part_id, "component_cat": component_cat });
+                }
+                else {
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function get_bom(part_id, component_cat) {
     $.ajax({
@@ -482,7 +573,7 @@ function get_bom(part_id, component_cat) {
 
 
 
-function get_bom_list(part) {
+function get_bom_list(part, process_id) {
     console.log(part);
 
     $.ajax({
@@ -528,12 +619,18 @@ function get_bom_list(part) {
 
                     </li>`;
                 $("#bom_list_table_body").append(html);
-                if (item.process !== null) {
-                    
+                if (item.process !== null && list.length == 1) {
+
                     $("#bom_list_table_body").find("li").trigger("click")
 
                 }
+
             });
+
+            // if (process_id) {
+            //     get_process_graph(part_id, '', process_id);
+            //     get_process_summary(process_id);
+            // }
 
             $("#collapseOne").collapse("show");
             $(".accordion-button").removeClass("collapsed");
