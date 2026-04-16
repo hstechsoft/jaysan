@@ -83,6 +83,8 @@ if($cat == 'out' && $output_part != null && $output_part != '' && $output_part !
 
  if ($conn->query($update_output_part_sql) === TRUE) {
 $new_process_id = $previous_process_id;
+include_once 'update_final_process_id.php';
+            update_final_id($conn, $new_process_id);
  }
 
   else {

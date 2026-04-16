@@ -110,6 +110,14 @@ if($is_default1 == 1)
  
  if ($conn->query($sql_process) === TRUE) {
     $last_insert_id = $conn->insert_id;
+
+    if($cat == 'out')
+        {
+            $new_process_id =$last_insert_id;
+            include_once 'update_final_process_id.php';
+            update_final_id($conn, $new_process_id);
+
+        }
  {
    foreach ($row['input_parts'] as $input) {
     $in_pre_id = null;
