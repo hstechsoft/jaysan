@@ -6,6 +6,7 @@
 
 function correction_check_fn(mysqli $conn, int $bom_id)
 {
+   
   $correction_check = false;
 $sql_correction_check = "
 with RECURSIVE bom_hi as(SELECT
@@ -103,6 +104,7 @@ if ($result_correction_check->num_rows > 0) {
     while($row = $result_correction_check->fetch_assoc()) {
         $correction_check = $row['correction_check'];
     }
+   
 return $correction_check;
 
 }
