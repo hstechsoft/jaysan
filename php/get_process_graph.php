@@ -27,7 +27,7 @@ WITH RECURSIVE process_details AS (
             ip.previous_process_id,
             'previous_process_name',
             (select jaysan_process.process_name from  jaysan_process WHERE jaysan_process.process_id = (select process from process_wel_tbl WHERE process_wel_tbl.process_id = ip.previous_process_id)),
-            'part_id',
+            'part_id', 
             ip.input_part_id,
             'part_name',
             (SELECT parts_tbl.part_name from parts_tbl WHERE parts_tbl.part_id = ip.input_part_id ),

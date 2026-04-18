@@ -12,77 +12,63 @@ return $data;
 }
   
 $sql = <<<SQL
-WITH RECURSIVE process_flow AS (
-
-    -- 🔹 Anchor
-    SELECT 
-    p.final_process_id,
-        p.process_id,
-        p.output_part,
-        i.input_part_id,
-        i.previous_process_id,
-        i.qty,
-        p.process,
-        0 AS level,
-        CAST(p.process_id AS CHAR(200)) AS path,
-        0 AS is_cycle
-    FROM process_wel_tbl p
-    JOIN input_wel_parts i 
-        ON p.process_id = i.process_id
-    WHERE p.process_id = $process_id
-
-    UNION ALL
-
-    -- 🔹 Recursive
-    SELECT 
-    p2.final_process_id,
-        p2.process_id,
-        p2.output_part,
-        i2.input_part_id,
-        i2.previous_process_id,
-        i2.qty,
-        p2.process,
-        pf.level + 1,
-        CONCAT(pf.path, '->', p2.process_id),
-
-        -- 🔥 Detect cycle
-        CASE 
-            WHEN FIND_IN_SET(p2.process_id, REPLACE(pf.path, '->', ',')) > 0 
-            THEN 1 
-            ELSE 0 
-        END AS is_cycle
-
-    FROM process_flow pf
-    JOIN process_wel_tbl p2 
-        ON p2.process_id = pf.previous_process_id
-    JOIN input_wel_parts i2 
-        ON p2.process_id = i2.process_id
-
-    WHERE pf.previous_process_id IS NOT NULL
-      AND pf.level < 20
-
-      -- 🔥 Stop recursion ONLY if already cycle before
-      AND pf.is_cycle = 0
-),
-
-input_group as(SELECT pf.final_process_id, pf.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name,pf.previous_process_id, jp_in.process_name AS previous_process_name, pf.qty,pf.process,jp.process_name AS process_name,pf.level,pf.path  FROM process_flow pf
-LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
-LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
-left join jaysan_process jp on jp.process_id = pf.process
-left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
-left join jaysan_process jp_in on jp_in.process_id = pwl_in.process
-ORDER BY level),
-process_group AS (
-SELECT input_group.process_id,input_group.final_process_id, input_group.output_part,COALESCE(input_group.output_part_name, CONCAT('semi finished part - ' , final_part.part_name,'(IN -', input_group.process_name, ')'))  as output_part_name, COALESCE(input_group.input_part_id,final_wel.output_part) as input_part_id,  COALESCE(input_group.input_part_name,CONCAT('semi finished part - ' , final_part.part_name,'(from -', input_group.previous_process_name, ')')) as input_part_name, sum(input_group.qty) as qty, input_group.previous_process_id,  input_group.previous_process_name,input_group.process,input_group.process_name,input_group.level,input_group.path FROM input_group  
-left join process_wel_tbl final_wel on final_wel.process_id = input_group.final_process_id  
-left join parts_tbl final_part on final_part.part_id = final_wel.output_part
-
-GROUP BY input_group.process_id,COALESCE(input_group.input_part_id,final_wel.output_part)
-order by input_group.final_process_id ) 
-
-SELECT input_part_name,sum(qty) as total_qty FROM process_group  GROUP BY input_part_id,previous_process_id order by process_group.level ASC;
-
+with RECURSIVE input_group as (
+    select 
+    previous_process_id, 
+    qty,
+    0 as level from input_wel_parts iwp1 WHERE  iwp1.process_id = $process_id 
     
+    UNION ALL
+SELECT 
+    iwp2.previous_process_id, 
+    iwp2.qty, 
+    ig.level + 1 as level from input_wel_parts iwp2
+inner JOIN input_group ig ON iwp2.process_id = ig.previous_process_id 
+),
+process_available as (
+    SELECT previous_process_id as process_available_id, sum(qty) as qty ,level FROM input_group 
+    WHERE previous_process_id IS NOT NULL GROUP BY previous_process_id 
+    UNION ALL
+    SELECT $process_id as process_available_id,1, 0 as level 
+),
+input_group_details as (
+SELECT process_available_id,
+ process_available.qty as production_qty,
+ pwt.process,
+ pwt.output_part,
+ iwp.input_part_id,iwp.qty as input_qty,
+ jp_input.process_name as previous_process_name,
+ if(input_part_id is null , CONCAT('semi finished part - ' , pt_final.part_name,'(from -', jp_input.process_name, ')'), if(iwp.previous_process_id is null, pt.part_name, CONCAT(pt.part_name,'(from -', jp_input.process_name, ')'))) as input_part_name,
+ iwp.previous_process_id,pt_final.part_name as final_part_name, pwt_final.output_part as final_part,jp_input.process_name,level,pwt.process_title FROM process_available
+
+inner join process_wel_tbl pwt on process_available.process_available_id = pwt.process_id
+inner join input_wel_parts iwp on process_available.process_available_id = iwp.process_id
+left join process_wel_tbl pwt_input on iwp.previous_process_id = pwt_input.process_id
+left join jaysan_process jp_input on pwt_input.process = jp_input.process_id
+inner join process_wel_tbl pwt_final on pwt.final_process_id = pwt_final.process_id
+left join parts_tbl pt on iwp.input_part_id = pt.part_id
+left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id),
+
+process_details as(SELECT process_available_id,production_qty, process, output_part,
+jp.process_name,
+
+if(output_part is null , CONCAT('semi finished part - ' , final_part_name,'(by -', jp.process_name, ')'), CONCAT(pt.part_name,'(by -', jp.process_name, ')')) as output_part_name,
+
+ JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_qty', input_qty, 'previous_process_name', previous_process_name, 'previous_process_id', previous_process_id,   'input_part_name', input_part_name )) as input_details,final_part_name,final_part,level,process_title FROM input_group_details 
+inner join jaysan_process jp on input_group_details.process = jp.process_id
+inner join parts_tbl pt_final on input_group_details.final_part = pt_final.part_id
+left join parts_tbl pt ON input_group_details.output_part = pt.part_id
+GROUP BY process_available_id)
+SELECT process_available_id,production_qty, process,process_name, output_part_name, input_details, final_part_name, final_part, level, process_title ,creditor_name as godown_name,dep_name,sec_name,creditor_id,department.dep_id,dep_section.dep_sec_id,cost,min_time,max_time FROM process_details
+
+left join work_time_master wtm on wtm.ori_process_id = process_details.process_available_id
+left join creditors on wtm.godown_id = creditors.creditor_id
+left join department on wtm.dep_id = department.dep_id
+left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id  order by level
+
+
+
+
 
     
 SQL;
