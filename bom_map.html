@@ -266,6 +266,24 @@
             transform: scale(1.03);
             transition: all 0.3s ease;
         }
+
+        .cursor_point {
+            cursor: pointer;
+            color: rgb(68, 189, 68);
+            font-weight: 500;
+        }
+
+        .breadcrumb {
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        #donut_center_text {
+            background: #fff;
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 
 </head>
@@ -347,6 +365,8 @@
                             <tbody id="bom_material_table_body" style="font-size: 13px;"></tbody>
                         </table>
                     </div>
+
+
                 </div>
 
                 <div class="col-md-7 d-none" id="bom_process_table">
@@ -371,6 +391,59 @@
 
                 </div>
 
+
+
+            </div>
+
+            <div class="row d-none" id="bom_required_material_table">
+
+                <div class="col-md-5">
+                    <div style="max-height: 65vh; overflow-y: auto;" class="position-relative">
+
+                        <table class="table table-bordered mt-4 ">
+                            <thead class="table-primary" style="position: sticky; top: 0; z-index: 1; font-size: 10px;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Output Material </th>
+                                    <th>Qty</th>
+                                    <th>Input Materials</th>
+                                    <th>Godown Info</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bom_required_material_table_body" style="font-size: 10px;"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div style="position: relative; width: 100%; height: 320px;">
+                                <div id="timing_dounut_chart"></div>
+
+                                <!-- 🔥 Center Content -->
+                                <div id="donut_center_text" style="
+                                        position: absolute;
+                                        top: 35%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        text-align: center;
+                                        font-weight: 600;
+                                        font-size: 12px;
+                                        pointer-events: none;
+                                    ">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div id="cost_bar_chart"></div>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
@@ -438,6 +511,8 @@
     <!-- Sweet alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <!-- external js -->
     <script src="js/bom_map.js" type="module"></script>

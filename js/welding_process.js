@@ -1515,7 +1515,7 @@ $(document).ready(function () {
     }
   });
 
-  $("#godown_table_data").on("change", "#default_godown", function(){
+  $("#godown_table_data").on("change", "#default_godown", function () {
     update_work_time_master_default($(this).data("wtid"), 1, $(".form_godown_update_btn").data("ori_process_id"));
   })
 
@@ -1604,6 +1604,7 @@ $(document).ready(function () {
         $("#process_list").append("<li class='list-group-item' data-in_previous_process_id=" + obj.process_id + ">" + obj.process + "</li>")
 
         $("#close_btn").data({ "part_no": $(this).data('part_no'), "part_id": part_id, "part_name": $(this).data('part_name') })
+        
       })
     } else {
       $("#add_part_btn").val('').data("process", '').trigger("click");
@@ -1619,6 +1620,13 @@ $(document).ready(function () {
   $("#process_list").on("dblclick", "li", function () {
     $("#add_part_btn").val($(this).data("in_previous_process_id")).data("process", $(this).text().trim()).trigger("click");
     $("#process_modal").modal("hide");
+  })
+
+  $("#process_modal_close_btn").click(function () {
+    
+    $("#add_part_btn").val('').data("process", $(this).text().trim()).trigger("click");
+    // $("#process_modal").modal("hide");
+
   })
 
   $("#close_btn").click(function () {
@@ -2017,7 +2025,7 @@ $(document).ready(function () {
   $('#machine').on('input', function () {
 
     $("#machine_add_btn").removeClass("d-none");
-        $(this).data("mach_id", "");
+    $(this).data("mach_id", "");
 
 
     $('#min_time').val('');

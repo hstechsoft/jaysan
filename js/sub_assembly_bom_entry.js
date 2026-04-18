@@ -543,6 +543,7 @@ $(document).ready(function () {
 
             get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
             console.log($('#bom_list_select').val());
+            $("#update_btn").prop("disabled", false);
 
             shw_toast("Updated", "Successfully Updated")
           }
@@ -550,6 +551,7 @@ $(document).ready(function () {
       });
     }
     else {
+      $("#update_btn").prop("disabled", false);
       shw_toast("Insert", "Kindly select output part from autocomplete/Select BOM List")
     }
 
@@ -945,7 +947,7 @@ function get_bom(part_id, component_cat) {
 
             $("#update_btn").val(obj.bom_id)
 
-            $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + obj.part_id + ">" + obj.part_name + " </td> <td contenteditable='true' class='qty-editable'>" + obj.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
+            $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + obj.part_id + ">" + obj.part_name + (obj.sub_ass == 1 ? ` - <span class='badge bg-secondary'>Sub Ass</span>` : '') + " </td> <td contenteditable='true' class='qty-editable'>" + obj.qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
 
 
           });

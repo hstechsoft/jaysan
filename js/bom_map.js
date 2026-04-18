@@ -43,7 +43,7 @@ $(document).ready(function () {
         $("#back").empty();
         $("#bom_list_table").addClass("d-none");
         $("#bom_process_table").addClass("d-none");
-        $("#bom_material_table").addClass("d-none");
+        $("#bom_material_table, #bom_required_material_table").addClass("d-none");
         $("#bom_process_summary_table").addClass("d-none");
 
 
@@ -104,11 +104,18 @@ $(document).ready(function () {
 
 
     $("#bom_list_table_body").on("click", "li", function () {
-        
+
         var part_id = $(this).data("part_id");
         var component_cat = $(this).data("component_cat");
+
+
+        $("#back").empty();
+        $("#bom_process_table").addClass("d-none");
+        $("#bom_material_table, #bom_required_material_table").addClass("d-none");
+        $("#bom_process_summary_table").addClass("d-none");
+
         if ($(this).data("process") == 1) {
-            $("#back").append(`<li class="breadcrumb-item" data-part_id='${part_id}'><a href="#">${$('#bom_part_search').val()}</a></li>`);
+            $("#back").append(`<li class="breadcrumb-item" data-part_id='${part_id}'><a href="#"><i>${$('#bom_part_search').val()}</i> (<span></span>)</a></li>`);
             $("#bom_process_table_cardHeader").empty();
             get_bom_process_summary(part_id, component_cat)
         }
@@ -123,11 +130,14 @@ $(document).ready(function () {
         var component_cat = $(this).data("component_cat");
         var process_title = $(this).data("process_title");
         var process_id = $(this).data("process_id");
-        $(".breadcrumb-item").data("process_id", process_id)
+        $("#back li:first-child").data("previous_process_id", process_id);
+        $("#back li:first-child").find("span").text(process_title);
         $("#multi_process").modal("hide");
-        get_process_graph(part_id, component_cat, process_id, process_title);
+        get_process_graph($('#bom_part_search').val(), component_cat, process_id, process_title);
         get_process_summary(process_id);
         get_bom(part_id, component_cat);
+        get_process_summary_inputs(process_id);
+        get_process_summary_godown(process_id);
     })
 
 
@@ -137,7 +147,7 @@ $(document).ready(function () {
 
             $("#bom_list_table").addClass("d-none");
             $("#bom_process_table").addClass("d-none");
-            $("#bom_material_table").addClass("d-none");
+            $("#bom_material_table, #bom_required_material_table").addClass("d-none");
             $("#bom_process_summary_table").addClass("d-none");
 
 
@@ -149,17 +159,37 @@ $(document).ready(function () {
         }
     })
 
+    $("#processFlow").on("click", "li", function () {
+
+        var previous_process_id = $(this).data("previous_process_id");
+        var previous_process_name = $(this).data("previous_process_name");
+        var part_id = $(this).data("part_id");
+        var part_name = $(this).find("span").text();
+        if (previous_process_id && part_id) {
+
+            $("#back").append(`<li class="breadcrumb-item" data-part_id='${part_id}' data-previous_process_id='${previous_process_id}'><a href="#"><i>${part_name}</i> (<span>${previous_process_name}</span>)</a></li>`);
+            $("#bom_process_table_cardHeader").empty();
+            get_process_graph(part_name, '', previous_process_id, previous_process_name);
+            get_process_summary(previous_process_id);
+            get_process_summary_inputs(previous_process_id);
+            get_process_summary_godown(previous_process_id);
+
+        }
+    })
+
 
     $("#back").on("click", "li", function () {
         var part_id = $(this).data("part_id");
-        var process_id = $(this).data("process_id");
-        if (part_id !== undefined) {
+        var process_id = $(this).data("previous_process_id");
+        var part_name = $(this).find("i").text();
+        var previous_process_name = $(this).find("span").text();
+        if (part_id !== undefined && !process_id) {
 
 
 
             $("#bom_list_table").addClass("d-none");
             $("#bom_process_table").addClass("d-none");
-            $("#bom_material_table").addClass("d-none");
+            $("#bom_material_table, #bom_required_material_table").addClass("d-none");
             $("#bom_process_summary_table").addClass("d-none");
 
             var index = $(this).nextAll().length;
@@ -170,7 +200,23 @@ $(document).ready(function () {
 
             $("#bom_part_search").val($(this).text());
             $("#bom_part_search").data("part_id", part_id);
-            get_bom_list(part_id, process_id);
+            get_bom_list(part_id);
+
+            return;
+        }
+
+        if (process_id && part_id != null) {
+
+            var index = $(this).nextAll().length;
+            for (var i = 1; i <= index; i++) {
+                $("#back").children().last().remove();
+            }
+
+            get_process_graph(part_name, '', process_id, previous_process_name);
+            get_process_summary(process_id);
+            get_process_summary_inputs(process_id);
+            get_process_summary_godown(process_id);
+
 
         }
     })
@@ -333,8 +379,8 @@ function get_process_summary(process_id) {
 }
 
 
-function get_process_graph(part_id, component_cat, process_id, process_title) {
-    console.log(part_id, component_cat, process_id);
+function get_process_graph(part_name, component_cat, process_id, process_title) {
+    console.log(part_name, component_cat, process_id, process_title);
 
     $.ajax({
         url: "php/get_process_graph.php",
@@ -350,7 +396,12 @@ function get_process_graph(part_id, component_cat, process_id, process_title) {
             console.log(response);
 
             if (response.trim() != "error") {
-                $("#bom_process_table_cardHeader").text($("#bom_part_search").val() +" - " + component_cat +  " ( " + (process_title ?? '') +  " ) process flow")
+                let part = part_name ?? '';
+                let process = process_title ?? '';
+
+                let title = `${part} - ${component_cat}${process ? ` (${process})` : ''} process flow`;
+
+                $("#bom_process_table_cardHeader").text(title);
 
                 $("#bom_process_table_body").empty();
                 if (response.trim() != "0 result") {
@@ -375,7 +426,7 @@ function get_process_graph(part_id, component_cat, process_id, process_title) {
                         let materialsHTML = "<ul>";
                         var m_count = 0;
                         parts.forEach(part => {
-                            materialsHTML += `<li>${m_count + 1} • ${part.part_name !== null ? part.part_name : prev_process_name} - Qty: ${part.qty}</li>`
+                            materialsHTML += `<li data-part_id=${part.part_id} data-previous_process_name='${part.previous_process_name}' data-previous_process_id=${part.previous_process_id}>${m_count + 1} • <span class=${(part.previous_process_id != null && part.part_id != null) ? "cursor_point" : 'text-dark'}>${part.part_name !== null ? part.part_name : prev_process_name}</span> - Qty: ${part.qty}</li>`
                             m_count++;
                         })
 
@@ -571,9 +622,297 @@ function get_bom(part_id, component_cat) {
     });
 }
 
+function get_process_summary_inputs(process_id) {
+
+    $.ajax({
+        url: "php/get_process_summary_inputs.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+        },
+
+        success: function (response) {
+
+            $("#bom_required_material_table_body").empty();
+
+            if (response.trim() === "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            if (response.trim() === "0 result") {
+                $("#bom_required_material_table_body").append("<tr><td>No BOM Material</td></tr>")
+
+                return;
+            }
+
+            $("#bom_required_material_table").removeClass("d-none");
+
+            var obj = JSON.parse(response);
+
+            var materials = '';
+            var total_min_time = 0;
+            var total_max_time = 0;
+            var total_cost = 0;
+            var count = 0;
+
+            obj.forEach(function (pr) {
+
+                total_min_time += parseFloat(pr.min_time ?? 0);
+                total_max_time += parseFloat(pr.max_time ?? 0);
+                total_cost += parseFloat(pr.cost ?? 0);
+
+                var input_dels = JSON.parse(pr.input_details || "[]");
+
+                var input_info = `<ul class="list-group">`;
+                input_dels.forEach(function (item) {
+                    input_info += `
+                                <li class="list-group-item d-flex justify-content-between p-1">
+                                    ${item.input_part_name ?? ''}
+                                    <p><span class='badge bg-secondary'>${item.input_qty ?? 0}</span></p>
+                                </li>`;
+                });
+                input_info += `</ul>`;
+
+                var godown_info = `
+                                <div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <strong>${pr.godown_name ?? '-'}</strong>
+                                        <p><span class="badge bg-primary">₹${pr.cost ?? 0}</span></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="badge bg-info">${pr.min_time ?? 0} Mins</span>
+                                        <span class="badge bg-secondary">${pr.max_time ?? 0} Mins</span>
+                                    </div>
+                                    <p>${pr.dep_name ?? ''} ${pr.sec_name ? ' - ' + pr.sec_name : ''}</p>
+                                </div>
+                            `;
+
+                count++;
+
+                materials += `
+                            <tr>
+                                <td>${count}</td>
+                                <td>${pr.output_part_name ?? ''}</td>
+                                <td>${pr.production_qty ?? 0}</td>
+                                <td>${input_info}</td>
+                                <td>${godown_info}</td>
+                            </tr>`;
+            });
+
+            // clear before append (important)
+            $("#bom_required_material_table_body").html(materials);
+
+            // total row
+            $("#bom_required_material_table_body").append(`
+                <tr class="fw-bold table-primary">
+                    <td colspan="2">Total</td>
+                    <td>Min: ${total_min_time}</td>
+                    <td>Max: ${total_max_time}</td>
+                    <td>₹ ${total_cost}</td>
+                </tr>
+            `);
+
+        },
+
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+    });
+}
+
+function get_process_summary_godown(process_id) {
+
+    $.ajax({
+        url: "php/get_process_summary_godown.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+        },
+
+        success: function (response) {
+
+            $("#timing_dounut_chart").empty();
+            $("#cost_bar_chart").empty();
+
+            if (response.trim() === "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            if (response.trim() === "0 result") {
+                $("#bom_required_material_table_body").append("<tr><td>No BOM Material</td></tr>");
+                return;
+            }
+
+            $("#bom_required_material_table").removeClass("d-none");
+
+            var obj = JSON.parse(response);
+
+            let companyNames = [];
+            let minTimes = [];
+            let maxTimes = [];
+            let costs = [];
+
+            obj.forEach(item => {
+                let name = item.godown_name || "N/A";
+
+                companyNames.push(name);
+                minTimes.push(parseFloat(item.total_min_time || 0));
+                maxTimes.push(parseFloat(item.total_max_time || 0));
+                costs.push(parseFloat(item.total_cost || 0));
+            });
+
+            // 🍩 DONUT CHART (Max Time per company)
+            // ✅ calculate totals
+            let totalMin = minTimes.reduce((a, b) => a + b, 0);
+            let totalMax = maxTimes.reduce((a, b) => a + b, 0);
+
+            $("#donut_center_text").html(`
+                <div>Min: ${totalMin} mins</div>
+                <div>Max: ${totalMax} mins</div>
+            `);
+
+            var donutOptions = {
+                chart: {
+                    type: 'donut',
+                    height: 330
+                },
+
+                series: maxTimes,
+
+                labels: companyNames.map(name =>
+                    name.length > 20 ? name.substring(0, 20) + '...' : name
+                ),
+
+                legend: {
+                    position: 'bottom'
+                },
+
+                dataLabels: {
+                    enabled: false
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: function (val, opts) {
+                            let index = opts.seriesIndex;
+                            let min = minTimes[index];
+                            let max = maxTimes[index];
+
+                            return `Min: ${min} mins | Max: ${max} mins`;
+                        }
+                    }
+                },
+
+                // 🔥 STATIC CENTER CONTENT
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: false
+                            }
+                        }
+                    }
+                },
+
+                title: {
+                    text: "Max Time by Company",
+                    align: "center"
+                }
+            };
+
+            var donutChart = new ApexCharts(
+                document.querySelector("#timing_dounut_chart"),
+                donutOptions
+            );
+            donutChart.render();
 
 
-function get_bom_list(part, process_id) {
+            // 📊 BAR CHART (Cost comparison)
+            var barOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 320,
+                    background: '#f8f9fa' // 🎨 light background
+                },
+
+                colors: ['#008FFB', '#168612', '#FEB019', '#FF4560', '#775DD0', '#3F51B5'],
+
+                series: [{
+                    name: "Cost",
+                    data: costs
+                }],
+
+                xaxis: {
+                    categories: companyNames.map(name =>
+                        name.length > 15 ? name.substring(0, 15) + '...' : name
+                    ),
+                    labels: {
+                        rotate: -30,
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        borderRadius: 5,
+                        columnWidth: '50%',
+                        distributed: true,
+                        dataLabels: {
+                            position: 'center' // 🔥 inside bar
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 5,
+                        distributed: true
+                    }
+                },
+
+                dataLabels: {
+                    enabled: true,
+                    formatter: val => "₹" + val,
+                    style: {
+                        fontSize: '11px',
+                        colors: ['#000000']
+                    }
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: val => "₹" + val
+                    }
+                },
+
+                title: {
+                    text: "Cost by Company",
+                    align: "center"
+                }
+            };
+
+            var barChart = new ApexCharts(
+                document.querySelector("#cost_bar_chart"),
+                barOptions
+            );
+            barChart.render();
+
+        },
+
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+    });
+}
+
+function get_bom_list(part) {
     console.log(part);
 
     $.ajax({
