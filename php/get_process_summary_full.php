@@ -66,7 +66,7 @@ WITH RECURSIVE process_flow AS (
 ),
 
 input_group as(SELECT pf.final_process_id, pf.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name,pf.previous_process_id, jp_in.process_name AS previous_process_name, pf.qty,pf.process,jp.process_name AS process_name,pf.level,pf.path  FROM process_flow pf
-LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.`part_id
+LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
 LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
 left join jaysan_process jp on jp.process_id = pf.process
 left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
