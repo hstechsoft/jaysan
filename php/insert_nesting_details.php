@@ -11,26 +11,23 @@ $product = test_input($_POST['product']);
 
 $nesting_parts = json_decode($_POST['nesting_parts'], true);
 
-try {
-    $conn->begin_transaction();
-// accept only pdf files
-
-// ✅ Validate file type properly
-$finfo = finfo_open(FILEINFO_MIME_TYPE);
-$fileType = finfo_file($finfo, $_FILES['file']['tmp_name']);
-
-if ($fileType !== 'application/pdf') {
-    throw new Exception("Invalid file type. Only PDF files are allowed.");  
-}
-
- 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-
+$data = "'".$data."'";
 return $data;
 }
+
+$response = array();
+try {
+    $conn->begin_transaction();
+// accept only pdf files
+
+
+$target_path = null; // initialize target path variable
+ 
+
 
 
  $sql = "INSERT INTO nesting_details ( created_by,path,nesting_name,material_id,material_qty,run_time,product) VALUES ($created_by,'',$nesting_name,$material_id,$material_qty,$run_time,$product)";
@@ -63,23 +60,29 @@ if (!is_dir($target_dir)) {
 $target_path = $target_dir . $file_name;
 
 if (move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
-    echo "File uploaded successfully: " . $file_name;
+    $response['upload-status'] = 'success';
+    $response['file_name'] = $file_name;
+  
 } else {
  throw new Exception("Error uploading file.");
 }
 
 // update path in database
-$update_sql = "UPDATE nesting_details SET path='$target_path' WHERE id=$last_id";
+$update_sql = "UPDATE nesting_details SET path ='$target_path' WHERE id=$last_id";
 if ($conn->query($update_sql) === TRUE) {
-    echo "ok";
+$response['status'] = 'success';
+    
 } else {
     throw new Exception("Error updating record: " . $conn->error);
 }
 
 $conn->commit();
+echo json_encode($response);
 } catch (Exception $e) {
+    $response['status'] = 'error';
+    $response['message'] = $e->getMessage();
     $conn->rollback();
-    echo "Error: " . $e->getMessage();
+    echo json_encode($response);
 }
 $conn->close();
 

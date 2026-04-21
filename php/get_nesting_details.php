@@ -14,7 +14,7 @@ if($created_by != ''){
 }
 
 if($nesting_name != ''){
-    $nesting_name_query = "nesting_name = $nesting_name";
+    $nesting_name_query = "nesting_name like '%$nesting_name%'";
 }
 
 if($material_id != ''){
@@ -26,15 +26,18 @@ function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-$data = "'".$data."'";
+
 return $data;
 }
 
 
- $sql = "SELECT created_by,path,nesting_name,material_id,material_qty,run_time,product,employee.emp_name,parts_tbl.part_name as material_name FROM nesting_details
+ $sql = "SELECT JSON_ARRAYAGG(
+        JSON_OBJECT('part_id', nesting_parts.part_id, 'qty', nesting_parts.qty, 'produced_qty', nesting_parts.produced_qty, 'scrap_qty', nesting_parts.scrap_qty, 'part_name', nesting_part.part_name)) as nesting_parts_details, created_by,path,nesting_name,material_id,material_qty,run_time,product,employee.emp_name,parts_tbl.part_name as material_name FROM nesting_details
+ left join nesting_parts on nesting_details.nesting_id = nesting_parts.nesting_id
+ left join parts_tbl nesting_part on nesting_parts.part_id = nesting_part.part_id
  inner join employee on nesting_details.created_by = employee.emp_id
 inner join parts_tbl on nesting_details.material_id = parts_tbl.part_id
-  WHERE $created_by_query and $nesting_name_query and $material_id_query";
+  WHERE $created_by_query and $nesting_name_query and $material_id_query  group by nesting_details.nesting_id";
 
 
 $result = $conn->query($sql);
