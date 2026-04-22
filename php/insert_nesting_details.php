@@ -69,7 +69,7 @@ if (move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
 }
 
 // update path in database
-$update_sql = "UPDATE nesting_details SET path ='$target_path' WHERE id=$last_id";
+$update_sql = "UPDATE nesting_details SET path ='$target_path' WHERE nesting_id=$last_id";
 if ($conn->query($update_sql) === TRUE) {
 $response['status'] = 'success';
     
