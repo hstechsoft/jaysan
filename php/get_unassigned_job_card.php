@@ -4,7 +4,7 @@
  $show_all = test_input($_GET['show_all']);
  $show_all_query = '';
  if($show_all != "true") {
-    $show_all_query = "having nesting_details.material_qty - COUNT(ifnull(laser_job_card.job_card_id,0)) > 1";
+    $show_all_query = "having nesting_details.material_qty - (COUNT(ifnull(laser_job_card.job_card_id,0)) - 1) > 0";
  }
 
 function test_input($data) {
@@ -16,7 +16,7 @@ return $data;
 }
 
 
- $sql = "SELECT nesting_details.*,employee.emp_name,parts_tbl.part_name as material_name,nesting_details.material_qty - COUNT(ifnull(laser_job_card.job_card_id,0)) as remaining_qty FROM `nesting_details`
+ $sql = "SELECT count(ifnull(laser_job_card.job_card_id,0)) - 1 as job_card_count, nesting_details.*,employee.emp_name,parts_tbl.part_name as material_name,nesting_details.material_qty - (COUNT(ifnull(laser_job_card.job_card_id,0)) - 1) as remaining_qty FROM `nesting_details`
 left join laser_job_card on nesting_details.nesting_id = laser_job_card.nesting_id
 inner join employee on nesting_details.created_by = employee.emp_id
 inner join parts_tbl on nesting_details.material_id = parts_tbl.part_id
