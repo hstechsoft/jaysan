@@ -32,7 +32,7 @@ return $data;
 
 
  $sql = "SELECT JSON_ARRAYAGG(
-        JSON_OBJECT('part_id', nesting_parts.part_id, 'qty', nesting_parts.qty, 'produced_qty', nesting_parts.produced_qty, 'scrap_qty', nesting_parts.scrap_qty, 'part_name', nesting_part.part_name)) as nesting_parts_details, created_by,path,nesting_name,nesting_id,material_id,material_qty,run_time,product,employee.emp_name,parts_tbl.part_name as material_name FROM nesting_details
+        JSON_OBJECT('part_id', nesting_parts.part_id, 'qty', nesting_parts.qty, 'produced_qty', nesting_parts.produced_qty, 'scrap_qty', nesting_parts.scrap_qty, 'part_name', nesting_part.part_name)) as nesting_parts_details, created_by,path,nesting_name,nesting_details.nesting_id,material_id,material_qty,run_time,product,employee.emp_name,parts_tbl.part_name as material_name FROM nesting_details
  left join nesting_parts on nesting_details.nesting_id = nesting_parts.nesting_id
  left join parts_tbl nesting_part on nesting_parts.part_id = nesting_part.part_id
  inner join employee on nesting_details.created_by = employee.emp_id
