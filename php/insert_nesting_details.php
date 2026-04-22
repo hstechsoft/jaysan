@@ -46,7 +46,8 @@ $target_path = null; // initialize target path variable
 } else {
   throw new Exception("Error: " . $sql . "<br>" . $conn->error);
   }
-
+// remove '' from $nesting_name for file name
+$nesting_name = str_replace("'", "", $nesting_name);
 
 $file_name = $nesting_name . "_" . $last_id . ".pdf";
 
