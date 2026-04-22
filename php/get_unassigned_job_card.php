@@ -4,7 +4,7 @@
  $show_all = test_input($_GET['show_all']);
  $show_all_query = '';
  if($show_all != "true") {
-    $show_all_query = "having nesting_details.material_qty - COUNT(ifnull(laser_job_card.job_card_id,0)) > 0";
+    $show_all_query = "having nesting_details.material_qty - COUNT(ifnull(laser_job_card.job_card_id,0)) > 1";
  }
 
 function test_input($data) {
