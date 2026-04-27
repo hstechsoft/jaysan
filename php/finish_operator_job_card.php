@@ -39,7 +39,7 @@ foreach ($produced_parts as $part) {
 // updated job_card table
 $sql = "UPDATE  laser_job_card SET operator_id='$opertor_id', status='finished', scarp_weight='$scarp_weight', scarp_qty='$scarp_qty', remark='$remark' WHERE job_card_id='$job_card_id'";
 if ($conn->query($sql) === TRUE) {
-    echo "Job card updated successfully";
+    echo "ok";
 } else {
     throw new Exception("Error updating job card: " . $conn->error);
 }
