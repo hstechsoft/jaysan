@@ -25,6 +25,7 @@ foreach ($produced_parts as $part) {
     $part_id = $part['part_id'];
     $quantity = $part['quantity'];
     $scarp_qty = $part['scarp_qty'];
+    echo "Part ID: $part_id, Quantity: $quantity, Scarp Qty: $scarp_qty <br>";
     $produced_qty = $quantity - $scarp_qty;
 
     $sql = "INSERT INTO laser_produced_parts (job_card_id, part_id, produced_qty, scarp_qty) VALUES ('$job_card_id', '$part_id', '$produced_qty', '$scarp_qty')";
