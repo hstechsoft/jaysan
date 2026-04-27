@@ -14,7 +14,7 @@ $data = "'".$data."'";
 return $data;
 }
  $sql_part = "INSERT INTO nesting_parts (nesting_id, part_id, qty) VALUES ($nesting_id, $part_id, $quantity) on duplicate key update qty =  $quantity";
- echo $sql_part;
+
  
 if ($conn->query($sql_part) === TRUE) {
     echo "ok";
