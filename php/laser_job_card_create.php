@@ -20,7 +20,7 @@ $data = htmlspecialchars($data);
 return $data;
 }
 // check qty available
-$sql_check = "SELECT material_qty - COUNT(ifnull(laser_job_card.job_card_id,0)) as remaining_qty FROM nesting_details
+$sql_check = "SELECT material_qty - (COUNT(ifnull(laser_job_card.job_card_id,0)) - 1)as remaining_qty FROM nesting_details
 left join laser_job_card on nesting_details.nesting_id = laser_job_card.nesting_id
 where nesting_details.nesting_id = $nesting_id
 group by nesting_details.nesting_id";
