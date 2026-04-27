@@ -1,13 +1,13 @@
 <?php
  include 'db_head.php';
 
-$machine_id = test_input($_GET['machine_id']);
-$shift = test_input($_GET['shift']);
-$assign_date = test_input($_GET['assign_date']);
-$assigned_by = test_input($_GET['assigned_by']);
+$machine_id = test_input($_POST['machine_id']);
+$shift = test_input($_POST['shift']);
+$assign_date = test_input($_POST['assign_date']);
+$assigned_by = test_input($_POST['assigned_by']);
 
-$nesting_id = test_input($_GET['nesting_id']);
-$qty = test_input($_GET['qty']);
+$nesting_id = test_input($_POST['nesting_id']);
+$qty = test_input($_POST['qty']);
 
 
  

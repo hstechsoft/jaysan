@@ -1,9 +1,7 @@
 <?php
  include 'db_head.php';
 
- $created_by = test_input($_POST['created_by']);
-
-
+$created_by = test_input($_POST['created_by']);
 $material_id = test_input($_POST['material_id']);
 $material_qty = test_input($_POST['material_qty']);
 $run_time = test_input($_POST['run_time']);
