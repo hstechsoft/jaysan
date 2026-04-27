@@ -39,7 +39,7 @@ if (move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
 $save_path = "nesting/" . $file_name;
 
 // update path in database
-$update_sql = "UPDATE nesting_details SET path ='$save_path', nesting_name = $nesting_name WHERE nesting_id=$nesting_id";
+$update_sql = "UPDATE nesting_details SET path ='$save_path', nesting_name = '$nesting_name' WHERE nesting_id='$nesting_id'";
 if ($conn->query($update_sql) === TRUE) {
 $response['status'] = 'success';
     
