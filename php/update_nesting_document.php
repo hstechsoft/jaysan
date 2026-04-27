@@ -18,7 +18,7 @@ try {
     $conn->begin_transaction();
     $nesting_name = str_replace("'", "", $nesting_name);
 
-$file_name = $nesting_name . "_" . $last_id . ".pdf";
+$file_name = $nesting_name . "_" . $nesting_id . ".pdf";
 
 // store directly in folder (not folder inside folder)
 $target_dir = __DIR__ . "/../nesting/";
