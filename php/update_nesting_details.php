@@ -7,6 +7,7 @@ $material_qty = test_input($_POST['material_qty']);
 $run_time = test_input($_POST['run_time']);
 $product = test_input($_POST['product']);
 $nesting_id = test_input($_POST['nesting_id']);
+$nesting_name = test_input($_POST['nesting_name']);
  
  
 function test_input($data) {
@@ -17,7 +18,7 @@ $data = "'".$data."'";
 return $data;
 }
 
- $sql = "UPDATE nesting_details SET created_by = $created_by,  material_id = $material_id, material_qty = $material_qty, run_time = $run_time, product = $product WHERE nesting_id = $nesting_id";
+ $sql = "UPDATE nesting_details SET created_by = $created_by,  material_id = $material_id, material_qty = $material_qty, run_time = $run_time, product = $product, nesting_name = $nesting_name WHERE nesting_id = $nesting_id";
  
   if ($conn->query($sql) === TRUE) {
    echo "ok";
