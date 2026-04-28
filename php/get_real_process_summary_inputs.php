@@ -113,7 +113,7 @@ SELECT  process_group.process_name,process_group.process_id as process_available
 left join work_time_master wtm on wtm.ori_process_id = process_group.process_id and wtm.is_default = 1
 left join creditors production_godown on production_godown.creditor_id = wtm.godown_id
 left join department production_department on production_department.dep_id = wtm.dep_id
-left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id 
+left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id order by process_group.max_level desc
 
 
 

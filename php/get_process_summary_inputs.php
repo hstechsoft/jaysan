@@ -49,7 +49,7 @@ inner join process_wel_tbl pwt_final on pwt.final_process_id = pwt_final.process
 left join parts_tbl pt on iwp.input_part_id = pt.part_id
 left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id),
 
-process_details as(SELECT process_available_id,production_qty, process, output_part,
+process_details as(SELECT   process_available_id,production_qty, process, output_part,
 jp.process_name,
 
 if(output_part is null , CONCAT('semi finished part - ' , final_part_name,'(by -', jp.process_name, ')'), CONCAT(pt.part_name,'(by -', jp.process_name, ')')) as output_part_name,
@@ -59,12 +59,16 @@ inner join jaysan_process jp on input_group_details.process = jp.process_id
 inner join parts_tbl pt_final on input_group_details.final_part = pt_final.part_id
 left join parts_tbl pt ON input_group_details.output_part = pt.part_id
 GROUP BY process_available_id)
-SELECT process_available_id,production_qty, process,process_name, output_part_name, input_details, final_part_name, final_part, level, process_title ,creditor_name as godown_name,dep_name,sec_name,creditor_id,department.dep_id,dep_section.dep_sec_id,cost,min_time,max_time FROM process_details
+SELECT sum(ifnull(js.qty,0)) as stock_qty, process_available_id,production_qty, process,process_name, output_part_name, input_details, final_part_name, final_part, level, process_title ,creditor_name as godown_name,dep_name,sec_name,creditor_id,department.dep_id,dep_section.dep_sec_id,cost,min_time,max_time FROM process_details
 
 left join work_time_master wtm on wtm.ori_process_id = process_details.process_available_id
 left join creditors on wtm.godown_id = creditors.creditor_id
 left join department on wtm.dep_id = department.dep_id
-left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id  order by level
+left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id  
+left join jaysan_stock js on js.process_id = process_details.process_available_id
+group by process_details.process_available_id
+order by level desc
+
 
 
 

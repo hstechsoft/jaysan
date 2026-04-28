@@ -114,7 +114,7 @@ left join creditors production_godown on production_godown.creditor_id = wtm.god
 left join department production_department on production_department.dep_id = wtm.dep_id
 left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id )
 SELECT   if(creditor_id > 0,if(dep_id > 0,if(dep_sec_id > 0, CONCAT(creditor_name, ' - ', dep_name, ' - ', sec_name), CONCAT(creditor_name, ' - ', dep_name)), creditor_name), 'N/A') as production_place, creditor_name as godown_name,dep_name,sec_name,creditor_id,dep_id,dep_sec_id,sum(ifnull(cost,0) ) * production_qty as total_cost, sum(ifnull(min_time,0)   ) * production_qty as total_min_time, sum(ifnull(max_time,0)) *production_qty as total_max_time, JSON_ARRAYAGG(JSON_OBJECT('process_available_id', process_available_id, 'production_qty', production_qty, 'process', process, 'process_name', process_name, 'output_part_name', output_part_name, 'input_details', input_details, 'final_part_name', final_part_name, 'final_part', final_part, 'level', level, 'process_title', process_title, 'cost', cost, 'min_time', min_time, 'max_time', max_time)) as process_details  FROM final_out
-GROUP BY creditor_id,dep_id,dep_sec_id  order by level
+GROUP BY creditor_id,dep_id,dep_sec_id  order by level desc   
 
 
 
