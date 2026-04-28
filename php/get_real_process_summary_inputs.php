@@ -87,7 +87,7 @@ inner join stock_wise  on bom_plan.process_id = stock_wise.process_available_id
    GROUP BY bom_plan.process_id
     ORDER BY max_level),
 
-    input_grouped as (SELECT final_needed.process_id,final_needed.max_level,final_needed.required_qty,JSON_ARRAYAGG (JSON_OBJECT(
+    input_grouped as (SELECT final_needed.process_id,final_needed.max_level,final_needed.required_qty,JSON_ARRAYAGG(JSON_OBJECT(
         'input_part_id', iwp.input_part_id,
         'previous_process_id', iwp.previous_process_id,
         'input_part_name', COALESCE(pt.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(from -', jp.process_name, ')')),
