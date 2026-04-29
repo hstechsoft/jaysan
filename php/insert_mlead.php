@@ -2,16 +2,16 @@
 <?php
  include 'db_head.php';
 
- $cus_name = test_input($_GET['cus_name']);
- $company_name = test_input($_GET['company_name']);
- $address = test_input($_GET['address']);
- $phone = test_input($_GET['phone']);
- $description = test_input($_GET['description']);
- $dated = test_input($_GET['dated']);
- $emp_id = test_input($_GET['emp_id']);
- $attach_id = test_input($_GET['attach_id']);
- $latti = test_input($_GET['latti']);
- $longi = test_input($_GET['longi']);
+ $cus_name = test_input($_POST['cus_name']);
+ $company_name = test_input($_POST['company_name']);
+ $address = test_input($_POST['address']);
+ $phone = test_input($_POST['phone']);
+ $description = test_input($_POST['description']);
+ $dated = test_input($_POST['dated']);
+ $phone_id = test_input($_POST['phone_id']);
+ $attach_id = test_input($_POST['attach_id']);
+ $latti = test_input($_POST['latti']);
+ $longi = test_input($_POST['longi']);
  
 function test_input($data) {
 $data = trim($data);
@@ -21,9 +21,19 @@ $data = "'".$data."'";
 return $data;
 }
 
+// get emp_id from phone_id
+$sql = "SELECT emp_id FROM employee WHERE emp_phone_id = $phone_id";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $emp_id = $row['emp_id'];
+} else {
+    echo "Error: Employee not found";
+    exit;
+}
 
-
-
+// insert current timestamp in milliseconds
+$dated = time() * 1000;
 $sql = "INSERT  INTO  marketing_lead (cus_name,phone,description,dated,emp_id,attach_id,latti,longi,company_name,address)
  VALUES ($cus_name,$phone,$description,$dated,$emp_id,$attach_id,$latti,$longi,$company_name,$address)";
   

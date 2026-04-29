@@ -15,6 +15,9 @@ $current_file = basename($_SERVER['PHP_SELF']);
 
 /* Public files (no session required) */
 $public_files = [
+    'app_upload.php',
+    'get_today_lead1.php',
+    'insert_mlead.php',
     'login.php',
     'logout.php',
     'csrf.js.php',
