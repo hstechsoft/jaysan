@@ -157,6 +157,17 @@ $(document).ready(function () {
 
     });
 
+    $("#nest_file").on("change", function () {
+        var file = this.files[0];
+        
+        if (file && file.type === "application/pdf") {
+            
+        }
+        else {
+            $("#nest_file").val("");
+            salert("Warning", "PDF Files Only.", "warning");
+        }
+    })
 
     $("#nested_part_add_btn").on("click", function () {
 
@@ -164,8 +175,15 @@ $(document).ready(function () {
         let nested_part_id = $("#nested_parts").data("part_id");
         let nested_part_qty = $("#nested_part_qty").val();
 
+        let update_btn = $("#update_nesting_btn").hasClass("d-none") ? 1 : 0;
 
-        if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0) {
+
+        if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && update_btn == 0 && $("#update_nesting_btn").val() > 0) {
+
+            update_nesting_parts($("#update_nesting_btn").val(), nested_part_id, nested_part_qty)
+        }
+
+        else if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && update_btn == 1) {
 
 
             $("#nesting_parts_tbody").append(`<tr data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td><button class='btn btn-danger delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
@@ -183,6 +201,10 @@ $(document).ready(function () {
     $("#nesting_parts_tbody").on("click", ".delete_btn", function () {
 
         var row = $(this).closest("tr");
+        var nes_part_id = row.data("nes_part_id");
+        var update_btn = $("#update_nesting_btn").hasClass("d-none") ? 1 : 0;
+
+        console.log(nes_part_id, update_btn);
 
         Swal.fire({
             title: "Warning",
@@ -194,6 +216,10 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 row.remove();
+
+                if (nes_part_id > 0 && update_btn == 0) {
+                    delete_nesting_parts(nes_part_id);
+                }
             }
         });
 
@@ -252,7 +278,7 @@ $(document).ready(function () {
 
     get_nesting_details();
 
-    $("#nesting_job_card_tbody").on("click", ".view_btn", function () {
+    $("#nesting_details_tbody").on("click", ".view_btn", function () {
         let path = $(this).data("path");
 
         // open in new tab
@@ -295,7 +321,7 @@ $(document).ready(function () {
         if (nesting_parts_details && nesting_parts_details.length > 0) {
             nesting_parts_details.forEach(function (item) {
                 $("#nesting_parts_tbody").append(`
-                <tr data-part_id="${item.part_id}">
+                <tr data-part_id="${item.part_id}" data-nes_part_id="${item.nes_part_id}">
                     <td>${item.part_name}</td>
                     <td>${item.qty}</td>
                     <td>
@@ -315,8 +341,9 @@ $(document).ready(function () {
     })
 
     $("#update_nesting_btn").on("click", function () {
-        
-        let nesting_id = $("this").val();
+
+
+        let nesting_id = $("#update_nesting_btn").val();
         let nesting_name = $("#nesting_name").val();
         let material_id = $("#material_id").data("material_id");
         let material_qty = $("#material_qty").val();
@@ -338,7 +365,7 @@ $(document).ready(function () {
         let file = $("#nest_file")[0].files[0];
         console.log(nesting_id, nesting_name, material_id, material_qty, run_time, product, nested_arr, file);
 
-        if (nesting_id > 0 && nesting_name && material_id && material_qty && run_time && product && nested_arr.length > 0 && file) {
+        if (nesting_id > 0 && nesting_name && material_id && material_qty && run_time && product && nested_arr.length > 0) {
 
             let formData = new FormData();
 
@@ -349,6 +376,8 @@ $(document).ready(function () {
             formData.append("run_time", run_time);
             formData.append("product", product);
             formData.append("nesting_id", nesting_id);
+            formData.append("nesting_name", nesting_name);
+            formData.append("file", file);
 
 
             formData.append("nesting_parts", JSON.stringify(nested_arr));
@@ -358,6 +387,10 @@ $(document).ready(function () {
             console.log(formData);
 
             update_nesting_details(formData);
+
+            if (file) {
+                update_nesting_document(formData)
+            }
 
         } else {
             salert("Warning", "Fill All Required Fields", "warning");
@@ -382,6 +415,31 @@ function clear_form() {
 
 }
 
+
+function delete_nesting_parts(nes_part_id) {
+
+    console.log(nes_part_id);
+
+    $.ajax({
+        url: "php/delete_nesting_parts.php",
+        type: "POST",
+        data: {
+            nes_part_id: nes_part_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+}
+
 function insert_nesting_details(formData) {
 
     console.log(formData);
@@ -394,6 +452,40 @@ function insert_nesting_details(formData) {
         contentType: false,   // IMPORTANT
         success: function (response) {
             console.log(response);
+
+            if (response.trim() == "ok") {
+                window.location.reload();
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+}
+
+function update_nesting_parts(nesting_id, part_id, quantity) {
+
+    console.log(nesting_id, part_id, quantity);
+
+    $.ajax({
+        url: "php/update_nesting_parts.php",
+        type: "POST",
+        data: {
+            nesting_id: nesting_id,
+            part_id: part_id,
+            quantity: quantity
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                $("#nesting_parts_tbody").append(`<tr data-part_id=${part_id}><td>${$("#nested_parts").val()}</td><td>${quantity}</td><td><button class='btn btn-danger delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
+
+
+                $("#nested_parts").val('');
+                $("#nested_part_qty").val('');
+            }
         },
         error: function (xhr) {
             console.log(xhr);
@@ -410,10 +502,17 @@ function update_nesting_details(formData) {
         url: "php/update_nesting_details.php",
         type: "POST",
         data: formData,
-        processData: false,   // IMPORTANT
-        contentType: false,   // IMPORTANT
+        processData: false,
+        contentType: false,
         success: function (response) {
             console.log(response);
+
+            if (response.trim() == "ok") {
+
+                setTimeout(function () {
+                    window.location.reload();
+                }, 500);
+            }
         },
         error: function (xhr) {
             console.log(xhr);
@@ -422,6 +521,30 @@ function update_nesting_details(formData) {
 
 }
 
+function update_nesting_document(formData) {
+
+    console.log(formData);
+
+    $.ajax({
+        url: "php/update_nesting_document.php",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+
+                // window.location.reload();
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+}
 
 function get_nesting_details() {
 
@@ -473,12 +596,14 @@ function get_nesting_details() {
                                 <td>${item.emp_name}</td>
                                 <td>${nesting_parts_details}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary view_btn" data-path="${filePath}">
-                                        View
-                                    </button>
-                                    <button type="button" class="btn btn-warning edit_btn" data-path=${item.path} data-nesting_parts_details='${item.nesting_parts_details}'  data-nesting_id="${item.nesting_id}"  data-material_id="${item.material_id}">
-                                        Edit
-                                    </button>
+                                    <div  class='d-flex justify-content-between'>
+                                        <button type="button" class="btn btn-outline-primary view_btn" data-path="${filePath}">
+                                            <i class="fa-solid fa-eye fa-beat"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-warning  edit_btn" data-path=${item.path} data-nesting_parts_details='${item.nesting_parts_details}'  data-nesting_id="${item.nesting_id}"  data-material_id="${item.material_id}">
+                                            <i class='fa fa-edit fa-beat'></i>
+                                        </button>
+                                    </div>    
                                 </td>
                             </tr>
                         `);

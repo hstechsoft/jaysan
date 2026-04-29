@@ -23,6 +23,7 @@
         table tr,
         th {
             font-size: 12px;
+            vertical-align: middle;
         }
 
         .nesting_job_card_mobile .card {
@@ -35,6 +36,10 @@
 
         .list-group-item{
             font-size: 12px;
+        }
+
+        button{
+            font-size: 12px !important;
         }
     </style>
 
@@ -105,11 +110,11 @@
                 <div class="col-md-9">
 
 
-                    <div class="table-responsive d-none d-md-block">
+                    <div class="table-responsive d-none d-md-block" style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
-                            <thead>
-
+                            <thead style="position: sticky; z-index: 5; top: 0; background-color: rgb(202, 222, 240);">
+ 
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nesting Name</th>

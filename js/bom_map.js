@@ -45,7 +45,10 @@ $(document).ready(function () {
         $("#bom_process_table").addClass("d-none");
         $("#bom_material_table, #bom_required_material_table").addClass("d-none");
         $("#bom_process_summary_table").addClass("d-none");
-
+        $("#bom_part_search").data("part_id", '');
+        $("#qty_needed_field").addClass("d-none");
+        $("#qty_needed").val("").data("process_id", 0);
+        $("#stock_check_box").prop("checked", false);
 
         //check the value not empty
         if ($('#bom_part_search').val() != "") {
@@ -138,6 +141,8 @@ $(document).ready(function () {
         get_bom(part_id, component_cat);
         get_process_summary_inputs(process_id);
         get_process_summary_godown(process_id);
+
+        $("#qty_needed").data("process_id", process_id);
     })
 
 
@@ -173,6 +178,9 @@ $(document).ready(function () {
             get_process_summary(previous_process_id);
             get_process_summary_inputs(previous_process_id);
             get_process_summary_godown(previous_process_id);
+
+            $("#qty_needed").data("process_id", process_id);
+
 
         }
     })
@@ -217,6 +225,9 @@ $(document).ready(function () {
             get_process_summary_inputs(process_id);
             get_process_summary_godown(process_id);
 
+            $("#qty_needed").data("process_id", process_id);
+
+
 
         }
     })
@@ -238,6 +249,48 @@ $(document).ready(function () {
     });
 
 
+
+    // Stock 
+
+    $("#stock_check_box").on("change", function () {
+
+        if ($("#bom_part_search").data("part_id")) {
+            if ($(this).is(":checked")) {
+                $("#qty_needed_field").removeClass("d-none");
+            } else {
+                $("#qty_needed_field").addClass("d-none");
+            }
+        }
+        else {
+            $(this).prop("checked", false);
+            salert("Warning", "Select Part First.", 'warning');
+        }
+
+    })
+
+    $("#qty_needed").on("focusout", function () {
+
+        var qty = $(this).val();
+        var process_id = $(this).data("process_id");
+
+        if (qty > 0 && process_id > 0) {
+
+            $("#stock_section").removeClass("d-none");
+            
+            $('html, body').animate({
+                scrollTop: $("#stock_section").offset().top
+            }, 600);
+
+            get_real_process_summary_inputs(process_id, qty);
+            get_real_process_summary_godown(process_id, qty);
+
+
+        } else {
+            salert("Warning", "Enter Valid Qty/ Data Missing.", "warning");
+        }
+    })
+
+
 });
 
 
@@ -246,6 +299,455 @@ $(document).ready(function () {
 
 
 
+
+// function get_real_process_summary_godown(process_id, qty) {
+//     $.ajax({
+//         url: "php/get_real_process_summary_godown.php",
+//         type: "get",
+//         data: {
+//             process_id: process_id,
+//             qty_needed: qty,
+
+//         },
+
+//         success: function (response) {
+
+//             if (response.trim() === "error") {
+//                 salert("Error", "Server Error", "error");
+//                 return;
+//             }
+
+//             if (response.trim() === "0 result") {
+//                 $("#bom_process_summary_table").html(
+//                     `<div class="alert alert-warning">No Process Summary Found</div>`
+//                 ).removeClass("d-none");
+//                 return;
+//             }
+//             console.log(response);
+
+//             let data = JSON.parse(response);
+
+//             let html = '';
+
+
+//             /* Compact Top Summary */
+//             html += `
+//                 <div class="d-flex flex-wrap gap-2 mb-3">
+
+//                 <div class="summary-mini shadow-sm">
+//                 <i class="fa-solid fa-indian-rupee-sign"></i>
+//                 <div>
+//                 <small>Total Cost</small>
+//                 <h6>
+//                 ₹ ${data.reduce((a, b) => a + parseFloat(b.total_cost || 0), 0)}
+//                 </h6>
+//                 </div>
+//                 </div>
+
+
+//                 <div class="summary-mini shadow-sm">
+//                 <i class="fa-solid fa-clock"></i>
+//                 <div>
+//                 <small>Max Time</small>
+//                 <h6>
+//                 ${Math.max(...data.map(x => parseInt(x.total_max_time || 0)))} Min
+//                 </h6>
+//                 </div>
+//                 </div>
+
+
+//                 <div class="summary-mini shadow-sm">
+//                 <i class="fa-solid fa-industry"></i>
+//                 <div>
+//                 <small>Places</small>
+//                 <h6>${data.length}</h6>
+//                 </div>
+//                 </div>
+
+//                 </div>
+//                 `;
+
+
+//             html += `<div class="process-timeline">`;
+
+//             data.forEach((item) => {
+
+//                 let processes = JSON.parse(item.process_details);
+
+//                 html += `
+//                     <div class="process-node card shadow-sm mb-3">
+
+//                     <div class="card-header bg-white py-2 px-3">
+
+//                     <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+
+//                     <div>
+//                     <h6 class="mb-1 text-primary fw-bold small">
+//                     <i class="fa-solid fa-building me-1"></i>
+//                     ${item.production_place}
+//                     </h6>
+
+//                     <small class="text-muted">
+//                     ${item.dep_name || '-'}
+//                     ${item.sec_name ? ' • ' + item.sec_name : ''}
+//                     </small>
+//                     </div>
+
+
+//                     <div class="d-flex gap-1">
+
+//                     <span class="badge bg-success small">
+//                     ₹${item.total_cost}
+//                     </span>
+
+//                     <span class="badge bg-warning text-dark small">
+//                     ${item.total_min_time}-${item.total_max_time} Min
+//                     </span>
+
+//                     </div>
+
+//                     </div>
+//                     </div>
+
+
+//                     <div class="card-body p-2">
+//                     `;
+
+
+
+//                 processes.forEach(p => {
+
+//                     html += `
+//                         <div class="process-flow">
+
+//                         <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+
+//                         <span class="step-badge">
+//                         ${p.level}
+//                         </span>
+
+//                         <strong class="small">
+//                         ${p.process_name}
+//                         </strong>
+
+//                         <span class="badge bg-info">
+//                         Qty ${p.production_qty}
+//                         </span>
+
+//                         </div>
+
+
+
+//                         <div class="output-box">
+//                         <i class="fa-solid fa-arrow-right text-success me-1"></i>
+//                         <b>${p.output_part_name}</b>
+//                         </div>
+
+
+
+//                         <div class="mt-2">
+//                         `;
+
+//                     p.input_details.forEach(inp => {
+
+//                         html += `
+//                             <span class="input-chip">
+//                             <i class="fa-solid fa-cube me-1"></i>
+//                             ${inp.input_part_name}
+//                             (${inp.qty})
+//                             </span>
+//                             `;
+
+//                     });
+
+
+//                     html += `
+//                         </div>
+
+//                         <div class="final-line">
+//                         Final:
+//                         <b>${p.final_part_name}</b>
+//                         </div>
+
+
+//                         </div>
+//                         `;
+
+//                 });
+
+
+//                 html += `
+//                     </div>
+//                     </div>
+//                     `;
+
+//             });
+
+
+//             html += `</div>`;
+
+//             $("#godown_summary").html(html);
+//         }
+//     });
+// }
+
+function get_real_process_summary_godown(process_id, qty) {
+    $.ajax({
+        url: "php/get_real_process_summary_godown.php",
+        type: "get",
+        data: {
+            process_id: process_id,
+            qty_needed: qty,
+        },
+
+        success: function (response) {
+
+            if (response.trim() === "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            if (response.trim() === "0 result") {
+                $("#godown_summary").html(
+                    `<div class="alert alert-warning">Nothing Found</div>`
+                );
+                return;
+            }
+
+            let obj = JSON.parse(response);
+
+            let allProcesses = [];
+
+            // Collect Processes
+            obj.forEach(function (row) {
+
+                let processes = JSON.parse(row.process_details || "[]");
+
+                processes.forEach(function (p) {
+
+                    p.production_place = row.production_place || "N/A";
+                    p.total_cost = row.total_cost || 0;
+                    p.total_min_time = row.total_min_time || 0;
+                    p.total_max_time = row.total_max_time || 0;
+
+                    allProcesses.push(p);
+                });
+
+            });
+
+
+            // sort by level desc
+            allProcesses.sort((a, b) => b.level - a.level);
+
+
+            // group by level
+            let grouped = {};
+
+            allProcesses.forEach(p => {
+                if (!grouped[p.level]) {
+                    grouped[p.level] = [];
+                }
+                grouped[p.level].push(p);
+            });
+
+
+            let html = `
+                    <div class='process-wrapper'>
+                    <div class='row g-3'>
+                    `;
+
+
+            Object.keys(grouped).forEach(level => {
+
+                html += `
+                    <div class="col-md-6 col-12">
+                    <div class="level-box">
+
+                    <div class="level-head">
+                    ⚙ Process Level ${level}
+                    </div>
+                    `;
+
+
+                grouped[level].forEach(proc => {
+
+                    let inputs = '';
+
+                    (proc.input_details || []).forEach(inp => {
+
+                        inputs += `
+                            <span class="part-chip">
+                            ${inp.input_part_name}
+                            <span class="qty-badge">${inp.qty}</span>
+                            </span>
+                            `;
+
+                    });
+
+
+                    html += `
+                        <div class="process-card">
+
+                        <div class="proc-title">
+                        ${proc.process_name}
+                        </div>
+
+
+                        <div class="stats">
+
+                        <span class="stat-pill company">
+                        🏭 ${proc.production_place}
+                        </span>
+
+                        <span class="stat-pill qty">
+                        📦 Qty ${proc.production_qty}
+                        </span>
+
+                        <span class="stat-pill time">
+                        ⏱ ${proc.min_time || proc.total_min_time}
+                        -
+                        ${proc.max_time || proc.total_max_time} min
+                        </span>
+
+                        <span class="stat-pill cost">
+                        ₹ ${proc.cost || proc.total_cost}
+                        </span>
+
+                        </div>
+
+
+                        <div class="inputs">
+                        ${inputs || '<span class="text-muted">No Inputs</span>'}
+                        </div>
+
+                        </div>
+                        `;
+
+                });
+
+
+                html += `
+                    </div>
+                    </div>
+                    `;
+
+            });
+
+
+            html += `
+                </div>
+                </div>
+                `;
+
+            $("#godown_summary")
+                .html(html);
+        }
+    });
+}
+
+
+function get_real_process_summary_inputs(process_id, qty) {
+
+    $.ajax({
+        url: "php/get_real_process_summary_inputs.php",
+        type: "get",
+        data: {
+            process_id: process_id,
+            qty_needed: qty
+        },
+
+        success: function (response) {
+
+            if (response.trim() == "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            if (response.trim() == "0 result") {
+                $("#input_parts_summary").html(
+                    `<div class="alert alert-warning">
+                        Nothing Found
+                    </div>`
+                );
+                return;
+            }
+
+
+            let data = JSON.parse(response);
+
+            // highest level first
+            data.sort((a, b) => b.max_level - a.max_level);
+
+            let html = `<div class="flow-container">`;
+
+            data.forEach((item, index) => {
+
+                let inputs = '';
+
+                (JSON.parse(item.input_parts || "[]")).forEach(part => {
+
+                    inputs += `
+                        <span class='part'>
+                        ${part.input_part_name}
+                        (Qty ${part.qty})
+                        </span>
+                        `;
+
+                });
+
+                html += `
+
+                        <div class="flow-step">
+
+                        <div class="flow-card ${index == data.length - 1 ? 'final-node' : ''}">
+
+                        <div class="level-badge">
+                        Level ${item.max_level}
+                        </div>
+
+                        <div class="proc-title">
+                        ${item.process_name}
+                        </div>
+
+                        <div class="stats">
+                        <span class="company">
+                        🏭 ${item.production_godown_name || 'Internal'}
+                        </span>
+
+                        <span class="qty">
+                        📦 ${item.production_qty}
+                        </span>
+
+                        <span class="time">
+                        ⏱ ${item.production_min_time || 0}
+                        -
+                        ${item.production_max_time || 0}
+                        </span>
+
+                        <span class="cost">
+                        ₹ ${item.production_cost || 0}
+                        </span>
+                        </div>
+
+                        <div class="inputs">
+                        ${inputs}
+                        </div>
+
+                        </div>
+
+                        </div>
+
+                        `;
+
+            });
+
+            html += `</div>`;
+
+            $("#input_parts_summary").html(html);
+        }
+    });
+
+}
 
 
 function get_process_summary(process_id) {
@@ -696,6 +1198,7 @@ function get_process_summary_inputs(process_id) {
                                 <td>${count}</td>
                                 <td>${pr.output_part_name ?? ''}</td>
                                 <td>${pr.production_qty ?? 0}</td>
+                                <td>${pr.stock_qty ?? 0}</td>
                                 <td>${input_info}</td>
                                 <td>${godown_info}</td>
                             </tr>`;
@@ -708,7 +1211,7 @@ function get_process_summary_inputs(process_id) {
             $("#bom_required_material_table_body").append(`
                 <tr class="fw-bold table-primary">
                     <td colspan="2">Total</td>
-                    <td>Min: ${total_min_time}</td>
+                    <td colspan="2">Min: ${total_min_time}</td>
                     <td>Max: ${total_max_time}</td>
                     <td>₹ ${total_cost}</td>
                 </tr>

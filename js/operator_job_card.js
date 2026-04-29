@@ -106,7 +106,7 @@ $(document).ready(function () {
             nesting.forEach(function (obj) {
 
                 html += `
-            <li class="list-group-item p-2" data-part_id="${obj.part_id}">
+            <li class="list-group-item p-2" data-part_id="${obj.part_id}" data-qty="${obj.qty}">
                 
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="fw-semibold">${obj.part_name}</span>
@@ -155,18 +155,19 @@ $(document).ready(function () {
         $("#nested_parts li").each(function () {
 
             let part_id = $(this).data("part_id");
-            let quantity = $(this).find(".li_scrap_qty").val() || 0;
+            let quantity = $(this).data("qty");
+            let scrap_qty = $(this).find(".li_scrap_qty").val() || 0;
 
-            
+
             let is_checked = $(this).find(".chech_field").is(":checked") ? 1 : 0;
 
-            
+
             if (part_id && is_checked === 1) {
 
                 produced_parts.push({
                     part_id: part_id,
                     quantity: quantity,
-                    scrap_qty: is_checked
+                    scarp_qty: scrap_qty
                 });
 
             } else {
@@ -177,7 +178,7 @@ $(document).ready(function () {
 
         console.log(job_card_id, machine_id, scrap_weight, scarp_qty, remark, produced_parts);
 
-        
+
         if (!isValid) {
             salert("Warning", "Work is pending. Please complete all parts.", "warning");
             return;
@@ -196,6 +197,13 @@ $(document).ready(function () {
             salert("Warning", "Data Missing! Kindly fill all fields.", "warning");
         }
 
+    });
+
+        $("#operator_job_card_tbody, .operator_job_card_mobile").on("click", ".view_btn", function () {
+        let path = $(this).data("path");
+
+
+        window.open(path, "_blank");
     });
 
 });
@@ -277,19 +285,20 @@ function get_operator_job_card(shift, machine_id) {
                                 <td>${item.nesting_name}</td>
                                 <td>${item.part_name}</td>
                                 <td>
-                                    ${item.total_material_qty} <strong>Assigned Date: ${item.assign_date}</strong>
+                                    <span class='badge bg-success pe-2'>${item.total_material_qty}</span> <strong>Assigned Date: ${item.assign_date}</strong>
                                 </td>
+                                
                                 <td>${item.run_time}</td>
                                 <td>${item.product}</td>
                                 <td>${item.created_name}</td>
                                 <td>${nesting_parts_details}</td>
                                 <td>
-                                    <button class="btn btn-primary view_btn" data-path="${filePath}">View</button>
-                                    <button class="btn btn-success laser_work_entry_btn" 
+                                    <button class="btn btn-outline-primary view_btn" data-path="${filePath}"><i class="fa-solid fa-eye fa-beat"></i></button>
+                                    <button class="btn btn-outline-success laser_work_entry_btn" 
                                         data-job_card_id="${item.job_card_id}" 
                                         data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
                                         data-machine_id="${item.machine_id}">
-                                        Work Entry
+                                        <i class="fa-solid fa-person-running fa-bounce"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -308,8 +317,8 @@ function get_operator_job_card(shift, machine_id) {
                                     <div class="small text-muted mb-2">${item.part_name}</div>
 
                                     <div class="mb-2">
-                                        <span class='badge bg-success'>Remain: ${item.total_material_qty}</span>
-                                        <strong>Assigned Date: ${item.assign_date}</strong>
+                                        <span class='badge bg-success pe-2'>Remain: ${item.total_material_qty}</span>
+                                        <strong> Assigned Date: ${item.assign_date}</strong>
                                     </div>
 
                                     <div class="d-flex justify-content-between small mb-2">
@@ -323,15 +332,15 @@ function get_operator_job_card(shift, machine_id) {
 
                                     ${nesting_parts_details}
 
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-sm btn-primary w-50 view_btn" data-path="${filePath}">
-                                            View
+                                    <div class=" d-flex justify-content-between mt-2">
+                                        <button class="btn btn-sm btn-outline-primary view_btn" data-path="${filePath}">
+                                            <i class="fa-solid fa-eye fa-beat"></i>
                                         </button>
-                                         <button class="btn btn-success laser_work_entry_btn" 
+                                         <button class="btn btn-outline-success laser_work_entry_btn" 
                                             data-job_card_id="${item.job_card_id}" 
                                             data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
                                             data-machine_id="${item.machine_id}">
-                                            Work Entry
+                                            <i class="fa-solid fa-person-running fa-bounce"></i>
                                         </button>
                                     </div>
 
@@ -342,7 +351,7 @@ function get_operator_job_card(shift, machine_id) {
                     });
 
                 } else {
-                    $("#operator_job_card_tbody").html(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $("#operator_job_card_tbody").html(`<tr><td colspan='9' class='text-center text-danger'>No Data Found</td></tr>`);
                     $(".operator_job_card_mobile").html(`<div class='text-center text-danger'>No Data Found</div>`);
                 }
             }

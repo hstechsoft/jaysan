@@ -87,6 +87,13 @@ $(document).ready(function () {
 
     })
 
+    $(".close_model_btn").on("click", function(){
+
+        $("#machine").val('');
+        $("#shift").val('');
+        $("#assign_date").val('');
+        $("#qty").val(1);
+    })
 });
 
 
@@ -98,7 +105,7 @@ function laser_job_card_create(machine_id, shift, assign_date, assigned_by, nest
 
     $.ajax({
         url: "php/laser_job_card_create.php",
-        type: "get",
+        type: "post",
         data: {
             machine_id: machine_id,
             shift: shift,
@@ -162,8 +169,8 @@ function get_unassigned_job_card(show_all) {
                                 <td>${item.product}</td>
                                 <td>${item.emp_name}</td>
                                 <td>
-                                    <button class="btn btn-primary view_btn" data-path="${filePath}">View</button>
-                                    <button class="btn btn-secondary allocate_btn" 
+                                    <button class="btn btn-outline-primary view_btn" data-path="${filePath}">View</button>
+                                    <button class="btn btn-outline-secondary allocate_btn" 
                                         data-nesting_id="${item.nesting_id}" 
                                         data-machine_id="${item.machine_id}">
                                         Allocate

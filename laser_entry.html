@@ -20,7 +20,13 @@
 
 
     <style>
+        table tr,
+        th {
+            font-size: 12px;
+            vertical-align: middle;
+        }
 
+        
     </style>
 
 
@@ -51,121 +57,181 @@
         <div class=" page-wrapper mt-5 mt-md-0">
 
             <div class="row">
+                <div class="col-md-4">
+                    <form class="p-3 border-0 rounded-4 shadow bg-white needs-validation" id="nesting_entry_form"
+                        novalidate onsubmit="return false;">
 
-                <div class="col-md-3">
-                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="nesting_entry_form"
-                        novalidate onsubmit="return false">
-
-
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="nesting_name" placeholder="" required>
-                            <label for="nesting_name">Nesting Name
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
+                        <!-- Header -->
+                        <div class="text-center mb-3">
+                            <h5 class="fw-bold text-primary mb-1">
+                                <i class="fa-solid fa-layer-group me-2"></i>
+                                Nesting Entry
+                            </h5>
+                            <small class="text-muted">Create nesting details quickly</small>
+                            <hr>
                         </div>
 
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="material_id" placeholder="" required>
-                            <label for="material_id">Material
-                                <span class="text-danger">*</span> </label>
 
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
+                        <div class="row g-2">
+
+                            <!-- Nesting -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-object-group"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="nesting_name" placeholder="Nesting Name"
+                                        required>
+                                </div>
                             </div>
+
+                            <!-- Material -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-cubes"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="material_id" placeholder="Material"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- Qty -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-hashtag"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="material_qty"
+                                        placeholder="Material Qty" required>
+                                </div>
+                            </div>
+
+                            <!-- Runtime -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-regular fa-clock"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="run_time" placeholder="Run Time (Min)"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- Product -->
+                            <div class="col-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-box-open"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="product" placeholder="Product" required>
+                                </div>
+                            </div>
+
+
+                            <!-- File -->
+                            <div class="col-12">
+                                <label class="small fw-semibold text-danger mb-1">
+                                    <i class="fa-solid fa-file-pdf me-1"></i>
+                                    Upload PDF Only
+                                </label>
+
+                                <input type="file" class="form-control form-control-sm" id="nest_file">
+                            </div>
+
                         </div>
 
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="material_qty" placeholder=""
-                                required>
-                            <label for="material_qty">Material Qty
-                                <span class="text-danger">*</span> </label>
 
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
+
+                        <!-- Nested Parts -->
+                        <div class="mt-4">
+
+                            <h6 class="fw-bold text-secondary mb-2">
+                                <i class="fa-solid fa-diagram-project me-2"></i>
+                                Nested Parts
+                            </h6>
+
+                            <div class="row g-2">
+                                <div class="col-5">
+                                    <input type="text" class="form-control form-control-sm" id="nested_parts"
+                                        placeholder="Part Name">
+                                </div>
+
+                                <div class="col-5">
+                                    <input type="text" class="form-control form-control-sm" id="nested_part_qty"
+                                        placeholder="Qty">
+                                </div>
+
+                                <div class="col-2 d-grid">
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill"
+                                        id="nested_part_add_btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
+
                         </div>
 
-                        <div class="form-floating mb-2">
-                            <input type="number" class="form-control rounded-3" id="run_time" placeholder="" required>
-                            <label for="run_time">Time
-                                <span class="text-danger">* In Mins</span> </label>
 
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="product" placeholder="" required>
-                            <label for="product">Product
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-
-                        <div class="form-floating mb-2">
-                            <input type="file" class="form-control rounded-3" id="nest_file" placeholder="" required>
-                            <label for="nest_file">
-                                <span class="text-danger">* Only PDF's Allowed</span> </label>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="nested_parts" placeholder="">
-                                <label for="nested_parts">Nested Part</label>
-                            </div>
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control rounded-3" id="nested_part_qty" placeholder="">
-                                <label for="nested_part_qty">Nested Part Qty</label>
-                            </div>
-                            <div class="align-middle text-center">
-                                <button type="button" class="btn btn-primary " id="nested_part_add_btn">+</button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table caption-top table-bordered table-striped ">
-                                <caption></caption>
-                                <thead class="small">
-
+                        <!-- Table -->
+                        <div class="table-responsive mt-3" style="max-height: 30vh; overflow-y: auto;">
+                            <table class="table table-sm table-hover text-center align-middle border">
+                                <thead class="table-primary" style=" position: sticky;  z-index: 5; top: 0; background-color: rgb(193, 216, 236);">
                                     <tr>
-                                        <th scope="col">Part name</th>
-                                        <th scope="col">Qty</th>
-                                        <th scope="col">Action</th>
+                                        <th>
+                                            <i class="fa-solid fa-cube me-1"></i>
+                                            Part
+                                        </th>
 
+                                        <th>
+                                            <i class="fa-solid fa-sort-numeric-up me-1"></i>
+                                            Qty
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-solid fa-gear me-1"></i>
+                                            Action
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody  class="small" id="nesting_parts_tbody">
 
-
-                                </tbody>
-
+                                <tbody id="nesting_parts_tbody"></tbody>
 
                             </table>
                         </div>
 
 
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary " id="add_nesting_btn">Add</button>
-                            <button type="submit" class="btn btn-secondary d-none"
-                                id="update_nesting_btn">Update</button>
-                            <button type="submit" class="btn btn-warning " id="clear_btn">Clear</button>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2 mt-3">
+
+                            <button class="btn btn-primary flex-fill rounded-pill shadow-sm" id="add_nesting_btn">
+                                <i class="fa-solid fa-circle-plus me-1"></i>
+                                Add
+                            </button>
+
+                            <button class="btn btn-success flex-fill rounded-pill shadow-sm d-none"
+                                id="update_nesting_btn">
+                                <i class="fa-solid fa-pen-to-square me-1"></i>
+                                Update
+                            </button>
+
+                            <button class="btn btn-warning flex-fill rounded-pill shadow-sm" id="clear_btn">
+                                <i class="fa-solid fa-rotate me-1"></i>
+                                Clear
+                            </button>
+
                         </div>
 
                     </form>
                 </div>
 
-                <div class="col-md-9">
+                <div class="col-md-8">
 
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
-                            <thead>
+                            <thead style="position: sticky; z-index: 5; top: 0; background-color: rgb(214, 229, 241);">
 
                                 <tr>
                                     <th scope="col">#</th>

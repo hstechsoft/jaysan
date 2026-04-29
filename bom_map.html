@@ -24,7 +24,7 @@
         .flow-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 60px;
+            gap: 45px;
             justify-content: center;
             padding: 10px 0;
         }
@@ -33,7 +33,7 @@
         .flow-step {
             position: relative;
             width: 200px;
-            padding: 10px 0px;
+            padding: 5px 5px;
             text-align: center;
             background: #ffffff;
             border-radius: 16px;
@@ -126,7 +126,7 @@
             color: #5062ff;
             position: absolute;
             top: 50%;
-            right: -45px;
+            right: -30px;
             transform: translateY(-50%);
             opacity: 0.7;
         }
@@ -284,6 +284,255 @@
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
+
+
+
+        /* Godown Summary */
+
+        .process-wrapper {
+            font-size: 13px;
+        }
+
+        .level-box {
+            background: #fff;
+            border: 1px solid #dfe7ef;
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 0px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+            height: 100%;
+        }
+
+        .level-head {
+            font-weight: 700;
+            font-size: 14px;
+            color: #0d6efd;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+            margin-bottom: 5px;
+        }
+
+        .process-card {
+            background: #f8fbff;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .proc-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .stat-pill {
+            background: white;
+            border: 1px solid #d7e2ef;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .company {
+            background: #eef4ff;
+            color: #0d6efd;
+            font-weight: 600;
+        }
+
+        .qty {
+            background: #fff7e6;
+            color: #ad6800;
+        }
+
+        .time {
+            background: #edfdf4;
+            color: #0f8a42;
+        }
+
+        .cost {
+            background: #fff1f0;
+            color: #cf1322;
+        }
+
+        .inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .part-chip {
+            background: white;
+            border: 1px solid #cfd8e3;
+            border-radius: 20px;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        .qty-badge {
+            background: #0d6efd;
+            color: white;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+            font-size: 10px;
+        }
+
+        @media(max-width:768px) {
+            .process-card {
+                padding: 8px;
+            }
+
+            .proc-title {
+                font-size: 12px;
+            }
+
+            .stat-pill {
+                font-size: 10px;
+            }
+        }
+
+
+        /* Input Summary */
+
+
+        .flow-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* .flow-step {
+            position: relative;
+            padding-bottom: 35px;
+        } */
+
+        .flow-step:last-child {
+            padding-bottom: 0;
+        }
+
+        /* connector line */
+        /* .flow-step:not(:last-child):after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            height: 28px;
+            width: 3px;
+            background: #0d6efd;
+            transform: translateX(-50%);
+        }
+
+        .flow-step:not(:last-child):before {
+            content: "▼";
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #0d6efd;
+            z-index: 2;
+        } */
+
+        .flow-card {
+            background: #fff;
+            border: 1px solid #dce4ec;
+            border: 5px solid #0d6efd;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+        }
+
+        .final-node {
+            border: 5px solid #28a745;
+            background: #eefaf2;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: #0d6efd;
+            color: #fff;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .proc-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .stats span {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 20px;
+        }
+
+        .company {
+            background: #eef4ff;
+            color: #0d6efd;
+        }
+
+        .qty {
+            background: #fff7e6;
+            color: #ad6800;
+        }
+
+        .time {
+            background: #edfdf4;
+            color: #0f8a42;
+        }
+
+        .cost {
+            background: #fff1f0;
+            color: #cf1322;
+        }
+
+        .inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .part {
+            background: #f8fafc;
+            border: 1px solid #d6dce5;
+            border-radius: 18px;
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+
+        @media(max-width:768px) {
+
+            .flow-card {
+                padding: 10px;
+            }
+
+            .proc-title {
+                font-size: 12px;
+            }
+
+            .stats span {
+                font-size: 10px;
+            }
+
+        }
     </style>
 
 </head>
@@ -324,6 +573,18 @@
                         <input type="text" class="form-control rounded-3" id="bom_part_search" placeholder="">
                         <label for="bom_part_search">Part Name</label>
 
+                    </div>
+
+                    <div class="form-check mb-3 ">
+                        <input class="form-check-input" type="checkbox" value="" id="stock_check_box">
+                        <label class="form-check-label " for="stock_check_box" style="font-size: small;">Do You Want to
+                            Check Stock ?
+                        </label>
+                    </div>
+
+                    <div class="form-floating mb-2 d-none" id="qty_needed_field">
+                        <input type="number" class="form-control rounded-3" id="qty_needed" placeholder="">
+                        <label for="qty_needed">Qty</label>
                     </div>
 
                     <div class="accordion mt-3 shadow-sm rounded" id="accordionExample">
@@ -406,6 +667,7 @@
                                     <th>#</th>
                                     <th>Output Material </th>
                                     <th>Qty</th>
+                                    <th>Stock Qty</th>
                                     <th>Input Materials</th>
                                     <th>Godown Info</th>
                                 </tr>
@@ -448,6 +710,23 @@
 
             </div>
 
+            <div class="row d-none mt-5" id="stock_section">
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Godowns Need TO Work</div>
+                        <div class="card-body" id="godown_summary"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Materials Stock</div>
+                        <div class="card-body" id="input_parts_summary"></div>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
 

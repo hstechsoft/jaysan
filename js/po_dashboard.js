@@ -591,6 +591,7 @@ $(document).ready(function () {
             "Purchase Qty",
             "DC Person Name",
             "PO.No",
+            "Supplier Name",
             "PO Batch Date",
             "Status",
             "Material Status",
@@ -629,6 +630,7 @@ $(document).ready(function () {
                 row.order_qty + " " + row.uom,
                 row.purchase_req_by,
                 po_no,
+                row.supplier_name || '',
                 row.batch_date,
                 row.status,
                 row.rd == "No Material Received" ? "Not Received" : "Received",
@@ -807,7 +809,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                                 batch += "<li class='list-group-item'><div class='row'><div class='col-6 border' style='font-size:12px'>Batch Date: <b>" + item.batch_date + "</b><br>Po Date: <b>" + item.po_date + "</b><br>Po no: " + item.po_no + "(" + item.po_id + ")" + " " + status + "<br>" + progress + "</div><div class='col-6'><ul class='list-group'>" + receive_detls + "</ul></div></div></li>";
 
                             })
-                            purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><span class='text-danger ps-5'>" + obj.order_qty + obj.uom + "-qty </span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5'>" + obj.status + "</span></li>"
+                            purchase += "<li class='list-group-item'><span class='fw-bold'>" + obj.raw_material_name + "</span><br><span class='text-danger ps-5 float-start'>" + obj.order_qty + obj.uom + "-qty </span><span class='text-success float-end'> " + (obj.supplier_name ?? '') + "</span><br>" + obj.purchase_req_by + "<span class='text-primary text-end ps-5 float-end'>" + obj.status + "</span></li>"
                         }
                         else {
                             batch = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
