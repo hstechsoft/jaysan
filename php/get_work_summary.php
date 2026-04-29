@@ -9,6 +9,18 @@ $process_part_array = json_decode($_POST['process_part_array'], true);
 $dep_id = test_input($_POST['dep_id']);
 $sec_id = test_input($_POST['sec_id']);
 
+
+echo "emp_id: " . $emp_id . "\n";
+echo "qr_work_id: " . $qr_work_id . "\n";
+echo "break_time_array: " . json_encode($break_time_array) . "\n";
+echo "godown_id: " . $godown_id . "\n";
+echo "process_part_array: " . json_encode($process_part_array) . "\n";
+echo "dep_id: " . $dep_id . "\n";
+echo "sec_id: " . $sec_id . "\n";
+
+
+
+
 if($qr_work_id == '')
 {
     $qr_work_id = 0;
