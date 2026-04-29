@@ -167,7 +167,7 @@ inner join jaysan_process jp on jp.process_id = pwt.process
 left join parts_tbl pt on pt.part_id = if(iwp.input_part_id = 0,$part_id,iwp.input_part_id)
 left join process_wel_tbl pwti on pwti.process_id = iwp.previous_process_id
 left join jaysan_process jp_in on jp_in.process_id = pwti.process
-left join jaysan_stock js on iwp.previous_process_id = ifnull(js.process_id,0) and if(iwp.input_part_id = 0,$part_id,iwp.input_part_id) = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
+left join jaysan_stock js on  iwp.previous_process_id <=> js.process_id  and if(iwp.input_part_id = 0,$part_id,iwp.input_part_id) = js.part_id and js.godown = $godown_id and js.dep = $dep_id  
 left join work_time_master wtm on wtm.ori_process_id = pwt.process_id and wtm.machine_id = $machine_id
  WHERE pwt.process_id = $process_id  GROUP BY iwp.input_part_id";
 
