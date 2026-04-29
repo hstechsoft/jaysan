@@ -142,7 +142,15 @@ $(document).ready(function () {
         get_process_summary_inputs(process_id);
         get_process_summary_godown(process_id);
 
-        $("#qty_needed").data("process_id", process_id);
+
+
+        $("#stock_check_box").prop("checked", false);
+        $("#stock_section").addClass("d-none");
+        $("#qty_needed").val('').data("process_id", process_id);
+        $("#qty_needed_field").addClass("d-none");
+
+
+        $("#godown_summary, #input_parts_summary").empty();
     })
 
 
@@ -179,7 +187,15 @@ $(document).ready(function () {
             get_process_summary_inputs(previous_process_id);
             get_process_summary_godown(previous_process_id);
 
-            $("#qty_needed").data("process_id", process_id);
+
+
+            $("#stock_check_box").prop("checked", false);
+            $("#stock_section").addClass("d-none");
+            $("#qty_needed").val('').data("process_id", previous_process_id);
+            $("#qty_needed_field").addClass("d-none");
+
+
+            $("#godown_summary, #input_parts_summary").empty();
 
 
         }
@@ -225,7 +241,12 @@ $(document).ready(function () {
             get_process_summary_inputs(process_id);
             get_process_summary_godown(process_id);
 
-            $("#qty_needed").data("process_id", process_id);
+            $("#stock_check_box").prop("checked", false);
+            $("#stock_section").addClass("d-none");
+            $("#qty_needed").val('').data("process_id", process_id);
+            $("#qty_needed_field").addClass("d-none");
+
+            $("#godown_summary, #input_parts_summary").empty();
 
 
 
@@ -256,6 +277,7 @@ $(document).ready(function () {
 
         if ($("#bom_part_search").data("part_id")) {
             if ($(this).is(":checked")) {
+
                 $("#qty_needed_field").removeClass("d-none");
             } else {
                 $("#qty_needed_field").addClass("d-none");
@@ -276,10 +298,11 @@ $(document).ready(function () {
         if (qty > 0 && process_id > 0) {
 
             $("#stock_section").removeClass("d-none");
-            
-            $('html, body').animate({
-                scrollTop: $("#stock_section").offset().top
-            }, 600);
+
+            document.getElementById("godown_summary")
+                .scrollIntoView({
+                    behavior: "smooth",
+                });
 
             get_real_process_summary_inputs(process_id, qty);
             get_real_process_summary_godown(process_id, qty);
@@ -291,6 +314,56 @@ $(document).ready(function () {
     })
 
 
+    // PDF 
+
+    $("#godown_summary_pdf_btn").click(function () {
+
+        let element = document.getElementById("godown_summary");
+
+        let opt = {
+            margin: .3,
+            filename: 'Godown_Summary.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        };
+
+        html2pdf().set(opt).from(element).save();
+
+    });
+
+
+
+    $("#input_parts_summary_pdf_btn").click(function () {
+
+        let element = document.getElementById("input_parts_summary");
+
+        let opt = {
+            margin: .3,
+            filename: 'Materials_Stock.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        };
+
+        html2pdf().set(opt).from(element).save();
+
+    });
+
 });
 
 
@@ -299,197 +372,6 @@ $(document).ready(function () {
 
 
 
-
-// function get_real_process_summary_godown(process_id, qty) {
-//     $.ajax({
-//         url: "php/get_real_process_summary_godown.php",
-//         type: "get",
-//         data: {
-//             process_id: process_id,
-//             qty_needed: qty,
-
-//         },
-
-//         success: function (response) {
-
-//             if (response.trim() === "error") {
-//                 salert("Error", "Server Error", "error");
-//                 return;
-//             }
-
-//             if (response.trim() === "0 result") {
-//                 $("#bom_process_summary_table").html(
-//                     `<div class="alert alert-warning">No Process Summary Found</div>`
-//                 ).removeClass("d-none");
-//                 return;
-//             }
-//             console.log(response);
-
-//             let data = JSON.parse(response);
-
-//             let html = '';
-
-
-//             /* Compact Top Summary */
-//             html += `
-//                 <div class="d-flex flex-wrap gap-2 mb-3">
-
-//                 <div class="summary-mini shadow-sm">
-//                 <i class="fa-solid fa-indian-rupee-sign"></i>
-//                 <div>
-//                 <small>Total Cost</small>
-//                 <h6>
-//                 ₹ ${data.reduce((a, b) => a + parseFloat(b.total_cost || 0), 0)}
-//                 </h6>
-//                 </div>
-//                 </div>
-
-
-//                 <div class="summary-mini shadow-sm">
-//                 <i class="fa-solid fa-clock"></i>
-//                 <div>
-//                 <small>Max Time</small>
-//                 <h6>
-//                 ${Math.max(...data.map(x => parseInt(x.total_max_time || 0)))} Min
-//                 </h6>
-//                 </div>
-//                 </div>
-
-
-//                 <div class="summary-mini shadow-sm">
-//                 <i class="fa-solid fa-industry"></i>
-//                 <div>
-//                 <small>Places</small>
-//                 <h6>${data.length}</h6>
-//                 </div>
-//                 </div>
-
-//                 </div>
-//                 `;
-
-
-//             html += `<div class="process-timeline">`;
-
-//             data.forEach((item) => {
-
-//                 let processes = JSON.parse(item.process_details);
-
-//                 html += `
-//                     <div class="process-node card shadow-sm mb-3">
-
-//                     <div class="card-header bg-white py-2 px-3">
-
-//                     <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-
-//                     <div>
-//                     <h6 class="mb-1 text-primary fw-bold small">
-//                     <i class="fa-solid fa-building me-1"></i>
-//                     ${item.production_place}
-//                     </h6>
-
-//                     <small class="text-muted">
-//                     ${item.dep_name || '-'}
-//                     ${item.sec_name ? ' • ' + item.sec_name : ''}
-//                     </small>
-//                     </div>
-
-
-//                     <div class="d-flex gap-1">
-
-//                     <span class="badge bg-success small">
-//                     ₹${item.total_cost}
-//                     </span>
-
-//                     <span class="badge bg-warning text-dark small">
-//                     ${item.total_min_time}-${item.total_max_time} Min
-//                     </span>
-
-//                     </div>
-
-//                     </div>
-//                     </div>
-
-
-//                     <div class="card-body p-2">
-//                     `;
-
-
-
-//                 processes.forEach(p => {
-
-//                     html += `
-//                         <div class="process-flow">
-
-//                         <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
-
-//                         <span class="step-badge">
-//                         ${p.level}
-//                         </span>
-
-//                         <strong class="small">
-//                         ${p.process_name}
-//                         </strong>
-
-//                         <span class="badge bg-info">
-//                         Qty ${p.production_qty}
-//                         </span>
-
-//                         </div>
-
-
-
-//                         <div class="output-box">
-//                         <i class="fa-solid fa-arrow-right text-success me-1"></i>
-//                         <b>${p.output_part_name}</b>
-//                         </div>
-
-
-
-//                         <div class="mt-2">
-//                         `;
-
-//                     p.input_details.forEach(inp => {
-
-//                         html += `
-//                             <span class="input-chip">
-//                             <i class="fa-solid fa-cube me-1"></i>
-//                             ${inp.input_part_name}
-//                             (${inp.qty})
-//                             </span>
-//                             `;
-
-//                     });
-
-
-//                     html += `
-//                         </div>
-
-//                         <div class="final-line">
-//                         Final:
-//                         <b>${p.final_part_name}</b>
-//                         </div>
-
-
-//                         </div>
-//                         `;
-
-//                 });
-
-
-//                 html += `
-//                     </div>
-//                     </div>
-//                     `;
-
-//             });
-
-
-//             html += `</div>`;
-
-//             $("#godown_summary").html(html);
-//         }
-//     });
-// }
 
 function get_real_process_summary_godown(process_id, qty) {
     $.ajax({
@@ -513,114 +395,95 @@ function get_real_process_summary_godown(process_id, qty) {
                 );
                 return;
             }
-
             let obj = JSON.parse(response);
 
-            let allProcesses = [];
+            let html = `<div class="row g-3">`;
 
-            // Collect Processes
-            obj.forEach(function (row) {
+            obj.forEach(function (company) {
 
-                let processes = JSON.parse(row.process_details || "[]");
-
-                processes.forEach(function (p) {
-
-                    p.production_place = row.production_place || "N/A";
-                    p.total_cost = row.total_cost || 0;
-                    p.total_min_time = row.total_min_time || 0;
-                    p.total_max_time = row.total_max_time || 0;
-
-                    allProcesses.push(p);
-                });
-
-            });
-
-
-            // sort by level desc
-            allProcesses.sort((a, b) => b.level - a.level);
-
-
-            // group by level
-            let grouped = {};
-
-            allProcesses.forEach(p => {
-                if (!grouped[p.level]) {
-                    grouped[p.level] = [];
-                }
-                grouped[p.level].push(p);
-            });
-
-
-            let html = `
-                    <div class='process-wrapper'>
-                    <div class='row g-3'>
-                    `;
-
-
-            Object.keys(grouped).forEach(level => {
+                let processes = JSON.parse(company.process_details || "[]");
 
                 html += `
-                    <div class="col-md-6 col-12">
-                    <div class="level-box">
+                    <div class="col-lg-6 col-12">
 
-                    <div class="level-head">
-                    ⚙ Process Level ${level}
+                    <div class="company-box">
+
+                    <!-- COMPANY HEADER -->
+                    <div class="company-head">
+                        <div class="company-name">
+                            🏭 ${company.production_place || 'Internal Production'}
+                        </div>
+
+                        <div class="summary-stats">
+
+                            <div class="sum-pill cost">
+                                <small>Total Cost</small>
+                                <b>₹ ${company.total_cost}</b>
+                            </div>
+
+                            <div class="sum-pill time">
+                                <small>Min Time</small>
+                                <b>${company.total_min_time} min</b>
+                            </div>
+
+                            <div class="sum-pill time2">
+                                <small>Max Time</small>
+                                <b>${company.total_max_time} min</b>
+                            </div>
+
+                        </div>
                     </div>
                     `;
 
 
-                grouped[level].forEach(proc => {
+                processes.forEach(function (proc) {
 
                     let inputs = '';
 
                     (proc.input_details || []).forEach(inp => {
 
                         inputs += `
-                            <span class="part-chip">
-                            ${inp.input_part_name}
-                            <span class="qty-badge">${inp.qty}</span>
+                            <div class="input-row">
+                            <span>${inp.input_part_name}</span>
+                            <span class="qty-badge">
+                                Qty ${inp.qty}
                             </span>
+                            </div>
                             `;
 
                     });
 
 
                     html += `
-                        <div class="process-card">
 
-                        <div class="proc-title">
-                        ${proc.process_name}
+                        <div class="process-box">
+
+                        <div class="process-title">
+                        ⚙ ${proc.process_name}
                         </div>
 
+                        <div class="process-stats">
 
-                        <div class="stats">
-
-                        <span class="stat-pill company">
-                        🏭 ${proc.production_place}
+                        <span class="mini-pill">
+                        ₹ ${proc.cost || 0}
                         </span>
 
-                        <span class="stat-pill qty">
-                        📦 Qty ${proc.production_qty}
+                        <span class="mini-pill green">
+                        ${proc.min_time || 0} min
                         </span>
 
-                        <span class="stat-pill time">
-                        ⏱ ${proc.min_time || proc.total_min_time}
-                        -
-                        ${proc.max_time || proc.total_max_time} min
-                        </span>
-
-                        <span class="stat-pill cost">
-                        ₹ ${proc.cost || proc.total_cost}
+                        <span class="mini-pill orange">
+                        ${proc.max_time || 0} min
                         </span>
 
                         </div>
 
-
-                        <div class="inputs">
-                        ${inputs || '<span class="text-muted">No Inputs</span>'}
+                        <div class="inputs-box">
+                        ${inputs}
                         </div>
 
                         </div>
+
                         `;
 
                 });
@@ -633,14 +496,9 @@ function get_real_process_summary_godown(process_id, qty) {
 
             });
 
+            html += `</div>`;
 
-            html += `
-                </div>
-                </div>
-                `;
-
-            $("#godown_summary")
-                .html(html);
+            $("#godown_summary").html(html);
         }
     });
 }

@@ -290,72 +290,51 @@
 
         /* Godown Summary */
 
-        .process-wrapper {
-            font-size: 13px;
-        }
-
-        .level-box {
+        .company-box {
             background: #fff;
             border: 1px solid #dfe7ef;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 5px;
-            margin-bottom: 0px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
             height: 100%;
         }
 
-        .level-head {
-            font-weight: 700;
-            font-size: 14px;
-            color: #0d6efd;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 4px;
+        .company-head {
+            border-bottom: 1px solid #ececec;
+            padding-bottom: 5px;
             margin-bottom: 5px;
         }
 
-        .process-card {
-            background: #f8fbff;
-            border-radius: 10px;
-            padding: 5px;
-            margin-bottom: 10px;
-            border-left: 4px solid #0d6efd;
-        }
-
-        .proc-title {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
-        .stat-pill {
-            background: white;
-            border: 1px solid #d7e2ef;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-        }
-
-        .company {
-            background: #eef4ff;
+        .company-name {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 5px;
             color: #0d6efd;
-            font-weight: 600;
         }
 
-        .qty {
-            background: #fff7e6;
-            color: #ad6800;
+        .summary-stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .time {
-            background: #edfdf4;
-            color: #0f8a42;
+        .sum-pill {
+            flex: 1;
+            min-width: 110px;
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .sum-pill small {
+            display: block;
+            font-size: 10px;
+            opacity: .7;
+        }
+
+        .sum-pill b {
+            display: block;
+            font-size: 13px;
         }
 
         .cost {
@@ -363,40 +342,88 @@
             color: #cf1322;
         }
 
-        .inputs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+        .time {
+            background: #edfdf4;
+            color: #0f8a42;
         }
 
-        .part-chip {
+        .time2 {
+            background: #eef4ff;
+            color: #0d6efd;
+        }
+
+        .process-box {
+            background: #f8fbff;
+            border-left: 4px solid #0d6efd;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .process-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .process-stats {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .mini-pill {
             background: white;
-            border: 1px solid #cfd8e3;
-            border-radius: 20px;
+            border: 1px solid #d8e0ea;
             padding: 4px 8px;
+            border-radius: 20px;
             font-size: 11px;
+        }
+
+        .green {
+            background: #edfdf4;
+            border: none;
+        }
+
+        .orange {
+            background: #fff7e6;
+            border: none;
+        }
+
+        .inputs-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 11px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .input-row:last-child {
+            border-bottom: none;
         }
 
         .qty-badge {
             background: #0d6efd;
-            color: white;
-            padding: 1px 6px;
-            border-radius: 10px;
-            margin-left: 4px;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
             font-size: 10px;
         }
 
         @media(max-width:768px) {
-            .process-card {
-                padding: 8px;
+            .company-name {
+                font-size: 13px;
             }
 
-            .proc-title {
+            .process-title {
                 font-size: 12px;
-            }
-
-            .stat-pill {
-                font-size: 10px;
             }
         }
 
@@ -714,14 +741,14 @@
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">Godowns Need TO Work</div>
+                        <div class="card-header">Godowns Need TO Work <button class="btn btn-success float-end" id="godown_summary_pdf_btn"><i class="fa-regular fa-file-pdf fa-bounce"></i></button></div>
                         <div class="card-body" id="godown_summary"></div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">Materials Stock</div>
+                        <div class="card-header" >Materials Stock <button class="btn btn-success float-end" id="input_parts_summary_pdf_btn"><i class="fa-regular fa-file-pdf fa-bounce"></i></button></div>
                         <div class="card-body" id="input_parts_summary"></div>
                     </div>
                 </div>
@@ -792,6 +819,9 @@
 
     <!-- ApexCharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- external js -->
     <script src="js/bom_map.js" type="module"></script>
