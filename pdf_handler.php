@@ -54,8 +54,16 @@ $options->set('defaultFont', 'DejaVu Sans');
 $dompdf = new Dompdf($options);
 
 // ========= Load External CSS =========
-$cssPath = __DIR__ . '/invoice_style.css';
-$css = file_exists($cssPath) ? file_get_contents($cssPath) : '';
+
+$bootstrapPath = __DIR__ . '/bootstrap.min.css';
+$invoiceCssPath = __DIR__ . '/invoice_style.css';
+
+$bootstrapCss = file_exists($bootstrapPath) ? file_get_contents($bootstrapPath) : '';
+$customCss = file_exists($invoiceCssPath) ? file_get_contents($invoiceCssPath) : '';
+
+$css = $bootstrapCss . "\n" . $customCss;
+// $cssPath = __DIR__ . '/invoice_style.css';
+// $css = file_exists($cssPath) ? file_get_contents($cssPath) : '';
 
 $css = str_replace(
     ['80px', '40px', '50px', '40px'],

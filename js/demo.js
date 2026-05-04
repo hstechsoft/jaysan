@@ -231,13 +231,13 @@ $(document).ready(function () {
 
 
     $('#print_button').on('click', function () {
-
+        
         var dcf_id = $(this).val();
 
         if (window.AndroidBridge) {
             // You are inside the Android App
             console.log("App detected");
-alert("App detected")
+            
 
 
             event.preventDefault();
@@ -307,7 +307,7 @@ alert("App detected")
         } else {
             // You are in a regular mobile or desktop browser
             console.log("Browser detected");
-alert("Browser detected")
+            
             print()
         }
 
