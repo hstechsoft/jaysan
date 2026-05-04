@@ -1,5 +1,5 @@
 @page {
-    margin: 80px 40px 50px 40px;
+    margin: 30px 20px 30px 20px;
 }
 
 body {
@@ -78,9 +78,283 @@ td:first-child {
     padding-left: 84%;
 }
 
-#dsa{
+#dsa {
     text-align: start;
 }
-#hess{
+
+#hess {
+    text-align: center;
+}
+
+
+
+
+
+/* =========================
+   CARD
+========================= */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.card-header {
+    text-align: center;
+    font-weight: 600;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+}
+
+.card-body {
+    padding: 5px;
+    text-transform: capitalize;
+}
+
+/* =========================
+   FLEX SYSTEM
+========================= */
+.d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+}
+
+.gap-1 {
+    gap: 3px;
+}
+
+/* =========================
+   TEXT
+========================= */
+.small {
+    font-size: 10px;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+.text-start {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}
+
+/* =========================
+   BACKGROUND COLORS
+========================= */
+.text-bg-light {
+    background: #f8f9fa;
+}
+
+.text-bg-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* =========================
+   BORDER
+========================= */
+.border {
+    border: 1px solid #ccc;
+}
+
+.border-1 {
+    border-width: 1px;
+}
+
+.border-dark {
+    border-color: #000;
+}
+
+.border-opacity-50 {
+    opacity: 0.8;
+}
+
+/* =========================
+   SPACING
+========================= */
+.mt-2 {
+    margin-top: 5px;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.p-0 {
+    padding: 0;
+}
+
+.p-2 {
+    padding: 5px;
+}
+
+.ps-1 {
+    padding-left: 2px;
+}
+
+.my-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.text-bg-warning {
+    color: #000 ;
+    background-color: RGBA(255, 193, 7, var(--bs-bg-opacity, 1)) ;
+}
+
+/* =========================
+   IMAGE
+========================= */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+/* =========================
+   TABLE
+========================= */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.table-sm td,
+.table-sm th {
+    padding: 4px;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: 1px solid black;
+}
+
+/* =========================
+   RESPONSIVE TABLE
+========================= */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* =========================
+   POSITION
+========================= */
+.position-relative {
+    position: relative;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.btn {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+
+/* WATERMARK */
+
+.table-watermark-wrapper {
+    position: relative;
+}
+
+.dcf-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 70px;
+    font-weight: 800;
+    color: rgba(255 0 24 / 46%);
+    /* Bootstrap danger color */
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-transform: uppercase;
+}
+
+/* Optional sliding animation */
+@keyframes slideWatermark {
+    0% {
+        transform: translate(-60%, -50%) rotate(-30deg);
+    }
+
+    100% {
+        transform: translate(-40%, -50%) rotate(-30deg);
+    }
+}
+
+.dcf-watermark {
+    animation: slideWatermark 3s ease-in-out infinite alternate;
+}
+
+@media (max-width: 1024px) {
+    .dcf-watermark {
+        font-size: 50px;
+    }
+}
+
+@media (max-width: 767px) {
+    .dcf-watermark {
+        font-size: 30px;
+    }
+
+    table {
+        font-size: 10px;
+        padding: 4px;
+    }
+}
+
+@media (max-width: 539px) {
+    .dcf-watermark {
+        font-size: 25px;
+    }
+
+    table {
+        font-size: 10px;
+        padding: 3px;
+    }
+}
+
+.justify-content-center {
     text-align: center;
 }
