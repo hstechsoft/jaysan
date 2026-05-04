@@ -237,7 +237,7 @@ $(document).ready(function () {
         if (window.AndroidBridge) {
             // You are inside the Android App
             console.log("App detected");
-
+alert("App detected")
 
 
             event.preventDefault();
@@ -268,9 +268,9 @@ $(document).ready(function () {
                 },
                 success: function (res) {
 
-                    let blob = new Blob([data], { type: 'application/pdf' });
-                    let url = URL.createObjectURL(blob);
-                    window.open(url);
+                    // let blob = new Blob([data], { type: 'application/pdf' });
+                    // let url = URL.createObjectURL(blob);
+                    // window.open(url);
                     // 'res' is the PDF blob
                     const reader = new FileReader();
                     reader.onloadend = function () {
@@ -307,6 +307,7 @@ $(document).ready(function () {
         } else {
             // You are in a regular mobile or desktop browser
             console.log("Browser detected");
+alert("Browser detected")
             print()
         }
 
