@@ -32,6 +32,8 @@ body {
 
 
 
+
+
 /* === Invoice Table === */
 table {
     border-collapse: collapse;
@@ -42,7 +44,7 @@ table {
 th,
 td {
     border: 1px solid #ccc;
-    padding: 6px;
+    /* padding: 6px; */
     text-align: left;
     font-size: 10px;
 
