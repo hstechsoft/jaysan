@@ -128,6 +128,197 @@
         }
 
 
+        /* =========================
+   CARD
+========================= */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .card-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            background: #f8f9fa;
+        }
+
+        .card-body {
+            padding: 10px;
+            text-transform: capitalize;
+        }
+
+        /* =========================
+   FLEX SYSTEM
+========================= */
+        .d-flex {
+            display: flex;
+            align-items: center;
+        }
+
+        .justify-content-center {
+            justify-content: center;
+        }
+
+        .justify-content-start {
+            justify-content: flex-start;
+        }
+
+        .gap-1 {
+            gap: 5px;
+        }
+
+        /* =========================
+   TEXT
+========================= */
+        .small {
+            font-size: 12px;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .text-start {
+            text-align: left;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-capitalize {
+            text-transform: capitalize;
+        }
+
+        /* =========================
+   BACKGROUND COLORS
+========================= */
+        .text-bg-light {
+            background: #f8f9fa;
+        }
+
+        .text-bg-secondary {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        /* =========================
+   BORDER
+========================= */
+        .border {
+            border: 1px solid #ccc;
+        }
+
+        .border-1 {
+            border-width: 1px;
+        }
+
+        .border-dark {
+            border-color: #000;
+        }
+
+        .border-opacity-50 {
+            opacity: 0.8;
+        }
+
+        /* =========================
+   SPACING
+========================= */
+        .mt-2 {
+            margin-top: 10px;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .m-0 {
+            margin: 0;
+        }
+
+        .p-0 {
+            padding: 0;
+        }
+
+        .p-2 {
+            padding: 8px;
+        }
+
+        .ps-1 {
+            padding-left: 5px;
+        }
+
+        .my-auto {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        /* =========================
+   IMAGE
+========================= */
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* =========================
+   TABLE
+========================= */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .table-sm td,
+        .table-sm th {
+            padding: 4px;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 1px solid black;
+        }
+
+        /* =========================
+   RESPONSIVE TABLE
+========================= */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* =========================
+   POSITION
+========================= */
+        .position-relative {
+            position: relative;
+        }
+
+        /* =========================
+   BUTTON
+========================= */
+        .btn {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        .btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
 
         /* WATERMARK */
 
@@ -367,7 +558,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <h6>Customer</h6>
-                            <button class="btn btn-outline-danger border-0 btn-sm fa-pencil" > <i class="fa fa-pencil"
+                            <button class="btn btn-outline-danger border-0 btn-sm fa-pencil"> <i class="fa fa-pencil"
                                     aria-hidden="true"></i> </button>
                         </div>
                         <div class="card-body">
@@ -452,7 +643,8 @@
                     <div class="card mb-2">
                         <div class="card-header">
                             Product
-                            <button type='submit' class='btn btn-success float-end ' data-bs-toggle="modal" data-bs-target="#extraProductModal" >+</button>
+                            <button type='submit' class='btn btn-success float-end ' data-bs-toggle="modal"
+                                data-bs-target="#extraProductModal">+</button>
                         </div>
                         <div class="card-body" style="overflow-x: auto;">
                             <table id='sales_pro_table1'
@@ -976,12 +1168,14 @@
 
 
 
-    <div class="modal fade" id="extraProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="extraProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="extraProductModalLabel">Add Products</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="close_modal_btn" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" id="close_modal_btn"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-floating mb-2">
