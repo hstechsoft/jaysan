@@ -465,15 +465,13 @@ function captureWithDbData() {
   console.log("capture");
 
   var params = {
-    "user_id": current_user_id,
-    "action_type": "lead_proof",
-    "remark": "Marketing Leads"
+    "emp_name": current_user_name,
   };
 
   if (window.AndroidBridge) {
     // Kotlin will take the photo, compress it, 
     // and include these params in the POST request to app_upload.php
-    AndroidBridge.takePhoto(JSON.stringify(params), current_user_name);
+    AndroidBridge.takePhoto(JSON.stringify(params), 'https://jaysan.cloud/upload_lead_attachment.php');
   }
 }
 
