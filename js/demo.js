@@ -234,7 +234,7 @@ $(document).ready(function () {
         
         var dcf_id = $(this).val();
 
-        if (window.AndroidBridge) {
+        // if (window.AndroidBridge) {
             // You are inside the Android App
             console.log("App detected");
             
@@ -304,12 +304,12 @@ $(document).ready(function () {
                 }
             });
 
-        } else {
-            // You are in a regular mobile or desktop browser
-            console.log("Browser detected");
+        // } else {
+        //     // You are in a regular mobile or desktop browser
+        //     console.log("Browser detected");
             
-            print()
-        }
+        //     print()
+        // }
 
     });
 
