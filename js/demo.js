@@ -496,7 +496,7 @@ function get_dcf_details(dcf_id) {
 
                         if (obj.sts == "invoice" || obj.sts == "delivery") {
                             $(".dcf-watermark")
-                                .html(`<i class="fa-solid fa-thumbs-up me-2"></i>DCF APPROVED`)
+                                .html(`<i class="fa-solid fa-thumbs-up me-2"></i>✅DCF APPROVED`)
                                 .css("color", "rgb(17 200 8 / 42%)");
                         }
 

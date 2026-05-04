@@ -732,11 +732,11 @@ function get_bal_payment() {
             count = count + 1;
             var tot_amt = $("#sptable tr:last").find("td").eq(2).html();
 
-            var ic = "<i class='text-success fa-solid fa-thumbs-up'></i>"
+            var ic = "<i class='text-success fa-solid fa-thumbs-up'></i>✅"
             console.log(parseInt(obj.balance));
 
             if (parseInt(tot_amt) > parseInt(obj.balance)) {
-              ic = "<i class='text-danger fa-solid fa-thumbs-down'></i>"
+              ic = "<i class='text-danger fa-solid fa-thumbs-down'></i>❌"
             }
 
             var formatter = new Intl.NumberFormat('en-IN', {
