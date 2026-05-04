@@ -13,14 +13,14 @@ import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebase
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyArBOz33-zRE8lMCj7d8mlzytL4hH6OSNQ",
-    authDomain: "jaysan-8fa8d.firebaseapp.com",
-    databaseURL: "https://jaysan-8fa8d-default-rtdb.firebaseio.com",
-    projectId: "jaysan-8fa8d",
-    storageBucket: "jaysan-8fa8d.appspot.com",
-    messagingSenderId: "1077120566221",
-    appId: "1:1077120566221:web:17e8bd20996c16bcc8fa84",
-    measurementId: "G-6JNJZT1YCV"
+  apiKey: "AIzaSyArBOz33-zRE8lMCj7d8mlzytL4hH6OSNQ",
+  authDomain: "jaysan-8fa8d.firebaseapp.com",
+  databaseURL: "https://jaysan-8fa8d-default-rtdb.firebaseio.com",
+  projectId: "jaysan-8fa8d",
+  storageBucket: "jaysan-8fa8d.appspot.com",
+  messagingSenderId: "1077120566221",
+  appId: "1:1077120566221:web:17e8bd20996c16bcc8fa84",
+  measurementId: "G-6JNJZT1YCV"
 };
 
 
@@ -30,27 +30,27 @@ const db = getDatabase(app);
 const demoRef = ref(db, 'demo');
 
 onValue(demoRef, (snapshot) => {
-    if (snapshot.exists()) {
-        const data = snapshot.val();
-        console.log(data);
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+    console.log(data);
 
-        // Example: access name
-        console.log(data.name); // harish
-    } else {
-        console.log("No data found");
-    }
+    // Example: access name
+    console.log(data.name); // harish
+  } else {
+    console.log("No data found");
+  }
 });
 
 window.onLocationReceived = function (lat, lng) {
-    console.log("GPS Location received:", lat, lng);
+  console.log("GPS Location received:", lat, lng);
 
-    // Example: Show it in an alert or update your UI
-    // alert("Latitude: " + lat + "\nLongitude: " + lng);
+  // Example: Show it in an alert or update your UI
+  // alert("Latitude: " + lat + "\nLongitude: " + lng);
 
-    // You can now use lat and lng for your business logic
-    // For example, update a hidden input or send to your server via AJAX
-    $("#lat_input").val(lat);
-    $("#lng_input").val(lng);
+  // You can now use lat and lng for your business logic
+  // For example, update a hidden input or send to your server via AJAX
+  $("#lat_input").val(lat);
+  $("#lng_input").val(lng);
 };
 
 // End Update
@@ -464,14 +464,28 @@ function uploadPdf() {
 function captureWithDbData() {
   console.log("capture");
 
-  var params = {
-    "emp_name": current_user_name,
-  };
+  // var params = {
+  //   "emp_name": current_user_name,
+  // };
+
+  // if (window.AndroidBridge) {
+  //   // Kotlin will take the photo, compress it, 
+  //   // and include these params in the POST request to app_upload.php
+  //   AndroidBridge.takePhoto(JSON.stringify(params), 'https://jaysan.cloud/upload_lead_attachment.php');
+  // }
+
 
   if (window.AndroidBridge) {
-    // Kotlin will take the photo, compress it, 
-    // and include these params in the POST request to app_upload.php
-    AndroidBridge.takePhoto(JSON.stringify(params), 'https://jaysan.cloud/upload_lead_attachment.php');
+    // Data you want to save in your MySQL DB along with the file
+    var dbParams = JSON.stringify({
+      "emp_name": current_user_name,
+    });
+
+    // Optional: Override the default upload URL
+    var uploadUrl = 'https://jaysan.cloud/upload_lead_attachment.php';
+
+    // Call the app's camera
+    window.AndroidBridge.takePhoto(dbParams, uploadUrl);
   }
 }
 
