@@ -145,15 +145,23 @@ $(document).ready(function () {
                     body_html: encodedHtml,
                     orientation: "portrait",
                     paper_size: "A4",
-                    stream: "no",
+                    stream: "yes",
                     // email_to: "sanjay040611@gmail.com",
                     // email_subject: "Invoice #1001",
                     // email_body: "Hello, please find attached your invoice.",
                     pdf_password: "",        // optional
                     watermark_text: ""       // optional
                 },
+
+                xhrFields: {
+                    responseType: 'blob'   // IMPORTANT
+                },
                 success: function (res) {
+
                     //console.log(res);
+                    let blob = new Blob([res], { type: 'application/pdf' });
+                    let url = URL.createObjectURL(blob);
+                    window.open(url);
 
                     insert_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_no);
                 },
@@ -232,6 +240,7 @@ $(document).ready(function () {
 
 
 
+
                 data: {
                     save_path: "storage/purchase_order/po_" + company_con,
                     file_name: "po_" + company_con,
@@ -241,15 +250,21 @@ $(document).ready(function () {
                     body_html: encodedHtml,
                     orientation: "portrait",
                     paper_size: "A4",
-                    stream: "no",
+                    stream: "yes",
                     // email_to: "sanjay040611@gmail.com",
                     // email_subject: "Invoice #1001",
                     // email_body: "Hello, please find attached your invoice.",
                     pdf_password: "",        // optional
                     watermark_text: ""       // optional
                 },
+                xhrFields: {
+                    responseType: 'blob'   // IMPORTANT
+                },
                 success: function (res) {
-                    //console.log(res);
+                    let blob = new Blob([res], { type: 'application/pdf' });
+                    let url = URL.createObjectURL(blob);
+                    window.open(url);
+                    // console.log(res);
 
                     update_purchase_order(po_order_to, po_delivery_to, po_terms, po_materials, "1", res.download_url, po_id, po_no);
                 },
