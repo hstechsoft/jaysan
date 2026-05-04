@@ -1,4 +1,7 @@
 <?php
+
+ini_set('display_errors', 0);
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Dompdf\Dompdf;
@@ -23,7 +26,8 @@ $params = [
     'email_to'      => $_POST['email_to'] ?? '',
     'email_subject' => $_POST['email_subject'] ?? 'Invoice',
     'email_body'    => $_POST['email_body'] ?? 'Please find your invoice attached.',
-    'watermark_text'=> $_POST['watermark_text'] ?? ''
+    'watermark_text'=> $_POST['watermark_text'] ?? '',
+    'stream'         => $_POST['stream'] ?? 'no'
 ];
 
 // ========= Prepare Save Path =========
@@ -81,7 +85,7 @@ $css
 <body>
   $watermarkHtml
   <div class='header'>{$params['header_html']}</div>
-  <div class='footer'>{$params['footer_html']}<br>Page {PAGE_NUM} of {PAGE_COUNT}</div>
+  <div class='footer'>{$params['footer_html']}</div>
   <main>{$params['body_html']}</main>
 </body>
 </html>";
@@ -97,19 +101,49 @@ $pageCount = $canvas->get_page_count();
 $font = $dompdf->getFontMetrics()->getFont("DejaVu Sans", "normal");
 $fontSize = 10;
 
-for ($i = 1; $i < $pageCount; $i++) {
-    $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $font, $fontSize) {
-        if ($pageNumber < $pageCount) {
-            $width = $canvas->get_width();
-            $height = $canvas->get_height();
-            $text = "To be continued...";
-            $textWidth = $canvas->getTextWidth($text, $font, $fontSize);
-            $x = ($width - $textWidth) / 2;
-            $y = $height - 30; // Position 30px from bottom
-            $canvas->text($x, $y, $text, $font, $fontSize);
-        }
-    }, $font, $fontSize);
-}
+
+
+$canvas = $dompdf->getCanvas();
+$fontMetrics = $dompdf->getFontMetrics();
+$font = $fontMetrics->getFont("DejaVu Sans", "normal");
+$fontSize = 6;
+
+$canvas->page_text(
+    520, 810,   // adjust position (right bottom)
+    "Page {PAGE_NUM} / {PAGE_COUNT}",
+    $font,
+    $fontSize
+);
+
+// $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
+
+//     if ($pageNumber < $pageCount) {
+
+//         $font = $fontMetrics->getFont("DejaVu Sans", "normal");
+//         $fontSize = 7;
+
+//         $width = $canvas->get_width();
+//         $height = $canvas->get_height();
+
+//         $footerSpace = 60; // adjust based on your footer
+
+//         // // 🔹 Center text
+//         // $text1 = "To be continued...";
+//         // $text1Width = $fontMetrics->getTextWidth($text1, $font, $fontSize);
+//         // $x1 = ($width - $text1Width) / 2;
+//          $y = $height - $footerSpace;
+
+//         // $canvas->text($x1, $y, $text1, $font, $fontSize);
+
+//         // 🔹 Right corner page number
+//         $text2 = "Page $pageNumber / $pageCount";
+//         $text2Width = $fontMetrics->getTextWidth($text2, $font, $fontSize);
+
+//         $x2 = $width - $text2Width - 50; // 20px padding from right
+
+//         $canvas->text($x2, $y, $text2, $font, $fontSize);
+//     }
+// });
 
 // ========= Save File =========
 $pdfOutput = $dompdf->output();
@@ -146,8 +180,17 @@ if (!empty($params['email_to'])) {
 } else {
     $email_status = '📄 File saved (email not sent)';
 }
-
+// if stream is yes, output PDF directly to browser
+if (strtolower($params['stream']) === 'yes') {
+      ob_end_clean(); // VERY IMPORTANT
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: inline; filename="' . basename($params['save_path']) . '"');
+    echo $pdfOutput;
+   
+}
+else
 // ========= Return JSON =========
+{
 header('Content-Type: application/json');
 echo json_encode([
     'status' => 'ok',
@@ -156,3 +199,4 @@ echo json_encode([
     'file_path' => $params['save_path'],
     'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
 ]);
+}
