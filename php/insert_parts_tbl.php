@@ -60,7 +60,7 @@ $part_id = 0;
       $rack = ($stock_master['rack']);
       $bin = ($stock_master['bin']);
 
-      $sql_stock_master = "INSERT INTO sec_stock_master (part_id, store_id, store_type, min_qty, max_qty, rack, bin,part_id) VALUES ('$part_id', '$store_id', '$store_type', '$min_qty', '$max_qty', '$rack', '$bin','$part_id')";
+      $sql_stock_master = "INSERT INTO sec_stock_master (part_id, store_id, store_type, min_qty, max_qty, rack, bin) VALUES ('$part_id', '$store_id', '$store_type', '$min_qty', '$max_qty', '$rack', '$bin')";
       if ($conn->query($sql_stock_master) !== TRUE) {
           echo "Error: " . $sql_stock_master . "<br>" . $conn->error;
       }
