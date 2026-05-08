@@ -180,14 +180,38 @@ if($paymentDetails != 0)
       $payment_date = $payment['payment_date'];
         $utr_no = $payment['utr_no'];
         // $advance_deposite = $payment['advance_deposite'];
-    
+    // get admin role employee firebase_uid and send fcm notification to admin about new order
 
+    $sql_get_admin_firebase_uid = "SELECT firebase_uid FROM employee WHERE emp_role = 'admin'";
+    $result = $conn->query($sql_get_admin_firebase_uid);
+    $admin_firebase_uids = [];
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $admin_firebase_uids[] = $row["firebase_uid"];
+        }
+    }
+
+    // get employee firebase_uid and send fcm notification to employee about new order
+    $sql_get_employee_firebase_uid = "SELECT firebase_uid FROM employee WHERE emp_id = $emp_id";
+    $result = $conn->query($sql_get_employee_firebase_uid);
+    $employee_firebase_uid = null;
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $employee_firebase_uid = $row["firebase_uid"];
+        }
+    }
+
+ require __DIR__ . '/send_fcm.php';
+    $title = "Payment Approval: $order_no";
+    $body = "A payment of amount $amount has been made for order number $order_no. Please review and approve the payment.";
+    $url = "https://jaysan.cloud/sales_payment_approval.html";
   
       $sql_insert_payment = "INSERT INTO jaysan_payment ( amount, payment_date, oid, ref_no, sts,utr_no) VALUES ( '$amount','$payment_date','$oid', '$ref_no', 'not_approve','$utr_no');";
 
       if ($conn->query($sql_insert_payment) === TRUE) {
           $payment_id = $conn->insert_id;
-
+  send_fcm($admin_firebase_uids, $title, $body, $url);
+   
   //      if($advance_deposite > 0)
   //      {
   //  $sql_insert_advance_deposite = "INSERT INTO sale_payment_advance (payment_id,amount,oid,cus_id,advance_ref_id) VALUES ($payment_id,$advance_deposite,$oid,$customer_id,null)";

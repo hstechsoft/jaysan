@@ -3,7 +3,7 @@
 
  
 
- 
+ $part_id = test_input($_GET['part_id']);
  
 function test_input($data) {
 $data = trim($data);
@@ -14,7 +14,7 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM parts_tbl limit 1 ";
+ $sql = "SELECT * FROM parts_tbl WHERE part_id = $part_id";
 
 $result = $conn->query($sql);
 
