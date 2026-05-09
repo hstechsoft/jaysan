@@ -31,7 +31,7 @@ $gstdetails = test_input($_POST['gstdetails']);
 $type_of_supply = test_input($_POST['type_of_supply']);
 $part_id = test_input($_POST['part_id']);
 
-
+echo $item_grade;
  
  
 function test_input($data) {
