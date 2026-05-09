@@ -75,7 +75,8 @@ $part_id = 0;
 $file_name = '';
 //  $file_name = $_POST['file_name'];
 if($_FILES['file']['name'] != ''){
-  
+  // remove '' from part_no
+  $part_no = str_replace("'", "", $part_no);
 // get file extension
         $FileType = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
         $file_name = $part_no."_".$part_id . "." . $FileType; // Rename file to part_id.extension    
