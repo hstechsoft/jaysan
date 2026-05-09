@@ -35,7 +35,7 @@ $stock_master_json = $_POST['stock_master'];
  $stock_master_json = json_decode($stock_master_json, true);
 
 
- 
+ echo $item_grade;
  
 function test_input($data) {
 $data = trim($data);
