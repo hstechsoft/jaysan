@@ -19,24 +19,36 @@ $result = $conn->query($sql);
 $rows = array();
 $rows['tally_transactions'] = [];
 
+// if ($result->num_rows > 0) {
+
+//     while ($r = $result->fetch_assoc()) {
+
+//         if (!empty($r['json_data'])) {
+//             $decoded = json_decode($r['json_data'], true);
+
+//             if (json_last_error() === JSON_ERROR_NONE) {
+//                 $r['json_data'] = $decoded;
+//             }
+//         }
+
+//         $rows['tally_transactions'][] = $r;
+//     }
+// }
+
+
+
+
 if ($result->num_rows > 0) {
-
-    while ($r = $result->fetch_assoc()) {
-
-        if (!empty($r['json_data'])) {
-            $decoded = json_decode($r['json_data'], true);
-
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $r['json_data'] = $decoded;
-            }
-        }
-
-        $rows['tally_transactions'][] = $r;
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] =json_decode($r['json_data'], true);
     }
+  
+} else {
+  echo "0 result";
 }
-
 header('Content-Type: application/json');
-echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
+ echo json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+//   print json_encode($rows);
 $conn->close();
 ?>
