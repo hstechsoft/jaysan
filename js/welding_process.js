@@ -1,3 +1,10 @@
+const urlParams = new URLSearchParams(window.location.search);
+
+const part_id = urlParams.get('part_id');
+const part_name = urlParams.get('part_name');
+
+
+
 
 var cus_id = '0';
 var issaved = 'yes'
@@ -521,6 +528,20 @@ $(document).ready(function () {
 
   });
 
+
+  if (part_id && part_name) {
+
+    $("#part_name_out")
+      .val(part_name)
+      .data("selected-part_id", part_id);
+
+    $('#part_no_out').data("selected-part_id", part_id);
+
+    get_bom_list(part_id);
+    get_bom_list_comp(part_id);
+
+  }
+
   $('#part_no_out').on('input', function () {
     //check the value not empty
     clear();
@@ -634,6 +655,7 @@ $(document).ready(function () {
   $('#part_name_out').on('input', function () {
     //check the value not empty
     clear();
+
     if ($('#part_name_out').val() != "") {
       $('#part_name_out').autocomplete({
         //get data from database return as array of object which contain label,value
@@ -1604,7 +1626,7 @@ $(document).ready(function () {
         $("#process_list").append("<li class='list-group-item' data-in_previous_process_id=" + obj.process_id + ">" + obj.process + "</li>")
 
         $("#close_btn").data({ "part_no": $(this).data('part_no'), "part_id": part_id, "part_name": $(this).data('part_name') })
-        
+
       })
     } else {
       $("#add_part_btn").val('').data("process", '').trigger("click");
@@ -1623,7 +1645,7 @@ $(document).ready(function () {
   })
 
   $("#process_modal_close_btn").click(function () {
-    
+
     $("#add_part_btn").val('').data("process", $(this).text().trim()).trigger("click");
     // $("#process_modal").modal("hide");
 

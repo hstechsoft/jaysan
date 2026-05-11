@@ -672,11 +672,13 @@ function get_jaysan_payment() {
 
           var obj = JSON.parse(response);
           var count = 0
+          var advance  = ''
 
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td colspan='2'>" + obj.date_f + "</td><td  colspan='2'>" + obj.amount + "</td></tr>")
+            advance = (obj.pay_sts == 'advance') ? `<strong class="text-primary blink ">Advance Payment</strong>` : '';
+            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td>" + obj.ref_no + "</td><td>" + obj.utr_no + "</td><td colspan=''>" + obj.date_f + " " +advance+ "</td><td  colspan=''>" + obj.amount + "</td><td>" + obj.sts + "</td></tr>")
 
           });
 

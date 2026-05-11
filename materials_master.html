@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-size: 13px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            margin-bottom: 15px;
+        }
+
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #ececec;
+            padding: 10px 15px;
+            font-weight: 600;
+        }
+
+        .card-body,
+        .card-footer {
+            padding: 12px;
+        }
+
+        h6 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .form-floating>.form-control,
+        .form-floating>.form-select {
+            height: 48px;
+            min-height: 48px;
+            font-size: 13px;
+        }
+
+        .form-floating>label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px !important;
+            border: 1px solid #dcdcdc;
+            box-shadow: none !important;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 10px #0d6efd !important;
+        }
+
+        .table {
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background: #f7f7f7;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* .alise_table {
+            max-height: 170px;
+            overflow: auto;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+        } */
+
+        #add_alise_name {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            padding: 0;
+            margin-bottom: 4px;
+        }
+
+        hr {
+            margin: 12px 0;
+            opacity: .25;
+        }
+
+        #parts_search {
+            width: 130px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        #parts_list {
+            max-height: 570px;
+            overflow: auto;
+        }
+
+        #parts_list .list-group-item {
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 5px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        #parts_list .list-group-item:hover {
+            background: #f8f9fa;
+        }
+
+        #parts_list .list-group-item {
+            transition:
+                background-color 0.35s ease,
+                box-shadow 0.35s ease,
+                transform 0.35s ease;
+        }
+
+        #parts_list .list-group-item:hover {
+            background-color: #9ec1f5 !important;
+            box-shadow: 13px 13px 20px 0px #3788ff !important;
+            transform: translate(-6px, -6px);
+        }
+
+        textarea.form-control {
+            min-height: 110px !important;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .form-floating>.form-select {
+            padding-top: 1.625rem;
+            padding-bottom: 0;
+        }
+
+        .form-check-input {
+            cursor: pointer;
+        }
+
+        @media(max-width:768px) {
+
+            .row>div {
+                margin-bottom: 10px;
+            }
+
+            .d-flex {
+                flex-wrap: wrap;
+            }
+
+            #parts_search {
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .card {
+                margin-bottom: 12px;
+            }
+
+        }
+
+
+        /* Godown Modal */
+        #godown_list .list-group-item {
+            transition: all 0.25s ease;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        #godown_list .list-group-item:hover {
+            background-color: #eef5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(13, 110, 253, 0.15);
+        }
+
+        #godown_search {
+            border: 1px solid #dbe5f1;
+        }
+
+        .godown_qty {
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .godown_checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+
+        /* opening balance modal 
+        .cursor-pointer {
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .cursor-pointer:hover {
+            transform: translateY(-2px);
+            background: #f8f9fa;
+        }
+
+        .opening_godown_item.active {
+            border-color: #0d6efd !important;
+            background: rgba(13, 110, 253, 0.08);
+        }
+
+        #opening_balance_godown_list_select::-webkit-scrollbar,
+        #opening_balance_godown_details::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #opening_balance_godown_list_select::-webkit-scrollbar-thumb,
+        #opening_balance_godown_details::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 10px;
+        } */
+
+        /* Model Auto complete */
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+
+        .ui-autocomplete-input {
+            position: relative;
+            z-index: 1051 !important;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
+        <!-- top bar -->
+
+
+        <div class=" page-wrapper mt-5 mt-md-0">
+
+            <div class="row">
+
+                <div class="col-md-9">
+
+                    <div class="row">
+
+                        <h6 class="text-center">Basic Details</h6>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="part_name" placeholder="">
+                                <label for="part_name">Part name</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <!-- <div class="d-flex justify-content-between gap-1"> -->
+                            <div class="form-floating mb-1">
+                                <input type="text" class="form-control rounded-3" id="alise_name" placeholder="">
+                                <label for="alise_name">Alise Name</label>
+                            </div>
+
+                            <!-- <div class="text-center">
+                                    <button type="button" class="btn btn-primary " id="add_alise_name">+</button>
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" checked type="checkbox" value=""
+                                            id="alise_checkbox">
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <div class="table-responsive alise_table mt-0 mb-1 "
+                                style="max-height: 25vh; overflow-y: auto;">
+                                <table class="table small caption-top table-bordered table-striped ">
+                                    <thead class="small"
+                                        style="position: sticky; z-index: 5; top: 0; background-color: #cdd7f3;">
+
+                                        <tr>
+                                            <th scope="col">Alice Name</th>
+                                            <th scope="col">Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small" id="alise_tbody">
+
+
+                                    </tbody>
+
+
+                                </table>
+                            </div> -->
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-1">
+                                <input type="text" class="form-control rounded-3" id="part_no" placeholder="">
+                                <label for="part_no">Part No</label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class=" mb-2">
+                                <input type="file" class="form-control rounded-3" id="image_path" placeholder="">
+                                <label for="image_path">Image</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="item_grade">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="a">A</option>
+                                    <option value="b">B</option>
+                                    <option value="c">C</option>
+                                    <option value="d">D</option>
+                                    <option value="e">E</option>
+                                </select>
+                                <label for="item_grade">Item Grade</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="item_prefernce">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="first">First</option>
+                                    <option value="second">Second</option>
+                                    <option value="third">Third</option>
+                                </select>
+                                <label for="item_prefernce">Item Preference</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="available_godown">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value=1>Yes</option>
+                                    <option value=0>No</option>
+                                </select>
+                                <label for="available_godown">Available Godown</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="under" placeholder="">
+                                <label for="under">Under</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="category" placeholder="">
+                                <label for="category">Category</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="uom">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="Nos">Nos</option>
+                                    <option value="No">No</option>
+                                    <option value="NUM">NUM</option>
+                                    <option value="Pcs">Pcs</option>
+                                    <option value="Sets">Sets</option>
+                                    <option value="Sheet">Sheet</option>
+                                    <option value="kgs">kgs</option>
+                                    <option value="Ltr">Ltr</option>
+                                    <option value="mls">mls</option>
+                                    <option value="Mts">Mts</option>
+                                    <option value="mtrs">mtrs</option>
+                                    <option value="mm">mm</option>
+                                    <option value="CUM">CUM</option>
+                                </select>
+                                <label for="uom">Base UOM</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" id="alternative_uom">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="Nos">Nos</option>
+                                    <option value="No">No</option>
+                                    <option value="NUM">NUM</option>
+                                    <option value="Pcs">Pcs</option>
+                                    <option value="Sets">Sets</option>
+                                    <option value="Sheet">Sheet</option>
+                                    <option value="kgs">kgs</option>
+                                    <option value="Ltr">Ltr</option>
+                                    <option value="mls">mls</option>
+                                    <option value="Mts">Mts</option>
+                                    <option value="mtrs">mtrs</option>
+                                    <option value="mm">mm</option>
+                                    <option value="CUM">CUM</option>
+                                </select>
+                                <label for="alternative_uom">Alternative UOM</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control rounded-3" id="alternative_uom_value"
+                                    placeholder="">
+                                <label for="alternative_uom_value">Per/Base Unit</label>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="col-12">
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="d-flex flex-wrap  gap-1 align-items-center">
+                                        <div class="form-floating mb-2">
+                                            <input type="number" class="form-control rounded-3" id="min_order_qty"
+                                                placeholder="">
+                                            <label for="min_order_qty">Min Order Level</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="number" class="form-control rounded-3" id="reorder_qty"
+                                                placeholder="">
+                                            <label for="reorder_qty">Re-order Level</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2" style="width: 30%;">
+                                            <select class="form-select" id="sale_item">
+                                                <option selected disabled value="">Choose...</option>
+                                                <option value=1>Yes</option>
+                                                <option value=0>No</option>
+                                            </select>
+                                            <label for="sale_item">Is This Sales Item?</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control rounded-3" placeholder="" id="part_des"
+                                            style="height: 120px"></textarea>
+                                        <label for="part_des">Part Description</label>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="text-center">Addional Details</h6>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="form-floating mb-2">
+                                                <select class="form-select" id="alter_component">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value=1>Yes</option>
+                                                    <option value=0>No</option>
+                                                </select>
+                                                <label for="alter_component">Alter Component (BOM)</label>
+                                            </div>
+
+                                            <div class="form-floating mb-2">
+                                                <select class="form-select" id="alter_standard_rate">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value=1>Yes</option>
+                                                    <option value=0>No</option>
+                                                </select>
+                                                <label for="alter_standard_rate">Alter Standard Rates</label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="card-footer">
+
+                                            <h6 class="text-center">Statutory Details</h6>
+
+                                            <div class="form-floating mb-2">
+                                                <select class="form-select" id="gst_applicability">
+                                                    <option selected value=1>Applicable</option>
+                                                    <option value=0>Not Applicable</option>
+                                                </select>
+                                                <label for="gst_applicability">GST Applicability</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6" id="gst_section">
+
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" value="" id="sub_ass">
+                                        <label class="form-check-label" for="sub_ass">Is This Sub Assembly?</label>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-body">
+
+
+                                            <h6 class="text-center">HSN/SAC & Related Details</h6>
+
+                                            <div class="form-floating mb-2">
+                                                <input type="text" class="form-control rounded-3" id="hsn_sac"
+                                                    placeholder="">
+                                                <label for="hsn_sac">HSN/SAC</label>
+                                            </div>
+
+                                            <div class="form-floating mb-2">
+                                                <textarea class="form-control rounded-3" placeholder="" id="description"
+                                                    style="height:120px"></textarea>
+                                                <label for="description">Description</label>
+                                            </div>
+
+                                            <hr>
+
+                                            <h6 class="text-center">GST Rate & Related Details</h6>
+
+                                            <div class="form-floating mb-2">
+                                                <input type="text" class="form-control rounded-3" id="gst_details"
+                                                    placeholder="">
+                                                <label for="gst_details">GST Rate Details</label>
+                                            </div>
+
+                                            <div class="form-floating mb-2">
+                                                <select class="form-select" id="gst_rate">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value="5">5</option>
+                                                    <option value="12">12</option>
+                                                    <option value="18">18</option>
+                                                    <option value="28">28</option>
+                                                    <option value="40">40</option>
+                                                </select>
+                                                <label for="gst_rate">GST Rate %</label>
+                                            </div>
+
+                                            <div class="form-floating mb-2">
+                                                <select class="form-select" id="supply_type">
+                                                    <option selected disabled value="">Choose...</option>
+                                                    <option value="capital goods">Capital Goods</option>
+                                                    <option value="goods">Goods</option>
+                                                    <option value="services">Services</option>
+                                                </select>
+                                                <label for="supply_type">Type Of Supply</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary btn-sm" id="add_part_btn">Add Part</button>
+                            <button class="btn btn-secondary btn-sm d-none" id="edit_part_btn">Update Part</button>
+                            <button class="btn btn-danger btn-sm d-none" id="delete_part_btn">Delete Part</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="text-center">Parts</h6>
+                                <input type="text" name="" id="parts_search" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group" id="parts_list">
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+
+    <!--Godown Modal -->
+    <div class="modal fade" id="godownModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="godownModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="godownModalLabel">Godown List</h5>
+                    <button type="button" class="btn-close modal_close_btn" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2 bg-light">
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Godown</span>
+                                    <input type="text" class="form-control rounded-end" id="godown">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Department</span>
+                                    <input type="text" class="form-control rounded-end" id="department">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Section</span>
+                                    <input type="text" class="form-control rounded-end" id="section">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Min Order Qty</span>
+                                    <input type="number" class="form-control rounded-end" id="mini_order_qty">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Max Order Qty</span>
+                                    <input type="number" class="form-control rounded-end" id="max_order_qty">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Rack</span>
+                                    <input type="text" class="form-control rounded-end" id="rack">
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Bin No</span>
+                                    <input type="text" class="form-control rounded-end" id="bin">
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 my-3">
+                                <button class="btn btn-primary btn-sm flex-fill" id="add_avialable_godown">
+                                    Add
+                                </button>
+
+                                <button class="btn btn-secondary btn-sm flex-fill d-none" id="edit_avialable_godown">
+                                    Edit
+                                </button>
+
+                                <button class="btn btn-warning btn-sm flex-fill" id="clear_avialable_godown">
+                                    Clear
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-8">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Store</th>
+                                            <th>Store Type</th>
+                                            <th>Min Order Qty</th>
+                                            <th>Max Order Qty</th>
+                                            <th>Rack</th>
+                                            <th>Bin No</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="available_godown_tbody">
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary modal_close_btn"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="add_godown_details_btn">Add</button>
+                        <button type="button" class="btn btn-primary d-none"
+                            id="update_godown_details_btn">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Opening Balance Modal -->
+        <!-- <div class="modal fade" id="opening_balanceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="opening_balanceModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+
+                
+                <div class="modal-header border-0 pb-2">
+                    <h5 class="modal-title fw-semibold" id="opening_balanceModalLabel">
+                        Opening Balance
+                    </h5>
+
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                
+                <div class="modal-body pt-2">
+
+                    <div class="row g-3">
+
+                        
+                        <div class="col-lg-4">
+
+                            
+                            <div class="mb-3">
+                                <div class="position-relative">
+                                    <input type="text" id="godown_search"
+                                        class="form-control form-control-sm rounded-3 ps-4" placeholder="Search Godown">
+
+                                    <span class="position-absolute top-50 start-0 translate-middle-y ms-2 text-muted">
+                                        🔍
+                                    </span>
+                                </div>
+                            </div>
+
+                            
+                            <div class="border rounded-4 p-2 bg-light" style="max-height: 450px; overflow-y: auto;">
+
+                                <ul class="list-group gap-2" id="opening_balance_godown_list_select">
+
+                                    <li
+                                        class="list-group-item border rounded-3 shadow-sm p-3 cursor-pointer fw-semibold opening_godown_item ">
+
+                                        Godown 1
+                                    </li>
+
+                                    <li
+                                        class="list-group-item border rounded-3 shadow-sm p-3 cursor-pointer fw-semibold opening_godown_item">
+
+                                        Godown 2
+                                    </li>
+
+                                    <li
+                                        class="list-group-item border rounded-3 shadow-sm p-3 cursor-pointer fw-semibold opening_godown_item">
+
+                                        Godown 3
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                        
+                        <div class="col-lg-8">
+
+                            <div class="border rounded-4 bg-light p-3" style="min-height: 450px;">
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0 fw-semibold">
+                                        Godown Details
+                                    </h6>
+
+                                </div>
+
+                                <ul class="list-group gap-2" id="opening_balance_godown_details">
+
+                                    
+                                    <li class="list-group-item border rounded-3 shadow-sm p-3">
+
+                                        <div class="row g-2 align-items-center">
+
+                                            <div class="col-md-3">
+                                                <label class="form-label small text-muted mb-1">
+                                                    Godown
+                                                </label>
+
+                                                <input type="text" class="form-control form-control-sm rounded-3"
+                                                    placeholder="Enter Godown">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label small text-muted mb-1">
+                                                    Qty
+                                                </label>
+
+                                                <input type="number" class="form-control form-control-sm rounded-3"
+                                                    placeholder="0">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label small text-muted mb-1">
+                                                    Rate
+                                                </label>
+
+                                                <input type="number" class="form-control form-control-sm rounded-3"
+                                                    placeholder="0.00">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-floating">
+                                                    <select class="form-select" id="">
+                                                        <option selected disabled value="">Choose...</option>
+                                                        <option value="">Nos</option>
+                                                        <option value="">Kg</option>
+                                                        <option value="">Mm</option>
+                                                    </select>
+                                                    <label for="">Per</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label small text-muted mb-1">
+                                                    Amount
+                                                </label>
+
+                                                <input type="number" class="form-control form-control-sm rounded-3"
+                                                    placeholder="0.00">
+                                            </div>
+
+                                            <div class="col-md-1 text-end">
+                                                <label class="form-label d-block small text-muted mb-1">
+                                                    Action
+                                                </label>
+
+                                                <button class="btn btn-sm btn-danger rounded-3">
+                                                    Delete
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+                <div class="modal-footer border-0 pt-2">
+
+                    <button type="button" class="btn btn-light border rounded-3 px-4" data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button type="button" class="btn btn-primary rounded-3 px-4">
+                        Submit
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+        <!--Alter Standard Rate Modal -->
+        <div class="modal fade" id="alter_standard_rateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="alter_standard_rateModalLabel" aria-hidden="true">
+
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4">
+
+                    <!-- Header -->
+                    <div class="modal-header border-0 pb-2">
+                        <h5 class="modal-title fw-semibold" id="alter_standard_rateModalLabel">
+                            Alter Standard Rate
+                        </h5>
+
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body pt-2">
+
+                        <div class="card">
+
+                            <div class="card-heard">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="text-center mb-0 text-primary fw-semibold">
+                                        Stock Item Name - 001 ECC Frame Assembly
+                                    </h6>
+
+                                    <button class="btn btn-sm btn-primary rounded-3 " id="add_alter_rate_row">
+                                        + Add Item
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table caption-top table-bordered table-striped ">
+                                        <caption></caption>
+                                        <thead class="small">
+
+                                            <tr class="text-center">
+                                                <th scope="col" colspan="3">Standard Cost</th>
+                                                <th scope="col" colspan="3">Standard Cost</th>
+
+                                            </tr>
+                                            <tr>
+                                                <th scope="col">ApplicableFrom</th>
+                                                <th scope="col">Rate</th>
+                                                <th scope="col">Per</th>
+                                                <th scope="col">ApplicableFrom</th>
+                                                <th scope="col">Rate</th>
+                                                <th scope="col">Per</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="small" id="alter_standard_rate_tbody">
+
+                                            <tr>
+
+                                                <!-- Standard Cost -->
+
+                                                <td>
+                                                    <input type="date"
+                                                        class="form-control form-control-sm rounded-3 shadow-sm">
+                                                </td>
+
+                                                <td>
+                                                    <input type="number"
+                                                        class="form-control form-control-sm rounded-3 shadow-sm"
+                                                        placeholder="Rate">
+                                                </td>
+
+                                                <td>
+                                                    <select class="form-select form-select-sm rounded-3 shadow-sm">
+                                                        <option selected disabled>
+                                                            Per
+                                                        </option>
+
+                                                        <option value="Nos">Nos</option>
+                                                        <option value="Kg">Kg</option>
+                                                        <option value="Mm">Mm</option>
+                                                    </select>
+                                                </td>
+
+                                                <!-- Standard Selling Price -->
+
+                                                <td>
+                                                    <input type="date"
+                                                        class="form-control form-control-sm rounded-3 shadow-sm">
+                                                </td>
+
+                                                <td>
+                                                    <input type="number"
+                                                        class="form-control form-control-sm rounded-3 shadow-sm"
+                                                        placeholder="Rate">
+                                                </td>
+
+                                                <td>
+                                                    <select class="form-select form-select-sm rounded-3 shadow-sm">
+                                                        <option selected disabled>
+                                                            Per
+                                                        </option>
+
+                                                        <option value="Nos">Nos</option>
+                                                        <option value="Kg">Kg</option>
+                                                        <option value="Mm">Mm</option>
+                                                    </select>
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer border-0 pt-2">
+
+                        <button type="button" class="btn btn-light border rounded-3 px-4" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                        <button type="button" class="btn btn-primary rounded-3 px-4">
+                            Submit
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id='footer' class="mt-auto"></div>
+
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
+
+
+        <!-- SWAL FIRE -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        <!-- external js -->
+        <script src="js/materials_master.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>
