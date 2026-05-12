@@ -5,7 +5,7 @@
 $customer_id = test_input($_POST['customer_id']);
 $amount = test_input($_POST['amount']);
  
-  if($amount <= 0){
+  if($amount < 0){
     echo "Amount must be greater than zero.";
     $conn->close();
     exit;
