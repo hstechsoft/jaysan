@@ -174,7 +174,7 @@ $(document).ready(function () {
 
         $('#department').val('').removeData("dept_id");
         $('#section').val('').removeData("section_id");
-        $('#min_order_qty').val('');
+        $('#mini_order_qty').val('');
         $('#max_order_qty').val('');
         $('#rack').val('');
         $('#bin').val('');
@@ -349,6 +349,7 @@ $(document).ready(function () {
     $("#add_avialable_godown").click(function () {
 
         var part_id = $(this).val() || 0;
+        var master_id = $(this).data('master_id');
 
         var godown = $("#godown").val();
         var godown_id = $("#godown").data("godown_id");
@@ -387,20 +388,11 @@ $(document).ready(function () {
 
 
 
-        if (part_id > 0) {
+        if (master_id > 0) {
+            update_sec_stock_master(master_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin, part_id);
+        }
+        else if (part_id > 0 && !master_id > 0) {
             insert_sec_stock_master(part_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin);
-            $("#available_godown_tbody").append(`<tr data-store_id='${store_id}' data-godown_id='${godown_id}' data-department_id='${department_id}' data-section_id='${section_id}' data-min_order_qty='${min_order_qty}' data-max_order_qty='${max_order_qty}' data-rack='${rack}' data-bin='${bin}' data-godown_type='${godown_type}'>
-                <td>${store}</td>
-                <td>${godown_type}</td>
-                <td>${min_order_qty}</td>
-                <td>${max_order_qty}</td>
-                <td>${rack}</td>
-                <td>${bin}</td>
-                <td>
-                    <button class="btn btn-sm btn-secondary edit_godown_btn">Edit</button>
-                    <button class="btn btn-sm btn-danger delete_godown_btn">Delete</button>
-                </td>
-            </tr>`);
         }
         else {
             $("#available_godown_tbody").append(`<tr data-store_id='${store_id}' data-godown_id='${godown_id}' data-department_id='${department_id}' data-section_id='${section_id}' data-min_order_qty='${min_order_qty}' data-max_order_qty='${max_order_qty}' data-rack='${rack}' data-bin='${bin}' data-godown_type='${godown_type}'>
@@ -440,6 +432,28 @@ $(document).ready(function () {
                 }
             }
         })
+    })
+
+    $("#available_godown_tbody").on("click", ".edit_godown_btn", function () {
+
+        var row = $(this).closest("tr");
+        var master_id = $(this).data("master_id")
+
+        $("#add_avialable_godown").removeData("master_id");
+        $("#selected_store").empty();
+
+        if (master_id > 0) {
+            $("#add_avialable_godown").data("master_id", master_id);
+            $("#selected_store").html(`<strong class='text-primary'>${row.find("td").eq(0).text()}</strong> <span>${row.find("td").eq(1).text()}</span>`)
+            $("#mini_order_qty").val(row.find("td").eq(2).text());
+            $("#max_order_qty").val(row.find("td").eq(3).text());
+            $("#rack").val(row.find("td").eq(4).text());
+            $("#bin").val(row.find("td").eq(5).text());
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+
     })
 
     $("#add_godown_details_btn").on("click", function () {
@@ -492,6 +506,9 @@ $(document).ready(function () {
         $("#department").data("dept_id", '');
         $("#section").data("sec_id", '');
 
+        
+        $("#add_avialable_godown").removeData("master_id");
+        $("#selected_store").empty();
     });
 
 
@@ -1138,7 +1155,7 @@ function delete_parts_tbl(part_id) {
 function insert_sec_stock_master(part_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin) {
 
     console.log(part_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin);
-    
+
     $.ajax({
         url: "php/insert_sec_stock_master.php",
         type: "POST",
@@ -1166,6 +1183,54 @@ function insert_sec_stock_master(part_id, min_order_qty, max_order_qty, store_id
                 );
 
                 setTimeout(() => {
+                    $("#available_godown_tbody").empty();
+                    get_parts_tbl(part_id);
+                }, 500);
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+
+function update_sec_stock_master(master_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin, part_id) {
+
+    console.log(master_id, min_order_qty, max_order_qty, store_id, godown_type, rack, bin, part_id);
+
+    $.ajax({
+        url: "php/update_sec_stock_master.php",
+        type: "POST",
+        data: {
+            master_id: master_id,
+            min_qty: min_order_qty,
+            max_qty: max_order_qty,
+            store_id: store_id,
+            store_type: godown_type,
+            // rack: rack,
+            // bin: bin,
+        },
+
+
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.trim() == "ok") {
+
+
+                $("#add_avialable_godown").removeData("master_id");
+                $("#selected_store").empty();
+
+                salert(
+                    "Success",
+                    "Godown Updated Successfully.",
+                    "success"
+                );
+
+                setTimeout(() => {
+                    $("#available_godown_tbody").empty();
                     get_parts_tbl(part_id);
                 }, 500);
             }

@@ -315,6 +315,10 @@ $(document).ready(function () {
       amount = remaining - enter_amount
 
     }
+    else if(Number(enter_amount) <= 0){
+      amount = remaining
+    }
+
     if (Number(amount) > 0 && cus_id) {
       insert_temp_spares(amount, cus_id);
     } else {

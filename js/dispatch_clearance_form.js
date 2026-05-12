@@ -678,7 +678,7 @@ function get_jaysan_payment() {
           obj.forEach(function (obj) {
             count = count + 1;
             advance = (obj.pay_sts == 'advance') ? `<strong class="text-primary blink ">Advance Payment</strong>` : '';
-            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td>" + obj.ref_no + "</td><td>" + obj.utr_no + "</td><td colspan=''>" + obj.date_f + " " +advance+ "</td><td  colspan=''>" + obj.amount + "</td><td>" + obj.sts + "</td></tr>")
+            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td>" + obj.ref_no + "</td><td>" + obj.utr_no + "</td><td colspan=''>" + obj.date_f + " " +advance+ "</td><td  colspan=''>" + Number(obj.amount.replace(/₹|,/g, '')).toLocaleString('en-IN') + "</td><td>" + obj.sts + "</td></tr>")
 
           });
 
