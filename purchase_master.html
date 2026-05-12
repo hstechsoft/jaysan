@@ -50,212 +50,113 @@
 
         <div class=" page-wrapper mt-5 mt-md-0">
 
-
-            <h4 class="text-center">Purchase Master</h4>
             <div class="row">
+                <h6 class="text-center">Purchase Master</h6>
 
-                <div class="col-2">
-
-
-                    <div class="d-flex justify-content-between">
-
+                <div class="col-md-3">
+                    <div class="d-flex">
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                            <label for="">part name
-                                <span class="text-danger">*</span> </label>
+                            <input type="text" class="form-control rounded-3" id="part_name" placeholder="">
+                            <label for="part_name">Part </label>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn  btn-primary" id="add_parts">Add</button>
+                        </div>
+                    </div>
+<div class="card">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="godown" placeholder="">
+                                    <label for="godown">Godown </label>
+                                </div>
 
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">Department</button>
+                                    <ul class="dropdown-menu" id="department_da">
+                                    </ul>
+                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
+                                        id="department">
+                                    <button type="submit" class="btn btn-primary d-none" id="department_add_btn"><i
+                                            class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">Section</button>
+                                    <ul class="dropdown-menu" id="section_da">
+                                    </ul>
+                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
+                                        id="section">
+                                    <button type="submit" class="btn btn-primary d-none" id="section_add_btn"><i
+                                            class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">Machine</button>
+                                    <ul class="dropdown-menu" id="machine_da">
+                                    </ul>
+                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
+                                        id="machine">
+                                    <button type="submit" class="btn btn-primary d-none" id="machine_add_btn"><i
+                                            class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="min_time" placeholder="">
+                                    <label for="min_time">Min Time
+                                        <span class="text-danger">in Mins*</span> </label>
+
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild Data
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
+                                    <label for="max_time">Max Time
+                                        <span class="text-danger">in Mins*</span> </label>
+
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild Data
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control rounded-3" id="cost" value="0"
+                                        placeholder="">
+                                    <label for="cost">Cost
+                                        <span class="text-danger">*</span> </label>
+
+                                    <div class="invalid-feedback">
+                                        Kindly Enter Vaild Data
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input " type="checkbox" value="" id="is_default"
+                                        style="height: 20px;">
+                                    <label class="form-check-label" for="is_default">
+                                        Is Default?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" id="" class="btn btn-primary form_godown_btn">Add</button>
+                                <button type="submit" id=""
+                                    class="btn btn-warning form_godown_update_btn d-none">Update</button>
                             </div>
                         </div>
-
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                            <label for="">part name
-                                <span class="text-danger">*</span> </label>
-
-                            <div class="invalid-feedback">
-                                Kindly Enter Vaild Data
-                            </div>
-                        </div>
-
-                        <div>
-                            <button type="submit" class="btn btn-primary " id="">+</button>
-                        </div>
-
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table caption-top table-bordered table-striped ">
-                            <caption></caption>
-                            <thead>
-
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">part name</th>
-                                    <th scope="col">raw material</th>
-
-                                </tr>
-                            </thead>
-                            <tbody id="">
-                                <tr>
-
-                                    <td>1</td>
-                                    <td>br 123</td>
-                                    <td>brp 123</td>
-
-                                </tr>
-                                <tr>
-
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-
-                                </tr>
-
-
-                            </tbody>
-
-
-                        </table>
-                    </div>
-
+                    </form>
                 </div>
-
-
-                <div class="col-2">
-
-                    <div class="card">
-                        <ul class="item-group">
-                            <li class="item-group-list d-flex">Godown 1 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="" required>
-                                    <label class="form-check-label" for="">
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="item-group-list d-flex">Godown 2 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="" required>
-                                    <label class="form-check-label" for="">
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="item-group-list d-flex">Godown 3 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="" required>
-                                    <label class="form-check-label" for="">
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-2">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="text-center">Quality</h6>
-                        </div>
-                        <div class="card-body">
-                            <ul class="item-group">
-                                <li class="item-group-list d-flex">inner dia</li>
-                                <li class="item-group-list d-flex">Outer dia</li>
-                                <li class="item-group-list d-flex">Thread</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-2">
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">min time
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">max time
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-2">
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">Delivery time
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">cost
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-2">
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">Transport
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="" placeholder="" required>
-                        <label for="">Transport qty
-                            <span class="text-danger">*</span> </label>
-
-                        <div class="invalid-feedback">
-                            Kindly Enter Vaild Data
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-2">
-
-                    <div class="card">
-                        <ul class="item-group">
-                            <li class="list-group-item d-flex">Roller <span class="badge bg-secondary">Re-order Qty:
-                                    10</span></li>
-                            <li class="list-group-item d-flex">gearbox <span class="badge bg-secondary">Re-order Qty:
-                                    40</span></li>
-                            <li class="list-group-item d-flex">door <span class="badge bg-secondary">Re-order Qty:
-                                    500</span></li>
-                            <li class="list-group-item d-flex">final <span class="badge bg-secondary">Re-order Qty:
-                                    220</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-
             </div>
 
         </div>
@@ -313,7 +214,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
-    <script src="js/reference_js.js" type="module"></script>
+    <script src="js/purchase_master.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 

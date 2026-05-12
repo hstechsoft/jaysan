@@ -306,25 +306,33 @@ $(document).ready(function () {
 
 
   $("#all_bom_table").on("focusout", "td[contenteditable]", function () {
-    var enter_amount = $(this).text();
-    var remaining = $(this).data("remaining");
-    var cus_id = $(this).data("cus_id");
 
-    var amount = 0;
-    if (Number(enter_amount) > 0) {
-      amount = remaining - enter_amount
+    let enter_amount = $.trim($(this).text());
+    let remaining = Number($(this).data("remaining"));
+    let cus_id = $(this).data("cus_id");
 
+    let enteredValue = Number(enter_amount);
+
+    
+    if (enter_amount === "" || isNaN(enteredValue) || enteredValue < 0) {
+        salert("Warning", "Enter a valid amount", "warning");
+        return;
     }
-    else if(Number(enter_amount) <= 0){
-      amount = remaining
+
+    let amount = remaining;
+
+    if (enteredValue > 0) {
+        amount = remaining - enteredValue;
     }
 
-    if (Number(amount) > 0 && cus_id) {
-      insert_temp_spares(amount, cus_id);
+    
+    if (amount >= 0 && cus_id) {
+        insert_temp_spares(amount, cus_id);
     } else {
-      salert("Warning", "Enter The Valid Amount/Data Miss Try Later", "warning")
+        salert("Warning", "Invalid calculation or customer ID missing", "warning");
     }
-  })
+
+});
 
 
   $("#summary_filter").on("change", function () {

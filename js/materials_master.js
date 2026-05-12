@@ -921,7 +921,7 @@ $(document).ready(function () {
         formData.append("part_id", part_id);
         // formData.append("stock_master", JSON.stringify(stock_master));
 
-        alert(is_godown_available);
+        // alert(is_godown_available);
 
         update_parts_tbl(formData)
 
