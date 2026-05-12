@@ -5,7 +5,7 @@
 $customer_id = test_input($_POST['customer_id']);
 $amount = test_input($_POST['amount']);
  
-  if($amount < 0){
+  if($amount <= 0){
     echo "Amount must be greater than zero.";
     $conn->close();
     exit;
@@ -44,7 +44,7 @@ if ($result_last_dcf->num_rows > 0) {
 
 
 $sql_insert_spares = "insert into sale_order_spares (qno, amount, oid, dcf_no,remark) values ('qno', $amount, '$last_order_id', '$last_dcf_id', 'inserted for customer $customer_id');";
-  echo $sql_insert_spares;
+  
   if ($conn->query($sql_insert_spares) === TRUE) {
     
     echo "ok";
