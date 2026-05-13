@@ -45,7 +45,7 @@ return $data;
 
  $sql =  "UPDATE  parts_tbl SET part_name =  $part_name,part_no =  $part_no,des =  $des,part_image =  $part_image,sub_ass =  $sub_ass,reorder_qty =  $reorder_qty,min_order_qty =  $min_order_qty,Parent =  $Parent,category =  $category,baseunits =  $baseunits,gstrate =  $gstrate,tally_part =  $tally_part,alias_name =  $alias_name,is_sale_item =  $is_sale_item,item_grade =  $item_grade,preference =  $preference,is_godown_available =  $is_godown_available,under_partid =  $under_partid,alternate_unit =  $alternate_unit,base_value =  $base_value,is_bom =  $is_bom,alter_std_rate =  $alter_std_rate,is_gst_appicable =  $is_gst_appicable,hsn_code =  $hsn_code,hsn_des =  $hsn_des,gstdetails =  $gstdetails,type_of_supply =  $type_of_supply WHERE part_id =  $part_id";
 
- echo $sql;
+
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
