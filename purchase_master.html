@@ -20,7 +20,64 @@
 
 
     <style>
+        #parts_search {
+            width: 130px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
 
+        #parts_list {
+            max-height: 570px;
+            overflow: auto;
+        }
+
+        #parts_list .list-group-item {
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 5px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        #parts_list .list-group-item:hover {
+            background: #f8f9fa;
+        }
+
+        #parts_list .list-group-item {
+            transition:
+                background-color 0.35s ease,
+                box-shadow 0.35s ease,
+                transform 0.35s ease;
+        }
+
+        #parts_list .list-group-item:hover {
+            background-color: #9ec1f5 !important;
+            box-shadow: 13px 13px 20px 0px #3788ff !important;
+            transform: translate(-6px, -6px);
+        }
+
+        @media(max-width:768px) {
+
+            .row>div {
+                margin-bottom: 10px;
+            }
+
+            .d-flex {
+                flex-wrap: wrap;
+            }
+
+            #parts_search {
+                width: 100%;
+                margin-top: 8px;
+            }
+
+            .card {
+                margin-bottom: 12px;
+            }
+
+        }
     </style>
 
 
@@ -55,7 +112,7 @@
                 <div class="row g-3">
 
                     <!-- Left Form Section -->
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-3">
 
                         <div class="card shadow-sm border-0 rounded-4">
 
@@ -182,7 +239,7 @@
                     </div>
 
                     <!-- Right Section -->
-                    <div class="col-12 col-lg-8">
+                    <div class="col-12 col-lg-6">
 
                         <div class="card shadow-sm border-0 rounded-4 h-100">
 
@@ -211,6 +268,24 @@
 
                             </div>
 
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="text-center">Parts</h6>
+                                    <input type="text" name="" id="parts_search" placeholder="Search">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group" id="parts_list">
+
+                                </ul>
+                            </div>
                         </div>
 
                     </div>

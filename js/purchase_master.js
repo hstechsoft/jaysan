@@ -26,6 +26,14 @@ $(document).ready(function () {
     );
 
 
+    $("#parts_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#parts_list li").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     $("#summary_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
@@ -35,6 +43,7 @@ $(document).ready(function () {
     });
 
     check_login();
+    get_purchase_process_recent();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -310,6 +319,19 @@ $(document).ready(function () {
             console.log(process_id, process, godown_id, depart_id, section_id, machine_id, min, max, cost);
 
             salert("Warning", "Fill the fields/Requied Data Missing.", "warning");
+        }
+    })
+
+    $("#parts_list").on("dblclick", "li", function () {
+
+        var part_id = $(this).data("part_id");
+
+        if (part_id) {
+            $("#part_name").data("part_id", part_id).val($(this).text().trim());
+            purchase_process_entry(part_id);
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
         }
     })
 
@@ -713,6 +735,51 @@ function purchase_process_entry(part_id) {
 
 
 // }
+
+function get_purchase_process_recent() {
+    $.ajax({
+        url: "php/get_purchase_process_recent.php",
+        type: "get", //send it through get method
+        data: {
+        },
+        success: function (response) {
+
+
+            if (response.trim() != "error") {
+                $("#parts_list").empty();
+                if (response.trim() != "0 result") {
+                    var obj = JSON.parse(response);
+
+
+                    console.log(response);
+
+
+                    obj.forEach(function (obj) {
+                        $("#parts_list").append(`<li class="list-group-item" data-part_id='${obj.part_id}'>${obj.part_name}</li>`);
+
+                    });
+                }
+                else {
+                    $("#parts_list").append(`<li class="list-group-item"'>No Data Found</li>`)
+                }
+
+
+                //    get_sales_order()
+            }
+
+            else {
+                salert("Error", "User ", "error");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
 
 function insert_new_process(processId) {
 

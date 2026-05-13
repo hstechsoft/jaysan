@@ -1356,6 +1356,7 @@ function get_parts() {
 
 
             if (response.trim() !== 'error') {
+                $("#parts_list").empty();
                 if (response.trim() !== '0 result') {
 
                     var obj = JSON.parse(response);
