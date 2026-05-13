@@ -50,113 +50,173 @@
 
         <div class=" page-wrapper mt-5 mt-md-0">
 
-            <div class="row">
-                <h6 class="text-center">Purchase Master</h6>
+            <div class="container-fluid py-2">
 
-                <div class="col-md-3">
-                    <div class="d-flex">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="part_name" placeholder="">
-                            <label for="part_name">Part </label>
+                <div class="row g-3">
+
+                    <!-- Left Form Section -->
+                    <div class="col-12 col-lg-4">
+
+                        <div class="card shadow-sm border-0 rounded-4">
+
+                            <div class="card-header bg-primary text-white py-2 rounded-top-4">
+                                <h6 class="mb-0 text-center fw-bold">
+                                    Purchase Master
+                                </h6>
+                            </div>
+
+                            <div class="card-body p-3">
+
+                                <!-- Part -->
+                                <div class="d-flex gap-2 mb-3">
+
+                                    <div class="form-floating flex-grow-1">
+                                        <input type="text" class="form-control" id="part_name" placeholder="Part">
+                                        <label for="part_name">Part</label>
+                                    </div>
+
+                                    <button class="btn btn-primary px-3" id="add_parts">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+
+                                </div>
+
+                                <div class="godown_section d-none">
+                                    <!-- Godown -->
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="godown" placeholder="Godown">
+                                        <label for="godown">Vendor</label>
+                                    </div>
+
+                                    <!-- Department -->
+                                    <!-- <div class="form-floating mb-3">
+                                        <select class="form-select" id="department_da">
+                                            <option selected disabled value="">Choose...</option>
+                                        </select>
+                                        <label for="department_da">Department</label>
+                                    </div> -->
+
+
+                                    <!-- Section -->
+                                    <!-- <div class="form-floating mb-3">
+                                        <select class="form-select" id="section_da">
+                                            <option selected disabled value="">Choose...</option>
+                                        </select>
+                                        <label for="section_da">Section</label>
+                                    </div> -->
+
+                                    <!-- Machine -->
+                                    <!-- <div class="form-floating mb-3">
+                                        <select class="form-select" id="machine_da">
+                                            <option selected disabled value="">Choose...</option>
+                                        </select>
+                                        <label for="machine_da">Machine</label>
+                                    </div> -->
+
+                                    <!-- Time Inputs -->
+                                    <div class="row g-2">
+
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="min_time"
+                                                    placeholder="Min Time">
+                                                <label for="min_time">
+                                                    Min Time
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="max_time"
+                                                    placeholder="Max Time">
+                                                <label for="max_time">
+                                                    Max Time
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Ubit -->
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="unit">
+                                            <option selected value="hrs">Hrs</option>
+                                            <option value="mins">Mins</option>
+                                            <option value="days">Days</option>
+                                        </select>
+                                        <label for="unit">Time In</label>
+                                    </div>
+
+                                    <!-- Cost -->
+                                    <div class="form-floating mt-3 mb-3">
+                                        <input type="text" class="form-control" id="cost" value="0" placeholder="Cost">
+
+                                        <label for="cost">Cost</label>
+                                    </div>
+
+                                    <!-- Checkbox -->
+                                    <div class="form-check form-switch mb-3">
+
+                                        <input class="form-check-input" type="checkbox" id="is_default">
+
+                                        <label class="form-check-label" for="is_default">
+                                            Is Default
+                                        </label>
+
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+                                        <button type="button" class="btn btn-warning px-4 form_godown_update_btn">
+                                            Update
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="text-center">
-                            <button class="btn  btn-primary" id="add_parts">Add</button>
-                        </div>
+
                     </div>
-<div class="card">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="godown" placeholder="">
-                                    <label for="godown">Godown </label>
-                                </div>
 
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Department</button>
-                                    <ul class="dropdown-menu" id="department_da">
-                                    </ul>
-                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
-                                        id="department">
-                                    <button type="submit" class="btn btn-primary d-none" id="department_add_btn"><i
-                                            class="fa fa-plus"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-12">
+                    <!-- Right Section -->
+                    <div class="col-12 col-lg-8">
 
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Section</button>
-                                    <ul class="dropdown-menu" id="section_da">
-                                    </ul>
-                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
-                                        id="section">
-                                    <button type="submit" class="btn btn-primary d-none" id="section_add_btn"><i
-                                            class="fa fa-plus"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-12">
+                        <div class="card shadow-sm border-0 rounded-4 h-100">
 
-                                <div class="input-group mb-3">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Machine</button>
-                                    <ul class="dropdown-menu" id="machine_da">
-                                    </ul>
-                                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
-                                        id="machine">
-                                    <button type="submit" class="btn btn-primary d-none" id="machine_add_btn"><i
-                                            class="fa fa-plus"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="min_time" placeholder="">
-                                    <label for="min_time">Min Time
-                                        <span class="text-danger">in Mins*</span> </label>
+                            <div class="card-body">
 
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
+                                <div class="text-center text-muted py-5">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm caption-top table-bordered table-striped mb-0">
+                                            <caption></caption>
+                                            <thead class="">
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Godown</th>
+                                                    <th scope="col">Mini Time</th>
+                                                    <th scope="col">Max Time</th>
+                                                    <th scope="col">Cost</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="" id="godown_tbody">
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
-                                    <label for="max_time">Max Time
-                                        <span class="text-danger">in Mins*</span> </label>
 
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
-                                </div>
                             </div>
-                            <div class="col-6">
-                                <div class="form-floating mb-2">
-                                    <input type="text" class="form-control rounded-3" id="cost" value="0"
-                                        placeholder="">
-                                    <label for="cost">Cost
-                                        <span class="text-danger">*</span> </label>
 
-                                    <div class="invalid-feedback">
-                                        Kindly Enter Vaild Data
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input " type="checkbox" value="" id="is_default"
-                                        style="height: 20px;">
-                                    <label class="form-check-label" for="is_default">
-                                        Is Default?
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" id="" class="btn btn-primary form_godown_btn">Add</button>
-                                <button type="submit" id=""
-                                    class="btn btn-warning form_godown_update_btn d-none">Update</button>
-                            </div>
                         </div>
-                    </form>
+
+                    </div>
+
                 </div>
+
             </div>
 
         </div>
