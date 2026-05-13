@@ -294,7 +294,7 @@ $(document).ready(function () {
         var unit = $("#unit").val();
 
         if (unit == 'hrs') {
-            alert()
+            
             min = Number(min) * 60;
             max = Number(max) * 60;
         }
