@@ -161,8 +161,8 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    get_master_department(ui.item.id);
-                    $("#department_add_btn").removeClass("d-none");
+                    // get_master_department(ui.item.id);
+                    // $("#department_add_btn").removeClass("d-none");
 
 
                 },
