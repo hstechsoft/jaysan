@@ -36,40 +36,37 @@ process_available as (
     SELECT $process_id as process_available_id,1
 ),
 
-stock_wise as (SELECT process_available.process_available_id, process_available.qty* $qty_needed as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty* $qty_needed), true, FALSE) as is_not_available FROM process_available 
+
+stock_wise as (SELECT process_available.process_available_id, process_available.qty*$qty_needed as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty*$qty_needed), true, FALSE) as is_not_available, (process_available.qty*$qty_needed) - ifnull(sum(js.qty),0) as shortage_qty FROM process_available 
 left join jaysan_stock js on js.process_id = process_available.process_available_id
 GROUP BY process_available.process_available_id),
---   SELECT * from stock_wise
   bom_plan as (
         SELECT
           
             iwp_parent.previous_process_id,
             iwp_parent.process_id,
-         
+            stock_wise.required_qty,
+            stock_wise.available_qty,
+            stock_wise.is_not_available,
+            stock_wise.shortage_qty,
             0  as LEVEL
           
           
         FROM
             input_wel_parts iwp_parent
-            
-          
-            
-        WHERE
-            iwp_parent.process_id = $process_id
-            and IFNULL((
-                SELECT SUM(js1.qty)
-                FROM jaysan_stock js1
-                WHERE js1.process_id = iwp_parent.process_id
-            ), 0) <= 1
-            -- qty to produced
-
+            inner join stock_wise on iwp_parent.process_id = stock_wise.process_available_id and stock_wise.is_not_available
+          WHERE iwp_parent.process_id = $process_id
+      
             UNION ALL
 
         SELECT
          
             iwp_child.previous_process_id,
             iwp_child.process_id,
-          
+            bp.shortage_qty as required_qty,
+            sw.available_qty,
+            sw.is_not_available,
+            (bp.shortage_qty - sw.available_qty) as shortage_qty,
             level + 1
          
         FROM
@@ -79,9 +76,10 @@ GROUP BY process_available.process_available_id),
              inner join stock_wise sw on sw.process_available_id = iwp_child.process_id and sw.is_not_available
          
                  -- qty to produced
+
     ),
-   final_needed as (
-       SELECT bom_plan.process_id, MAX(bom_plan.level) AS max_level,stock_wise.required_qty FROM bom_plan
+      final_needed as (
+       SELECT bom_plan.process_id, MAX(bom_plan.level) AS max_level,bom_plan.required_qty as requseted_qty, bom_plan.available_qty, bom_plan.shortage_qty as required_qty FROM bom_plan
 inner join stock_wise  on bom_plan.process_id = stock_wise.process_available_id
    GROUP BY bom_plan.process_id
     ORDER BY max_level),

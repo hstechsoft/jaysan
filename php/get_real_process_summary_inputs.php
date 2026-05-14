@@ -37,40 +37,37 @@ process_available as (
     SELECT $process_id as process_available_id,1
 ),
 
-stock_wise as (SELECT process_available.process_available_id, process_available.qty* $qty_needed as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty* $qty_needed), true, FALSE) as is_not_available FROM process_available 
+
+stock_wise as (SELECT process_available.process_available_id, process_available.qty*$qty_needed as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty*$qty_needed), true, FALSE) as is_not_available, (process_available.qty*$qty_needed) - ifnull(sum(js.qty),0) as shortage_qty FROM process_available 
 left join jaysan_stock js on js.process_id = process_available.process_available_id
 GROUP BY process_available.process_available_id),
---   SELECT * from stock_wise
   bom_plan as (
         SELECT
           
             iwp_parent.previous_process_id,
             iwp_parent.process_id,
-         
+            stock_wise.required_qty,
+            stock_wise.available_qty,
+            stock_wise.is_not_available,
+            stock_wise.shortage_qty,
             0  as LEVEL
           
           
         FROM
             input_wel_parts iwp_parent
-            
-          
-            
-        WHERE
-            iwp_parent.process_id = $process_id
-            and IFNULL((
-                SELECT SUM(js1.qty)
-                FROM jaysan_stock js1
-                WHERE js1.process_id = iwp_parent.process_id
-            ), 0) <= 1
-            -- qty to produced
-
+            inner join stock_wise on iwp_parent.process_id = stock_wise.process_available_id and stock_wise.is_not_available
+          WHERE iwp_parent.process_id = $process_id
+      
             UNION ALL
 
         SELECT
          
             iwp_child.previous_process_id,
             iwp_child.process_id,
-          
+            bp.shortage_qty as required_qty,
+            sw.available_qty,
+            sw.is_not_available,
+            (bp.shortage_qty - sw.available_qty) as shortage_qty,
             level + 1
          
         FROM
@@ -80,14 +77,15 @@ GROUP BY process_available.process_available_id),
              inner join stock_wise sw on sw.process_available_id = iwp_child.process_id and sw.is_not_available
          
                  -- qty to produced
+
     ),
-   final_needed as (
-       SELECT bom_plan.process_id, MAX(bom_plan.level) AS max_level,stock_wise.required_qty FROM bom_plan
+      final_needed as (
+       SELECT bom_plan.process_id, MAX(bom_plan.level) AS max_level,bom_plan.required_qty as requseted_qty, bom_plan.available_qty, bom_plan.shortage_qty as required_qty FROM bom_plan
 inner join stock_wise  on bom_plan.process_id = stock_wise.process_available_id
    GROUP BY bom_plan.process_id
     ORDER BY max_level),
 
-    input_grouped as (SELECT final_needed.process_id,final_needed.max_level,final_needed.required_qty,JSON_ARRAYAGG(JSON_OBJECT(
+    input_grouped as (SELECT final_needed.process_id,final_needed.max_level,final_needed.required_qty,final_needed.requseted_qty,final_needed.available_qty,JSON_ARRAYAGG(JSON_OBJECT(
         'input_part_id', iwp.input_part_id,
         'previous_process_id', iwp.previous_process_id,
         'input_part_name', COALESCE(pt.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(from -', jp.process_name, ')')),
@@ -102,18 +100,18 @@ inner join stock_wise  on bom_plan.process_id = stock_wise.process_available_id
     inner join parts_tbl final_part on final_part.part_id = final_pwl2.output_part
 
 GROUP BY final_needed.process_id),
-process_group as(SELECT input_grouped.process_id,jp.process_name,input_grouped.max_level,input_grouped.required_qty,input_grouped.input_parts,final_pwl.output_part,final_pwl.process_title,COALESCE(process_part.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(IN -', jp.process_name, ')'))  as output_part_name,pwt.process from input_grouped 
+process_group as(SELECT input_grouped.process_id,jp.process_name,input_grouped.max_level,input_grouped.required_qty,input_grouped.requseted_qty,input_grouped.available_qty,input_grouped.input_parts,final_pwl.output_part,final_pwl.process_title,COALESCE(process_part.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(IN -', jp.process_name, ')'))  as output_part_name,pwt.process from input_grouped 
 inner join process_wel_tbl pwt on input_grouped.process_id = pwt.process_id
 inner join jaysan_process jp on jp.process_id = pwt.process
 inner JOIN process_wel_tbl final_pwl on pwt.final_process_id = final_pwl.process_id
 left join parts_tbl process_part on pwt.output_part = process_part.part_id
 left join parts_tbl final_part on final_part.part_id = final_pwl.output_part)
 
-SELECT  process_group.process_name,process_group.process_id as process_available_id ,process_group.process,process_group.max_level,process_group.required_qty as production_qty,process_group.input_parts,process_group.output_part,process_group.process_title,process_group.output_part_name,production_godown.creditor_name as production_godown_name, production_department.dep_name as production_department_name, production_sec.sec_name as production_sec_name, wtm.cost as production_cost, wtm.min_time as production_min_time, wtm.max_time as production_max_time from process_group
+SELECT  process_group.process_name,process_group.process_id as process_available_id ,process_group.process,process_group.max_level,process_group.required_qty as production_qty,process_group.requseted_qty,process_group.available_qty,process_group.input_parts,process_group.output_part,process_group.process_title,process_group.output_part_name,production_godown.creditor_name as production_godown_name, production_department.dep_name as production_department_name, production_sec.sec_name as production_sec_name, wtm.cost as production_cost, wtm.min_time as production_min_time, wtm.max_time as production_max_time from process_group
 left join work_time_master wtm on wtm.ori_process_id = process_group.process_id and wtm.is_default = 1
 left join creditors production_godown on production_godown.creditor_id = wtm.godown_id
 left join department production_department on production_department.dep_id = wtm.dep_id
-left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id order by process_group.max_level desc
+left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id 
 
 
 
