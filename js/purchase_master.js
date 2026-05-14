@@ -559,17 +559,20 @@ function purchase_process_entry(part_id) {
                                         </tr>`)
                                 })
                             }
+                            else {
+                                $("#godown_tbody").append(`<tr><td colspan='6'><div class="text-center text-muted py-5">
+                                                                <i class="fa fa-table fa-2x mb-2"></i>
+                                                                <p class="mb-0">
+                                                                    Data Table Area<br><span class='text-danger'>No Vendor Found.</span>
+                                                                </p>
+                                                            </div></td></tr>
+                                                        `);
+                            }
                         }
                     })
                 }
                 else {
-                    $("#godown_tbody").append(`<div class="text-center text-muted py-5">
-                                            <i class="fa fa-table fa-2x mb-2"></i>
-                                            <p class="mb-0">
-                                                Data Table Area
-                                            </p>
-                                        </div>
-                    `);
+                    salert("Warning", response, "warning");
                 }
             }
 
