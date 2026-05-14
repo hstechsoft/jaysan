@@ -51,6 +51,7 @@ $(document).ready(function () {
     $('#part_name').on('input', function () {
         //check the value not empty
         $(this).removeData("part_id");
+        $("#godown_tbody").empty();
         $(".godown_section").addClass('d-none');
         if ($('#part_name').val() != "") {
             $('#part_name').autocomplete({
@@ -295,7 +296,7 @@ $(document).ready(function () {
         var unit = $("#unit").val();
 
         if (unit == 'hrs') {
-            
+
             min = Number(min) * 60;
             max = Number(max) * 60;
         }
