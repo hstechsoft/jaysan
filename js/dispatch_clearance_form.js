@@ -139,7 +139,7 @@ $(document).ready(function () {
     })
 
 
-    $("#sptable").append("<tr ><td colspan = ''>" + "Total" + "</td><td>" + total_qty + "</td><td colspan='2'>" + total_amount + "</td></tr>")
+    $("#sptable").append("<tr ><td colspan = '4'>" + "Total" + "</td><td>" + total_qty + "</td><td colspan='2'>" + total_amount + "</td></tr>")
     if (ass_id.length > 0) {
       shw_toast("Success", "Machine Selected")
 
