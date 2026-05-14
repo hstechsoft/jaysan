@@ -51,6 +51,7 @@ $(document).ready(function () {
     $('#part_name').on('input', function () {
         //check the value not empty
         $(this).removeData("part_id");
+        $(".godown_section").addClass('d-none');
         if ($('#part_name').val() != "") {
             $('#part_name').autocomplete({
                 //get data from databse return as array of object which contain label,value
