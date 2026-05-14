@@ -758,11 +758,14 @@ function get_purchase_process_recent() {
 
                     console.log(response);
 
-
+                    var count = 0;
                     obj.forEach(function (obj) {
+                        count += 1;
                         $("#parts_list").append(`<li class="list-group-item" data-part_id='${obj.part_id}'>${obj.part_name}</li>`);
 
                     });
+
+                    $("#part_count").text(count)
                 }
                 else {
                     $("#parts_list").append(`<li class="list-group-item"'>No Data Found</li>`)

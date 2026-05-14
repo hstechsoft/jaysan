@@ -2225,6 +2225,7 @@ function insert_qr_work_entry(emp_id, qr_code, sec_id, work_done_id) {
 
 
             if (response.trim() == "ok") {
+                location.reload();
                 $("#start_work").prop("disabled", true).text("Time Started");
                 get_current_work_details(current_user_id);
                 // get_current_work_break(current_user_id);
