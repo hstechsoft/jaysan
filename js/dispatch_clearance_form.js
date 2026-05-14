@@ -129,7 +129,7 @@ $(document).ready(function () {
         var tamount = parseInt($(this).find("td").eq(1).find("ul").data("price")) * parseInt(count) || billing_amount
         total_amount = total_amount + tamount
         var len = $("#sptable tr").length + 1;
-        $("#sptable").append("<tr>" + "<td>" + len + "</td>" + "<td>" + $(this).find("td").eq(1).html() + "</td>" + "<td>" + $(this).find("td").eq(2).html() + "</td>" + "<td>" + $(this).find("td").eq(3).html() + "</td>" + "<td>" + count + "</td>" + "<td>" + tamount + "</td>")
+        $("#sptable").append("<tr>" + "<td>" + len + "</td>" + "<td>" + $(this).find("td").eq(1).html() + "</td>" + "<td>" + $(this).find("td").eq(2).html() + "</td>" + "<td>" + $(this).find("td").eq(3).html() + "</td>" + "<td>" + count + "</td>" + "<td colspan='2'>" + tamount + "</td>")
         oid_arr.push($(this).find("td").eq(2).html().trim())
         $("#sptable").find("tr:last").find("td").eq(1).append("<p class=\"text-bg-secondary rounded small\">Billing Amount/Machine - ₹" + billing_amount + "</p>")
 
@@ -139,7 +139,7 @@ $(document).ready(function () {
     })
 
 
-    $("#sptable").append("<tr ><td colspan = '4'>" + "Total" + "</td><td>" + total_qty + "</td><td>" + total_amount + "</td></tr>")
+    $("#sptable").append("<tr ><td colspan = ''>" + "Total" + "</td><td>" + total_qty + "</td><td colspan='2'>" + total_amount + "</td></tr>")
     if (ass_id.length > 0) {
       shw_toast("Success", "Machine Selected")
 
@@ -749,7 +749,7 @@ function get_bal_payment() {
 
             var formattedBalance = formatter.format(obj.balance);
             $("#sptable tr:last").find("td").eq(2).html(formatter.format($("#sptable tr:last").find("td").eq(2).html()))
-            $('#sptable').append("<tr class = 'text-bg-warning'><td colspan='5'> Available Amount " + ic + "</td><td >" + formattedBalance + "</td></tr>")
+            $('#sptable').append("<tr class = 'text-bg-warning'><td colspan='5'> Available Amount " + ic + "</td><td colspan='2'>" + formattedBalance + "</td></tr>")
 
           });
 

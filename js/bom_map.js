@@ -576,6 +576,14 @@ function get_real_process_summary_inputs(process_id, qty) {
                         📦 ${item.production_qty}
                         </span>
 
+                        <span class="available_qty">
+                        AVQ - ${item.available_qty}
+                        </span>
+
+                        <span class="requseted_qty">
+                        RQ - ${item.requseted_qty}
+                        </span>
+
                         <span class="time">
                         ⏱ ${item.production_min_time || 0}
                         -
