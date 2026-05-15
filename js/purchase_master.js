@@ -331,6 +331,7 @@ $(document).ready(function () {
         if (part_id) {
             $("#part_name").data("part_id", part_id).val($(this).text().trim());
             purchase_process_entry(part_id);
+            clear();
         }
         else {
             salert("Warning", "Data Missing!, Try Later.", "warning");

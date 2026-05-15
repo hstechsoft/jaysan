@@ -138,6 +138,7 @@ function get_current_qr_list() {
                 if (response.trim() != "0 result") {
 
                     var obj = JSON.parse(response);
+                    obj.sort((a, b) => b.production_id - a.production_id);
 
                     obj.forEach(function (obj) {
                         var scanned = JSON.parse(obj.qr_details);

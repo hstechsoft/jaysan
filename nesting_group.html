@@ -58,67 +58,35 @@
                         <!-- Header -->
                         <div class="text-center mb-3">
                             <h5 class="fw-bold text-primary mb-1">
-                                <i class="fa-solid fa-layer-group me-2"></i>
-                                Nesting Entry
+                                <i class="fa-solid fa-arrows-to-circle"></i>
+                                Nesting Group
                             </h5>
-                            <small class="text-muted">Create Standard Nesting</small>
+                            <small class="text-muted">Create Standard Nesting Group</small>
                             <hr>
                         </div>
 
 
                         <div class="row g-2">
 
-                            <!-- Nesting -->
-                            <div class="col-md-6">
+                            <!-- Group -->
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
-                                        <i class="fa-solid fa-object-group"></i>
+                                        <i class="fa-solid fa-people-line"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="nesting_name" placeholder="Nesting Name"
+                                    <input type="text" class="form-control" id="group_name" placeholder="Group Name"
                                         required>
                                 </div>
                             </div>
 
-                            <!-- Material -->
-                            <div class="col-md-6">
+                            <!-- Quantity -->
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-cubes"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="material_id" placeholder="Material"
+                                    <input type="text" class="form-control" id="group_qty" placeholder="Quantity"
                                         required>
-                                </div>
-                            </div>
-
-                            <!-- Standard Length -->
-                            <div class="col-md-6">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text">
-                                        <i class="fa-solid fa-tape"></i>
-                                    </span>
-                                    <input type="number" class="form-control" id="std_length"
-                                        placeholder="Standard Length" required>
-                                </div>
-                            </div>
-
-                            <!-- Runtime -->
-                            <div class="col-md-6">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text">
-                                        <i class="fa-regular fa-clock"></i>
-                                    </span>
-                                    <input type="number" class="form-control" id="run_time" placeholder="Run Time (Min)"
-                                        required>
-                                </div>
-                            </div>
-
-                            <!-- Size -->
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text">
-                                        <i class="fa-solid fa-ruler-combined"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="size" placeholder="Size" required>
                                 </div>
                             </div>
 
@@ -126,49 +94,81 @@
                             <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
+                                        <i class="fa-solid fa-tractor"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="product"
+                                        placeholder="Product" required>
+                                </div>
+                            </div>
+
+                            <!-- Model -->
+                            <div class="col-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-dice"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="run_time" placeholder="Model"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- Size -->
+                            <!-- <div class="col-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-ruler-combined"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="size" placeholder="Size" required>
+                                </div>
+                            </div> -->
+
+                            <!-- Product -->
+                            <!-- <div class="col-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
                                         <i class="fa-solid fa-box-open"></i>
                                     </span>
                                     <input type="text" class="form-control" id="product" placeholder="Product" required>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <!-- File -->
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                                 <label class="small fw-semibold text-danger mb-1">
                                     <i class="fa-solid fa-file-pdf me-1"></i>
                                     Upload PDF Only
                                 </label>
 
                                 <input type="file" class="form-control form-control-sm" id="nest_file">
-                            </div>
+                            </div> -->
 
                         </div>
 
 
 
-                        <!-- Nested Parts -->
+                        <!-- Nesting  -->
                         <div class="mt-4">
 
                             <h6 class="fw-bold text-secondary mb-2">
                                 <i class="fa-solid fa-diagram-project me-2"></i>
-                                Nested Parts
+                                Nesting's Under This Group?
                             </h6>
 
                             <div class="row g-2">
                                 <div class="col-5">
-                                    <input type="text" class="form-control form-control-sm" id="nested_parts"
-                                        placeholder="Part Name">
+                                    <input type="text" class="form-control form-control-sm" id="nesting"
+                                        placeholder="Nesting Name">
                                 </div>
 
                                 <div class="col-5">
-                                    <input type="text" class="form-control form-control-sm" id="nested_part_qty"
+                                    <input type="text" class="form-control form-control-sm" id="nesting_qty"
                                         placeholder="Qty">
                                 </div>
 
                                 <div class="col-2 d-grid">
                                     <button type="button" class="btn btn-primary btn-sm rounded-pill"
-                                        id="nested_part_add_btn">
+                                        id="nesting_add_btn">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
                                 </div>
@@ -184,8 +184,8 @@
                                     style=" position: sticky;  z-index: 5; top: 0; background-color: rgb(193, 216, 236);">
                                     <tr>
                                         <th>
-                                            <i class="fa-solid fa-cube me-1"></i>
-                                            Part
+                                            <i class="fa-solid fa-chart-diagram"></i>
+                                            Nesting Name
                                         </th>
 
                                         <th>
@@ -240,18 +240,16 @@
 
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Nesting Name</th>
-                                    <th scope="col">Material</th>
-                                    <th scope="col">Standard Length</th>
-                                    <th scope="col">Process Time</th>
-                                    <th scope="col">Size</th>
+                                    <th scope="col">Group Name</th>
+                                    <th scope="col">Quantity</th>
                                     <th scope="col">Product</th>
-                                    <th scope="col">Nested Parts</th>
+                                    <th scope="col">Model</th>
+                                    <th scope="col">Nesting Name</th>
                                     <th scope="col">Action</th>
 
                                 </tr>
                             </thead>
-                            <tbody id="nesting_details_tbody">
+                            <tbody id="nesting_group_tbody">
 
 
 
@@ -303,7 +301,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
-    <script src="js/nesting_master.js" type="module"></script>
+    <script src="js/nesting_group.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
