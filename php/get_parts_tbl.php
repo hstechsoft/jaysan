@@ -15,7 +15,7 @@ return $data;
 
 
  $sql = "SELECT parts_tbl.*,JSON_ARRAYAGG(JSON_OBJECT('master_id', sec_stock_master.master_id,'min_qty', sec_stock_master.min_qty,'max_qty', sec_stock_master.max_qty,'rack', sec_stock_master.rack,'bin', sec_stock_master.bin,'store_id', sec_stock_master.store_id,'store_type', sec_stock_master.store_type,'store_name', COALESCE(creditors.creditor_name, department.dep_name, dep_section.sec_name))) as stock_master FROM parts_tbl
- left join sec_stock_master on sec_stock_master.part_id = parts_tbl.part_id 
+ inner  join sec_stock_master on sec_stock_master.part_id = parts_tbl.part_id 
  -- Join godown table only if store_type = 'godown'
 LEFT JOIN creditors 
     ON sec_stock_master.store_id = creditors.creditor_id 
