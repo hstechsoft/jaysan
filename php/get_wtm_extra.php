@@ -23,7 +23,7 @@ $sql = <<<SQL
 with mrf_details as(SELECT  mrf_purchase.raw_material_part_id, group_concat(mrf_purchase.raw_material_rate) as raw_material_rate, creditors.creditor_name, creditors.creditor_id FROM mrf_purchase
 inner join creditors on mrf_purchase.po_order_to = creditors.creditor_id GROUP BY raw_material_part_id,creditors.creditor_id),
 wtm as (select godown_id,output_part from process_wel_tbl inner join work_time_master on process_wel_tbl.process_id = work_time_master.ori_process_id where process_wel_tbl.component_cat = 'purchase' and process_wel_tbl.process_title = 'purchase' and process_wel_tbl.cat = 'out')
-select raw_material_part_id, approx_delivery_days, creditor_name, creditor_id, godown_id from mrf_details 
+select raw_material_part_id, raw_material_rate, creditor_name, creditor_id, godown_id from mrf_details 
 left join wtm on mrf_details.raw_material_part_id = wtm.output_part WHERE godown_id is null and raw_material_part_id = $part_id
 SQL;
 
