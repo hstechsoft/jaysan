@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- $part_id = test_input($_GET['part_id']);
+ $process_id = test_input($_GET['process_id']);
 
 
  
@@ -12,9 +12,20 @@ $data = stripslashes($data);
 $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
+
 }
 
-
+// get part_id from process_id
+$part_id_sql = "SELECT output_part FROM process_wel_tbl WHERE process_id = $process_id";
+$part_id_result = $conn->query($part_id_sql);
+if ($part_id_result->num_rows > 0) {
+    $part_id_row = $part_id_result->fetch_assoc();
+    $part_id = $part_id_row['output_part'];
+} else {
+    echo "0 result";
+    $conn->close();
+    exit;
+}
 
 
 
