@@ -460,12 +460,16 @@ $(document).ready(function () {
         if ($("#company").data("po_order_to")) {
             var company = $("#company").data("po_order_to");
         }
+        if ($("#po_no").val()) {
+            var po_no = $("#po_no").val();
+        }
         console.log(part);
         console.log(company);
         console.log(from_date);
         console.log(to_date);
+        console.log(po_no);
 
-        get_po_report(part, company, from_date, to_date);
+        get_po_report(part, company, from_date, to_date, po_no);
     })
 
     $("#po_report_reset").on("click", function () {
@@ -1240,7 +1244,7 @@ function get_po_receive_sts(po_id) {
 
 
 
-function get_po_report(part, company, fdate, tdate) {
+function get_po_report(part, company, fdate, tdate, po_no) {
     $.ajax({
         url: "php/get_po_report.php",
         type: "get", //send it through get method
@@ -1249,6 +1253,7 @@ function get_po_report(part, company, fdate, tdate) {
             order_to_query: company,
             from_date: fdate,
             to_date: tdate,
+            po_no: po_no,
 
 
         },

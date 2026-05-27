@@ -58,11 +58,23 @@
             <!-- content -->
 
             <div class="row">
-                <h5 class="text-center text-primary" id="part_name_as_title"></h5>
+
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+
+                    <h5 class="text-primary mb-0" id="part_name_as_title">
+                        Part Name
+                    </h5>
+
+                    <div class="form-floating stock_sec" style="width: 180px;">
+                        <input type="text" class="form-control rounded-3" id="stock_sec" placeholder="Section">
+                        <label for="stock_sec">Section</label>
+                    </div>
+
+                </div>
 
                 <div class="col-md-6">
 
-                    <div class="table-responsive" style="height: 80vh; overflow-y: auto;">
+                    <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption class="text-center bg-light text-dark">Part available From</caption>
                             <thead>
@@ -117,7 +129,7 @@
 
                 <div class="col-md-5">
 
-                    <div class="table-responsive" id="stock_req_table" style="height: 80vh; overflow-y: auto;">
+                    <div class="table-responsive" id="stock_req_table" style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption class="text-center bg-light text-dark">Part Request From</caption>
                             <thead>
@@ -171,7 +183,8 @@
                         <button type="button" class="btn btn-primary " id="material_request_btn">Request</button>
                     </div>
 
-                    <div class="table-responsive d-none" id="stock_need_table" style="height: 80vh; overflow-y: auto;">
+                    <div class="table-responsive d-none" id="stock_need_table"
+                        style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption class="text-center bg-light text-dark">Low Section Stock</caption>
                             <thead>
@@ -179,7 +192,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Section</th>
-                                    <th scope="col">Qty</th>
+                                    <th scope="col">Req Qty</th>
                                     <th scope="col">Allocate Qty</th>
                                     <th scope="col">
                                         <div class="position-relative">
@@ -200,7 +213,7 @@
 
 
                         </table>
-                        <button type="button" class="btn btn-primary " id="material_request_btn">Request</button>
+                        <button type="button" class="btn btn-primary " id="material_request_btn1">Request</button>
                     </div>
 
 

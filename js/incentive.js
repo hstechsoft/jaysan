@@ -69,11 +69,14 @@ $(document).ready(function () {
   $("#tarket_amount").on("focusout", function () {
     var tarket_amount = $("#tarket_amount").val();
     var quarter = 0;
+    var quarter_percentage = 0;
 
     if (tarket_amount > 0) {
       quarter = Number(tarket_amount) / 4;
+      quarter_percentage = 100 / 4;
 
-      $("#tarket_amount_one, #tarket_amount_two, #tarket_amount_three, #tarket_amount_four").val(quarter);
+      $("#tarket_amount_one, #tarket_amount_two, #tarket_amount_three, #tarket_amount_four").val(quarter_percentage);
+      $("#tarket_amount_one_view, #tarket_amount_two_view, #tarket_amount_three_view, #tarket_amount_four_view").text(quarter.toLocaleString('en-IN'));
     }
   })
 
@@ -115,6 +118,7 @@ function quarter_calculation(tarket_amount, individual_quarter, id) {
   var tarket_amount = tarket_amount;
   var individual_quarter = individual_quarter;
   var quarter = 0;
+  var quarter_percentage = 0;
   var id = id;
 
 
@@ -124,26 +128,35 @@ function quarter_calculation(tarket_amount, individual_quarter, id) {
 
     case (1):
       if (tarket_amount > 0 && individual_quarter > 0) {
-        quarter = (Number(tarket_amount) - Number(individual_quarter)) / 3;
+        $("#tarket_amount_one_view").text((Number(tarket_amount) * Number(individual_quarter)) / 100);
+        quarter_percentage = (100 - Number(individual_quarter)) / 3;
+        quarter = (Number(tarket_amount) * Number(quarter_percentage)) / 100;
       }
-      $("#tarket_amount_two, #tarket_amount_three, #tarket_amount_four").val(quarter);
+      $("#tarket_amount_two, #tarket_amount_three, #tarket_amount_four").val(quarter_percentage);
+      $("#tarket_amount_two_view, #tarket_amount_three_view, #tarket_amount_four_view").text(quarter.toLocaleString('en-IN'));
       break;
 
     case (2):
       var one = $("#tarket_amount_one").val();
       if (tarket_amount > 0 && individual_quarter > 0) {
-        quarter = (Number(tarket_amount) - (Number(individual_quarter) + Number(one))) / 2;
+        $("#tarket_amount_two_view").text((Number(tarket_amount) * Number(individual_quarter)) / 100);
+        quarter_percentage = (100 - (Number(individual_quarter) + Number(one))) / 2;
+        quarter = (Number(tarket_amount) * Number(quarter_percentage)) / 100;
       }
-      $("#tarket_amount_three, #tarket_amount_four").val(quarter);
+      $("#tarket_amount_three, #tarket_amount_four").val(quarter_percentage);
+      $("#tarket_amount_three_view, #tarket_amount_four_view").text(quarter.toLocaleString('en-IN'));
       break;
 
     case (3):
       var one = $("#tarket_amount_one").val();
       var two = $("#tarket_amount_two").val();
       if (tarket_amount > 0 && individual_quarter > 0) {
-        quarter = Number(tarket_amount) - (Number(individual_quarter) + Number(one) + Number(two));
+        $("#tarket_amount_three_view").text((Number(tarket_amount) * Number(individual_quarter)) / 100);
+        quarter_percentage = 100 - (Number(individual_quarter) + Number(one) + Number(two));
+        quarter = (Number(tarket_amount) * Number(quarter_percentage)) / 100;
       }
-      $("#tarket_amount_four").val(quarter);
+      $("#tarket_amount_four").val(quarter_percentage);
+      $("#tarket_amount_four_view").val(quarter.toLocaleString('en-IN'));
       break;
 
     default:

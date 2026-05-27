@@ -6,8 +6,8 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 
-const part_id = urlParams.get("part_id");
-const req = urlParams.get("req");
+var part_id = urlParams.get("part_id");
+var req = urlParams.get("req");
 
 console.log(part_id, req);
 
@@ -36,10 +36,12 @@ $(document).ready(function () {
 
 
     if (!part_id || !req) {
+        $(".stock_sec").removeClass('d-none');
         $("#part_name_as_title").addClass("d-none")
         get_jaysan_stock_needed()
     }
     else {
+        $(".stock_sec").addClass('d-none');
         get_jaysan_stock_request()
     }
     get_jaysan_stock_available()
@@ -522,7 +524,7 @@ $(document).ready(function () {
     });
 
 
-    $("#material_request_btn").on("click", function () {
+    $("#material_request_btn1, #material_request_btn").on("click", function () {
 
         if (req > 0 && part_id > 0) {
 
@@ -531,7 +533,16 @@ $(document).ready(function () {
             window.location.href =
                 `material_request_form.html?part_id_para=${part_id}&req_para=${req}&qty_para=${0}`;
 
-        } else {
+        }
+        else if (part_id > 0) {
+            $(this).prop("disabled", true);
+
+            window.location.href =
+                `material_request_form.html?part_id_para=${part_id}&req_para=${0}&qty_para=${0}`;
+
+
+        }
+        else {
             salert("Warning", "Data missing. Try later", "warning");
         }
     });
@@ -541,6 +552,7 @@ $(document).ready(function () {
     $('#search_stock_part').on('input', function () {
         //check the value not empty
         $(this).data('process_id', "");
+        part_id = '';
 
         if ($('#search_stock_part').val() != "") {
             $('#search_stock_part').autocomplete({
@@ -583,6 +595,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
                     if (ui.item.id) {
+                        part_id = ui.item.id
                         $("#part_name_as_title").removeClass().text(ui.item.label)
                         get_jaysan_stock_needed(1, '', '', '', '', '', ui.item.id, '', '',)
                         get_jaysan_stock_available('', '', '', '', '', '', ui.item.id, '', '',)
@@ -605,6 +618,94 @@ $(document).ready(function () {
         }
 
     });
+
+    $('#stock_sec').on('input', function () {
+        $('#stock_sec').data("sec_id", '');
+        //check the value not empty
+        if ($('#stock_sec').val() != "") {
+            $('#stock_sec').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_auto2.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: $('#stock_sec').val(),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id,
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+                    if (ui.item.id > 0) {
+                        alert(part_id)
+                        // get_jaysan_stock_available('', '', '', '', '', ui.item.id, part_id, '', '');
+                        get_jaysan_stock_needed('', '', '', '', '', ui.item.id, part_id, '', '')
+                    }
+                    else {
+                        // get_jaysan_stock_available('', '', '', '', '', '', part_id, '', '');
+                        get_jaysan_stock_needed('', '', '', '', '', '', part_id, '', '')
+                    }
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#stock_sec, #search_stock_part').on('focusout', function () {
+
+        var sec_id = $("#stock_sec").data("sec_id") || '';
+        if (sec_id < 1) {
+            $("#stock_sec").val('');
+        }
+        if (part_id < 1){
+            $("#search_stock_part").val('')
+        }
+        get_jaysan_stock_available('', '', '', '', '', '', part_id, '', '');
+        get_jaysan_stock_needed('', '', '', '', '', sec_id, part_id, '', '');
+    })
+
+    $("#material_needed_details").on("dblclick", "tr", function () {
+
+        var part_idd = $(this).data("part_id");
+        var part_name = $(this).data("part_name");
+        var sec_id = $("#stock_sec").data("sec_id") || '';
+        part_id = part_idd;
+        
+
+        if (part_id > 0) {
+
+            $("#search_stock_part").val(part_name).data("part_id", part_id)
+            get_jaysan_stock_available('', '', '', '', '', '', part_id, '', '');
+            get_jaysan_stock_needed('', '', '', '', '', sec_id, part_id, '', '')
+        }
+    })
 
 });
 
@@ -670,7 +771,7 @@ function get_jaysan_stock_needed(min_order_query, from_date, to_date, creditor_q
 
                                     s_count++;
                                     tbody += `
-                                            <tr>
+                                            <tr data-part_id="${item.part_id}" data-part_name="${item.part_name}">
                                                 <td>${s_count}</td>
                                                 <td>${u.unit}</td>
                                                 <td>${u.godown_qty}</td>
@@ -689,7 +790,7 @@ function get_jaysan_stock_needed(min_order_query, from_date, to_date, creditor_q
                                         if (s.section === "no-section") {
 
                                             tbody += `
-                                                    <tr>
+                                                    <tr data-part_id="${item.part_id}" data-part_name="${item.part_name}">
                                                         <td>${s_count}</td>
                                                         <td>${d.department}</td>
                                                         <td>${d.department_qty}</td>
@@ -700,7 +801,7 @@ function get_jaysan_stock_needed(min_order_query, from_date, to_date, creditor_q
                                         } else {
 
                                             tbody += `
-                                                    <tr>
+                                                    <tr data-part_id="${item.part_id}" data-part_name="${item.part_name}">
                                                         <td>${s_count}</td>
                                                         <td>${s.section}</td>
                                                         <td>${s.Section_qty}</td>
@@ -980,7 +1081,7 @@ function insert_stock_allocation(allocation_json) {
                     if (part_id) {
                         window.location.href = "http://localhost/jaysan/json_stock.html";
                     }
-                    else{
+                    else {
                         window.location.reload()
                     }
                 } else {

@@ -33,7 +33,12 @@
             overflow: auto;
         }
 
-        #parts_list .list-group-item {
+        #mrf_godown_details{
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        #parts_list .list-group-item, #mrf_godown_details .list-group-item {
             border: none;
             border-bottom: 1px solid #f0f0f0;
             padding: 5px;
@@ -41,18 +46,18 @@
             cursor: pointer;
         }
 
-        #parts_list .list-group-item:hover {
+        #parts_list .list-group-item:hover, #mrf_godown_details .list-group-item:hover {
             background: #f8f9fa;
         }
 
-        #parts_list .list-group-item {
+        #parts_list .list-group-item, #mrf_godown_details .list-group-item {
             transition:
                 background-color 0.35s ease,
                 box-shadow 0.35s ease,
                 transform 0.35s ease;
         }
 
-        #parts_list .list-group-item:hover {
+        #parts_list .list-group-item:hover, #mrf_godown_details .list-group-item:hover  {
             background-color: #9ec1f5 !important;
             box-shadow: 13px 13px 20px 0px #3788ff !important;
             transform: translate(-6px, -6px);
@@ -223,6 +228,8 @@
 
                                     </div>
 
+                                    <ul class="list-group my-2 rounded border border-2 border-primary" id="mrf_godown_details"></ul>
+
                                     <!-- Buttons -->
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 
@@ -243,7 +250,7 @@
 
                         <div class="card shadow-sm border-0 rounded-4 h-100">
 
-                            <div class="card-body">
+                        <div class="card-body">
 
                                 <div class="text-center text-muted">
                                     <div class="table-responsive">

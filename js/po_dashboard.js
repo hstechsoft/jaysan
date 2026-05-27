@@ -679,6 +679,35 @@ $(document).ready(function () {
         $(this).closest(".material_in_by").removeClass('d-none')
     })
 
+
+
+    $("#print_container").load('material_request_form_report.html', function () {
+        $("#mrf_print_btn").on("click", function (event) {
+            event.preventDefault();
+            // TODO: handle click here
+
+
+            $('#mrf_report_table').printThis({
+
+
+
+            });
+        });
+
+
+    });
+
+    $("#po_dashboard_details").on("click", ".view_btn", function () {
+
+        if ($(this).data("mrf_id") > 0) {
+            get_material_request_form_details_print($(this).data("mrf_id"));
+        }
+        else{
+            salert("Warning", "Data Missing!, Try Later.", "warring");
+        }
+
+    })
+
 });
 
 
@@ -816,7 +845,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                             purchase = "<li class='list-group-item text-danger text-center'>" + obj.batch + "</li>"
                         }
 
-                        $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.dated + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td></tr>")
+                        $("#po_dashboard_details").append("<tr><td class='text-center'>" + count + " (" + obj.mrf_id + ") " + "</td><td><ul class='list-group'><li class='list-group-item'><span class='fw-bold pe-5'>" + obj.part_name + "</span><span class='text-end'>" + obj.emp_name + "</span><br>" + obj.dated + "  <span class='text-danger ps-5'>" + obj.req_qty + obj.mrf_uom + "-qty </span><span class='text-primary ps-5'>" + obj.status + "</span></li></ul></td><td><ul class='list-group'>" + purchase + "</ul></td><td ><ul class='list-group' style='max-height: 300px; overflow-y: auto;'>" + batch + "</ul></td><td><button class='btn btn-sm btn-outline-primary border-0 view_btn' data-mrf_id=" + obj.mrf_id + "><i class='fa fa-eye'></i></button></td></tr>")
                     });
 
 

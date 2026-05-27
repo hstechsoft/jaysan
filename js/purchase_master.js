@@ -338,6 +338,19 @@ $(document).ready(function () {
         }
     })
 
+    $("#mrf_godown_details").on("dblclick", "li", function () {
+        var godown_id = $(this).data("creditor_id");
+        var godown_name = $(this).data("godown_name");
+
+        if (godown_id) {
+            $("#godown").data("godown_id", godown_id).val(godown_name);
+            // clear();
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+    })
+
 });
 
 
@@ -505,6 +518,7 @@ function purchase_process_entry(part_id) {
 
                     obj.forEach(function (item) {
                         if (item.process_id) {
+                            get_wtm_extra(item.process_id)
                             $(".godown_section").removeClass('d-none');
                             $(".form_godown_update_btn").data("process_id", item.process_id);
                             $(".form_godown_update_btn").data("process", item.process);
@@ -575,6 +589,45 @@ function purchase_process_entry(part_id) {
                 else {
                     salert("Warning", response, "warning");
                 }
+            }
+
+        },
+        error: function (xhr) {
+            salert("Error", xhr.responseText, "error");
+        }
+    })
+}
+
+function get_wtm_extra(process_id) {
+
+    console.log(process_id);
+
+    $.ajax({
+        url: "php/get_wtm_extra.php",
+        type: "get",
+        data: {
+            process_id: process_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != 'error') {
+                $("#mrf_godown_details").empty();
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+
+                    obj.forEach(function (item) {
+                        $("#mrf_godown_details").append(`
+                            <li class="list-group-item" data-creditor_id="${item.creditor_id}" data-godown_name="${item.creditor_name}">
+                                ${item.creditor_name} - MRF Rates: ${item.raw_material_rate}
+                            </li>
+                        `);
+                    });
+                }
+                // else {
+                //     salert("Warning", response, "warning");
+                // }
             }
 
         },

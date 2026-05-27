@@ -377,6 +377,8 @@
                                         <th scope="col">Batch Details <button class="btn btn-success float-end"
                                                 id="excel_btn"><i class="fa-solid fa-file-excel"></i></button></th>
 
+                                        <th scope="col">MRF PDF</th>
+
                                     </tr>
                                 </thead>
                                 <tbody id="po_dashboard_details">
@@ -438,6 +440,24 @@
     </div>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="mrf_report_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"  id="print_container">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id='footer' class="mt-auto"></div>
     <!-- jQuery -->
@@ -467,6 +487,8 @@
     <!-- excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <!-- external js -->
+    <script src="js/printThis.js" type="module"></script>
+    <script src="js/mrf_report.js" type="module"></script>
     <script src="js/po_dashboard.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->

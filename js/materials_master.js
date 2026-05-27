@@ -157,6 +157,7 @@ $(document).ready(function () {
     $("#available_godown").on("change focusout", function () {
 
         if ($(this).val() == 1) {
+            $("#modal_part_name").text($("#part_name").val())
             $("#godownModal").modal("show");
 
         }
@@ -506,7 +507,7 @@ $(document).ready(function () {
         $("#department").data("dept_id", '');
         $("#section").data("sec_id", '');
 
-        
+
         $("#add_avialable_godown").removeData("master_id");
         $("#selected_store").empty();
     });
@@ -516,7 +517,7 @@ $(document).ready(function () {
     //   GST Applicability
     $("#gst_applicability").on("change", function () {
 
-        if ($(this).val() == "yes") {
+        if ($(this).val() == "1") {
             $("#gst_section").removeClass("d-none");
         }
         else {
@@ -1360,12 +1361,15 @@ function get_parts() {
                 if (response.trim() !== '0 result') {
 
                     var obj = JSON.parse(response);
+                    var count = 0;
 
-                    obj.forEach(function (obj) {
+                    obj.forEach(function (obj, index) {
 
+                        count++;
                         $("#parts_list").append(`<li class="list-group-item" data-part_id='${obj.part_id}'>${obj.part_name}</li>`)
 
                     })
+                    $(".part_count").text(count)
                 }
                 else {
 

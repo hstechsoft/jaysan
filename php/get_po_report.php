@@ -14,6 +14,8 @@ $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
   $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
   $order_to_query = ($order_to_query == '') ? "1" :  "jp.po_order_to = '$order_to_query'";
  
+  $po_no = isset($_GET['po_no']) ? $_GET['po_no'] : '';
+  $po_no = ($po_no == '') ? "1" : "jp.po_no = '$po_no'";
  
 function test_input($data) {
 $data = trim($data);
@@ -48,7 +50,7 @@ ifnull(sum(grn.qty),0) as inward_qty,
 FROM
   jaysan_po_material   jmat
 INNER JOIN jaysan_po jp  ON  jmat.jaysan_po_id = jp.po_id 
-LEFT join grn on jmat.jaysan_po_material_id = grn.jaysan_po_material_id where  $material_query and  $date_query and  $order_to_query  GROUP by po_id
+LEFT join grn on jmat.jaysan_po_material_id = grn.jaysan_po_material_id where  $material_query and  $date_query and  $order_to_query and $po_no GROUP by po_id
 ";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 

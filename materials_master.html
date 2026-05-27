@@ -614,6 +614,7 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
                                 <h6 class="text-center">Parts</h6>
+                                <p><span class="badge bg-success part_count"></span></p>
                                 <input type="text" name="" id="parts_search" placeholder="Search">
                             </div>
                         </div>
@@ -642,7 +643,10 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="godownModalLabel">Godown List</h5>
+                    <div class="d-flex gap-4">
+                        <h5 class="modal-title" id="godownModalLabel">Godown List</h5>
+                        <h5 class="modal-title text-primary" id="modal_part_name"></h5>
+                    </div>
                     <button type="button" class="btn-close modal_close_btn" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>

@@ -20,6 +20,11 @@
 
 
     <style>
+        table td,
+        table th {
+            padding: 3px !important;
+        }
+
         /* Card Styling */
         .card-modern {
             border-radius: 16px;
@@ -151,41 +156,140 @@
                         <div class="d-flex justify-content-between mb-2">
                             <h5 class="mb-3"><i class="fa-solid fa-users fa-beat-fade"></i> Team Setup</h5>
                             <button type="button" class="btn btn-secondary " id="percentage_btn" data-bs-toggle="modal"
-                                data-bs-target="#percentage"><i class="fa-regular fa-paper-plane fa-flip"></i></button>
+                                data-bs-target="#percentage" disabled><i
+                                    class="fa-regular fa-paper-plane fa-flip"></i></button>
                         </div>
+                        <div class="row">
 
-                        <div class="d-flex justify-content-between">
-                            <div>
+                            <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="telecaller_name">
-                                    <label>Telecaller</label>
+                                    <input type="text" class="form-control" id="customer_name">
+                                    <label>Customer</label>
                                 </div>
+                            </div>
 
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="customer_target">
+                                    <label>Customer Target</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="marketing_person">
-                                    <label>Marketing Person</label>
+                                    <label>Sales/Marketing Person</label>
                                 </div>
+                            </div>
 
+                            <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="marketing_head">
-                                    <label>Marketing Head</label>
+                                    <input type="number" class="form-control" id="marketing_percentage">
+                                    <label>Percentage%</label>
                                 </div>
                             </div>
 
-                            <div class="card mb-3">
-                                <div class="card-header p-1">Select Customer <input type="text" class="float-end"
-                                        id="dealer_search"></div>
-                                <div class="card-body p-1">
-                                    <ul class="list-group" id="dealer_list" style="height: 20vh; overflow-y: auto;">
-
-                                    </ul>
+                            <div class="col-md-5">
+                                <div class="form-floating mb-3">
+                                    <input type="datetime-local" class="form-control" id="f_date">
+                                    <label>From Date</label>
                                 </div>
                             </div>
+
+                            <div class="col-md-5">
+                                <div class="form-floating mb-3">
+                                    <input type="datetime-local" class="form-control" id="t_date">
+                                    <label>To Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 align-item-center">
+                                <button class="btn btn-primary  rounded-3 add_marketing_person_btn">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table caption-top table-bordered table-striped small">
+                                        <caption></caption>
+                                        <thead>
+
+                                            <tr>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Percentage%</th>
+                                                <th scope="col">From</th>
+                                                <th scope="col">To</th>
+                                                <th scope="col">Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="">
+                                            <tr>
+
+                                                <td>Poorni</td>
+                                                <td>10</td>
+                                                <td>20-05-2026</td>
+                                                <td>30-07-2026</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-primary border-0" id="edit_btn"><i
+                                                            class="fa fa-edit"></i></button>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger border-0"><i
+                                                            class="fa fa-trash"></i></button>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>Bhupesh</td>
+                                                <td>30</td>
+                                                <td>02-04-2026</td>
+                                                <td>-</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-primary border-0" id="edit_btn"><i
+                                                            class="fa fa-edit"></i></button>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger border-0"><i
+                                                            class="fa fa-trash"></i></button>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td>Gowrishangar</td>
+                                                <td>60</td>
+                                                <td>01-04-2026</td>
+                                                <td>30-10-2026</td>
+                                                <td>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-primary border-0" id="edit_btn"><i
+                                                            class="fa fa-edit"></i></button>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger border-0"><i
+                                                            class="fa fa-trash"></i></button>
+                                                </td>
+
+                                            </tr>
+
+                                        </tbody>
+
+
+                                    </table>
+                                </div>
+
+                                <div class="text-center mb-2">
+                                    <button type="submit" class="btn btn-primary " id="team_btn">Create</button>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="text-center mb-2">
-                            <button type="submit" class="btn btn-primary " id="team_btn">Create</button>
-                        </div>
+
 
                         <hr class="mt-0 mb-3">
 
@@ -216,27 +320,31 @@
                         <div class="d-flex gap-2 flex-mobile">
                             <div class="form-floating mb-3 w-100">
                                 <input type="number" class="form-control" id="tarket_amount_one">
-                                <label>Q1</label>
+                                <label>Q1 In %</label>
+                                <span class="text-primary" id="tarket_amount_one_view"></span>
                             </div>
                             <div class="form-floating mb-3 w-100">
                                 <input type="number" class="form-control" id="tarket_amount_two">
-                                <label>Q2</label>
+                                <label>Q2 In %</label>
+                                <span class="text-primary" id="tarket_amount_two_view"></span>
                             </div>
                         </div>
 
                         <div class="d-flex gap-2 flex-mobile">
                             <div class="form-floating mb-3 w-100">
                                 <input type="number" class="form-control" id="tarket_amount_three">
-                                <label>Q3</label>
+                                <label>Q3 In %</label>
+                                <span class="text-primary" id="tarket_amount_three_view"></span>
                             </div>
                             <div class="form-floating mb-3 w-100">
                                 <input type="number" class="form-control" disabled id="tarket_amount_four">
-                                <label>Q4</label>
+                                <label>Q4 In %</label>
+                                <span class="text-primary" id="tarket_amount_four_view"></span>
                             </div>
                         </div>
 
                         <button class="btn btn-modern w-100">
-                            <i class="fa-solid fa-plus"></i> Add Member
+                            <i class="fa-solid fa-plus"></i> Add Target
                         </button>
 
                     </div>
@@ -244,6 +352,83 @@
 
                 <!-- SUMMARY -->
                 <div class="col-lg-7">
+
+                    <div class="card card-modern mb-2">
+                        <div class="card-header">
+                            <h5><i class="fa-solid fa-money-bill-1-wave fa-bounce"></i> Customer Based Incentive</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive" style="max-height: 50vh; overflow-y: auto;">
+                                <table class="table caption-top table-bordered table-striped small">
+                                    <caption></caption>
+                                    <thead class="small"
+                                        style="position: sticky; top: 0; z-index: 5; background-color: hsl(221, 100%, 89%);">
+
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Customer Name</th>
+                                            <th scope="col">Customer Target</th>
+                                            <th scope="col">Employee Incentive</th>
+                                            <th scope="col">Employee Incentive</th>
+                                            <th scope="col">Employee Incentive</th>
+                                            <th scope="col">Balance Incentive</th>
+                                            <th scope="col">Total Percentage%</th>
+                                            <th scope="col">Total Sales</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small" id="">
+                                        <tr>
+
+                                            <td>1</td>
+                                            <td>Balaji Agency</td>
+                                            <td>10,00,000</td>
+                                            <td>Poorni (10%): 50,000</td>
+                                            <td>Bhupesh (30%): 1,50,000</td>
+                                            <td>Gowrishankar (60%): 3,00,000</td>
+                                            <td>0</td>
+                                            <td>100%</td>
+                                            <td>5,00,000</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td>2</td>
+                                            <td>Agri Traders</td>
+                                            <td>12,00,000</td>
+                                            <td>Anitha (10%): 85,000</td>
+                                            <td>Magesh (30%): 2,55,000</td>
+                                            <td>Gowrishankar (60%): 5,10,000</td>
+                                            <td>0</td>
+                                            <td>100%</td>
+                                            <td>8,50,000</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td>3</td>
+                                            <td>Bharani Agro Traders</td>
+                                            <td>6,00,000</td>
+                                            <td>Kasturi (10%): 35,000</td>
+                                            <td>Asif Khan (30%): 1,05,000</td>
+                                            <td>Counter Sale (60%): 2,10,000</td>
+                                            <td>0</td>
+                                            <td>100%</td>
+                                            <td>3,50,000</td>
+
+                                        </tr>
+
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card card-modern p-4">
 
                         <h5 class="mb-3"><i class="fa-solid fa-ranking-star"></i>Tarket Summary</h5>
@@ -356,6 +541,7 @@
                         </div>
 
                     </div>
+
                 </div>
 
             </div>
@@ -400,7 +586,8 @@
                     </div>
 
                     <div class="form-floating mb-2">
-                        <input type="number" class="form-control rounded-3" id="marketing_head_percentage" placeholder="">
+                        <input type="number" class="form-control rounded-3" id="marketing_head_percentage"
+                            placeholder="">
                         <label for="marketing_head_percentage">Marketing Head's % </label>
                     </div>
 
