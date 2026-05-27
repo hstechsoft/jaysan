@@ -51,7 +51,7 @@ VALUES ($cus_name,$cus_addr,$cus_phone,'customer')";
 
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO dealer_delivery (cus_name, cus_phone, cus_addr, chasis_no, dimage, implement, model, ext_warranty, did,cus_id,work_id,date) VALUES ($cus_name, $cus_phone, $cus_addr, $chasis_no, $dimage, $implement, $model, $ext_warranty, $did,$cus_id,0,$delivery_date)";
+$sql .= "INSERT INTO dealer_delivery (cus_name, cus_phone, cus_addr, chasis_no, dimage, implement, model, ext_warranty, did,cus_id,work_id,ddate) VALUES ($cus_name, $cus_phone, $cus_addr, $chasis_no, $dimage, $implement, $model, $ext_warranty, $did,$cus_id,0,$delivery_date)";
 
 if ($conn->multi_query($sql) === TRUE) {
     echo "ok";
