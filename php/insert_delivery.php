@@ -10,6 +10,7 @@ $implement = test_input($_GET['implement']);
 $model = test_input($_GET['model']);
 $ext_warranty = test_input($_GET['ext_warranty']);
 $did = test_input($_GET['did']);
+$delivery_date = test_input($_GET['delivery_date']);
 $cus_id = 0;
 function test_input($data) {
     $data = trim($data);
@@ -50,7 +51,7 @@ VALUES ($cus_name,$cus_addr,$cus_phone,'customer')";
 
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO dealer_delivery (cus_name, cus_phone, cus_addr, chasis_no, dimage, implement, model, ext_warranty, did,cus_id,work_id) VALUES ($cus_name, $cus_phone, $cus_addr, $chasis_no, $dimage, $implement, $model, $ext_warranty, $did,$cus_id,0)";
+$sql .= "INSERT INTO dealer_delivery (cus_name, cus_phone, cus_addr, chasis_no, dimage, implement, model, ext_warranty, did,cus_id,work_id,date) VALUES ($cus_name, $cus_phone, $cus_addr, $chasis_no, $dimage, $implement, $model, $ext_warranty, $did,$cus_id,0,$delivery_date)";
 
 if ($conn->multi_query($sql) === TRUE) {
     echo "ok";
