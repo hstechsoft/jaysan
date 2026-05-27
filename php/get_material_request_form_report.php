@@ -73,7 +73,7 @@ LEFT JOIN employee emp_tally_stock on mrf.tally_stock_approved_by = emp_tally_st
 left JOIN employee emp_purchase_requested ON mrf_purchase.purchase_requested_by = emp_purchase_requested.emp_id 
 left JOIN employee emp_purchase_approved ON mrf_purchase.purchase_approved_by = emp_purchase_approved.emp_id 
 WHERE mrf.mrf_id 
-= 1448 GROUP by mrf_id),
+= $mrf_id GROUP by mrf_id),
 mrf_phy as (select mrf_details.*,
 GROUP_CONCAT(concat('<tr><td>',(select godown_name from internal_godown where internal_godown_id = phy.godown_id) ,'</td><td>',phy.qty,'</td></tr>') ) as phy_stock,
 ifnull(sum(phy.qty),0) as total_physical_stock_print,
