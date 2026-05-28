@@ -2,7 +2,20 @@
  include 'db_head.php';
 
 
-$emp_id = test_input($_POST['emp_id']);
+$emp_id = isset($_POST['emp_id']) ? test_input($_POST['emp_id']) : "'all'";
+$tally_emp_id = isset($_POST['tally_emp_id']) ? test_input($_POST['tally_emp_id']) : 'all';
+$md_emp_id = isset($_POST['md_emp_id']) ? test_input($_POST['md_emp_id']) : 'all';
+
+$md_emp_query = "1";
+
+if($md_emp_id != 'all') {
+    $md_emp_query = "mrf_purchase.purchase_approved_by = $md_emp_id";
+}
+
+$tally_emp_query = "1";
+ if($tally_emp_id != 'all') {
+$tally_emp_query = "mrf.tally_stock_approved_by = $tally_emp_id";
+ }
 
 $status = json_decode($_POST['status'], true);
 $mrf_purchase_by = isset($_POST['mrf_purchase_by']) ? ($_POST['mrf_purchase_by']) : 'all';
@@ -80,6 +93,9 @@ if($emp_id != "'all'") {
 } else {
    $sql =  $sql. "1=1";
 }
+
+$sql  = $sql . " AND " . $tally_emp_query;
+$sql  = $sql . " AND " . $md_emp_query;
 $sql  = $sql . " AND " . $mrf_purchase_query;
 $sql  = $sql . " AND " . $mrf_receive_query;
 $sql = $sql . " ORDER BY mrf.mrf_id DESC";
