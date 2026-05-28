@@ -1180,7 +1180,15 @@
             </table>
           </div>
 
+          <div class="form-floating mb-2">
+            <input type="datetime-local" class="form-control rounded-3" id="day_start_time" placeholder="">
+            <label for="day_start_time">Day Start Time</label>
+          </div>
 
+          <div class="form-floating mb-2">
+            <input type="datetime-local" class="form-control rounded-3" id="day_end_time" placeholder="">
+            <label for="day_end_time">Day End Time</label>
+          </div>
           <!-- Button -->
           <button class="start-btn w-100 mt-4" id="start_day_btn">
             Start My Day
@@ -1254,7 +1262,7 @@
                       </div>
 
                       <div class="table-responsive d-none Worked_parts_table"
-                        style="max-height: 25vh; overflow-y: auto;">
+                        style="max-height: 50vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                           <caption></caption>
                           <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
@@ -1321,7 +1329,7 @@
             </div>
           </div>
 
-          <div class="col-12 col-md-8 col-lg-5 mt-2" id="scan_section">
+          <!-- <div class="col-12 col-md-8 col-lg-5 mt-2" id="scan_section">
 
 
 
@@ -1334,25 +1342,15 @@
 
               <div class="card-body p-4">
 
-                <!-- Section Select -->
-                <!-- <div class="form-floating mb-3">
-                                    <select class="form-select" id="section_select">
-                                        <option selected disabled value="null">Choose Section</option>
-                                    </select>
-                                    <label>Select Section</label>
-                                </div> -->
-
-                <!-- Scan Button -->
                 <div class="d-grid mb-3">
 
-                  <!-- Plus Box -->
+                  
                   <div class="add-box mb-3">
                     <button type="button" class="add-btn" id="openScannerBtn">
                       <i class="fa-solid fa-plus"></i>
                     </button>
                   </div>
-
-                  <!-- ID Input -->
+                  
                   <div class="form-floating mb-2">
                     <input type="text" class="form-control rounded-3" id="job_ass_id" placeholder="">
                     <label for="job_ass_id">ID</label>
@@ -1367,7 +1365,7 @@
               </div>
             </div>
 
-          </div>
+          </div> -->
 
           <div class="col-12 col-md-6 col-lg-4 d-none" id="timing_section">
 
@@ -1544,8 +1542,10 @@
       <div class="d-none" id="viwe_work">
         <div class="row">
           <div class="col-md-6">
-            <button type="button" class="btn btn-outline-success" id="pdf_summary_btnn"><i class="fa-solid fa-file-pdf fa-bounce" ></i></button>
-            <button type="button" class="btn btn-outline-secondary" id="image_summary_btnn"><i class="fa-regular fa-image fa-beat-fade"></i></button>
+            <button type="button" class="btn btn-outline-success" id="pdf_summary_btnn"><i
+                class="fa-solid fa-file-pdf fa-bounce"></i></button>
+            <button type="button" class="btn btn-outline-secondary" id="image_summary_btnn"><i
+                class="fa-regular fa-image fa-beat-fade"></i></button>
             <div class="card shadow p-3 mt-2">
               <div id="pdfContentt">
                 <h4 class="text-center mb-3" id="emp_name_summaryyy">Employee Work Summary</h4>
