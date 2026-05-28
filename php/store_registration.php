@@ -23,7 +23,7 @@ return $data;
 
 
 $sql = "INSERT  INTO  employee (emp_phone_id, emp_email, emp_name, emp_phone,emp_approve,emp_role,firebase_uid,emp_code,emp_user_id)
- VALUES ( $emp_phone_id, $emp_email, $emp_name, $emp_phone, 'no','','','','')";
+ VALUES ( $emp_phone_id, $emp_email, $emp_name, $emp_phone, 'no','users','','','')";
   
   if ($conn->query($sql) === TRUE) {
     
