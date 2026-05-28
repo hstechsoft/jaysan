@@ -22,7 +22,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE material_request_form SET purchase_approved_by = $emp_id,  status = $status , form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'>', $status ,' by ' ,(SELECT emp_name FROM employee WHERE emp_id = $emp_id), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i') , '$reason' ,' </li>')  where mrf_id = $mrf_id";
+ $sql =  "UPDATE material_request_form SET  status = $status , form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'>', $status ,' by ' ,(SELECT emp_name FROM employee WHERE emp_id = $emp_id), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i') , '$reason' ,' </li>')  where mrf_id = $mrf_id";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
