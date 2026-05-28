@@ -1602,10 +1602,12 @@ $(document).ready(function () {
     var department_id = $("#start_worked_dept").val();
     var section_id = $("#start_worked_section").val();
     var machine_id = $("#start_worked_machine").val();
+    var day_start_time = $("#day_start_time").val();
+    var day_end_time = $("#day_end_time").val();
     console.log(process_id, part_id);
 
-    if (Number($("#emp").val()) > 0 && godown_id && department_id && section_id && machine_id && process_id && part_id) {
-      insert_work_done_table($("#emp").val(), godown_id, department_id, section_id, machine_id, process_id, part_id);
+    if (Number($("#emp").val()) > 0 && godown_id && department_id && section_id && machine_id && process_id && part_id && day_start_time && day_end_time) {
+      insert_work_done_table($("#emp").val(), godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time, day_end_time);
     }
     else {
       salert("Warning", "select The Section Or Data Missing!, Try Later.", "warning");
@@ -3796,7 +3798,7 @@ function insert_new_process(processId) {
 
 }
 
-function insert_work_done_table(user_id, godown_id, department_id, section_id, machine_id, process_id, part_id) {
+function insert_work_done_table(user_id, godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time, day_end_time) {
 
   $.ajax({
     url: "php/insert_work_done_table.php",
@@ -3810,6 +3812,8 @@ function insert_work_done_table(user_id, godown_id, department_id, section_id, m
       dep_id: department_id,
       sec_id: section_id,
       current_machine_id: machine_id,
+      day_start_time: day_start_time,
+      day_end_time: day_end_time
     },
     success: function (response) {
       console.log(response);

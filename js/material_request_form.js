@@ -736,7 +736,7 @@ function get_physical_stock_details(mrf_id) {
     }
   });
 
-``
+  ``
 
 
 }
@@ -772,10 +772,11 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
           obj.forEach(function (obj) {
 
             var edit_btn = "disabled";
-            var statuss = ''
+            var statuss = '';
+            var reject = '';
 
 
-            if (obj.emp_id == current_user_id && obj.status == "created")
+            if (obj.emp_id == current_user_id && (obj.status == "created" || obj.status == "purchase_rejected"))
 
               edit_btn = "";
 
@@ -783,6 +784,8 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
 
               edit_btn = "disabled";
 
+            if (obj.status == "purchase_rejected")
+              reject = `<span class='badge bg-danger blink'>Purchase Rejected</span>`
 
 
 
@@ -790,25 +793,24 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
 
 
 
+              // var emp_invalved_list = [];
+              // emp_invalved_list.push("Created by " + obj.emp_name);
 
-            // var emp_invalved_list = [];
-            // emp_invalved_list.push("Created by " + obj.emp_name);
+              // if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
+              //   emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
+              // }
+              // if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
+              //   emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by_name);
+              // }
+              // if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
+              //   emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
+              // }
+              // if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
+              //   emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
+              // }
+              // var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
 
-            // if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
-            //   emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
-            // }
-            // if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
-            //   emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by_name);
-            // }
-            // if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
-            //   emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
-            // }
-            // if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
-            //   emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
-            // }
-            // var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
-
-            var order_type_badge = "";
+              var order_type_badge = "";
 
             if (obj.order_type == "Regular") {
               order_type_badge = "<span class='ms-1 badge bg-success'>R</span>"
@@ -931,7 +933,7 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
 
             count = count + 1;
             $('#material_requset_form_table').append(
-              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span>"+reject+"</div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
               "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + statuss + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"

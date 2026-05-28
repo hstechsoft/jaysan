@@ -61,7 +61,7 @@ $(document).ready(function () {
   get_material_request_form_list_purchase(sts_array_tally, 'all');
 
 
-  var sts_array = ["purchase_requested","md_rejected"];
+  var sts_array = ["purchase_requested", "md_rejected"];
   get_material_request_form_list(sts_array, current_user_id, "purchase_requested");
 
   $("#material_requset_form_purchase_table").on("click", "tr", function (event) {
@@ -929,12 +929,17 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
           obj.forEach(function (obj) {
             console.log(obj.status);
             var edit_btn = "disabled";
+            var reject = '';
             if (field_name == "tally_stock_approved_by") {
-              if (obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved") {
+              if (obj.tally_stock_approved_by == current_user_id && (obj.status == "tally_stock_approved" || obj.status == "md_rejected")) {
                 edit_btn = "";
               }
               else {
                 edit_btn = "disabled";
+              }
+
+              if (obj.status == "md_rejected") {
+                reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
               }
 
             }
@@ -950,13 +955,17 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
 
 
             }
-            else if (field_name == "purchase_requested" && obj.status == "purchase_requested") {
+            else if (field_name == "purchase_requested" && (obj.status == "purchase_requested" || obj.status == "md_rejected")) {
               if (obj.purchase_requested_by == current_user_id) {
                 edit_btn = "";
               }
               else {
                 edit_btn = "disabled";
 
+              }
+              
+              if (obj.status == "md_rejected") {
+                reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
               }
             }
             else if (field_name == "purchase_verified_by") {
@@ -1026,10 +1035,10 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
 
 
             $('#material_requset_form_table').append(
-              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span> " + reject + "</div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm ' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
             );
           });
 
