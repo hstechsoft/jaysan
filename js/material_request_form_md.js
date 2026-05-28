@@ -279,7 +279,8 @@ console.log(mrf_id_g);
      type: "POST", //send it through get method
      data: {
      status : JSON.stringify(sts_array),
-    emp_id : emp_id
+   md_emp_id : emp_id
+
 
      },
      success: function (response) {

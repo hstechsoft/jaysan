@@ -736,7 +736,7 @@ function get_physical_stock_details(mrf_id) {
     }
   });
 
-
+``
 
 
 }

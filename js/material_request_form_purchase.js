@@ -61,7 +61,7 @@ $(document).ready(function () {
   get_material_request_form_list_purchase(sts_array_tally, 'all');
 
 
-  var sts_array = ["purchase_requested"];
+  var sts_array = ["purchase_requested","md_rejected"];
   get_material_request_form_list(sts_array, current_user_id, "purchase_requested");
 
   $("#material_requset_form_purchase_table").on("click", "tr", function (event) {

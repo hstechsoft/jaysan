@@ -576,7 +576,7 @@ $('#material_requset_form_tally_table').append(
      type: "POST", //send it through get method
      data: {
      status : JSON.stringify(sts_array),
-    emp_id : emp_id
+    tally_emp_id : emp_id
 
      },
      success: function (response) {
