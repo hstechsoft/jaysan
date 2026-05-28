@@ -9,15 +9,21 @@
  $implement  =   test_input($_GET['implement']);
  $dealer_name  =   test_input($_GET['dealer_name']);
  $service_person_name  =  test_input($_GET['service_person_name']);
- $rating_service  =   test_input($_GET['rating_service']);
- $rating_dealer	=test_input($_GET['rating_dealer']);
+ $rating_service  =  isset($_GET['rating_service']) ? test_input($_GET['rating_service']) : 'NULL';
+ $rating_dealer	= isset($_GET['rating_dealer']) ? test_input($_GET['rating_dealer']) : 'NULL';
  $did  =   test_input($_GET['did']);
- $cus_id = 0;
+ $cus_id = 0; 
+ $machine_problem = test_input($_GET['machine_problem']);
+ $solution = test_input($_GET['solution']);
 
  
 
  
   
+
+
+
+ 
  
 function test_input($data) {
 $data = trim($data);

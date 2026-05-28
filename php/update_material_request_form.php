@@ -27,7 +27,7 @@ return $data;
 }
 // Set time zone and insert in a single query using multi_query
 $sql = "SET time_zone = '+05:30';";
-$sql .= "UPDATE material_request_form SET uom = $uom, emp_id=$emp_id, part_id=$part_id, bom_production=$bom_production, order_type=$order_type, shortfall_qty=$shortfall_qty, stock_for_sufficent_days=$stock_for_sufficent_days, req_qty=$req_qty, req_date=$req_date, last_purchase_date=$last_purchase_date, last_purchase_qty=$last_purchase_qty, material_receipt_status=$material_receipt_status, prepared_by=$prepared_by,form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'> form Modified by ', (SELECT emp_name FROM employee WHERE emp_id = $emp_id), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i'),' </li>') WHERE mrf_id=$mrf_id;";
+$sql .= "UPDATE material_request_form SET  status ='created',  uom = $uom, emp_id=$emp_id, part_id=$part_id, bom_production=$bom_production, order_type=$order_type, shortfall_qty=$shortfall_qty, stock_for_sufficent_days=$stock_for_sufficent_days, req_qty=$req_qty, req_date=$req_date, last_purchase_date=$last_purchase_date, last_purchase_qty=$last_purchase_qty, material_receipt_status=$material_receipt_status, prepared_by=$prepared_by,form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'> form Modified by ', (SELECT emp_name FROM employee WHERE emp_id = $emp_id), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i'),' </li>') WHERE mrf_id=$mrf_id;";
 
 if ($conn->multi_query($sql)) {
     // Advance through all results to reach the insert
