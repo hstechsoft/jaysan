@@ -98,8 +98,8 @@ $sql  = $sql . " AND " . $tally_emp_query;
 $sql  = $sql . " AND " . $md_emp_query;
 $sql  = $sql . " AND " . $mrf_purchase_query;
 $sql  = $sql . " AND " . $mrf_receive_query;
-$sql = $sql . " ORDER BY mrf.mrf_id DESC";
-//  echo $sql;
+$sql = $sql . " group by mrf.mrf_id ORDER BY mrf.mrf_id DESC";
+//   echo $sql;
 if ($conn->multi_query($sql)) {
     do {
         if ($result = $conn->store_result()) {
