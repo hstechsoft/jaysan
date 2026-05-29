@@ -8,12 +8,7 @@ $godown_id = test_input($_POST['godown_id']);
 $process_part_array = json_decode($_POST['process_part_array'], true);
 $dep_id = test_input($_POST['dep_id']);
 $sec_id = test_input($_POST['sec_id']);
-
-
-
-
-
-
+$work_end_time = test_input($_POST['work_end_time']);
 
 if($qr_work_id == '')
 {
@@ -89,7 +84,7 @@ if ($result_qr_sts->num_rows > 0) {
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, '$work_end_time') as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, '$work_end_time'))) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id and work_done_id = $work_done_id;";
@@ -119,7 +114,7 @@ if(count($break_time_array) > 0) {
 
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
-$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
+$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= '$work_end_time' and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
@@ -195,7 +190,7 @@ $stcok_zero_array[] = [
 
         }
 
-                                                                                                                                                                                                     
+
     } else {
         $stock_zero_count++;
         $stcok_zero_array[] = [
@@ -210,33 +205,13 @@ $stcok_zero_array[] = [
     }
 }
 
-if($stock_zero_count > 0) {
-// if stock not available insert into stock requset table
-foreach ($stcok_zero_array as $zero_stock)
-{
-    $pre_process_id = 'NULL';
-    if($zero_stock['previous_process_id'] > 0) {
-        $pre_process_id = $zero_stock['previous_process_id'];
-    }
-
-    $sql_insert_stock_requset = "INSERT  INTO stock_request (part_id, previous_process_id, qty, godown, dep, sec, emp_id,updated_at) VALUES ( {$zero_stock['part_id']},  $pre_process_id,   {$zero_stock['required_qty']} - {$zero_stock['available_qty']} , $godown_id, $dep_id, $sec_id, $emp_id, NOW()) on duplicate key update updated_at = NOW(), qty = qty + (  {$zero_stock['required_qty']} - {$zero_stock['available_qty']})";
-    if ($conn->query($sql_insert_stock_requset) !== TRUE) {
-        $result_json['message'] = "Error inserting stock request: " . $conn->error;
-        echo json_encode($result_json);
-        $conn->close();
-        exit; 
-    }
-    
-}
-
-
-
-    // $result_json['message'] = "Insufficient stock for some parts.";
-    // $result_json['stock_issue'] = $stcok_zero_array;
-    // echo json_encode($result_json);
-    // $conn->close();
-    // exit;
-}
+// if($stock_zero_count > 0) {
+//     $result_json['message'] = "Insufficient stock for some parts.";
+//     $result_json['stock_issue'] = $stcok_zero_array;
+//     echo json_encode($result_json);
+//     $conn->close();
+//     exit;
+// }
 
     try{
 $conn->begin_transaction();
@@ -249,7 +224,7 @@ $current_work_id = 0;
 
 if($qr_work_id > 0) {
     $current_work_id = $qr_work_id;
-    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
+    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = '$work_end_time', work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
     if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
         $conn->rollback();
         $result_json['message'] = "Error updating QR work entry: " . $conn->error;
@@ -261,7 +236,7 @@ if($qr_work_id > 0) {
 else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
    
-    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
+    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', '$work_end_time')";
       if ($conn->query($sql_insert_qr_work_entry) === TRUE) {
            $current_work_id = $conn->insert_id;
            $result_json['current_work_id'] = $current_work_id;
@@ -325,24 +300,25 @@ if($total_work_duration_minutes > $total_max_time) {
     $pr_time = $process_time['max_time'];
     $required_qty1 = $process_time['required_qty'];
     $part_id = $process_time['part_id'];
-    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id,part_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id, $part_id)";
+
+    $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit,qty,current_work_id, part_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id, $part_id)";
     if ($conn->query($insert_work_process_sql) !== TRUE) {
         $conn->rollback();
-        $result_json['message'] = "Error inserting work process: " . $conn->error;
+        $result_json['message'] = "Error inserting work process: " . $conn->error . " SQL: " . $insert_work_process_sql;
         echo json_encode($result_json);
         $conn->close();
         exit; 
+
+
+        
 
     }
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
     // this is correct on time  so we sum all min time and that time we reduce from total work time then we calulate excess time and distubute to all process
-       $excess_time = $total_work_duration_minutes - $total_min_time;
-
-    $time_to_distribute = ($excess_time + $total_min_time )/$required_qty;
-
-    
+  $excess_time = $total_work_duration_minutes - $total_min_time;
+  $time_to_distribute = ($excess_time + $total_min_time )/$required_qty;
 
     $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
@@ -350,11 +326,11 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
         $pr_id = $process_time['process_id'];
         $pr_time =  $time_to_distribute;
         $required_qty1 = $process_time['required_qty'];
-        $part_id = $process_time['part_id'];
+            $part_id = $process_time['part_id'];
         $insert_work_process_sql = "INSERT INTO work_process (work_id, process_id, work_time_per_unit, qty, current_work_id, part_id) VALUES ($work_done_id,$pr_id, $pr_time, $required_qty1, $current_work_id, $part_id)";
         if ($conn->query($insert_work_process_sql) !== TRUE) {
             $conn->rollback();
-            $result_json['message'] = "Error inserting work process: " . $conn->error;
+            $result_json['message'] = "Error inserting work process: " . $conn->error. " SQL: " . $insert_work_process_sql;
             echo json_encode($result_json);
             $conn->close();
             exit; 
@@ -461,7 +437,51 @@ if ($result_time->num_rows > 0) {
 // bom stock check  done. now reduce bom input and add output to stock based on process_part_array and process_id
 
 
+    foreach ($consumption as $consume) {
+        $part_id = $consume['part_id'];
+        $qty_to_consume = $consume['qty'];
+    $previous_process_id_query = ($consume['previous_process_id'] == 0) 
+    ? 'process_id is null' 
+    : "process_id = " . $consume['previous_process_id'];
+    //  find sec wise stock details
+    // $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query and qty > 0 order by stock_id";
 
+    $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query order by stock_id";
+   
+   
+    $result_sec_stock = $conn->query($sql_sec_stock);
+$remaining = $qty_to_consume;
+    if ($result_sec_stock->num_rows > 0) {
+    while($row = $result_sec_stock->fetch_assoc()) {
+
+        if($remaining <= 0) break;
+
+        $available = $row['qty'];
+        $take_qty = min($available, $remaining);
+
+        // 🔥 reduce stock (insert negative entry with SAME section)
+   $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = " . $row['stock_id'];
+
+    if ($conn->query($sql_update_stock) === TRUE) {
+    } else {
+        $result_json['message'] = "Error updating stock: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->rollback();
+        $conn->close();
+        exit;
+
+    }
+
+        $remaining -= $take_qty;
+    
+
+    }
+
+    
+    }
+    }
+
+  
 
     // insert breaks 
     if($production_id > 0)
@@ -484,9 +504,31 @@ if ($result_time->num_rows > 0) {
 
 
 
-   
-    $result_json['message'] = "Work done entry and stock updates successful.";
+  foreach($process_part_array as $process_part) {
+        $part_id = $process_part['part_id'];
+        $required_qty = $process_part['required_qty'];
+        $process_id = $process_part['process_id'];
+       
+$batch_id = "j".$work_done_id;
+    // insert output stock for the process part
+    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
+
+    if ($conn->query($sql_insert_output) === TRUE) {
+
+    } else {
+        $result_json['message'] = "Error inserting output stock: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->rollback();
+        $conn->close();
+        exit;
+        
     
+
+    }
+    }
+    $conn->commit();
+    $result_json['message'] = "Work done entry and stock updates successful.";
+    echo json_encode($result_json);
     }
 
      catch(Exception $e) {
@@ -496,167 +538,18 @@ if ($result_time->num_rows > 0) {
         $conn->close();
         exit;
     }
-
-    
-    $total_qr_time = 0;
+  
 
 
-// get total break time for the current work done id on;y unfinished entry
-$get_total_qr_unfinished = "SELECT ifnull(sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)), 0) AS total_qr_time FROM qr_work_entry 
-
-WHERE production_id > 0 and end_time is not null and work_done_id = $work_done_id and production_id not in (select production_id from qr_work_entry where work_done_id = $work_done_id and production_id > 0 and work_sts = 'finished' and end_time is not null)";
-$result_qr_unfinished = $conn->query($get_total_qr_unfinished);
-if ($result_qr_unfinished->num_rows > 0) {
-    while($row = $result_qr_unfinished->fetch_assoc()) {
-        $total_qr_time += $row['total_qr_time']; // Convert minutes to seconds
-    }
-}
-$result_json['total_qr_time'] = $total_qr_time;
 
 
-// get inserted entry
-$sql_report = "WITH qr_summary_wob as (SELECT wd.start_date,wd.end_date,qr_work_entry.qr_work_id,qr_work_entry.emp_id, qr_work_entry.start_time, qr_work_entry.end_time,qr_work_entry.free_time,qr_work_entry.production_id,qr_work_entry.reason,qr_work_entry.work_sts,
-JSON_ARRAYAGG(JSON_OBJECT('part_id',work_process.part_id,'qty',work_process.qty,'work_time_per_unit',work_process.work_time_per_unit,'total_time',work_process.qty * work_process.work_time_per_unit,'process_id',work_process.process_id,'process_name',jaysan_process.process_name,'part_name',parts_tbl.part_name)) as process_data,
-
-sum(work_process.qty * work_process.work_time_per_unit) as total_process_time,
-
-TIMESTAMPDIFF(MINUTE,qr_work_entry.start_time,qr_work_entry.end_time) as total_time,
-COUNT(work_process.process_id) as total_processes,
-pv.worked_process_data,
-if(pv.production_id>0,JSON_OBJECT('worked_process_data',pv.worked_process_data,'process_total_time',pv.process_total_time,'process_total_time',pv.process_total_time,'production_entry_data',pv.production_entry_data,'total_free_time',pv.total_free_time,'total_proess_count',pv.total_proess_count,'total_qr_work_time',pv.total_qr_work_time,'total_work_count',pv.total_work_count),null) as production_data
-
-
-FROM qr_work_entry
-
-    left join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
-   
-    left join process_wel_tbl on work_process.process_id = process_wel_tbl.process_id
-    left join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
-    LEFT join parts_tbl on work_process.part_id = parts_tbl.part_id
-   
-    left join production_details_view pv on qr_work_entry.production_id = pv.production_id
-     inner join work_done_table wd on qr_work_entry.work_done_id = wd.work_id
-    WHERE
-   qr_work_entry.work_done_id = $work_done_id group by qr_work_entry.qr_work_id),
-
- qr_summary as ( SELECT qr_summary_wob.*,
- JSON_ARRAYAGG(
-  CASE 
-    WHEN extra_time_master.ex_type = 'break' 
-    THEN JSON_OBJECT('break_time',work_break.break_time,'ext_id',work_break.ext_id,'ex_name',extra_time_master.ex_name)
-  END
-) as break_data,
-
-JSON_ARRAYAGG(
-  CASE 
-    WHEN extra_time_master.ex_type != 'break' 
-    THEN JSON_OBJECT('break_time',work_break.break_time,'ext_id',work_break.ext_id,'ex_name',extra_time_master.ex_name)
-  END
-) as extra_work_data,
 
 
  
-SUM(CASE WHEN extra_time_master.ex_type = 'break' THEN work_break.break_time ELSE 0 END) as total_break_time,
-SUM(CASE WHEN extra_time_master.ex_type != 'break' THEN work_break.break_time ELSE 0 END) as total_extra_work_time
- from  qr_summary_wob
-  left join work_break on qr_summary_wob.qr_work_id = work_break.current_work_id
-   left join extra_time_master on work_break.ext_id = extra_time_master.ext_id    GROUP BY qr_summary_wob.qr_work_id
-  )
-SELECT qr_work_id,start_date, end_date,TIMESTAMPDIFF(MINUTE, start_date, now()) as total_work_duration, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data,if(qr_summary.production_id>0,null,extra_work_data) as extra_work_data, total_process_time, total_break_time, total_extra_work_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
-left  join machine_production_taken mpt on qr_summary.production_id = mpt.production_id
-left join assign_product ap on mpt.ass_id = ap.ass_id";
-$result_report = $conn->query($sql_report);
-    $rows = array();
-    $total_process_entry_time = 0;
-    $total_break_entry_time = 0;
-    $tpt = 0;
-    $total_free_time = 0;
-    $total_extra_work_time = 0;
-if ($result_report->num_rows > 0) {
-    while($row = $result_report->fetch_assoc()) {
-        $rows[] = $row;
-        $total_process_entry_time += $row['total_time'];
-        $total_break_entry_time += $row['total_break_time'];
-        $tpt += $row['total_process_time'];
-        $total_free_time += $row['free_time'];
-        $total_work_duration = $row['total_work_duration'];
-        $total_extra_work_time += $row['total_extra_work_time'];
-
-    }
-} 
-     else {
-    echo "Error: " . $sql_report . "<br>" . $conn->error;
-  }
 
 
 
-
-
-
-
-$result_json['report'] = $rows;
-$result_json['total_day_time'] = $total_work_duration;
-$result_json['paused_time'] = $total_qr_time;
-$result_json['break_time'] = $total_break_entry_time;
-$result_json['total_process_time'] = $tpt;
-$result_json['total_extra_work_time'] = $total_extra_work_time;
-$total_free_time = 0;
-$total_free_time = $total_work_duration - ( $total_break_entry_time + $total_qr_time + $tpt+ $total_extra_work_time);
-$result_json['free_time'] = $total_free_time;
-
-// $total_wtime = $total_process_entry_time;
-// $total_btime = $total_break_entry_time ;
-
-// $actual_work_time = $total_wtime - ($total_btime + $total_qr_time);
-// $result_json['ref'] = 'total_time-'.$total_wtime.'-'.$total_btime.'-'.$total_qr_time;
-// $result_json['total_entry_time'] = $total_process_entry_time;
-
-
-
-// $result_json['total_work_time'] = $total_wtime;
-// $result_json['total_break_time'] = $total_btime;
-// $result_json['actual_work_time'] = $actual_work_time;
-// $result_json['total_process_entry_time'] = $tpt;
-
-// $result_json['total_free_time'] = $total_free_time;
-
-
-// if(($total_free_time > 0) && ($total_free_time < 15)) {
-//     $result_json['final_status'] = "free_time";
-//     $result_json['time_info'] = $total_free_time;
-// } else if($total_free_time >= 15) {
-//     $result_json['final_status'] = "excess_free_time";
-//     $result_json['time_info'] = $total_free_time;
-// }
-// else {
-//      $result_json['final_status'] = "on_time";
-//     $result_json['time_info'] = 0;
-// }
-
-
-// if($actual_work_time < $tpt) {
-//     $result_json['final_status'] = "less_time ";
-//     $result_json['time_info'] = 0;
-
-// } else if($actual_work_time > $tpt) {
-//     $free_time = $actual_work_time - $tpt;
-//     $result_json['final_status'] = "free time";
-//     $result_json['time_info'] = $free_time;
-// } else {
-//     $result_json['final_status'] = "on_time";
-//      $result_json['time_info'] = 0;
-// }
-
-$result_json['message'] = "success";
-http_response_code(200);
-echo json_encode($result_json);
-
- 
- $conn->rollback();
-
-$conn->close();
 
  ?>
-
 
 

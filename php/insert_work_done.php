@@ -204,13 +204,13 @@ $stcok_zero_array[] = [
     }
 }
 
-if($stock_zero_count > 0) {
-    $result_json['message'] = "Insufficient stock for some parts.";
-    $result_json['stock_issue'] = $stcok_zero_array;
-    echo json_encode($result_json);
-    $conn->close();
-    exit;
-}
+// if($stock_zero_count > 0) {
+//     $result_json['message'] = "Insufficient stock for some parts.";
+//     $result_json['stock_issue'] = $stcok_zero_array;
+//     echo json_encode($result_json);
+//     $conn->close();
+//     exit;
+// }
 
     try{
 $conn->begin_transaction();
@@ -443,7 +443,10 @@ if ($result_time->num_rows > 0) {
     ? 'process_id is null' 
     : "process_id = " . $consume['previous_process_id'];
     //  find sec wise stock details
-    $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query and qty > 0 order by stock_id";
+    // $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query and qty > 0 order by stock_id";
+
+    $sql_sec_stock = "select stock_id, qty,sec from jaysan_stock where part_id = $part_id and godown = $godown_id and dep = $dep_id and $previous_process_id_query order by stock_id";
+   
    
     $result_sec_stock = $conn->query($sql_sec_stock);
 $remaining = $qty_to_consume;

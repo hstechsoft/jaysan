@@ -8,6 +8,7 @@ $godown_id = test_input($_POST['godown_id']);
 $process_part_array = json_decode($_POST['process_part_array'], true);
 $dep_id = test_input($_POST['dep_id']);
 $sec_id = test_input($_POST['sec_id']);
+$work_end_time = test_input($_POST['work_end_time']);
 
 
 
@@ -89,7 +90,7 @@ if ($result_qr_sts->num_rows > 0) {
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, '$work_end_time') as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, '$work_end_time'))) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id and work_done_id = $work_done_id;";
@@ -119,7 +120,7 @@ if(count($break_time_array) > 0) {
 
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
-$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
+$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= '$work_end_time' and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
@@ -219,7 +220,7 @@ foreach ($stcok_zero_array as $zero_stock)
         $pre_process_id = $zero_stock['previous_process_id'];
     }
 
-    $sql_insert_stock_requset = "INSERT  INTO stock_request (part_id, previous_process_id, qty, godown, dep, sec, emp_id,updated_at) VALUES ( {$zero_stock['part_id']},  $pre_process_id,   {$zero_stock['required_qty']} - {$zero_stock['available_qty']} , $godown_id, $dep_id, $sec_id, $emp_id, NOW()) on duplicate key update updated_at = NOW(), qty = qty + (  {$zero_stock['required_qty']} - {$zero_stock['available_qty']})";
+    $sql_insert_stock_requset = "INSERT  INTO stock_request (part_id, previous_process_id, qty, godown, dep, sec, emp_id,updated_at) VALUES ( {$zero_stock['part_id']},  $pre_process_id,   {$zero_stock['required_qty']} - {$zero_stock['available_qty']} , $godown_id, $dep_id, $sec_id, $emp_id, '$work_end_time') on duplicate key update updated_at = '$work_end_time', qty = qty + (  {$zero_stock['required_qty']} - {$zero_stock['available_qty']})";
     if ($conn->query($sql_insert_stock_requset) !== TRUE) {
         $result_json['message'] = "Error inserting stock request: " . $conn->error;
         echo json_encode($result_json);
@@ -249,7 +250,7 @@ $current_work_id = 0;
 
 if($qr_work_id > 0) {
     $current_work_id = $qr_work_id;
-    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
+    $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = '$work_end_time', work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
     if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
         $conn->rollback();
         $result_json['message'] = "Error updating QR work entry: " . $conn->error;
@@ -261,7 +262,7 @@ if($qr_work_id > 0) {
 else {
     // insert new entry in qr_work_entry with work sts as finished and end time as now
    
-    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', NOW())";
+    $sql_insert_qr_work_entry = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id, work_done_id, work_sts, start_time, end_time) VALUES ($emp_id, $production_id, $sec_id, $work_done_id, 'finished', '$current_process_start_time', '$work_end_time')";
       if ($conn->query($sql_insert_qr_work_entry) === TRUE) {
            $current_work_id = $conn->insert_id;
            $result_json['current_work_id'] = $current_work_id;
@@ -562,7 +563,7 @@ SUM(CASE WHEN extra_time_master.ex_type != 'break' THEN work_break.break_time EL
   left join work_break on qr_summary_wob.qr_work_id = work_break.current_work_id
    left join extra_time_master on work_break.ext_id = extra_time_master.ext_id    GROUP BY qr_summary_wob.qr_work_id
   )
-SELECT qr_work_id,start_date, end_date,TIMESTAMPDIFF(MINUTE, start_date, now()) as total_work_duration, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data,if(qr_summary.production_id>0,null,extra_work_data) as extra_work_data, total_process_time, total_break_time, total_extra_work_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
+SELECT qr_work_id,start_date, end_date,TIMESTAMPDIFF(MINUTE, start_date, '$work_end_time') as total_work_duration, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data,if(qr_summary.production_id>0,null,extra_work_data) as extra_work_data, total_process_time, total_break_time, total_extra_work_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
 left  join machine_production_taken mpt on qr_summary.production_id = mpt.production_id
 left join assign_product ap on mpt.ass_id = ap.ass_id";
 $result_report = $conn->query($sql_report);
