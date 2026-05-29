@@ -15,7 +15,7 @@
  $cus_id = 0; 
  $machine_problem = test_input($_GET['machine_problem']);
  $solution = test_input($_GET['solution']);
-
+$review_date = (!empty($_GET['review_date'])) ? "'" . date("Y-m-d H:i:s", strtotime($_GET['review_date'])) . "'" : "NOW()";
  
 
  
@@ -64,11 +64,11 @@ VALUES ($cus_name,$cus_addr,$cus_phone,'customer')";
 
 $sql = "SET time_zone = '+05:30';"; 
 
-$sql .= "INSERT  INTO review (cus_name,cus_phone,cus_place,cus_addr,chasis_no,dealer_name,service_person_name,rating_service,rating_dealer,did,cus_id,work_id,implement)
- VALUES ($cus_name,$cus_phone,$cus_place,$cus_addr,$chasis_no,$dealer_name,$service_person_name,$rating_service,$rating_dealer,$did,$cus_id,0,$implement	)";
+$sql .= "INSERT  INTO review (cus_name,cus_phone,cus_place,cus_addr,chasis_no,dealer_name,service_person_name,rating_service,rating_dealer,did,cus_id,work_id,implement, review_date, solution, machine_problem)
+ VALUES ($cus_name,$cus_phone,$cus_place,$cus_addr,$chasis_no,$dealer_name,$service_person_name,$rating_service,$rating_dealer,$did,$cus_id,0,$implement, $review_date, $solution, $machine_problem	)";
   
   if ($conn->multi_query($sql) === TRUE) {
-   echo "Thanks for your review";
+   echo "ok";
     
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

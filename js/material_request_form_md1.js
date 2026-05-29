@@ -592,11 +592,11 @@ $(document).ready(function () {
   $("#reject_btn").on("click", function (event) {
     event.preventDefault();
     // TODO: handle click here
-    if ($("#reject_reason").val() != "") {
-      update_reject($(this).data("mrf_id"), "md_rejected", $("#reject_reason").val())
+    if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
+      update_reject($(this).data("mrf_id"), "md_rejected-"+$("#reject_to").val()+"", $("#reject_reason").val())
     }
     else {
-      shw_toast("Warning", "Enter Reason", "")
+      shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
     }
   });
 
@@ -607,7 +607,7 @@ $(document).ready(function () {
       update_reject($(this).data("mrf_id"), "md_redo", $("#reject_reason").val())
     }
     else {
-      shw_toast("Warning", "Enter Reason", "")
+      shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
     }
   });
 

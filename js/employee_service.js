@@ -26,16 +26,17 @@ $(document).ready(function () {
     );
 
 
-    $("#summary_search").on("keyup", function () {
+    $("#service_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
-        $("#all_bom_table tr").filter(function () {
+        $("#service_history_table tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
 
     check_login();
     get_jaysan_final_product();
+    get_service_review();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -54,7 +55,7 @@ $(document).ready(function () {
                         type: "get", //send it through get method
                         data: {
 
-                            cus_name: $('#dealer_name').val() + '%',
+                            cus_name: $('#dealer_name').val(),
 
 
                         },
@@ -100,7 +101,7 @@ $(document).ready(function () {
     $('#customer_name').on('input', function () {
         //check the value not empty
         $(this).removeData("customer_id");
-        $("#customer_number").val('');
+        $("#customer_number, #customer_address").val('');
 
         if ($('#customer_name').val() != "") {
             $('#customer_name').autocomplete({
@@ -124,7 +125,8 @@ $(document).ready(function () {
                                     label: item.cus_name,
                                     value: item.cus_name,
                                     id: item.cus_id,
-                                    cus_phone: item.cus_phone
+                                    cus_phone: item.cus_phone,
+                                    addr: item.cus_address,
                                 };
                             }));
 
@@ -138,6 +140,7 @@ $(document).ready(function () {
 
                     $(this).data("customer_id", ui.item.id);
                     $("#customer_number").val(ui.item.cus_phone);
+                    $("#customer_address").val(ui.item.addr);
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
@@ -157,6 +160,7 @@ $(document).ready(function () {
     $('#customer_number').on('input', function () {
 
         $("#customer_name").removeData("customer_id").val('');
+        $("#customer_address").val('');
         //check the value not empty
         if ($('#customer_number').val() != "") {
             $('#customer_number').autocomplete({
@@ -180,7 +184,8 @@ $(document).ready(function () {
                                     label: item.cus_phone,
                                     value: item.cus_phone,
                                     id: item.cus_id,
-                                    cus_name: item.cus_name
+                                    cus_name: item.cus_name,
+                                    addr: item.cus_address,
                                 };
                             }));
 
@@ -193,6 +198,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $("#customer_name").data("customer_id", ui.item.id).val(ui.item.cus_name);
+                    $("#customer_address").val(ui.item.addr);
                     //   $(this).data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
@@ -210,6 +216,7 @@ $(document).ready(function () {
 
     });
 
+
     // Service Date
     let now = new Date();
 
@@ -219,12 +226,330 @@ $(document).ready(function () {
         now.toISOString().slice(0, 16)
     );
 
+    // Employee
+    $('#employee1').on('input', function () {
+
+        //check the value not empty
+        $('#employee1').data("emp_id", '');
+        if ($(this).val() != "") {
+            $(this).autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_employee_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            emp_name: request.term
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.emp_name,
+                                    value: item.emp_name,
+                                    cus_id: item.emp_id,
+                                    phone: item.cus_phone,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("emp_id", ui.item.cus_id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div style='font-size:12px;'><strong>" + item.label + "</strong></div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+
+    $("#add_problem_btn").on("click", function () {
+
+        var problem = $("#problem").val();
+        if (problem != '') {
+            $("#problem_table_body").append(`<tr><td>${problem}</td><td><button class='btn btn-sm btn-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+
+            $('#problem').val('');
+
+        }
+        else {
+            salert("Warning", "Enter The Problem.", "warning");
+        }
+
+    });
+
+    $("#problem_table_body").on("click", "td button", function () {
+
+        let row = $(this).closest("tr");
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this Problem?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                row.remove();
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "The Problem has been removed.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+
+        });
+
+    });
+    $("#add_employee_btn").on("click", function () {
+
+        var employee = $('#employee1').val().trim();
+
+        if (employee !== '') {
+            $("#employee_table_body").append(`
+            <tr>
+                <td>${employee}</td>
+                <td>
+                    <button class='btn btn-sm btn-danger'>
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </td>
+            </tr>
+        `);
+
+            $('#employee1').val(''); // Clear field
+        } else {
+            salert("Warning", "Enter The Employee.", "warning");
+        }
+
+    });
+
+    $("#employee_table_body").on("click", "td button", function () {
+
+        let row = $(this).closest("tr");
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to delete this Employee?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                row.remove();
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "The row Employee been removed.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+
+        });
+
+    });
+
+    $("#add_service_details_btn").on("click", function () {
+
+        var dealer_name = $("#dealer_name").val();
+        var did = $("#dealer_name").data("dealer_id");
+
+        var cus_name = $("#customer_name").val();
+        var cus_phone = $("#customer_number").val();
+        var cus_place = $("#place").val();
+        var cus_addr = $("#customer_address").val();
+        var chasis_no = $("#chasis_no").val();
+        var implement = $("#implement").val();
+        var review_date = $("#service_date").val();
+        
+        var service_person_name = '';
+        var machine_problem = '';
+
+        var rating_service = 0;
+        var rating_dealer = 0;
+
+        var solution = $("#solution").val();
+
+        if ($("#employee_table_body tr").length > 0) {
+
+            $("#employee_table_body tr").each(function () {
+                service_person_name +=
+                    (service_person_name ? ", " : "") +
+                    $(this).find("td").eq(0).text().trim();
+            });
+
+        } else {
+            salert("Warning", "At least one Service Person needed.", "warning");
+            return;
+        }
+
+        if ($("#problem_table_body tr").length > 0) {
+
+            $("#problem_table_body tr").each(function () {
+                machine_problem +=
+                    (machine_problem ? ", " : "") +
+                    $(this).find("td").eq(0).text().trim();
+            });
+
+        } else {
+            salert("Warning", "Problem needed.", "warning");
+            return;
+        }
+
+        console.log(
+            dealer_name, did, cus_name, cus_phone,
+            cus_addr, cus_place, chasis_no, implement,
+            service_person_name, machine_problem,
+            rating_dealer, rating_service, solution, review_date
+        );
+
+        if (!did || !cus_name || !cus_phone || !cus_place ||
+            !chasis_no || !implement || !service_person_name ||
+            !machine_problem || !review_date) {
+
+            salert("Warning", "Fill all required fields.", "warning");
+            return;
+        }
+
+        insert_review(
+            dealer_name, did, cus_name, cus_phone, cus_addr, cus_place, chasis_no, implement, service_person_name, machine_problem, rating_dealer, rating_service, solution, review_date
+        );
+    });
+
+
 });
 
 
 
 
+// Insert
+function insert_review(dealer_name, did, cus_name, cus_phone, cus_addr, cus_place, chasis_no, implement, service_person_name, machine_problem, rating_dealer, rating_service, solution, review_date) {
+    
+    $.ajax({
+        url: "php/insert_review.php",
+        type: "get", //send it through get method
+        data: {
 
+            dealer_name: dealer_name,
+            did: did,
+            cus_name: cus_name,
+            cus_phone: cus_phone,
+            cus_addr: cus_addr,
+            cus_place: cus_place,
+            chasis_no: chasis_no,
+            implement: implement,
+            service_person_name: service_person_name,
+            machine_problem: machine_problem,
+            rating_dealer: rating_dealer,
+            rating_service: rating_service,
+            solution: solution,
+            review_date: review_date
+
+
+        },
+        success: function (response) {
+            console.log(response);
+            
+
+            if (response.trim() == "ok") {
+                //console.log
+                window.location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+}
+
+function get_service_review() {
+
+
+    $.ajax({
+        url: "php/get_today_review.php",
+        type: "get", //send it through get method
+        data: {
+            did: 0
+
+        },
+        success: function (response) {
+
+            console.log(response);
+            if (response.trim() != "error") {
+                $('#service_history_table').empty();
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        $('#service_history_table').append("<tr><td>" + count + "</td><td>" + obj.dealer_name + "</td><td>" + obj.cus_name + "</td><td>" + obj.cus_place + "</td><td>" + obj.service_person_name + "</td><td>" + obj.chasis_no + "</td><td>" + obj.implement + "</td><td>" + obj.machine_problem + "</td><td>" + obj.solution + "</td><td>" + obj.ddate + "</td></tr>")
+
+                    });
+
+
+                }
+                else {
+                    $("#service_history_table").append("<td colspan='10' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 // Implement
 function get_jaysan_final_product() {
@@ -251,7 +576,7 @@ function get_jaysan_final_product() {
 
                     obj.forEach(function (obj) {
                         count = count + 1;
-                        $('#implement').append("<option  value = '" + obj.product_id + "'>" + obj.product_name + "</option>")
+                        $('#implement').append("<option  value = '" + obj.product_name + "'>" + obj.product_name + "</option>")
 
                     });
 

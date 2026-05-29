@@ -61,7 +61,7 @@ $(document).ready(function () {
   get_material_request_form_list_purchase(sts_array_tally, 'all');
 
 
-  var sts_array = ["purchase_requested", "md_rejected"];
+  var sts_array = ["purchase_requested", "md_rejected", "md_rejected-puraches"];
   get_material_request_form_list(sts_array, current_user_id, "purchase_requested");
 
   $("#material_requset_form_purchase_table").on("click", "tr", function (event) {
@@ -582,11 +582,11 @@ $(document).ready(function () {
   $("#reject_btn").on("click", function (event) {
     event.preventDefault();
     // TODO: handle click here
-    if ($("#reject_reason").val() != "") {
-      update_reject($(this).data("mrf_id"))
+    if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
+      update_reject($(this).data("mrf_id"), $("#reject_to").val())
     }
     else {
-      shw_toast("Warning", "Enter Reason", "")
+      shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
     }
   });
 
@@ -594,14 +594,14 @@ $(document).ready(function () {
 });
 
 
-function update_reject(mrf_id) {
+function update_reject(mrf_id, reject_to) {
 
 
   $.ajax({
     url: "php/update_material_request_form_status.php",
     type: "get", //send it through get method
     data: {
-      status: "purchase_rejected",
+      status: "purchase_rejected-"+reject_to,
       mrf_id: mrf_id,
       emp_id: current_user_id
 
@@ -931,16 +931,13 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
             var edit_btn = "disabled";
             var reject = '';
             if (field_name == "tally_stock_approved_by") {
-              if (obj.tally_stock_approved_by == current_user_id && (obj.status == "tally_stock_approved" || obj.status == "md_rejected")) {
+              if (obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved") {
                 edit_btn = "";
               }
               else {
                 edit_btn = "disabled";
               }
 
-              if (obj.status == "md_rejected") {
-                reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
-              }
 
             }
             else if (field_name == "created" && obj.status == "created") {
@@ -955,7 +952,7 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
 
 
             }
-            else if (field_name == "purchase_requested" && (obj.status == "purchase_requested" || obj.status == "md_rejected")) {
+            else if (field_name == "purchase_requested" && (obj.status == "purchase_requested" || obj.status == "md_rejected-puraches" || obj.status == "md_rejected")) {
               if (obj.purchase_requested_by == current_user_id) {
                 edit_btn = "";
               }
@@ -964,7 +961,7 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
 
               }
               
-              if (obj.status == "md_rejected") {
+              if (obj.status == "md_rejected" || obj.status == "md_rejected-puraches") {
                 reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
               }
             }
