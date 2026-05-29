@@ -1,27 +1,27 @@
 <?php
 include 'db_head.php';
 
-$did = test_input($_GET['did']);
+$did = $_GET['did'];
+// $did = test_input($_GET['did']);
 
 
 
 
-function test_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    $data = "'" . $data . "'";
-    return $data;
-}
+// function test_input($data)
+// {
+//     $data = trim($data);
+//     $data = stripslashes($data);
+//     $data = htmlspecialchars($data);
+//     $data = "'" . $data . "'";
+//     return $data;
+// }
 $sql = "SET time_zone = '+05:30';";
 
-if ($did < 1) {
+if ($did <= 0) {
 
     $sql .= "SELECT dealer_name, machine_problem, cus_name, cus_place, service_person_name, implement, solution, chasis_no,DATE_FORMAT(review_date, '%d-%m-%Y %H:%i %p') as ddate FROM review ORDER BY review_date DESC";
 } 
 else {
-
     $sql .= "SELECT dealer_name, machine_problem, cus_name, cus_place, service_person_name, implement, solution, chasis_no,DATE_FORMAT(review_date, '%d-%m-%Y %H:%i %p') as ddate FROM review WHERE review_date BETWEEN CURRENT_DATE AND NOW() and did = $did";
 }
 

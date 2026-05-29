@@ -36,7 +36,7 @@ $(document).ready(function () {
 
     check_login();
     get_jaysan_final_product();
-    get_service_review();
+    get_service_review(0);
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -51,11 +51,11 @@ $(document).ready(function () {
 
                 source: function (request, response) {
                     $.ajax({
-                        url: "php/get_customer_autocomplete.php",
+                        url: "php/get_dealer_auto_complete.php",
                         type: "get", //send it through get method
                         data: {
 
-                            cus_name: $('#dealer_name').val(),
+                            dealer_name: $('#dealer_name').val(),
 
 
                         },
@@ -65,9 +65,9 @@ $(document).ready(function () {
                             console.log(data);
                             response($.map(data, function (item) {
                                 return {
-                                    label: item.cus_name,
-                                    value: item.cus_name,
-                                    id: item.cus_id,
+                                    label: item.dname,
+                                    value: item.dname,
+                                    id: item.did,
                                     // part_name: item.part_name
                                 };
                             }));
@@ -84,6 +84,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
+                    get_service_review(ui.item.id);
 
 
                 },
@@ -96,6 +97,14 @@ $(document).ready(function () {
         }
 
     });
+
+    $('#dealer_name').on("focusout", function () {
+        
+        if ($(this).data("dealer_id") === undefined) {
+            $(this).val('');
+            get_service_review(0);
+        }
+    })
 
     // Customer Auto Complete
     $('#customer_name').on('input', function () {
@@ -216,6 +225,60 @@ $(document).ready(function () {
 
     });
 
+    // Problem
+    $('#problem').on('input', function () {
+        //check the value not empty
+        if ($('#problem').val() != "") {
+            $('#problem').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_machine_problem_autocomplete.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            problem: $("#problem").val(),
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.machine_problem,
+                                    value: item.machine_problem,
+                                    // id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    //   $(this).data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     // Service Date
     let now = new Date();
@@ -393,7 +456,7 @@ $(document).ready(function () {
         var chasis_no = $("#chasis_no").val();
         var implement = $("#implement").val();
         var review_date = $("#service_date").val();
-        
+
         var service_person_name = '';
         var machine_problem = '';
 
@@ -456,7 +519,7 @@ $(document).ready(function () {
 
 // Insert
 function insert_review(dealer_name, did, cus_name, cus_phone, cus_addr, cus_place, chasis_no, implement, service_person_name, machine_problem, rating_dealer, rating_service, solution, review_date) {
-    
+
     $.ajax({
         url: "php/insert_review.php",
         type: "get", //send it through get method
@@ -481,7 +544,7 @@ function insert_review(dealer_name, did, cus_name, cus_phone, cus_addr, cus_plac
         },
         success: function (response) {
             console.log(response);
-            
+
 
             if (response.trim() == "ok") {
                 //console.log
@@ -500,14 +563,14 @@ function insert_review(dealer_name, did, cus_name, cus_phone, cus_addr, cus_plac
 
 }
 
-function get_service_review() {
-
+function get_service_review(did) {
+    console.log(did);
 
     $.ajax({
         url: "php/get_today_review.php",
         type: "get", //send it through get method
         data: {
-            did: 0
+            did: did
 
         },
         success: function (response) {
@@ -531,7 +594,7 @@ function get_service_review() {
 
                 }
                 else {
-                    $("#service_history_table").append("<td colspan='10' scope='col'>No Data</td>");
+                    $("#service_history_table").append("<td colspan='10' class='text-center text-danger' scope='col'>No Data</td>");
 
                 }
             }
