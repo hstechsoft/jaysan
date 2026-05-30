@@ -1,20 +1,29 @@
 <?php
- include 'db_head.php';
+include 'db_head.php';
 
- $did = test_input($_GET['did']);
+$did = test_input($_GET['did']);
 
 
- 
- 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
+
+
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    $data = "'" . $data . "'";
+    return $data;
 }
-$sql = "SET time_zone = '+05:30';"; 
-$sql .= "SELECT cus_name, service_person_name, chasis_no,DATE_FORMAT(review_date, '%d-%m-%Y %H:%i %p') as ddate FROM review WHERE review_date BETWEEN CURRENT_DATE AND NOW() and did = $did";
+$sql = "SET time_zone = '+05:30';";
+
+if ($did < 1) {
+
+    $sql .= "SELECT dealer_name, machine_problem, cus_name, cus_place, service_person_name, implement, solution, chasis_no,DATE_FORMAT(review_date, '%d-%m-%Y %H:%i %p') as ddate FROM review ORDER BY review_date DESC";
+} 
+else {
+
+    $sql .= "SELECT dealer_name, machine_problem, cus_name, cus_place, service_person_name, implement, solution, chasis_no,DATE_FORMAT(review_date, '%d-%m-%Y %H:%i %p') as ddate FROM review WHERE review_date BETWEEN CURRENT_DATE AND NOW() and did = $did";
+}
 
 if ($conn->multi_query($sql)) {
     // Move to the second result set
@@ -23,7 +32,7 @@ if ($conn->multi_query($sql)) {
 
     if ($result->num_rows > 0) {
         $rows = array();
-        while($r = $result->fetch_assoc()) {
+        while ($r = $result->fetch_assoc()) {
             $rows[] = $r;
         }
         print json_encode($rows);
@@ -38,4 +47,3 @@ if ($conn->multi_query($sql)) {
 
 $conn->close();
 ?>
-
