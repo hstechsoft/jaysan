@@ -656,11 +656,11 @@ $(document).ready(function () {
 
     if ($(this).val() > 0) {
       get_material_request_form_details_print1($(this).val());
-      $("#previous_form_modal").modal("hide");
+      // $("#previous_form_modal").modal("hide");
 
-      $('html, body').animate({
-        scrollTop: $(document).height()
-      }, 500);
+      // $('html, body').animate({
+      //   scrollTop: $(document).height()
+      // }, 500);
     }
     else {
       salert("Warning", "Data Missing!, Try Later.", "warning");

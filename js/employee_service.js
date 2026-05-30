@@ -99,7 +99,7 @@ $(document).ready(function () {
     });
 
     $('#dealer_name').on("focusout", function () {
-        
+
         if ($(this).data("dealer_id") === undefined) {
             $(this).val('');
             get_service_review(0);
@@ -460,8 +460,8 @@ $(document).ready(function () {
         var service_person_name = '';
         var machine_problem = '';
 
-        var rating_service = 0;
-        var rating_dealer = 0;
+        var rating_service = $('#rating_service').rateit('value') || 0;
+        var rating_dealer = $('#rating_dealer').rateit('value') || 0;
 
         var solution = $("#solution").val();
 
@@ -511,6 +511,19 @@ $(document).ready(function () {
         );
     });
 
+    $("#rating_service").bind('rated', function (event, value) {
+
+
+        $("#service_rno").text(value)
+    });
+
+
+
+    $("#rating_dealer").bind('rated', function (event, value) {
+
+
+        $("#dealer_rno").text(value)
+    });
 
 });
 
