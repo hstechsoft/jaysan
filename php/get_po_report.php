@@ -42,7 +42,7 @@ $sql .= "SELECT
 jp.po_no,
 jp.po_date,
 jp.po_id,
-sum(jmat.qty) as total_po_qty,
+(jmat.qty) as total_po_qty,
 
 ifnull(sum(grn.qty),0) as inward_qty,
     (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to)  as order_to
