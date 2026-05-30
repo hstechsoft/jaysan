@@ -1603,11 +1603,11 @@ $(document).ready(function () {
     var section_id = $("#start_worked_section").val();
     var machine_id = $("#start_worked_machine").val();
     var day_start_time = $("#day_start_time").val();
-    var day_end_time = $("#day_end_time").val();
+    // var day_end_time = $("#day_end_time").val();
     console.log(process_id, part_id);
 
-    if (Number($("#emp").val()) > 0 && godown_id && department_id && section_id && machine_id && process_id && part_id && day_start_time && day_end_time) {
-      insert_work_done_table($("#emp").val(), godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time, day_end_time);
+    if (Number($("#emp").val()) > 0 && godown_id && department_id && section_id && machine_id && process_id && part_id && day_start_time) {
+      insert_work_done_table_admin($("#emp").val(), godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time);
     }
     else {
       salert("Warning", "select The Section Or Data Missing!, Try Later.", "warning");
@@ -1669,7 +1669,7 @@ $(document).ready(function () {
 
     if ($("#paused_work_tbody tr").length <= 0) {
       $("#final_summary").removeClass("d-none");
-      get_final_summary();
+      get_final_summary_admin();
     }
     else {
       salert("Warning", "First Complete all the paused work.", "warning");
@@ -1680,8 +1680,15 @@ $(document).ready(function () {
 
   $("#last_end_btn").on("click", function () {
 
+    var day_end_time = $("#day_end_time").val();
     if (work_done_id <= 0) {
       salert("Warning", "Data Missing Try Later.", "warning");
+    }
+
+    
+    if(day_end_time == '' || !day_end_time || day_end_time == null){
+      salert("Warning", "Fill End Time.", "warning");
+      return;
     }
 
     Swal.fire({
@@ -1809,6 +1816,12 @@ $(document).ready(function () {
 
     var process_part_array = [];
     var machine_id = $("#worked_machine").val();
+    var work_end_time = $("#end_time").val();
+
+    if (work_end_time == '' || !work_end_time || work_end_time == null) {
+      salert("Warning", "Fill End Time.", "warning");
+      return;
+    }
 
     $("#setting_part_tbody tr").each(function () {
 
@@ -1823,7 +1836,7 @@ $(document).ready(function () {
 
     $("#end_day_work").data("process_part_array", process_part_array);
     $("#end_day_work").data("qr_id", '');
-    get_current_work_break($("#emp").val());
+    get_current_work_break($("#emp").val(), work_end_time);
 
 
   });
@@ -1877,6 +1890,12 @@ $(document).ready(function () {
     var godown_id = $(this).data("godown_id");
     var dep_id = $(this).data("dep_id");
     var sec_id = $(this).data("sec_id");
+    var work_end_time = $("#end_time").val();
+
+    if (work_end_time == '' || !work_end_time || work_end_time == null) {
+      salert("Warning", "Fill End Time.", "warning");
+      return;
+    }
     console.log(qr_work_id);
     console.log(break_time_array);
     console.log(process_part_array);
@@ -1911,7 +1930,7 @@ $(document).ready(function () {
 
         if (process_part_array.length > 0 || qr_work_id) {
 
-          insert_work_done($("#emp").val(), qr_work_id, break_time_array, process_part_array, se.godown_id, se.dep_id, se.sec_id);
+          insert_work_done_admin($("#emp").val(), qr_work_id, break_time_array, process_part_array, se.godown_id, se.dep_id, se.sec_id, work_end_time);
           console.log(se.godown_id, se.dep_id, se.sec_id);
 
         }
@@ -3129,14 +3148,14 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
   });
 }
 
-function get_final_summary() {
-  console.log(current_user_id);
+function get_final_summary_admin() {
+  console.log($("#emp").val());
 
   $.ajax({
-    url: "php/get_final_summary.php",
+    url: "php/get_final_summary_admin.php",
     type: "get",
     data: {
-      emp_id: current_user_id,
+      emp_id: $("#emp").val(),
     },
 
     success: function (response) {
@@ -3148,7 +3167,7 @@ function get_final_summary() {
       try {
         data = JSON.parse(response);
         $("#summay_btn").addClass("d-none")
-        $("#last_end_btn").removeClass("d-none")
+        $("#last_end_btn, .day_end_time").removeClass("d-none")
       } catch (e) {
         salert("Invalid response");
         $("#final_summary").addClass("d-none");
@@ -3609,12 +3628,12 @@ function work_day_end(work_done_id) {
 }
 
 
-function insert_work_done(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id) {
+function insert_work_done_admin(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id, work_end_time) {
 
-  console.log(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id);
+  console.log(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id, work_end_time);
 
   $.ajax({
-    url: "php/insert_work_done.php",
+    url: "php/insert_work_done_admin.php",
     type: "post", //send it through get method
     data: {
 
@@ -3624,7 +3643,8 @@ function insert_work_done(emp_id, qr_work_id, break_time_array, process_part_arr
       process_part_array: process_part_array,
       godown_id: godown_id,
       dep_id: dep_id,
-      sec_id: sec_id
+      sec_id: sec_id,
+      work_end_time: work_end_time
     },
     success: function (response) {
       console.log(response);
@@ -3701,12 +3721,13 @@ function update_chasis_no(ass_id, chasis_no) {
 
 }
 
-function get_current_work_break(emp_id) {
+function get_current_work_break(emp_id, work_end_time) {
   $.ajax({
     url: "php/get_current_work_break.php",
     type: "get", //send it through get method
     data: {
       emp_id: emp_id,
+      work_end_time: work_end_time
     },
     success: function (response) {
       console.log(response);
@@ -3798,10 +3819,10 @@ function insert_new_process(processId) {
 
 }
 
-function insert_work_done_table(user_id, godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time, day_end_time) {
+function insert_work_done_table_admin(user_id, godown_id, department_id, section_id, machine_id, process_id, part_id, day_start_time) {
 
   $.ajax({
-    url: "php/insert_work_done_table.php",
+    url: "php/insert_work_done_table_admin.php",
     type: "post", //send it through get method
     data: {
 
@@ -3813,7 +3834,7 @@ function insert_work_done_table(user_id, godown_id, department_id, section_id, m
       sec_id: section_id,
       current_machine_id: machine_id,
       day_start_time: day_start_time,
-      day_end_time: day_end_time
+      // day_end_time: day_end_time
     },
     success: function (response) {
       console.log(response);

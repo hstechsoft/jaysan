@@ -48,6 +48,23 @@ $(document).ready(function () {
 
     });
 
+  $("#print_previous_form").load('material_request_form_report1.html',
+    function () {
+      $("#mrf_print_btn1").on("click", function (event) {
+        event.preventDefault();
+        // TODO: handle click here
+
+
+        $('#mrf_report_table1').printThis({
+
+
+
+        });
+      });
+
+
+    });
+
   $("#mrf_search").on("keyup", function () {
     var value = $(this).val().toLowerCase();
 
@@ -593,7 +610,7 @@ $(document).ready(function () {
     event.preventDefault();
     // TODO: handle click here
     if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
-      update_reject($(this).data("mrf_id"), "md_rejected-"+$("#reject_to").val()+"", $("#reject_reason").val())
+      update_reject($(this).data("mrf_id"), "md_rejected-" + $("#reject_to").val() + "", $("#reject_reason").val())
     }
     else {
       shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
@@ -621,8 +638,289 @@ $(document).ready(function () {
   });
 
 
+  $("#material_requset_form_purchase_table, #material_requset_form_table").on("click", "td span.previous_form", function () {
+
+    var part_id = $(this).data('part_id');
+
+    if (part_id > 0) {
+      $("#previous_form_modal").modal("show")
+      get_material_request_form_previous(part_id, 'all', "all");
+    }
+    else {
+      salert("Warning", "Data Missing!, Try Later.", "warning");
+    }
+
+  })
+
+  $("#previous_form_tbody").on("click", "button.print ", function () {
+
+    if ($(this).val() > 0) {
+      get_material_request_form_details_print1($(this).val());
+      $("#previous_form_modal").modal("hide");
+
+      $('html, body').animate({
+        scrollTop: $(document).height()
+      }, 500);
+    }
+    else {
+      salert("Warning", "Data Missing!, Try Later.", "warning");
+    }
+  })
 
 });
+
+
+
+function get_material_request_form_previous(part_id, emp_id, field_name) {
+
+
+  $.ajax({
+    url: "php/get_material_request_form_parts_search.php",
+    type: "GET", //send it through get method
+    data: {
+
+      part_id: part_id,
+
+
+    },
+    success: function (response) {
+
+
+      console.log(response);
+      $('#previous_form_tbody').empty();
+
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+
+          $("#received_btn").prop("checked", false);
+          $("#all_btn").prop("checked", false);
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+
+          obj.forEach(function (obj) {
+            var statuss = ''
+
+            var edit_btn = "disabled";
+            if (field_name == "tally_stock_approved_by") {
+              if (obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved") {
+                edit_btn = "";
+              }
+              else {
+                edit_btn = "disabled";
+              }
+
+            }
+            else if (field_name == "created" && obj.status == "created") {
+
+              if (obj.emp_id == current_user_id) {
+                edit_btn = "";
+              }
+              else {
+                edit_btn = "disabled";
+
+              }
+
+
+            }
+            else if (field_name == "purchase_requested_by" && obj.status == "purchase_requested") {
+              if (obj.purchase_requested_by == current_user_id) {
+                edit_btn = "";
+              }
+              else {
+                edit_btn = "disabled";
+
+              }
+            }
+            else if (field_name == "purchase_verified_by") {
+              if (obj.purchase_verified_by == current_user_id) {
+                edit_btn = "";
+              }
+              else {
+                edit_btn = "disabled";
+
+              }
+            }
+            else if (field_name == "purchase_approved_by") {
+              if (obj.purchase_approved_by == current_user_id) {
+                edit_btn = "";
+              }
+              else {
+                edit_btn = "disabled";
+
+              }
+            }
+
+            var emp_invalved_list = [];
+            emp_invalved_list.push("Created by " + obj.emp_name);
+
+            if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
+              emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
+            }
+            if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
+              emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by_name);
+            }
+            if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
+              emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
+            }
+            if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
+              emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
+            }
+            var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
+            var order_type_badge = "";
+
+            if (obj.order_type == "Regular") {
+              order_type_badge = "<span class='ms-1 badge bg-success'>R</span>"
+            }
+            else if (obj.order_type == "Emergency") {
+              order_type_badge = "<span class='ms-1 blink badge bg-danger'>E</span>"
+            }
+
+            var commitment_sts = "";
+            if (obj.commitment_date != null && obj.commitment_date != "" && obj.commitment_date != "0" && obj.commitment_date != "undefined") {
+              commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
+            }
+            else {
+              commitment_sts = "<i class='fa-solid fa-hourglass-start'></i>"
+              // commitment_sts = obj.commitment_date
+            }
+
+            var batch_details = [];
+            var bth_d = '';
+            var mrf_batch_qty = 0;
+
+            try {
+              batch_details = JSON.parse(obj.batch_details || "[]");
+            } catch (e) {
+              batch_details = [];
+              mrf_batch_qty = 1;
+            }
+
+
+            batch_details.forEach(function (bd) {
+
+              let po_details = bd.po_details || [];
+
+              if (typeof po_details === "string") {
+                try {
+                  po_details = JSON.parse(po_details || "[]");
+                } catch (e) {
+                  po_details = [];
+                }
+              }
+
+              mrf_batch_qty += parseFloat(bd.batch_qty || 0);
+
+
+              bth_d += `
+                      <div class="border rounded px-1 py-1 mb-1 small">
+
+                          <div class="d-flex justify-content-between align-items-start">
+
+                              <div>
+                                  <span class="badge bg-secondary fw-semibold">
+                                      ${bd.batch_qty || 0} Qty • ${bd.batch_date || "-"}
+                                  </span>
+                              </div>
+
+                              <div class="d-flex flex-wrap justify-content-end gap-1" style="max-width: 50%;">
+                  `;
+
+              let hasGRN = false;
+
+              po_details.forEach(function (po_d) {
+
+                let grn_details = po_d.grn_details || [];
+
+                if (typeof grn_details === "string") {
+                  try {
+                    grn_details = JSON.parse(grn_details || "[]");
+                  } catch (e) {
+                    grn_details = [];
+                  }
+                }
+
+                if (Array.isArray(grn_details) && grn_details.length > 0) {
+                  grn_details.forEach(function (grn) {
+
+                    hasGRN = true;
+
+                    bth_d += `
+                            <span class="badge bg-success">
+                                ${grn.received_qty || 0} Qty • ${grn.grn_date || "-"}
+                            </span>
+                        `;
+                  });
+                }
+              });
+
+              if (!hasGRN) {
+                if (!hasGRN) {
+                  bth_d += `
+                              <span class="badge bg-warning text-dark">
+                                  No PO
+                              </span>
+                          `;
+                }
+              }
+
+              bth_d += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            let pending =
+              parseFloat(mrf_batch_qty || 0) - parseFloat(obj.mrf_receive_qty || 0);
+
+            if (pending === 0 && obj.mrf_receive_qty !== null) {
+              statuss = `<span class='text-success'>Material Received(${mrf_batch_qty + " Qty -" + obj.mrf_receive_qty + " Qty"})</span>
+                    ${bth_d}`;
+            } else {
+              statuss = `
+                    <span class='text-danger'>
+                        ${pending} Material Not Received
+                    </span>
+                    ${bth_d}
+                `;
+            }
+
+            count = count + 1;
+            $('#previous_form_tbody').append(
+              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
+              "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
+              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + statuss + "</td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+            );
+
+
+          });
+
+
+        }
+        else {
+          // $("#@id@") .append("<td colspan='7' scope='col'>No Data</td>");
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 
 function update_reject(mrf_id, sts, cmd) {
@@ -1022,10 +1320,10 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
 
 
             $('#material_requset_form_table').append(
-              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary previous_form' data-part_id = '" + obj.part_id + "'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
             );
           });
 
@@ -1276,10 +1574,10 @@ function get_material_request_form_list_purchase(sts_array, emp_id) {
             // );
 
             $('#material_requset_form_purchase_table').append(
-              "<tr data-part_name = '" + obj.part_name + "'><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr data-part_name = '" + obj.part_name + "'><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary previous_form' data-part_id = '" + obj.part_id + "'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>");
+              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>");
 
 
           });

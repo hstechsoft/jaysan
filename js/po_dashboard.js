@@ -681,13 +681,13 @@ $(document).ready(function () {
 
 
 
-    $("#print_container").load('material_request_form_report.html', function () {
-        $("#mrf_print_btn").on("click", function (event) {
+    $("#print_container").load('material_request_form_report1.html', function () {
+        $("#mrf_print_btn1").on("click", function (event) {
             event.preventDefault();
             // TODO: handle click here
 
 
-            $('#mrf_report_table').printThis({
+            $('#mrf_report_table1').printThis({
 
 
 
@@ -700,10 +700,10 @@ $(document).ready(function () {
     $("#po_dashboard_details").on("click", ".view_btn", function () {
 
         if ($(this).data("mrf_id") > 0) {
-            get_material_request_form_details_print($(this).data("mrf_id"));
+            get_material_request_form_details_print1($(this).data("mrf_id"));
         }
         else{
-            salert("Warning", "Data Missing!, Try Later.", "warring");
+            salert("Warning", "Data Missing!, Try Later.", "warning");
         }
 
     })

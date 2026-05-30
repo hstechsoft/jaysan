@@ -168,7 +168,7 @@ $(document).ready(function () {
 
     $('#customer_number').on('input', function () {
 
-        $("#customer_name").removeData("customer_id").val('');
+        $("#customer_name").removeData("customer_id");
         $("#customer_address").val('');
         //check the value not empty
         if ($('#customer_number').val() != "") {

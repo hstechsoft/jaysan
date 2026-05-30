@@ -7,7 +7,7 @@ window.demo = function () {
 
   $("#department_txt").html("selector");
 };
-window.get_material_request_form_details_print = function (mrf_id) {
+window.get_material_request_form_details_print1 = function (mrf_id) {
 
        $("#mrf_report_card").removeClass("d-none");
        $("#mrf_report_modal").modal("show");

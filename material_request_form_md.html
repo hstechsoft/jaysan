@@ -69,7 +69,7 @@
           </div>
 
           <div class="form-floating mb-3">
-            <select class="form-select" id="reject_to" >
+            <select class="form-select" id="reject_to">
               <option selected disabled>Choose...</option>
               <option value="puraches">MRF Puraches</option>
               <option value="tally">MRF Tally</option>
@@ -670,7 +670,47 @@
 
 
 
+  <!-- Modal -->
+  <div class="modal fade" id="previous_form_modal" tabindex="-1" aria-labelledby="previous_form_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="previous_form_modalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table small caption-top table-bordered table-striped ">
+              <caption></caption>
+              <thead>
 
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Part</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+
+                </tr>
+              </thead>
+              <tbody id="previous_form_tbody">
+
+
+              </tbody>
+
+
+            </table>
+          </div>
+
+          <div id="print_previous_form"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
@@ -706,6 +746,7 @@
   <script src="js/printThis.js" type="module"></script>
   <!-- external js -->
 
+  <script src="js/mrf_report.js" type="module"></script>
   <script src="js/material_request_form_report.js" type="module"></script>
   <script src="js/material_request_form_md1.js" type="module"></script>
   <script src="js/menu.js" type="module"></script>
