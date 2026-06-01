@@ -53,7 +53,7 @@ window.onLocationReceived = function (lat, lng) {
 
   if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
 
-    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng);
+    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng+ " / "+ clicked_capture_live_pic);
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
 
@@ -150,8 +150,8 @@ $(document).ready(function () {
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
 
-    AndroidBridge.getLocation();
     clicked_capture_live_pic = 1;
+    AndroidBridge.getLocation();
 
 
     // let lat = $("#lat_input").val();
