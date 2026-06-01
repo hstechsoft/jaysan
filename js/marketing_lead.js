@@ -139,7 +139,7 @@ $(document).ready(function () {
     let lat = $("#lat_input").val();
     let lng = $("#lng_input").val();
 
-    console.log(lat, lng);
+    alert(lat + ", " + lng);
 
     if (
       lat !== undefined && lat !== "" && lng !== undefined && lng !== ""
