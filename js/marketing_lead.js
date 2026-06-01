@@ -49,9 +49,23 @@ window.onLocationReceived = function (lat, lng) {
 
   // You can now use lat and lng for your business logic
   // For example, update a hidden input or send to your server via AJAX
-  $("#lat_input").val(lat);
-  $("#lng_input").val(lng);
 
+  if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
+
+    $("#lat_input").val(lat);
+    $("#lng_input").val(lng);
+  } else {
+    swal.fire({
+      title: "Warning",
+      text: "GPS location not received yet. Please Turn On The Location and try again.",
+      icon: "warning",
+      confirmButtonText: "OK"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.AndroidBridge.openLocationSettings();
+      };
+    });
+  }
 
 };
 
@@ -97,16 +111,17 @@ $(document).ready(function () {
   });
 
 
+  AndroidBridge.getLocation();
 
 
-  $("#demo").on("click", function (event) {
-    event.preventDefault();
-    // TODO: handle click here
-    AndroidBridge.vibrate(200);
-    console.log("vibrate");
+  // $("#demo").on("click", function (event) {
+  //   event.preventDefault();
+  //   // TODO: handle click here
+  // AndroidBridge.vibrate(200);
+  // console.log("vibrate");
 
-    AndroidBridge.getLocation();
-  });
+  // AndroidBridge.getLocation();
+  // });
 
 
   $("#qr_btn").on("click", function (event) {
