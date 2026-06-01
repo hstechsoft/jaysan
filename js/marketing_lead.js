@@ -53,7 +53,7 @@ window.onLocationReceived = function (lat, lng) {
 
   if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
 
-    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng+ " / "+ clicked_capture_live_pic);
+    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng);
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
 
