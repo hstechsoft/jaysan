@@ -28,7 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const demoRef = ref(db, 'demo');
-let clicked_capture_live_pic = 0;
+var clicked_capture_live_pic = 0;
 
 onValue(demoRef, (snapshot) => {
   if (snapshot.exists()) {
@@ -151,7 +151,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     AndroidBridge.getLocation();
-    clicked_capture_live_pic == 1;
+    clicked_capture_live_pic = 1;
 
 
     // let lat = $("#lat_input").val();
