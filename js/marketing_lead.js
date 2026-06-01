@@ -257,7 +257,7 @@ $(document).ready(function () {
 });
 
 function insert_mlead() {
-
+alert(current_user_id)
 
   $.ajax({
     url: "php/insert_mlead.php",
