@@ -175,7 +175,7 @@ $(document).ready(function () {
 
 
   $('#mlead_add_btn').on('click', function () {
-    alert(current_user_id + " - " + attach_id)
+    
     if ($('#mlead_form')[0].checkValidity() && attach_id > 0) {
       insert_mlead();
     }
@@ -229,7 +229,7 @@ $(document).ready(function () {
           $('#mlead_add_btn').prop("disabled", false)
           attach_id = data.trim();
 
-          $("#uploaded_img").attr("src", "attachment\\mlead\\attach_" + attach_id + "." + file_extension);
+          $("#uploaded_img").attr("src", "attachment/mlead/attach_" + attach_id + "." + file_extension);
           // $('#msg').html(data);
           salert("Upload Result", data, "success")
         }
@@ -252,7 +252,6 @@ $(document).ready(function () {
 });
 
 function insert_mlead() {
-  alert(current_user_id)
 
   $.ajax({
     url: "php/insert_mlead.php",
