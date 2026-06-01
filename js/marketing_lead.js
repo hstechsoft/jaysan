@@ -51,6 +51,8 @@ window.onLocationReceived = function (lat, lng) {
   // For example, update a hidden input or send to your server via AJAX
   $("#lat_input").val(lat);
   $("#lng_input").val(lng);
+
+
 };
 
 // End Update
@@ -101,7 +103,6 @@ $(document).ready(function () {
     event.preventDefault();
     // TODO: handle click here
     AndroidBridge.vibrate(200);
-    alert("vibrate")
     console.log("vibrate");
 
     AndroidBridge.getLocation();
@@ -119,7 +120,23 @@ $(document).ready(function () {
   // 1. Capture a live photo (Auto-compressed to < 256KB)
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
-    captureWithDbData();
+
+    let lat = $("#lat_input").val();
+    let lng = $("#lng_input").val();
+
+    console.log(lat, lng);
+
+    if (
+      lat !== undefined && lat !== "" && lng !== undefined && lng !== ""
+    ) {
+      captureWithDbData();
+    } else {
+      salert(
+        "Warning",
+        "GPS location not received yet. Please Turn On The Location and try again.",
+        "warning"
+      );
+    }
   });
 
   $("#select_any_file_btn").on("click", function (event) {
