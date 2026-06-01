@@ -22,15 +22,18 @@
 
 
   <style>
+
     .waiting {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 20px;
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 15px 25px;
       border-radius: 10px;
       z-index: 9999;
+      font-size: 16px;
     }
   </style>
 
@@ -108,12 +111,13 @@
 
             </div>
 
-              <input id='lng_input' type='hidden' class='form-control' placeholder=''>
-              <input id='lat_input' type='hidden' class='form-control' placeholder=''>
+            <input id='lng_input' type='hidden' class='form-control' placeholder=''>
+            <input id='lat_input' type='hidden' class='form-control' placeholder=''>
 
-          
 
-            <button type="button" class="btn btn-primary d-sm-none " id="lead_attachment_mobile">Capture the Live Pic</button>
+
+            <button type="button" class="btn btn-primary d-sm-none " id="lead_attachment_mobile">Capture the Live
+              Pic</button>
             <button type="button" class="btn btn-primary d-none " id="demo">demo</button>
 
 
