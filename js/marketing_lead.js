@@ -28,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const demoRef = ref(db, 'demo');
+let clicked_capture_live_pic = 0;
 
 onValue(demoRef, (snapshot) => {
   if (snapshot.exists()) {
@@ -55,7 +56,16 @@ window.onLocationReceived = function (lat, lng) {
     $("#loca").html("Location received: Lat " + lat + ", Lng " + lng);
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
-  } else {
+
+    if (clicked_capture_live_pic == 1) {
+      captureWithDbData();
+      $("#lead_attachment_mobile").prop("disabled", false).text("Image Captured").css("background-color", "green");
+      clicked_capture_live_pic = 0;
+    } else {
+      $("#lead_attachment_mobile").prop("disabled", false).text("waiting for GPS...");
+    }
+  } 
+  else {
     $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
     swal.fire({
       title: "Warning",
@@ -136,40 +146,19 @@ $(document).ready(function () {
       AndroidBridge.openScanner();
     }
   });
-  
+  // 1. Capture a live photo (Auto-compressed to < 256KB)
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
 
-    $("#lat_input").val('');
-    $("#lng_input").val('');
     AndroidBridge.getLocation();
+    clicked_capture_live_pic == 1;
 
-    let attempts = 0;
 
-    let checkLocation = setInterval(function () {
+    // let lat = $("#lat_input").val();
+    // let lng = $("#lng_input").val();
 
-      let lat = $("#lat_input").val();
-      let lng = $("#lng_input").val();
+    // alert(lat + ", " + lng);
 
-      if (lat && lng) {
-        clearInterval(checkLocation);
-        captureWithDbData();
-        return;
-      }
-
-      attempts++;
-
-      if (attempts >= 10) {
-        clearInterval(checkLocation);
-
-        salert(
-          "Warning",
-          "Unable to get GPS location. Please enable Location and try again.",
-          "warning"
-        );
-      }
-
-    }, 600);
   });
 
   $("#select_any_file_btn").on("click", function (event) {
