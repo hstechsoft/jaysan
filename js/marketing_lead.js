@@ -43,7 +43,7 @@ onValue(demoRef, (snapshot) => {
 
 window.onLocationReceived = function (lat, lng) {
   console.log("GPS Location received:", lat, lng);
-
+alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
   // Example: Show it in an alert or update your UI
   // alert("Latitude: " + lat + "\nLongitude: " + lng);
 
