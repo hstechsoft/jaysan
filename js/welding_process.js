@@ -2,6 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const part_id = urlParams.get('part_id');
 const part_name = urlParams.get('part_name');
+const component_cat = urlParams.get('component_cat');
 
 
 
@@ -529,7 +530,7 @@ $(document).ready(function () {
   });
 
 
-  if (part_id && part_name) {
+  if (part_id && part_name && component_cat) {
 
     $("#part_name_out")
       .val(part_name)
@@ -539,6 +540,9 @@ $(document).ready(function () {
 
     get_bom_list(part_id);
     get_bom_list_comp(part_id);
+    setTimeout(() => {
+      $('#bom_list_select').val(component_cat).trigger('change');
+    }, 500);
 
   }
 

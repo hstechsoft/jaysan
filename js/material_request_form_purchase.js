@@ -73,6 +73,8 @@ $(document).ready(function () {
     mrf_id_g = $(this).find("button.print").val();
 
     get_mrf_details(mrf_id_g)
+    get_bom_list_wel($(this).data("part_id"));
+
     $('#details').text(" part Name : " + $(this).data("part_name"))
     $("#reject_modal_btn").removeClass("d-none");
     $("#reject_btn").data("mrf_id", mrf_id_g);
@@ -171,6 +173,7 @@ $(document).ready(function () {
       // get_material_request_form_details(purchase_id);
 
       get_mrf_details(mrf_id_g)
+      get_bom_list_wel($(this).data("part_id"));
       $('#details').text(" part Name : " + $(this).data("part_name"))
     }
     if ($(this).hasClass("print")) {
@@ -591,8 +594,82 @@ $(document).ready(function () {
   });
 
 
+  $("#bom_list_select").on("click", ".bom_list_li", function (event) {
+    event.preventDefault();
+    var part_id = $("#bom_list_select").data("part_id");
+
+    var part_name = $("#bom_list_select").data("part_name");
+    var component_cat = $(this).data("component_cat");
+    if (part_id != "" && part_id != null) {
+      window.location.href = "welding_process.html?part_id=" + part_id + "&part_name=" + encodeURIComponent(part_name) + "&component_cat=" + encodeURIComponent(component_cat);
+    }
+  });
 });
 
+
+
+function get_bom_list_wel(part_id) {
+
+
+  $.ajax({
+    url: "php/get_bom_list_wel.php",
+    type: "get", //send it through get method
+    data: {
+      part_id: part_id
+
+    },
+    success: function (response) {
+      console.log(response);
+
+      $('#bom_list_select').empty()
+
+      if (response.trim() != "error") {
+
+        if (response.trim() != "0 result") {
+
+
+          $("#bom_list_select").empty()
+
+          var obj = JSON.parse(response);
+          var count = 0
+
+          $("#bom_list_select").append(`<li class="list-group-item align-items-center bg-dark text-white">BOM List</li>`)
+
+          obj.forEach(function (obj) {
+            count = count + 1;
+            //  $("#bom_list_item").append("<li  data-bom_id='"+ obj.bom_id+"' data-part_id='"+obj.part_id+" ' class=' list-group-item'>"+obj.component_cat + "</li>")
+            $("#bom_list_select").append("<li class='list-group-item align-items-center bom_list_li' data-component_cat='" + obj.component_cat + "' data-part_id='" + obj.part_id + "' data-process_count='" + obj.process_count + "' data-bom_list='" + obj.bom_list + "'>" + obj.component_cat + "</li>")
+
+            // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
+
+
+          });
+
+
+
+
+
+        }
+        else {
+          $('#bom_list_item').append("<li class='list-group-item'>No BOM Found</li>")
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function update_reject(mrf_id, reject_to) {
 
@@ -601,7 +678,7 @@ function update_reject(mrf_id, reject_to) {
     url: "php/update_material_request_form_status.php",
     type: "get", //send it through get method
     data: {
-      status: "purchase_rejected-"+reject_to,
+      status: "purchase_rejected-" + reject_to,
       mrf_id: mrf_id,
       emp_id: current_user_id
 
@@ -776,7 +853,8 @@ function get_mrf_details(mrf_id) {
             part_id = obj.part_id;
 
 
-
+            $("#bom_list_select").data("part_name", obj.part_name);
+            $("#bom_list_select").data("part_id", obj.part_id);
             $("#details").text($("#details").text() + uom1);
             details_body
             $("#details_body").find("tr").eq(1).find("td").eq(0).html(obj.part_name)
@@ -960,7 +1038,7 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
                 edit_btn = "disabled";
 
               }
-              
+
               if (obj.status == "md_rejected" || obj.status == "md_rejected-puraches") {
                 reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
               }
@@ -1035,7 +1113,7 @@ function get_material_request_form_list(sts_array, emp_id, field_name) {
               "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span> " + reject + "</div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm ' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
+              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  data-part_id = '" + obj.part_id + "' class='btn btn-outline-danger border-0 edit btn-animate btn-sm ' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"
             );
           });
 
@@ -1287,7 +1365,7 @@ function get_material_request_form_list_purchase(sts_array, emp_id) {
             // );
 
             $('#material_requset_form_purchase_table').append(
-              "<tr data-part_name = '" + obj.part_name + "'><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr data-part_name = '" + obj.part_name + "'  data-part_id = '" + obj.part_id + "'><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
               "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>");

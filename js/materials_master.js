@@ -166,6 +166,7 @@ $(document).ready(function () {
         }
     })
 
+    
     $('#godown').on('input', function () {
 
         $(this).removeData("godown_id");
@@ -527,7 +528,7 @@ $(document).ready(function () {
 
     // BOM
 
-    $("#alter_component").on("change", function () {
+    $("#alter_component").on("change focusout", function () {
 
         if ($(this).val() == 1) {
 
@@ -541,7 +542,7 @@ $(document).ready(function () {
                 }
             }
             else {
-                salert("Message", "After Creating Part, Set The BOM Details.", "success");
+                salert("Message", "After Creating Part, Set The BOM Details.", "warning");
             }
 
 
