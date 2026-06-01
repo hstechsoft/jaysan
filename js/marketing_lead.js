@@ -26,21 +26,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const demoRef = ref(db, 'demo');
+
 var clicked_capture_live_pic = 0;
 
-onValue(demoRef, (snapshot) => {
-  if (snapshot.exists()) {
-    const data = snapshot.val();
-    console.log(data);
-
-    // Example: access name
-    console.log(data.name); // harish
-  } else {
-    console.log("No data found");
-  }
-});
 
 window.onLocationReceived = function (lat, lng) {
   console.log("GPS Location received:", lat, lng);
@@ -58,12 +46,12 @@ window.onLocationReceived = function (lat, lng) {
     $("#lng_input").val(lng);
 
     if (clicked_capture_live_pic == 1) {
-    $(".waiting").addClass("d-none");
+      $(".waiting").addClass("d-none");
       $("#lead_attachment_mobile").prop("disabled", true);
       clicked_capture_live_pic = 0;
       captureWithDbData();
-    } 
-  } 
+    }
+  }
   else {
     $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
     swal.fire({
@@ -124,7 +112,7 @@ $(document).ready(function () {
   // setTimeout(() => {
   // $("#demo").trigger("click");}, 500);
 
-
+  if (window.AndroidBridge) 
   AndroidBridge.getLocation();
 
   // $("#demo").on("click", function (event) {
@@ -180,16 +168,29 @@ $(document).ready(function () {
   check_login();
 
 
-  $("#mlead_form").submit(function () {
-    $("#mlead_add_btn").attr("disabled", true);
+  // $("#mlead_form").submit(function () {
+  //   $("#mlead_add_btn").attr("disabled", true);
+  // });
+
+  $("#mlead_add_btn").on("click", function(event) {
+  
+     alert("Clicked", "You clicked the Add button!", "info");
+    // TODO: handle click here
+
+    console.log(attach_id + " \ " + current_user_id);
   });
 
-  $('#mlead_add_btn').on('click', function () {
+  // $('#mlead_add_btn').on('click', function () {
 
-    if ($('#mlead_form')[0].checkValidity())
-      insert_mlead()
+  //   console.log(attach_id + " \ " + current_user_id);
+  //   if ($('#mlead_form')[0].checkValidity() && attach_id > 0) {
+  //     insert_mlead();
+  //   }
+  //   else {
+  //     salert("Warning", "Please fill all fields and upload attachment", "warning");
+  //   }
 
-  });
+  // });
 
 
   $('#lead_attachment').on('change', function () {
@@ -257,7 +258,7 @@ $(document).ready(function () {
 });
 
 function insert_mlead() {
-alert(current_user_id)
+  alert(current_user_id)
 
   $.ajax({
     url: "php/insert_mlead.php",
