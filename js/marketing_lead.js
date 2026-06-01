@@ -43,7 +43,7 @@ onValue(demoRef, (snapshot) => {
 
 window.onLocationReceived = function (lat, lng) {
   console.log("GPS Location received:", lat, lng);
-  alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
+  // alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
   // Example: Show it in an alert or update your UI
   // alert("Latitude: " + lat + "\nLongitude: " + lng);
 
@@ -52,9 +52,11 @@ window.onLocationReceived = function (lat, lng) {
 
   if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
 
+    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng);
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
   } else {
+    $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
     swal.fire({
       title: "Warning",
       text: "GPS location not received yet. Please Turn On The Location and try again.",
@@ -110,20 +112,20 @@ $(document).ready(function () {
     }
   });
 
-  setTimeout(() => {
-  $("#demo").trigger("click");}, 500);
+  // setTimeout(() => {
+  // $("#demo").trigger("click");}, 500);
 
 
-  // AndroidBridge.getLocation();
+  AndroidBridge.getLocation();
 
-  $("#demo").on("click", function (event) {
-    event.preventDefault();
-    // TODO: handle click here
-    AndroidBridge.vibrate(200);
-    console.log("vibrate");
+  // $("#demo").on("click", function (event) {
+  //   event.preventDefault();
+  //   // TODO: handle click here
+  //   AndroidBridge.vibrate(200);
+  //   console.log("vibrate");
 
-    AndroidBridge.getLocation();
-  });
+  //   AndroidBridge.getLocation();
+  // });
 
 
   $("#qr_btn").on("click", function (event) {
@@ -134,26 +136,40 @@ $(document).ready(function () {
       AndroidBridge.openScanner();
     }
   });
-  // 1. Capture a live photo (Auto-compressed to < 256KB)
+  
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
 
-    let lat = $("#lat_input").val();
-    let lng = $("#lng_input").val();
+    $("#lat_input").val('');
+    $("#lng_input").val('');
+    AndroidBridge.getLocation();
 
-    alert(lat + ", " + lng);
+    let attempts = 0;
 
-    if (
-      lat !== undefined && lat !== "" && lng !== undefined && lng !== ""
-    ) {
-      captureWithDbData();
-    } else {
-      salert(
-        "Warning",
-        "GPS location not received yet. Please Turn On The Location and try again.",
-        "warning"
-      );
-    }
+    let checkLocation = setInterval(function () {
+
+      let lat = $("#lat_input").val();
+      let lng = $("#lng_input").val();
+
+      if (lat && lng) {
+        clearInterval(checkLocation);
+        captureWithDbData();
+        return;
+      }
+
+      attempts++;
+
+      if (attempts >= 10) {
+        clearInterval(checkLocation);
+
+        salert(
+          "Warning",
+          "Unable to get GPS location. Please enable Location and try again.",
+          "warning"
+        );
+      }
+
+    }, 600);
   });
 
   $("#select_any_file_btn").on("click", function (event) {
