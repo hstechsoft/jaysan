@@ -8,11 +8,14 @@
  $phone = test_input($_POST['phone']);
  $description = test_input($_POST['description']);
  $dated = test_input($_POST['dated']);
- $phone_id = test_input($_POST['phone_id']);
+//  $phone_id = test_input($_POST['phone_id']);
+ $emp_id = test_input($_POST['emp_id']);
  $attach_id = test_input($_POST['attach_id']);
  $latti = test_input($_POST['latti']);
  $longi = test_input($_POST['longi']);
  
+
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -21,16 +24,16 @@ $data = "'".$data."'";
 return $data;
 }
 
-// get emp_id from phone_id
-$sql = "SELECT emp_id FROM employee WHERE emp_phone_id = $phone_id";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $emp_id = $row['emp_id'];
-} else {
-    echo "Error: Employee not found";
-    exit;
-}
+// // get emp_id from phone_id
+// $sql = "SELECT emp_id FROM employee WHERE emp_phone_id = $phone_id";
+// $result = $conn->query($sql);
+// if ($result->num_rows > 0) {
+//     $row = $result->fetch_assoc();
+//     $emp_id = $row['emp_id'];
+// } else {
+//     echo "Error: Employee not found";
+//     exit;
+// }
 
 // insert current timestamp in milliseconds
 $dated = time() * 1000;
