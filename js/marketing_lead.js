@@ -229,7 +229,7 @@ $(document).ready(function () {
           $('#mlead_add_btn').prop("disabled", false)
           attach_id = data.trim();
 
-          $("#uploaded_img").attr("src", "attachment/mlead/attach_" + attach_id + "." + file_extension);
+          $("#uploaded_img").attr("src", "attachment/mlead/" + attach_id + "/attach_" + attach_id + "." + file_extension);
           // $('#msg').html(data);
           salert("Upload Result", data, "success")
         }
