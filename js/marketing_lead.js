@@ -58,12 +58,11 @@ window.onLocationReceived = function (lat, lng) {
     $("#lng_input").val(lng);
 
     if (clicked_capture_live_pic == 1) {
-      captureWithDbData();
-      $("#lead_attachment_mobile").prop("disabled", false).text("Image Captured").css("background-color", "green");
+    $(".waiting").addClass("d-none");
+      $("#lead_attachment_mobile").prop("disabled", true);
       clicked_capture_live_pic = 0;
-    } else {
-      $("#lead_attachment_mobile").prop("disabled", false).text("waiting for GPS...");
-    }
+      captureWithDbData();
+    } 
   } 
   else {
     $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
@@ -151,13 +150,11 @@ $(document).ready(function () {
     event.preventDefault();
 
     clicked_capture_live_pic = 1;
+
+    $(".waiting").removeClass("d-none");
+
     AndroidBridge.getLocation();
 
-
-    // let lat = $("#lat_input").val();
-    // let lng = $("#lng_input").val();
-
-    // alert(lat + ", " + lng);
 
   });
 
