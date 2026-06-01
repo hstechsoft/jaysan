@@ -252,8 +252,8 @@ function insert_mlead() {
       dated: get_cur_millis(),
       emp_id: current_user_id,
       attach_id: attach_id,
-      latti: latti,
-      longi: longi
+      latti: $("#lat_input").val(),
+      longi: $("#lng_input").val()
 
 
 
