@@ -22,7 +22,6 @@
 
 
   <style>
-
     .waiting {
       position: fixed;
       top: 50%;
@@ -34,6 +33,26 @@
       border-radius: 10px;
       z-index: 9999;
       font-size: 16px;
+    }
+
+    .capture-box {
+      border: 2px dashed #0d6efd;
+      border-radius: 12px;
+      padding: 30px 15px;
+      text-align: center;
+      cursor: pointer;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+
+    .capture-box:hover,
+    .capture-box:active {
+      background: #e7f1ff;
+      border-color: #0a58ca;
+    }
+
+    .capture-box i {
+      color: #0d6efd;
     }
   </style>
 
@@ -68,7 +87,7 @@
           Marketing Lead
         </div>
 
-        <p id="loca" class=" mt-2 border border-2 border-primary text-dark p-2 rounded"></p>
+        <p id="loca" class=" mt-2 border border-2 border-primary text-dark p-2 rounded" style="font-size: 10px;"></p>
 
         <form id="mlead_form" onsubmit="return false">
           <div class="card-body">
@@ -116,14 +135,19 @@
 
 
 
-            <button type="button" class="btn btn-primary d-sm-none " id="lead_attachment_mobile">Capture the Live
-              Pic</button>
+            <div class="capture-box " id="lead_attachment_mobile">
+              <i class="fas fa-camera fa-3x mb-2"></i>
+              <h6 class="mb-1">Capture Live Picture</h6>
+              <small class="text-muted">Tap here to open camera</small>
+            </div>
+
+            <img src="" alt="" class="uploaded_img">
             <button type="button" class="btn btn-primary d-none " id="demo">demo</button>
 
 
 
             <div class="d-flex justify-content-center mt-3">
-              <button type="button" id="mlead_add_btn" class="btn btn-primary">Add 11</button>
+              <button type="submit" id="mlead_add_btn" class="btn btn-primary">Add 11</button>
             </div>
 
           </div>

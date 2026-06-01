@@ -41,7 +41,7 @@ window.onLocationReceived = function (lat, lng) {
 
   if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
 
-    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng);
+    $("#loca").html("Location: Lat " + lat + ", Lng " + lng);
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
 
@@ -112,8 +112,8 @@ $(document).ready(function () {
   // setTimeout(() => {
   // $("#demo").trigger("click");}, 500);
 
-  if (window.AndroidBridge) 
-  AndroidBridge.getLocation();
+  if (window.AndroidBridge)
+    AndroidBridge.getLocation();
 
   // $("#demo").on("click", function (event) {
   //   event.preventDefault();
@@ -168,29 +168,22 @@ $(document).ready(function () {
   check_login();
 
 
-  // $("#mlead_form").submit(function () {
-  //   $("#mlead_add_btn").attr("disabled", true);
-  // });
-
-  $("#mlead_add_btn").on("click", function(event) {
-  
-     alert("Clicked", "You clicked the Add button!", "info");
-    // TODO: handle click here
-
-    console.log(attach_id + " \ " + current_user_id);
+  $("#mlead_form").submit(function () {
+    $("#mlead_add_btn").attr("disabled", true);
   });
 
-  // $('#mlead_add_btn').on('click', function () {
 
-  //   console.log(attach_id + " \ " + current_user_id);
-  //   if ($('#mlead_form')[0].checkValidity() && attach_id > 0) {
-  //     insert_mlead();
-  //   }
-  //   else {
-  //     salert("Warning", "Please fill all fields and upload attachment", "warning");
-  //   }
 
-  // });
+  $('#mlead_add_btn').on('click', function () {
+    alert(current_user_id + " - " + attach_id)
+    if ($('#mlead_form')[0].checkValidity() && attach_id > 0) {
+      insert_mlead();
+    }
+    else {
+      salert("Warning", "Please fill all fields and upload attachment", "warning");
+    }
+
+  });
 
 
   $('#lead_attachment').on('change', function () {
@@ -236,6 +229,7 @@ $(document).ready(function () {
           $('#mlead_add_btn').prop("disabled", false)
           attach_id = data.trim();
 
+          $("#uploaded_img").attr("src", "attachment\\mlead\\attach_" + attach_id + "." + file_extension);
           // $('#msg').html(data);
           salert("Upload Result", data, "success")
         }
