@@ -43,7 +43,7 @@ onValue(demoRef, (snapshot) => {
 
 window.onLocationReceived = function (lat, lng) {
   console.log("GPS Location received:", lat, lng);
-alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
+  alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
   // Example: Show it in an alert or update your UI
   // alert("Latitude: " + lat + "\nLongitude: " + lng);
 
@@ -110,18 +110,20 @@ $(document).ready(function () {
     }
   });
 
+  setTimeout(() => {
+  $("#demo").trigger("click");}, 500);
 
-  AndroidBridge.getLocation();
-
-
-  // $("#demo").on("click", function (event) {
-  //   event.preventDefault();
-  //   // TODO: handle click here
-  // AndroidBridge.vibrate(200);
-  // console.log("vibrate");
 
   // AndroidBridge.getLocation();
-  // });
+
+  $("#demo").on("click", function (event) {
+    event.preventDefault();
+    // TODO: handle click here
+    AndroidBridge.vibrate(200);
+    console.log("vibrate");
+
+    AndroidBridge.getLocation();
+  });
 
 
   $("#qr_btn").on("click", function (event) {
