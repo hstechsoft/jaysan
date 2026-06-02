@@ -18,9 +18,9 @@ function test_input($data)
 
 $sql = "with godwn as(SELECT pwt.process_id, pwt.final_process_id from process_wel_tbl pwt 
 inner join work_time_master wtm on pwt.process_id= wtm.ori_process_id WHERE wtm.godown_id = $godown_id GROUP BY final_process_id)
-SELECT pwt.process_id, pwt.process_title,pwt.output_part,pwt.component_cat,pwt.is_default,pwt.cat,parts_tbl.part_name FROM godwn g 
+SELECT parts_tbl.part_name,pwt.component_cat,JSON_ARRAYAGG(JSON_OBJECT('process_id', pwt.process_id, 'process_title', pwt.process_title, 'is_default', pwt.is_default)) as process_details,pwt.output_part,pwt.cat FROM godwn g 
 inner join process_wel_tbl pwt on g.final_process_id = pwt.process_id
-inner join parts_tbl on  pwt.output_part = parts_tbl.part_id";
+inner join parts_tbl on  pwt.output_part = parts_tbl.part_id group by output_part,component_cat order ";
 
 $result = $conn->query($sql);
 
