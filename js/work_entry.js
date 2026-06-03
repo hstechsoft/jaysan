@@ -4200,7 +4200,7 @@ function get_current_work_details(emp_id) {
             $("#timing_section").addClass("d-none");
           }
 
-          $("#day_start_time_at").text(obj.start_time).data("work_done_id", obj.work_done_id);
+          $("#day_start_time_at").text(obj.day_start_time).data("work_done_id", obj.work_done_id);
           $("#batch_id").text("JS" + obj.work_done_id);
 
           let in_process_work_entries = Array.isArray(obj.in_process_work_entries) ? obj.in_process_work_entries : [];
