@@ -1701,7 +1701,7 @@ $(document).ready(function () {
 
       if (result.isConfirmed) {
 
-        work_day_end(work_done_id);
+        work_day_end_admin(work_done_id, day_end_time);
 
       }
     });
@@ -3594,16 +3594,17 @@ function get_final_summary_admin() {
   });
 }
 
-function work_day_end(work_done_id) {
+function work_day_end_admin(work_done_id, day_end_time) {
 
-  console.log(work_done_id);
+  console.log(work_done_id, day_end_time);
 
   $.ajax({
-    url: "php/work_day_end.php",
+    url: "php/work_day_end_admin.php",
     type: "post", //send it through get method
     data: {
 
       work_done_id: work_done_id,
+      day_end_time: day_end_time
     },
     success: function (response) {
       console.log(response);
