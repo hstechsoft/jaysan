@@ -1,6 +1,6 @@
 <?php
  include 'db_head.php';
-error_reporting(0);
+error_reporting(E_ALL);
  $emp_id = test_input($_GET['emp_id']);
  $work_end_time = test_input($_GET['work_end_time']);
  if($work_end_time == "" || $work_end_time == null)
