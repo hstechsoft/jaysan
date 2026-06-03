@@ -9,7 +9,7 @@ error_reporting(E_ALL);
  }
  else
  {
-   $work_end_time = "'$work_end_time'";
+   $work_end_time = "$work_end_time";
  }
 
 
