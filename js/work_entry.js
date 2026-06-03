@@ -1250,7 +1250,7 @@ $(document).ready(function () {
             scrollTop: $("#workChart").offset().top
           }, 500);
 
-          get_work_summary($("#emp").val(), qrValue, '', JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id);
+          get_work_summary_admin($("#emp").val(), qrValue, '', JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id, work_end_time);
           console.log(qrValue, process_part_array, se.godown_id, se.dep_id, se.sec_id);
 
         }
@@ -1861,15 +1861,16 @@ $(document).ready(function () {
 
     console.log(process_part_array, break_time_array)
     var se = sec_details()
+    var work_end_time = $("#end_time").val();
 
-    if (!se.godown_id || !se.dep_id || !se.sec_id) {
-      salert("Warning", "Select Section First", "warning");
+    if (!se.godown_id || !se.dep_id || !se.sec_id || !work_end_time) {
+      salert("Warning", "Select Section First / Fill End Time.", "warning");
       return;
     }
 
     if (process_part_array.length > 0 || qr_work_id) {
 
-      get_work_summary($("#emp").val(), qr_work_id, JSON.stringify(break_time_array), JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id);
+      get_work_summary_admin($("#emp").val(), qr_work_id, JSON.stringify(break_time_array), JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id, work_end_time);
       console.log(se.godown_id, se.dep_id, se.sec_id);
       $('html, body').animate({
         scrollTop: $("#workChart").offset().top
@@ -2627,10 +2628,10 @@ function sec_details() {
   return { godown_id, dep_id, sec_id };
 }
 
-function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id) {
+function get_work_summary_admin(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id, work_end_time) {
 
   $.ajax({
-    url: "php/get_work_summary.php",
+    url: "php/get_work_summary_admin.php",
     type: "post",
     data: {
       emp_id,
@@ -2639,7 +2640,8 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
       process_part_array,
       godown_id,
       dep_id,
-      sec_id
+      sec_id,
+      work_end_time
     },
 
     success: function (response) {
