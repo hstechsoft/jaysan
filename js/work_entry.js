@@ -2018,7 +2018,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#images_summary_btnn").on("click", function () {
+  $("#image_summary_btnn").on("click", function () {
 
     const element = document.getElementById("pdfContentt");
 
@@ -3670,7 +3670,7 @@ function insert_work_done_admin(emp_id, qr_work_id, break_time_array, process_pa
         salert(msg);
         $("#setting_part_tbody").empty();
         $("#setting_part_table").addClass("d-none");
-        get_current_work_details(current_user_id)
+        get_current_work_details(emp_id)
       }
 
 
@@ -3722,6 +3722,8 @@ function update_chasis_no(ass_id, chasis_no) {
 }
 
 function get_current_work_break_admin(emp_id, work_end_time) {
+  console.log(emp_id, work_end_time);
+  
   $.ajax({
     url: "php/get_current_work_break_admin.php",
     type: "get", //send it through get method
@@ -3845,7 +3847,7 @@ function insert_work_done_table_admin(user_id, godown_id, department_id, section
 
         $("#start_section").addClass("d-none");
         $("#after_start").removeClass("d-none");
-        get_current_work_details(current_user_id);
+        get_current_work_details(user_id);
       }
 
 
@@ -3922,7 +3924,7 @@ function insert_qr_work_entry(emp_id, qr_code, sec_id, work_done_id) {
 
       if (response.trim() == "ok") {
         $("#start_work").prop("disabled", true).text("Time Started");
-        get_current_work_details(current_user_id);
+        get_current_work_details(emp_id);
         // get_current_work_break(current_user_id);
       }
 
