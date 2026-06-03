@@ -1836,7 +1836,7 @@ $(document).ready(function () {
 
     $("#end_day_work").data("process_part_array", process_part_array);
     $("#end_day_work").data("qr_id", '');
-    get_current_work_break($("#emp").val(), work_end_time);
+    get_current_work_break_admin($("#emp").val(), work_end_time);
 
 
   });
@@ -3721,9 +3721,9 @@ function update_chasis_no(ass_id, chasis_no) {
 
 }
 
-function get_current_work_break(emp_id, work_end_time) {
+function get_current_work_break_admin(emp_id, work_end_time) {
   $.ajax({
-    url: "php/get_current_work_break.php",
+    url: "php/get_current_work_break_admin.php",
     type: "get", //send it through get method
     data: {
       emp_id: emp_id,
