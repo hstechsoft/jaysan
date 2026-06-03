@@ -548,7 +548,7 @@
 <body>
   <div class="modal fade" id="extra_time_master" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="extra_time_masterLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable     ">
+    <div class="modal-dialog modal-dialog-scrollable  modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="extra_time_masterLabel">Extra Time Creation</h5>
@@ -636,7 +636,12 @@
               <thead class="table-primary small">
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
+                  <th class="d-flex">Name
+                    <div class="input-group input-group-sm mb-3">
+                      <span class="input-group-text">🔍</span>
+                      <input type="text" class="form-control extra_time_search" placeholder="Search Extra Time">
+                    </div>
+                  </th>
                   <th>Type</th>
                   <th>Start</th>
                   <th>End</th>
@@ -645,7 +650,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody class="small"></tbody>
+              <tbody class="small" id="extra_time_tbody"></tbody>
             </table>
           </div>
         </div>
@@ -1655,7 +1660,7 @@
           <div class="accordion" id="accordionExample1">
             <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne3">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" disabled data-bs-target="#collapseOne"
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                   aria-expanded="true" aria-controls="collapseOne">
                   Add Extra Work
                 </button>

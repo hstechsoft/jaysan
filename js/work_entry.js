@@ -50,6 +50,13 @@ $(document).ready(function () {
   load_extra_time_table();
   check_login();
 
+    $(".extra_time_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#extra_time_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
 
   $('#employeeProcessModal').on('show.bs.modal', function () {
