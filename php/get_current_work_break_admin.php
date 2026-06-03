@@ -60,7 +60,7 @@ WHERE TIMESTAMP(d.dt, b.start_time) >= '$start_time'
 $result = $conn->query($sql);
 
 
-echo "SQL Query: " . $sql . "\n"; // Debugging line to check the generated SQL query
+// echo "SQL Query: " . $sql . "\n"; // Debugging line to check the generated SQL query
 if ($result->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result)) {
