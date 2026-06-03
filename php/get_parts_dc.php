@@ -1,0 +1,220 @@
+<?php
+ include 'db_head.php';
+
+ $process_id = test_input($_GET['process_id']);
+ $godown_id = test_input($_GET['godown_id']);
+
+
+ 
+ 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+$data = "'".$data."'";
+return $data;
+}
+
+
+ $sql = "with recursive
+    process_cte as (
+        SELECT
+            pwt.process,
+            pwt.process_id,
+            pwt.previous_process_id,
+            iwp.previous_process_id as in_previous_process_id,
+            iwp.input_part_id,
+            iwp.qty,
+            0 as level
+        from
+            process_wel_tbl pwt
+            inner join input_wel_parts iwp on pwt.process_id = iwp.process_id
+        WHERE
+            pwt.process_id = $process_id
+        union all
+        SELECT
+            pwt.process,
+            pwt.process_id,
+            pwt.previous_process_id,
+            iwp.previous_process_id as in_previous_process_id,
+            iwp.input_part_id,
+            iwp.qty,
+            level + 1 as level
+        from
+            process_wel_tbl pwt
+            inner join process_cte pc on pwt.process_id = pc.previous_process_id
+            inner join input_wel_parts iwp on pwt.process_id = iwp.process_id
+    ),
+    stock_reserve as (
+        SELECT
+            process_cte.process,
+            process_cte.process_id,
+            process_cte.previous_process_id,
+            process_cte.in_previous_process_id,
+            process_cte.input_part_id,
+            process_cte.qty,
+            process_cte.level,
+            sum(srv.qty) as total_stock_qty,
+            sum(srv.reserve_qty) as reserved_qty,
+            JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'godown_name',
+                    srv.creditor_name,
+                    'godown',
+                    srv.godown,
+                    'dep_name',
+                    srv.dep_name,
+                    'dep',
+                    srv.dep,
+                    'sec_name',
+                    srv.sec_name,
+                    'sec',
+                    srv.sec,
+                    'stock_id',
+                    srv.stock_id,
+                    'batch_id',
+                    srv.batch_id,
+                    'qty',
+                    srv.qty,
+                    'reserve_qty',
+                    srv.reserve_qty,
+                    'reserve_details',
+                    srv.reserve_details
+                )
+            ) as stock_reserve_details
+        FROM
+            process_cte
+            left JOIN stock_reserve_view srv on ifnull(process_cte.input_part_id, 0) = srv.part_id
+            and process_cte.in_previous_process_id = srv.process_id
+        group by
+            process_cte.input_part_id,
+            process_cte.in_previous_process_id
+    ),
+    process_final as (
+        select
+            stock_reserve.process_id,
+            stock_reserve.level,
+            stock_reserve.process,
+            JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'part_id',
+                    stock_reserve.input_part_id,
+                    'part_name',
+                    if(
+                        in_previous_process_id is null,
+                        pt_in.part_name,
+                        concat(
+                            ifnull(
+                                pt_in.part_name,
+                                'semi finished part '
+                            ),
+                            ' (',
+                            jp_in.process_name,
+                            ')'
+                        )
+                    ),
+                    'in_previous_process_id',
+                    stock_reserve.in_previous_process_id,
+                    'in_previous_process_name',
+                    ifnull(jp_in.process_name, 'N/A'),
+                    'qty',
+                    stock_reserve.qty,
+                    'total_stock_qty',
+                    stock_reserve.total_stock_qty,
+                    'reserved_qty',
+                    stock_reserve.reserved_qty,
+                    'stock_reserve_details',
+                    stock_reserve.stock_reserve_details
+                )
+            ) as part_details,
+            jp.process_name as process_name
+        from
+            stock_reserve
+            left join parts_tbl pt_in on stock_reserve.input_part_id = pt_in.part_id
+            left join process_wel_tbl pwt_in on stock_reserve.in_previous_process_id = pwt_in.process_id
+            left join jaysan_process jp_in on pwt_in.process = jp_in.process_id
+            left join jaysan_process jp on stock_reserve.process = jp.process_id
+        group by
+            stock_reserve.process_id
+    ),
+
+godwn as(SELECT
+    process_final.process_id,
+    process_final.process_name,
+    process_final.part_details,
+
+    process_final.level,
+    creditors.creditor_name,
+    department.dep_name,
+    dep_section.sec_name,
+    wtm.cost,
+    wtm.godown_id,
+    wtm.dep_id,
+    wtm.dep_sec_id,
+    wtm.is_default,
+    wtm.max_time,
+    wtm.min_time,
+    wtm.wtid,
+    if(wtm.godown_id = $godown_id, 1, 0) as godown_flag
+FROM
+    process_final
+    left join work_time_master wtm on process_final.process_id = wtm.ori_process_id
+    left join creditors on wtm.godown_id = creditors.creditor_id
+    left join department on wtm.dep_id = department.dep_id
+    left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id)
+
+    SELECT
+    godwn.process_id,
+    godwn.process_name,
+    godwn.part_details,
+    godwn.level,
+ JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'godown_name',
+           creditor_name,
+            'dep_name',
+           dep_name,
+            'sec_name',
+            sec_name,
+            'cost',
+            cost,
+            'godown_id',
+            godown_id,
+            'dep_id',
+            dep_id,
+            'dep_sec_id',
+            dep_sec_id,
+            'is_default',
+            is_default,
+            'max_time',
+            max_time,
+            'min_time',
+            min_time,
+            'wtid',
+            wtid
+           
+        )
+    ) as work_time_details,
+    if(sum(godown_flag) > 0, 1, 0) as has_godown
+
+    from godwn group by process_id order by level DESC
+
+   
+   ";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    print json_encode($rows);
+} else {
+  echo "0 result";
+}
+$conn->close();
+
+ ?>
+
+
