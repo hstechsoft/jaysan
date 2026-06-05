@@ -1674,12 +1674,12 @@ $(document).ready(function () {
 
   $("#summay_btn").on("click", function () {
 
-    if ($("#paused_work_tbody tr").length <= 0) {
+    if ($("#paused_work_tbody tr").length <= 0 && $("#day_end_time").val()) {
       $("#final_summary").removeClass("d-none");
       get_final_summary_admin();
     }
     else {
-      salert("Warning", "First Complete all the paused work.", "warning");
+      salert("Warning", "First Complete all the paused work / Fill the End Time.", "warning");
     }
 
 
@@ -3165,6 +3165,7 @@ function get_final_summary_admin() {
     type: "get",
     data: {
       emp_id: $("#emp").val(),
+      work_end_time : $("#day_end_time").val()
     },
 
     success: function (response) {
@@ -3176,7 +3177,7 @@ function get_final_summary_admin() {
       try {
         data = JSON.parse(response);
         $("#summay_btn").addClass("d-none")
-        $("#last_end_btn, .day_end_time").removeClass("d-none")
+        $("#last_end_btn").removeClass("d-none")
       } catch (e) {
         salert("Invalid response");
         $("#final_summary").addClass("d-none");

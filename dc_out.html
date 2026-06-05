@@ -20,6 +20,51 @@
 
 
     <style>
+        .accordion-button {
+            padding: .6rem .8rem;
+            font-size: 14px;
+        }
+
+        .accordion-body {
+            padding: .75rem;
+        }
+
+        .accordion-item {
+            margin-bottom: 6px;
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            font-size: 11px;
+        }
+
+        .info-card {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 5px;
+            background: #fff;
+            font-size: 12px;
+        }
+
+        .reserve-type-card {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .reserve-type-header {
+            background: #f8f9fa;
+            padding: 8px;
+            font-weight: 600;
+            color: #0d6efd;
+            border-bottom: 1px solid #dee2e6;
+        }
+
         @media (max-width: 767px) {
 
             .table-bordered>:not(caption)>*>* {
@@ -80,7 +125,8 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control form-control-sm rounded-3" id="from_godown">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="from_godown">
                                         <label for="from_godown">From Godown</label>
                                     </div>
                                 </div>
@@ -112,6 +158,38 @@
                                     </div>
                                 </div>
 
+                                <div class="col-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="vehicle_type">
+                                        <label for="vehicle_type">Vehicle Type</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="vehicle_no">
+                                        <label for="vehicle_no">Vehicle/No</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="driver_name">
+                                        <label for="driver_name">Driver Name</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="contact_name">
+                                        <label for="contact_name">Contact Name</label>
+                                    </div>
+                                </div>
+
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="text" class="form-control form-control-sm rounded-3"
@@ -136,6 +214,7 @@
                                             <th width="50">#</th>
                                             <th>Part</th>
                                             <th width="140">Process</th>
+                                            <th>Qty</th>
                                             <th width="70"></th>
                                         </tr>
                                     </thead>
@@ -177,16 +256,17 @@
                                         <tr>
                                             <th>Part</th>
                                             <th>Process</th>
-                                            <th width="90">Available</th>
+                                            <th width="90">Total Available</th>
+                                            <th width="90">Reserved Qty</th>
                                             <th width="100">Qty</th>
                                             <th width="110">Rate</th>
                                             <th width="120">Amount</th>
-                                            <th width="70"></th>
+                                            <th width="70">Action</th>
                                         </tr>
 
                                     </thead>
 
-                                    <tbody>
+                                    <tbody id="selected_part_tbody">
 
                                         <tr>
 
@@ -252,7 +332,8 @@
 
                                     <div class="alert alert-light border mb-1 p-1">
                                         <strong>Total Amount:</strong>
-                                        <span class="float-end text-success fw-bold">₹4,000</span>
+                                        <span class="float-end text-success fw-bold total_amount"
+                                            data-amount="0">₹4,000</span>
                                     </div>
 
                                 </div>
@@ -447,6 +528,65 @@
 
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="stock_reserve_modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable float-start">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Stock Reserve Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+
+                    <!-- Stock Reserve Section -->
+                    <div class="card shadow-sm border-0 mb-3">
+
+                        <div class="card-header bg-primary text-white py-2">
+                            <h6 class="mb-0">
+                                <i class="fas fa-boxes me-2"></i>
+                                Stock Reserve History
+                            </h6>
+                        </div>
+
+                        <div class="card-body p-2">
+
+                            <div class="accordion" id="stock_reserve_accordion">
+                                <!-- Dynamic Content -->
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Work Time Section -->
+                    <div class="card shadow-sm border-0">
+
+                        <div class="card-header bg-secondary text-white py-2">
+                            <h6 class="mb-0">
+                                <i class="fas fa-clock me-2"></i>
+                                Work Time Details
+                            </h6>
+                        </div>
+
+                        <div class="card-body p-2">
+
+                            <div class="accordion" id="work_time_accordion">
+                                <!-- Dynamic Content -->
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
