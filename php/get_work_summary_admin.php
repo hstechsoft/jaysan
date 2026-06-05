@@ -130,7 +130,7 @@ if ($result_production_entry_time->num_rows > 0) {
 
 // calcaulate total work time with break
 $day_start =  new DateTime($current_process_start_time);
-$now = new DateTime();
+$now = new DateTime($work_end_time);
 $result_json['current_process_start_time'] = $current_process_start_time;
 $result_json['now'] = $now->format('Y-m-d H:i:s');
 $result_json['time_zone'] = date_default_timezone_get();
