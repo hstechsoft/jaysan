@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
  include 'db_head.php';
 
@@ -105,14 +107,16 @@ if($payment['advance_id']>0)
 
     
 
-
+try
+{
+  $conn->begin_transaction();
 // insert customer if customer_id is 0
 if($customer_id == "'0'"){
   $sql_insert_customer = "INSERT  INTO customer (cus_name,cus_phone ,cus_address,pincode) VALUES($customer_name,$customer_phone,$delivery_addr,$pincode) ON DUPLICATE KEY UPDATE cus_id = LAST_INSERT_ID(cus_id)";
   if ($conn->query($sql_insert_customer) === TRUE) {
     $customer_id = $conn->insert_id;
   } else {
-    echo "Error: " . $sql_insert_customer . "<br>" . $conn->error;
+   throw new Exception("Error: " . $sql_insert_customer . "<br>" . $conn->error);
   }
 }
 
@@ -120,7 +124,7 @@ if($customer_id == "'0'"){
 $sql_update_customer = "UPDATE customer SET cus_address = $delivery_addr, pincode = $pincode WHERE cus_id = $customer_id";
 if ($conn->query($sql_update_customer) === TRUE) {
 } else {
-  echo "Error: " . $sql_update_customer . "<br>" . $conn->error;
+  throw new Exception("Error: " . $sql_update_customer . "<br>" . $conn->error);
 } 
 // if order_category is 'Sales' or 'Requirement' then get the last order_no and increment it by 1
 // else set order_no to 1
@@ -232,7 +236,7 @@ if($paymentDetails != 0)
       if ($conn->query($sql_insert_advance) === TRUE) {
           
       } else {
-          echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
+        throw new Exception("Error: " . $sql_insert_advance . "<br>" . $conn->error);
       }
 
   }
@@ -241,7 +245,7 @@ $remaining_product_price = $amount >= $remaining_product_price ? 0 : $remaining_
 
 
       } else {
-          echo "Error: " . $sql_insert_payment . "<br>" . $conn->error;
+          throw new Exception("Error: " . $sql_insert_payment . "<br>" . $conn->error);
       }
     }
 
@@ -267,7 +271,7 @@ $payment_id_advance = $payment_id;
       if ($conn->query($sql_insert_advance) === TRUE) {
           
       } else {
-          echo "Error: " . $sql_insert_advance . "<br>" . $conn->error;
+          throw new Exception("Error: " . $sql_insert_advance . "<br>" . $conn->error);
       }
   }
 
@@ -288,7 +292,7 @@ foreach ($sparesDetails as $spare)
       if ($conn->query($sql_insert_spares) === TRUE) {
           
       } else {
-          echo "Error: " . $sql_insert_spares . "<br>" . $conn->error;
+          throw new Exception("Error: " . $sql_insert_spares . "<br>" . $conn->error);
       }
     }
 
@@ -308,7 +312,7 @@ foreach ($sparesDetails as $spare)
       if ($conn->query($sql_insert_subtype) === TRUE) {
           
       } else {
-          echo "Error: " . $sql_insert_subtype . "<br>" . $conn->error;
+          throw new Exception("Error: " . $sql_insert_subtype . "<br>" . $conn->error);
       }
     }
   //   foreach ($sub_type_id as $stid)
@@ -321,9 +325,18 @@ foreach ($sparesDetails as $spare)
   //       echo "Error: " . $sql_insert_subtype . "<br>" . $conn->error;
   //   }
   // }
+
+$conn->commit();
   echo "ok";
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    throw new Exception("Error: " . $sql . "<br>" . $conn->error);
+}
+
+}
+catch(Exception $e)
+{
+  $conn->rollback();
+  echo "Error: " . $e->getMessage();
 }
 
 $conn->close();
