@@ -6,7 +6,7 @@ function send_fcm(array $tokens, string $title, string $body, string $url)
 {
     $accessToken = getFirebaseAccessToken();
     $projectId = "jaysan-8fa8d";
-echo "Access Token: " . $accessToken . "<br>";
+// echo "Access Token: " . $accessToken . "<br>";
     foreach ($tokens as $fcm_token) {
 
         $payload = [
@@ -42,7 +42,7 @@ echo "Access Token: " . $accessToken . "<br>";
             return "Curl Error: " . curl_error($ch) . "<br>";
         } else {
 
-echo "FCM Response for token $fcm_token: " . $response . "<br>";
+// echo "FCM Response for token $fcm_token: " . $response . "<br>";
            
           
         }
