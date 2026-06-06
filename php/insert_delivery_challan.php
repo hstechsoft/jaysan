@@ -79,10 +79,9 @@ try {
 // insert dc parts
         foreach ($dc_parts as $part) {
             $part_id = test_input($part['part_id']);
-              $part_pre_process_id  = test_input($part['part_pre_process_id ']);
+              $part_pre_process_id  = test_input($part['part_pre_process_id']);
                 $rate = test_input($part['rate']);
             $qty = test_input($part['qty']);
-            
             $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
             if (!$conn->query($sql_part)) {
                 throw new Exception("Error inserting part: " . $conn->error);
@@ -107,10 +106,10 @@ try {
             $reserve_type = "dc";
             $reserve_type_id = $dc_id;
             $emp_id = $emp_id;
-            $remark = "Reserved for DC #$dc_id";
+            $remark = "Reserved for DC #".$dc_id;
             $stock_id = $location['stock_id'];
             $reserve_qty = $location['qty'];
-              $sql_reserve = "INSERT INTO stock_reserve (reserve_type, reserve_type_id, emp_id, remark, stock_id, reserve_qty) VALUES ($reserve_type, $reserve_type_id, $emp_id, $remark, $stock_id, $reserve_qty)";
+              $sql_reserve = "INSERT INTO stock_reserve (reserve_type, reserve_type_id, emp_id, remark, stock_id, reserve_qty) VALUES ('$reserve_type', $reserve_type_id, $emp_id, '$remark', $stock_id, $reserve_qty)";
               
             if (!$conn->query($sql_reserve)) {
                 throw new Exception("Error reserving stock: " . $conn->error);
@@ -120,7 +119,7 @@ try {
 
             // if stock taken from other then source godown need to insert in_dc_tracking
             // check godown of stock id
-            $sql_godown = "SELECT godown FROM jaysan_stock WHERE stock_id = $stock_id";
+            $sql_godown = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
             $result_godown = $conn->query($sql_godown);
             if ($result_godown->num_rows > 0) {
                 $row_godown = $result_godown->fetch_assoc();
@@ -163,5 +162,3 @@ try {
 $conn->close();
 
  ?>
-
-
