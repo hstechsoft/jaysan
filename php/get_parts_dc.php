@@ -2,7 +2,8 @@
  include 'db_head.php';
 
  $process_id = test_input($_GET['process_id']);
- $godown_id = test_input($_GET['godown_id']);
+ $source_godown_id = test_input($_GET['godown_id']);
+ $dest_godown_id = test_input($_GET['dest_godown_id']);
 
 
  
@@ -14,6 +15,7 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+
 
 
  $sql = "with recursive
@@ -79,7 +81,9 @@ return $data;
                     'reserve_qty',
                     srv.reserve_qty,
                     'reserve_details',
-                    srv.reserve_details
+                    srv.reserve_details,
+                    'same_des_godown',
+                    if(srv.godown = $dest_godown_id, 1, 0)
                 )
             ) as stock_reserve_details
         FROM
@@ -138,6 +142,8 @@ return $data;
             stock_reserve.process_id
     ),
 
+
+
 godwn as(SELECT
     process_final.process_id,
     process_final.process_name,
@@ -155,15 +161,15 @@ godwn as(SELECT
     wtm.max_time,
     wtm.min_time,
     wtm.wtid,
-    if(wtm.godown_id = $godown_id, 1, 0) as godown_flag
+    if(wtm.godown_id = $source_godown_id, 1, 0) as godown_flag
 FROM
     process_final
     left join work_time_master wtm on process_final.process_id = wtm.ori_process_id
     left join creditors on wtm.godown_id = creditors.creditor_id
     left join department on wtm.dep_id = department.dep_id
-    left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id)
+    left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id),
 
-    SELECT
+    final_process_list as (SELECT
     godwn.process_id,
     godwn.process_name,
     godwn.part_details,
@@ -197,10 +203,27 @@ FROM
     ) as work_time_details,
     if(sum(godown_flag) > 0, 1, 0) as has_godown
 
-    from godwn group by process_id order by level DESC
+    from godwn group by process_id order by level DESC),
+    out_process_stock as(select process_wel_tbl.process_id,ifnull(parts_tbl.part_name, concat('semi finished part ', jaysan_process.process_name)) as part_name,jaysan_process.process_name,sum(stock_reserve_view.qty) as qty,reserve_qty,reserve_details from stock_reserve_view 
+    inner join process_wel_tbl on stock_reserve_view.process_id = process_wel_tbl.process_id
+    left join parts_tbl on process_wel_tbl.output_part = parts_tbl.part_id
+    left join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
+    where godown = $dest_godown_id group by process_wel_tbl.process_id)
 
-   
-   ";
+    select   final_process_list.process_id,
+    final_process_list.process_name,
+    reserve_qty as out_process_reserve_qty,
+    reserve_details as out_process_reserve_details,
+    part_details,
+    level,
+    work_time_details,
+    has_godown,
+    out_process_stock.part_name as out_part_name,
+    out_process_stock.qty as out_part_qty
+
+    from final_process_list
+
+    left join out_process_stock on final_process_list.process_id = out_process_stock.process_id and has_godown = 1";
 
 $result = $conn->query($sql);
 
