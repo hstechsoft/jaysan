@@ -16,6 +16,7 @@ $dc_from = test_input($_POST['dc_from']);
 $dc_to = test_input($_POST['dc_to']);
 $bill_to = test_input($_POST['bill_to']);
 $ship_to = test_input($_POST['ship_to']);
+$transport_godown = test_input($_POST['transport_godown']);
 
 
 $dc_parts = json_decode($_POST['dc_parts'], true);
@@ -141,6 +142,13 @@ try {
                     if (!$conn->query($sql_in_dc_parts)) {
                         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
                     }
+                }
+
+
+                // insert transport parts
+                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id,part_id,process_id, qty) VALUES ($dc_from, $dc_to, $transport_godown, $dc_id, $emp_id, $stock_part_id, $stock_process_id, $reserve_qty)";
+                if (!$conn->query($sql_transport)) {
+                    throw new Exception("Error inserting transport parts: " . $conn->error);
                 }
             }
             
