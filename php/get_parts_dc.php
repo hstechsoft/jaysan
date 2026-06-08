@@ -90,6 +90,7 @@ return $data;
             process_cte
             left JOIN stock_reserve_view srv on ifnull(process_cte.input_part_id, 0) = srv.part_id
             and process_cte.in_previous_process_id = srv.process_id
+            where (srv.qty - srv.reserve_qty) > 0 or srv.qty is null
         group by
             process_cte.input_part_id,
             process_cte.in_previous_process_id
