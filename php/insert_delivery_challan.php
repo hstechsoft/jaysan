@@ -1,5 +1,5 @@
 <?php
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+error_reporting(E_ALL);
  include 'db_head.php';
 
 $dc_no = test_input($_POST['dc_no']);
