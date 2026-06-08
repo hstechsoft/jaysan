@@ -111,11 +111,14 @@ try {
             $stock_id = $location['stock_id'];
             $reserve_qty = $location['qty'];
               $sql_reserve = "INSERT INTO stock_reserve (reserve_type, reserve_type_id, emp_id, remark, stock_id, reserve_qty) VALUES ('$reserve_type', $reserve_type_id, $emp_id, '$remark', $stock_id, $reserve_qty)";
-              
-            if (!$conn->query($sql_reserve)) {
+            //   get reserve id
+            if ($conn->query($sql_reserve) === TRUE) {
+                $reserve_id = $conn->insert_id;
+            } else {
                 throw new Exception("Error reserving stock: " . $conn->error);
-
-            } 
+            }
+          
+            
 
 
             // if stock taken from other then source godown need to insert in_dc_tracking
@@ -146,7 +149,7 @@ try {
 
 
                 // insert transport parts
-                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id,part_id,process_id, qty) VALUES ($dc_from, $dc_to, $transport_godown, $dc_id, $emp_id, $stock_part_id, $stock_process_id, $reserve_qty)";
+                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id, qty,reserve_id) VALUES ($dc_from, $dc_to, $transport_godown, $dc_id, $emp_id, $reserve_qty, $reserve_id)";
                 if (!$conn->query($sql_transport)) {
                     throw new Exception("Error inserting transport parts: " . $conn->error);
                 }
