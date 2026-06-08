@@ -76,13 +76,14 @@ if ($qty > $stock_qty) {
         throw new Exception("Error getting stock details for stock reserve id $stock_reserve_id: " . $conn->error.$sql_update_stock);
     }
 
-}
+} 
 
   
 
 
 }
 $conn->commit();
+echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();
