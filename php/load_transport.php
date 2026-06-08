@@ -76,6 +76,12 @@ if ($qty > $stock_qty) {
         throw new Exception("Error getting stock details for stock reserve id $stock_reserve_id: " . $conn->error.$sql_update_stock);
     }
 
+    // update current transport in transport parts with $transport_godown and sts as transport
+    $sql_update_transport = "UPDATE transport_parts SET transport_godown = $transport_godown, sts = 'transport' WHERE reserve_id = $stock_reserve_id";
+    if (!$conn->query($sql_update_transport)) {
+        throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
+    }
+
 } 
 
   
