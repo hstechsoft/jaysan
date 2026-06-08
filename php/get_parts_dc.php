@@ -226,6 +226,8 @@ FROM
 
     left join out_process_stock on final_process_list.process_id = out_process_stock.process_id and has_godown = 1";
 
+    echo $sql;
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
