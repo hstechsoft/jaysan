@@ -88,7 +88,8 @@ return $data;
             ) as stock_reserve_details
         FROM
             process_cte
-            left JOIN stock_reserve_view srv on ifnull(process_cte.input_part_id, 0) = srv.part_id
+            left JOIN stock_reserve_view srv  on ifnull(process_cte.input_part_id, 0) = srv.part_id and (srv.qty - ifnull(srv.reserve_qty, 0)) > 0
+            
             and process_cte.in_previous_process_id = srv.process_id
             where (srv.qty - srv.reserve_qty) > 0 or srv.qty is null
         group by
@@ -226,7 +227,7 @@ FROM
 
     left join out_process_stock on final_process_list.process_id = out_process_stock.process_id and has_godown = 1";
 
-    echo $sql;
+   
 
 $result = $conn->query($sql);
 
