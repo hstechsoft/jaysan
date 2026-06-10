@@ -26,7 +26,7 @@ left JOIN creditors on js.godown = creditors.creditor_id
 left join dep_section ds on js.sec = ds.dep_sec_id 
 left join department dep on js.dep = dep.dep_id 
 
- WHERE tp.current_transport = $transport_godown and tp.sts <> 'create' and tp.sts = 'transport' and tp.dest_godown = $des_godown
+ WHERE tp.current_transport = $transport_godown and tp.sts <> 'create' and tp.sts = 'transport' and tp.des_godown = $des_godown
 group by sr.reserve_type,sr.reserve_type_id,js.godown,js.dep,js.sec)
 
 SELECT reserve_type,reserve_type_id,bill_to,ship_to,JSON_ARRAYAGG(JSON_OBJECT('godown',godown,'dep',dep,'sec',sec,'creditor_name',creditor_name,'dep_name',dep_name,'sec_name',sec_name,'parts',parts)) as parts from transport
