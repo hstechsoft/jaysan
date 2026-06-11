@@ -174,7 +174,7 @@ try {
             $result = print_dc($dc_id, $conn);
 
             // save filepath in delivery challan table
-            $sql_update = "UPDATE delivery_challan SET file_path = '".$result['file_name']."' WHERE dc_id = $dc_id";
+            $sql_update = "UPDATE delivery_challan SET file_path = '".$result['pdf_file_name']."' WHERE dc_id = $dc_id";
             if (!$conn->query($sql_update)) {
                 throw new Exception("Error updating delivery challan: " . $conn->error);
             }
