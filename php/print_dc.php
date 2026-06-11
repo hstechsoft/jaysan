@@ -295,7 +295,7 @@ require_once __DIR__ . '/../pdf_service.php';
                     'body_html' => $html,
                     'orientation' => "portrait",
                     'paper_size' => "A4",
-                    'stream' => "no",
+                  
                     // 'email_to' => "sanjay040611@gmail.com",
                     // 'email_subject' => "Invoice #1001",
                     // 'email_body' => "Hello, please find attached your invoice.",
