@@ -1,0 +1,635 @@
+
+var urlParams = new URLSearchParams(window.location.search);
+var phone_id = urlParams.get('phone_id');
+var current_user_id = localStorage.getItem("ls_uid");
+var current_user_name = localStorage.getItem("ls_uname");
+var physical_stock_array = [];
+let allBomData = [];
+
+let historyQueue = [];
+let currentIndex = 0;
+let output_qty = 0;
+
+$(document).ready(function () {
+
+
+    $("#menu_bar").load('menu.html',
+        function () {
+            var lo = (window.location.pathname.split("/").pop());
+            var web_addr = "#" + (lo.substring(0, lo.indexOf(".")))
+
+
+            if ($(web_addr).find("a").hasClass('nav-link')) {
+                $(web_addr).find("a").toggleClass('active')
+            }
+            else if ($(web_addr).find("a").hasClass('dropdown-item')) {
+                $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
+            }
+
+
+        }
+    );
+
+
+    $(".part_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#available_part_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    check_login();
+
+    $("#unamed").text(localStorage.getItem("ls_uname"))
+
+
+    $('#godown').on('input', function () {
+        $(this).removeData("godown_id");
+        $("#dc_switch").prop("checked", false);
+
+        //check the value not empty
+        if ($('#godown').val() != "") {
+            $('#godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+                    get_transport_parts(ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+
+    $(".dc_details").on("click", ".driver_confrim_btn", function () {
+        var stock_json = $(this).data("stock_id_qty");
+
+        var dc_type = $("#dc_switch").is(":checked") ? 1 : 0;
+        console.log(stock_json);
+
+        if (stock_json.length > 0 && dc_type == 0) {
+            load_transport(JSON.stringify(stock_json));
+        }
+        else if(stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0 ){
+            un_load_transport(JSON.stringify(stock_json), $('#godown').data("godown_id"))
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+
+    })
+
+    $("#dc_switch").on('change', function () {
+
+        if ($('#godown').data("godown_id") < 1 || $('#godown').data("godown_id") == undefined) {
+            $(this).prop("checked", false);
+            salert("Warning", "First Select The Godown.", "warning");
+            return;
+        }
+
+        if ($(this).is(":checked")) {
+            $(".dc_title").text("DC Unload Details");
+            $(this).next('label').text("DC Load Details");
+            get_transport_unload_parts($('#godown').data("godown_id"))
+        }
+        else {
+            $(".dc_title").text("DC Load Details");
+            $(this).next('label').text("DC Unload Details");
+            get_transport_parts($('#godown').data("godown_id"));
+        }
+    })
+
+
+
+
+
+});
+
+
+
+function get_transport_parts(godown_id) {
+
+    $.ajax({
+        url: "php/get_transport_parts.php",
+        type: "get", //send it through get method
+        data: {
+
+            godown: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $(".dc_details").empty();
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+
+                        let parts = JSON.parse(item.parts);
+                        let stock_id_qty = [];
+
+                        let html = `
+                                <div class="card shadow-sm border-0 mb-3 dc-card">
+                                    <div class="card-header bg-primary text-white py-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>DC #${item.dc_no}</strong>
+                                            </div>
+                                            <span class="badge bg-light text-primary">
+                                                ${item.reserve_type.toUpperCase()}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body p-2">
+
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-6">
+                                                <small class="text-muted">Bill To</small>
+                                                <div class="fw-semibold">${item.bill_to}</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <small class="text-muted">Ship To</small>
+                                                <div class="fw-semibold">${item.ship_to}</div>
+                                            </div>
+                                        </div>`;
+
+                        parts.forEach(function (group) {
+
+                            html += `<div class="location-card mb-2"><div class="location-header"><span class="badge bg-success"> ${group.creditor_name} </span> ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+
+                            group.parts.forEach(function (part) {
+
+                                stock_id_qty.push({ stock_reserve_id: part.stock_reserve_id, qty: part.qty })
+
+                                html += `
+                                    <div class="part-row">
+                                        <div>
+                                            <div class="part-name">${part.part_name}</div>
+                                            <small class="text-muted">
+                                                ${part.process_name}
+                                            </small>
+                                        </div>
+
+                                        <div class="text-end"><span class="qty-badge">Qty : ${part.qty}</span></div>
+                                    </div>`;
+                            });
+
+                            html += `</div>`;
+                        });
+
+                        html += `<button class='btn btn-sm btn-success float-end driver_confrim_btn' data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class='fa fa-circle-check'></i></button></div> </div>`;
+
+                        $(".dc_details").append(html);
+
+                    });
+
+                }
+                else {
+                    salert("Warning", "No DC Found for this Vendor ", "warning");
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function load_transport(stock_json) {
+
+    $.ajax({
+        url: "php/load_transport.php",
+        type: "get", //send it through get method
+        data: {
+
+            transport_godown: 1233,
+            stock_json: stock_json,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+
+                location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_transport_unload_parts(godown_id) {
+
+    $.ajax({
+        url: "php/get_transport_unload_parts.php",
+        type: "get", //send it through get method
+        data: {
+
+            des_godown: godown_id,
+            transport_godown: 1233,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $(".dc_details").empty();
+
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+
+                        let parts = JSON.parse(item.parts);
+                        let stock_id_qty = [];
+
+                        let html = `
+                                <div class="card shadow-sm border-0 mb-3 dc-card">
+                                    <div class="card-header bg-primary text-white py-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>DC #${item.dc_no}</strong>
+                                            </div>
+                                            <span class="badge bg-light text-primary">
+                                                ${item.reserve_type.toUpperCase()}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body p-2">
+
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-6">
+                                                <small class="text-muted">Bill To</small>
+                                                <div class="fw-semibold">${item.bill_to}</div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <small class="text-muted">Ship To</small>
+                                                <div class="fw-semibold">${item.ship_to}</div>
+                                            </div>
+                                        </div>`;
+
+                        parts.forEach(function (group) {
+
+                            html += `<div class="location-card mb-2"><div class="location-header"><span class="badge bg-success"> ${group.creditor_name} </span> ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+
+                            group.parts.forEach(function (part) {
+
+                                stock_id_qty.push({ stock_reserve_id: part.stock_reserve_id, qty: part.qty })
+
+                                html += `
+                                    <div class="part-row">
+                                        <div>
+                                            <div class="part-name">${part.part_name}</div>
+                                            <small class="text-muted">
+                                                ${part.process_name}
+                                            </small>
+                                        </div>
+
+                                        <div class="text-end"><span class="qty-badge">Qty : ${part.qty}</span></div>
+                                    </div>`;
+                            });
+
+                            html += `</div>`;
+                        });
+
+                        html += `<button class='btn btn-sm btn-success float-end driver_confrim_btn' data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class='fa fa-circle-check'></i></button></div> </div>`;
+
+                        $(".dc_details").append(html);
+
+                    });
+
+                }
+                else {
+                    salert("Warning", "No DC Found for this Vendor ", "warning");
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function un_load_transport(stock_json, godown_id) {
+
+    console.log(stock_json, godown_id);
+    
+    $.ajax({
+        url: "php/un_load_transport.php",
+        type: "get", //send it through get method
+        data: {
+
+            des_godown: godown_id,
+            stock_json: stock_json,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+
+                location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+
+
+
+
+function insert_new_process(processId) {
+
+    $.ajax({
+        url: "php/insert_nprocess.php",
+        type: "get", //send it through get method
+        data: {
+
+            process_id: processId,
+            edit_process_id: edit_process_id,
+            input_part_id: sel_input_part_id,
+            output_part_id: sel_output_part_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim()) {
+                sessionStorage.setItem('editProcessId', response.trim());
+                sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
+                // Reload the page
+                location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function check_login() {
+
+    if (localStorage.getItem("logemail") == null && phone_id == null) {
+        window.location.replace("login.html");
+    }
+    else if (localStorage.getItem("logemail") == null && phone_id != null) {
+        get_current_userid_byphoneid();
+        $('#menu_bar').hide()
+    }
+
+    else {
+
+    }
+}
+
+
+function get_current_userid_byphoneid() {
+    $.ajax({
+        url: "php/get_current_employee_id_byphoneid.php",
+        type: "get", //send it through get method
+        data: {
+            phone_id: phone_id,
+
+
+        },
+        success: function (response) {
+
+
+            if (response.trim() != "error") {
+                var obj = JSON.parse(response);
+
+
+                console.log(response);
+
+
+                obj.forEach(function (obj) {
+                    current_user_id = obj.emp_id;
+                    current_user_name = obj.emp_name;
+                });
+
+                //    get_sales_order()
+            }
+
+            else {
+                salert("Error", "User ", "error");
+            }
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+}
+
+
+function shw_toast(title, des, theme) {
+
+
+    $('.toast-title').text(title);
+    $('.toast-description').text(des);
+    var toast = new bootstrap.Toast($('#myToast'));
+    toast.show();
+}
+
+function get_millis(t) {
+
+    var dt = new Date(t);
+    return dt.getTime();
+}
+
+
+
+function get_cur_millis() {
+    var dt = new Date();
+    return dt.getTime();
+}
+
+
+function get_today_date() {
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    var hour = date.getHours();
+    var mins = date.getMinutes();
+
+    console.log(mins)
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day + "T" + hour + ":" + mins;
+    return today;
+}
+
+function get_today_start_millis() {
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day + "T00:00";
+
+    return get_millis(today)
+
+}
+
+
+function get_today_end_millis() {
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day + "T23:59";
+
+    return get_millis(today)
+
+}
+
+function salert(title, text, icon) {
+
+
+    swal({
+        title: title,
+        text: text,
+        icon: icon,
+    });
+}
+
+
+
+function millis_to_date(millis) {
+    var d = new Date(millis); // Parameter should be long value
+
+
+    return d.toLocaleString('en-GB');
+
+}

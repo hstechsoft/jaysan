@@ -96,6 +96,14 @@ $(document).ready(function () {
 
     });
 
+    $("#same_as").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#ship_to").val($("#godown").val());
+        } else {
+            $("#ship_to").val('');
+        }
+    })
+
     $('#from_godown').on('input', function () {
         $(this).removeData("from_godown_id");
 
@@ -151,18 +159,26 @@ $(document).ready(function () {
 
         let process_id = $(this).parent().parent().find(".process_select").val();
         let godown_id = $('#godown').data("godown_id");
+        let f_godown_id = $('#from_godown').data("from_godown_id");
         let output_qty = $(this).parent().parent().find(".output_qty").val();
 
         if (process_id == null || process_id == "") {
             salert("Warning", "Please select process", "warning");
         }
         else if (godown_id == null || godown_id == "") {
-            salert("Warning", "Please select godown", "warning");
+            salert("Warning", "Please select Vendor", "warning");
+        }
+        else if (f_godown_id == null || f_godown_id == "") {
+            salert("Warning", "Please select From Godown", "warning");
         }
         else {
             $(this).parent().parent().find(".process_select").prop("disabled", true);
             $(this).prop("disabled", true);
-            get_parts_dc(process_id, godown_id, output_qty);
+            $('html, body').animate({
+                scrollTop: 0
+            }, 500);
+
+            get_parts_dc(process_id, godown_id, f_godown_id, output_qty);
         }
 
 
@@ -191,9 +207,15 @@ $(document).ready(function () {
 
     $("#selected_part_tbody").on("click", ".History_btn", function () {
 
+        let row = $(this).closest("tr");
         let stock_reserve_details = $(this).data("stock_reserve_details");
         let work_time_details = $(this).data("work_time_details");
         let part_name = $(this).data("part_name");
+        let output_part_name = $(this).data("output_part_name");
+        let output_part_qty = $(this).data("output_part_qty");
+        let need_qty = $(this).data("need_qty");
+
+        $("#stock_qty_add_btn").data("row", row);
 
         $("#stock_reserve_modal .modal-title").text(`Stock Reserve & Work Time Details - ${part_name}`);
 
@@ -201,12 +223,15 @@ $(document).ready(function () {
 
         $("#stock_reserve_accordion").empty();
         $("#work_time_accordion").empty();
+        $(".out_stock").empty();
 
         // ==========================================
         // STOCK RESERVE ACCORDION
         // ==========================================
 
         let stockData = parseJsonDeep(stock_reserve_details);
+
+        $(".out_stock").append(`<strong class='text-secodary small'>${output_part_name} <span class='float-end badge bg-success'>${output_part_qty} - Qty</span></strong>`);
 
         if (Array.isArray(stockData)) {
 
@@ -245,7 +270,7 @@ $(document).ready(function () {
 
                                 reserveBody += `
                                 <tr>
-                                    <td>${num(detail.reserve_type_id)}</td>
+                                    <td>${val(reserve.reserve_type)}</td>
                                     <td>${num(detail.reserve_qty)}</td>
                                     <td>${num(detail.reserve_id)}</td>
                                 </tr>
@@ -279,9 +304,9 @@ $(document).ready(function () {
 
                                 <div class="row align-items-center">
 
-                                    <div class="col-md-8 text-start">
+                                    <div class="col-md-6 text-start">
                                         <small class="text-muted">Godown</small><br>
-                                        <span class="fw-semibold">
+                                        <span class="fw-semibold small">
                                             ${val(item.godown_name)}
                                         </span>
                                     </div>
@@ -300,6 +325,12 @@ $(document).ready(function () {
                                         </span>
                                     </div>
 
+                                    <div class="col-2 text-center">
+                                        <input type="number" class="form-control form-control-sm rounded-3" value=${index == 0 ? need_qty : 0} (${item.same_des_godown == 1 ? "disabled" : ''})
+                                            id="allo_qty" data-stock_id="${item.stock_id}" placeholder='Qty'>
+                                    </div>
+
+
                                 </div>
 
                             </div>
@@ -313,6 +344,7 @@ $(document).ready(function () {
                          data-bs-parent="#stock_reserve_accordion">
 
                         <div class="accordion-body">
+
 
                             ${reserveBody || '<div class="text-muted">No Reserve Details Available</div>'}
 
@@ -503,30 +535,71 @@ $(document).ready(function () {
     }
     );
 
-    $("#stock_reserve_modal").on("hidden.bs.modal", function () {
+    $("#stock_qty_add_btn, .modal_close_btn").on("click", function () {
+
+        let row = $("#stock_qty_add_btn").data("row");
+
+        console.log(row);
+
+
+        var stock_id_qty = [];
+        // var qty_cou = [];
+        var qty = 0;
+
+        $("#stock_reserve_accordion button").each(function () {
+
+            // alert()
+            var enter_qty = Number($(this).find("#allo_qty").val());
+
+            if (enter_qty > 0) {
+                qty += enter_qty;
+
+                stock_id_qty.push({ stock_id: $(this).find("#allo_qty").data("stock_id"), qty: enter_qty });
+                // qty_cou.push(enter_qty);
+            }
+        })
+
+
+        // var stock_id_str = stock_id.join(",");
+        // var qty_cou_str = qty_cou.join(",");
+
+        console.log(stock_id_qty);
+        // console.log(qty_cou_str);
+        // console.log(qty);
+
+        row.find("td").eq(4).find("input").data("stock_id_qty", stock_id_qty);
+        // row.find("td").eq(4).find("input").data("qty_cou", qty_cou_str);
+        row.find("td").eq(4).find("input").val(qty);
+
 
         currentIndex++;
 
         processNextPart();
+    })
 
-    });
+
 
 
     $("#add_to_table").on("click", function () {
 
         let godown_id = $('#godown').data("godown_id");
+        let bill_to = $('#godown').val();
         let from_godown_id = $('#from_godown').data("from_godown_id");
+        let ship_to = $('#ship_to').val();
         let dc_no = $("#dc_no").val();
         let dc_date = $("#dc_date").val();
         let transport_mode = $("#transport_mode").val();
         let vehicle_type = $("#vehicle_type").val();
-        let vehicle_no = $("#vehicle_no").val();
-        let driver_name = $("#driver_name").val();
-        let contact_no = $("#contact_no").val();
-        let vehicle_description = $("#vehicle_description").val();
+        let vehicle_no = $("#vehicle_no").val() || '';
+        let driver_name = $("#driver_name").val() || '';
+        let contact_no = $("#contact_no").val() || '';
+        let vehicle_description = $("#vehicle_description").val() || '';
+        let e_invoice = $("#e_invoice").val() || '';
 
         let emp_id = current_user_id;
         let dc_type = "dc";
+
+        let transport_godown = null;
 
         let parts = [];
         let dc_parts_location = [];
@@ -536,13 +609,17 @@ $(document).ready(function () {
 
             let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
-            let part_pre_process_id = $(this).data("part_pre_process_id");
+            let part_pre_process_id = $(this).data("in_previous_process_id");
             let process_name = $(this).find("td").eq(1).text();
             let process_id = $(this).data("process_id");
             let qty = parseFloat($(this).find(".qty_input").val()) || 0;
+            // let reserve_qty = $(this).find(".qty_input").data("qty_cou");
+            let stock_id_qty = $(this).find(".qty_input").data("stock_id_qty");
             let rate = parseFloat($(this).find(".rate_input").val()) || 0;
             let amount = parseFloat($(this).find(".amount_td").text()) || 0;
             let is_checked = $(this).find(".form-check-input").is(":checked");
+
+            console.log(stock_id_qty);
 
             if (is_checked) {
                 parts.push({
@@ -556,13 +633,12 @@ $(document).ready(function () {
                     qty: qty,
                     rate: rate,
                 });
-                dc_parts_location.push({
-                    reserve_type: reserve_type,
-                    reserve_type_id: reserve_type_id,
-                    emp_id: emp_id,
-                    remark: remark,
-                    stock_id: stock_id,
-                    reserve_qty: reserve_qty,
+                stock_id_qty.forEach(item => {
+                    dc_parts_location.push({
+                        emp_id: emp_id,
+                        stock_id: item.stock_id,
+                        qty: item.qty
+                    });
                 });
             }
         });
@@ -571,6 +647,30 @@ $(document).ready(function () {
             salert("Warning", "Please select at least one part", "warning");
             return;
         }
+
+        if (dc_process.length == 0) {
+            salert("Warning", "Process Data Missing", "warning");
+            return;
+        }
+
+        if (dc_parts_location.length == 0) {
+            salert("Warning", "Part Location Missing", "warning");
+            return;
+        }
+
+        if (!dc_date || !dc_no) {
+            salert("Warning", "Enter DC/No And DC Date", "warning");
+            return;
+        }
+
+        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
+
+
+        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts), JSON.stringify(dc_parts_location), JSON.stringify(dc_process));
+    })
+
+    $("#transport_modal_btn").on("click", function () {
+        get_transport_all();
     })
 });
 
@@ -583,6 +683,7 @@ function processNextPart() {
 
     let data = historyQueue[currentIndex];
 
+    console.log(data.item)
     let row = $(`
         <tr data-in_previous_process_id='${data.part.in_previous_process_id}' data-part_id='${data.part.part_id}' data-process_id='${data.item.process_id}'>
             <td>${data.part.part_name}</td>
@@ -593,7 +694,7 @@ function processNextPart() {
             <td>
                 <input type="number"
                     class="form-control form-control-sm qty_input"
-                    value="${parseFloat(data.part.qty)*output_qty}" >
+                    value="${parseFloat(data.part.qty) * output_qty}" >
             </td>
 
             <td>
@@ -612,7 +713,10 @@ function processNextPart() {
                     class="btn btn-secondary btn-sm History_btn "
                     data-stock_reserve_details='${JSON.stringify(data.part.stock_reserve_details)}'
                     data-work_time_details='${JSON.stringify(data.item.work_time_details)}'
-                    data-part_name='${data.part.part_name}'>
+                    data-part_name='${data.part.part_name}'
+                    data-output_part_name='${data.item.out_part_name}'
+                    data-output_part_qty='${data.item.out_part_qty}'
+                    data-need_qty='${parseFloat(data.part.qty) * output_qty}'>
                     <i class="fas fa-clock"></i>
                 </button>
             </td>
@@ -625,15 +729,18 @@ function processNextPart() {
     }, 800);
 }
 
-function get_parts_dc(process_id, godown_id, output_qtyy) {
+function get_parts_dc(process_id, godown_id, f_godown_id, output_qtyy) {
+
+    console.log(process_id, godown_id, f_godown_id, output_qtyy);
 
     $.ajax({
         url: "php/get_parts_dc.php",
         type: "get", //send it through get method
         data: {
 
-            godown_id: godown_id,
-            process_id: process_id
+            godown_id: f_godown_id,
+            process_id: process_id,
+            dest_godown_id: godown_id
         },
         success: function (response) {
             console.log(response);
@@ -667,6 +774,10 @@ function get_parts_dc(process_id, godown_id, output_qtyy) {
                         }
                     });
 
+                    if (historyQueue.length <= 0) {
+                        salert("Warning", "The Parts For Process Are Not Mapped To the From Godown You Selected.", "warning");
+                        return;
+                    }
                     processNextPart();
                 }
                 else {
@@ -760,6 +871,212 @@ function get_company_dc(godown_id) {
 
 
 }
+
+function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
+
+    $.ajax({
+        url: "php/insert_delivery_challan.php",
+        type: "post", //send it through get method
+        data: {
+
+            dc_no: dc_no,
+            dc_date: dc_date,
+            transport_mode: transport_mode,
+            transport_des: transport_des,
+            vehicle_no: vehicle_no,
+            driver_name: driver_name,
+            driver_contact: driver_contact,
+            mode_of_payment: '',
+            supplier_ref_order_no: '',
+            dispatch_doc_no: '',
+            dispatched_through: '',
+            date_time_of_issue: '',
+            duration_of_process: '',
+            nature_of_processing: '',
+            challan_no: '',
+            emp_id: emp_id,
+            dc_type: dc_type,
+            dc_from: dc_from,
+            dc_to: dc_to,
+            bill_to: bill_to,
+            ship_to: ship_to,
+            transport_godown: 1166,
+            dc_parts: dc_parts,
+            dc_parts_location: dc_parts_location,
+            dc_process: dc_process,
+        },
+        success: function (response) {
+            console.log(response);
+
+            console.log(response.status);
+            console.log(
+                'http://localhost/jaysan/' + response.download_url
+            );
+            if (response.status == 'ok') {
+
+                window.open(
+                    'http://localhost/jaysan/' + response.download_url,
+                    '_blank'
+                );
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_transport_all(godown_id) {
+
+    $.ajax({
+        url: "php/get_transport_parts_all.php",
+        type: "get", //send it through get method
+        data: {
+
+            transport_godown: 1233,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $(".dc_details").empty();
+                $("#transport_modal").modal('show');
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item, index) {
+
+                        let parts = JSON.parse(item.parts);
+                        let stock_id_qty = [];
+
+                        let html = `
+                                    <div class="accordion mb-2" id="dcAccordion${index}">
+                                        <div class="accordion-item border shadow-sm">
+
+                                            <h2 class="accordion-header" id="heading${index}">
+                                                <button class="accordion-button collapsed py-2 px-3"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse${index}">
+
+                                                    <div class="w-100 d-flex justify-content-between align-items-center me-2">
+
+                                                        <div>
+                                                            <strong>DC #${item.dc_no}</strong>
+                                                            <span class="badge bg-primary ms-2">
+                                                                ${item.reserve_type.toUpperCase()}
+                                                            </span>
+                                                        </div>
+
+                                                        <small class="text-muted">
+                                                            ${item.bill_to}
+                                                        </small>
+
+                                                    </div>
+                                                </button>
+                                            </h2>
+
+                                            <div id="collapse${index}"
+                                                class="accordion-collapse collapse"
+                                                data-bs-parent="#dcAccordion${index}">
+
+                                                <div class="accordion-body p-2">
+
+                                                    <div class="row g-2 mb-2">
+                                                        <div class="col-6">
+                                                            <small class="text-muted">Bill To</small>
+                                                            <div class="fw-semibold small">${item.bill_to}</div>
+                                                        </div>
+
+                                                        <div class="col-6">
+                                                            <small class="text-muted">Ship To</small>
+                                                            <div class="fw-semibold small">${item.ship_to}</div>
+                                                        </div>
+                                                    </div>`;
+
+                        parts.forEach(function (group) {
+
+                            html += `
+                                <div class="border rounded p-2 mb-2 bg-light">
+
+                                    <div class="d-flex gap-2 mb-2">
+                                        <span class="badge bg-success">
+                                            ${group.creditor_name}
+                                        </span>
+
+                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}
+                                </div>`;
+
+                            group.parts.forEach(function (part) {
+
+                                stock_id_qty.push({
+                                    stock_reserve_id: part.stock_reserve_id,
+                                    qty: part.qty
+                                });
+
+                                html += `
+                                    <div class="d-flex justify-content-between align-items-center border-bottom py-1">
+
+                                        <div>
+                                            <div class="fw-semibold small">
+                                                ${part.part_name}
+                                            </div>
+
+                                            <small class="text-muted">
+                                                ${part.process_name}
+                                            </small>
+                                        </div>
+
+                                        <span class="badge bg-secondary">
+                                            ${part.qty}
+                                        </span>
+                                    </div>`;
+                            });
+
+                            html += `</div>`;
+                        });
+
+                        html += `</div></div></div></div>`;
+
+                        $(".dc_details").append(html);
+                    });
+
+                }
+                else {
+                    $("#transport_modal").modal('hide');
+                    salert("Warning", "No DC Found In Transport Godown.", "warning");
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 
 function insert_new_process(processId) {
