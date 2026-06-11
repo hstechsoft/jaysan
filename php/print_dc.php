@@ -4,13 +4,7 @@ function print_dc($dc_id, $conn) {
 
 
 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
-}
+
 $process_details = "";
 // -- process details in json array format
 $sql_dc_process = " with prs as(select dc_prs.process_id,jp1.process_name,JSON_ARRAYAGG(json_object('part_name', if(ip.input_part_id IS not NULL, concat(pt.part_name,'(',jp.process_name,')'), concat('Semi-finished part(', final_part.part_name, jp.process_name)), 'qty', ip.qty)) as part_details,dc_process.qty as process_qty,dc_process.dc_process_id as dc_process_id,if(prs_output_part.part_name IS NOT NULL, concat(prs_output_part.part_name), concat('Semi-finished part of ', final_part.part_name,'(from ', jp1.process_name, ' Process)')) as output_part_name from dc_process 
