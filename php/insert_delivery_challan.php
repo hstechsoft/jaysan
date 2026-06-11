@@ -180,7 +180,7 @@ try {
             }
 
 
-        echo "ok";
+        echo $result;
         $conn->commit();
 
 // print dc
