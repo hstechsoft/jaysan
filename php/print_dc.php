@@ -1,7 +1,7 @@
 <?php
 function print_dc($dc_id, $conn) {
 //  get dc details and generate pdf for that dc
-$dc_id = test_input($_GET['dc_id']);
+
 
 
 function test_input($data) {
