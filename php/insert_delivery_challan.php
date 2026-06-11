@@ -179,7 +179,8 @@ try {
             //     throw new Exception("Error updating delivery challan: " . $conn->error);
             // }
 
- print json_encode($result);
+//  print array
+        print_r($result);
         
         $conn->commit();
 
