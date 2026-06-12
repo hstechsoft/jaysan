@@ -47,6 +47,7 @@ $(document).ready(function () {
     $('#godown').on('input', function () {
         $(this).removeData("godown_id");
         $("#dc_switch").prop("checked", false);
+        $(".dc_details").empty();
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -107,7 +108,7 @@ $(document).ready(function () {
         if (stock_json.length > 0 && dc_type == 0) {
             load_transport(JSON.stringify(stock_json));
         }
-        else if(stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0 ){
+        else if (stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0) {
             un_load_transport(JSON.stringify(stock_json), $('#godown').data("godown_id"))
         }
         else {
@@ -166,63 +167,95 @@ function get_transport_parts(godown_id) {
                     var obj = JSON.parse(response);
                     var count = 0;
 
-                    obj.forEach(function (item) {
+                    obj.forEach(function (item, index) {
 
                         let parts = JSON.parse(item.parts);
                         let stock_id_qty = [];
 
                         let html = `
-                                <div class="card shadow-sm border-0 mb-3 dc-card">
-                                    <div class="card-header bg-primary text-white py-2">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <strong>DC #${item.dc_no}</strong>
-                                            </div>
-                                            <span class="badge bg-light text-primary">
-                                                ${item.reserve_type.toUpperCase()}
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="accordion mb-2" id="dcAccordion${index}">
+                                    <div class="accordion-item border-0 shadow-sm">
 
-                                    <div class="card-body p-2">
+                                        <h2 class="accordion-header" id="heading${index}">
+                                            <button class="accordion-button collapsed py-2 px-3"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse${index}"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse${index}">
 
-                                        <div class="row g-2 mb-2">
-                                            <div class="col-6">
-                                                <small class="text-muted">Bill To</small>
-                                                <div class="fw-semibold">${item.bill_to}</div>
-                                            </div>
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <strong>DC #${item.dc_no}</strong>
 
-                                            <div class="col-6">
-                                                <small class="text-muted">Ship To</small>
-                                                <div class="fw-semibold">${item.ship_to}</div>
-                                            </div>
-                                        </div>`;
+                                                        <span class="badge bg-primary">
+                                                            ${item.reserve_type.toUpperCase()}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="small text-muted mt-1">
+                                                        ${item.bill_to}
+                                                        <i class="fa fa-arrow-right mx-1"></i>
+                                                        ${item.ship_to}
+                                                    </div>
+                                                </div>
+
+                                            </button>
+                                        </h2>
+
+                                        <div id="collapse${index}"
+                                            class="accordion-collapse collapse"
+                                            aria-labelledby="heading${index}">
+
+                                            <div class="accordion-body p-2">`;
 
                         parts.forEach(function (group) {
 
-                            html += `<div class="location-card mb-2"><div class="location-header"><span class="badge bg-success"> ${group.creditor_name} </span> ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+                            html += `
+                                <div class="border rounded p-2 mb-2 bg-light">
+
+                                    <div class="d-flex flex-wrap gap-1 mb-2">
+                                        <span class="badge bg-success">
+                                            ${group.creditor_name}
+                                        </span>
+
+                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}
+                                    </div>`;
 
                             group.parts.forEach(function (part) {
 
-                                stock_id_qty.push({ stock_reserve_id: part.stock_reserve_id, qty: part.qty })
+                                stock_id_qty.push({
+                                    stock_reserve_id: part.stock_reserve_id,
+                                    qty: part.qty
+                                });
 
                                 html += `
-                                    <div class="part-row">
-                                        <div>
-                                            <div class="part-name">${part.part_name}</div>
-                                            <small class="text-muted">
-                                                ${part.process_name}
-                                            </small>
-                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
 
-                                        <div class="text-end"><span class="qty-badge">Qty : ${part.qty}</span></div>
-                                    </div>`;
+                                            <div class="flex-grow-1 pe-2">
+                                                <div class="fw-semibold small">
+                                                    ${part.part_name}
+                                                </div>
+
+                                                <small class="text-muted">
+                                                    ${part.process_name}
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary">
+                                                Qty : ${part.qty}
+                                            </span>
+
+                                        </div>`;
                             });
 
                             html += `</div>`;
                         });
 
-                        html += `<button class='btn btn-sm btn-success float-end driver_confrim_btn' data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class='fa fa-circle-check'></i></button></div> </div>`;
+                        html += `
+                                <div class="text-end mt-2">
+                                    <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class="fa fa-circle-check"></i>Confirm</button>
+                                </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);
 
@@ -230,7 +263,7 @@ function get_transport_parts(godown_id) {
 
                 }
                 else {
-                    salert("Warning", "No DC Found for this Vendor ", "warning");
+                    salert("Warning", "No DC Found for this Vendor To Load", "warning");
                 }
             }
 
@@ -307,63 +340,94 @@ function get_transport_unload_parts(godown_id) {
                     var obj = JSON.parse(response);
                     var count = 0;
 
-                    obj.forEach(function (item) {
+                    obj.forEach(function (item, index) {
 
                         let parts = JSON.parse(item.parts);
                         let stock_id_qty = [];
 
                         let html = `
-                                <div class="card shadow-sm border-0 mb-3 dc-card">
-                                    <div class="card-header bg-primary text-white py-2">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <strong>DC #${item.dc_no}</strong>
-                                            </div>
-                                            <span class="badge bg-light text-primary">
-                                                ${item.reserve_type.toUpperCase()}
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="accordion mb-2" id="dcAccordion${index}">
+                                    <div class="accordion-item shadow-sm border-0">
 
-                                    <div class="card-body p-2">
+                                        <h2 class="accordion-header" id="heading${index}">
+                                            <button class="accordion-button collapsed py-2 px-3"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse${index}"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapse${index}">
 
-                                        <div class="row g-2 mb-2">
-                                            <div class="col-6">
-                                                <small class="text-muted">Bill To</small>
-                                                <div class="fw-semibold">${item.bill_to}</div>
-                                            </div>
+                                                <div class="w-100">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <strong class="small">
+                                                            DC #${item.dc_no}
+                                                        </strong>
 
-                                            <div class="col-6">
-                                                <small class="text-muted">Ship To</small>
-                                                <div class="fw-semibold">${item.ship_to}</div>
-                                            </div>
-                                        </div>`;
+                                                        <span class="badge bg-primary">
+                                                            ${item.reserve_type.toUpperCase()}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="small text-muted mt-1">
+                                                        <span class="fw-semibold">${item.bill_to}</span>
+                                                        <i class="fa fa-arrow-right mx-1"></i>
+                                                        <span class="fw-semibold">${item.ship_to}</span>
+                                                    </div>
+                                                </div>
+
+                                            </button>
+                                        </h2>
+
+                                        <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}">
+
+                                            <div class="accordion-body p-2">`;
 
                         parts.forEach(function (group) {
 
-                            html += `<div class="location-card mb-2"><div class="location-header"><span class="badge bg-success"> ${group.creditor_name} </span> ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+                            html += `
+                                <div class="border rounded p-2 mb-2 bg-light">
+
+                                    <div class="d-flex flex-wrap gap-1 mb-2">
+                                        <span class="badge bg-success">
+                                            ${group.creditor_name}
+                                        </span>
+
+                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
 
                             group.parts.forEach(function (part) {
 
-                                stock_id_qty.push({ stock_reserve_id: part.stock_reserve_id, qty: part.qty })
+                                stock_id_qty.push({
+                                    stock_reserve_id: part.stock_reserve_id,
+                                    qty: part.qty
+                                });
 
                                 html += `
-                                    <div class="part-row">
-                                        <div>
-                                            <div class="part-name">${part.part_name}</div>
-                                            <small class="text-muted">
-                                                ${part.process_name}
-                                            </small>
-                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
 
-                                        <div class="text-end"><span class="qty-badge">Qty : ${part.qty}</span></div>
-                                    </div>`;
+                                            <div class="flex-grow-1 pe-2">
+                                                <div class="fw-semibold small">
+                                                    ${part.part_name}
+                                                </div>
+
+                                                <small class="text-muted">
+                                                    ${part.process_name}
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary">
+                                                ${part.qty}
+                                            </span>
+
+                                        </div>`;
                             });
 
                             html += `</div>`;
                         });
 
-                        html += `<button class='btn btn-sm btn-success float-end driver_confrim_btn' data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class='fa fa-circle-check'></i></button></div> </div>`;
+                        html += `
+                                    <div class="text-end mt-2">
+                                        <button class="btn btn-success btn-sm driver_confrim_btn"data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class="fa fa-circle-check"></i>Confirm</button>
+                                    </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);
 
@@ -371,7 +435,8 @@ function get_transport_unload_parts(godown_id) {
 
                 }
                 else {
-                    salert("Warning", "No DC Found for this Vendor ", "warning");
+                    $("#dc_switch").prop("checked", false).trigger('change');
+                    salert("Warning", "No DC Found for this Vendor To Unload", "warning");
                 }
             }
 
@@ -393,7 +458,7 @@ function get_transport_unload_parts(godown_id) {
 function un_load_transport(stock_json, godown_id) {
 
     console.log(stock_json, godown_id);
-    
+
     $.ajax({
         url: "php/un_load_transport.php",
         type: "get", //send it through get method
