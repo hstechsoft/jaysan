@@ -66,10 +66,11 @@ return $data;
             srv.batch_id,
         
             sum(ifnull(srv.reserve_qty, 0)) as total_reserve_qty,
+            sum(ifnull(srv.qty, 0)) as total_stock_qty,
             
 
 
-            json_arrayagg(json_object('reserve_detail', srv.reserve_details)) as reserve_details,
+            JSON_OBJECT('reserve_detail', srv.reserve_details) as reserve_details,
             ifnull(srv.reserve_qty, 0) as reserve_qty,
             srv.qty as stock_qty
 
@@ -123,9 +124,9 @@ return $data;
                     'batch_id',
                     stock_reserve_godown.batch_id,
                     'qty',
-                    stock_reserve_godown.qty,
+                    stock_reserve_godown.total_stock_qty,
                     'reserve_qty',
-                    stock_reserve_godown.reserve_qty,
+                    stock_reserve_godown.total_reserve_qty,
                     'reserve_details',
                     stock_reserve_godown.reserve_details,
                     'same_des_godown',
