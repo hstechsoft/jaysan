@@ -69,7 +69,7 @@ return $data;
             
 
 
-            group_concat(srv.reserve_details) as reserve_details,
+            json_arrayagg(json_object('reserve_detail', srv.reserve_details)) as reserve_details,
             ifnull(srv.reserve_qty, 0) as reserve_qty,
             srv.qty as stock_qty
 
