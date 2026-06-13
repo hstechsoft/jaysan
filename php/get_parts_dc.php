@@ -101,10 +101,10 @@ return $data;
             stock_reserve_godown.previous_process_id,
             stock_reserve_godown.in_previous_process_id,
             stock_reserve_godown.input_part_id,
-            stock_reserve_godown.qty,
+           
             stock_reserve_godown.level,
-            sum(stock_reserve_godown.qty) as total_stock_qty,
-            sum(stock_reserve_godown.reserve_qty) as reserved_qty,
+            sum(stock_reserve_godown.total_stock_qty) as total_stock_qty,
+            sum(stock_reserve_godown.total_reserve_qty) as reserved_qty,
             JSON_ARRAYAGG(
                 JSON_OBJECT(
                     'godown_name',
