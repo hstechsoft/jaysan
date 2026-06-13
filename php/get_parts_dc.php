@@ -267,8 +267,8 @@ FROM
     level,
     work_time_details,
     has_godown,
-    out_process_stock.part_name as out_part_name,
-    out_process_stock.qty as out_part_qty
+    ifnull(out_process_stock.part_name, 'no stock available') as out_part_name,
+    ifnull(out_process_stock.qty, 0) as out_part_qty
 
     from final_process_list
 
