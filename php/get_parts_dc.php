@@ -47,57 +47,99 @@ return $data;
             inner join process_cte pc on pwt.process_id = pc.previous_process_id
             inner join input_wel_parts iwp on pwt.process_id = iwp.process_id
     ),
-    stock_reserve as (
+    stock_reserve_godown as (
         SELECT
             process_cte.process,
-            process_cte.process_id,
+            process_cte.process_id ,
             process_cte.previous_process_id,
             process_cte.in_previous_process_id,
             process_cte.input_part_id,
-            process_cte.qty,
+            process_cte.qty ,
             process_cte.level,
-            sum(srv.qty) as total_stock_qty,
-            sum(srv.reserve_qty) as reserved_qty,
-            JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'godown_name',
-                    srv.creditor_name,
-                    'godown',
-                    srv.godown,
-                    'dep_name',
-                    srv.dep_name,
-                    'dep',
-                    srv.dep,
-                    'sec_name',
-                    srv.sec_name,
-                    'sec',
-                    srv.sec,
-                    'stock_id',
-                    srv.stock_id,
-                    'batch_id',
-                    srv.batch_id,
-                    'qty',
-                    srv.qty,
-                    'reserve_qty',
-                    srv.reserve_qty,
-                    'reserve_details',
-                    srv.reserve_details,
-                    'same_des_godown',
-                    if(srv.godown = $dest_godown_id, 1, 0)
-                )
-            ) as stock_reserve_details
+            srv.creditor_name,
+            srv.dep_name,
+            srv.sec_name,
+            srv.godown,
+            srv.dep,
+            srv.sec,
+            srv.stock_id,
+            srv.batch_id,
+        
+            sum(ifnull(srv.reserve_qty, 0)) as total_reserve_qty,
+            
+
+
+            group_concat(srv.reserve_details) as reserve_details,
+            ifnull(srv.reserve_qty, 0) as reserve_qty,
+            srv.qty as stock_qty
+
+
+         
+           
+    
         FROM
             process_cte
             left JOIN stock_reserve_view srv on ifnull(process_cte.input_part_id, 0) = srv.part_id and ifnull(srv.reserve_qty, 0)
             and process_cte.in_previous_process_id = srv.process_id
-            
-        group by
+
+            group by
             process_cte.input_part_id,
             process_cte.in_previous_process_id,
-              srv.godown,
+            srv.godown,
             srv.dep,
             srv.sec
 
+          
+            
+      
+    ),
+    stock_reserve as (
+        SELECT
+            stock_reserve_godown.process,
+            stock_reserve_godown.process_id,
+            stock_reserve_godown.previous_process_id,
+            stock_reserve_godown.in_previous_process_id,
+            stock_reserve_godown.input_part_id,
+            stock_reserve_godown.qty,
+            stock_reserve_godown.level,
+            sum(stock_reserve_godown.qty) as total_stock_qty,
+            sum(stock_reserve_godown.reserve_qty) as reserved_qty,
+            JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'godown_name',
+                    stock_reserve_godown.creditor_name,
+                    'godown',
+                    stock_reserve_godown.godown,
+                    'dep_name',
+                    stock_reserve_godown.dep_name,
+                    'dep',
+                    stock_reserve_godown.dep,
+                    'sec_name',
+                    stock_reserve_godown.sec_name,
+                    'sec',
+                    stock_reserve_godown.sec,
+                    'stock_id',
+                    stock_reserve_godown.stock_id,
+                    'batch_id',
+                    stock_reserve_godown.batch_id,
+                    'qty',
+                    stock_reserve_godown.qty,
+                    'reserve_qty',
+                    stock_reserve_godown.reserve_qty,
+                    'reserve_details',
+                    stock_reserve_godown.reserve_details,
+                    'same_des_godown',
+                    if(stock_reserve_godown.godown = $dest_godown_id, 1, 0)
+                )
+            ) as stock_reserve_details
+        FROM
+            stock_reserve_godown
+           
+            
+        group by
+         input_part_id,
+           in_previous_process_id
+         
     ),
     process_final as (
         select
