@@ -45,7 +45,7 @@ if ($qty > $stock_qty) {
         }
 
         // check if stock with same part id, process id, godown and batch id exists in transport godown
-        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id = $part_id AND process_id = $process_id AND godown = $transport_godown AND batch_id = $batch_id";
+        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id = $part_id AND process_id = $process_id AND godown = $transport_godown AND batch_id = '$batch_id'";
         $result_check_stock = $conn->query($sql_check_stock);
         if ($result_check_stock->num_rows > 0) {
             // stock exists in transport godown, update quantity
