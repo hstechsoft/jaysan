@@ -80,8 +80,8 @@ return $data;
     
         FROM
             process_cte
-            left JOIN stock_reserve_view srv on ifnull(process_cte.input_part_id, 0) = srv.part_id and ifnull(srv.reserve_qty, 0)
-            and process_cte.in_previous_process_id = srv.process_id
+             left JOIN stock_reserve_view srv on process_cte.input_part_id <=> srv.part_id 
+            and process_cte.in_previous_process_id <=> srv.process_id
 
             group by
             process_cte.input_part_id,
