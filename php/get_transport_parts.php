@@ -39,7 +39,7 @@ if ($result->num_rows > 0) {
     }
     print json_encode($rows);
 } else {
-  echo "not_login";
+  echo "0 results";
 }
 $conn->close();
 
