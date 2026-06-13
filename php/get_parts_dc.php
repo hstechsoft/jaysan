@@ -93,7 +93,11 @@ return $data;
             
         group by
             process_cte.input_part_id,
-            process_cte.in_previous_process_id
+            process_cte.in_previous_process_id,
+              srv.godown,
+            srv.dep,
+            srv.sec
+
     ),
     process_final as (
         select
