@@ -64,13 +64,14 @@ return $data;
             srv.sec,
             srv.stock_id,
             srv.batch_id,
+            srv.reserve_details,
         
             sum(ifnull(srv.reserve_qty, 0)) as total_reserve_qty,
             sum(ifnull(srv.qty, 0)) as total_stock_qty,
             
 
 
-            JSON_OBJECT('reserve_detail', srv.reserve_details) as reserve_details,
+           
             ifnull(srv.reserve_qty, 0) as reserve_qty,
             srv.qty as stock_qty
 
