@@ -162,7 +162,7 @@ function get_transport_parts(godown_id) {
             if (response.trim() != "error") {
                 $(".dc_details").empty();
 
-                if (response.trim() != "0 result") {
+                if (response.trim() != "0 results") {
 
                     var obj = JSON.parse(response);
                     var count = 0;

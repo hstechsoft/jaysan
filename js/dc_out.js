@@ -233,119 +233,145 @@ $(document).ready(function () {
 
         $(".out_stock").append(`<strong class='text-secodary small'>${output_part_name} <span class='float-end badge bg-success'>${output_part_qty} - Qty</span></strong>`);
 
+        let firstEligibleFound = false;
+
         if (Array.isArray(stockData)) {
 
             stockData.forEach(function (item, index) {
 
                 let reserveBody = "";
 
+                // Check if current row should be disabled
+                let isDisabled = (item.same_des_godown == 1 || item.godown == 1233);
+
+                // Determine value
+                let qtyValue = 0;
+
+                if (!isDisabled && !firstEligibleFound) {
+                    qtyValue = need_qty;
+                    firstEligibleFound = true;
+                }
+
                 if (item.reserve_details && item.reserve_details.length > 0) {
 
                     item.reserve_details.forEach(function (reserve) {
 
                         reserveBody += `
-                        <div class="reserve-type-card">
+                <div class="reserve-type-card">
 
-                            <div class="reserve-type-header">
-                                ${val(reserve.reserve_type).toUpperCase()}
-                            </div>
+                    <div class="reserve-type-header">
+                        ${val(reserve.reserve_type).toUpperCase()}
+                    </div>
 
-                            <div class="p-2">
+                    <div class="p-2">
 
-                                <table class="table table-sm table-bordered mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Type ID</th>
-                                            <th>Qty</th>
-                                            <th>Reserve ID</th>
-                                        </tr>
-                                    </thead>
+                        <table class="table table-sm table-bordered mb-0" ${item.reserve_qty == 0 ? 'disabled' : ''}>
+                            <thead>
+                                <tr>
+                                    <th>Type ID</th>
+                                    <th>Qty</th>
+                                    <th>Reserve ID</th>
+                                </tr>
+                            </thead>
 
-                                    <tbody>
-                    `;
+                            <tbody>
+                `;
 
-                        if (reserve.details && reserve.details.length > 0) {
+                        if (reserve.details && reserve.details.length > 0 && item.reserve_qty > 0) {
 
                             reserve.details.forEach(function (detail) {
 
                                 reserveBody += `
-                                <tr>
-                                    <td>${val(reserve.reserve_type)}</td>
-                                    <td>${num(detail.reserve_qty)}</td>
-                                    <td>${num(detail.reserve_id)}</td>
-                                </tr>
-                            `;
+                                    <tr>
+                                        <td>${val(reserve.reserve_type)}</td>
+                                        <td>${num(detail.reserve_qty)}</td>
+                                        <td>${num(detail.reserve_id)}</td>
+                                    </tr>
+                                    `;
                             });
                         }
+                        else {
+                            reserveBody += `<tr><td colspan='3'><div class="text-danger text-center">No Reserve Details Available</div></td></tr>`;
+                        }
 
-                        reserveBody += `</tbody></table></div></div>`;
+                        reserveBody += `
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>`;
                     });
                 }
 
                 $("#stock_reserve_accordion").append(`
 
-                <div class="accordion-item">
+                                    <div class="accordion-item">
 
-                    <h2 class="accordion-header">
+                                        <h2 class="accordion-header">
 
-                        <button class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#stockReserve${index}">
+                                            <button class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#stockReserve${index}">
 
-                            <div class="w-100">
+                                                <div class="w-100">
 
-                                <div class="row align-items-center">
+                                                    <div class="row align-items-center">
 
-                                    <div class="col-md-6 text-start">
-                                        <small class="text-muted">Godown</small><br>
-                                        <span class="fw-semibold small">
-                                            ${val(item.godown_name)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-md-6 text-start">
+                                                            <small class="text-muted">Godown</small><br>
+                                                            <span class="fw-semibold small">
+                                                                ${val(item.godown_name)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <small class="text-muted">Stock</small><br>
-                                        <span class="badge bg-primary">
-                                            ${num(item.qty)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <small class="text-muted">Stock</small><br>
+                                                            <span class="badge bg-primary">
+                                                                ${num(item.qty)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <small class="text-muted">Reserved</small><br>
-                                        <span class="badge bg-warning text-dark">
-                                            ${num(item.reserve_qty)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <small class="text-muted">Reserved</small><br>
+                                                            <span class="badge bg-warning text-dark">
+                                                                ${num(item.reserve_qty)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <input type="number" class="form-control form-control-sm rounded-3" value=${index == 0 ? need_qty : 0} ${(item.same_des_godown == 1 || item.godown == 1233) ? "disabled" : ''}
-                                            id="allo_qty" data-stock_id="${item.stock_id}" placeholder='Qty'>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <input type="number"
+                                                                class="form-control form-control-sm rounded-3"
+                                                                value="${qtyValue}"
+                                                                ${isDisabled ? "disabled" : ""}
+                                                                id="allo_qty"
+                                                                data-stock_id="${item.stock_id}"
+                                                                placeholder="Qty">
+                                                        </div>
 
+                                                    </div>
 
-                                </div>
+                                                </div>
 
-                            </div>
+                                            </button>
 
-                        </button>
+                                        </h2>
 
-                    </h2>
+                                        <div id="stockReserve${index}"
+                                            class="accordion-collapse collapse"
+                                            data-bs-parent="#stock_reserve_accordion">
 
-                    <div id="stockReserve${index}"
-                         class="accordion-collapse collapse"
-                         data-bs-parent="#stock_reserve_accordion">
+                                            <div class="accordion-body">
 
-                        <div class="accordion-body">
+                                                ${reserveBody}
 
+                                            </div>
 
-                            ${reserveBody || '<div class="text-muted">No Reserve Details Available</div>'}
+                                        </div>
 
-                        </div>
-
-                    </div>
-
-                </div>`);
+                                    </div>`
+                );
             });
         }
 
@@ -907,11 +933,11 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
 
             console.log(response.status);
             console.log('http://localhost/jaysan/' + response.download_url);
-            
+
             if (response.status == 'ok') {
 
                 window.open(
-                    'http://localhost/jaysan/' + response.download_url,'_blank'
+                    'http://localhost/jaysan/' + response.download_url, '_blank'
                 );
 
             }
@@ -947,8 +973,8 @@ function get_transport_all(godown_id) {
 
             if (response.trim() != "error") {
                 $(".dc_details").empty();
-                $("#transport_modal").modal('show');
                 if (response.trim() != "0 results") {
+                    $("#transport_modal").modal('show');
 
                     var obj = JSON.parse(response);
                     var count = 0;
