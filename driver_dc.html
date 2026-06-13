@@ -63,10 +63,65 @@
             font-weight: 600;
         }
 
+        .accordion-item {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            font-size: 0.9rem;
+            background: #fff;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: #f8f9fa;
+            color: #212529;
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-button::after {
+            width: 0.9rem;
+            height: 0.9rem;
+            background-size: 0.9rem;
+        }
+
+        .accordion-body {
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+        }
+
+        .border-bottom:last-child {
+            border-bottom: none !important;
+        }
+
+        @media (max-width: 576px) {
+            .accordion-button {
+                padding: 0.75rem;
+            }
+
+            .accordion-body {
+                padding: 0.75rem;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+            }
+
+            .btn-sm {
+                font-size: 0.75rem;
+            }
+        }
+
         @media (max-width: 576px) {
 
             .part-row {
-                flex-direction: column;
+                flex-direction: row;
                 align-items: start;
                 gap: 5px;
             }
@@ -114,7 +169,7 @@
                     <h6 class="dc_title">DC Load Details</h6>
 
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="dc_switch" >
+                        <input class="form-check-input" type="checkbox" id="dc_switch">
                         <label class="form-check-label" for="dc_switch">DC Unload Details</label>
                     </div>
                 </div>

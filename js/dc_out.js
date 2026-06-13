@@ -278,14 +278,7 @@ $(document).ready(function () {
                             });
                         }
 
-                        reserveBody += `
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div>
-                    `;
+                        reserveBody += `</tbody></table></div></div>`;
                     });
                 }
 
@@ -326,7 +319,7 @@ $(document).ready(function () {
                                     </div>
 
                                     <div class="col-2 text-center">
-                                        <input type="number" class="form-control form-control-sm rounded-3" value=${index == 0 ? need_qty : 0} (${item.same_des_godown == 1 ? "disabled" : ''})
+                                        <input type="number" class="form-control form-control-sm rounded-3" value=${index == 0 ? need_qty : 0} ${(item.same_des_godown == 1 || item.godown == 1233) ? "disabled" : ''}
                                             id="allo_qty" data-stock_id="${item.stock_id}" placeholder='Qty'>
                                     </div>
 
@@ -352,9 +345,7 @@ $(document).ready(function () {
 
                     </div>
 
-                </div>
-
-            `);
+                </div>`);
             });
         }
 
@@ -476,9 +467,7 @@ $(document).ready(function () {
 
                     </div>
 
-                </div>
-
-            `);
+                </div>`);
             });
         }
 
@@ -559,16 +548,9 @@ $(document).ready(function () {
             }
         })
 
-
-        // var stock_id_str = stock_id.join(",");
-        // var qty_cou_str = qty_cou.join(",");
-
         console.log(stock_id_qty);
-        // console.log(qty_cou_str);
-        // console.log(qty);
 
         row.find("td").eq(4).find("input").data("stock_id_qty", stock_id_qty);
-        // row.find("td").eq(4).find("input").data("qty_cou", qty_cou_str);
         row.find("td").eq(4).find("input").val(qty);
 
 
@@ -595,6 +577,14 @@ $(document).ready(function () {
         let contact_no = $("#contact_no").val() || '';
         let vehicle_description = $("#vehicle_description").val() || '';
         let e_invoice = $("#e_invoice").val() || '';
+        let mode_of_payment = $("#mode_of_payment").val() || '';
+        let supplier_ref_order_no = $("#supplier_ref_order_no").val() || '';
+        let dispatch_doc_no = $("#dispatch_doc_no").val() || '';
+        let dispatched_through = $("#vehicle_type").val() || '';
+        let date_time_of_issue = $("#date_time_of_issue").val() || '';
+        let duration_of_process = $("#duration_of_process").val() || '';
+        let nature_of_processing = $("#nature_of_processing").val() || '';
+        let challan_no = $("#challan_no").val() || '';
 
         let emp_id = current_user_id;
         let dc_type = "dc";
@@ -628,11 +618,6 @@ $(document).ready(function () {
                     qty: qty,
                     rate: rate,
                 });
-                dc_process.push({
-                    process_id: process_id,
-                    qty: qty,
-                    rate: rate,
-                });
                 stock_id_qty.forEach(item => {
                     dc_parts_location.push({
                         emp_id: emp_id,
@@ -640,6 +625,18 @@ $(document).ready(function () {
                         qty: item.qty
                     });
                 });
+
+                let existing = dc_process.find(item => item.process_id == process_id);
+
+                if (existing) {
+                    existing.qty += qty;
+                } else {
+                    dc_process.push({
+                        process_id: process_id,
+                        qty: qty,
+                        rate: 0
+                    });
+                }
             }
         });
 
@@ -663,10 +660,10 @@ $(document).ready(function () {
             return;
         }
 
-        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
+        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
 
 
-        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts), JSON.stringify(dc_parts_location), JSON.stringify(dc_process));
+        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts), JSON.stringify(dc_parts_location), JSON.stringify(dc_process));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -872,7 +869,7 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
+function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
 
     $.ajax({
         url: "php/insert_delivery_challan.php",
@@ -886,14 +883,14 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
             vehicle_no: vehicle_no,
             driver_name: driver_name,
             driver_contact: driver_contact,
-            mode_of_payment: '',
-            supplier_ref_order_no: '',
-            dispatch_doc_no: '',
-            dispatched_through: '',
-            date_time_of_issue: '',
-            duration_of_process: '',
-            nature_of_processing: '',
-            challan_no: '',
+            mode_of_payment: mode_of_payment,
+            supplier_ref_order_no: supplier_ref_order_no,
+            dispatch_doc_no: dispatch_doc_no,
+            dispatched_through: dispatched_through,
+            date_time_of_issue: date_time_of_issue,
+            duration_of_process: duration_of_process,
+            nature_of_processing: nature_of_processing,
+            challan_no: challan_no,
             emp_id: emp_id,
             dc_type: dc_type,
             dc_from: dc_from,
@@ -909,14 +906,12 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
             console.log(response);
 
             console.log(response.status);
-            console.log(
-                'http://localhost/jaysan/' + response.download_url
-            );
+            console.log('http://localhost/jaysan/' + response.download_url);
+            
             if (response.status == 'ok') {
 
                 window.open(
-                    'http://localhost/jaysan/' + response.download_url,
-                    '_blank'
+                    'http://localhost/jaysan/' + response.download_url,'_blank'
                 );
 
             }
