@@ -160,7 +160,7 @@ try {
 
 
                 // insert transport parts
-                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id, qty,reserve_id) VALUES ($dc_from, $dc_to, $transport_godown, $dc_id, $emp_id, $reserve_qty, $reserve_id)";
+                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id, qty,reserve_id) VALUES ($dc_from, $godown_id, $transport_godown, $dc_id, $emp_id, $reserve_qty, $reserve_id)";
                 if (!$conn->query($sql_transport)) {
                     throw new Exception("Error inserting transport parts: " . $conn->error);
                 }
