@@ -16,7 +16,7 @@ return $data;
 
 $sql = "SET time_zone = '+05:30';"; 
 
-$sql .= "SELECT employee.emp_name,customer.cus_phone,customer.cus_name, sales_order_form.order_no,jaysan_payment.*,DATE_FORMAT(jaysan_payment.payment_date, '%d-%m-%Y %h:%i %p') as date_f FROM sales_order_form INNER join jaysan_payment on sales_order_form.oid = jaysan_payment.oid INNER JOIN customer on sales_order_form.customer_id = customer.cus_id INNER JOIN employee on sales_order_form.emp_id = employee.emp_id WHERE jaysan_payment.sts = 'not_approve' order by sales_order_form.oid ASC";
+$sql .= "SELECT employee.emp_name,customer.cus_phone,customer.cus_name,sales_order_form.order_category, sales_order_form.order_no,jaysan_payment.*,DATE_FORMAT(jaysan_payment.payment_date, '%d-%m-%Y %h:%i %p') as date_f FROM sales_order_form INNER join jaysan_payment on sales_order_form.oid = jaysan_payment.oid INNER JOIN customer on sales_order_form.customer_id = customer.cus_id INNER JOIN employee on sales_order_form.emp_id = employee.emp_id WHERE jaysan_payment.sts = 'not_approve' order by sales_order_form.oid ASC";
 
 
 
