@@ -194,7 +194,7 @@ try {
 $rows = [];
 $rows[] = $result;
 
-header('Content-Type: application/json');
+
 print json_encode($rows);
         
         $conn->commit();
