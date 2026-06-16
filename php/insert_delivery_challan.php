@@ -189,19 +189,13 @@ try {
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
 
-         
+
+
 $rows = [];
 $rows[] = $result;
 
 header('Content-Type: application/json');
-if ($result) {
-    echo json_encode($result);
-} else {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'PDF generation failed'
-    ]);
-}
+echo json_encode($rows);
         
         $conn->commit();
 
