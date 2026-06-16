@@ -194,7 +194,14 @@ $rows = [];
 $rows[] = $result;
 
 header('Content-Type: application/json');
-echo json_encode($rows);
+if ($result) {
+    echo json_encode($result);
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'PDF generation failed'
+    ]);
+}
         
         $conn->commit();
 
