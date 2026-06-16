@@ -32,7 +32,7 @@ group by sr.reserve_type,sr.reserve_type_id,js.godown,js.dep,js.sec)
 
 SELECT dc_no, reserve_type,reserve_type_id,bill_to,ship_to,JSON_ARRAYAGG(JSON_OBJECT('godown',godown,'dep',dep,'sec',sec,'creditor_name',creditor_name,'dep_name',dep_name,'sec_name',sec_name,'parts',parts)) as parts from transport
 group by reserve_type,reserve_type_id";
-
+ 
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
