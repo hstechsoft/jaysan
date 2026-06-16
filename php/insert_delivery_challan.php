@@ -188,17 +188,13 @@ try {
 
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
-$result = print_dc($dc_id, $conn);
 
-var_dump($result);
 
-$json = json_encode($result);
+$rows = [];
+$rows[] = $result;
 
-if ($json === false) {
-    die('JSON Error: ' . json_last_error_msg());
-}
-
-echo $json;
+header('Content-Type: application/json');
+echo json_encode($rows);
 
 
         
