@@ -896,7 +896,7 @@ function get_company_dc(godown_id) {
 }
 
 function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
-
+    alert()
     $.ajax({
         url: "php/insert_delivery_challan.php",
         type: "post", //send it through get method
@@ -930,17 +930,22 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
         },
         success: function (response) {
             console.log(response);
+            console.log(typeof response);
 
-            console.log(response.status);
-            console.log('http://localhost/jaysan/' + response.download_url);
+            var le = response;
 
-            if (response.status == 'ok') {
+            le.forEach(function (i) {
 
-                window.open(
-                    'http://localhost/jaysan/' + response.download_url, '_blank'
-                );
+                if (i.status === 'ok') {
+                    window.open(
+                        'http://localhost/jaysan/' + i.download_url,
+                        '_blank'
+                    );
 
-            }
+                }
+
+            });
+
 
 
 

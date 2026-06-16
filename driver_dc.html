@@ -100,6 +100,18 @@
             border-bottom: none !important;
         }
 
+        #manual_dc_tbody td {
+            vertical-align: middle;
+        }
+
+        #manual_dc_tbody input[type="number"] {
+            min-width: 80px;
+        }
+
+        .modal-body .badge {
+            font-size: 11px;
+        }
+
         @media (max-width: 576px) {
             .accordion-button {
                 padding: 0.75rem;
@@ -159,9 +171,15 @@
 
         <div class=" page-wrapper mt-5 mt-md-0">
 
-            <div class="form-floating mb-2">
-                <input type="text" class="form-control rounded-3" id="godown" placeholder="">
-                <label for="godown">Godown</label>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="form-floating flex-grow-1">
+                    <input type="text" class="form-control rounded-3" id="godown" placeholder="">
+                    <label for="godown">Godown</label>
+                </div>
+
+                <button type="button" class="btn btn-primary" id="manual_dc_modal_btn">
+                    Manual DC
+                </button>
             </div>
 
             <div class="card">
@@ -187,6 +205,41 @@
 
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="manual_dc_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Create Manual DC</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control form-control-sm rounded-3" id="dest_godown"
+                            placeholder="" required>
+                        <label for="dest_godown">
+                            To Godown <span class="text-danger">*</span>
+                        </label>
+                        <div class="invalid-feedback">
+                            Kindly Enter Valid Data
+                        </div>
+                    </div>
+
+                    <div class="card mb-2 shadow-sm" id="manual_dc_card">
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success add_manual_dc">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div id='footer' class="mt-auto"></div>

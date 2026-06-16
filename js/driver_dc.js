@@ -31,10 +31,10 @@ $(document).ready(function () {
     );
 
 
-    $(".part_search").on("keyup", function () {
+    $("#part_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
-        $("#available_part_tbody tr").filter(function () {
+        $("#manual_dc_card card-body").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
@@ -137,11 +137,103 @@ $(document).ready(function () {
         }
     })
 
+    $("#manual_dc_modal_btn").on("click", function () {
+        if ($('#godown').data("godown_id") < 1 || $('#godown').data("godown_id") == undefined) {
+            salert("Warning", "First Select The Godown.", "warning");
+            return;
+        }
+        else {
+
+            get_godown_wise_process($('#godown').data("godown_id"));
+            $("#manual_dc_modal").modal('show');
+
+        }
+    })
 
 
 
 
 });
+
+
+
+function get_godown_wise_process(godown_id) {
+
+    $.ajax({
+        url: "php/get_godown_wise_process.php",
+        type: "get", //send it through get method
+        data: {
+
+            godown_id: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $("#manual_dc_card").empty();
+
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+                    $("#manual_dc_card").append(`<div class='card-header'>
+                        <input type='text' class='part_search' placeholder='Search'>
+                        </div>`)
+                    obj.forEach(function (item, index) {
+
+                        count++;
+
+                        $("#manual_dc_card").append(`
+                                <div class="card-body p-2">
+
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <div class="fw-semibold">${item.final_part}</div>
+                                            <span class="badge bg-success">
+                                                ${item.process_name}
+                                            </span>
+                                        </div>
+
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            data-stock_id="${item.stock_id}">
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm text-end"
+                                            value="${item.qty || 0}"
+                                            data-stock_id="${item.stock_id}">
+                                    </div>
+
+                                </div>`
+                        );
+
+                    });
+                }
+                else {
+                    salert("Warning", "No Part Found", "warning");
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
