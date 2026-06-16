@@ -97,7 +97,7 @@ $sql_get_transport_id = "SELECT transport_dc_id from transport_parts WHERE reser
             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_get_transport_id . $conn->error);
         }   
 
-
+echo   $transport_dc_id ;
 
 
     // update current transport in transport parts with $transport_godown and sts as transport
