@@ -189,7 +189,14 @@ try {
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
 
-print_r($result);
+
+$json = json_encode($result);
+
+if ($json === false) {
+    echo json_last_error_msg();
+} else {
+    echo $json;
+}
 
 
         
