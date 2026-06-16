@@ -87,7 +87,7 @@ if ($qty > $stock_qty) {
                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
                 }
 
-       
+         $transport_dc_id = 0;
 // get transport_dc_id 
 $sql_get_transport_id = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
   $result_check_stock = $conn->query($sql_get_transport_id);
