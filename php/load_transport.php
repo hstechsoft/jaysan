@@ -88,12 +88,19 @@ if ($qty > $stock_qty) {
                 }
 
        
+// get transport_dc_id 
+$sql_get_transport_id = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
+if ($conn->query($sql_get_transport_id) === TRUE) {
+            $transport_dc_id = $conn->insert_id;
+        } else {
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " . $conn->error);
+        }   
 
 
 
 
     // update current transport in transport parts with $transport_godown and sts as transport
-    $sql_update_transport = "UPDATE transport_parts SET current_transport = $transport_godown, sts = 'transport' WHERE reserve_id = $stock_reserve_id";
+    $sql_update_transport = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE reserve_id = $transport_dc_id";
     if (!$conn->query($sql_update_transport)) {
         throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
     }
