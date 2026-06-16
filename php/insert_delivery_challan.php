@@ -141,29 +141,45 @@ try {
                 $godown_id = $row_godown['godown'];
                 $stock_process_id = $row_godown['process_id'];
                 $stock_part_id = $row_godown['part_id'];
-                if ($godown_id != $dc_from) {
+                // if ($godown_id != $dc_from) {
+                //     // insert in_dc_tracking
+                //     $sql_in_dc = "INSERT INTO in_dc_tracking (out_dc_id, godown, dated) VALUES ($dc_id, $godown_id, NOW())";
+                //     // get in_dc_tracking id
+                //     if ($conn->query($sql_in_dc) === TRUE) {
+                //         $in_dc_id = $conn->insert_id;
+                //     } else {
+                //         throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
+                //     }
+
+                //     // add parts to in_dc_parts 
+                //     $sql_in_dc_parts = "INSERT INTO in_dc_parts (tracking_id, part_id,process_id, qty) VALUES ($in_dc_id, $stock_part_id, $stock_process_id, $reserve_qty)";
+                //     if (!$conn->query($sql_in_dc_parts)) {
+                //         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
+                //     }
+                // }
+
+
+          
                     // insert in_dc_tracking
-                    $sql_in_dc = "INSERT INTO in_dc_tracking (out_dc_id, godown, dated) VALUES ($dc_id, $godown_id, NOW())";
+                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,transport_godown,dc_id) VALUES ($godown_id, $dc_to, $transport_godown, $dc_id)";
                     // get in_dc_tracking id
                     if ($conn->query($sql_in_dc) === TRUE) {
-                        $in_dc_id = $conn->insert_id;
+                        $transport_dc_id = $conn->insert_id;
                     } else {
                         throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
                     }
 
                     // add parts to in_dc_parts 
-                    $sql_in_dc_parts = "INSERT INTO in_dc_parts (tracking_id, part_id,process_id, qty) VALUES ($in_dc_id, $stock_part_id, $stock_process_id, $reserve_qty)";
+                    $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id)";
                     if (!$conn->query($sql_in_dc_parts)) {
                         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
                     }
-                }
+             
 
 
-                // insert transport parts
-                $sql_transport = "INSERT INTO transport_parts (source_godown,des_godown,transport_godown,dc_id,emp_id, qty,reserve_id) VALUES ($godown_id, $dc_to, $transport_godown, $dc_id, $emp_id, $reserve_qty, $reserve_id)";
-                if (!$conn->query($sql_transport)) {
-                    throw new Exception("Error inserting transport parts: " . $conn->error);
-                }
+
+
+
             }
             
    
