@@ -86,7 +86,7 @@ left join jaysan_process jp on jp.process_id = dc_parttbl_process.process
 left join process_wel_tbl pwt on pwt.process_id = dc_parttbl_process.final_process_id
 left join parts_tbl final_part on final_part.part_id = pwt.output_part
 
- WHERE dc.dc_id = 20
+ WHERE dc.dc_id = $dc_id
 
  group by dcp.dc_id";
  
