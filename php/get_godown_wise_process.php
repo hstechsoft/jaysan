@@ -22,9 +22,12 @@ return $data;
  $sql = "with jprocess as (SELECT jaysan_process_view.final_part,jaysan_process_view.output_part,jaysan_process_view.process_name,jaysan_process_view.process_id from work_time_master 
 left join jaysan_process_view on work_time_master.ori_process_id = jaysan_process_view.process_id 
 
-WHERE godown_id = $godown_id)
+WHERE godown_id =  $godown_id)
 
-SELECT final_part,output_part,process_name,jprocess.process_id,stock_id,qty from jprocess left join jaysan_stock on jprocess.output_part = jaysan_stock.part_id and jprocess.process_id = jaysan_stock.process_id and jaysan_stock.godown = $godown_id";
+SELECT final_part,output_part,process_name,jprocess.process_id,stock_id,qty,jaysan_stock.godown,jaysan_stock.dep,jaysan_stock.sec,creditors.creditor_name,department.dep_name,dep_section.sec_name from jprocess left join jaysan_stock on jprocess.output_part = jaysan_stock.part_id and jprocess.process_id = jaysan_stock.process_id and jaysan_stock.godown =  $godown_id
+ left join creditors on jaysan_stock.godown = creditors.creditor_id
+    left join department on jaysan_stock.dep = department.dep_id
+    left join dep_section on jaysan_stock.sec = dep_section.dep_sec_id";
 
 
 $result = $conn->query($sql);
