@@ -14,7 +14,8 @@ function test_input($data) {
   return $data;
 }
 
-$sql = "with transport as(SELECT sr.reserve_type,sr.reserve_type_id,dc.dc_no,dc.bill_to,dc.ship_to,js.godown,js.dep,js.sec,creditor_name,dep.dep_name,ds.sec_name, JSON_ARRAYAGG(JSON_OBJECT('part_id',js.part_id,'process_id',js.process_id,'part_name',ifnull(pt.part_name, CONCAT('semi finished part (', jp.process_name, ')')) ,'process_name', jp.process_name,'qty',sr.reserve_qty,'stock_id',sr.stock_id,'godown',js.godown)) as parts from  transport_parts tp
+$sql = "with transport as(SELECT sr.reserve_type,sr.reserve_type_id,dc.dc_no,dc.bill_to,dc.ship_to,js.godown,js.dep,js.sec,creditor_name,dep.dep_name,ds.sec_name, JSON_ARRAYAGG(JSON_OBJECT('part_id',js.part_id,'process_id',js.process_id,'part_name',ifnull(pt.part_name, CONCAT('semi finished part (', jp.process_name, ')')) ,'process_name', jp.process_name,'qty',sr.reserve_qty,'stock_id',sr.stock_id,'godown',js.godown)) as parts from  transport_dc tdc
+inner join transport_parts tp on tdc.transport_dc_id = tp.transport_dc_id
 inner join stock_reserve sr on tp.reserve_id = sr.stock_reserve_id
 inner join jaysan_stock js on sr.stock_id = js.stock_id
 left join parts_tbl pt on js.part_id = pt.part_id
