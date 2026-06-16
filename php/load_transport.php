@@ -90,7 +90,8 @@ if ($qty > $stock_qty) {
        
 // get transport_dc_id 
 $sql_get_transport_id = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
-if ($conn->query($sql_get_transport_id) === TRUE) {
+  $result_check_stock = $conn->query($sql_get_transport_id);
+        if ($result_check_stock->num_rows > 0) {
             $transport_dc_id = $conn->insert_id;
         } else {
             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_get_transport_id . $conn->error);
