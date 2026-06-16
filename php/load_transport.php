@@ -99,7 +99,6 @@ $result_check_transport = $conn->query($sql_check_transport);
             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
         }   
 
-echo   $sql_check_transport;
 
     // update current transport in transport parts with $transport_godown and sts as transport
     $sql_update_transport = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
