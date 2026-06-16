@@ -31,7 +31,7 @@ $params = [
     'watermark_text'=> $params['watermark_text'] ?? '',
     'stream'         => $params['stream'] ?? 'no'
 ];
-
+$file_fullname = "";
 // ========= Prepare Save Path =========
 if (empty($params['save_path'])) {
     $params['save_path'] = __DIR__ . '/storage/pdf/invoice_' . time();
@@ -44,8 +44,10 @@ if (!is_dir($dir)) {
 
 if (strtolower($params['unique_file']) === 'yes') {
     $params['save_path'] .= '_' . time() . '.pdf';
+    $file_fullname = $params['save_path'];
 } else {
     $params['save_path'] .= '.pdf';
+    $file_fullname = $params['save_path'];
 }
 
 // ========= Setup Dompdf =========
@@ -183,13 +185,7 @@ if (!empty($params['email_to'])) {
     $email_status = '📄 File saved (email not sent)';
 }
 // if stream is yes, output PDF directly to browser
-if (strtolower($params['stream']) === 'yes') {
-      ob_end_clean(); // VERY IMPORTANT
 
-    return $pdfOutput;
-   
-}
-else
 // ========= Return JSON =========
 {
 
@@ -203,10 +199,11 @@ else
 
 return [
     'status' => 'ok',
-    'pdf_content' => $pdfOutput,
+    
     'message' => '✅ PDF generated successfully!',
     'email_status' => $email_status,
     'file_path' => $params['save_path'],
+    'pdf_file_name' => $file_fullname,
     'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
 ];
 }
