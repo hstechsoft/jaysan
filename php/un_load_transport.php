@@ -104,15 +104,28 @@ foreach ($stock_json as $stock) {
         throw new Exception("Error checking destination godown for id $des_godown: " . $conn->error);
     }
 
+          $transport_dc_id = 0;
+// get transport_dc_id 
+$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
+$result_check_transport = $conn->query($sql_check_transport);
+        if ($result_check_transport->num_rows > 0) {
+            // stock exists in transport godown, update quantity
+            $row_check_transport = $result_check_transport->fetch_assoc();
+            $transport_dc_id = $row_check_transport['transport_dc_id'];
+        } else {
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
+        }   
+// UPDATE transport_dc SET current_transport = $des_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id
+
     if($creditor_group == 'transport') {
         // update current transport in transport parts with $transport_godown and sts as transport
-        $sql_update_transport = "UPDATE transport_parts SET current_transport = $des_godown, sts = 'transport' WHERE reserve_id = $stock_reserve_id";
+        $sql_update_transport = "UPDATE transport_dc SET current_transport = $des_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
         if (!$conn->query($sql_update_transport)) {
             throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
         }
     } else {
         // update current transport in transport parts with $transport_godown and sts as finished
-        $sql_update_transport = "UPDATE transport_parts SET  sts = 'finished' WHERE reserve_id = $stock_reserve_id";
+        $sql_update_transport = "UPDATE transport_dc SET  sts = 'finished' WHERE transport_dc_id = $transport_dc_id";
         if (!$conn->query($sql_update_transport)) {
             throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
         }
