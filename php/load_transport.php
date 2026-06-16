@@ -71,7 +71,7 @@ if ($qty > $stock_qty) {
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
         } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " . $conn->error);
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " .$sql_insert_stock. $conn->error);
         }   
 
 
