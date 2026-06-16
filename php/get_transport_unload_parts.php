@@ -34,7 +34,7 @@ SELECT dc_no, reserve_type,reserve_type_id,bill_to,ship_to,JSON_ARRAYAGG(JSON_OB
 group by reserve_type,reserve_type_id";
  
 
-echo $sql;
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
