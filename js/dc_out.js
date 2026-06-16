@@ -257,29 +257,29 @@ $(document).ready(function () {
                     item.reserve_details.forEach(function (reserve) {
 
                         reserveBody += `
-                <div class="reserve-type-card">
+                            <div class="reserve-type-card">
 
-                    <div class="reserve-type-header">
-                        ${val(reserve.reserve_type).toUpperCase()}
-                    </div>
+                                <div class="reserve-type-header">
+                                    ${val(reserve.reserve_type).toUpperCase()}
+                                </div>
 
-                    <div class="p-2">
+                                <div class="p-2">
 
-                        <table class="table table-sm table-bordered mb-0" ${item.reserve_qty == 0 ? 'disabled' : ''}>
-                            <thead>
-                                <tr>
-                                    <th>Type ID</th>
-                                    <th>Qty</th>
-                                    <th>Reserve ID</th>
-                                </tr>
-                            </thead>
+                                    <table class="table table-sm table-bordered mb-0" ${item.reserve_qty == 0 ? 'disabled' : ''}>
+                                        <thead>
+                                            <tr>
+                                                <th>Type ID</th>
+                                                <th>Qty</th>
+                                                <th>Reserve ID</th>
+                                            </tr>
+                                        </thead>
 
-                            <tbody>
-                `;
+                                        <tbody>
+                            `;
 
-                        if (reserve.details && reserve.details.length > 0 && item.reserve_qty > 0) {
+                        if (reserve.reserve_details && reserve.reserve_details.length > 0 && item.reserve_qty > 0) {
 
-                            reserve.details.forEach(function (detail) {
+                            reserve.reserve_details.forEach(function (detail) {
 
                                 reserveBody += `
                                     <tr>

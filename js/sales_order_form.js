@@ -5510,17 +5510,30 @@ function insert_sales_order_form() {
   }
 
   var paymentDetails = [];
-  $('#payment_table').find('tr').each(function () {
-    if ($(this).find('td:eq(4)').data("advance_id") === null) {
-      var ref_no = $(this).find('td:eq(1)').text();
-      var utr_no = $(this).find('td:eq(2)').text();
-      var amount = $(this).find('td:eq(3)').text();
-      var payment_date = $(this).find('td:eq(5)').text();
-      paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date, utr_no: utr_no });
-    }
+  if ($('#order_category :selected').val() == "Sales") {
+    $('#payment_table').find('tr').each(function () {
 
+      if ($(this).find('td:eq(4)').data("advance_id") === null) {
+        var ref_no = $(this).find('td:eq(1)').text();
+        var utr_no = $(this).find('td:eq(2)').text();
+        var amount = $(this).find('td:eq(3)').text();
+        var payment_date = $(this).find('td:eq(5)').text();
+        paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date, utr_no: utr_no });
+      }
+    });
 
-  });
+  }
+  else {
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    paymentDetails.push({
+      ref_no: "Requirement Order",
+      amount: 0,
+      payment_date: currentDate,
+      utr_no: currentDate.toString()
+    });
+  }
+
 
   var paymentadvanceDetails = [];
   $('#payment_table').find('tr').each(function () {
@@ -5634,17 +5647,31 @@ function update_sales_order_form() {
   });
 
   var paymentDetails = [];
-  $('#payment_table').find('tr').each(function () {
-    if ($(this).find('td:eq(4)').data("advance_id") === null) {
-      var ref_no = $(this).find('td:eq(1)').text();
-      var utr_no = $(this).find('td:eq(2)').text();
-      var amount = $(this).find('td:eq(3)').text();
-      var payment_date = $(this).find('td:eq(5)').text();
-      paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date, utr_no: utr_no });
-    }
+
+  if ($('#order_category :selected').val() == "Sales") {
+    $('#payment_table').find('tr').each(function () {
+      if ($(this).find('td:eq(4)').data("advance_id") === null) {
+        var ref_no = $(this).find('td:eq(1)').text();
+        var utr_no = $(this).find('td:eq(2)').text();
+        var amount = $(this).find('td:eq(3)').text();
+        var payment_date = $(this).find('td:eq(5)').text();
+        paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date, utr_no: utr_no });
+      }
 
 
-  });
+    });
+  }
+  else {
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    paymentDetails.push({
+      ref_no: "Requirement Order",
+      amount: 0,
+      payment_date: currentDate,
+      utr_no: currentDate.toString()
+    });
+  }
+
 
   var paymentadvanceDetails = [];
   $('#payment_table').find('tr').each(function () {
