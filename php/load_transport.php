@@ -93,7 +93,7 @@ $sql_get_transport_id = "SELECT transport_dc_id from transport_parts WHERE reser
 if ($conn->query($sql_get_transport_id) === TRUE) {
             $transport_dc_id = $conn->insert_id;
         } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " . $conn->error);
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_get_transport_id . $conn->error);
         }   
 
 
