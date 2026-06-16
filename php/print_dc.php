@@ -21,7 +21,7 @@ left join process_wel_tbl dc_prs on dc_prs.process_id = dc_process.process_id
 left join jaysan_process jp1 on jp1.process_id = dc_prs.process
 left join parts_tbl prs_output_part on prs_output_part.part_id = pwt.output_part
 
- WHERE dc_process.dc_id = 20 group by dc_process.dc_process_id, dc_process.process_id)
+ WHERE dc_process.dc_id = $dc_id group by dc_process.dc_process_id, dc_process.process_id)
 
  SELECT process_id,process_name,part_details,process_qty,dc_process_id,output_part_name from prs";
  $dc_process_id = 0;
