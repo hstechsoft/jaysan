@@ -189,13 +189,9 @@ try {
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
 
+print_r($result);
 
 
-$rows = [];
-$rows[] = $result;
-
-header('Content-Type: application/json');
-print json_encode($rows);
         
         $conn->commit();
 
