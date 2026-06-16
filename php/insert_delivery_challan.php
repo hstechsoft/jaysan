@@ -189,15 +189,12 @@ try {
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
 
-            // // save filepath in delivery challan table
-            // $sql_update = "UPDATE delivery_challan SET file_path = '".$result['pdf_file_name']."' WHERE dc_id = $dc_id";
-            // if (!$conn->query($sql_update)) {
-            //     throw new Exception("Error updating delivery challan: " . $conn->error);
-            // }
+         
+$rows = [];
+$rows[] = $result;
 
-//  print array
-      header('Content-Type: application/json');
-echo json_encode($result);
+header('Content-Type: application/json');
+echo json_encode($rows);
         
         $conn->commit();
 
