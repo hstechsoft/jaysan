@@ -196,7 +196,8 @@ try {
             // }
 
 //  print array
-        print_r($result);
+      header('Content-Type: application/json');
+echo json_encode($result);
         
         $conn->commit();
 
