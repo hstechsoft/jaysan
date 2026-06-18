@@ -65,7 +65,14 @@ try {
 
     {
     
-
+       // insert in_dc_tracking
+                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown) VALUES ($source_godown, $destination)";
+                    // get in_dc_tracking id
+                    if ($conn->query($sql_in_dc) === TRUE) {
+                        $transport_dc_id = $conn->insert_id;
+                    } else {
+                        throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
+                    }
 
 
         // reserve stock for dc parts
@@ -124,14 +131,7 @@ try {
                 }
 
           
-                    // insert in_dc_tracking
-                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown) VALUES ($source_godown, $destination)";
-                    // get in_dc_tracking id
-                    if ($conn->query($sql_in_dc) === TRUE) {
-                        $transport_dc_id = $conn->insert_id;
-                    } else {
-                        throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
-                    }
+             
 
                     // add parts to in_dc_parts 
                     $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id)";
