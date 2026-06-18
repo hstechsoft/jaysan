@@ -115,6 +115,9 @@ try {
 // check if stock is taken from source godown or not
 // convert $godown_id and $source_godown to integer
                 $godown_id = (int)$godown_id;
+                // remove '$source_godown'
+                $source_godown = (int)str_replace("'", "", $source_godown);
+
                 $source_godown = (int)$source_godown;
                 if ($godown_id != $source_godown) {
                     throw new Exception("Stock id $stock_id is not from source godown $source_godown and godown id is $godown_id");
