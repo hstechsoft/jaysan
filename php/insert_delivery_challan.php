@@ -27,6 +27,8 @@ $transport_godown = test_input($_POST['transport_godown']);
 
 
 
+
+
 $dc_parts = json_decode($_POST['dc_parts'], true);
 
 
@@ -63,8 +65,11 @@ try {
     if ($conn->query($sql) === TRUE) {
         $dc_id = $conn->insert_id;
 // insert dc parts
+$all_transport_ids = array_column($dc_parts, 'transport_id');
+$transport_ids_str = implode(',', $all_transport_ids);
         foreach ($dc_parts as $part) {
             $part_id = test_input($part['part_id']);
+              $transport_id = test_input($part['transport_id']);
               $part_pre_process_id  = test_input($part['part_pre_process_id']);
                 $rate = test_input($part['rate']);
             $qty = test_input($part['qty']);
@@ -72,7 +77,29 @@ try {
             if (!$conn->query($sql_part)) {
                 throw new Exception("Error inserting part: " . $conn->error);
             }
+
+
+
         }
+
+        // update transport parts set out_dc = 1
+            $sql_update_transport_parts = "UPDATE transport_parts SET out_dc = 1 WHERE transport_id IN ($transport_ids_str)";
+            if (!$conn->query($sql_update_transport_parts)) {
+                throw new Exception("Error updating transport parts: " . $conn->error);
+            }
+
+            // get all transport dc id gruop by and set current transport and set sts = transport
+            $sql_get_transport_dc = "SELECT transport_dc_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id";
+            $result_transport_dc = $conn->query($sql_get_transport_dc);
+            if ($result_transport_dc->num_rows > 0) {
+                while ($row = $result_transport_dc->fetch_assoc()) {
+                    $transport_dc_id = $row['transport_dc_id'];
+                    $sql_update_transport_dc = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
+                    if (!$conn->query($sql_update_transport_dc)) {
+                        throw new Exception("Error updating transport dc: " . $conn->error);
+                    }
+                }
+            }
 
 
 
