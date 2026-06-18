@@ -8,7 +8,6 @@ $destination = test_input($_POST['destination']);
 $source_godown = test_input($_POST['source_godown']);
 
 $emp_id = test_input($_POST['emp_id']);
-$transport_godown = test_input($_POST['transport_godown']);
 
 
 
