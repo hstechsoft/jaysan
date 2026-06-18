@@ -141,7 +141,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("from_godown_id", ui.item.id);
-
+                    get_loaded_parts(ui.item.id)
 
                 },
 
@@ -587,7 +587,7 @@ $(document).ready(function () {
 
 
 
-    $("#add_to_table").on("click", function () {
+    $("#loaded_details_tbody").on("click", '.dc_submit', function () {
 
         let godown_id = $('#godown').data("godown_id");
         let bill_to = $('#godown').val();
@@ -620,36 +620,37 @@ $(document).ready(function () {
         let dc_parts_location = [];
         let dc_process = [];
 
-        $("#selected_part_tbody tr").each(function () {
+        $("#loaded_details_tbody .tbody tr").each(function () {
 
-            let part_name = $(this).find("td").eq(0).text();
+            // let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
             let part_pre_process_id = $(this).data("in_previous_process_id");
-            let process_name = $(this).find("td").eq(1).text();
-            let process_id = $(this).data("process_id");
-            let qty = parseFloat($(this).find(".qty_input").val()) || 0;
+            // let process_name = $(this).find("td").eq(1).text();
+            // let process_id = $(this).data("process_id");
+            let qty = parseFloat($(this).data('qty')) || 0;
             // let reserve_qty = $(this).find(".qty_input").data("qty_cou");
-            let stock_id_qty = $(this).find(".qty_input").data("stock_id_qty");
-            let rate = parseFloat($(this).find(".rate_input").val()) || 0;
-            let amount = parseFloat($(this).find(".amount_td").text()) || 0;
+            // let stock_id_qty = $(this).find(".qty_input").data("stock_id_qty");
+            // let rate = parseFloat($(this).find(".rate_input").val()) || 0;
+            // let amount = parseFloat($(this).find(".amount_td").text()) || 0;
             let is_checked = $(this).find(".form-check-input").is(":checked");
 
-            console.log(stock_id_qty);
+            // console.log(stock_id_qty);
 
             if (is_checked) {
-                // parts.push({
-                //     part_id: part_id,
-                //     part_pre_process_id: part_pre_process_id,
-                //     qty: qty,
-                //     rate: rate,
-                // });
-                stock_id_qty.forEach(item => {
-                    dc_parts_location.push({
-                        emp_id: emp_id,
-                        stock_id: item.stock_id,
-                        qty: item.qty
-                    });
+                parts.push({
+                    part_id: part_id,
+                    transport_id: 1233,
+                    part_pre_process_id: part_pre_process_id,
+                    qty: qty,
+                    rate: 0,
                 });
+                // stock_id_qty.forEach(item => {
+                //     dc_parts_location.push({
+                //         emp_id: emp_id,
+                //         stock_id: item.stock_id,
+                //         qty: item.qty
+                //     });
+                // });
 
                 // let existing = dc_process.find(item => item.process_id == process_id);
 
@@ -665,37 +666,140 @@ $(document).ready(function () {
             }
         });
 
-        // if (parts.length == 0) {
-        //     salert("Warning", "Please select at least one part", "warning");
-        //     return;
-        // }
+        if (parts.length == 0) {
+            salert("Warning", "Please select at least one part", "warning");
+            return;
+        }
 
         // if (dc_process.length == 0) {
         //     salert("Warning", "Process Data Missing", "warning");
         //     return;
         // }
 
-        if (dc_parts_location.length == 0) {
-            salert("Warning", "Part Location Missing", "warning");
-            return;
-        }
+        // if (dc_parts_location.length == 0) {
+        //     salert("Warning", "Part Location Missing", "warning");
+        //     return;
+        // }
 
         // if (!dc_date || !dc_no) {
         //     salert("Warning", "Enter DC/No And DC Date", "warning");
         //     return;
         // }
 
-        // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
-        console.log(emp_id, from_godown_id, godown_id, dc_parts_location);
+        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
+        // console.log(emp_id, from_godown_id, godown_id, dc_parts_location);
 
 
-        insert_dc_trip(emp_id, from_godown_id, godown_id, JSON.stringify(dc_parts_location));
+        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
         get_transport_all();
     })
+
+    // $("#lo 
 });
+
+
+function get_loaded_parts(godown_id) {
+
+    $.ajax({
+        url: "php/get_loaded_parts.php",
+        type: "get", //send it through get method
+        data: {
+
+            godown: godown_id,
+            transport_godown: 1233,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $("#loaded_details_tbody").empty();
+
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+
+                    obj.forEach(function (item) {
+
+                        let parts = JSON.parse(item.parts);
+
+                        let partsHtml = `
+                <table class="table table-sm table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Process</th>
+                            <th>Qty</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class='tbody'>
+            `;
+
+                        parts.forEach(function (part) {
+                            partsHtml += `
+                    <tr data-qty='${part.qty} data-in_previous_process_id='${part.process_id}' data-part_id='${item.part_id}'>
+                        <td>${part.part_name}</td>
+                        <td>${part.process_name}</td>
+                        <td>${part.qty}</td>
+                        <td>
+                        <input class="form-check-input add_dc_checkbox" type="checkbox" data-fgodown='${item.source_godown}'  data-dgodown='${item.des_godown}'  data-process_id='${part.process_id}' value=${part.qty}>
+                        </td>
+                    </tr>
+                `;
+                        });
+
+                        partsHtml += `
+                    </tbody>
+                </table>
+            `;
+
+                        $("#loaded_details_tbody").append(`
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header bg-primary text-white">
+                        <strong>${item.des_godown_name}</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <strong>GST :</strong> ${item.des_godown_gst || '-'}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Source :</strong> ${item.source_godown_name}
+                            </div>
+                        </div>
+
+                        ${partsHtml}
+                    </div>
+
+                    <button type='button' class='btn btn-primary dc_submit'>Submit</button>
+                </div>
+            `);
+                    });
+
+                } else {
+                    salert("Warning", "No Part Found", "warning");
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function processNextPart() {
@@ -895,17 +999,36 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
-    
+function insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts) {
+
     $.ajax({
-        url: "php/insert_dc_trip.php",
+        url: "php/insert_delivery_challan.php",
         type: "post", //send it through get method
         data: {
-            
+
+            dc_no: dc_no,
+            dc_date: dc_date,
+            transport_mode: transport_mode,
+            transport_des: vehicle_description,
+            vehicle_no: vehicle_no,
+            driver_name: driver_name,
+            driver_contact: contact_no,
+            mode_of_payment: mode_of_payment,
+            supplier_ref_order_no: supplier_ref_order_no,
+            dispatch_doc_no: dispatch_doc_no,
+            dispatched_through: dispatched_through,
+            date_time_of_issue: date_time_of_issue,
+            duration_of_process: duration_of_process,
+            nature_of_processing: nature_of_processing,
+            challan_no: challan_no,
             emp_id: emp_id,
-            destination: godown_id,
-            source_godown: from_godown_id,
-            dc_parts_location: dc_parts_location,
+            dc_type: dc_type,
+            dc_from: from_godown_id,
+            dc_to: godown_id,
+            bill_to: bill_to,
+            ship_to: ship_to,
+            transport_godown: transport_godown,
+            dc_parts: parts,
         },
         success: function (response) {
             console.log(response);
@@ -929,154 +1052,6 @@ function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
             //     }
 
             // });
-            if(response.trim() == "ok"){
-                alert("success");
-            }
-            else{
-                salert("Warning", response, "warning");
-            }
-
-
-
-
-
-
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
-
-
-
-
-}
-
-function get_transport_all(godown_id) {
-
-    $.ajax({
-        url: "php/get_transport_parts_all.php",
-        type: "get", //send it through get method
-        data: {
-
-            transport_godown: 1233,
-        },
-        success: function (response) {
-            console.log(response);
-
-
-
-            if (response.trim() != "error") {
-                $(".dc_details").empty();
-                if (response.trim() != "0 results") {
-                    $("#transport_modal").modal('show');
-
-                    var obj = JSON.parse(response);
-                    var count = 0;
-
-                    obj.forEach(function (item, index) {
-
-                        let parts = JSON.parse(item.parts);
-                        let stock_id_qty = [];
-
-                        let html = `
-                                    <div class="accordion mb-2" id="dcAccordion${index}">
-                                        <div class="accordion-item border shadow-sm">
-
-                                            <h2 class="accordion-header" id="heading${index}">
-                                                <button class="accordion-button collapsed py-2 px-3"
-                                                        type="button"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#collapse${index}">
-
-                                                    <div class="w-100 d-flex justify-content-between align-items-center me-2">
-
-                                                        <div>
-                                                            <strong>DC #${item.dc_no}</strong>
-                                                            <span class="badge bg-primary ms-2">
-                                                                ${item.reserve_type.toUpperCase()}
-                                                            </span>
-                                                        </div>
-
-                                                        <small class="text-muted">
-                                                            ${item.bill_to}
-                                                        </small>
-
-                                                    </div>
-                                                </button>
-                                            </h2>
-
-                                            <div id="collapse${index}"
-                                                class="accordion-collapse collapse"
-                                                data-bs-parent="#dcAccordion${index}">
-
-                                                <div class="accordion-body p-2">
-
-                                                    <div class="row g-2 mb-2">
-                                                        <div class="col-6">
-                                                            <small class="text-muted">Bill To</small>
-                                                            <div class="fw-semibold small">${item.bill_to}</div>
-                                                        </div>
-
-                                                        <div class="col-6">
-                                                            <small class="text-muted">Ship To</small>
-                                                            <div class="fw-semibold small">${item.ship_to}</div>
-                                                        </div>
-                                                    </div>`;
-
-                        parts.forEach(function (group) {
-
-                            html += `
-                                <div class="border rounded p-2 mb-2 bg-light">
-
-                                    <div class="d-flex gap-2 mb-2">
-                                        <span class="badge bg-success">
-                                            ${group.creditor_name}
-                                        </span>
-
-                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}
-                                </div>`;
-
-                            group.parts.forEach(function (part) {
-
-                                stock_id_qty.push({
-                                    stock_reserve_id: part.stock_reserve_id,
-                                    qty: part.qty
-                                });
-
-                                html += `
-                                    <div class="d-flex justify-content-between align-items-center border-bottom py-1">
-
-                                        <div>
-                                            <div class="fw-semibold small">
-                                                ${part.part_name}
-                                            </div>
-
-                                            <small class="text-muted">
-                                                ${part.process_name}
-                                            </small>
-                                        </div>
-
-                                        <span class="badge bg-secondary">
-                                            ${part.qty}
-                                        </span>
-                                    </div>`;
-                            });
-
-                            html += `</div>`;
-                        });
-
-                        html += `</div></div></div></div>`;
-
-                        $(".dc_details").append(html);
-                    });
-
-                }
-                else {
-                    $("#transport_modal").modal('hide');
-                    salert("Warning", "No DC Found In Transport Godown.", "warning");
-                }
-            }
 
 
 
