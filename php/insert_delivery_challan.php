@@ -89,14 +89,21 @@ $transport_ids_str = implode(',', $all_transport_ids);
             }
 
             // get all transport dc id gruop by and set current transport and set sts = transport
-            $sql_get_transport_dc = "SELECT transport_dc_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id";
+            $sql_get_transport_dc = "SELECT transport_dc_id,reserve_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id";
             $result_transport_dc = $conn->query($sql_get_transport_dc);
             if ($result_transport_dc->num_rows > 0) {
                 while ($row = $result_transport_dc->fetch_assoc()) {
                     $transport_dc_id = $row['transport_dc_id'];
+                    $reserve_id = $row['reserve_id'];
                     $sql_update_transport_dc = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
                     if (!$conn->query($sql_update_transport_dc)) {
                         throw new Exception("Error updating transport dc: " . $conn->error);
+                    }
+
+                    // updatestock reserve reserve_type_id = $dc_id ,remark = reserved for dc $dc_no
+                    $sql_update_stock_reserve = "UPDATE stock_reserve SET reserve_type_id = $dc_id, remark = 'reserved for dc $dc_no' WHERE stock_reserve_id = $reserve_id";
+                    if (!$conn->query($sql_update_stock_reserve)) {
+                        throw new Exception("Error updating stock reserve: " . $conn->error);
                     }
                 }
             }
