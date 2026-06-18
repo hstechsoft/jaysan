@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 
 $destination = test_input($_POST['destination']);
+$source_godown = test_input($_POST['source_godown']);
 
 $emp_id = test_input($_POST['emp_id']);
 $transport_godown = test_input($_POST['transport_godown']);
@@ -112,11 +113,14 @@ try {
                 //         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
                 //     }
                 // }
-
+// check if stock is taken from source godown or not
+                if ($godown_id != $source_godown) {
+                    throw new Exception("Stock id $stock_id is not from source godown $source_godown");
+                }
 
           
                     // insert in_dc_tracking
-                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,transport_godown) VALUES ($godown_id, $destination, $transport_godown)";
+                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown) VALUES ($source_godown, $destination)";
                     // get in_dc_tracking id
                     if ($conn->query($sql_in_dc) === TRUE) {
                         $transport_dc_id = $conn->insert_id;
