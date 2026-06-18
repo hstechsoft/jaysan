@@ -113,7 +113,7 @@ try {
                 //     }
                 // }
 // check if stock is taken from source godown or not
-                if ($godown_id != $source_godown) {
+                if ($godown_id != "'$source_godown'") {
                     throw new Exception("Stock id $stock_id is not from source godown $source_godown");
                 }
 
