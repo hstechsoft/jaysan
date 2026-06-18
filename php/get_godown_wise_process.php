@@ -19,15 +19,10 @@ return $data;
 //  $sql = "SELECT (SELECT 1 FROM process_wel_tbl WHERE process_wel_tbl.output_part =  parts_tbl.part_id   and cat = 'out')  as process_availble, (select part_name from parts_tbl where part_id = $part_id) as out_part_name,(select sub_ass from parts_tbl where part_id = bom_input.part_id) as sub_ass, bom_input.part_id,bom_input.qty,parts_tbl.part_name,bom_input.bom_id,parts_tbl.part_no from bom_input INNER JOIN bom_output on bom_input.bom_id = bom_output.bom_id INNER JOIN parts_tbl on bom_input.part_id = parts_tbl.part_id WHERE bom_output.part_id =$part_id and bom_output.component_cat = $component_cat";
 
  
- $sql = "with jprocess as (SELECT jaysan_process_view.final_part,jaysan_process_view.output_part,jaysan_process_view.process_name,jaysan_process_view.process_id from work_time_master 
-left join jaysan_process_view on work_time_master.ori_process_id = jaysan_process_view.process_id 
-
-WHERE godown_id =  $godown_id)
-
-SELECT final_part,output_part,process_name,jprocess.process_id,stock_id,qty,jaysan_stock.godown,jaysan_stock.dep,jaysan_stock.sec,creditors.creditor_name,department.dep_name,dep_section.sec_name from jprocess left join jaysan_stock on jprocess.output_part = jaysan_stock.part_id and jprocess.process_id = jaysan_stock.process_id and jaysan_stock.godown =  $godown_id
- left join creditors on jaysan_stock.godown = creditors.creditor_id
-    left join department on jaysan_stock.dep = department.dep_id
-    left join dep_section on jaysan_stock.sec = dep_section.dep_sec_id";
+ $sql = "    SELECT if(js.process_id is null, parts_tbl.part_name, jaysan_process_view.final_part) as final_part,js.stock_id, output_part,process_name,js.process_id, js.part_id,js.process_id,js.qty,js.godown,js.dep,js.sec,creditor_name,dep_name,sec_name from stock_reserve_view js
+    left join parts_tbl on js.part_id = parts_tbl.part_id
+    left join jaysan_process_view on js.process_id = jaysan_process_view.process_id
+WHERE js.godown =  $godown_id";
 
 
 $result = $conn->query($sql);

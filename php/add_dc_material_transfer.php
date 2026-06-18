@@ -37,7 +37,7 @@ $sql_get_transport = "SELECT transport_dc_id FROM `transport_dc` WHERE source_go
             if($transport_dc_id == 0)
               {
                 
-                     $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,transport_godown,dc_id) VALUES ($source_godown, $des_godown, $current_transport, $dc_id)";
+                     $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,transport_godown) VALUES ($source_godown, $des_godown, $current_transport)";
                     // get in_dc_tracking id
                     if ($conn->query($sql_in_dc) === TRUE) {
                         $transport_dc_id = $conn->insert_id;
@@ -67,7 +67,7 @@ FROM creditors WHERE creditor_id = $des_godown) as ship_to,
 
 
 
- $sql = "INSERT INTO delivery_challan ( dc_date, dc_type, dc_from, dc_to, bill_to, ship_to) VALUES (current_timestamp(),)";
+ $sql = "INSERT INTO delivery_challan ( dc_date, dc_type, dc_from, dc_to, bill_to, ship_to) VALUES (current_timestamp(),'dc',$company,$ship_to,$ship_to)";
     if ($conn->query($sql) === TRUE) {
         $dc_id = $conn->insert_id;
 // insert dc parts
@@ -82,17 +82,7 @@ FROM creditors WHERE creditor_id = $des_godown) as ship_to,
             }
         }
 
-// insert dc process
-        foreach ($dc_process as $process) {
-            $process_id = test_input($process['process_id']);
-            $qty = test_input($process['qty']);
-            $rate = test_input($process['rate']);
-            
-            $sql_process = "INSERT INTO dc_process (dc_id, process_id, qty, rate) VALUES ($dc_id, $process_id, $qty, $rate)";
-            if (!$conn->query($sql_process)) {
-                throw new Exception("Error inserting process: " . $conn->error);
-            }
-        }
+
 
 
         // reserve stock for dc parts
@@ -123,24 +113,7 @@ FROM creditors WHERE creditor_id = $des_godown) as ship_to,
                 $godown_id = $row_godown['godown'];
                 $stock_process_id = $row_godown['process_id'];
                 $stock_part_id = $row_godown['part_id'];
-                // if ($godown_id != $dc_from) {
-                //     // insert in_dc_tracking
-                //     $sql_in_dc = "INSERT INTO in_dc_tracking (out_dc_id, godown, dated) VALUES ($dc_id, $godown_id, NOW())";
-                //     // get in_dc_tracking id
-                //     if ($conn->query($sql_in_dc) === TRUE) {
-                //         $in_dc_id = $conn->insert_id;
-                //     } else {
-                //         throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
-                //     }
-
-                //     // add parts to in_dc_parts 
-                //     $sql_in_dc_parts = "INSERT INTO in_dc_parts (tracking_id, part_id,process_id, qty) VALUES ($in_dc_id, $stock_part_id, $stock_process_id, $reserve_qty)";
-                //     if (!$conn->query($sql_in_dc_parts)) {
-                //         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
-                //     }
-                // }
-
-
+         
           
                     // insert in_dc_tracking
                     $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,transport_godown,dc_id) VALUES ($godown_id, $dc_to, $transport_godown, $dc_id)";
@@ -171,11 +144,7 @@ FROM creditors WHERE creditor_id = $des_godown) as ship_to,
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
 
-            // // save filepath in delivery challan table
-            // $sql_update = "UPDATE delivery_challan SET file_path = '".$result['pdf_file_name']."' WHERE dc_id = $dc_id";
-            // if (!$conn->query($sql_update)) {
-            //     throw new Exception("Error updating delivery challan: " . $conn->error);
-            // }
+         
 
 //  print array
         print_r($result);
