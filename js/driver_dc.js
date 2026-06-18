@@ -32,11 +32,17 @@ $(document).ready(function () {
 
 
     $("#part_search").on("keyup", function () {
+
         var value = $(this).val().toLowerCase();
 
-        $("#manual_dc_card card-body").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        $("#manual_dc_card .card-body").each(function () {
+
+            $(this).toggle(
+                $(this).text().toLowerCase().indexOf(value) > -1
+            );
+
         });
+
     });
 
     check_login();
