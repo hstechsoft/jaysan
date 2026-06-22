@@ -77,7 +77,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
             $qty = test_input($part['qty']);
             $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
             if (!$conn->query($sql_part)) {
-                throw new Exception("Error inserting part: " . $conn->error);
+                throw new Exception("Error inserting part: " . $conn->error.$sql_part);
             }
 
 
@@ -105,7 +105,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
                     // updatestock reserve reserve_type_id = $dc_id ,remark = reserved for dc $dc_no
                     $sql_update_stock_reserve = "UPDATE stock_reserve SET reserve_type_id = $dc_id, remark = 'reserved for dc $dc_no' WHERE stock_reserve_id = $reserve_id";
                     if (!$conn->query($sql_update_stock_reserve)) {
-                        throw new Exception("Error updating stock reserve: " . $conn->error);
+                        throw new Exception("Error updating stock reserve: " . $conn->error.$sql_update_stock_reserve);
                     }
                 }
             }
