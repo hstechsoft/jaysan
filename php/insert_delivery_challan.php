@@ -87,7 +87,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
         // update transport parts set out_dc = 1
             $sql_update_transport_parts = "UPDATE transport_parts SET out_dc = 1 WHERE transport_id IN ($transport_ids_str)";
             if (!$conn->query($sql_update_transport_parts)) {
-                throw new Exception("Error updating transport parts: " . $conn->error);
+                throw new Exception("Error updating transport parts: " . $conn->error.$sql_update_transport_parts);
             }
 
             // get all transport dc id gruop by and set current transport and set sts = transport
