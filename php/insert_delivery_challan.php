@@ -110,7 +110,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
 
 
 
-
+echo "Delivery Challan created successfully with ID: " . $dc_id;
 
 
            require_once 'print_dc.php';
