@@ -2,6 +2,8 @@
 error_reporting(E_ALL);
  include 'db_head.php';
 
+ echo "Connected successfully";
+
 $dc_no = test_input($_POST['dc_no']);
 $dc_date = test_input($_POST['dc_date']);
 $transport_mode = test_input($_POST['transport_mode']);
