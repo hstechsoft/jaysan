@@ -25,7 +25,7 @@ left join creditors  sg on tdc.source_godown = sg.creditor_id
 left join creditors  dg on tdc.des_godown = dg.creditor_id
  
  
- WHERE tdc.source_godown = $godown and tdc.sts = 'transport' and tdc.current_transport = $transport_godown
+ WHERE tdc.source_godown = $godown and tdc.sts = 'transport' and tdc.current_transport = $transport_godown and tdc.dc_id =0
 group by tdc.des_godown";
 
 $result = $conn->query($sql);
