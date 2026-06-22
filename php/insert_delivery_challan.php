@@ -68,7 +68,7 @@ try {
 $all_transport_ids = array_column($dc_parts, 'transport_id');
 $transport_ids_str = implode(',', $all_transport_ids);
 
-echo "DC created with ID: " . $dc_id . " and Transport IDs: " . $transport_ids_str . "\n";
+
         foreach ($dc_parts as $part) {
             $part_id = test_input($part['part_id']);
               $transport_id = test_input($part['transport_id']);
@@ -112,7 +112,7 @@ echo "DC created with ID: " . $dc_id . " and Transport IDs: " . $transport_ids_s
 
 
 
-echo "Delivery Challan created successfully with ID: " . $dc_id;
+
 
 
            require_once 'print_dc.php';
