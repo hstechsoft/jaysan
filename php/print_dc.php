@@ -61,9 +61,10 @@ $summary_table .= '<tr>
     
     
 
-} else {
-  echo "0 result";
-}
+} 
+// else {
+//   echo "0 result";
+// }
 
 // convert parts details into list format
  
