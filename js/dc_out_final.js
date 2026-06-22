@@ -594,7 +594,7 @@ $(document).ready(function () {
         else {
             $(this).prop('ckecked', false);
             if (dg_count == 0)
-                godown_id = 0; D
+                godown_id = 0;
             salert('Warning', 'Destination Godown Has To Be Same.', 'warning');
         }
     })
