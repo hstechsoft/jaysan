@@ -90,7 +90,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    get_transport_parts(ui.item.id);
+                    get_transport_parts_dc(ui.item.id);
 
 
                 },
@@ -139,7 +139,7 @@ $(document).ready(function () {
         else {
             $(".dc_title").text("DC Load Details");
             $(this).next('label').text("DC Unload Details");
-            get_transport_parts($('#godown').data("godown_id"));
+            get_transport_parts_dc($('#godown').data("godown_id"));
         }
     })
 
@@ -243,14 +243,152 @@ function get_godown_wise_process(godown_id) {
 
 
 
-function get_transport_parts(godown_id) {
+// function get_transport_parts(godown_id) {
+
+//     $.ajax({
+//         url: "php/get_transport_parts.php",
+//         type: "get", //send it through get method
+//         data: {
+
+//             godown: godown_id,
+//         },
+//         success: function (response) {
+//             console.log(response);
+
+
+
+//             if (response.trim() != "error") {
+//                 $(".dc_details").empty();
+
+//                 if (response.trim() != "0 results") {
+
+//                     var obj = JSON.parse(response);
+//                     var count = 0;
+
+//                     obj.forEach(function (item, index) {
+
+//                         let parts = JSON.parse(item.parts);
+//                         let stock_id_qty = [];
+
+//                         let html = `
+//                                 <div class="accordion mb-2" id="dcAccordion${index}">
+//                                     <div class="accordion-item border-0 shadow-sm">
+
+//                                         <h2 class="accordion-header" id="heading${index}">
+//                                             <button class="accordion-button collapsed py-2 px-3"
+//                                                     type="button"
+//                                                     data-bs-toggle="collapse"
+//                                                     data-bs-target="#collapse${index}"
+//                                                     aria-expanded="false"
+//                                                     aria-controls="collapse${index}">
+
+//                                                 <div class="w-100">
+//                                                     <div class="d-flex justify-content-between align-items-center">
+//                                                         <strong>DC #${item.dc_no}</strong>
+
+//                                                         <span class="badge bg-primary">
+//                                                             ${item.reserve_type.toUpperCase()}
+//                                                         </span>
+//                                                     </div>
+
+//                                                     <div class="small text-muted mt-1">
+//                                                         ${item.bill_to}
+//                                                         <i class="fa fa-arrow-right mx-1"></i>
+//                                                         ${item.ship_to}
+//                                                     </div>
+//                                                 </div>
+
+//                                             </button>
+//                                         </h2>
+
+//                                         <div id="collapse${index}"
+//                                             class="accordion-collapse collapse"
+//                                             aria-labelledby="heading${index}">
+
+//                                             <div class="accordion-body p-2">`;
+
+//                         parts.forEach(function (group) {
+
+//                             html += `
+//                                 <div class="border rounded p-2 mb-2 bg-light">
+
+//                                     <div class="d-flex flex-wrap gap-1 mb-2">
+//                                         <span class="badge bg-success">
+//                                             ${group.creditor_name}
+//                                         </span>
+
+//                                         ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}
+//                                     </div>`;
+
+//                             group.parts.forEach(function (part) {
+
+//                                 stock_id_qty.push({
+//                                     stock_reserve_id: part.stock_reserve_id,
+//                                     qty: part.qty
+//                                 });
+
+//                                 html += `
+//                                         <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
+
+//                                             <div class="flex-grow-1 pe-2">
+//                                                 <div class="fw-semibold small">
+//                                                     ${part.part_name}
+//                                                 </div>
+
+//                                                 <small class="text-muted">
+//                                                     ${part.process_name}
+//                                                 </small>
+//                                             </div>
+
+//                                             <span class="badge bg-secondary">
+//                                                 Qty : ${part.qty}
+//                                             </span>
+
+//                                         </div>`;
+//                             });
+
+//                             html += `</div>`;
+//                         });
+
+//                         html += `
+//                                 <div class="text-end mt-2">
+//                                     <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class="fa fa-circle-check"></i>Confirm</button>
+//                                 </div></div></div></div></div>`;
+
+//                         $(".dc_details").append(html);
+
+//                     });
+
+//                 }
+//                 else {
+//                     salert("Warning", "No DC Found for this Vendor To Load", "warning");
+//                 }
+//             }
+
+
+
+
+
+//         },
+//         error: function (xhr) {
+//             //Do Something to handle error
+//         }
+//     });
+
+
+
+
+// }
+
+function get_transport_parts_dc(godown_id) {
 
     $.ajax({
-        url: "php/get_transport_parts.php",
+        url: "php/get_transport_parts_dc.php",
         type: "get", //send it through get method
         data: {
 
             godown: godown_id,
+            transport_godown: 1233,
         },
         success: function (response) {
             console.log(response);
@@ -282,21 +420,7 @@ function get_transport_parts(godown_id) {
                                                     aria-expanded="false"
                                                     aria-controls="collapse${index}">
 
-                                                <div class="w-100">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <strong>DC #${item.dc_no}</strong>
-
-                                                        <span class="badge bg-primary">
-                                                            ${item.reserve_type.toUpperCase()}
-                                                        </span>
-                                                    </div>
-
-                                                    <div class="small text-muted mt-1">
-                                                        ${item.bill_to}
-                                                        <i class="fa fa-arrow-right mx-1"></i>
-                                                        ${item.ship_to}
-                                                    </div>
-                                                </div>
+                                                ${item.des_godown_name}
 
                                             </button>
                                         </h2>

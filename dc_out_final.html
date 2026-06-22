@@ -119,12 +119,12 @@
 
                             <div class="row g-2 mb-3">
 
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-floating">
                                         <input type="text" class="form-control form-control-sm rounded-3" id="godown">
                                         <label for="godown">Vendor</label>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
@@ -146,7 +146,7 @@
                                         <input class="form-check-input" type="checkbox" value="" id="same_as">
                                         <label class="form-check-label" for="same_as">Same As Vendor</label>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="col-6">
                                     <div class="form-floating">
@@ -161,9 +161,9 @@
                                             id="dc_date">
                                         <label for="dc_date">DC Date</label>
                                     </div>
-                                </div> -->
+                                </div>
 
-                                <!-- <div class="col-12">
+                                <div class="col-12">
                                     <div class="form-floating">
                                         <select class="form-select form-select-sm" id="transport_mode">
                                             <option selected disabled value="">Choose...</option>
@@ -277,7 +277,7 @@
                                             id="e_invoice">
                                         <label for="e_invoice">E Invoice/No</label>
                                     </div>
-                                </div> -->
+                                </div>
 
                             </div>
 
@@ -286,26 +286,8 @@
                                 <input type="text" class="form-control part_search" placeholder="Search Part">
                             </div>
 
-                            <div class="table-responsive">
-
-                                <table class="table table-sm small align-middle table-hover">
-
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th width="50">#</th>
-                                            <th>Part</th>
-                                            <th width="140">Process</th>
-                                            <th>Qty</th>
-                                            <th width="70"></th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="available_part_tbody">
-
-                                    </tbody>
-
-                                </table>
-
+                            <div class="card">
+                                <div class="card-body" id="loaded_details_tbody"></div>
                             </div>
 
                         </div>
@@ -361,8 +343,8 @@
 
                                     <div class="alert alert-light border mb-1 p-1">
                                         <strong>Total Material Value:</strong>
-                                        <span class="float-end text-success fw-bold total_amount"
-                                            data-amount="0">₹ 0</span>
+                                        <span class="float-end text-success fw-bold total_amount" data-amount="0">₹
+                                            0</span>
                                     </div>
 
                                 </div>
@@ -673,7 +655,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
-    <script src="js/dc_out.js" type="module"></script>
+    <script src="js/dc_out_final.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
