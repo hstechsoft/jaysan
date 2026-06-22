@@ -115,7 +115,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
 
 
 
-echo "New record created successfully. Last inserted ID is: " . $dc_id;
+
 
            require_once 'print_dc.php';
             $result = print_dc($dc_id, $conn);
