@@ -99,6 +99,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
                     $transport_dc_id = $row['transport_dc_id'];
                     $reserve_id = $row['reserve_id'];
                     $sql_update_transport_dc = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
+                    echo $sql_update_transport_dc;
                     if (!$conn->query($sql_update_transport_dc)) {
                         throw new Exception("Error updating transport dc: " . $conn->error.$sql_update_transport_dc);
                     }
