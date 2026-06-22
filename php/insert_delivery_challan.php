@@ -91,6 +91,12 @@ $transport_ids_str = implode(',', $all_transport_ids);
                 throw new Exception("Error updating transport parts: " . $conn->error.$sql_update_transport_parts);
             }
 
+            // update dc_id in transport_dc
+            $sql_update_transport_dc_id = "UPDATE transport_dc SET dc_id = $dc_id WHERE transport_dc_id IN (SELECT transport_dc_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id)";
+            if (!$conn->query($sql_update_transport_dc_id)) {
+                throw new Exception("Error updating transport dc id: " . $conn->error.$sql_update_transport_dc_id);
+            }
+
             // get all transport dc id gruop by and set current transport and set sts = transport
             $sql_get_transport_dc = "SELECT transport_dc_id,reserve_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id";
             $result_transport_dc = $conn->query($sql_get_transport_dc);
