@@ -132,7 +132,7 @@ echo json_encode($rows);
 // print dc
 
     } else {
-        throw new Exception("Error: " . $sql . "<br>" . $conn->error);
+        throw new Exception("Error: " . $sql . "<br>" . $conn->error."<br>".$sql);
     }
 } catch (Exception $e) {
     echo "Transaction failed: " . $e->getMessage();
