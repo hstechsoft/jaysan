@@ -2,8 +2,6 @@
 error_reporting(E_ALL);
  include 'db_head.php';
 
- echo "Connected successfully";
-
 $dc_no = test_input($_POST['dc_no']);
 $dc_date = test_input($_POST['dc_date']);
 $transport_mode = test_input($_POST['transport_mode']);
@@ -69,6 +67,8 @@ try {
 // insert dc parts
 $all_transport_ids = array_column($dc_parts, 'transport_id');
 $transport_ids_str = implode(',', $all_transport_ids);
+
+echo "DC created with ID: " . $dc_id . " and Transport IDs: " . $transport_ids_str . "\n";
         foreach ($dc_parts as $part) {
             $part_id = test_input($part['part_id']);
               $transport_id = test_input($part['transport_id']);
