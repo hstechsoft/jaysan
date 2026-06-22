@@ -584,15 +584,28 @@ $(document).ready(function () {
         processNextPart();
     })
 
-
+    let godown_id = 0;
+    let dg_count = 0
+    $("#loaded_details_tbody").on('change', '.add_dc_checkbox', function () {
+        if ($(this).is(":checked") && (godown_id == $(this).data("dgodown") || godown_id == 0)) {
+            godown_id = $(this).data("dgodown");
+            dg_count++;
+        }
+        else {
+            $(this).prop('ckecked', false);
+            if (dg_count == 0)
+                godown_id = 0; D
+            salert('Warning', 'Destination Godown Has To Be Same.', 'warning');
+        }
+    })
 
 
     $("#loaded_details_tbody").on("click", '.dc_submit', function () {
 
-        let godown_id = $('#godown').data("godown_id");
-        let bill_to = $('#godown').val();
+        let dc_to = godown_id;
+        let bill_to = '';
         let from_godown_id = $('#from_godown').data("from_godown_id");
-        let ship_to = $('#ship_to').val();
+        let ship_to = '';
         let dc_no = $("#dc_no").val();
         let dc_date = $("#dc_date").val();
         let transport_mode = $("#transport_mode").val();
@@ -686,11 +699,11 @@ $(document).ready(function () {
         //     return;
         // }
 
-        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
+        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, dc_to, bill_to, ship_to, transport_godown, parts);
         // console.log(emp_id, from_godown_id, godown_id, dc_parts_location);
 
 
-        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts));
+        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, dc_to, bill_to, ship_to, transport_godown, JSON.stringify(parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -742,7 +755,7 @@ function get_loaded_parts(godown_id) {
 
                         parts.forEach(function (part) {
                             partsHtml += `
-                    <tr data-qty='${part.qty} data-in_previous_process_id='${part.process_id}' data-part_id='${item.part_id}'>
+                    <tr data-qty='${part.qty}' data-in_previous_process_id='${part.process_id}' data-part_id='${part.part_id}'>
                         <td>${part.part_name}</td>
                         <td>${part.process_name}</td>
                         <td>${part.qty}</td>
@@ -1000,6 +1013,7 @@ function get_company_dc(godown_id) {
 }
 
 function insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts) {
+    console.log(parts);
 
     $.ajax({
         url: "php/insert_delivery_challan.php",
@@ -1032,7 +1046,6 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_descrip
         },
         success: function (response) {
             console.log(response);
-            console.log(typeof response);
 
             // var le = response;
 
@@ -1060,6 +1073,8 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_descrip
         },
         error: function (xhr) {
             //Do Something to handle error
+            console.log(xhr.responseText);
+
         }
     });
 
