@@ -134,7 +134,7 @@ $(document).ready(function () {
         if ($(this).is(":checked")) {
             $(".dc_title").text("DC Unload Details");
             $(this).next('label').text("DC Load Details");
-            get_transport_unload_parts($('#godown').data("godown_id"))
+            get_transport_unload_parts($('#godown').data("godown_id"));
         }
         else {
             $(".dc_title").text("DC Load Details");
@@ -586,7 +586,7 @@ function get_transport_unload_parts(godown_id) {
                                                         </strong>
 
                                                         <span class="badge bg-primary">
-                                                            ${item.reserve_type.toUpperCase()}
+                                                            ${item.reserve_type}
                                                         </span>
                                                     </div>
 
@@ -616,11 +616,11 @@ function get_transport_unload_parts(godown_id) {
 
                                         ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
 
-                            group.parts.forEach(function (part) {
+                            // group.parts.forEach(function (part) {
 
                                 stock_id_qty.push({
-                                    stock_reserve_id: part.stock_reserve_id,
-                                    qty: part.qty
+                                    stock_reserve_id: group.stock_reserve_id,
+                                    qty: group.qty
                                 });
 
                                 html += `
@@ -628,20 +628,20 @@ function get_transport_unload_parts(godown_id) {
 
                                             <div class="flex-grow-1 pe-2">
                                                 <div class="fw-semibold small">
-                                                    ${part.part_name}
+                                                    ${group.part_name}
                                                 </div>
 
                                                 <small class="text-muted">
-                                                    ${part.process_name}
+                                                    ${group.process_name}
                                                 </small>
                                             </div>
 
                                             <span class="badge bg-secondary">
-                                                ${part.qty}
+                                                ${group.qty}
                                             </span>
 
                                         </div>`;
-                            });
+                            // });
 
                             html += `</div>`;
                         });

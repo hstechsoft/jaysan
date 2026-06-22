@@ -40,6 +40,8 @@ $(document).ready(function () {
 
     check_login();
 
+    get_dcout_order_report('all', 'all');
+
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
@@ -154,6 +156,125 @@ $(document).ready(function () {
 
     });
 
+    $('#source_godown_search').on('input', function () {
+        $(this).removeData("source_godown_search_id");
+
+        //check the value not empty
+        if ($('#source_godown_search').val() != "") {
+            $('#source_godown_search').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("source_godown_search_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#destination_godown_search').on('input', function () {
+        $(this).removeData("destination_godown_search_id");
+
+        //check the value not empty
+        if ($('#destination_godown_search').val() != "") {
+            $('#destination_godown_search').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("destination_godown_search_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#source_godown_search, #destination_godown_search").on('focusout', function () {
+        var source_id = $("#source_godown_search").data("source_godown_search_id") || 0;
+        var destination_id = $("#destination_godown_search").data("destination_godown_search_id") || 0;
+        if (source_id > 0 && destination_id > 0) {
+            get_dcout_order_report(source_id, destination_id);
+        }
+        else if (source_id > 0 && destination_id < 1) {
+            get_dcout_order_report(source_id, 'all');
+        }
+        else if (source_id < 1 && destination_id > 0) {
+            get_dcout_order_report('all', destination_id);
+        }
+        else {
+
+        }
+    })
+
     $("#available_part_tbody").on("click", ".add_btn", function () {
 
         let process_id = $(this).parent().parent().find(".process_select").val();
@@ -241,7 +362,7 @@ $(document).ready(function () {
                 let reserveBody = "";
 
                 // Check if current row should be disabled
-                let isDisabled = (item.same_des_godown == 1 || item.godown == 1233);
+                let isDisabled = (item.same_des_godown == 1 || item.godown == 1233 || item.godown != $('#from_godown').data('from_godown_id'));
 
                 // Determine value
                 let qtyValue = 0;
@@ -695,7 +816,166 @@ $(document).ready(function () {
     $("#transport_modal_btn").on("click", function () {
         get_transport_all();
     })
+
+    $("#dc_out_order_tbody").on("click", '.edit_btn', function () {
+
+        var row = $(this).closest('tr');
+
+        var sg_name = row.find('td').eq(1).find('span').eq(0).text();
+        var dg_name = row.find('td').eq(2).text();
+        var source_godown = $(this).data("source_godown") || 0;
+        var des_godown = $(this).data("des_godown") || 0;
+        var transport_dc_id = $(this).val() || 0;
+
+        if (source_godown == 0 || des_godown == 0 || transport_dc_id == 0) {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+        else {
+            $("#from_godown").data("from_godown_id", source_godown).val(sg_name);
+            $("#godown").data("godown_id", des_godown).val(sg_name);
+            get_dcout_order_details(transport_dc_id);
+        }
+    })
+
 });
+
+
+function get_dcout_order_details(transport_dc_id) {
+
+    console.log(transport_dc_id);
+
+    $.ajax({
+        url: "php/get_dcout_order_details.php",
+        type: "get", //send it through get method
+        data: {
+
+            transport_dc_id: transport_dc_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $("#selected_part_tbody").empty();
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+                        count += 1;
+
+                        let row = $(`
+        <tr data-in_previous_process_id='${item.in_previous_process_id}' data-part_id='${item.part_id}' data-process_id='${item.process_id}'>
+            <td>${item.part_name}</td>
+            <td>${item.process_name}</td>
+            <td>${item.total_stock_qty ?? 0}</td>
+            <td>${item.reserved_qty ?? 0}</td>
+
+            <td>
+                <input type="number"
+                    class="form-control form-control-sm qty_input"
+                    value="${parseFloat(item.qty) * output_qty}" >
+            </td>
+
+            <td>
+                <input type="number"
+                    class="form-control form-control-sm rate_input"
+                    value="0" >
+            </td>
+
+            <td class="amount_td">0</td>
+
+            <td>
+                <input type="checkbox" checked class="form-check-input">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary btn-sm History_btn "
+                    data-stock_reserve_details='${JSON.stringify(item.stock_reserve_details)}'
+                    data-work_time_details='${JSON.stringify(item.work_time_details)}'
+                    data-part_name='${item.part_name}'
+                    data-output_part_name='${item.out_part_name}'
+                    data-output_part_qty='${item.out_part_qty}'
+                    data-need_qty='${parseFloat(item.qty) * output_qty}'>
+                    <i class="fas fa-clock"></i>
+                </button>
+            </td>
+        </tr>
+    `);
+
+                        $("#selected_part_tbody").append(row);
+                    });
+                }
+                else {
+                    $("#dc_out_order_tbody").append(`<tr><td colspan='4' class='text-center text-danger fw-bold'>No DC Out Order Found</td></tr>`)
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_dcout_order_report(source, destination) {
+
+    console.log(source, destination);
+
+    $.ajax({
+        url: "php/get_dcout_order_report.php",
+        type: "get", //send it through get method
+        data: {
+
+            source: source,
+            destination: destination,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $("#dc_out_order_tbody").empty();
+                if (response.trim() != "0 results") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+                        count += 1;
+                        $("#dc_out_order_tbody").append(`<tr><td>${count}</td><td><span>${item.source}</span><br><span class='badge bg-primary'>${item.dated}</span></td><td>${item.destination}</td><td><button class='btn btn-sm btn-danger edit_btn' value='${item.transport_dc_id}' data-des_godown='${item.des_godown}' data-source_godown='${item.source_godown}'><i class='fa fa-edit'></i></button></td></tr>`)
+                    });
+                }
+                else {
+                    $("#dc_out_order_tbody").append(`<tr><td colspan='4' class='text-center text-danger fw-bold'>No DC Out Order Found</td></tr>`)
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 function processNextPart() {
@@ -896,12 +1176,12 @@ function get_company_dc(godown_id) {
 }
 
 function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
-    
+
     $.ajax({
         url: "php/insert_dc_trip.php",
         type: "post", //send it through get method
         data: {
-            
+
             emp_id: emp_id,
             destination: godown_id,
             source_godown: from_godown_id,
@@ -929,10 +1209,10 @@ function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
             //     }
 
             // });
-            if(response.trim() == "ok"){
+            if (response.trim() == "ok") {
                 alert("success");
             }
-            else{
+            else {
                 salert("Warning", response, "warning");
             }
 
