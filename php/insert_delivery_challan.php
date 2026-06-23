@@ -111,6 +111,9 @@ $transport_ids_str = implode(',', $all_transport_ids);
                     }
 
                     // updatestock reserve reserve_type_id = $dc_id ,remark = reserved for dc $dc_no
+                // remove single quotes from $dc_no
+                $dc_no = str_replace("'", "", $dc_no);
+                    
                     $sql_update_stock_reserve = "UPDATE stock_reserve SET reserve_type_id = $dc_id, remark = 'reserved for dc $dc_no' WHERE stock_reserve_id = $reserve_id";
                     if (!$conn->query($sql_update_stock_reserve)) {
                         throw new Exception("Error updating stock reserve: " . $conn->error.$sql_update_stock_reserve);
