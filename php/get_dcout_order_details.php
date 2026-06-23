@@ -14,7 +14,7 @@ function test_input($data) {
   return $data;
 }
 
-$sql = "SELECT tp.*,pwt.process,if(tp.part_id IS not NULL, concat(pt.part_name,'(',jp.process_name,')'), concat('Semi-finished part(', final_part.part_name, jp.process_name)) as part, FROM `transport_parts` tp
+$sql = "SELECT tp.*,pwt.process,if(tp.part_id IS not NULL, concat(pt.part_name,'(',jp.process_name,')'), concat('Semi-finished part(', final_part.part_name, jp.process_name)) as part FROM `transport_parts` tp
 left join parts_tbl pt on tp.part_id = pt.part_id
 left join process_wel_tbl pwt on tp.process_id = pwt.process_id
 left join jaysan_process jp on pwt.process = jp.process_id
