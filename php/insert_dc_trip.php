@@ -13,6 +13,8 @@ $emp_id = test_input($_POST['emp_id']);
 
 $dc_parts_location = json_decode($_POST['dc_parts_location'], true);
 
+$transport_dc_id = test_input($_POST['transport_dc_id'])??0;
+$transport_dc_id = str_replace("'", "", $transport_dc_id);
 
 
 // check dc part on dc_to location and exit if any part is already in dc_to location
@@ -66,6 +68,7 @@ try {
     {
     
        // insert in_dc_tracking
+       if($transport_dc_id == "0"){
                     $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown) VALUES ($source_godown, $destination)";
                     // get in_dc_tracking id
                     if ($conn->query($sql_in_dc) === TRUE) {
@@ -74,7 +77,7 @@ try {
                         throw new Exception("Error inserting in_dc_tracking: " . $conn->error);
                     }
 
-
+       }
         // reserve stock for dc parts
         foreach ($dc_parts_location as $location) {
             $reserve_type = "dc";
