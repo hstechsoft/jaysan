@@ -6,6 +6,7 @@ var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 let allBomData = [];
 
+let current_stock = [];
 let historyQueue = [];
 let currentIndex = 0;
 let output_qty = 0;
@@ -36,6 +37,11 @@ $(document).ready(function () {
         $("#available_part_tbody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
+    });
+
+    $("input").on("input", function () {
+        let labelText = $(this).siblings("label").text();
+        $(this).attr("title", `${labelText}: ${$(this).val()}`);
     });
 
     check_login();
@@ -439,17 +445,25 @@ $(document).ready(function () {
 
                                                     <div class="row align-items-center">
 
-                                                        <div class="col-md-6 text-start">
+                                                        <div class="col-md-4 text-start">
                                                             <small class="text-muted">Godown</small><br>
                                                             <span class="fw-semibold small">
                                                                 ${val(item.godown_name)}
                                                             </span>
                                                         </div>
 
-                                                        <div class="col-2 text-center">
+                                                        <div class="col-1 text-center">
                                                             <small class="text-muted">Stock</small><br>
                                                             <span class="badge bg-primary">
                                                                 ${num(item.qty)}
+                                                            </span>
+                                                        </div>
+
+                                                        
+                                                        <div class="col-3 text-center">
+                                                            <small class="text-muted">Currently Reserved</small><br>
+                                                            <span class="badge bg-secondary">
+                                                                ${current_stock.find(stocks => stocks.stock_id == item.stock_id)?.qty || 0}
                                                             </span>
                                                         </div>
 
@@ -689,6 +703,17 @@ $(document).ready(function () {
             if (enter_qty > 0) {
                 qty += enter_qty;
 
+                let existingStock = current_stock.find(item => item.stock_id == $(this).find("#allo_qty").data("stock_id"));
+
+                if (existingStock) {
+                    existingStock.qty += qty;
+                } else {
+                    current_stock.push({
+                        stock_id: $(this).find("#allo_qty").data("stock_id"),
+                        qty: qty
+                    });
+                }
+
                 stock_id_qty.push({ stock_id: $(this).find("#allo_qty").data("stock_id"), qty: enter_qty });
                 // qty_cou.push(enter_qty);
             }
@@ -740,6 +765,8 @@ $(document).ready(function () {
         let parts = [];
         let dc_parts_location = [];
         let dc_process = [];
+
+        let transport_dc_id = ($(this).data("transport_dc_id") > 0 || $(this).data("transport_dc_id") !== undefined) ? $(this).data("transport_dc_id") : 0;
 
         $("#selected_part_tbody tr").each(function () {
 
@@ -810,7 +837,7 @@ $(document).ready(function () {
         console.log(emp_id, from_godown_id, godown_id, dc_parts_location);
 
 
-        insert_dc_trip(emp_id, from_godown_id, godown_id, JSON.stringify(dc_parts_location));
+        insert_dc_trip(emp_id, from_godown_id, godown_id, JSON.stringify(dc_parts_location), transport_dc_id);
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -831,11 +858,43 @@ $(document).ready(function () {
             salert("Warning", "Data Missing!, Try Later.", "warning");
         }
         else {
-            $("#from_godown").data("from_godown_id", source_godown).val(sg_name);
-            $("#godown").data("godown_id", des_godown).val(sg_name);
+            $(".edit_table_card").removeClass('d-none');
             get_dcout_order_details(transport_dc_id);
+
+            setTimeout(function () {
+                Swal.fire({
+                    title: 'Are You Sure?',
+                    text: 'The Previous Entry Will Be Cleared & You Must Have To Enter New Entries.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        delete_transport_parts(transport_dc_id, source_godown, des_godown, sg_name, dg_name)
+
+                    }
+                    else {
+                        $(".edit_table_card").addClass('d-none');
+                    }
+                });
+            }, 500)
+
         }
     })
+
+
+    $(".one_to_many, .many_to_one").on("click", function () {
+        $(".one_to_many, .many_to_one").removeClass("active");
+        $(this).addClass("active");
+        if ($(this).hasClass('one_to_many')) {
+            $(".one_to_many_card").removeClass('d-none');
+            $(".many_to_one_card").addClass('d-none');
+        } else {
+            $(".one_to_many_card").addClass('d-none');
+            $(".many_to_one_card").removeClass('d-none');
+        }
+    });
 
 });
 
@@ -857,7 +916,7 @@ function get_dcout_order_details(transport_dc_id) {
 
 
             if (response.trim() != "error") {
-                $("#selected_part_tbody").empty();
+                $("#selected_part_edit_tbody").empty();
                 if (response.trim() != "0 results") {
 
                     var obj = JSON.parse(response);
@@ -867,49 +926,24 @@ function get_dcout_order_details(transport_dc_id) {
                         count += 1;
 
                         let row = $(`
-        <tr data-in_previous_process_id='${item.in_previous_process_id}' data-part_id='${item.part_id}' data-process_id='${item.process_id}'>
-            <td>${item.part_name}</td>
-            <td>${item.process_name}</td>
-            <td>${item.total_stock_qty ?? 0}</td>
-            <td>${item.reserved_qty ?? 0}</td>
+                            <tr>
+                                <td>${item.part}</td>
+                                <td>${item.process_name}</td>
+                                <td>${item.qty ?? 0}</td>
 
-            <td>
-                <input type="number"
-                    class="form-control form-control-sm qty_input"
-                    value="${parseFloat(item.qty) * output_qty}" >
-            </td>
+                                <td>
+                                    0
+                                </td>
 
-            <td>
-                <input type="number"
-                    class="form-control form-control-sm rate_input"
-                    value="0" >
-            </td>
+                                <td class="amount_td">0</td>
+                            </tr>
+                        `);
 
-            <td class="amount_td">0</td>
-
-            <td>
-                <input type="checkbox" checked class="form-check-input">
-
-                <button
-                    type="button"
-                    class="btn btn-secondary btn-sm History_btn "
-                    data-stock_reserve_details='${JSON.stringify(item.stock_reserve_details)}'
-                    data-work_time_details='${JSON.stringify(item.work_time_details)}'
-                    data-part_name='${item.part_name}'
-                    data-output_part_name='${item.out_part_name}'
-                    data-output_part_qty='${item.out_part_qty}'
-                    data-need_qty='${parseFloat(item.qty) * output_qty}'>
-                    <i class="fas fa-clock"></i>
-                </button>
-            </td>
-        </tr>
-    `);
-
-                        $("#selected_part_tbody").append(row);
+                        $("#selected_part_edit_tbody").append(row);
                     });
                 }
                 else {
-                    $("#dc_out_order_tbody").append(`<tr><td colspan='4' class='text-center text-danger fw-bold'>No DC Out Order Found</td></tr>`)
+                    $("#selected_part_edit_tbody").append(`<tr><td colspan='5' class='text-center text-danger fw-bold'>No DC Entries Found</td></tr>`)
                 }
             }
 
@@ -1119,6 +1153,7 @@ function get_company_dc(godown_id) {
 
             if (response.trim() != "error") {
                 $("#available_part_tbody, #selected_part_tbody").empty();
+                current_stock = [];
 
                 if (response.trim() != "0 result") {
 
@@ -1175,7 +1210,9 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
+function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location, transport_dc_id) {
+
+    console.log(emp_id, from_godown_id, godown_id, dc_parts_location, transport_dc_id);
 
     $.ajax({
         url: "php/insert_dc_trip.php",
@@ -1186,6 +1223,7 @@ function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
             destination: godown_id,
             source_godown: from_godown_id,
             dc_parts_location: dc_parts_location,
+            transport_dc_id: transport_dc_id,
         },
         success: function (response) {
             console.log(response);
@@ -1210,7 +1248,51 @@ function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location) {
 
             // });
             if (response.trim() == "ok") {
-                alert("success");
+                window.location.reload();
+            }
+            else {
+                salert("Warning", response, "warning");
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function delete_transport_parts(transport_dc_id, source_godown, des_godown, sg_name, dg_name) {
+
+    $.ajax({
+        url: "php/delete_transport_parts.php",
+        type: "get", //send it through get method
+        data: {
+
+            transport_dc_id: transport_dc_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+
+                $("#from_godown").data("from_godown_id", source_godown).val(sg_name).prop('disabled', true);
+
+                $("#godown").data("godown_id", des_godown).val(dg_name).prop('disabled', true);
+
+                $("#add_to_table").data("transport_dc_id", transport_dc_id);
+
+                get_company_dc(des_godown);
+
+                $("#dc_out_order_tbody").empty()
             }
             else {
                 salert("Warning", response, "warning");

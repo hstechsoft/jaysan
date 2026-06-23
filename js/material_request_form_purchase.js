@@ -31,6 +31,12 @@ $(document).ready(function () {
 
     }
   );
+
+  $("input").on("input", function () {
+    let labelText = $(this).siblings("label").text();
+    $(this).attr("title", `${labelText}: ${$(this).val()}`);
+  });
+
   $("#print_container").load('material_request_form_report.html',
     function () {
       $("#mrf_print_btn").on("click", function (event) {
