@@ -587,15 +587,21 @@ $(document).ready(function () {
     let godown_id = 0;
     let dg_count = 0
     $("#loaded_details_tbody").on('change', '.add_dc_checkbox', function () {
+        console.log(godown_id == $(this).data("dgodown"), godown_id == 0, godown_id)
         if ($(this).is(":checked") && (godown_id == $(this).data("dgodown") || godown_id == 0)) {
             godown_id = $(this).data("dgodown");
             dg_count++;
         }
         else {
-            $(this).prop('ckecked', false);
+            $(this).prop('checked', false);
+            if(godown_id == $(this).data("dgodown")){
+                dg_count--;
+                return;
+            }
             if (dg_count == 0)
                 godown_id = 0;
-            salert('Warning', 'Destination Godown Has To Be Same.', 'warning');
+            else
+                salert('Warning', 'Destination Godown Has To Be Same.', 'warning');
         }
     })
 
@@ -627,7 +633,7 @@ $(document).ready(function () {
         let emp_id = current_user_id;
         let dc_type = "dc";
 
-        let transport_godown = null;
+        let transport_godown = 1233;
 
         let parts = [];
         let dc_parts_location = [];
@@ -638,6 +644,7 @@ $(document).ready(function () {
             // let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
             let part_pre_process_id = $(this).data("in_previous_process_id");
+            let transport_id = $(this).find(".form-check-input").data("transport_dc_id");
             // let process_name = $(this).find("td").eq(1).text();
             // let process_id = $(this).data("process_id");
             let qty = parseFloat($(this).data('qty')) || 0;
@@ -652,7 +659,7 @@ $(document).ready(function () {
             if (is_checked) {
                 parts.push({
                     part_id: part_id,
-                    transport_id: 1233,
+                    transport_id: transport_id,
                     part_pre_process_id: part_pre_process_id,
                     qty: qty,
                     rate: 0,
@@ -760,7 +767,7 @@ function get_loaded_parts(godown_id) {
                         <td>${part.process_name}</td>
                         <td>${part.qty}</td>
                         <td>
-                        <input class="form-check-input add_dc_checkbox" type="checkbox" data-fgodown='${item.source_godown}'  data-dgodown='${item.des_godown}'  data-process_id='${part.process_id}' value=${part.qty}>
+                        <input class="form-check-input add_dc_checkbox" type="checkbox" data-fgodown='${item.source_godown}'  data-dgodown='${item.des_godown}'  data-process_id='${part.process_id}' value=${part.qty} data-transport_dc_id='${part.transport_dc_id}'>
                         </td>
                     </tr>
                 `;
@@ -773,10 +780,10 @@ function get_loaded_parts(godown_id) {
 
                         $("#loaded_details_tbody").append(`
                 <div class="card shadow-sm mb-3">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-secondary text-white p-1">
                         <strong>${item.des_godown_name}</strong>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-1">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <strong>GST :</strong> ${item.des_godown_gst || '-'}
@@ -789,7 +796,7 @@ function get_loaded_parts(godown_id) {
                         ${partsHtml}
                     </div>
 
-                    <button type='button' class='btn btn-primary dc_submit'>Submit</button>
+                    <button type='button' class='btn btn-sm btn-primary dc_submit'>Submit</button>
                 </div>
             `);
                     });
