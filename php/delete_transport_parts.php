@@ -26,7 +26,11 @@ if ($result->num_rows > 0) {
     }
 }
 $reserve_ids_str = implode(',', $reserve_ids);
-
+// if length of reserve_ids_str is 0, then do not delete from stock_reserve
+if (strlen($reserve_ids_str) == 0) {
+    echo "ok";
+    exit();
+}
 $sql = "DELETE from stock_reserve WHERE stock_reserve_id IN ($reserve_ids_str)" ;
 
 if ($conn->query($sql) === TRUE) {
