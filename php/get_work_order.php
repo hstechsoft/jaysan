@@ -8,15 +8,16 @@ $work_order_id = isset($_GET['work_order_id']) ? test_input($_GET['work_order_id
 
 
 $work_order_id_query = 1;
-
-
+ $godown = sql_nullable($godown);
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
+$work_order_id = sql_nullable($work_order_id);
+// check null
  if($work_order_id != 'null'){
     $work_order_id_query = " work_order_id = $work_order_id";
  }
 
- $godown = sql_nullable($godown);
-$dep = sql_nullable($dep);
-$sec = sql_nullable($sec);
+
 
 
 function test_input($data) {
