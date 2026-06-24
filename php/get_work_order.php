@@ -13,8 +13,7 @@ $godown_query = 1;
 $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 $work_order_id = sql_nullable($work_order_id);
-// check null
-echo "godown: $godown, dep: $dep, sec: $sec, work_order_id: $work_order_id\n";
+
  if($work_order_id != 'NULL'){
     $work_order_id_query = " work_order_id = $work_order_id";
  }
@@ -40,7 +39,7 @@ return $data;
  inner join demand on work_order.demand_id = demand.demand_id
  inner  join jaysan_process_view on demand.process_id = jaysan_process_view.process_id
  WHERE $godown_query and $work_order_id_query order by work_order_id desc";
- echo "sql: $sql\n";
+ 
 
 $result = $conn->query($sql);
 
