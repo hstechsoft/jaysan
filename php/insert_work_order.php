@@ -42,18 +42,19 @@ if (!$conn->query($sql_insert_work_order)) {
 // get parts from input_parts_tbl
 
 $sql_get_parts = "SELECT * FROM input_wel_parts WHERE process_id = $process_id";
-echo "sql_get_parts: $sql_get_parts\n";
+
 $result = $conn->query($sql_get_parts);
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $input_part_id = $row['input_part_id'];
-        $previous_process_id = $row['previous_process_id'];
+        $input_part_id = sql_nullable($row['input_part_id']);
+        $previous_process_id = sql_nullable($row['previous_process_id']);
         $qty = $row['qty'];
 
         echo "input_part_id: $input_part_id, previous_process_id: $previous_process_id, qty: $qty\n";
        
 // get stock id from stock table where process_id = $previous_process_id and input_part_id = $input_part_id
         $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE process_id = $previous_process_id AND part_id = $input_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+        echo "sql_get_stock_id: $sql_get_stock_id\n";
         $result_stock = $conn->query($sql_get_stock_id);
         if ($result_stock->num_rows > 0) {
             while($row_stock = $result_stock->fetch_assoc()) {
