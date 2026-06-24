@@ -47,7 +47,7 @@ if ($result->num_rows > 0) {
         echo "input_part_id: $input_part_id, previous_process_id: $previous_process_id, qty: $qty\n";
        
 // get stock id from stock table where process_id = $previous_process_id and input_part_id = $input_part_id
-        $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE process_id <=> $previous_process_id AND part_id = $input_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+        $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE process_id <=> $previous_process_id AND part_id <=> $input_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
         echo "sql_get_stock_id: $sql_get_stock_id\n";
         $result_stock = $conn->query($sql_get_stock_id);
         if ($result_stock->num_rows > 0) {
