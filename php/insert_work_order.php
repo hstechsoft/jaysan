@@ -42,7 +42,7 @@ if (!$conn->query($sql_insert_work_order)) {
 
 // get parts from input_parts_tbl
 
-$sql_get_parts = "SELECT * FROM input_parts_tbl WHERE process_id = $process_id";
+$sql_get_parts = "SELECT * FROM input_wel_parts WHERE process_id = $process_id";
 $result = $conn->query($sql_get_parts);
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
