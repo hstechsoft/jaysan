@@ -29,7 +29,7 @@ return $data;
  left join jaysan_process on jaysan_process.process_id = process_wel_tbl.process
 left join process_wel_tbl pwt_final on process_wel_tbl.final_process_id = pwt_final.process_id
 left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id
-  where godown <=> $godown and dep <=> $dep and sec <=> $sec and (stock_reserve_view.qty  - stock_reserve_view.reserved_qty) <= 0";
+  where godown <=> $godown and dep <=> $dep and sec <=> $sec and (stock_reserve_view.qty  - stock_reserve_view.reserve_qty) <= 0";
  
 
 
