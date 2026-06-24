@@ -27,9 +27,9 @@ return $data;
  left join parts_tbl on stock_reserve_view.part_id = parts_tbl.part_id
  left join process_wel_tbl on process_wel_tbl.process_id = stock_reserve_view.process_id
  left join jaysan_process on jaysan_process.process_id = process_wel_tbl.process
-left join process_wel_tbl pwt_final on process_wel_tbl.final_proess_id = pwt_final.process_id
+left join process_wel_tbl pwt_final on process_wel_tbl.final_process_id = pwt_final.process_id
 left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id
-  where godown <=> $godown and dep <=> $dep and sec <=> $sec";
+  where godown <=> $godown and dep <=> $dep and sec <=> $sec and (stock_reserve_view.qty  - stock_reserve_view.reserved_qty) <= 0";
  
 
 
