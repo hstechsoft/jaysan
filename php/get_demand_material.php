@@ -6,7 +6,10 @@
  $sec = test_input($_GET['sec']);
 
 
- 
+ $godown = sql_nullable($godown);
+ $dep = sql_nullable($dep);
+    $sec = sql_nullable($sec);
+
  
 function test_input($data) {
 $data = trim($data);
@@ -23,7 +26,7 @@ return $data;
  
  $sql = "SELECT * from stock_reserve_view
   where godown <=> $godown and dep <=> $dep and sec <=> $sec";
-  echo $sql;
+ 
 
 
 $result = $conn->query($sql);
