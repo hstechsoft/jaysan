@@ -7,8 +7,18 @@ $sec = isset($_GET['sec']) ? test_input($_GET['sec']) : null;
 $work_order_id = isset($_GET['work_order_id']) ? test_input($_GET['work_order_id']) : null;
 
 
- 
- 
+$work_order_id_query = 1;
+
+
+ if($work_order_id != null){
+    $work_order_id_query = " work_order_id = $work_order_id";
+ }
+
+ $godown = sql_nullable($godown);
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
+
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -18,7 +28,9 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM work_order WHERE godown =  $godown";
+ $sql = "SELECT work_order.*,input_parts,input_parts,final_part FROM work_order 
+ inner join jaysan_process_view on work_order.process_id = jaysan_process_view.process_id
+ WHERE godown <=>  $godown and dep <=> $dep and sec <=> $sec and $work_order_id_query order by work_order_id desc";
 
 $result = $conn->query($sql);
 
