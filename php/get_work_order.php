@@ -8,6 +8,7 @@ $work_order_id = isset($_GET['work_order_id']) ? test_input($_GET['work_order_id
 
 
 $work_order_id_query = 1;
+$godown_query = 1;
  $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
@@ -17,6 +18,11 @@ echo "godown: $godown, dep: $dep, sec: $sec, work_order_id: $work_order_id\n";
  if($work_order_id != 'NULL'){
     $work_order_id_query = " work_order_id = $work_order_id";
  }
+ if($godown != 'NULL'){
+    $godown_query = " work_order.godown = $godown and work_order.dep = $dep and work_order.sec = $sec";
+ }
+
+ 
 
 
 
@@ -33,7 +39,7 @@ return $data;
  $sql = "SELECT work_order.*,input_parts,input_parts,final_part FROM work_order 
  inner join demand on work_order.demand_id = demand.demand_id
  inner  join jaysan_process_view on demand.process_id = jaysan_process_view.process_id
- WHERE work_order.godown <=>  $godown and work_order.dep <=> $dep and work_order.sec <=> $sec and $work_order_id_query order by work_order_id desc";
+ WHERE $godown_query and $work_order_id_query order by work_order_id desc";
  echo "sql: $sql\n";
 
 $result = $conn->query($sql);
