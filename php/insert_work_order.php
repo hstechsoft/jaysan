@@ -32,8 +32,7 @@ try {
 
   
 
- $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date) VALUES ('INTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now())";
-//  get the last inserted id
+ //  get the last inserted id
 $work_order_id  = $conn->insert_id;
 //  if failed to insert, throw exception
 if (!$conn->query($sql_insert_work_order)) {
