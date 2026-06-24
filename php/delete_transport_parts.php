@@ -31,6 +31,7 @@ if (strlen($reserve_ids_str) == 0) {
     echo "ok";
     exit();
 }
+
 $sql = "DELETE from stock_reserve WHERE stock_reserve_id IN ($reserve_ids_str)" ;
 
 if ($conn->query($sql) === TRUE) {
