@@ -3,13 +3,13 @@
  include 'db_head.php';
 
 
-$godown = test_input($_GET['godown']);
-$dep = test_input($_GET['dep']);
-$sec = test_input($_GET['sec']);
-$qty = test_input($_GET['qty']);
-$process_id = test_input($_GET['process_id']);
+$godown = test_input($_POST['godown']);
+$dep = test_input($_POST['dep']);
+$sec = test_input($_POST['sec']);
+$qty = test_input($_POST['qty']);
+$process_id = test_input($_POST['process_id']);
 
-$created_by = test_input($_GET['created_by']);
+$created_by = test_input($_POST['created_by']);
 
 $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
