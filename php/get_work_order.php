@@ -29,8 +29,9 @@ return $data;
 
 
  $sql = "SELECT work_order.*,input_parts,input_parts,final_part FROM work_order 
- inner join jaysan_process_view on work_order.process_id = jaysan_process_view.process_id
- WHERE godown <=>  $godown and dep <=> $dep and sec <=> $sec and $work_order_id_query order by work_order_id desc";
+ inner join demand on work_order.demand_id = demand.demand_id
+ inner  join jaysan_process_view on demand.process_id = jaysan_process_view.process_id
+ WHERE work_order.godown <=>  $godown and work_order.dep <=> $dep and work_order.sec <=> $sec and $work_order_id_query order by work_order_id desc";
 
 $result = $conn->query($sql);
 
