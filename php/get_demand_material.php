@@ -23,6 +23,7 @@ return $data;
  
  $sql = "SELECT * from stock_reserve_view
   where godown <=> $godown and dep <=> $dep and sec <=> $sec";
+  echo $sql;
 
 
 $result = $conn->query($sql);
