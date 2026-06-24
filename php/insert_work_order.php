@@ -28,17 +28,11 @@ try {
     $conn->begin_transaction();
 
     $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date) VALUES ('INTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now())";
-   
-
-  
-
- //  get the last inserted id
-$work_order_id  = $conn->insert_id;
-//  if failed to insert, throw exception
-if (!$conn->query($sql_insert_work_order)) {
-    throw new Exception("Error inserting record: " . $conn->error);
-}
-
+\
+    if (!$conn->query($sql_insert_work_order)) {
+        throw new Exception("Error inserting record: " . $conn->error);
+    }
+    $work_order_id = $conn->insert_id;
 // get parts from input_parts_tbl
 
 $sql_get_parts = "SELECT * FROM input_wel_parts WHERE process_id = $process_id";
