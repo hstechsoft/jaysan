@@ -13,7 +13,7 @@ $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 $work_order_id = sql_nullable($work_order_id);
 // check null
- if($work_order_id != 'null'){
+ if($work_order_id != null){
     $work_order_id_query = " work_order_id = $work_order_id";
  }
 
