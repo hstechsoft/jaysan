@@ -18,7 +18,7 @@ $work_order_id = sql_nullable($work_order_id);
     $work_order_id_query = " work_order_id = $work_order_id";
  }
  if($godown != 'NULL'){
-    $godown_query = " work_order.godown = $godown and work_order.dep = $dep and work_order.sec = $sec";
+    $godown_query = " work_order.godown <=> $godown and work_order.dep <=> $dep and work_order.sec <=> $sec";
  }
 
  
