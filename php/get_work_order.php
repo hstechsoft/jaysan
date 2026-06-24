@@ -1,16 +1,16 @@
 <?php
  include 'db_head.php';
 
- $godown = isset($_GET['godown']) ? test_input($_GET['godown']) : null;
-$dep = isset($_GET['dep']) ? test_input($_GET['dep']) : null;
-$sec = isset($_GET['sec']) ? test_input($_GET['sec']) : null;
-$work_order_id = isset($_GET['work_order_id']) ? test_input($_GET['work_order_id']) : null;
+ $godown = isset($_GET['godown']) ? test_input($_GET['godown']) : 'null';
+$dep = isset($_GET['dep']) ? test_input($_GET['dep']) : 'null';
+$sec = isset($_GET['sec']) ? test_input($_GET['sec']) : 'null';
+$work_order_id = isset($_GET['work_order_id']) ? test_input($_GET['work_order_id']) : 'null';
 
 
 $work_order_id_query = 1;
 
 
- if($work_order_id != null){
+ if($work_order_id != 'null'){
     $work_order_id_query = " work_order_id = $work_order_id";
  }
 
