@@ -32,6 +32,7 @@ return $data;
  inner join demand on work_order.demand_id = demand.demand_id
  inner  join jaysan_process_view on demand.process_id = jaysan_process_view.process_id
  WHERE work_order.godown <=>  $godown and work_order.dep <=> $dep and work_order.sec <=> $sec and $work_order_id_query order by work_order_id desc";
+ echo "sql: $sql\n";
 
 $result = $conn->query($sql);
 
