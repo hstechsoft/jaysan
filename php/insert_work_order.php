@@ -30,12 +30,21 @@ try {
 // insert demand in demand table INSERT INTO `demand`(`demand_id`, `plan_id`, `assign_id`, `part_id`, `process_id`, `bom_qty`, `demand_qty`, `work_order_qty`, `completed_qty`, `status`, `created_by`, `created_date`, `updated_date`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]','[value-10]','[value-11]','[value-12]','[value-13]')
 
 
+$sql_get_output_part = "SELECT output_part FROM process_wel_tbl WHERE process_id = $process_id";
+$result = $conn->query($sql_get_output_part);
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $output_part = sql_nullable($row['output_part']);
+    }
+} else {
+    throw new Exception("No output part found for process_id: " . $process_id);
+}
 
 
 
 
 
-$sql_insert_demand = "INSERT INTO demand (part_id,process_id,demand_qty,status,created_by,created_date) VALUES (SELECT output_part FROM process_wel_tbl WHERE process_id = $process_id, $process_id,$qty,'OPEN',$created_by,now())";
+$sql_insert_demand = "INSERT INTO demand (part_id,process_id,demand_qty,status,created_by,created_date) VALUES ($output_part, $process_id,$qty,'OPEN',$created_by,now())";
 // last insert id is demand_id
 if (!$conn->query($sql_insert_demand)) {
     throw new Exception("Error inserting record: " . $conn->error);
