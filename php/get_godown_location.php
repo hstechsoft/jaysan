@@ -3,7 +3,7 @@
 
  $latti = test_input($_GET['latti']);
 $longi = test_input($_GET['longi']);
-$godown =test_input($_GET['godown']);
+
 
  
  
