@@ -210,7 +210,7 @@ godwn as(SELECT
     wtm.max_time,
     wtm.min_time,
     wtm.wtid,
-    if(wtm.godown_id = $source_godown_id, 1, 0) as godown_flag
+    if(wtm.godown_id = $dest_godown_id, 1, 0) as godown_flag
 FROM
     process_final
     left join work_time_master wtm on process_final.process_id = wtm.ori_process_id
