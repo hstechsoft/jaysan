@@ -192,9 +192,9 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
-        $("#loc_status").addClass("bg-danger");
+        $("#loc_status").addClass("text-danger");
         if (lat && lng) {
-            $("#loc_status").addClass("bg-success");
+            $("#loc_status").addClass("text-success");
         }
         get_godown_location(lat, lng)
     };
