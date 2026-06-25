@@ -202,7 +202,7 @@ $(document).ready(function () {
     window.onUploadSuccess = function (response) {
         console.log("Upload Success:", response);
         $(".loading").addClass("d-none");
-        salert("Success", "Image Uploaded Successfully.", "succes");
+        salert("Success", "Image Uploaded Successfully.", "success");
     };
 
     window.onUploadError = function (error) {
