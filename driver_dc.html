@@ -173,7 +173,7 @@
 
             <div class="d-flex align-items-center gap-2 mb-2">
                 <div class="form-floating flex-grow-1">
-                    <input type="text" class="form-control rounded-3" id="godown" placeholder="">
+                    <input type="text" class="form-control form-control-sm rounded-3" id="godown" placeholder="">
                     <label for="godown">Godown</label>
                 </div>
 
@@ -181,6 +181,14 @@
                     Manual DC
                 </button>
             </div>
+
+            <div class="mb-3">
+                <label for="dc_file" class="form-label">DC Photo</label>
+                <input class="form-control form-control-sm" type="file" id="dc_file" disabled>
+            </div>
+
+            <input type="text" class="form-control rounded-3" id="lat_input" placeholder="latitude">
+            <input type="text" class="form-control rounded-3" id="lng_input" placeholder="longitude">
 
             <div class="card">
                 <div class="card-header d-flex justify-content-between">

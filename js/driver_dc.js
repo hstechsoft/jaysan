@@ -54,6 +54,7 @@ $(document).ready(function () {
         $(this).removeData("godown_id");
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
+        $("#dc_file").prop("disabled", true);
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -91,7 +92,7 @@ $(document).ready(function () {
 
                     $(this).data("godown_id", ui.item.id);
                     get_transport_parts_dc(ui.item.id);
-
+                    $("#dc_file").prop("disabled", false);
 
                 },
 
@@ -156,11 +157,83 @@ $(document).ready(function () {
         }
     })
 
+    // $("#dc_file").on("change", function () {
+    //     if (this.files.length > 0) {
 
+    //         let godown_id = $("#godown").data("godown_id");
+    //         let file = this.files[0];
+
+    //         let formData = new FormData();
+    //         formData.append("file", file);
+    //         formData.append("godown_id", godown_id);
+
+    //         upload_dc(formData);
+    //     }
+    // });
+
+    window.onLocationReceived = function (lat, lng) {
+        console.log("GPS Location received:", lat, lng);
+
+        // Example: Show it in an alert or update your UI
+        // alert("Latitude: " + lat + "\nLongitude: " + lng);
+
+        // You can now use lat and lng for your business logic
+        // For example, update a hidden input or send to your server via AJAX
+        $("#lat_input").val(lat);
+        $("#lng_input").val(lng);
+    };
+
+
+
+    AndroidBridge.getLocation();
+
+    $("#dc_file").on("click", function (event) {
+        event.preventDefault();
+        captureWithDbData();
+    });
+
+    function captureWithDbData() {
+        console.log("capture");
+
+        var params = {
+            "godown_id": $("#godown").data("godown_id"),
+        };
+
+        var url = 'jaysan.cloud/php/upload_dc.php';
+
+        if (window.AndroidBridge) {
+            // Kotlin will take the photo, compress it, 
+            // and include these params in the POST request to app_upload.php
+            AndroidBridge.takePhoto(JSON.stringify(params), url);
+        }
+    }
 
 
 });
 
+
+function upload_dc(formData) {
+
+    $.ajax({
+        url: "php/upload_dc.php",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "Success") {
+                alert("DC uploaded successfully");
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 
 function get_godown_wise_process(godown_id) {
@@ -481,6 +554,7 @@ function get_transport_parts_dc(godown_id) {
 
                         $(".dc_details").append(html);
 
+                        $("#dc_file").trigger("click");
                     });
 
                 }
@@ -618,12 +692,12 @@ function get_transport_unload_parts(godown_id) {
 
                             // group.parts.forEach(function (part) {
 
-                                stock_id_qty.push({
-                                    stock_reserve_id: group.stock_reserve_id,
-                                    qty: group.qty
-                                });
+                            stock_id_qty.push({
+                                stock_reserve_id: group.stock_reserve_id,
+                                qty: group.qty
+                            });
 
-                                html += `
+                            html += `
                                         <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
 
                                             <div class="flex-grow-1 pe-2">
@@ -653,6 +727,7 @@ function get_transport_unload_parts(godown_id) {
 
                         $(".dc_details").append(html);
 
+                        $("#dc_file").trigger("click");
                     });
 
                 }
