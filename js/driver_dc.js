@@ -235,6 +235,21 @@ $(document).ready(function () {
         }
     });
 
+    $("#godown_list_tbody").on("click", ".select_btn", function () {
+        let godown_name = $(this).data("creditor_name");
+        let godown_id = $(this).val();
+
+        if (godown_id && godown_name) {
+            $("#godown_list_modal").modal("hide");
+            $("#godown").data("godown_id", godown_id).val(godown_name);
+            get_transport_parts_dc($('#godown').data("godown_id"));
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Again.", "warning");
+        }
+
+    })
+
 
 
 
@@ -832,9 +847,24 @@ function get_godown_location(lat, lng) {
         success: function (response) {
             console.log(response);
 
-            if (response.trim() != "error") {
-                if (response.trim() != "0 result") {
-                    alert();
+            if (response.trim() !== "error") {
+                $("#godown_list_tbody").empty();
+                if (response.trim() !== "0 result") {
+                    var obj = JSON.parse(response);
+                    if (obj.length == 1) {
+                        obj.forEach(function (item) {
+                            get_transport_parts_dc(item.creditor_id);
+                            $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                        })
+                    }
+                    else {
+                        $("#godown_list_modal").modal("show");
+                        var count = 0;
+                        obj.forEach(function (item) {
+                            count += 1;
+                            $("#godown_list_tbody").append(`<tr><td>${count}</td><td>${item.creditor_name}</td><td><button class='btn btn-sm select_btn btn-primary' value=${item.creditor_id} data-creditor_name="${item.creditor_name}">Select</button></td></tr>`);
+                        });
+                    }
                 }
             }
         },
