@@ -878,7 +878,7 @@ function get_godown_location(lat, lng) {
                                         <h6 class="godown-name mb-1">${item.creditor_name}</h6>
                                         <span class="godown-distance">
                                             <i class="fa-solid fa-location-dot me-1"></i>
-                                            ${item.distance} Meters Away
+                                            ${item.distance_m} Meters Away
                                         </span>
                                     </div>
 
