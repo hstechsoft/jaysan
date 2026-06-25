@@ -217,7 +217,7 @@ $(document).ready(function () {
 
     });
 
-    $(".save_map_btn").on("click", function () {
+    $("#save_map_btn").on("click", function () {
 
         let lati = $("#lat_input").val();
         let long = $("#lng_input").val();

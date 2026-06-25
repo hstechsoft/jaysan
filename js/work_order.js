@@ -143,7 +143,7 @@ $(document).ready(function () {
 
     $(".save_map_btn").on("click", function () {
 
-        let coordinates = $("#map_coordinates").val().trim();
+        let coordinates = "11.031031862579654, 76.97910556474159";
 
         let parts = coordinates.split(',');
 
