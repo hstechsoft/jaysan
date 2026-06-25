@@ -55,6 +55,8 @@ $(document).ready(function () {
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
         $(".dc_filess").prop("disabled", true);
+        $(".alert_text").text('');
+        $("#dc_switch").prop("checked", false);
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -785,7 +787,6 @@ function get_transport_unload_parts(godown_id) {
 
                 }
                 else {
-                    $("#dc_switch").prop("checked", false).trigger('change');
                     $(".alert_text").text("No DC Found for this Vendor To Unload");
                 }
             }
@@ -876,7 +877,7 @@ function get_godown_location(lat, lng) {
                     }
                 }
                 else {
-                    $("#loc_status").text('No Godown');
+                    $("#godown_status").text('No Godown');
                 }
             }
         },
