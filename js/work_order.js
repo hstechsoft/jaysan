@@ -49,9 +49,59 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
+    $('#current_godown').on('input', function () {
+        $(this).removeData("current_godown_id");
+
+        //check the value not empty
+        if ($('#current_godown').val() != "") {
+            $('#current_godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("current_godown_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
     $('#godown').on('input', function () {
         $(this).removeData("godown_id");
-        $("#work_order_tbody").empty();
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -104,6 +154,58 @@ $(document).ready(function () {
 
     });
 
+    $('#to_godown').on('input', function () {
+        $(this).removeData("to_godown_id");
+        $("#work_order_tbody").empty();
+
+        //check the value not empty
+        if ($('#to_godown').val() != "") {
+            $('#to_godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("to_godown_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
 
 
     $("#work_order_tbody").on("click", ".add_btn", function () {
@@ -143,7 +245,7 @@ $(document).ready(function () {
 
     $(".save_map_btn").on("click", function () {
 
-        let coordinates = "11.031031862579654, 76.97910556474159";
+        let coordinates = $("#map_coordinates").val();
 
         let parts = coordinates.split(',');
 
@@ -163,6 +265,16 @@ $(document).ready(function () {
         }
     });
 
+    $("#filter_btn").on("click", function(){
+        let current_godown = $("#current_godown").data("current_godown_id");
+        let godown = $("#to_godown").data("to_godown_id");
+        let part_id = $("#part").data("part_id");
+        let process_id = $("#process").data("process_id");
+        let sec = '';
+        let dc_sts = $("#dc_sts").val();
+
+        get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts)
+    })
 
 });
 
@@ -185,6 +297,8 @@ function update_godown_location(lati, long, godown_id) {
             console.log(response);
 
             if (response.trim() == "ok") {
+                $("#map_modal").modal('hide');
+                $("#map_coordinates").val('');
                 salert("Success", "Location Saved Successfully.", "success");
             }
             else {
