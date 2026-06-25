@@ -64,7 +64,7 @@ $demand_id = $conn->insert_id;
 // get parts from input_parts_tbl
 
 $sql_get_parts = "SELECT * FROM input_wel_parts WHERE process_id = $process_id";
-
+echo "sql_get_parts: " . $sql_get_parts . "<br>";
 $result = $conn->query($sql_get_parts);
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
