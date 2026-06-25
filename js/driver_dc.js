@@ -157,19 +157,26 @@ $(document).ready(function () {
         }
     })
 
-    $("#dc_file_upload").on("change", function () {
-        if (this.files.length > 0) {
+    // $("#dc_file_upload").on("change", function () {
+    //     if (this.files.length > 0) {
 
-            let godown_id = $("#godown").data("godown_id");
-            let file = this.files[0];
+    //         let godown_id = $("#godown").data("godown_id");
+    //         let file = this.files[0];
 
-            let formData = new FormData();
-            formData.append("file", file);
-            formData.append("godown_id", godown_id);
+    //         let formData = new FormData();
+    //         formData.append("file", file);
+    //         formData.append("godown_id", godown_id);
+    //         $(".loading").removeClass("d-none");
 
-            upload_dc(formData);
-        }
+    //         upload_dc(formData);
+    //     }
+    // });
+
+    $("#dc_file_upload").on("click", function (event) {
+        event.preventDefault();
+        uploadFile();
     });
+
 
     window.onLocationReceived = function (lat, lng) {
         console.log("GPS Location received:", lat, lng);
@@ -198,8 +205,10 @@ $(document).ready(function () {
 
 
 
+    if (phone_id) {
 
-    AndroidBridge.getLocation();
+        AndroidBridge.getLocation();
+    }
 
     $("#dc_file").on("click", function (event) {
         event.preventDefault();
@@ -226,6 +235,7 @@ function upload_dc(formData) {
             console.log(response);
 
             if (response.trim() == "Success") {
+                $(".loading").addClass("d-none");
                 alert("DC uploaded successfully");
             }
         },
@@ -555,7 +565,7 @@ function get_transport_parts_dc(godown_id) {
 
                         $(".dc_details").append(html);
 
-                        $("#dc_file_upload").trigger("click");
+                        // $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -728,7 +738,7 @@ function get_transport_unload_parts(godown_id) {
 
                         $(".dc_details").append(html);
 
-                        $("#dc_file_upload").trigger("click");
+                        // $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -837,7 +847,17 @@ function insert_new_process(processId) {
 
 
 
+function uploadFile() {
+    $(".loading").removeClass("d-none");
+    var myParams = { "godown_id": $("#godown").data("godown_id"), };
+    var url = 'https://jaysan.cloud/php/upload_dc.php';
+    // Parameters are passed as the second argument
+    if (window.AndroidBridge) {
+        AndroidBridge.pickFile("*/*", JSON.stringify(myParams), url);
+    }
 
+
+}
 
 
 
