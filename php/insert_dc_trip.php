@@ -134,7 +134,8 @@ try {
                 }
 
           
-             
+             $stock_part_id = sql_nullable($stock_part_id);
+             $stock_process_id = sql_nullable($stock_process_id);
 
                     // add parts to in_dc_parts 
                     $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id)";
