@@ -204,21 +204,7 @@ window.onUploadError = function (error) {
         captureWithDbData();
     });
 
-    function captureWithDbData() {
-        console.log("capture");
 
-        var params = {
-            "godown_id": $("#godown").data("godown_id"),
-        };
-
-        var url = 'jaysan.cloud/php/upload_dc.php';
-
-        if (window.AndroidBridge) {
-            // Kotlin will take the photo, compress it, 
-            // and include these params in the POST request to app_upload.php
-            AndroidBridge.takePhoto(JSON.stringify(params), url);
-        }
-    }
 
 
 });
@@ -852,7 +838,21 @@ function insert_new_process(processId) {
 
 
 
+    function captureWithDbData() {
+        console.log("capture");
 
+        var params = {
+            "godown_id": $("#godown").data("godown_id"),
+        };
+
+        var url = 'jaysan.cloud/php/upload_dc.php';
+
+        if (window.AndroidBridge) {
+            // Kotlin will take the photo, compress it, 
+            // and include these params in the POST request to app_upload.php
+            AndroidBridge.takePhoto(JSON.stringify(params), url);
+        }
+    }
 
 
 
