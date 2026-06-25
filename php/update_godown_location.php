@@ -1,9 +1,9 @@
 <?php
  include 'db_head.php';
 
- $latti = test_input($_GET['latti']);
-$longi = test_input($_GET['longi']);
-$creditor_id =test_input($_GET['creditor_id']);
+ $latti = test_input($_POST['latti']);
+$longi = test_input($_POST['longi']);
+$creditor_id =test_input($_POST['creditor_id']);
 
  
  
