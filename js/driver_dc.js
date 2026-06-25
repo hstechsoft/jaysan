@@ -845,7 +845,7 @@ function insert_new_process(processId) {
             "godown_id": $("#godown").data("godown_id"),
         };
 
-        var url = 'jaysan.cloud/php/upload_dc.php';
+        var url = 'https://jaysan.cloud/php/upload_dc.php';
 
         if (window.AndroidBridge) {
             // Kotlin will take the photo, compress it, 
