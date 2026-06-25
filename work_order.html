@@ -116,11 +116,16 @@
 
                             <div class="row g-2 mb-3">
 
-                                <div class="col-12">
+                                <div class="col-10">
                                     <div class="form-floating">
                                         <input type="text" class="form-control form-control-sm rounded-3" id="godown">
                                         <label for="godown">Vendor</label>
                                     </div>
+                                </div>
+
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary " id="map_btn"><i
+                                            class="fa-solid fa-map-location-dot"></i></button>
                                 </div>
 
                                 <!-- <div class="col-md-6">
@@ -351,6 +356,32 @@
         </div>
     </div>
 
+    <div class="modal fade" id="map_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="map_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="map_modalLabel">Map Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-floating mb-2">
+                      <input type="text" class="form-control rounded-3" id="map_coordinates" placeholder="" required>
+                      <label for="map_coordinates">Map Coordinates
+                      <span class="text-danger">*</span> </label>
+                    
+                      <div class="invalid-feedback">
+                        Kindly Enter  Vaild Data
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save_map_btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id='footer' class="mt-auto"></div>
     <!-- jQuery -->

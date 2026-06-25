@@ -136,11 +136,76 @@ $(document).ready(function () {
     });
 
 
+    $("#map_btn").on("click", function () {
+        window.open("https://www.google.com/maps/", "_blank");
+        $("#map_modal").modal('show');
+    });
+
+    $(".save_map_btn").on("click", function () {
+
+        let coordinates = $("#map_coordinates").val().trim();
+
+        let parts = coordinates.split(',');
+
+        let lati = parts[0]?.trim();
+        let long = parts[1]?.trim();
+
+        let godown_id = $("#godown").data("godown_id");
+
+        if (lati && long && godown_id) {
+            update_godown_location(lati, long, godown_id);
+        } else {
+            salert(
+                "Warning",
+                "Data Is Missing! Please provide map coordinates and vendor.",
+                "warning"
+            );
+        }
+    });
+
 
 });
 
 
 
+function update_godown_location(lati, long, godown_id) {
+
+    console.log(lati, long, godown_id);
+
+    $.ajax({
+        url: "php/update_godown_location.php",
+        type: "post", //send it through get method
+        data: {
+
+            latti: lati,
+            longi: long,
+            creditor_id: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                salert("Success", "Location Saved Successfully.", "success");
+            }
+            else {
+                salert("Warning", response, "warning");
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 // function processNextPart() {
 
@@ -366,9 +431,9 @@ function get_work_order(godown, dep, sec, work_order_id) {
 
 }
 
-function get_demand_material(godown, dep, sec ) {
+function get_demand_material(godown, dep, sec) {
 
-    console.log(godown, dep, sec );
+    console.log(godown, dep, sec);
 
     $.ajax({
         url: "php/get_demand_material.php",

@@ -188,6 +188,7 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
+        get_godown_location(lat, lng)
     };
 
     // Global callbacks called by the Android app
@@ -214,6 +215,24 @@ $(document).ready(function () {
         event.preventDefault();
         captureWithDbData();
 
+    });
+
+    $(".save_map_btn").on("click", function () {
+
+        let lati = $("#lat_input").val();
+        let long = $("#lng_input").val();
+
+        let godown_id = $("#godown").data("godown_id");
+
+        if (lati && long && godown_id) {
+            update_godown_location1(lati, long, godown_id);
+        } else {
+            salert(
+                "Warning",
+                "Data Is Missing! Please provide map coordinates and vendor.",
+                "warning"
+            );
+        }
     });
 
 
@@ -800,6 +819,70 @@ function un_load_transport(stock_json, godown_id) {
 
 }
 
+function get_godown_location(lat, lng) {
+
+    $.ajax({
+        url: "php/get_godown_location.php",
+        type: "get",
+        data: {
+            latti: lat,
+            longi: lng,
+        },
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != "error") {
+                if (response.trim() != "0 result") {
+                    alert();
+                }
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+
+function update_godown_location1(lati, long, godown_id) {
+
+    console.log(lati, long, godown_id);
+
+    $.ajax({
+        url: "php/update_godown_location.php",
+        type: "post", //send it through get method
+        data: {
+
+            latti: lati,
+            longi: long,
+            creditor_id: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                salert("Success", "Location Saved Successfully.", "success");
+            }
+            else {
+                salert("Warning", response, "warning");
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
