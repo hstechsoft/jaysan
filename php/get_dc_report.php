@@ -47,7 +47,10 @@ inner join transport_parts tp on tdc.transport_dc_id = tp.transport_dc_id
 
  where (source_godown = $current_godown or des_godown = $current_godown ) and ($godown_query) and ($sts_query) and ($part_query) GROUP BY tdc.transport_dc_id )
 
- select tdc.dated,tdc.source_godown,tdc.des_godown,tdc.dc_id,tdc.sts,tdc.current_transport,tdc.dc_type,tdc.transport_dc_id,tdc.in_dc_chk,tdc.out_dc,tdc.total_count,if(dc_type = 'dc out',if(total_count>out_dc,'dc_out','ok'),if(total_count>in_dc_chk,'dc_in','ok')) as dc_inout_sts from transport_dc tdc order by dated desc";
+ select source.creditor_name as source, dest.creditor_name as destination, tdc.dated,tdc.source_godown,tdc.des_godown,tdc.dc_id,tdc.sts,tdc.current_transport,tdc.dc_type,tdc.transport_dc_id,tdc.in_dc_chk,tdc.out_dc,tdc.total_count,if(dc_type = 'dc out',if(total_count>out_dc,'dc_out','ok'),if(total_count>in_dc_chk,'dc_in','ok')) as dc_inout_sts from  transport_dc tdc
+ inner join creditors source on tdc.source_godown = source.creditor_id
+ inner join creditors dest on tdc.des_godown = dest.creditor_id
+ order by dated desc";
  
 // echo "sql: " . $sql . "<br>";
 
