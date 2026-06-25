@@ -193,8 +193,8 @@ $(document).ready(function () {
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
         // $("#loc_status").addClass("text-danger");
-            $("#loc_status").removeClass("text-danger");
-            $("#loc_status").addClass("text-success");
+        $("#loc_status").removeClass("text-danger");
+        $("#loc_status").addClass("text-success");
         get_godown_location(lat, lng)
     };
 
@@ -872,9 +872,27 @@ function get_godown_location(lat, lng) {
                         var count = 0;
                         obj.forEach(function (item) {
                             count += 1;
-                            $("#godown_list_tbody").append(`<tr><td>${count}</td><td>${item.creditor_name}</td><td>${item.distance_m} Meters</td><td><button class='btn btn-sm select_btn btn-success' value=${item.creditor_id} data-creditor_name="${item.creditor_name}"><i class="fa-solid fa-circle-check"></i></button></td></tr>`);
+                            $("#godown_list_tbody").append(`
+                                <li class="list-group-item godown-item">
+                                    <div class="godown-details">
+                                        <h6 class="godown-name mb-1">${item.creditor_name}</h6>
+                                        <span class="godown-distance">
+                                            <i class="fa-solid fa-location-dot me-1"></i>
+                                            ${item.distance} Meters Away
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-success btn-sm select_btn"
+                                        value="${item.creditor_id}"
+                                        data-creditor_name="${item.creditor_name}">
+                                        <i class="fa-solid fa-circle-check me-1"></i>
+                                        Select
+                                    </button>
+                                </li>
+                            `);
                         });
-                        $("#godown_status").text('Found '+ count +' Godown').addClass("bg-success");
+                        $("#godown_status").text('Found ' + count + ' Godown').addClass("bg-success");
 
                     }
                 }

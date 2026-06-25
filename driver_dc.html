@@ -131,6 +131,68 @@
             font-size: 3rem;
         }
 
+        .godown-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .godown-item {
+            border: none !important;
+            border-radius: 12px !important;
+            margin-bottom: 10px;
+            padding: 14px 16px;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+
+            transition: all .25s ease;
+        }
+
+        .godown-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(0, 0, 0, .12);
+        }
+
+        .godown-name {
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+
+        .godown-distance {
+            font-size: .85rem;
+            color: #6c757d;
+        }
+
+        .select_btn {
+            border-radius: 25px;
+            padding: 6px 14px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 576px) {
+            .godown-item {
+                padding: 12px;
+            }
+
+            .godown-name {
+                font-size: .95rem;
+            }
+
+            .godown-distance {
+                font-size: .8rem;
+            }
+
+            .select_btn {
+                padding: 5px 10px;
+                font-size: .8rem;
+            }
+        }
+
         @media (max-width: 576px) {
             .accordion-button {
                 padding: 0.75rem;
@@ -290,25 +352,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                    <table class="table caption-top table-bordered table-striped ">
-                        <caption></caption>
-                      <thead>
-                    
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Godown Name</th>
-                          <th scope="col">Distance</th>
-                          <th scope="col">action</th>
-                    
-                        </tr>
-                      </thead>
-                      <tbody id="godown_list_tbody">
-                    
-                      </tbody>
-                    
-                    
-                    </table>
+                    <div class="godown-container">
+                        <ul class="list-group border-0" id="godown_list_tbody">
+
+
+                        </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
