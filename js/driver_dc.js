@@ -183,6 +183,18 @@ $(document).ready(function () {
         $("#lng_input").val(lng);
     };
 
+    // Global callbacks called by the Android app
+window.onUploadSuccess = function (response) {
+    console.log("Upload Success:", response);
+    alert("Photo uploaded successfully!");
+};
+
+window.onUploadError = function (error) {
+    console.error("Upload Error:", error);
+    alert("Upload failed. Error code: " + error);
+};
+
+
 
 
     AndroidBridge.getLocation();
