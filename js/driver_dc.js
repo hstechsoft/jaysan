@@ -191,6 +191,7 @@ $(document).ready(function () {
     };
 
     window.onUploadError = function (error) {
+        $(".loading").addClass("d-none");
         console.error("Upload Error:", error);
         salert("Warning", "Upload failed. Error code: " + error, "warning");
     };
