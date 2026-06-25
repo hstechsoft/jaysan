@@ -135,11 +135,13 @@ $(document).ready(function () {
         if ($(this).is(":checked")) {
             $(".dc_title").text("DC Unload Details");
             $(this).next('label').text("DC Load Details");
+            $(".alert_text").text('');
             get_transport_unload_parts($('#godown').data("godown_id"));
         }
         else {
             $(".dc_title").text("DC Load Details");
             $(this).next('label').text("DC Unload Details");
+            $(".alert_text").text('');
             get_transport_parts_dc($('#godown').data("godown_id"));
         }
     })
@@ -188,6 +190,10 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
+        $("#loc_status").addClass("bg-danger");
+        if (lat && lng) {
+            $("#loc_status").addClass("bg-success");
+        }
         get_godown_location(lat, lng)
     };
 
@@ -242,6 +248,8 @@ $(document).ready(function () {
         if (godown_id && godown_name) {
             $("#godown_list_modal").modal("hide");
             $("#godown").data("godown_id", godown_id).val(godown_name);
+            $(".alert_text").text('');
+            $(".dc_filess").prop("disabled", false);
             get_transport_parts_dc($('#godown').data("godown_id"));
         }
         else {
@@ -604,7 +612,7 @@ function get_transport_parts_dc(godown_id) {
 
                 }
                 else {
-                    salert("Warning", "No DC Found for this Vendor To Load", "warning");
+                    $(".alert_text").text("No DC Found for this Vendor To Load");
                 }
             }
 
@@ -778,7 +786,7 @@ function get_transport_unload_parts(godown_id) {
                 }
                 else {
                     $("#dc_switch").prop("checked", false).trigger('change');
-                    salert("Warning", "No DC Found for this Vendor To Unload", "warning");
+                    $(".alert_text").text("No DC Found for this Vendor To Unload");
                 }
             }
 
@@ -853,6 +861,7 @@ function get_godown_location(lat, lng) {
                     var obj = JSON.parse(response);
                     if (obj.length == 1) {
                         obj.forEach(function (item) {
+                            $(".dc_filess").prop("disabled", false);
                             get_transport_parts_dc(item.creditor_id);
                             $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
                         })
@@ -862,9 +871,12 @@ function get_godown_location(lat, lng) {
                         var count = 0;
                         obj.forEach(function (item) {
                             count += 1;
-                            $("#godown_list_tbody").append(`<tr><td>${count}</td><td>${item.creditor_name}</td><td><button class='btn btn-sm select_btn btn-primary' value=${item.creditor_id} data-creditor_name="${item.creditor_name}">Select</button></td></tr>`);
+                            $("#godown_list_tbody").append(`<tr><td>${count}</td><td>${item.creditor_name}</td><td>${item.distance_m} Meters</td><td><button class='btn btn-sm select_btn btn-success' value=${item.creditor_id} data-creditor_name="${item.creditor_name}"><i class="fa-solid fa-circle-check"></i></button></td></tr>`);
                         });
                     }
+                }
+                else {
+                    $("#loc_status").text('No Godown');
                 }
             }
         },
