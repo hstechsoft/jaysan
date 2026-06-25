@@ -48,13 +48,34 @@ window.open("marketing_lead.html?phone_id="+app_phone_id, '_blank');
 $("#camera_btn").on("click", function(event) {
   event.preventDefault();
   // TODO: handle click here
-    Android.openCamera();
+  captureWithDbData();
 });
 
 
 
 });
 
+function captureWithDbData() {
+var dbParams = JSON.stringify({ "godown_id": 1166 });
+var url = "https://jaysan.cloud/php/upload_dc.php";
+
+    if (window.AndroidBridge) {
+        // Kotlin will take the photo, compress it, 
+        // and include these params in the POST request to app_upload.php
+        AndroidBridge.takePhoto(dbParams, url);
+    }
+}
+
+// Global callbacks called by the Android app
+window.onUploadSuccess = function (response) {
+    console.log("Upload Success:", response);
+    alert("Photo uploaded successfully!");
+};
+
+window.onUploadError = function (error) {
+    console.error("Upload Error:", error);
+    alert("Upload failed. Error code: " + error);
+};
 
 
 
