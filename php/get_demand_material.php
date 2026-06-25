@@ -35,7 +35,7 @@ left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id
   
 transport as (select part_id,process_id,sum(qty) as qty from transport_parts inner join transport_dc on transport_parts.transport_dc_id = transport_dc.transport_dc_id WHERE transport_dc.sts <> 'finished' and transport_dc.des_godown <=> $godown GROUP BY part_id,process_id)
 
-select (ifnull(stock.qty,0) - (ifnull(transport.qty,0) + ifnull(stock.reserve_qty,0))) as available_qty, stock.*,ifnull(transport.qty,0) as transport_qty from stock left join transport on stock.part_id <=> transport.part_id and stock.process_id <=> transport.process_id";
+select (ifnull(stock.qty,0) - (ifnull(transport.qty,0) + ifnull(stock.reserve_qty,0))) as demand_qty, stock.*,ifnull(transport.qty,0) as transport_qty from stock left join transport on stock.part_id <=> transport.part_id and stock.process_id <=> transport.process_id";
  
 
 
