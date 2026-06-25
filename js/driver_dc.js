@@ -54,7 +54,7 @@ $(document).ready(function () {
         $(this).removeData("godown_id");
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
-        $("#dc_file").prop("disabled", true);
+        $(".dc_filess").prop("disabled", true);
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -92,7 +92,7 @@ $(document).ready(function () {
 
                     $(this).data("godown_id", ui.item.id);
                     get_transport_parts_dc(ui.item.id);
-                    $("#dc_file").prop("disabled", false);
+                    $(".dc_filess").prop("disabled", false);
 
                 },
 
@@ -157,19 +157,19 @@ $(document).ready(function () {
         }
     })
 
-    // $("#dc_file").on("change", function () {
-    //     if (this.files.length > 0) {
+    $("#dc_file_upload").on("change", function () {
+        if (this.files.length > 0) {
 
-    //         let godown_id = $("#godown").data("godown_id");
-    //         let file = this.files[0];
+            let godown_id = $("#godown").data("godown_id");
+            let file = this.files[0];
 
-    //         let formData = new FormData();
-    //         formData.append("file", file);
-    //         formData.append("godown_id", godown_id);
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("godown_id", godown_id);
 
-    //         upload_dc(formData);
-    //     }
-    // });
+            upload_dc(formData);
+        }
+    });
 
     window.onLocationReceived = function (lat, lng) {
         console.log("GPS Location received:", lat, lng);
@@ -184,15 +184,16 @@ $(document).ready(function () {
     };
 
     // Global callbacks called by the Android app
-window.onUploadSuccess = function (response) {
-    console.log("Upload Success:", response);
-    alert("Photo uploaded successfully!");
-};
+    window.onUploadSuccess = function (response) {
+        console.log("Upload Success:", response);
+        $(".loading").addClass("d-none");
+        salert("Success", "Image Uploaded Successfully.", "succes");
+    };
 
-window.onUploadError = function (error) {
-    console.error("Upload Error:", error);
-    alert("Upload failed. Error code: " + error);
-};
+    window.onUploadError = function (error) {
+        console.error("Upload Error:", error);
+        salert("Warning", "Upload failed. Error code: " + error, "warning");
+    };
 
 
 
@@ -202,6 +203,7 @@ window.onUploadError = function (error) {
     $("#dc_file").on("click", function (event) {
         event.preventDefault();
         captureWithDbData();
+
     });
 
 
@@ -552,7 +554,7 @@ function get_transport_parts_dc(godown_id) {
 
                         $(".dc_details").append(html);
 
-                        $("#dc_file").trigger("click");
+                        $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -725,7 +727,7 @@ function get_transport_unload_parts(godown_id) {
 
                         $(".dc_details").append(html);
 
-                        $("#dc_file").trigger("click");
+                        $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -838,21 +840,20 @@ function insert_new_process(processId) {
 
 
 
-    function captureWithDbData() {
-        console.log("capture");
+function captureWithDbData() {
+    $(".loading").removeClass("d-none");
+    var params = {
+        "godown_id": $("#godown").data("godown_id"),
+    };
 
-        var params = {
-            "godown_id": $("#godown").data("godown_id"),
-        };
+    var url = 'https://jaysan.cloud/php/upload_dc.php';
 
-        var url = 'https://jaysan.cloud/php/upload_dc.php';
-
-        if (window.AndroidBridge) {
-            // Kotlin will take the photo, compress it, 
-            // and include these params in the POST request to app_upload.php
-            AndroidBridge.takePhoto(JSON.stringify(params), url);
-        }
+    if (window.AndroidBridge) {
+        // Kotlin will take the photo, compress it, 
+        // and include these params in the POST request to app_upload.php
+        AndroidBridge.takePhoto(JSON.stringify(params), url);
     }
+}
 
 
 
