@@ -860,7 +860,7 @@ function get_godown_location(lat, lng) {
                 if (response.trim() !== "0 result") {
                     var obj = JSON.parse(response);
                     if (obj.length == 1) {
-                        $("#godown_status").text('Found 1 Godown');
+                        $("#godown_status").text('Found 1 Godown').addClass("bg-success");
                         obj.forEach(function (item) {
                             $(".dc_filess").prop("disabled", false);
                             get_transport_parts_dc(item.creditor_id);
@@ -874,12 +874,12 @@ function get_godown_location(lat, lng) {
                             count += 1;
                             $("#godown_list_tbody").append(`<tr><td>${count}</td><td>${item.creditor_name}</td><td>${item.distance_m} Meters</td><td><button class='btn btn-sm select_btn btn-success' value=${item.creditor_id} data-creditor_name="${item.creditor_name}"><i class="fa-solid fa-circle-check"></i></button></td></tr>`);
                         });
-                        $("#godown_status").text('Found '+ count +' Godown');
+                        $("#godown_status").text('Found '+ count +' Godown').addClass("bg-success");
 
                     }
                 }
                 else {
-                    $("#godown_status").text('No Godown');
+                    $("#godown_status").text('No Godown').addClass("bg-danger");
                 }
             }
         },
