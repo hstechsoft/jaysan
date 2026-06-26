@@ -28,7 +28,7 @@ $emp_query = "emp_id = $emp_id";
 
     if( $dc_status != "all")
     {
-     
+       $dc_status = "'".$dc_status."'";
         $status_query = "status = $dc_status";
     }
     
@@ -40,7 +40,7 @@ function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-$data = "'".$data."'";
+
 return $data;
 }
 
