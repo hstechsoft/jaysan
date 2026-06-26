@@ -14,12 +14,11 @@ function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-
 return $data;
 }
 
 
- $sql = "select if(tp.part_id is null, concat('semi finished part of ', pt.part_name ,'( from - ',jp.process_name,')'), pt2.part_name) as output_part,jp.process_name,tp.qty,creditors.creditor_name from transport_parts tp
+ $sql = "select if(tp.part_id is null, concat('semi finished part of ', pt.part_name ,'( from - ',jp.process_name,')'), pt2.part_name) as output_part,jp.process_name,tp.qty,tp.creditors.creditor_name,tp.transport_id,tp.part_id,tp.process_id from transport_parts tp
  inner join transport_dc tdc on tp.transport_dc_id = tdc.transport_dc_id
 left join process_wel_tbl pwt on tp.process_id = pwt.process_id
 left join process_wel_tbl pwt2 on pwt.final_process_id = pwt2.process_id

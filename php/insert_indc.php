@@ -9,6 +9,7 @@ $transport_des = test_input($_POST['transport_des']);
 $vehicle_no = test_input($_POST['vehicle_no']);
 $emp_id = test_input($_POST['emp_id']);
 $attach_id  = test_input($_POST['attach_id']);
+$in_dc_no = test_input($_POST['in_dc_no']);
 
 
 
@@ -48,7 +49,7 @@ try {
 
  $in_dc_id = 0;
 
-    $sql = "INSERT INTO in_dc ( godown,dc_date,transport_mode,transport_des,vehicle_no,emp_id,invoice_sts) VALUES ($godown,$dc_date,$transport_mode,$transport_des,$vehicle_no,$emp_id,'pending')";
+    $sql = "INSERT INTO in_dc ( godown,dc_date,transport_mode,transport_des,vehicle_no,emp_id,invoice_sts,in_dc_no) VALUES ($godown,$dc_date,$transport_mode,$transport_des,$vehicle_no,$emp_id,'pending',$in_dc_no)";
     if ($conn->query($sql) === TRUE) {
         $in_dc_id = $conn->insert_id;
 // insert dc parts
