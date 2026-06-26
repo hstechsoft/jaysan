@@ -206,7 +206,51 @@ $(document).ready(function () {
 
     });
 
+    $('#part').on('input', function () {
+        //check the value not empty
+        $(this).removeData("part_id");
 
+
+        if ($('#part').val() != "") {
+            $('#part').autocomplete({
+                //get data from database return as array of object which contain label,value
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_part_name_auto_wel.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: "name",
+                            part: request.term,
+                            godwon_id: $("#godown_filter").data("godown_id"),
+                            department_id: $("#department_filter").data("dept_id"),
+                            section_id: $("#section_filter").data("sec_id"),
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name + "-" + item.part_no,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    part_no: item.part_no
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+                    $(this).data("part_id", ui.item.id);
+                },
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.value + "</strong> - " + item.part_no + "</div>")
+                    .appendTo(ul);
+            };
+        }
+    });
 
     $("#work_order_tbody").on("click", ".add_btn", function () {
 
@@ -265,15 +309,20 @@ $(document).ready(function () {
         }
     });
 
-    $("#filter_btn").on("click", function(){
+    $("#filter_btn").on("click", function () {
         let current_godown = $("#current_godown").data("current_godown_id");
-        let godown = $("#to_godown").data("to_godown_id");
-        let part_id = $("#part").data("part_id");
-        let process_id = $("#process").data("process_id");
+        let godown = $("#to_godown").data("to_godown_id") || '';
+        let part_id = $("#part").data("part_id") || '';
+        let process_id = $("#process").data("process_id") || '';
         let sec = '';
         let dc_sts = $("#dc_sts").val();
 
-        get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts)
+        if (!current_godown) {
+            salert("Warning", "Select The From Godown", "warning");
+            return;
+        }
+
+        get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts);
     })
 
 });
@@ -599,6 +648,77 @@ function get_demand_material(godown, dep, sec) {
 
 
 }
+
+function get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts) {
+
+    console.log(current_godown, godown, part_id, process_id, sec, dc_sts);
+
+    $.ajax({
+        url: "php/get_dc_report.php",
+        type: "get", //send it through get method
+        data: {
+
+            current_godown: current_godown,
+            godown: godown,
+            part_id: part_id,
+            process_id: process_id,
+            sec: sec,
+            dc_sts: dc_sts
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+
+                $("#dc_status_tbody").empty();
+
+                if (response.trim() != "0 result") {
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+
+                        count += 1;
+
+                        $("#dc_status_tbody").append(`
+                            <tr>
+                                <td>${count}</td>
+                                <td>${item.source}</td>
+                                <td>${item.destination}</td>
+                                <td>${item.dated}</td>
+                                <td>${item.dc_type}</td>
+                                <td><span class="badge bg-secondary">${item.sts}</span></td>
+                                <td>
+                                    ${item.dc_inout_sts == 'ok' ? '<span class="badge bg-success">Completed</span>' : `<span class="badge bg-danger">${item.dc_inout_sts} Not Completed</span>` }
+                                </td>
+                            </tr>
+                        `);
+
+                    });
+
+                }
+                else {
+                    $("#dc_status_tbody").append(`<tr><td colspan='7' class='text-center text-danger'>No DC Found.</td></tr>`)
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 
 
 function get_work_order_company_dc(godown_id) {

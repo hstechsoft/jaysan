@@ -192,7 +192,7 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
-        // $("#loc_status").addClass("text-danger");
+        
         $("#loc_status").removeClass("text-danger");
         $("#loc_status").addClass("text-success");
         get_godown_location(lat, lng)
@@ -714,11 +714,11 @@ function get_transport_unload_parts(godown_id) {
                                                         </strong>
 
                                                         <span class="badge bg-primary">
-                                                            ${item.reserve_type}
+                                                            ${item.dc_date}
                                                         </span>
                                                     </div>
 
-                                                    <div class="small text-muted mt-1">
+                                                    <div class="small text-muted mt-1  d-none">
                                                         <span class="fw-semibold">${item.bill_to}</span>
                                                         <i class="fa fa-arrow-right mx-1"></i>
                                                         <span class="fw-semibold">${item.ship_to}</span>
@@ -738,11 +738,11 @@ function get_transport_unload_parts(godown_id) {
                                 <div class="border rounded p-2 mb-2 bg-light">
 
                                     <div class="d-flex flex-wrap gap-1 mb-2">
-                                        <span class="badge bg-success">
+                                        <span class="badge bg-success d-none">
                                             ${group.creditor_name}
                                         </span>
 
-                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+                                        ${group.dep_name ? `<span class="badge bg-warning text-dark  d-none">${group.dep_name}</span>` : ''}</div>`;
 
                             // group.parts.forEach(function (part) {
 
@@ -995,7 +995,7 @@ function insert_new_process(processId) {
 
 function uploadFile() {
     $(".loading").removeClass("d-none");
-    var myParams = { "godown_id": $("#godown").data("godown_id"), };
+    var myParams = { "godown_id": $("#godown").data("godown_id"), "emp_id": current_user_id};
     var url = 'https://jaysan.cloud/php/upload_dc.php';
     // Parameters are passed as the second argument
     if (window.AndroidBridge) {
@@ -1011,6 +1011,7 @@ function captureWithDbData() {
     $(".loading").removeClass("d-none");
     var params = {
         "godown_id": $("#godown").data("godown_id"),
+        "emp_id": current_user_id,
     };
 
     var url = 'https://jaysan.cloud/php/upload_dc.php';

@@ -336,7 +336,7 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control rounded-3" id="process">
+                                <input type="hidden" class="form-control rounded-3" id="process">
                                 <label for="process">
                                     <i class="fa-solid fa-industry me-1"></i>
                                     Process
@@ -364,7 +364,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8"></div>
+                <div class="col-md-8">
+                    <div class="table-responsive">
+                        <table class="table caption-top small table-bordered table-striped ">
+                            <caption></caption>
+                            <thead class="small">
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">From</th>
+                                    <th scope="col">To</th>
+                                    <th scope="col">DC Date</th>
+                                    <th scope="col">DC Type</th>
+                                    <th scope="col">DC Status</th>
+                                    <th scope="col">Status</th>
+
+                                </tr>
+                            </thead>
+                            <tbody  class="small" id="dc_status_tbody">
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
             </div>
 
         </div>
