@@ -310,8 +310,8 @@
 
                             <div class="m-1 d-flex">
                                 <div class="form-check mb-0 bg-secondary border rounded px-2 py-1">
-                                    <input type="hidden" class="form-check-input" type="checkbox" id="grid">
-                                    <label class="form-check-label text-white " for="grid">
+                                    <input class="form-check-input d-none" type="checkbox" id="grid">
+                                    <label class="form-check-label text-white" for="grid" style="cursor:pointer;">
                                         <i class="fa-solid fa-border-all"></i>
                                     </label>
                                 </div>
@@ -392,6 +392,20 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <!-- <button type="button" class="btn btn-primary save_map_btn">Save</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Attachment Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center overflow-auto">
+                    <img id="modalImage" src="" class="img-fluid">
                 </div>
             </div>
         </div>

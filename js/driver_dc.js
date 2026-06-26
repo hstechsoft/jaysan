@@ -203,6 +203,7 @@ $(document).ready(function () {
     window.onUploadSuccess = function (response) {
         console.log("Upload Success:", response);
         $(".loading").addClass("d-none");
+        get_dc_attachment(current_user_id, '', '', 'create');
         salert("Success", "Image Uploaded Successfully.", "success");
     };
 
@@ -262,13 +263,18 @@ $(document).ready(function () {
 
     $("#grid").on("change", function () {
         if ($(this).is(":checked")) {
-            $(".attech_col").removeClass("col-4").addClass("col-12")
+            $(".attech_col").removeClass("col-4").addClass("col-12");
+            $("label[for='grid']").addClass("text-warning");
+        } else {
+            $(".attech_col").removeClass("col-12").addClass("col-4");
+            $("label[for='grid']").removeClass("text-warning");
         }
-        else {
-            $(".attech_col").removeClass("col-12").addClass("col-4")
-        }
-    })
+    });
 
+    $("#attachment_list").on("click", ".attachment_img", function () {
+        $("#modalImage").attr("src", $(this).data("src"));
+        $("#imageModal").modal("show");
+    });
 
 });
 
@@ -402,8 +408,11 @@ function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
                         $("#attachment_list").append(`
                             <div class="col-4 attech_col">
                                 <img src="${item.path}"
-                                    class="img-fluid rounded border shadow-sm"
-                                    alt="Attachment">
+                                    data-src="${item.path}"
+                                    value="${item.attach_id}"
+                                    class="img-fluid rounded border shadow-sm attachment_img"
+                                    alt="Attachment"
+                                    style="cursor:pointer;">
                             </div>
                         `);
 
