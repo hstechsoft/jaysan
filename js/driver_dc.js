@@ -260,7 +260,14 @@ $(document).ready(function () {
 
     })
 
-
+    $("#grid").on("change", function () {
+        if ($(this).is(":checked")) {
+            $(".attech_col").removeClass("col-4").addClass("col-12")
+        }
+        else {
+            $(".attech_col").removeClass("col-12").addClass("col-4")
+        }
+    })
 
 
 });
@@ -393,7 +400,7 @@ function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
                     obj.forEach(function (item) {
 
                         $("#attachment_list").append(`
-                            <div class="col-md-4 mb-3 attech_col">
+                            <div class="col-4 attech_col">
                                 <img src="${item.path}"
                                     class="img-fluid rounded border shadow-sm"
                                     alt="Attachment">
