@@ -88,7 +88,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
  
 
 // update dc_attachment 
-$sql_update_attachment = "UPDATE dc_attachment SET dc_id = $in_dc_id,status = 'updated' WHERE attach_id = $attach_id";
+$sql_update_attachment = "UPDATE dc_attachment SET dc_id = $in_dc_id,status = 'assign' WHERE attach_id = $attach_id";
 if (!$conn->query($sql_update_attachment)) {
     throw new Exception("Error updating dc attachment: " . $conn->error.$sql_update_attachment);
 }
