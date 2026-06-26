@@ -253,150 +253,118 @@
 
         <div class=" page-wrapper mt-5 mt-md-0">
 
-            <div class="d-flex justify-content-between my-2">
-                <i class="fa-solid fa-location-dot text-danger" id="loc_status"></i>
-                <span class="badge " id="godown_status"></span>
-            </div>
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <div class="form-floating flex-grow-1">
-                    <input type="text" class="form-control form-control-sm rounded-3" id="godown" placeholder="">
-                    <label for="godown">Godown</label>
-                </div>
 
-                <button type="button" class="btn btn-primary" id="save_map_btn">
-                    <i class="fa fa-plus"></i>
-                </button>
-            </div>
+            <div class="row">
 
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <div class=" flex-grow-1">
-                    <input class="form-control dc_filess" type="file" id="dc_file_upload" disabled>
-                </div>
-                <button type="button" class="btn btn-secondary dc_filess" id="dc_file" disabled><i
-                        class="fa-regular fa-camera fa-beat"></i></button>
-            </div>
+                <div class="col-md-3">
 
-            <input type="hidden" class="form-control rounded-3" id="lat_input" placeholder="latitude">
-            <input type="hidden" class="form-control rounded-3" id="lng_input" placeholder="longitude">
-
-            <div class="alert_text text-center text-danger " style="font-size: 11px;"></div>
-
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h6 class="dc_title">DC Load Details</h6>
-
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="dc_switch">
-                        <label class="form-check-label" for="dc_switch">DC Unload Details</label>
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="all_parts">
                     </div>
-                </div>
-
-                <div class="card-body dc_details">
-
-                </div>
-            </div>
-
-            <div class="accordion mt-2" id="accordionExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="attachment">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#attachment_accordion" aria-expanded="true"
-                            aria-controls="attachment_accordion">
-                            Attachments <span class="badge bg-primary ms-3" id="attachment_count"></span>
-                        </button>
-                    </h2>
-                    <div id="attachment_accordion" class="accordion-collapse collapse " aria-labelledby="attachment"
-                        data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-
-                            <div class="m-1 d-flex">
-                                <div class="form-check mb-0 bg-secondary border rounded px-2 py-1">
-                                    <input class="form-check-input d-none" type="checkbox" id="grid">
-                                    <label class="form-check-label text-white" for="grid" style="cursor:pointer;">
-                                        <i class="fa-solid fa-border-all"></i>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row" id="attachment_list">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="loading d-none">
-                <i class="fas fa-spinner fa-spin"></i>
-            </div>
-
-        </div>
-
-
-
-
-
-    </div>
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="manual_dc_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Create Manual DC</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-2">
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control form-control-sm rounded-3" id="dest_godown"
-                            placeholder="" required>
-                        <label for="dest_godown">
-                            To Godown <span class="text-danger">*</span>
-                        </label>
-                        <div class="invalid-feedback">
-                            Kindly Enter Valid Data
+                        <input type="text" class="form-control rounded-3" id="godown" placeholder="">
+                        <label for="godown">Vendor </label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="in_dc_no" placeholder="">
+                        <label for="in_dc_no">In DC/No</label>
+                    </div>
+                    
+                    <div class="form-floating mb-2">
+                        <input type="datetime-local" class="form-control rounded-3" id="dc_date" placeholder="">
+                        <label for="dc_date">DC Date</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="transport_mode" placeholder="">
+                        <label for="transport_mode">Mode Of Transport</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="transport_des" placeholder="">
+                        <label for="transport_des">Transport Description</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="vehicle_no" placeholder="">
+                        <label for="vehicle_no">Vehicle/No</label>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table small caption-top table-bordered table-striped ">
+                            <caption></caption>
+                            <thead class="small">
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Part Name</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="small" id="dc_parts_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <button type="button" class="btn btn-primary " id="in_dc_btn">Submit</button>
+                </div>
+
+                <div class="col-md-6"></div>
+
+                <div class="col-md-3">
+                    <div class="accordion mt-2" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="attachment">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#attachment_accordion" aria-expanded="true"
+                                    aria-controls="attachment_accordion">
+                                    Attachments <span class="badge bg-primary ms-3" id="attachment_count"></span>
+                                </button>
+                            </h2>
+                            <div id="attachment_accordion" class="accordion-collapse collapse  show"
+                                aria-labelledby="attachment" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+
+                                    <div class="m-1 d-flex">
+                                        <div class="form-check mb-0 bg-secondary border rounded px-2 py-1">
+                                            <input class="form-check-input d-none" type="checkbox" id="grid">
+                                            <label class="form-check-label text-white" for="grid"
+                                                style="cursor:pointer;">
+                                                <i class="fa-solid fa-border-all"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="attachment_list">
+
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card mb-2 shadow-sm" id="manual_dc_card">
-
-                    </div>
-
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success add_manual_dc">Create</button>
-                </div>
+
             </div>
+
+
         </div>
+
+
+
+
+
     </div>
 
-    <div class="modal fade" id="godown_list_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="godown_list_modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="godown_list_modalLabel">Select Godown</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="godown-container">
-                        <ul class="list-group border-0" id="godown_list_tbody">
 
 
-                        </ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <!-- <button type="button" class="btn btn-primary save_map_btn">Save</button> -->
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -419,7 +387,7 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
 
-        <!-- Facnybox -->
+    <!-- Facnybox -->
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script>
 
     <!-- font awesome -->
@@ -430,7 +398,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
-    <script src="js/driver_dc.js" type="module"></script>
+    <script src="js/dc_in.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 

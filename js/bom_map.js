@@ -505,6 +505,8 @@ function get_real_process_summary_godown(process_id, qty) {
 
 
 function get_real_process_summary_inputs(process_id, qty) {
+    console.log(process_id, qty);
+
 
     $.ajax({
         url: "php/get_real_process_summary_inputs.php",
@@ -599,6 +601,9 @@ function get_real_process_summary_inputs(process_id, qty) {
                         ${inputs}
                         </div>
 
+                        <p class="output_part m-1">
+                            ${item.output_part_name}
+                        </p>
                         </div>
 
                         </div>

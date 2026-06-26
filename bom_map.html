@@ -114,7 +114,7 @@
         }
 
         /* When open, max-height will be set in JS */
-       
+
 
 
         /* ARROW BETWEEN STEPS */
@@ -553,6 +553,25 @@
             font-size: 10px;
         }
 
+        .output_part {
+            background: #757575;
+            border: 1px solid #3a3a3a;
+            color: #fff;
+            border-radius: 18px;
+            padding: 4px 8px;
+            font-size: 10px;
+
+            /* Handle long text */
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+
+            /* Responsive */
+            display: inline-block;
+            max-width: 100%;
+            text-align: center;
+        }
+
         @media(max-width:768px) {
 
             .flow-card {
@@ -749,14 +768,18 @@
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">Godowns Need To Work <button class="btn btn-success float-end" id="godown_summary_pdf_btn"><i class="fa-regular fa-file-pdf fa-bounce"></i></button></div>
+                        <div class="card-header">Godowns Need To Work <button class="btn btn-success float-end"
+                                id="godown_summary_pdf_btn"><i class="fa-regular fa-file-pdf fa-bounce"></i></button>
+                        </div>
                         <div class="card-body" id="godown_summary"></div>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header" >Materials Stock <button class="btn btn-success float-end" id="input_parts_summary_pdf_btn"><i class="fa-regular fa-file-pdf fa-bounce"></i></button></div>
+                        <div class="card-header">Materials Stock <button class="btn btn-success float-end"
+                                id="input_parts_summary_pdf_btn"><i
+                                    class="fa-regular fa-file-pdf fa-bounce"></i></button></div>
                         <div class="card-body" id="input_parts_summary"></div>
                     </div>
                 </div>

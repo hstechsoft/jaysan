@@ -325,6 +325,21 @@ $(document).ready(function () {
         get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts);
     })
 
+    $("#dc_status_tbody").on("click", ".dc_in", function () {
+
+        let dc_in = $(this).data("transport_dc_id");
+        let godown_id = $(this).data("godown_id");
+        let godown_name = $(this).data("godown_name");
+
+
+        if (!dc_in || dc_in < 1 || !godown_id || godown_id < 1) {
+            salert("Warning", "Data Missing! Try Later.", "warning");
+            return;
+        }
+
+        window.open( `dc_in.html?transport_dc_id=${dc_in}&godown_id=${godown_id}&name=${encodeURIComponent(godown_name)}`, "_blank" );
+    });
+
 });
 
 
@@ -691,7 +706,7 @@ function get_dc_report(current_godown, godown, part_id, process_id, sec, dc_sts)
                                 <td>${item.dc_type}</td>
                                 <td><span class="badge bg-secondary">${item.sts}</span></td>
                                 <td>
-                                    ${item.dc_inout_sts == 'ok' ? '<span class="badge bg-success">Completed</span>' : `<span class="badge bg-danger">${item.dc_inout_sts} Not Completed</span>` }
+                                    ${item.dc_inout_sts == 'ok' ? '<span class="badge bg-success">Completed</span>' : `<span class="badge  ${item.dc_inout_sts == "dc_in" ? "bg-primary dc_in" : "bg-danger"}" data-transport_dc_id="${item.transport_dc_id}" data-godown_id="${item.source_godown}" data-godown_name="${item.source}">${item.dc_inout_sts} Not Completed</span>`}
                                 </td>
                             </tr>
                         `);

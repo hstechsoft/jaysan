@@ -420,7 +420,7 @@ function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
                             <div class="col-4 attech_col">
                                 <a href="${item.path}"
                                 data-fancybox="attachments"
-                                data-caption="Attachment ${item.attach_id}">
+                                data-caption="Attachment Date: ${item.dated}">
                                     <img src="${item.path}"
                                         class="img-fluid rounded border shadow-sm"
                                         style="cursor:pointer;">
