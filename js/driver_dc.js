@@ -46,6 +46,7 @@ $(document).ready(function () {
     });
 
     check_login();
+    get_dc_attachment(current_user_id, '', '', 'create');
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -192,7 +193,7 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
-        
+
         $("#loc_status").removeClass("text-danger");
         $("#loc_status").addClass("text-success");
         get_godown_location(lat, lng)
@@ -366,6 +367,54 @@ function get_godown_wise_process(godown_id) {
 
 
 
+}
+
+function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
+    $.ajax({
+        url: "php/get_dc_attachment.php",
+        type: "get",
+        data: {
+            emp_id: emp_id,
+            godown: godown,
+            dc_id: dc_id,
+            dc_status: dc_status,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != "error") {
+
+                $("#attachment_list").empty();
+
+                if (response.trim() != "0 result") {
+
+                    let obj = JSON.parse(response);
+
+                    obj.forEach(function (item) {
+
+                        $("#attachment_list").append(`
+                            <div class="col-md-4 mb-3 attech_col">
+                                <img src="${item.path}"
+                                    class="img-fluid rounded border shadow-sm"
+                                    alt="Attachment">
+                            </div>
+                        `);
+
+                    });
+
+                } else {
+
+                            $("#attachment_list").html(`
+                    <p class="text-center text-danger">
+                        No Attachments Found.
+                    </p>
+                `);
+
+                }
+            }
+
+        }
+    })
 }
 
 
@@ -995,7 +1044,7 @@ function insert_new_process(processId) {
 
 function uploadFile() {
     $(".loading").removeClass("d-none");
-    var myParams = { "godown_id": $("#godown").data("godown_id"), "emp_id": current_user_id};
+    var myParams = { "godown_id": $("#godown").data("godown_id"), "emp_id": current_user_id };
     var url = 'https://jaysan.cloud/php/upload_dc.php';
     // Parameters are passed as the second argument
     if (window.AndroidBridge) {
