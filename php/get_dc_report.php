@@ -37,7 +37,8 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
-
+if( $part_id > 0 )
+  {
 // get process_id
 $sql_get_ids = "select if(pwt.output_part is null, concat('semi finished part of ', pt.part_name ,'( from - ',jp.process_name,')'), pt.part_name) as output_part,pwt.process_id,pwt.output_part,pwt2.process_title from process_wel_tbl pwt
 left join process_wel_tbl pwt2 on pwt.final_process_id = pwt2.process_id
@@ -53,7 +54,7 @@ while ($row_get_ids = mysqli_fetch_assoc($result_get_ids)) {
 
 // comma separated process_id
 $process_id1 = implode(',', $process_id1);
-
+  }
 if( $part_id > 0 || $process_id > 0)
   {
 
