@@ -30,6 +30,17 @@ $(document).ready(function () {
         }
     );
 
+    Fancybox.bind("[data-fancybox='attachments']", {
+        Toolbar: {
+            display: [
+                "zoom",
+                "fullscreen",
+                "slideshow",
+                "download",
+                "close"
+            ]
+        }
+    });
 
     $("#part_search").on("keyup", function () {
 
@@ -271,10 +282,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#attachment_list").on("click", ".attachment_img", function () {
-        $("#modalImage").attr("src", $(this).data("src"));
-        $("#imageModal").modal("show");
-    });
+
 
 });
 
@@ -402,21 +410,27 @@ function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
                 if (response.trim() != "0 result") {
 
                     let obj = JSON.parse(response);
+                    var count = 0;
 
                     obj.forEach(function (item) {
 
+                        count += 1;
+
                         $("#attachment_list").append(`
                             <div class="col-4 attech_col">
-                                <img src="${item.path}"
-                                    data-src="${item.path}"
-                                    value="${item.attach_id}"
-                                    class="img-fluid rounded border shadow-sm attachment_img"
-                                    alt="Attachment"
-                                    style="cursor:pointer;">
+                                <a href="${item.path}"
+                                data-fancybox="attachments"
+                                data-caption="Attachment ${item.attach_id}">
+                                    <img src="${item.path}"
+                                        class="img-fluid rounded border shadow-sm"
+                                        style="cursor:pointer;">
+                                </a>
                             </div>
                         `);
 
                     });
+
+                    $("#attachment_count").text(count);
 
                 } else {
 

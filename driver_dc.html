@@ -11,6 +11,7 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- bootsttrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.css" />
     <title>Document</title>
 
     <!-- external css -->
@@ -301,7 +302,7 @@
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#attachment_accordion" aria-expanded="true"
                             aria-controls="attachment_accordion">
-                            Attachments
+                            Attachments <span class="badge bg-primary" id="attachment_count"></span>
                         </button>
                     </h2>
                     <div id="attachment_accordion" class="accordion-collapse collapse " aria-labelledby="attachment"
@@ -397,19 +398,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="imageModal" tabindex="-1">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Attachment Preview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center overflow-auto">
-                    <img id="modalImage" src="" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <div id='footer' class="mt-auto"></div>
@@ -430,6 +418,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
+
+        <!-- Facnybox -->
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.js"></script>
 
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
