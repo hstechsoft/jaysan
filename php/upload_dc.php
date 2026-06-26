@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 
 include 'db_head.php';
 $godown_id = $_POST['godown_id'];
+$emp_id = $_POST['emp_id'];
 // get godown name
 $godown_name = '';
 $sql_name = "SELECT creditor_name FROM creditors WHERE creditor_id = '$godown_id'";
@@ -102,7 +103,7 @@ $filename1 =   "dc_" . $godown_id . "_" . time() . "." . $FileType;
     // echo $target_path;
 
     // insert into dc_attchment
-    $sql_insert = "INSERT INTO dc_attachment (godown, path) VALUES ('$godown_id', '$filename1')";
+    $sql_insert = "INSERT INTO dc_attachment (godown, path,emp_id) VALUES ('$godown_id', '$filename1', '$emp_id')";
     $conn->query($sql_insert);
     if ($conn->error) {
         echo "Error inserting into database: " . $conn->error;
