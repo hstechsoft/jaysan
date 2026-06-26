@@ -404,11 +404,11 @@ function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
 
                 } else {
 
-                            $("#attachment_list").html(`
-                    <p class="text-center text-danger">
-                        No Attachments Found.
-                    </p>
-                `);
+                    $("#attachment_list").html(`
+                        <p class="text-center text-danger">
+                            No Attachments Found.
+                        </p>
+                    `);
 
                 }
             }
