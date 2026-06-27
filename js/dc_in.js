@@ -49,7 +49,7 @@ $(document).ready(function () {
 
         var value = $(this).val().toLowerCase();
 
-        $("#manual_dc_card .card-body").each(function () {
+        $("#dc_parts_tbody tr").each(function () {
 
             $(this).toggle(
                 $(this).text().toLowerCase().indexOf(value) > -1
@@ -63,6 +63,7 @@ $(document).ready(function () {
     get_dc_attachment1('', '', '', 'create');
 
     if (transport_dc_id > 0 && godown_id > 0) {
+        $("#vendor").text(godown_name)
         $('#godown').data("godown_id", godown_id).val(godown_name);
         get_unassign_indc(transport_dc_id, godown_id);
     }
@@ -74,7 +75,6 @@ $(document).ready(function () {
         $(this).removeData("godown_id");
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
-        $(".dc_filess").prop("disabled", true);
         $(".alert_text").text('');
         $("#dc_switch").prop("checked", false);
 
@@ -113,8 +113,6 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    get_transport_parts_dc(ui.item.id);
-                    $(".dc_filess").prop("disabled", false);
 
                 },
 
@@ -128,13 +126,170 @@ $(document).ready(function () {
     });
 
     $("#all_parts").on("change", function () {
+        $("#parts_tbody").empty();
         if ($(this).is(":checked") && godown_id > 0) {
             get_unassign_indc('', godown_id);
         }
         else {
             get_unassign_indc(transport_dc_id, godown_id);
         }
-    })
+    });
+
+
+    // $("#in_dc_no").on("focusout", function () {
+    //     $("#dc_no").text($(this).val());
+    // });
+
+    // $("#dc_date").on("change focusout", function () {
+
+    //     let value = $(this).val();
+
+    //     if (value) {
+    //         let date = new Date(value);
+
+    //         let formatted =
+    //             String(date.getDate()).padStart(2, "0") + "-" +
+    //             String(date.getMonth() + 1).padStart(2, "0") + "-" +
+    //             date.getFullYear() + " " +
+    //             date.toLocaleTimeString([], {
+    //                 hour: "2-digit",
+    //                 minute: "2-digit",
+    //                 hour12: true
+    //             });
+
+    //         $("#dc_datee").text(formatted);
+    //     }
+    // });
+
+    // $("#transport_mode").on("focusout", function () {
+    //     $("#mode_of_transportt").text($(this).val());
+    // });
+
+    // $("#transport_des").on("focusout", function () {
+    //     $("#transport_descriptionn").text($(this).val());
+    // });
+
+    // $("#vehicle_no").on("focusout", function () {
+    //     $("#vehicle_noo").text($(this).val());
+    // });
+
+    // Select row by clicking anywhere on it
+
+    $("#dc_parts_tbody").on("click", "tr", function (e) {
+
+        if ($(e.target).is(".check_dc")) return;
+
+        const checkbox = $(this).find(".check_dc");
+
+        if (!checkbox.prop("checked")) {
+            checkbox.prop("checked", true).trigger("change");
+        }
+
+    });
+
+
+    $("#dc_parts_tbody").on("change", ".check_dc", function () {
+
+        var table_length = $("#parts_tbody tr:not(.total-row)").length;
+        var row = $(this).closest("tr");
+        var transport_id = row.data("transport_id");
+
+        if ($(this).is(":checked")) {
+
+            var count = table_length + 1;
+
+            $("#parts_tbody").append(`
+            <tr data-transport_id="${transport_id}">
+                <td>${count}</td>
+                <td>${row.find("td").eq(1).find("strong").text()}</td>
+                <td>${row.find("td").eq(1).find("span").text()}</td>
+                <td>${row.find("td").eq(2).text()}</td>
+                <td>
+                    <input type="number"
+                           class="form-control form-control-sm rounded-3 rate_per"
+                           placeholder="Rate/Per">
+                </td>
+                <td>
+                    <input type="number"
+                           class="form-control form-control-sm rounded-3 rate"
+                           placeholder="Total Amount">
+                </td>
+                <td>
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            data-transport_id="${transport_id}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `);
+
+            row.find("td").eq(3).find("input").prop("disabled", true);
+            row.addClass("d-none");
+
+        } else {
+
+            $("#parts_tbody tr[data-transport_id='" + transport_id + "']").remove();
+
+            row.find("td").eq(3).find("input").prop("disabled", false);
+            row.removeClass("d-none");
+
+            $("#parts_tbody tr:not(.total-row)").each(function (index) {
+                $(this).find("td:first").text(index + 1);
+            });
+
+        }
+
+        calculateTotal();
+    });
+
+
+    $("#parts_tbody").on("input focusout", ".rate, .rate_per", function () {
+
+        var row = $(this).closest('tr');
+        var qty = parseFloat(row.find('td').eq(3).text());
+
+        if ($(this).hasClass("rate_per")) {
+            var rate_per = parseFloat($(this).val() || 0)
+            row.find(".rate").val(qty * rate_per)
+        }
+        else {
+            var rate = parseFloat($(this).val() || 0)
+            row.find(".rate_per").val(rate / qty)
+        }
+        calculateTotal();
+    });
+
+
+    $("#parts_tbody").on("click", "button", function () {
+
+        var transport_id = $(this).data("transport_id");
+
+        $("#parts_tbody tr[data-transport_id='" + transport_id + "']").remove();
+
+        $("#dc_parts_tbody tr").each(function () {
+
+            if ($(this).data("transport_id") == transport_id) {
+
+                $(this)
+                    .removeClass("d-none")
+                    .find(".check_dc")
+                    .prop("checked", false);
+
+            }
+
+        });
+
+        $("#parts_tbody tr:not(.total-row)").each(function (index) {
+            $(this).find("td:first").text(index + 1);
+        });
+
+        calculateTotal();
+
+    });
+
+
+
 
 
     $("#dc_switch").on('change', function () {
@@ -186,7 +341,7 @@ $(document).ready(function () {
         var emp_id = current_user_id;
 
         $("#dc_parts_tbody tr").each(function () {
-            if ($(this).find("input").is(":checked")) {
+            if ($(this).find(".check_dc").is(":checked")) {
                 var part_id = $(this).data("part_id");
                 var transport_id = $(this).data("transport_id");
                 var part_pre_process_id = $(this).data("part_pre_process_id");
@@ -212,7 +367,7 @@ $(document).ready(function () {
         }
 
         else {
-            insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, JSON.stringify(dc_parts));
+            // insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, JSON.stringify(dc_parts));
         }
     })
 
@@ -244,6 +399,36 @@ $(document).ready(function () {
 
 });
 
+// Calculate Totals
+function calculateTotal() {
+
+    $("#parts_tbody .total-row").remove();
+
+    var total_qty = 0;
+    var total_amount = 0;
+
+    $("#parts_tbody tr").not(".total-row").each(function () {
+
+        total_qty += parseFloat($(this).find("td").eq(3).text()) || 0;
+        total_amount += parseFloat($(this).find(".rate").val()) || 0;
+
+    });
+
+    if ($("#parts_tbody tr").length > 0) {
+
+        $("#parts_tbody").append(`
+            <tr class="total-row fw-bold">
+                <td colspan="3" class="text-end">Total</td>
+                <td>${total_qty}</td>
+                <td colspan="2" class="text-end">${total_amount.toFixed(2)}</td>
+                <td></td>
+            </tr>
+        `);
+
+    }
+
+}
+
 
 function get_unassign_indc(transport_dc_id, godown_id) {
 
@@ -272,7 +457,7 @@ function get_unassign_indc(transport_dc_id, godown_id) {
 
                         count += 1;
 
-                        $("#dc_parts_tbody").append(`<tr data-part_id="${item.part_id}" data-transport_id="${item.transport_id}" data-part_pre_process_id="${item.process_id}" data-qty="${item.qty}"><td>${count}</td><td>${item.output_part} <br><span class='badge bg-secondary'>${item.process_name}</span></td><td>${item.qty}</td><td><input type='checkbox'></td></tr>`);
+                        $("#dc_parts_tbody").append(`<tr data-part_id="${item.part_id}" data-transport_id="${item.transport_id}" data-part_pre_process_id="${item.process_id}" data-qty="${item.qty}"><td>${count}</td><td><strong>${item.output_part}</strong> <br><span class='badge bg-secondary'>${item.process_name}</span></td><td>${item.qty}</td><td class="d-none"><input type='checkbox' class='check_dc'></td></tr>`);
 
                     });
 
@@ -349,7 +534,7 @@ function get_dc_attachment1(emp_id, godown, dc_id, dc_status) {
 function insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, dc_parts) {
 
     console.log(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, dc_parts);
-    
+
     $.ajax({
         url: "php/insert_indc.php",
         type: "post", //send it through get method
