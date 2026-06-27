@@ -267,41 +267,20 @@
                         <label for="godown">Vendor </label>
                     </div>
 
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="in_dc_no" placeholder="">
-                        <label for="in_dc_no">In DC/No</label>
-                    </div>
-                    
-                    <div class="form-floating mb-2">
-                        <input type="datetime-local" class="form-control rounded-3" id="dc_date" placeholder="">
-                        <label for="dc_date">DC Date</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="transport_mode" placeholder="">
-                        <label for="transport_mode">Mode Of Transport</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="transport_des" placeholder="">
-                        <label for="transport_des">Transport Description</label>
-                    </div>
-
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control rounded-3" id="vehicle_no" placeholder="">
-                        <label for="vehicle_no">Vehicle/No</label>
-                    </div>
-
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
                         <table class="table small caption-top table-bordered table-striped ">
                             <caption></caption>
-                            <thead class="small">
+                            <thead class="small"
+                                style="position: sticky; z-index: 5; top: 0; background-color: #e0ecff;">
 
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Part Name</th>
+                                    <th scope="col">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="part_search" placeholder="Part Name">
+                                    </th>
                                     <th scope="col">Qty</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col" class="d-none">Action</th>
 
                                 </tr>
                             </thead>
@@ -314,10 +293,67 @@
                         </table>
                     </div>
 
-                    <button type="button" class="btn btn-primary " id="in_dc_btn">Submit</button>
                 </div>
 
-                <div class="col-md-6"></div>
+                <div class="col-md-6">
+
+                    <div class="table-responsive">
+                        <table class="table small caption-top table-bordered table-striped ">
+                            <caption>DC In</caption>
+                            <thead class="small">
+
+                                <tr>
+                                    <th scope="col" colspan="5" id="vendor">Vendor</th>
+                                    <th scope="col" id="dc_no">
+                                        <input type="text" class="form-control form-control-sm rounded-3" id="in_dc_no"
+                                            placeholder="DC/No">
+                                    </th>
+                                    <th scope="col" id="dc_datee">
+                                        <input type="datetime-local" id="dc_date"
+                                            class="form-control form-control-sm rounded-3" placeholder="DC Date">
+                                    </th>
+
+                                </tr>
+
+                                <tr>
+                                    <th scope="col" colspan="5" id="transport_descriptionn">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="transport_mode" placeholder="Mode Of Transport">
+                                    </th>
+                                    <th scope="col" id="mode_of_transportt">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="transport_des" placeholder="Transport Description">
+
+                                    </th>
+                                    <th scope="col" id="vehicle_noo">
+                                        <input type="text" class="form-control form-control-sm rounded-3"
+                                            id="vehicle_no" placeholder="Vehicle/No">
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Part Name</th>
+                                    <th scope="col">Process</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Rate/Per</th>
+                                    <th scope="col">Total Rate</th>
+                                    <th scope="col">Delet</th>
+                                </tr>
+
+                            </thead>
+                            <tbody class="small" id="parts_tbody">
+
+                            </tbody>
+
+
+                        </table>
+
+                        <button type="button" class="btn btn-primary float-end " id="in_dc_btn">Submit</button>
+
+                    </div>
+
+                </div>
 
                 <div class="col-md-3">
                     <div class="accordion mt-2" id="accordionExample">
