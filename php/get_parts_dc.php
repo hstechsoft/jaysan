@@ -81,7 +81,7 @@ return $data;
     
         FROM
             process_cte
-             left JOIN stock_reserve_view srv on process_cte.input_part_id <=> srv.part_id 
+             left JOIN stock_reserve_view_dc srv on process_cte.input_part_id <=> srv.part_id 
             and process_cte.in_previous_process_id <=> srv.process_id
 
             group by
@@ -253,8 +253,8 @@ FROM
     if(sum(godown_flag) > 0, 1, 0) as has_godown
 
     from godwn group by process_id order by level DESC),
-    out_process_stock as(select process_wel_tbl.process_id,ifnull(parts_tbl.part_name, concat('semi finished part ', jaysan_process.process_name)) as part_name,jaysan_process.process_name,sum(stock_reserve_view.qty) as qty,reserve_qty,reserve_details from stock_reserve_view 
-    inner join process_wel_tbl on stock_reserve_view.process_id = process_wel_tbl.process_id
+    out_process_stock as(select process_wel_tbl.process_id,ifnull(parts_tbl.part_name, concat('semi finished part ', jaysan_process.process_name)) as part_name,jaysan_process.process_name,sum(stock_reserve_view_dc.qty) as qty,reserve_qty,reserve_details from stock_reserve_view_dc 
+    inner join process_wel_tbl on stock_reserve_view_dc.process_id = process_wel_tbl.process_id
     left join parts_tbl on process_wel_tbl.output_part = parts_tbl.part_id
     left join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
     where godown = $dest_godown_id group by process_wel_tbl.process_id)
