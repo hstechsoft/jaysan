@@ -25,6 +25,23 @@ $(document).ready(function () {
     }
   );
 
+  // Current Location
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        console.log("Latitude:", position.coords.latitude);
+        console.log("Longitude:", position.coords.longitude);
+        console.log("Accuracy:", position.coords.accuracy + " meters");
+        get_godown_locations(position.coords.latitude, position.coords.longitude)
+      },
+      function (error) {
+        console.log(error.message);
+      }
+    );
+  } else {
+    console.log("Geolocation is not supported.");
+  }
 
   $("#summary_search").on("keyup", function () {
     var value = $(this).val().toLowerCase();

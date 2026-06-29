@@ -45,6 +45,7 @@ $(document).ready(function () {
         }
     });
 
+
     $("#part_search").on("keyup", function () {
 
         var value = $(this).val().toLowerCase();
@@ -193,13 +194,15 @@ $(document).ready(function () {
         var table_length = $("#parts_tbody tr:not(.total-row)").length;
         var row = $(this).closest("tr");
         var transport_id = row.data("transport_id");
+        var part_pre_process_id = row.data("part_pre_process_id");
+        var part_id = row.data("part_id");
 
         if ($(this).is(":checked")) {
 
             var count = table_length + 1;
 
             $("#parts_tbody").append(`
-            <tr data-transport_id="${transport_id}">
+            <tr data-transport_id="${transport_id}" data-part_id="${part_id}" data-part_pre_process_id="${part_pre_process_id}" data-qty="${row.find("td").eq(2).text()}">
                 <td>${count}</td>
                 <td>${row.find("td").eq(1).find("strong").text()}</td>
                 <td>${row.find("td").eq(1).find("span").text()}</td>
@@ -340,16 +343,14 @@ $(document).ready(function () {
 
         var emp_id = current_user_id;
 
-        $("#dc_parts_tbody tr").each(function () {
-            if ($(this).find(".check_dc").is(":checked")) {
-                var part_id = $(this).data("part_id");
-                var transport_id = $(this).data("transport_id");
-                var part_pre_process_id = $(this).data("part_pre_process_id");
-                var rate = 0;
-                var qty = $(this).data("qty");
+        $("#parts_tbody tr:not(.total-row)").each(function () {
+            var part_id = $(this).data("part_id");
+            var transport_id = $(this).data("transport_id");
+            var part_pre_process_id = $(this).data("part_pre_process_id");
+            var rate = $(this).find('td').eq(4).find('input').val();
+            var qty = $(this).data("qty");
 
-                dc_parts.push({ part_id: part_id, transport_id: transport_id, part_pre_process_id: part_pre_process_id, rate: rate, qty: qty })
-            }
+            dc_parts.push({ part_id: part_id, transport_id: transport_id, part_pre_process_id: part_pre_process_id, rate: rate, qty: qty })
         })
 
         console.log(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, dc_parts);
@@ -367,7 +368,7 @@ $(document).ready(function () {
         }
 
         else {
-            // insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, JSON.stringify(dc_parts));
+            insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no, emp_id, attach_id, in_dc_no, JSON.stringify(dc_parts));
         }
     })
 
@@ -556,7 +557,7 @@ function insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no,
 
 
             if (response.trim() == "ok") {
-                window.location.reload();
+                // window.location.reload();
             }
 
 
