@@ -8,6 +8,11 @@ include "ProductionPlanner.php";
 
 $stock = loadStock($conn);
 
+
+
+
+
+ 
 $bom = loadBom($conn);
 
 $planner = new ProductionPlanner($stock, $bom);
