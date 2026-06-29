@@ -20,7 +20,168 @@
 
 
     <style>
+        .order-card {
+            transition: .25s;
+            border: 1px solid #eef2f7;
+        }
 
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .08) !important;
+        }
+
+        .order-card .badge {
+            font-size: .72rem;
+            font-weight: 500;
+            padding: .45rem .75rem;
+            border-radius: 20px;
+        }
+
+        .product-description {
+            background: #f8fafc;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: .85rem;
+            color: #555;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .input-group {
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .input-group-text {
+            font-weight: 600;
+            min-width: 60px;
+            justify-content: center;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .custom-accordion .accordion-item {
+            overflow: hidden;
+        }
+
+        .custom-accordion .accordion-button {
+            background: #fff;
+            box-shadow: none;
+            padding: 18px;
+        }
+
+        .custom-accordion .accordion-button:not(.collapsed) {
+            background: #f8fafc;
+        }
+
+        .part-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr .8fr .8fr .8fr 100px;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .part-name strong {
+            font-size: .95rem;
+        }
+
+        .qty-box {
+            text-align: center;
+        }
+
+        .qty-box small {
+            display: block;
+            color: #6c757d;
+            font-size: .72rem;
+            margin-bottom: 4px;
+        }
+
+        .qty-box .badge {
+            min-width: 55px;
+            border-radius: 20px;
+            font-size: .75rem;
+        }
+
+        .qty-input input {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .godown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .godown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            background: #f8fafc;
+            border: 1px solid #edf0f3;
+            border-radius: 12px;
+        }
+
+        @media (max-width:992px) {
+
+            .part-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
+
+            .qty-input {
+                grid-column: 1 / -1;
+            }
+
+        }
+
+        @media (max-width:576px) {
+
+            .order-card .card-body,
+            .order-card .card-footer {
+                padding: 1rem;
+            }
+
+            .order-card .badge {
+                font-size: .68rem;
+            }
+
+            .product-description {
+                font-size: .8rem;
+            }
+
+            .part-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qty-box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+            }
+
+            .godown-item {
+                /* flex-direction: column; */
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .qty-input input {
+                width: 100%;
+            }
+
+            .custom-accordion .accordion-button {
+                padding: 8px;
+            }
+
+        }
     </style>
 
 
@@ -52,32 +213,223 @@
 
             <div class="row">
 
-                <div class="col-md-5">
-                    <div class="card">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div class="card d-flex justify-content-between">
-                                    <div class="card-body">
-                                        <h6>Sale Order Nos:</h6>
-                                        <p>450,623,465</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6>Product Details</h6>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="badge bg-primary">Baler</span>
-                                            <span class="badge bg-secondary">JRB 312</span>
-                                            <span class="badge bg-primary">4G+</span>
-                                        </div>
-                                        <span class="border">30 Dai Roller, Scale, 3/4 16 Teeth Chain, Withdoor</span>
-                                    </div>
-                                    <div class="card-body"></div>
+                <div class="col-12 col-md-6 col-lg-5">
+                    <div class="card shadow-sm border-0 rounded-4 order-card">
+
+                        <div class="card-body p-2">
+
+                            <!-- Sale Order -->
+                            <div class="mb-1">
+                                <small class="text-muted fw-semibold">Sale Order Nos:</small>
+                                <div class="mt-1 d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border">#450</span>
+                                    <span class="badge bg-light text-dark border">#623</span>
+                                    <span class="badge bg-light text-dark border">#465</span>
                                 </div>
-                            </li>
-                        </ul>
+                            </div>
+
+                            <hr class="my-1">
+
+                            <!-- Product Details -->
+                            <div>
+                                <small class="text-muted fw-semibold d-block mb-1">
+                                    Product Details
+                                </small>
+
+                                <div class="d-flex flex-wrap gap-2 mb-1">
+                                    <span class="badge bg-primary">Baler</span>
+                                    <span class="badge bg-secondary">JRB 312</span>
+                                    <span class="badge bg-success">4G+</span>
+                                </div>
+
+                                <div class="product-description">
+                                    30 Dai Roller, Scale, 3/4 16 Teeth Chain, With Door
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0 p-1 pt-0">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    Qty
+                                </span>
+                                <input type="number" class="form-control form-control-sm border-0 shadow-none"
+                                    placeholder="Enter Quantity">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="col-md-7"></div>
+                <div class="col-12 col-md-6 col-lg-7 my-2 my-sm-0">
+
+                    <div class="accordion custom-accordion" id="partAccordion">
+
+                        <div class="accordion-item shadow-sm border-0 rounded-4 mb-3">
+
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed part-header" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseOne">
+
+                                    <div class="part-grid">
+
+                                        <div class="part-name">
+                                            <small class="text-muted d-block">Part Name</small>
+                                            <strong>30 Dai Roller</strong>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Requested</small>
+                                            <span class="badge bg-primary">25</span>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Available</small>
+                                            <span class="badge bg-success">18</span>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Required</small>
+                                            <span class="badge bg-danger">7</span>
+                                        </div>
+
+                                        <div class="qty-input">
+                                            <input type="number" class="form-control form-control-sm rounded-3"
+                                                value="7" placeholder="Qty">
+                                        </div>
+
+                                    </div>
+
+                                </button>
+                            </h2>
+
+                            <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#partAccordion">
+
+                                <div class="accordion-body">
+
+                                    <div class="godown-list">
+
+                                        <div class="godown-item">
+                                            <div>
+                                                <strong>Varun CNC</strong>
+                                                <small class="text-muted d-block">
+                                                    Available Stock
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary px-3 py-2">
+                                                Qty : 10
+                                            </span>
+
+                                        </div>
+
+                                        <div class="godown-item">
+                                            <div>
+                                                <strong>King Coats</strong>
+                                                <small class="text-muted d-block">
+                                                    Available Stock
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary px-3 py-2">
+                                                Qty : 8
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="accordion-item shadow-sm border-0 rounded-4 mb-3">
+
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed part-header" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+
+                                    <div class="part-grid">
+
+                                        <div class="part-name">
+                                            <small class="text-muted d-block">Part Name</small>
+                                            <strong>3/4 16 Teeth Chain</strong>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Requested</small>
+                                            <span class="badge bg-primary">33</span>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Available</small>
+                                            <span class="badge bg-success">3</span>
+                                        </div>
+
+                                        <div class="qty-box">
+                                            <small>Required</small>
+                                            <span class="badge bg-danger">30</span>
+                                        </div>
+
+                                        <div class="qty-input">
+                                            <input type="number" class="form-control form-control-sm rounded-3"
+                                                value="30" placeholder="Qty">
+                                        </div>
+
+                                    </div>
+
+                                </button>
+                            </h2>
+
+                            <div id="collapseTwo" class="accordion-collapse collapse " data-bs-parent="#partAccordion">
+
+                                <div class="accordion-body">
+
+                                    <div class="godown-list">
+
+                                        <div class="godown-item">
+                                            <div>
+                                                <strong>Varun CNC</strong>
+                                                <small class="text-muted d-block">
+                                                    Available Stock
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary px-3 py-2">
+                                                Qty : 12
+                                            </span>
+
+                                        </div>
+
+                                        <div class="godown-item">
+                                            <div>
+                                                <strong>King Coats</strong>
+                                                <small class="text-muted d-block">
+                                                    Available Stock
+                                                </small>
+                                            </div>
+
+                                            <span class="badge bg-secondary px-3 py-2">
+                                                Qty : 21
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-primary float-end" id="">Submit Plan <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+
+                </div>
 
             </div>
 

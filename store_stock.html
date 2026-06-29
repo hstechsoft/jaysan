@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        .needs-validation {
+            padding: 0.75rem !important;
+        }
+
+        .form-floating>.form-control {
+            height: 2.2rem !important;
+            padding: 0.25rem .5rem !important;
+            font-size: .8rem;
+        }
+
+        .form-floating>label {
+            padding: 0.25rem .5rem !important;
+            font-size: .7rem;
+        }
+
+        /* Make input groups compact */
+        .input-group-sm .form-control,
+        .input-group-sm .input-group-text {
+            padding: .15rem .3rem !important;
+            font-size: .75rem !important;
+        }
+
+        /* Table compactness */
+        .table th,
+        .table td {
+            padding: .35rem .5rem !important;
+            font-size: .8rem;
+        }
+
+        .table caption {
+            padding-bottom: .3rem !important;
+        }
+
+        /* Reduce overall card/form spacing */
+        .p-4 {
+            padding: 1rem !important;
+        }
+
+        /* Reduce spacing between floating fields */
+        .mb-2 {
+            margin-bottom: .4rem !important;
+        }
+
+        /* Compact button */
+        #section_stock_btn {
+            padding: .3rem .8rem !important;
+            font-size: .8rem !important;
+        }
+
+        #mobile_form_view_r {
+            display: none;
+        }
+
+        #mobile_form_view {
+            display: block;
+        }
+
+        @media screen and (max-width: 747px) {
+            #mobile_form_view_r {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            #mobile_form_view {
+                display: none;
+            }
+
+            .table th,
+            .table td {
+                font-size: .65rem !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+
+    <section id="menu_bar"></section>
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+        <!-- top bar -->
+
+
+
+
+
+
+
+
+        <div class="page-wrapper  mt-5 mt-md-0">
+
+            <!-- content -->
+
+            <!-- <div id="mobile_form_view_r">
+                <div class="form-check form-switch m-0" style="font-size: 20px;">
+                    <input class="form-check-input" type="checkbox" id="mobile_form_view_btn">
+                    <label for="mobile_form_view_btn" class="cursor-pointer">
+                        <i class="fa-solid fa-align-right"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="row"> -->
+
+                <!-- <div class="col-md-2" id="mobile_form_view">
+                    <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
+                        onsubmit="return false">
+
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="section" placeholder="">
+                            <label for="section">Section</label>
+                        </div>
+
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="part" placeholder="">
+                            <label for="part">Part </label>
+                        </div>
+
+
+                        <div class="form-floating mb-2">
+                            <input type="number" class="form-control rounded-3" id="qty" placeholder="">
+                            <label for="qty">Qty</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary " id="section_stock_btn">Submit</button>
+
+                    </form>
+                </div> -->
+
+
+                <div class="col-md-12">
+
+                    <div class="table-responsive d-none" id="allocation_confirmation_table">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <thead>
+
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Part Name</th>
+                                    <th scope="col">Requested Qty</th>
+                                    <th scope="col">Allocated Qty</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="allocation_confirmation_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between m-2">
+                        <div class="p-0 mb-3">
+                            <select class="form-select " disabled id="section_select_stock">
+                                <option selected disabled value="30">Store</option>
+                            </select>
+                            <!-- <label for="section_select_stock">Section</label> -->
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" id="add_stock_row">+</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                        <table class="table caption-top table-bordered table-striped ">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">#</th>
+                                    <th scope="col"><input type="text" name="" id="section_stock_tabel_search"
+                                            placeholder="Part"></th>
+
+                                    <th scope="col" class="d-flex justify-content-between">Qty
+                                        <div class="form-check form-switch m-0 d-none ms-3" id="tog">
+                                            <input class="form-check-input" type="checkbox" id="section_min_max_view">
+                                            <label for="section_min_max_view" class="cursor-pointer">
+                                                <i class="fa fa-eye"></i>
+                                            </label>
+                                        </div>
+                                    </th>
+                                    <!-- <th scope="col">System Stock</th> -->
+                                    <th scope="col">Action</th>
+                                    <!-- <th>
+                                        <div class="position-relative">
+                                            <select class="form-select  form-select-sm ps-4 rounded-2"
+                                                id="search_part_type">
+                                                <option selected disabled value="">Part type</option>
+                                                <option value="purchase">Purchase</option>
+                                                <option value="welding">Welding</option>
+                                                <option value="job_work">Job Work</option>
+                                            </select>
+                                        </div>
+                                    </th> -->
+
+                                </tr>
+                            </thead>
+                            <tbody id="section_stock_tbody">
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Material Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure do you need to request materials
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="req_btn">Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="sectionConfirmationModal" tabindex="-1" aria-labelledby="sectionConfirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sectionConfirmationModalLabel">Confirm the Qty</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control rounded-3" id="sec_qty" placeholder="">
+                        <label for="sec_qty">Received Qty
+                        </label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="sec_remark" placeholder="">
+                        <label for="sec_remark">Remarks
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sec_confirm_btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='footer' class="mt-auto"></div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <!-- external js -->
+    <script src="js/store_stock.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>
