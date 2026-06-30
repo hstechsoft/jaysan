@@ -81,7 +81,14 @@ if ($qty > $stock_qty) {
         }   
         
         
-        // using that new_stock_id update stock reserve with new stock id and reserve qty
+        // update stock reserve with completed qty + qty
+   $sql_update_reserve = "UPDATE stock_reserve SET  reserve_qty = ifnull(completed_qty, 0) + $qty, reserve_status = if(reserve_qty - (ifnull(completed_qty, 0) + $qty),'finish','active') WHERE stock_reserve_id = $stock_reserve_id";
+                if (!$conn->query($sql_update_reserve)) {
+                    throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
+                }
+
+        
+
                 $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
                 if (!$conn->query($sql_update_reserve)) {
                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
