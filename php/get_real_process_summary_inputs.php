@@ -248,6 +248,8 @@ if ($result->num_rows > 0) {
             'max_level' => $level,
             'requseted_qty' => $qty_needed,
             'available_qty' => $value['stock_qty'],
+            '$production_qty' => $value['produce_qty'],
+            'consume_qty' => $value['consume_qty'],
 
 
             'required_qty' => $required_qty1
