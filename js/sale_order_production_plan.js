@@ -34,11 +34,49 @@ $(document).ready(function () {
     });
   });
 
+  $("#search_order").on("keyup", function () {
+    let value = $(this).val().toLowerCase().trim();
+
+    $("#sale_order_details_container .order-card").each(function () {
+
+      let text = $(this).text().toLowerCase();
+
+      $(this).find("input").each(function () {
+        text += " " + $(this).val().toString().toLowerCase();
+      });
+
+      $(this).toggle(text.includes(value));
+    });
+  });
+
   check_login();
+
+  get_sale_order_plan();
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
+  $("#sale_order_details_container").on("click", ".sale_span", function () {
+    var oid = $(this).data("oid");
+    var required_qty = $(this).data("required_qty");
 
+    var card = $(this).closest(".order-card");
+    var selected_qty_input = card.find(".selected_qty").val();
+
+    card.find(".selected_qty").addClass("change_qty_style");
+    setTimeout(() => {
+      card.find(".selected_qty").removeClass("change_qty_style");
+    }, 600);
+    console.log(oid, required_qty, selected_qty_input);
+
+    if ($(this).hasClass("selected_order")) {
+      $(this).removeClass("selected_order");
+      card.find(".selected_qty").val(parseInt(selected_qty_input) - parseInt(required_qty));
+    }
+    else {
+      $(this).addClass("selected_order");
+      card.find(".selected_qty").val(parseInt(selected_qty_input) + parseInt(required_qty));
+    }
+  });
 
 });
 
@@ -47,7 +85,102 @@ $(document).ready(function () {
 
 
 
+function get_sale_order_plan() {
 
+  $.ajax({
+    url: "php/get_sale_order_plan.php",
+    type: "get", //send it through get method
+    data: {
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim() != "error") {
+        $('#sale_order_details_container').empty();
+        if (response.trim() != "0 result") {
+          var obj = JSON.parse(response);
+
+          obj.forEach(function (obj) {
+
+            var order_info = JSON.parse(obj.order_info);
+            var sale_order_nos = ``;
+
+            order_info.forEach(function (order) {
+              sale_order_nos += `<span class="badge  text-dark border sale_span selected_order" data-oid="${order.oid}" data-required_qty="${order.required_qty}">#${order.order_no}</span>`;
+            });
+
+            $('#sale_order_details_container').append(`
+              <div class="card shadow-sm border-0 rounded-4 order-card mb-2">
+
+                        <div class="card-body p-2">
+
+                            <!-- Sale Order -->
+                            <div class="mb-1">
+                                <small class="text-muted fw-semibold">Sale Order Nos:</small>
+                                <div class="mt-1 d-flex flex-wrap gap-2">
+                                    ${sale_order_nos}
+                                </div>
+                            </div>
+
+                            <hr class="my-1">
+
+                            <!-- Product Details -->
+                            <div>
+                                <small class="text-muted fw-semibold d-block mb-1">
+                                    Product Details
+                                </small>
+
+                                <div class="d-flex flex-wrap gap-2 mb-1">
+                                    <span class="badge bg-primary">${obj.product}</span>
+                                    <span class="badge bg-secondary">${obj.model_name}</span>
+                                    <span class="badge bg-success">${obj.type_name}</span>
+                                </div>
+
+                                <div class="product-description">
+                                    ${obj.sub_type}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0 p-1 pt-0">
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0">
+                                    Qty
+                                </span>
+                                <input type="number" class="form-control form-control-sm border-0 shadow-none" disabled value="${obj.total_required_qty}" placeholder="Enter Quantity">
+                                <input type="number" class="form-control form-control-sm border-0 shadow-none selected_qty" value="${obj.total_required_qty}" placeholder="Enter Quantity">
+                            </div>
+                        </div>
+
+                    </div>
+              `)
+          });
+
+        }
+        else {
+          $('#sale_order_details_container').html('<div class="alert alert-info" role="alert">No Sale Orders Found</div>');
+        }
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 
 function insert_new_process(processId) {

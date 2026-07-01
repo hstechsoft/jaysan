@@ -544,7 +544,7 @@ function get_real_process_summary_inputs(process_id, qty) {
 
                 let inputs = '';
 
-                (JSON.parse(item.input_parts || "[]")).forEach(part => {
+                (item.input_parts || "[]").forEach(part => {
 
                     inputs += `
                         <span class='part'>

@@ -128,6 +128,18 @@
             border-radius: 12px;
         }
 
+        .selected_order {
+            background: #b8dfa5;
+            color: #215f02 !important;
+        }
+
+        .change_qty_style {
+            border: 2px solid #ff3f3f !important;
+            box-shadow: 0 0px 40px rgb(255 21 21) !important;
+            background: #fff0f0;
+            transition: ease-in-out 0.3s;
+        }
+
         @media (max-width:992px) {
 
             .part-grid {
@@ -214,51 +226,60 @@
             <div class="row">
 
                 <div class="col-12 col-md-6 col-lg-5">
-                    <div class="card shadow-sm border-0 rounded-4 order-card">
+                    <div class="border rounded-3 bg-secondary p-1 mb-2 d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 text-white">Sale Order Details</h6>
+                        <input type="text" class="form-control form-control-sm rounded-3 shadow-none w-50" id="search_order"
+                            placeholder="Search Order">
+                    </div>
+                    <div id="sale_order_details_container" style="max-height: 75vh; overflow-y: auto;">
+                        <div class="card shadow-sm border-0 rounded-4 order-card">
 
-                        <div class="card-body p-2">
+                            <div class="card-body p-2">
 
-                            <!-- Sale Order -->
-                            <div class="mb-1">
-                                <small class="text-muted fw-semibold">Sale Order Nos:</small>
-                                <div class="mt-1 d-flex flex-wrap gap-2">
-                                    <span class="badge bg-light text-dark border">#450</span>
-                                    <span class="badge bg-light text-dark border">#623</span>
-                                    <span class="badge bg-light text-dark border">#465</span>
+                                <!-- Sale Order -->
+                                <div class="mb-1">
+                                    <small class="text-muted fw-semibold">Sale Order Nos:</small>
+                                    <div class="mt-1 d-flex flex-wrap gap-2">
+                                        <span class="badge bg-light text-dark border">#450</span>
+                                        <span class="badge bg-light text-dark border">#623</span>
+                                        <span class="badge bg-light text-dark border">#465</span>
+                                    </div>
                                 </div>
+
+                                <hr class="my-1">
+
+                                <!-- Product Details -->
+                                <div>
+                                    <small class="text-muted fw-semibold d-block mb-1">
+                                        Product Details
+                                    </small>
+
+                                    <div class="d-flex flex-wrap gap-2 mb-1">
+                                        <span class="badge bg-primary">Baler</span>
+                                        <span class="badge bg-secondary">JRB 312</span>
+                                        <span class="badge bg-success">4G+</span>
+                                    </div>
+
+                                    <div class="product-description">
+                                        30 Dai Roller, Scale, 3/4 16 Teeth Chain, With Door
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <hr class="my-1">
-
-                            <!-- Product Details -->
-                            <div>
-                                <small class="text-muted fw-semibold d-block mb-1">
-                                    Product Details
-                                </small>
-
-                                <div class="d-flex flex-wrap gap-2 mb-1">
-                                    <span class="badge bg-primary">Baler</span>
-                                    <span class="badge bg-secondary">JRB 312</span>
-                                    <span class="badge bg-success">4G+</span>
-                                </div>
-
-                                <div class="product-description">
-                                    30 Dai Roller, Scale, 3/4 16 Teeth Chain, With Door
+                            <div class="card-footer bg-white border-0 p-1 pt-0">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        Qty
+                                    </span>
+                                    <input type="number" class="form-control form-control-sm border-0 shadow-none"
+                                        placeholder="Enter Quantity">
+                                    <input type="number" class="form-control form-control-sm border-0 shadow-none"
+                                        placeholder="Enter Quantity">
                                 </div>
                             </div>
 
                         </div>
-
-                        <div class="card-footer bg-white border-0 p-1 pt-0">
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    Qty
-                                </span>
-                                <input type="number" class="form-control form-control-sm border-0 shadow-none"
-                                    placeholder="Enter Quantity">
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
@@ -427,7 +448,8 @@
 
                     </div>
 
-                    <button type="button" class="btn btn-primary float-end" id="">Submit Plan <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                    <button type="button" class="btn btn-primary float-end" id="">Submit Plan <i
+                            class="fa-solid fa-arrow-right-to-bracket"></i></button>
 
                 </div>
 
