@@ -583,7 +583,7 @@ function get_real_process_summary_inputs(process_id, qty) {
                         </span>
 
                         <span class="requseted_qty">
-                        RQ - ${item.requseted_qty}
+                        RQ - ${item.required_qty}
                         </span>
 
                         <span class="time">

@@ -151,7 +151,7 @@ function get_sale_order_plan() {
                                 <span class="input-group-text bg-light border-0">
                                     Qty
                                 </span>
-                                <input type="number" class="form-control form-control-sm border-0 shadow-none" disabled value="${obj.total_required_qty}" placeholder="Enter Quantity">
+                                <input type="text" class="form-control form-control-sm border-0 shadow-none" disabled value="Total Qty: ${obj.total_required_qty}" placeholder="Enter Quantity">
                                 <input type="number" class="form-control form-control-sm border-0 shadow-none selected_qty" value="${obj.total_required_qty}" placeholder="Enter Quantity">
                             </div>
                         </div>
