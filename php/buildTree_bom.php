@@ -85,6 +85,7 @@ foreach ($demandReserve as $key => $value) {
     echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
 $output_part = $value['output_part'];
     $process_id = $value['process_id'];
+    $part_id = $value['output_part'];
     $qty = $value['qty'];
     // get stock  from stock table and reserve that stock until $qty = 0
 $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE process_id = $process_id AND available_qty > 0 ORDER BY stock_id ASC";
@@ -130,11 +131,12 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
 echo "<br><hr><h3>Demands</h3>";
 foreach ($demands as $key => $value) {
     echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
-    $process_id = $value['process_id'];
+    $process_id = sql_nullable($value['process_id']);
     $qty = $value['qty'];
+    $part_id = sql_nullable($value['output_part']);
 
     // insert into demands table if not exist else update qty = qty + $qty
-    $sql_insert_demand = "INSERT INTO demand (process_id, demand_qty,plan_id,created_by) VALUES ($process_id, $qty, $plan_id, $created_by)";
+    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by)";
     $conn->query($sql_insert_demand);
     if ($conn->affected_rows > 0) {
         echo "Inserted demand for Process ID: $process_id, Quantity: $qty<br>";
