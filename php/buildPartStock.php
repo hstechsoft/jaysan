@@ -3,11 +3,11 @@ function buildPartStock($conn, $node)
 {
 
 $part_ids_str = $node; // Assuming $node is a comma-separated string of part IDs
-// get stock from jaysan_stock table
+// get stock from stock_reserve_view table
 
-$sql_stock = "select jaysan_stock.part_id,part_name, qty,stock_id,godown,dep,sec from jaysan_stock
-inner join parts_tbl on jaysan_stock.part_id = parts_tbl.part_id
-where jaysan_stock.part_id in ($part_ids_str)";
+$sql_stock = "select stock_reserve_view.part_id,part_name, qty,stock_id,godown,dep,sec from stock_reserve_view
+inner join parts_tbl on stock_reserve_view.part_id = parts_tbl.part_id
+where stock_reserve_view.part_id in ($part_ids_str)";
 // get result as $partStock = [
 
     // 16298 => [

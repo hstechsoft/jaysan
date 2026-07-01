@@ -18,7 +18,7 @@ return $data;
  require_once 'collectPartIds.php';
  require_once 'buildProcessStock.php';
  require_once 'planTree.php';
-$required_qty = 100; // Set the required quantity for the root process
+$required_qty = 1; // Set the required quantity for the root process
 $tree = buildTree($conn, $proces_id, $required_qty);
 $partIds = [];
 $processIds = [];
@@ -57,8 +57,20 @@ $process_ids_str = implode(',', $process_ids);
 $partStock = buildPartStock($conn, $part_ids_str);
 $processStock = buildProcessStock($conn, $process_ids_str);
 
-planTree($tree, $partStock, $processStock);
+$demandReserve = [];
+$demands = [];
+planTree($tree, $partStock, $processStock, $demandReserve, $demands);
+echo "<hr>";
+echo "<h3>Stock Reserve</h3>";
+// get array as for each
+foreach ($demandReserve as $key => $value) {
+    echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
+}
 
+echo "<br><hr><h3>Demands</h3>";
+foreach ($demands as $key => $value) {
+    echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
+}
 
 $conn->close();
 

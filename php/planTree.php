@@ -1,6 +1,10 @@
 <?php
 
-function planTree(&$node, &$partStock, &$processStock)
+function planTree( &$node,
+    &$partStock,
+    &$processStock,
+    &$demandReserve,
+    &$demands)
 {
     // -----------------------------------
     // Get Available Stock
@@ -31,12 +35,40 @@ function planTree(&$node, &$partStock, &$processStock)
     $node['consume_qty'] = $consume;
     $node['produce_qty'] = $produce;
 
+    
+
     echo "Process {$node['process_id']} ".
          "Need {$node['required_qty']} ".
          "Stock {$available} ".
          "Consume {$consume} ".
          "Produce {$produce}<br>";
+   // -----------------------------------
+    // Collect Demand Reserve
+    // -----------------------------------
 
+    if ($consume > 0) {
+
+        $demandReserve[] = [
+          
+            'process_id' => $node['process_id'],
+            'output_part' => $node['output_part'],
+            'qty' => $consume
+        ];
+    }
+
+    // -----------------------------------
+    // Collect Production Demand
+    // -----------------------------------
+
+    if ($produce > 0) {
+
+        $demands[] = [
+         
+            'process_id' => $node['process_id'],
+            'output_part' => $node['output_part'],
+            'qty' => $produce
+        ];
+    }
     // -----------------------------------
     // Reduce Global Stock
     // -----------------------------------
@@ -72,6 +104,6 @@ function planTree(&$node, &$partStock, &$processStock)
         // Child requirement depends on parent's remaining production
         $child['required_qty'] = $produce * $child['bom_qty'];
 
-        planTree($child, $partStock, $processStock);
+        planTree($child, $partStock, $processStock, $demandReserve, $demands);
     }
 }
