@@ -13,7 +13,7 @@ function test_input($data) {
   return $data;
 }
 
-$sql = "select JSON_ARRAYAGG(JSON_OBJECT('oid', oid,'order_no', order_no)) as order_info,sum(required_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view WHERE 1 group by type_id,model_id,sub_type WHERE 1";
+$sql = "select JSON_ARRAYAGG(JSON_OBJECT('oid', oid,'order_no', order_no)) as order_info,sum(required_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view WHERE 1 group by type_id,model_id,sub_type ";
 
 $result = $conn->query($sql);
 
