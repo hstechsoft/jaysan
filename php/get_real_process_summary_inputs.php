@@ -197,7 +197,7 @@ $sql_get_process_details = "with process_group as (
     select JSON_ARRAYAGG(JSON_OBJECT(
         'input_part_id', iwp.input_part_id,
         'previous_process_id', iwp.previous_process_id,
-        'input_part_name', COALESCE(pt.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(from -', jp.process_name, ')')),
+        'input_part_name', COALESCE(pt.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(from -', in_jp.process_name, ')')),
         'qty', iwp.qty
     )) as input_parts,
     jp.process_name,
@@ -205,18 +205,24 @@ $sql_get_process_details = "with process_group as (
     pwt.process,
     final_pwt.output_part,
     pwt.process_title,
-    final_part.part_name as output_part_name
+    ifnull(process_part.part_name, CONCAT('semi finished part - ' , final_part.part_name,'(IN -', jp.process_name, ')'))  as output_part_name
+    
 
     
 
 
     
      FROM process_wel_tbl pwt
+     left join parts_tbl process_part on pwt.output_part = process_part.part_id
     inner join jaysan_process jp on jp.process_id = pwt.process
     inner join input_wel_parts iwp on pwt.process_id = iwp.process_id
+left join process_wel_tbl in_pwt on iwp.previous_process_id = in_pwt.process_id
+left join jaysan_process in_jp on in_pwt.process = in_jp.process_id
+
     left join parts_tbl pt on iwp.input_part_id = pt.part_id
     left join process_wel_tbl final_pwt on pwt.final_process_id = final_pwt.process_id
     left join parts_tbl final_part on final_part.part_id = final_pwt.output_part
+    
     where pwt.process_id = $process_id1
     group by pwt.process_id)
 
