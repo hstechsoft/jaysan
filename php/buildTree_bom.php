@@ -4,7 +4,7 @@
  $proces_id = isset($_GET['proces_id']) ? test_input($_GET['proces_id']) : '2796';
  $created_by = isset($_GET['created_by']) ? test_input($_GET['created_by']) : '141';
  $plan_name = isset($_GET['plan_name']) ? test_input($_GET['plan_name']) : 'Plan for Process ID: '.$proces_id;
- $production_qty = isset($_GET['production_qty']) ? test_input($_GET['production_qty']) : '1';
+ $production_qty = isset($_GET['production_qty']) ? test_input($_GET['production_qty']) : '100';
 
  
 
@@ -76,17 +76,25 @@ $processStock = buildProcessStock($conn, $process_ids_str);
 
 $demandReserve = [];
 $demands = [];
-planTree($tree, $partStock, $processStock, $demandReserve, $demands);
+$summary = [];
+planTree($tree, $partStock, $processStock, $demandReserve, $demands, $summary);
 echo "<hr>";
 echo "<h3>Stock Reserve</h3>";
 // get array as for each
 foreach ($demandReserve as $key => $value) {
     echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
-
+$output_part = $value['output_part'];
     $process_id = $value['process_id'];
     $qty = $value['qty'];
     // get stock  from stock table and reserve that stock until $qty = 0
-    $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE process_id = $process_id AND available_qty > 0 ORDER BY stock_id ASC";
+$sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE process_id = $process_id AND available_qty > 0 ORDER BY stock_id ASC";
+    if($output_part > 0)
+        {
+            
+            $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE part_id = $output_part AND available_qty > 0 ORDER BY stock_id ASC";
+        }
+
+    
     $result = $conn->query($sql_get_stock);
     while ($row = $result->fetch_assoc()) {
         
@@ -140,5 +148,7 @@ foreach ($demands as $key => $value) {
 $conn->close();
 
  ?>
+
+
 
 
