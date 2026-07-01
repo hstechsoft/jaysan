@@ -5,7 +5,7 @@ function buildPartStock($conn, $node)
 $part_ids_str = $node; // Assuming $node is a comma-separated string of part IDs
 // get stock from stock_reserve_view table
 
-$sql_stock = "select stock_reserve_view.part_id,part_name, qty,stock_id,godown,dep,sec from stock_reserve_view
+$sql_stock = "select stock_reserve_view.part_id,part_name, available_qty,stock_id,godown,dep,sec from stock_reserve_view
 inner join parts_tbl on stock_reserve_view.part_id = parts_tbl.part_id
 where stock_reserve_view.part_id in ($part_ids_str)";
 // get result as $partStock = [
@@ -35,7 +35,7 @@ where stock_reserve_view.part_id in ($part_ids_str)";
     $total_qty = 0;
     while ($row = mysqli_fetch_assoc($result_stock)) {
         $part_id = $row['part_id'];
-        $stock_qty = $row['qty'];
+        $stock_qty = $row['available_qty'];
         $stock_id = $row['stock_id'];
         $godown = $row['godown'];
         $dep = $row['dep'];
