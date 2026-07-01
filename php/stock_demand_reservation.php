@@ -197,6 +197,8 @@ $result_reservation = $conn->query($sql_reservation);
           }
     }
 
+    
+
 $same_godown = current(array_filter($stock_reservation_array, function ($item) {
     return $item['same_godown'] == true;
 }));
