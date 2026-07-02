@@ -6,6 +6,8 @@ $godown_id = isset($_POST['godown_id']) ? test_input($_POST['godown_id']) : '';
 $dep_id = isset($_POST['dep_id']) ? test_input($_POST['dep_id']) : '';
 $dep_sec_id = isset($_POST['dep_sec_id']) ? test_input($_POST['dep_sec_id']) : '';
 
+echo "final_part_id: $final_part_id, process_id: $process_id, godown_id: $godown_id, dep_id: $dep_id, dep_sec_id: $dep_sec_id<br>";
+
 $part_query = 1;
 $process_query = 1;
 $godown_query = 1;
@@ -60,7 +62,7 @@ left join jaysan_process_view jpv on ds.process_id <=> jpv.process_id and ds.par
 left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query and $godown_query and $dep_query and $dep_sec_query)
 
 select * from final_summary group by part_id,process_id";
- echo "SQL: " . $sql . "<br>";
+//  echo "SQL: " . $sql . "<br>";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
