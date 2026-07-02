@@ -8,7 +8,8 @@
  $assign_id_json = isset($_POST['assign_id']) ? test_input($_POST['assign_id']) : '[]';
  $assign_id_array = json_decode($assign_id_json, true);
 
- 
+ echo  "assign_id_array: ";
+print_r($assign_id_array);
 
 function test_input($data) {
 $data = trim($data);
