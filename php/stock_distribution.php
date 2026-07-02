@@ -3,6 +3,7 @@
 function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id)
 {
     $process_id = sql_nullable($process_id);
+    $result_json = [];
 try
     {
 
@@ -223,7 +224,7 @@ from
                 $part_id = $row_job_work_order_demand['input_part_id'];
                 $process_id = $row_job_work_order_demand['previous_process_id'];
                  $jobWork_stock_id = $row_job_work_order_demand['stock_id'];
-                 echo $jobWork_stock_id;
+                //  echo $jobWork_stock_id;
                 //  if($jobWork_stock_id == null){
                 //     throw new Exception("No stock found for job work order demand for godown kindly add 0 stock for godown ".$row_job_work_order_demand['godown']." dep ".$row_job_work_order_demand['dep']." sec ".$row_job_work_order_demand['sec']." and part id ".$row_job_work_order_demand['input_part_id']." and process id ".$row_job_work_order_demand['previous_process_id']);
                 //  }
@@ -263,7 +264,8 @@ if($remaining_reserve_qty >= $qty){
             throw new Exception("No job work order demand found for godown $godown, dep $dep, sec $sec");
         }
           $conn->commit();
-return "Stock distribution completed successfully." . "<br>Stock id: $stock_id, Remaining qty to reserve: $qty";
+          
+return true;
 
 
     
@@ -274,7 +276,7 @@ return "Stock distribution completed successfully." . "<br>Stock id: $stock_id, 
      
     catch (Exception $e) {
         $conn->rollback();
-       return "Transaction failed: " . $e->getMessage();
+       return false;
     }
 
 }
