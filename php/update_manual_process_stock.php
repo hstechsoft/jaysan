@@ -53,6 +53,7 @@ $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) 
     $stock_id = $conn->insert_id;
    require_once 'stock_distribution.php';
    $result = stock_distribution($conn,$stock_id,$qty,$process_id);
+   echo "<br>Stock distribution result: ".$result;
    if ($result) {
        echo "ok";
    } else {
