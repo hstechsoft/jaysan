@@ -13,7 +13,12 @@ function test_input($data) {
   return $data;
 }
 
-$sql = "select JSON_ARRAYAGG(JSON_OBJECT('oid', oid,'order_no', order_no,'required_qty', required_qty)) as order_info,sum(required_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view WHERE 1 group by type_id,model_id,sub_type ";
+$sql = "with unassign as (
+    select opid,sum(qty) as total_qty,JSON_ARRAYAGG(JSON_OBJECT('assign_id', ass_id)) as assign_details from assign_product WHERE assign_type = 'Production' AND dcf_id = 0 and ass_id not in (select assign_id from production_planner_parts ) GROUP BY opid
+)
+select JSON_ARRAYAGG(JSON_OBJECT('oid', oid,'order_no', order_no,'required_qty', total_qty,'opid', unassign.opid,'assign_details', assign_details)) as order_info,sum(total_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view
+inner join unassign on sales_order_info_view.opid = unassign.opid
+ WHERE 1 group by type_id,model_id,sub_type";
 
 $result = $conn->query($sql);
 

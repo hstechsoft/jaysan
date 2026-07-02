@@ -7,6 +7,7 @@
  $godown = test_input($_GET['godown']);
  $dep = test_input($_GET['dep']);
  $sec = test_input($_GET['sec']);
+ $emp_id = test_input($_GET['emp_id']);
  
 $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
@@ -253,6 +254,16 @@ if($same_godown)
     
 } else {
 throw new Exception("No raw material found for the demand id: " . $demand_id);
+}
+
+// work_order_id	work_order_no	demand_id	work_order_type	godown	dep	sec	qty	completed_qty	status	due_date	remarks	created_by	created_date	updated_date	
+
+// insert work order record
+$sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$work_order_qty,'open',$emp_id)";
+if ($conn->query($sql_insert_work_order) === TRUE) {
+  echo "New work order created successfully";
+} else {
+  throw new Exception("Error inserting work order: " . $conn->error);
 }
 $conn->commit();
 
