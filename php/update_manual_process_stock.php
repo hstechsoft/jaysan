@@ -67,9 +67,9 @@ $stock_id = 0;
         }
     }
    require_once 'stock_distribution.php';
-   echo "<br>Stock ID: ".$stock_id;
+   
    $result = stock_distribution($conn,$stock_id,$qty,$process_id);
-   echo "<br>Stock distribution result: ".$result;
+
    if ($result) {
        echo "ok";
    } else {
