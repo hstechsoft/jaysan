@@ -280,7 +280,7 @@ return true;
      
     catch (Exception $e) {
         $conn->rollback();
-       return  false
+       return  false;`
         // echo "Transaction failed: " . $e->getMessage();
     }
 
