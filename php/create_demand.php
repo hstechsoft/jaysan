@@ -7,7 +7,8 @@
  $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
  $assign_id_json = isset($_POST['assign_id']) ? test_input($_POST['assign_id']) : '[]';
  $assign_id_array = json_decode($assign_id_json, true);
-
+echo "assign_id_json: " . $assign_id_json . "<br>";
+echo "parameter" . $_POST['assign_id'];
  echo  "assign_id_array: ";
 print_r($assign_id_array);
 
