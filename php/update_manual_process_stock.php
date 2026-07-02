@@ -49,8 +49,21 @@ $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) 
 //  echo $sql;
 
   if ($conn->query($sql) === TRUE) {
-    // get inserted stock id
-    $stock_id = $conn->insert_id;
+    // get inserted stock id if new record inserted else get stock id from jaysan_stock table for that godown,dep,sec,process_id,part_id
+    if ($conn->affected_rows > 0) {
+        $stock_id = $conn->insert_id;
+    } else {
+        $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE godown <=> $godown AND dep <=> $dep AND sec <=> $sec AND process_id <=> $process_id AND part_id <=> $part_id";
+        $result_get_stock_id = $conn->query($sql_get_stock_id);
+        if ($result_get_stock_id->num_rows > 0) {
+            $row_get_stock_id = $result_get_stock_id->fetch_assoc();
+            $stock_id = $row_get_stock_id['stock_id'];
+        } else {
+            echo "Error: Could not retrieve stock ID.";
+            $conn->close();
+            exit();
+        }
+    }
    require_once 'stock_distribution.php';
    $result = stock_distribution($conn,$stock_id,$qty,$process_id);
    echo "<br>Stock distribution result: ".$result;

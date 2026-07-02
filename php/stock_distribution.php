@@ -88,7 +88,7 @@ from
     self_demand
     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
-        echo "<br>SQL Work Order Demand: ".$sql_work_order_demand;
+        // echo "<br>SQL Work Order Demand: ".$sql_work_order_demand;
         $result_work_order_demand = $conn->query($sql_work_order_demand);
         if ($result_work_order_demand->num_rows > 0) {
             while ($row_work_order_demand = $result_work_order_demand->fetch_assoc()) {
@@ -213,7 +213,7 @@ from
     self_demand
     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
-          echo "<br>SQL Job Work Order Demand: ".$sql_job_work_order_demand;
+        //   echo "<br>SQL Job Work Order Demand: ".$sql_job_work_order_demand;
         $result_job_work_order_demand = $conn->query($sql_job_work_order_demand);
         if ($result_job_work_order_demand->num_rows > 0) {
             while ($row_job_work_order_demand = $result_job_work_order_demand->fetch_assoc()) {
@@ -224,7 +224,7 @@ from
                 $part_id = $row_job_work_order_demand['input_part_id'];
                 $process_id = $row_job_work_order_demand['previous_process_id'];
                  $jobWork_stock_id = $row_job_work_order_demand['stock_id'];
-                 echo $jobWork_stock_id;
+                //  echo $jobWork_stock_id;
                 //  if($jobWork_stock_id == null){
                 //     throw new Exception("No stock found for job work order demand for godown kindly add 0 stock for godown ".$row_job_work_order_demand['godown']." dep ".$row_job_work_order_demand['dep']." sec ".$row_job_work_order_demand['sec']." and part id ".$row_job_work_order_demand['input_part_id']." and process id ".$row_job_work_order_demand['previous_process_id']);
                 //  }
@@ -233,7 +233,7 @@ from
 if($remaining_reserve_qty >= $qty){
     // reserve full qty 
     $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$qty) on duplicate key update reserve_qty = reserve_qty + $qty";
-   echo "<br>SQL Reserve: ".$sql_reserve;
+//    echo "<br>SQL Reserve: ".$sql_reserve;
     if($conn->query($sql_reserve)) {
        $qty = 0;
        $conn->commit();
@@ -247,7 +247,7 @@ if($remaining_reserve_qty >= $qty){
            else
             {
                 $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$remaining_reserve_qty) on duplicate key update reserve_qty = reserve_qty + $remaining_reserve_qty";
-                echo "<br>SQL Reserve: ".$sql_reserve;
+                // echo "<br>SQL Reserve: ".$sql_reserve;
                 if($conn->query($sql_reserve)) {
                     $qty -= $remaining_reserve_qty;
                 }
@@ -276,7 +276,8 @@ return true;
      
     catch (Exception $e) {
         $conn->rollback();
-       return  "Transaction failed: " . $e->getMessage();
+       return  false;
+        // echo "Transaction failed: " . $e->getMessage();
     }
 
 }
