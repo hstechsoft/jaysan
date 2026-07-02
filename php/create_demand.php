@@ -7,10 +7,9 @@
  $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
  $assign_id_json = isset($_POST['assign_id']) ? ($_POST['assign_id']) : '[]';
  $assign_id_array = json_decode($assign_id_json, true);
-echo "assign_id_json: " . $assign_id_json . "<br>";
-echo "parameter" . $_POST['assign_id'];
- echo  "assign_id_array: ";
-print_r($assign_id_array);
+ $result_json = array();
+
+
 
 function test_input($data) {
 $data = trim($data);
@@ -35,7 +34,8 @@ $sql_insert_plan = "INSERT INTO production_planner (plan_name, created_by) VALUE
 $conn->query($sql_insert_plan);
 if ($conn->affected_rows > 0) {
     $plan_id = $conn->insert_id;
-    echo "Inserted plan with ID: $plan_id<br>";
+    $result_json['message'] = "Inserted plan with ID: $plan_id";
+
 } else {
     throw new Exception("Error inserting plan: " . $conn->error);
 }
@@ -45,7 +45,7 @@ foreach ($assign_id_array as $assign_id) {
     $sql_insert_planner_parts = "INSERT INTO production_planner_parts (planner_id, assign_id) VALUES ($plan_id, $assign_id)";
     $conn->query($sql_insert_planner_parts);
     if ($conn->affected_rows > 0) {
-        echo "Inserted assign_id: $assign_id into production_planner_parts<br>";
+        $result_json['message'] = "Inserted assign_id: $assign_id into production_planner_parts";
     } else {
         throw new Exception("Error inserting assign_id: $assign_id into production_planner_parts: " . $conn->error);
     }
@@ -96,11 +96,10 @@ $demandReserve = [];
 $demands = [];
 $summary = [];
 planTree($tree, $partStock, $processStock, $demandReserve, $demands, $summary);
-echo "<hr>";
-echo "<h3>Stock Reserve</h3>";
+
 // get array as for each
 foreach ($demandReserve as $key => $value) {
-    echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
+    
 $output_part = $value['output_part'];
     $process_id = $value['process_id'];
     $part_id = $value['output_part'];
@@ -129,27 +128,26 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
             $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $qty, 'demand')
             ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
             $conn->query($sql_reserve_stock);
-            echo "Reserved $qty from Stock ID: $stock_id<br>";
+            $result_json['message'] = "Reserved $qty from Stock ID: $stock_id";
             $qty = 0; // All required quantity has been reserved
         } else {
             // Reserve all available quantity from this stock and continue to the next stock
             $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $available_qty, 'demand')
             ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $available_qty";
             $conn->query($sql_reserve_stock);
-            echo "Reserved $available_qty from Stock ID: $stock_id<br>";
+            $result_json['message'] = "Reserved $available_qty from Stock ID: $stock_id";
             $qty -= $available_qty; // Decrease the remaining required quantity
         }
     }
 
     if ($qty > 0) {
-        echo "Warning: Not enough stock available to reserve the required quantity for Process ID: $process_id. Remaining quantity to reserve: $qty<br>";
+        $result_json['warning'] = "Not enough stock available to reserve the required quantity for Process ID: $process_id. Remaining quantity to reserve: $qty";
     }
 }
 
-echo "<br><hr><h3>Demands</h3>";
+
 foreach ($demands as $key => $value) {
-    echo "Process ID: " . $value['process_id'] . ", Output Part: " . $value['output_part'] . ", Quantity: " . $value['qty'] . "<br>";
-    $process_id = sql_nullable($value['process_id']);
+     $process_id = sql_nullable($value['process_id']);
     $qty = $value['qty'];
     $part_id = sql_nullable($value['output_part']);
 
@@ -157,7 +155,7 @@ foreach ($demands as $key => $value) {
     $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
     $conn->query($sql_insert_demand);
     if ($conn->affected_rows > 0) {
-        echo "Inserted demand for Process ID: $process_id, Quantity: $qty<br>";
+        $result_json['message'] = "Inserted demand for Process ID: $process_id, Quantity: $qty";
     }
     else
         {
@@ -166,13 +164,17 @@ foreach ($demands as $key => $value) {
 }
     
 $conn->commit();
+$result_json['success'] = true;
+
 
 }
 catch (Exception $e) {
     $conn->rollback();
-    echo "Error: " . $e->getMessage();
+    $result_json['success'] = false;
+    $result_json['error'] = $e->getMessage();
+   
 }
-
+ echo json_encode($result_json);
 
 $conn->close();
 

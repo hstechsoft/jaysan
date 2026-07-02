@@ -2,7 +2,8 @@
  include 'db_head.php';
 
  
- $demand_id = test_input($_GET['demand_id']);
+//  $demand_id = test_input($_GET['demand_id']);
+$work_process_id = test_input($_GET['work_process_id']);
  $work_order_qty = test_input($_GET['work_order_qty']);
  $godown = test_input($_GET['godown']);
  $dep = test_input($_GET['dep']);
@@ -14,7 +15,7 @@ $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 
 $godown_string = $godown.$dep.$sec;
-echo $godown_string;
+
  
 function test_input($data) {
   $data = trim($data);
@@ -24,17 +25,83 @@ function test_input($data) {
   return $data;
 }
 
+$result_json = array();
+
 try
 {
 
+$conn->begin_transaction();
 
-// 
+
+$demand_array = array();
+$total_unaassigned_qty = 0;
+// get total unaassigned qty for the work_process_id
+$sql_total_unaassigned_qty = "select (demand_qty) - sum(ifnull(wo.qty, 0)) as total_unaassigned_qty,demand.demand_id from demand
+left join work_order wo on demand.demand_id = wo.demand_id
+ where process_id = $work_process_id  GROUP BY demand.demand_id having total_unaassigned_qty > 0";
+$result_total_unaassigned_qty = $conn->query($sql_total_unaassigned_qty);
+
+if ($result_total_unaassigned_qty->num_rows > 0) {
+  while($row_total_unaassigned_qty = mysqli_fetch_assoc($result_total_unaassigned_qty)) {
+    $demand_array[] = array(
+      "demand_id" => $row_total_unaassigned_qty['demand_id'],
+      "total_unaassigned_qty" => $row_total_unaassigned_qty['total_unaassigned_qty']
+    );
+    $total_unaassigned_qty += $row_total_unaassigned_qty['total_unaassigned_qty'];
+  }
+} else {
+    throw new Exception("No unaassigned qty found for the work_process_id: " . $work_process_id);
+}
+
+
+
+if($total_unaassigned_qty < $work_order_qty) {
+    throw new Exception("Not enough unaassigned qty for the work_process_id: " . $work_process_id . ". Total unaassigned qty: " . $total_unaassigned_qty . ", requested work order qty: " . $work_order_qty);
+}
+
+
+// loop through the demand_array and assign the work_order_qty to the demands until the work_order_qty is fulfilled
+while($work_order_qty > 0 && count($demand_array) > 0) {
+    $demand = array_shift($demand_array);
+    $demand_id = $demand['demand_id'];
+    $total_unaassigned_qty = $demand['total_unaassigned_qty'];
+
+    if($total_unaassigned_qty <= $work_order_qty) {
+        // assign the entire unaassigned qty to the work order
+        $assign_qty = $total_unaassigned_qty;
+    } else {
+        // assign only the remaining work order qty to the demand
+        $assign_qty = $work_order_qty;
+    }
+
+    // insert work order record for the demand
+    $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id)";
+   
+    if ($conn->query($sql_insert_work_order) === TRUE) {
+      $result_json['work_orders'][] = array(
+            "demand_id" => $demand_id,
+            "assigned_qty" => $assign_qty,
+            "work_order_id" => $conn->insert_id
+        );
+       
+    } else {
+      $result_json['errors'][] = "Error inserting work order for demand_id: " . $demand_id . ": " . $conn->error;
+        throw new Exception("Error inserting work order for demand_id: " . $demand_id . ": " . $conn->error);
+    }
+
+    // reduce the remaining work order qty
+    $work_order_qty -= $assign_qty;
+}
+
+
+
+
 
 // begin transaction
-$conn->begin_transaction();
+
 // get the raw materail for the demand id
 $sql = "select iwp.input_part_id, iwp.previous_process_id,iwp.qty* $work_order_qty as required_qty from input_wel_parts iwp 
-where iwp.process_id = (select process_id from demand where demand_id = $demand_id)";
+where iwp.process_id = $work_process_id";
 
 $result = $conn->query($sql);
 
@@ -45,7 +112,7 @@ if ($result->num_rows > 0) {
     $input_part_id = $r['input_part_id'];
     $previous_process_id = $r['previous_process_id'];
     $required_qty = $r['required_qty'];
-echo "input_part_id: ".$input_part_id." previous_process_id: ".$previous_process_id." required_qty: ".$required_qty;
+
 
  $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.process_id = $previous_process_id";
@@ -93,12 +160,19 @@ if($godown_string_db == $godown_string)
 
 
         } else {
-          echo "not_reserved";
+         
+          $result_json['warnings'][] = "No demand reservation found for input_part_id: " . $input_part_id;
         }
 
 
- echo json_encode($demand_array);
- echo "total_holded_qty: ".$total_holded_qty;
+ $result_json['input_parts'][] = array(
+        
+            "total_holded_qty" => $total_holded_qty,
+           
+        );
+
+    }
+
 
 // if holded qty > 0 need to release the holded qty  first relese same godown qty first then other godown qty
 if($total_holded_qty > 0)
@@ -124,7 +198,7 @@ if($same_godown)
         // release the reserve qty
         $sql_release = "update stock_reserve set reserve_qty = reserve_qty - $stock_to_be_released_same_godown where stock_reserve_id = $stock_reserve_id and reserve_type = 'demand'";
         if ($conn->query($sql_release) === TRUE) {
-          echo "stock internally released successfully";
+          $result_json['messages'][] = "stock internally released successfully";
        $stock_to_be_released -= $stock_to_be_released_same_godown;
         } else {
          throw new Exception("Error updating record: " . $conn->error);
@@ -134,7 +208,7 @@ if($same_godown)
 print_r($same_godown);
   }
 
-  echo "stock_to_be_released: ".$stock_to_be_released;
+  $result_json['messages'][] = "stock_to_be_released: ".$stock_to_be_released;
   // if stock to be released is still > 0 then release other godown qty
 
   if($stock_to_be_released > 0)
@@ -150,7 +224,7 @@ print_r($same_godown);
           // release the reserve qty
           $sql_release = "update stock_reserve set reserve_qty = reserve_qty - $stock_to_be_released_other_godown where stock_reserve_id = $stock_reserve_id and reserve_type = 'demand'";
           if ($conn->query($sql_release) === TRUE) {
-            echo "stock released externally successfully";
+            $result_json['messages'][] = "stock released externally successfully";
          $stock_to_be_released -= $stock_to_be_released_other_godown;
           } else {
             throw new Exception("Error updating record: " . $conn->error);
@@ -223,7 +297,7 @@ if($same_godown)
         // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown
         $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_same_godown,'work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown";
         if ($conn->query($sql_release) === TRUE) {
-          echo "stock internally reserved successfully";
+          $result_json['messages'][] = "stock internally reserved successfully";
        $stock_to_be_reserved -= $stock_to_be_reserved_same_godown;
         } else {
           throw new Exception("Error updating record: " . $conn->error);
@@ -244,7 +318,7 @@ if($same_godown)
         // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_other_godown
         $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_other_godown,'job_work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_other_godown";
         if ($conn->query($sql_release) === TRUE) {
-          echo "stock externally reserved successfully";
+          $result_json['messages'][] = "stock externally reserved successfully";
        $stock_to_be_reserved -= $stock_to_be_reserved_other_godown;
         } else {
           throw new Exception("Error updating record: " . $conn->error);
@@ -255,27 +329,32 @@ if($same_godown)
     }
     }
     
-} else {
-throw new Exception("No raw material found for the demand id: " . $demand_id);
+ else {
+throw new Exception("No raw material found for the process id: " . $work_process_id);
 }
 
 // work_order_id	work_order_no	demand_id	work_order_type	godown	dep	sec	qty	completed_qty	status	due_date	remarks	created_by	created_date	updated_date	
 
-// insert work order record
-$sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$work_order_qty,'open',$emp_id)";
-if ($conn->query($sql_insert_work_order) === TRUE) {
-  echo "New work order created successfully";
-} else {
-  throw new Exception("Error inserting work order: " . $conn->error);
-}
+// // insert work order record
+// $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$work_order_qty,'open',$emp_id)";
+// if ($conn->query($sql_insert_work_order) === TRUE) {
+//   echo "New work order created successfully";
+// } else {
+//   throw new Exception("Error inserting work order: " . $conn->error);
+// }
+$result_json['success'] = true;
 $conn->commit();
 
 }
 catch (Exception $e) {
+  $result_json['success'] = false;
   // Rollback the transaction if an exception occurs
   $conn->rollback();
-  echo "Error: " . $e->getMessage();
+  $result_json['error'] = $e->getMessage();
+ 
 }
+
+echo json_encode($result_json);
 $conn->close();
 
 
