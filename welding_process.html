@@ -439,11 +439,11 @@
                         <th colspan="7" scope="col" class="small align-middle bg-info bg-opacity-25">
                           <div class="d-flex justify-content-center gap-5 align-items-center">
 
-                          <div>
+                            <div>
                               <label for="process_default" class="mb-0 form-check-label">Process Track:</label>
-                            <input type="text" placeholder="Process Track" id="process_title"
-                              class="border border-3 border-success fw-bold">
-</div>
+                              <input type="text" placeholder="Process Track" id="process_title"
+                                class="border border-3 border-success fw-bold">
+                            </div>
                             <div class="form-check form-switch">
                               <input class="form-check-input" type="checkbox" id="process_default">
                               <label class="form-check-label" for="process_default">
@@ -619,10 +619,10 @@
                     </div>
                   </div>
                   <div class="col-6">
-                      <div class="form-check mb-3">
+                    <div class="form-check mb-3">
                       <input class="form-check-input " type="checkbox" value="" id="is_default" style="height: 20px;">
                       <label class="form-check-label" for="is_default">
-                         Is Default?
+                        Is Default?
                       </label>
                     </div>
                   </div>
@@ -718,7 +718,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title " id="staticBackdropLabel"> <b class="process_title"></b>From Previous Process</h5>
-          <button type="button" class="btn-close " id="process_modal_close_btn" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close " id="process_modal_close_btn" data-bs-dismiss="modal"
+            aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <ul class='list-group' id="process_list"></ul>
@@ -797,6 +798,31 @@
       </div>
     </div>
   </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="opening_qty_modal" tabindex="-1" aria-labelledby="opening_qty_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="opening_qty_modalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-2">
+            <input type="number" class="form-control rounded-3" id="opening_qty" value="1" placeholder="">
+            <label for="opening_qty">Qty </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary add_opening_qty_btn">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id='footer' class="mt-auto"></div>
 
   <!-- content -->

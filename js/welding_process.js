@@ -1490,6 +1490,7 @@ $(document).ready(function () {
       $(this).addClass("tbl_selected");
 
       const encodedExtra = $(this).data("extra");
+      var original_process_id = $(this).data("ori_process-id");
 
       if (encodedExtra) {
         try {
@@ -1501,7 +1502,7 @@ $(document).ready(function () {
 
             if (extra_obj.wtid > 0) {
               $("#godown_table_data").append(`
-                <tr data-wtid=${extra_obj.wtid} data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
+                <tr class="godown_row" data-ori_process-id=${original_process_id} data-wtid=${extra_obj.wtid} data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
                   <td> <input class="form-check-input" data-wtid=${extra_obj.wtid} ${extra_obj.is_default == 1 ? "checked" : ''} type="radio" name="flexRadioDefault" id="default_godown" ></td>
                   <td>${extra_obj.godown_name}</td>
                   <td>${extra_obj.dep_name}</td>
@@ -1544,6 +1545,24 @@ $(document).ready(function () {
   $("#godown_table_data").on("change", "#default_godown", function () {
     update_work_time_master_default($(this).data("wtid"), 1, $(".form_godown_update_btn").data("ori_process_id"));
   })
+
+  $("#godown_table_data").on("dblclick", "td", function () {
+    var wtid = $(this).closest("tr").data("wtid");
+    $("#opening_qty_modalLabel").text($(this).closest("tr").find("td").eq(1).text());
+
+    $("#opening_qty_modal").modal("show");
+    $(".add_opening_qty_btn").data("wtid", wtid);
+
+
+  });
+
+  $(".add_opening_qty_btn").click(function () {
+    var wtid = $(this).data("wtid");
+    var opening_qty = $("#opening_qty").val() || 0;
+
+    update_manual_process_stock(wtid, opening_qty);
+
+  });
 
   $("#welding_table").on("blur", ".qty-editable", function () {
     let newQty = $(this).text().trim();
@@ -2535,6 +2554,41 @@ function update_input_wel_parts_pre_process(id, previous_process_id) {
 
         shw_toast("Success", "Updated Successfully!");
         get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_manual_process_stock(wtid, opening_qty) {
+
+  console.log(wtid, opening_qty);
+
+
+  $.ajax({
+    url: "php/update_manual_process_stock.php",
+    type: "post", //send it through get method
+    data: {
+      wtid: wtid,
+      qty: opening_qty,
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        $("#opening_qty_modal").modal("hide");
       }
       else {
         salert("Warning", response, "warning");

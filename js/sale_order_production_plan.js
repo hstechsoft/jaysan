@@ -78,12 +78,77 @@ $(document).ready(function () {
     }
   });
 
+  $("#sale_order_details_container").on("click", ".add_demand_btn", function () {
+
+    var card = $(this).closest(".order-card");
+    var selected_orders = card.find(".sale_span.selected_order");
+    var plan_name = card.find(".plan_name").val().trim();
+    var selected_qty = card.find(".selected_qty").val();
+    var process_id = $(this).data("process_id");
+    var assign_id = [];
+
+    selected_orders.each(function () {
+
+      var ids = $(this).data("ass_ids").toString().split(",");
+
+      ids.forEach(function (id) {
+        assign_id.push(parseInt(id, 10));
+      });
+
+    });
+
+    if (plan_name && selected_qty && process_id && assign_id.length > 0) {
+      create_demand(plan_name, selected_qty, process_id, JSON.stringify(assign_id));
+    } else {
+      salert("Warning", "Please fill all required fields and select at least one order.", "warning");
+    }
+  });
+
 });
 
 
 
 
 
+function create_demand(plan_name, selected_qty, process_id, assign_id) {
+
+  console.log(plan_name, selected_qty, process_id, assign_id);
+
+  $.ajax({
+    url: "php/create_demand.php",
+    type: "post", //send it through post method
+    data: {
+      process_id: process_id,
+      created_by: current_user_id,
+      plan_name: plan_name,
+      production_qty: selected_qty,
+      assign_id: assign_id
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      var response = JSON.parse(response);
+
+      if (response.success === true) {
+        alert("Success", "Demand created successfully.", "success");
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function get_sale_order_plan() {
 
@@ -109,7 +174,15 @@ function get_sale_order_plan() {
             var sale_order_nos = ``;
 
             order_info.forEach(function (order) {
-              sale_order_nos += `<span class="badge  text-dark border sale_span selected_order" data-oid="${order.oid}" data-required_qty="${order.required_qty}">#${order.order_no}</span>`;
+
+              var assign_details = order.assign_details;
+              var ass_id = [];
+
+              assign_details.forEach(function (ass) {
+                ass_id.push(ass.assign_id);
+              });
+
+              sale_order_nos += `<span class="badge  text-dark border sale_span selected_order" data-oid="${order.oid}" data-ass_ids="${ass_id.join(',')}" data-required_qty="${order.required_qty}">#${order.order_no}</span>`;
             });
 
             $('#sale_order_details_container').append(`
@@ -146,15 +219,40 @@ function get_sale_order_plan() {
 
                         </div>
 
-                        <div class="card-footer bg-white border-0 p-1 pt-0">
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    Qty
-                                </span>
-                                <input type="text" class="form-control form-control-sm border-0 shadow-none" disabled value="Total Qty: ${obj.total_required_qty}" placeholder="Enter Quantity">
-                                <input type="number" class="form-control form-control-sm border-0 shadow-none selected_qty" value="${obj.total_required_qty}" placeholder="Enter Quantity">
-                            </div>
-                        </div>
+                        <div class="card-footer bg-white border-0 p-2">
+                          <div class="input-group mb-2">
+                              <span class="input-group-text bg-light border-0">
+                                  Qty
+                              </span>
+
+                              <input type="text"
+                                  class="form-control form-control-sm border-0 shadow-none"
+                                  disabled
+                                  value="Total Qty: ${obj.total_required_qty}">
+
+                              <input type="number"
+                                  class="form-control form-control-sm border-0 shadow-none selected_qty"
+                                  readonly
+                                  value="${obj.total_required_qty}">
+                          </div>
+
+                          <div class="row g-2 align-items-center">
+                              <div class="col-8">
+                                  <input type="text"
+                                      class="form-control form-control-sm shadow-none plan_name"
+                                      placeholder="Enter Plan Name">
+                              </div>
+
+                              <div class="col-4">
+                                  <button
+                                      class="btn btn-sm btn-primary w-100 add_demand_btn"
+                                      data-process_id="${obj.process_id}">
+                                      Submit <i class="fa-solid fa-arrow-right-to-bracket ms-1"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                      
 
                     </div>
               `)
