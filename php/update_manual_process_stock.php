@@ -45,7 +45,7 @@ return $data;
 
 $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  $qty, remark = '$remark' ";
 
- 
+ echo $sql;
 
   if ($conn->query($sql) === TRUE) {
     // get inserted stock id
