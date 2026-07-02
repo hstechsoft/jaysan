@@ -16,7 +16,7 @@ function test_input($data) {
 $sql = "with unassign as (
     select opid,sum(qty) as total_qty,JSON_ARRAYAGG(JSON_OBJECT('assign_id', ass_id)) as assign_details from assign_product WHERE assign_type = 'Production' AND dcf_id = 0 and ass_id not in (select assign_id from production_planner_parts ) GROUP BY opid
 )
-select JSON_ARRAYAGG(JSON_OBJECT('oid', oid,'order_no', order_no,'required_qty', total_qty,'opid', unassign.opid,'assign_details', assign_details)) as order_info,sum(total_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view
+select JSON_ARRAYAGG(JSON_OBJECT('process_id','2796','oid', oid,'order_no', order_no,'required_qty', total_qty,'opid', unassign.opid,'assign_details', assign_details)) as order_info,sum(total_qty) as total_required_qty,sales_order_info_view.* from sales_order_info_view
 inner join unassign on sales_order_info_view.opid = unassign.opid
  WHERE 1 group by type_id,model_id,sub_type";
 
