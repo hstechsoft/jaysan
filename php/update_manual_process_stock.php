@@ -8,7 +8,7 @@ $qty = test_input($_POST['qty']);
 
 
 // get_details fromwork_time_master table
-$get_details_sql = "SELECT wtm.godown_id, wtm.dep_id, wtm.dep_sec_id, wtm.ori_process_id,pwt.part_id,pwt.process_id FROM work_time_master wtm
+$get_details_sql = "SELECT wtm.godown_id, wtm.dep_id, wtm.dep_sec_id, wtm.ori_process_id,pwt.output_part,pwt.process_id FROM work_time_master wtm
 inner join process_wel_tbl pwt on wtm.ori_process_id = pwt.process_id
 WHERE wtid = $wtid";
 $result = $conn->query($get_details_sql);
