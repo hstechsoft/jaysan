@@ -73,7 +73,7 @@ $stock_id = 0;
    if ($result) {
        echo "ok";
    } else {
-       echo "error distributing stock";
+       echo "error distributing stock".$result;
    }
 
 
