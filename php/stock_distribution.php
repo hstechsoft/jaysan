@@ -128,9 +128,11 @@ if($remaining_reserve_qty >= $qty){
 
        }
             }
-        } else {
-            throw new Exception("No work order demand found for godown $godown, dep $dep, sec $sec");
-        }
+        } 
+        
+        // else {
+        //     throw new Exception("No work order demand found for godown $godown, dep $dep, sec $sec");
+        // }
 
 
 
@@ -260,9 +262,11 @@ if($remaining_reserve_qty >= $qty){
 
        }
             }
-        } else {
-            throw new Exception("No job work order demand found for godown $godown, dep $dep, sec $sec");
         }
+        
+        // else {
+        //     throw new Exception("No job work order demand found for godown $godown, dep $dep, sec $sec");
+        // }
           $conn->commit();
           
 return true;
