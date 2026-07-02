@@ -27,6 +27,9 @@ function test_input($data) {
 try
 {
 
+
+// 
+
 // begin transaction
 $conn->begin_transaction();
 // get the raw materail for the demand id
