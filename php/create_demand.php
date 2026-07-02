@@ -42,7 +42,7 @@ if ($conn->affected_rows > 0) {
 
 // insert into production_planner_parts table for each assign_id in $assign_id_array
 foreach ($assign_id_array as $assign_id) {
-    $sql_insert_planner_parts = "INSERT INTO production_planner_parts (plan_id, assign_id) VALUES ($plan_id, $assign_id)";
+    $sql_insert_planner_parts = "INSERT INTO production_planner_parts (planner_id, assign_id) VALUES ($plan_id, $assign_id)";
     $conn->query($sql_insert_planner_parts);
     if ($conn->affected_rows > 0) {
         echo "Inserted assign_id: $assign_id into production_planner_parts<br>";
@@ -154,7 +154,7 @@ foreach ($demands as $key => $value) {
     $part_id = sql_nullable($value['output_part']);
 
     // insert into demands table if not exist else update qty = qty + $qty
-    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by)";
+    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
     $conn->query($sql_insert_demand);
     if ($conn->affected_rows > 0) {
         echo "Inserted demand for Process ID: $process_id, Quantity: $qty<br>";

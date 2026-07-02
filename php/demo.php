@@ -1,8 +1,12 @@
-<?php
-$value = "null";
- if ($value === 'null' || $value === '' || is_null($value) || $value === NULL || strtolower($value) === 'null' || strcmp($value,'null') == 0) {
-    echo "Value is considered NULL"."NULL";
-        return "NULL";
-    }
 
+<?php
+ include 'db_head.php';
+//  assign demo json data 
+$assign_id_json = '[1, 2, 3, 4, 5]';
+ $assign_id_array = json_decode($assign_id_json, true);
+
+
+foreach ($assign_id_array as $assign_id) {
+    echo $assign_id . "<br>";
+}
 ?>
