@@ -18,7 +18,7 @@ if ($result->num_rows > 0) {
     $dep = $row['dep_id'];
     $sec = $row['dep_sec_id'];
     $process_id = $row['ori_process_id'];
-    $part_id = $row['part_id'];
+    $part_id = $row['output_part'];
 } else {
     echo "No details found for the given work time ID.";
     $conn->close();
