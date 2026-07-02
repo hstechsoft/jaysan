@@ -6,7 +6,7 @@ $godown_id = isset($_POST['godown_id']) ? test_input($_POST['godown_id']) : '';
 $dep_id = isset($_POST['dep_id']) ? test_input($_POST['dep_id']) : '';
 $dep_sec_id = isset($_POST['dep_sec_id']) ? test_input($_POST['dep_sec_id']) : '';
 
-echo "final_part_id: $final_part_id, process_id: $process_id, godown_id: $godown_id, dep_id: $dep_id, dep_sec_id: $dep_sec_id<br>";
+// echo "final_part_id: $final_part_id, process_id: $process_id, godown_id: $godown_id, dep_id: $dep_id, dep_sec_id: $dep_sec_id<br>";
 
 $part_query = 1;
 $process_query = 1;
