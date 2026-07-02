@@ -165,7 +165,7 @@ foreach ($demands as $key => $value) {
     
 $conn->commit();
 $result_json['success'] = true;
-
+ 
 
 }
 catch (Exception $e) {
