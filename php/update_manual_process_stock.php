@@ -47,12 +47,14 @@ return $data;
 $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  $qty, remark = '$remark' ";
 
 //  echo $sql;
-
+$stock_id = 0;
   if ($conn->query($sql) === TRUE) {
     // get inserted stock id if new record inserted else get stock id from jaysan_stock table for that godown,dep,sec,process_id,part_id
     if ($conn->affected_rows > 0) {
         $stock_id = $conn->insert_id;
-    } else {
+    } 
+    
+    if($stock_id == 0){
         $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE godown <=> $godown AND dep <=> $dep AND sec <=> $sec AND process_id <=> $process_id AND part_id <=> $part_id";
         $result_get_stock_id = $conn->query($sql_get_stock_id);
         if ($result_get_stock_id->num_rows > 0) {
