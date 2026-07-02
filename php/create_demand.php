@@ -1,11 +1,11 @@
 <?php
  include 'db_head.php';
 
- $proces_id = isset($_GET['proces_id']) ? test_input($_GET['proces_id']) : '2796';
- $created_by = isset($_GET['created_by']) ? test_input($_GET['created_by']) : '141';
- $plan_name = isset($_GET['plan_name']) ? test_input($_GET['plan_name']) : 'Plan for Process ID: '.$proces_id;
- $production_qty = isset($_GET['production_qty']) ? test_input($_GET['production_qty']) : '100';
- $assign_id_json = isset($_GET['assign_id']) ? test_input($_GET['assign_id']) : '[]';
+ $proces_id = isset($_POST['proces_id']) ? test_input($_POST['proces_id']) : '2796';
+ $created_by = isset($_POST['created_by']) ? test_input($_POST['created_by']) : '141';
+ $plan_name = isset($_POST['plan_name']) ? test_input($_POST['plan_name']) : 'Plan for Process ID: '.$proces_id;
+ $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
+ $assign_id_json = isset($_POST['assign_id']) ? test_input($_POST['assign_id']) : '[]';
  $assign_id_array = json_decode($assign_id_json, true);
 
  
