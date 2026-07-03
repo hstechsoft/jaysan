@@ -269,6 +269,109 @@ $(document).ready(function () {
         });
     });
 
+    $("#processFlow").on("click", ".stock_gddown_list", function () {
+
+        let stock_details = $(this).attr("data-stock_details");
+        stock_details = stock_details ? JSON.parse(stock_details) : [];
+
+        if (typeof stock_details === "string") {
+            stock_details = JSON.parse(stock_details);
+        }
+        console.log(stock_details);
+        let html = "";
+
+        if (stock_details.length > 0) {
+
+            stock_details.forEach(stock => {
+
+                html += `
+                <div class="card shadow-sm mb-3 border-0">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">${stock.creditor_name}</h6>
+                            <small class="text-muted">
+                                ${stock.dep_name ?? "-"}
+                                ${stock.sec_name ? " / " + stock.sec_name : ""}
+                            </small>
+                        </div>
+
+                        <span class="badge bg-primary">
+                            Available : ${stock.available_qty}
+                        </span>
+                    </div>
+
+                    <div class="card-body py-2">
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <small class="text-muted">Reserved Qty</small>
+                                <h6 class="mb-0 text-danger">${stock.reserve_qty}</h6>
+                            </div>
+
+                            <div class="col-6">
+                                <small class="text-muted">Stock ID</small>
+                                <h6 class="mb-0">${stock.stock_id}</h6>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm table-bordered align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Reserve Type</th>
+                                    <th>Qty</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+                stock.reserve_details.forEach(type => {
+
+                    type.reserve_details.forEach(detail => {
+
+                        html += `
+                        <tr>
+                            <td>${type.reserve_type.replaceAll("_", " ").toUpperCase()}</td>
+                            <td>${detail.reserve_qty}</td>
+                            <td>
+                                <span class="badge bg-success">
+                                    ${detail.reserve_status}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+
+                    });
+
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            `;
+
+            });
+
+        } else {
+
+            html = `
+            <div class="text-center py-5">
+                <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
+                <h6>No Stock Details Found</h6>
+            </div>
+        `;
+        }
+
+        $("#stock_details_modal .modal-body").html(html);
+
+        $("#stock_details_modal").modal("show");
+
+    });
+
+
 
 
     // Stock 
@@ -805,16 +908,21 @@ function get_process_graph(part_name, component_cat, process_id, process_title) 
 
 
                         step.innerHTML = `
-                            <div class="flow-step-header position-relative">
+                            <div class="flows-step-header position-relative">
 
                                 <div class="flow-title">STEP ${i + 1}</div>
-                                <div class="flow-icon">${icons[i] || "⚙️"}</div>
-                                <div class="flow-title">${p.process_name}</div>
+                                <div class="flow-icon ">${icons[i] || "⚙️"}</div>
+                                <div class="flow-title flow-step-header">${p.process_name}</div>
 
                                 <!-- TOP RIGHT ICON + COUNT -->
                                 <div class="top-right-wrapper">
                                     <span class="extra-count badge bg-success">₹${p.cost !== null ? p.cost : 0}</span>
                                     <span class="extra-count badge bg-secondary d-flex"><i class="fa fa-clock"></i>${p.max_time !== null ? p.max_time : 0} mins</span>
+                                </div>
+
+                                <!-- BOTTOM RIGHT ICON + COUNT -->
+                                <div class="bottom-right-wrapper">
+                                    <span class="stock_gddown_list badge bg-primary" data-stock_details='${JSON.stringify(p.stock_details)}'><i class="fa fa-warehouse"></i></span>
                                 </div>
 
                             </div>
@@ -828,25 +936,19 @@ function get_process_graph(part_name, component_cat, process_id, process_title) 
 
                         container.appendChild(step);
 
-                        // Accordion toggle
                         step.querySelector(".flow-step-header").onclick = () => {
 
                             const body = step.querySelector(".accordion-body");
-
                             const isOpen = body.classList.contains("open");
 
-                            // Close all
                             document.querySelectorAll(".accordion-body").forEach(b => {
                                 b.classList.remove("open");
-                                b.style.maxHeight = 0;
+                                b.style.maxHeight = "0";
                             });
 
-                            // Toggle
                             if (!isOpen) {
-                                document.querySelectorAll(".accordion-body").forEach(b => {
-                                    b.classList.add("open");
-                                    b.style.maxHeight = b.scrollHeight + "px";
-                                });
+                                body.classList.add("open");
+                                body.style.maxHeight = body.scrollHeight + "px";
                             }
                         };
 

@@ -68,6 +68,13 @@
             font-size: 12px;
         }
 
+        .flows-step-header {
+
+            width: 100%;
+            font-size: 12px;
+        }
+
+
         /* ICON */
         .flow-icon {
             width: 50px;
@@ -139,6 +146,56 @@
             border-radius: 50%;
             display: inline-block;
             margin-left: 10px;
+        }
+
+        /* Stock Godown List Span */
+        .bottom-right-wrapper {
+            position: absolute;
+            top: 45px;
+            /*right: -5px;*/
+            display: flex;
+            align-items: center;
+            gap: 102px;
+        }
+
+        .stock_gddown_list {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+            border-radius: 50%;
+            z-index: 2;
+            overflow: visible;
+        }
+
+        .stock_gddown_list::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(13, 110, 253, 0.4);
+            animation: pulseCircle 1.8s infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulseCircle {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            70% {
+                transform: scale(2);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
         }
 
         /* Container holding badge + clock */
@@ -822,6 +879,25 @@
             </div>
         </div>
 
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="stock_details_modal" tabindex="-1" aria-labelledby="stock_details_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stock_details_modalLabel">Godown & Reserve Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id='footer' class="mt-auto"></div>
