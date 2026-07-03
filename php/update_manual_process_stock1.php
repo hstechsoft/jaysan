@@ -37,11 +37,18 @@ return $data;
 
 if($stock_reserve == 1){
     // get stock id from jaysan_stock table for that godown,dep,sec,process_id,part_id
-    $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE godown <=> $godown AND dep <=> $dep AND sec <=> $sec AND process_id <=> $process_id AND part_id <=> $part_id";
+    $sql_get_stock_id = "SELECT stock_id,srv.available_qty FROM jaysan_stock 
+    inner join stock_reserve_view srv on jaysan_stock.stock_id = srv.stock_id
+    WHERE godown <=> $godown AND dep <=> $dep AND sec <=> $sec AND process_id <=> $process_id AND part_id <=> $part_id";
     $result_get_stock_id = $conn->query($sql_get_stock_id);
     if ($result_get_stock_id->num_rows > 0) {
         $row_get_stock_id = $result_get_stock_id->fetch_assoc();
         $stock_id = $row_get_stock_id['stock_id'];
+        if($row_get_stock_id['available_qty'] < $qty) {
+            echo "Error: Not enough available stock to reserve.";
+            $conn->close();
+            exit();
+        }
         // insert into stock_reserve table
         $sql_insert_stock_reserve = "INSERT INTO stock_reserve (stock_id, reserve_type, qty) VALUES ($stock_id, '$reserve_type', $qty) on duplicate key update qty = $qty";
         if ($conn->query($sql_insert_stock_reserve) === TRUE) {
