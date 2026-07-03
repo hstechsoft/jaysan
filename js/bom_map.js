@@ -628,23 +628,30 @@ function get_manual_stock(process_id) {
 
                         type.reserve_details.forEach(detail => {
 
-                            html += `
-                                <tr>
+                            if (detail.reserve_qty > 0) {
+                                html += `
+                                        <tr>
 
-                                    <td>
-                                        ${(type.reserve_type != null ? type.reserve_type.replaceAll("_", " ").toUpperCase() : '')}
-                                    </td>
+                                            <td>
+                                                ${(type.reserve_type != null ? type.reserve_type.replaceAll("_", " ").toUpperCase() : '')}
+                                            </td>
 
-                                    <td>${detail.reserve_qty}</td>
+                                            <td>${detail.reserve_qty}</td>
 
-                                    <td>
-                                        <span class="badge bg-success">
-                                            ${detail.reserve_status}
-                                        </span>
-                                    </td>
+                                            <td>
+                                                <span class="badge bg-success">
+                                                    ${detail.reserve_status}
+                                                </span>
+                                            </td>
 
-                                </tr>
-                            `;
+                                        </tr>
+                                    `;
+                            }
+                            else{
+                                 html += `<tr><td colspan='3' class="text-danger text-center">Nothing Reserved</td></tr>`;
+                            }
+
+
 
                         });
 
