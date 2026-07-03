@@ -36,8 +36,12 @@ WITH RECURSIVE process_details AS (
         )) as parts
    from process_details pd
     LEFT join input_wel_parts ip on pd.process_id = ip.process_id GROUP by process_id),
+    stock_info as(select pf.*, srv.part_id ,  JSON_ARRAYAGG(
+        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty from process_final pf   
+    left join stock_reserve_view srv on pf.process_id <=> srv.process_id group by pf.process_id),
     
-    extra as (SELECT pf.*,  
+    extra as (SELECT pf.*, 
+    
               COUNT(wtm.ori_process_id) over (PARTITION by wtm.wtid) as  a,
      wtm.ori_process_id,
     wtm.godown_id,
@@ -46,7 +50,7 @@ WITH RECURSIVE process_details AS (
     wtm.machine_id,
     wtm.min_time,
     wtm.max_time,
-    wtm.cost,jp.process_name from process_final pf  inner join jaysan_process jp on  pf.process = jp.process_id 
+    wtm.cost,jp.process_name from stock_info pf  inner join jaysan_process jp on  pf.process = jp.process_id 
    
     LEFT join work_time_master wtm on pf.process_id = wtm.ori_process_id)
     SELECT ex.* , 
