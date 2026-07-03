@@ -391,7 +391,7 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
 
             var godown_list = "";
 
-            var godowns = obj.all_godown_details != null ? JSON.parse(obj.all_godown_details) : (godown_list = ` <button class="btn btn-sm btn-danger"onclick="window.open('http://localhost/jaysan/welding_process.html', '_blank')">Select Godown </button>`, []);
+            var godowns = obj.all_godown_details != null ? JSON.parse(obj.all_godown_details) : (godown_list = ` <button class="btn btn-sm btn-danger"onclick="window.open('https://jaysan.cloud/welding_process.html', '_blank')">Select Godown </button>`, []);
 
             godowns.forEach(function (godown) {
               godown_list += `

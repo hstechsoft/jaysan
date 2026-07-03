@@ -485,17 +485,29 @@ function get_manual_stock(process_id) {
                 stock_details = JSON.parse(result.stock_details);
             }
 
+            var other = `<table class="table small table-bordered table-sm">
+
+                                            <thead class="table-light small">
+                                                <tr>
+                                                    <th>Reserve Type</th>
+                                                    <th>Qty</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody class="small"></tbody></table>`
+
             let html = `
-                    <div class="alert alert-primary d-flex justify-content-between mb-3">
-                        <div>
+                    <div class="alert small alert-primary d-flex justify-content-between mb-2 p-2">
+                        <div class="bg-light border rounded-3 p-1">
                             <strong>Total Available Qty :</strong>
                             ${result.total_available_qty}
                         </div>
-                        <div>
+                        <div  class="bg-light border rounded-3 p-1">
                             <strong>Total Reserve Qty :</strong>
                             ${result.total_reserve_qty}
                         </div>
-                        <div>
+                        <div  class="bg-light border rounded-3 p-1">
                             <strong>Total Qty :</strong>
                             ${parseInt(result.total_reserve_qty) + parseInt(result.total_available_qty)}
                         </div>
@@ -576,7 +588,7 @@ function get_manual_stock(process_id) {
 
                                 <div class="card-body">
 
-                                    <div class="row mb-3">
+                                    <div class="row mb-3 text-center">
 
                                     
                                         <div class="col-md-4">
@@ -598,17 +610,18 @@ function get_manual_stock(process_id) {
 
                                     </div>
 
-                                    <table class="table table-bordered table-sm">
+                                    <div class="d-flex justify-content-between">
+                                        <table class="table small table-bordered table-sm">
 
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Reserve Type</th>
-                                                <th>Qty</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
+                                            <thead class="table-light small">
+                                                <tr>
+                                                    <th>Reserve Type</th>
+                                                    <th>Qty</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
 
-                                        <tbody>
+                                            <tbody class="small">
                             `;
 
                     stock.reserve_details.forEach(type => {
@@ -619,7 +632,7 @@ function get_manual_stock(process_id) {
                                 <tr>
 
                                     <td>
-                                        ${type.reserve_type.replaceAll("_", " ").toUpperCase()}
+                                        ${(type.reserve_type != null ? type.reserve_type.replaceAll("_", " ").toUpperCase() : '')}
                                     </td>
 
                                     <td>${detail.reserve_qty}</td>
@@ -637,29 +650,21 @@ function get_manual_stock(process_id) {
 
                     });
 
-                    html += `
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-            `;
+                    html += `</tbody></table>${other}</div></div></div>`;
 
                 });
 
             } else {
 
                 html += `
-            <div class="text-center py-5">
+                    <div class="text-center py-5">
 
-                <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
+                        <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
 
-                <h5>No Stock Details Found</h5>
+                        <h5>No Stock Details Found</h5>
 
-            </div>
-        `;
+                    </div>
+                `;
             }
 
             $("#stock_details_modal .modal-body").html(html);
@@ -1412,7 +1417,7 @@ function get_process_summary_inputs(process_id) {
 
             // total row
             $("#bom_required_material_table_body").append(`
-                <tr class="fw-bold table-primary">
+                <tr class="fw-bold table-primary" style="bottom: 0; z-index: 5; position: sticky;">
                     <td colspan="2">Total</td>
                     <td colspan="2">Min: ${total_min_time}</td>
                     <td>Max: ${total_max_time}</td>
