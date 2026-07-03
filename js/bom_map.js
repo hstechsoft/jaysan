@@ -271,104 +271,64 @@ $(document).ready(function () {
 
     $("#processFlow").on("click", ".stock_gddown_list", function () {
 
-        let stock_details = $(this).attr("data-stock_details");
-        stock_details = stock_details ? JSON.parse(stock_details) : [];
+        let part_id = $(this).attr("data-part_id");
+        let process_id = $(this).attr("data-process_id");
 
-        if (typeof stock_details === "string") {
-            stock_details = JSON.parse(stock_details);
+        if (!part_id || !process_id) {
+            salert("Warning", "Missing Data", "warning");
         }
-        console.log(stock_details);
-        let html = "";
-
-        if (stock_details.length > 0) {
-
-            stock_details.forEach(stock => {
-
-                html += `
-                <div class="card shadow-sm mb-3 border-0">
-                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-0">${stock.creditor_name}</h6>
-                            <small class="text-muted">
-                                ${stock.dep_name ?? "-"}
-                                ${stock.sec_name ? " / " + stock.sec_name : ""}
-                            </small>
-                        </div>
-
-                        <span class="badge bg-primary">
-                            Available : ${stock.available_qty}
-                        </span>
-                    </div>
-
-                    <div class="card-body py-2">
-
-                        <div class="row mb-2">
-                            <div class="col-6">
-                                <small class="text-muted">Reserved Qty</small>
-                                <h6 class="mb-0 text-danger">${stock.reserve_qty}</h6>
-                            </div>
-
-                            <div class="col-6">
-                                <small class="text-muted">Stock ID</small>
-                                <h6 class="mb-0">${stock.stock_id}</h6>
-                            </div>
-                        </div>
-
-                        <table class="table table-sm table-bordered align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Reserve Type</th>
-                                    <th>Qty</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-            `;
-
-                stock.reserve_details.forEach(type => {
-
-                    type.reserve_details.forEach(detail => {
-
-                        html += `
-                        <tr>
-                            <td>${type.reserve_type.replaceAll("_", " ").toUpperCase()}</td>
-                            <td>${detail.reserve_qty}</td>
-                            <td>
-                                <span class="badge bg-success">
-                                    ${detail.reserve_status}
-                                </span>
-                            </td>
-                        </tr>
-                    `;
-
-                    });
-
-                });
-
-                html += `
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            `;
-
-            });
-
-        } else {
-
-            html = `
-            <div class="text-center py-5">
-                <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
-                <h6>No Stock Details Found</h6>
-            </div>
-        `;
+        else {
+            get_manual_stock(process_id);
         }
 
-        $("#stock_details_modal .modal-body").html(html);
+    });
 
-        $("#stock_details_modal").modal("show");
 
+    // Show/Hide Reason Input
+    $("#stock_details_modal").on("change", ".stock_status_switch", function () {
+
+        const card = $(this).closest(".card");
+
+        card.find(".reason_input").toggleClass("d-none", !this.checked);
+
+    });
+
+
+    $("#stock_details_modal").on("click", ".opening_qty_btn", function () {
+
+        const card = $(this).closest(".card");
+        const part_id = $(this).data("part_id");
+        const process_id = $(this).data("process_id");
+        const qty = card.find(".opening_stock_qty").val();
+        const stock_reserve = card.find(".stock_status_switch").is(":checked") ? 1 : 0;
+        const reserve_type = card.find(".reason_input").val();
+        const godown = $(this).data("godown");
+        const dep = $(this).data("dep");
+        const sec = $(this).data("sec");
+
+        console.log({
+            part_id,
+            process_id,
+            qty,
+            stock_reserve,
+            reserve_type,
+            godown,
+            dep,
+            sec
+        });
+
+        update_manual_process_stock1(godown, dep, sec, process_id, part_id, qty, stock_reserve, reserve_type);
+
+
+    });
+
+    $("#refreshBtn").on("click", function () {
+
+        const process_id = $(this).val();
+
+        if (process_id) {
+            get_manual_stock(process_id);
+        }
     });
 
 
@@ -475,6 +435,276 @@ $(document).ready(function () {
 
 
 
+function get_manual_stock(process_id) {
+    console.log(process_id);
+    $.ajax({
+        url: "php/get_manual_stock.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+        },
+
+        success: function (response) {
+
+            $("#bom_material_table_body").empty();
+
+            if (response.trim() === "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            if (response.trim() === "0 result") {
+                $("#stock_details_modal .modal-body").html(`
+                    <div class="text-center py-5">
+                        <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
+                        <h5>No Stock Details Found</h5>
+                    </div>
+                `);
+
+                $("#stock_details_modal").modal("show");
+                return;
+            }
+
+            $("#refreshBtn").val(process_id);
+            console.log(response);
+
+            let responseData = JSON.parse(response);
+
+            if (!responseData.length) {
+                return;
+            }
+
+
+            let result = responseData[0];
+
+
+            let stock_details = [];
+
+            if (result.stock_details) {
+                stock_details = JSON.parse(result.stock_details);
+            }
+
+            let html = `
+                    <div class="alert alert-primary d-flex justify-content-between mb-3">
+                        <div>
+                            <strong>Total Available Qty :</strong>
+                            ${result.total_available_qty}
+                        </div>
+                        <div>
+                            <strong>Total Reserve Qty :</strong>
+                            ${result.total_reserve_qty}
+                        </div>
+                        <div>
+                            <strong>Total Qty :</strong>
+                            ${parseInt(result.total_reserve_qty) + parseInt(result.total_available_qty)}
+                        </div>
+                    </div>
+                `;
+
+            if (stock_details.length > 0) {
+
+                stock_details.forEach(stock => {
+
+                    html += `
+                            <div class="card shadow-sm mb-3 border-0">
+
+                                <div class="card-header bg-light">
+
+                                    <div class="row g-2 align-items-center">
+
+                                        <div class="col-lg-4">
+                                            <h6 class="mb-0">${stock.creditor_name}</h6>
+
+                                            <small class="text-muted">
+                                                ${stock.dep_name ?? "-"}
+                                                ${stock.sec_name ? " / " + stock.sec_name : ""}
+                                            </small>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <input
+                                                type="number"
+                                                class="form-control form-control-sm opening_stock_qty"
+                                                placeholder="Opening Qty">
+                                        </div>
+
+                                        <div class="col-lg-auto">
+
+                                            <div class="form-check form-switch">
+                                                <input
+                                                    class="form-check-input stock_status_switch"
+                                                    type="checkbox">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-lg-2">
+
+                                            <input
+                                                type="text"
+                                                class="form-control form-control-sm reason_input d-none"
+                                                placeholder="Reason">
+
+                                        </div>
+
+                                        <div class="col-lg-auto">
+
+                                            <button
+                                                class="btn btn-sm btn-primary opening_qty_btn"
+                                                data-process_id="${result.process_id}"
+                                                data-part_id="${result.part_id}"
+                                                data-godown="${stock.godown}"
+                                                data-dep="${stock.dep}"
+                                                data-sec="${stock.sec}">
+                                                OK
+                                            </button>
+
+                                        </div>
+
+                                        <div class="col text-end">
+
+                                            <span class="badge bg-secondary">
+                                                Stock ID : ${stock.stock_id}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card-body">
+
+                                    <div class="row mb-3">
+
+                                    
+                                        <div class="col-md-4">
+                                            <small class="text-muted">Actual Qty</small>
+                                            <h6 class="text-success">${stock.qty}</h6>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <small class="text-muted">Reserved Qty</small>
+                                            <h6 class="text-danger">
+                                                ${stock.reserve_qty}
+                                            </h6>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <small class="text-muted">Available</small>
+                                            <h6 class="text-info">${stock.available_qty}</h6>
+                                        </div>
+
+                                    </div>
+
+                                    <table class="table table-bordered table-sm">
+
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Reserve Type</th>
+                                                <th>Qty</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                            `;
+
+                    stock.reserve_details.forEach(type => {
+
+                        type.reserve_details.forEach(detail => {
+
+                            html += `
+                                <tr>
+
+                                    <td>
+                                        ${type.reserve_type.replaceAll("_", " ").toUpperCase()}
+                                    </td>
+
+                                    <td>${detail.reserve_qty}</td>
+
+                                    <td>
+                                        <span class="badge bg-success">
+                                            ${detail.reserve_status}
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            `;
+
+                        });
+
+                    });
+
+                    html += `
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+            `;
+
+                });
+
+            } else {
+
+                html += `
+            <div class="text-center py-5">
+
+                <i class="fa fa-box-open fa-3x text-secondary mb-3"></i>
+
+                <h5>No Stock Details Found</h5>
+
+            </div>
+        `;
+            }
+
+            $("#stock_details_modal .modal-body").html(html);
+
+            $("#stock_details_modal").modal("show");
+        },
+
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+    });
+}
+
+function update_manual_process_stock1(godown, dep, sec, process_id, part_id, qty, stock_reserve, reserve_type) {
+    console.log(godown, dep, sec, process_id, part_id, qty, stock_reserve, reserve_type);
+
+
+    $.ajax({
+        url: "php/update_manual_process_stock1.php",
+        type: "post",
+        data: {
+            godown: godown,
+            dep: dep,
+            sec: sec,
+            process_id: process_id,
+            part_id: part_id,
+            qty: qty,
+            stock_reserve: stock_reserve,
+            reserve_type: reserve_type
+        },
+
+        success: function (response) {
+
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                get_manual_stock(process_id);
+                salert("Success", "Stock updated successfully", "success");
+            }
+
+
+        }
+    });
+
+}
 
 function get_real_process_summary_godown(process_id, qty) {
     $.ajax({
@@ -922,7 +1152,7 @@ function get_process_graph(part_name, component_cat, process_id, process_title) 
 
                                 <!-- BOTTOM RIGHT ICON + COUNT -->
                                 <div class="bottom-right-wrapper">
-                                    <span class="stock_gddown_list badge bg-primary" data-stock_details='${JSON.stringify(p.stock_details)}'><i class="fa fa-warehouse"></i></span>
+                                    <span class="stock_gddown_list badge bg-primary" data-stock_details='${JSON.stringify(p.stock_details)}' data-part_id='${p.output_part}' data-process_id='${p.process_id}'><i class="fa fa-warehouse"></i></span>
                                 </div>
 
                             </div>
