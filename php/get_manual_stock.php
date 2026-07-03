@@ -20,10 +20,55 @@ return $data;
 
   
 
- $sql = "select process_id,part_id, JSON_ARRAYAGG(
-        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name,'qty', srv.qty, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty,sum(srv.qty) as total_qty from stock_reserve_view srv   where srv.process_id <=> $process_id group by srv.process_id";
+ $sql = "with
+    srv as (
+        select process_id, part_id
+        from stock_reserve_view
+        WHERE
+            process_id = $process_id
+    )
+select
+    srv.process_id,
+    srv.part_id,
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'godown',
+            srv1.godown,
+            'dep',
+            srv1.dep,
+            'sec',
+            srv1.sec,
+            'stock_id',
+            srv1.stock_id,
+            'creditor_name',
+            srv1.creditor_name,
+            'dep_name',
+            srv1.dep_name,
+            'sec_name',
+            srv1.sec_name,
+            'qty',
+            srv1.qty,
+            'reserve_qty',
+            srv1.reserve_qty,
+            'available_qty',
+            srv1.available_qty,
+            'reserve_details',
+            srv1.reserve_details
+        )
+    ) as stock_details,
+    sum(srv1.available_qty) as total_available_qty,
+    sum(ifnull(srv1.reserve_qty, 0)) as total_reserve_qty,
+    sum(srv1.qty) as total_qty
+from srv
+  left join stock_reserve_view srv1 on CASE
+       WHEN srv.part_id IS NOT NULL
+           THEN srv.part_id = srv1.part_id
+       ELSE
+           srv.process_id = srv1.process_id
+   END";
  
 // echo "sql: " . $sql . "<br>";
+
 
 $result = $conn->query($sql);
 
