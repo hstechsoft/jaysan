@@ -37,7 +37,7 @@ WITH RECURSIVE process_details AS (
    from process_details pd
     LEFT join input_wel_parts ip on pd.process_id = ip.process_id GROUP by process_id),
     stock_info as(select pf.*, srv.part_id ,  JSON_ARRAYAGG(
-        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty from process_final pf   
+        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name,'qty', srv.qty, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty,sum(srv.qty) as total_qty from process_final pf   
     left join stock_reserve_view srv on pf.process_id <=> srv.process_id group by pf.process_id),
     
     extra as (SELECT pf.*, 

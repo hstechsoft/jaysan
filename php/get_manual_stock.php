@@ -21,7 +21,7 @@ return $data;
   
 
  $sql = "select process_id,part_id, JSON_ARRAYAGG(
-        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty from stock_reserve_view srv   where srv.process_id <=> $process_id group by srv.process_id";
+        JSON_OBJECT( 'godown', srv.godown, 'dep', srv.dep, 'sec', srv.sec, 'stock_id', srv.stock_id, 'creditor_name', srv.creditor_name, 'dep_name', srv.dep_name, 'sec_name', srv.sec_name,'qty', srv.qty, 'reserve_qty', srv.reserve_qty, 'available_qty', srv.available_qty, 'reserve_details', srv.reserve_details) ) as stock_details,sum(srv.available_qty) as total_available_qty,sum(srv.reserve_qty) as total_reserve_qty,sum(srv.qty) as total_qty from stock_reserve_view srv   where srv.process_id <=> $process_id group by srv.process_id";
  
 // echo "sql: " . $sql . "<br>";
 
