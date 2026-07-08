@@ -5,6 +5,7 @@
 //  $demand_id = test_input($_GET['demand_id']);
 $work_process_id = test_input($_GET['work_process_id']);
  $work_order_qty = test_input($_GET['work_order_qty']);
+  $work_order_qty1 = $work_order_qty ;
  $godown = test_input($_GET['godown']);
  $dep = test_input($_GET['dep']);
  $sec = test_input($_GET['sec']);
@@ -107,9 +108,10 @@ $result_json['assignments'][] = array(
 // begin transaction
 
 // get the raw materail for the demand id
-$sql = "select iwp.input_part_id, iwp.previous_process_id,iwp.qty* $work_order_qty as required_qty from input_wel_parts iwp 
+$sql = "select iwp.input_part_id, iwp.previous_process_id,iwp.qty* $work_order_qty1 as required_qty from input_wel_parts iwp 
 where iwp.process_id = $work_process_id";
 
+$result_json['messages']['raw material query'] = $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -129,7 +131,7 @@ if ($result->num_rows > 0) {
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.part_id = $input_part_id";
       }
 
-      $result_json['messages'][] = "sql_demand_reservation: ".$sql_demand_reservation;
+      $result_json['messages']['demand query'] = $sql_demand_reservation;
       
         $total_holded_qty = 0;
         // get demand reservation for the input part id
@@ -203,10 +205,15 @@ $same_godown = current(array_filter($demand_array, function ($item) {
     return $item['same_godown'] == true;
 }));
 
+
+
+$result_json['messages']['raw material result'] = $same_godown['same_godown'];
+
+
 $stock_to_be_released = min($required_qty, $total_holded_qty);
 
 // if same godown qty found then release it
-if($same_godown)
+if($same_godown['same_godown'])
   {
     foreach($demand_array as $item)
     {
@@ -219,17 +226,17 @@ if($same_godown)
         // release the reserve qty
         $sql_release = "update stock_reserve set reserve_qty = reserve_qty - $stock_to_be_released_same_godown where stock_reserve_id = $stock_reserve_id and reserve_type = 'demand'";
         if ($conn->query($sql_release) === TRUE) {
-          $result_json['messages'][] = "stock internally released successfully";
+          $result_json['messages']['result1'][] = "stock internally released successfully";
        $stock_to_be_released -= $stock_to_be_released_same_godown;
         } else {
          throw new Exception("Error updating record: " . $conn->error);
         }
       }
     }
-print_r($same_godown);
+
   }
 
-  $result_json['messages'][] = "stock_to_be_released: ".$stock_to_be_released;
+  $result_json['messages'][' result2'][] = "stock_to_be_released: ".$stock_to_be_released;
   // if stock to be released is still > 0 then release other godown qty
 
   if($stock_to_be_released > 0)
@@ -245,7 +252,7 @@ print_r($same_godown);
           // release the reserve qty
           $sql_release = "update stock_reserve set reserve_qty = reserve_qty - $stock_to_be_released_other_godown where stock_reserve_id = $stock_reserve_id and reserve_type = 'demand'";
           if ($conn->query($sql_release) === TRUE) {
-            $result_json['messages'][] = "stock released externally successfully";
+            $result_json['messages']['result3'][] = "stock released externally successfully";
          $stock_to_be_released -= $stock_to_be_released_other_godown;
           } else {
             throw new Exception("Error updating record: " . $conn->error);
@@ -303,9 +310,9 @@ $same_godown = current(array_filter($stock_reservation_array, function ($item) {
 }));
 
 
+$result_json['stock_reservation_array'] = $stock_reservation_array;
 
-
-if($same_godown)
+if($same_godown['same_godown'])
   {
  foreach($stock_reservation_array as $item)
     {
@@ -318,7 +325,7 @@ if($same_godown)
         // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown
         $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_same_godown,'work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown";
         if ($conn->query($sql_release) === TRUE) {
-          $result_json['messages'][] = "stock internally reserved successfully";
+          $result_json['messages']['result4'][] = "stock internally reserved successfully";
        $stock_to_be_reserved -= $stock_to_be_reserved_same_godown;
         } else {
           throw new Exception("Error updating record: " . $conn->error);
@@ -326,8 +333,8 @@ if($same_godown)
       }
     }
   }
-
-
+if($stock_to_be_reserved > 0)
+{
   foreach($stock_reservation_array as $item)
     {
       if($item['same_godown'] == false && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
@@ -339,7 +346,7 @@ if($same_godown)
         // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_other_godown
         $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_other_godown,'job_work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_other_godown";
         if ($conn->query($sql_release) === TRUE) {
-          $result_json['messages'][] = "stock externally reserved successfully";
+          $result_json['messages']['result5'][] = "stock externally reserved successfully";
        $stock_to_be_reserved -= $stock_to_be_reserved_other_godown;
         } else {
           throw new Exception("Error updating record: " . $conn->error);
@@ -348,6 +355,8 @@ if($same_godown)
 
 
     }
+
+}
     }
     
  else {
@@ -364,7 +373,7 @@ throw new Exception("No raw material found for the process id: " . $work_process
 //   throw new Exception("Error inserting work order: " . $conn->error);
 // }
 $result_json['success'] = true;
-$conn->commit();
+ $conn->commit();
 
 }
 catch (Exception $e) {
