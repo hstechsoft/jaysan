@@ -288,17 +288,17 @@ $result_reservation = $conn->query($sql_reservation);
             $stock_id = $r_reservation['stock_id']; 
             $available_qty = $r_reservation['available_qty'];
             $godown_string = $r_reservation['godown_string'];
-            $same_godown = false;
+            $same_godown_chk = false;
             if($godown_string_db == $godown_string)
             {
-             $same_godown = true;
+             $same_godown_chk = true;
             }
 
             $stock_reservation_array[] = array(
               "stock_id" => $stock_id,
               "available_qty" => $available_qty,
               "godown_string" => $godown_string,
-              "same_godown" => $same_godown
+              "same_godown" => $same_godown_chk
             );
 
           }
