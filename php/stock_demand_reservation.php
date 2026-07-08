@@ -128,6 +128,8 @@ if ($result->num_rows > 0) {
            $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.part_id = $input_part_id";
       }
+
+      $result_json['messages'][] = "sql_demand_reservation: ".$sql_demand_reservation;
       
         $total_holded_qty = 0;
         // get demand reservation for the input part id
