@@ -17,7 +17,7 @@ $sec = sql_nullable($sec);
 
 $godown_string = $godown.$dep.$sec;
 
- 
+ $same_godown_string = "";
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -153,6 +153,7 @@ $same_godown = false;
 if($godown_string_db == $godown_string)
             {
              $same_godown = true;
+             $same_godown_string = $godown_string_db;
             }
 
             $demand_array[] = array(
@@ -289,7 +290,7 @@ $result_reservation = $conn->query($sql_reservation);
             $available_qty = $r_reservation['available_qty'];
             $godown_string = $r_reservation['godown_string'];
             $same_godown_chk = false;
-            if($godown_string_db == $godown_string)
+            if($same_godown_string == $godown_string)
             {
              $same_godown_chk = true;
             }
