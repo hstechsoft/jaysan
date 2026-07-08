@@ -162,6 +162,18 @@ if($godown_string_db == $godown_string)
               "same_godown" => $same_godown,
               "stock_reserve_id" => $stock_reserve_id
             );
+
+            $result_json['demand_reservations'][] = array(
+              "stock_id" => $stock_id,
+              "godown_id" => $godown_id,
+              "dep_id" => $dep_id,
+              "sec_id" => $sec_id,
+              "godown_string" => $godown_string_db,
+              "reserve_qty" => $demand_reserve_qty,
+              "available_qty" => $available_qty,
+              "same_godown" => $same_godown,
+              "stock_reserve_id" => $stock_reserve_id
+            );
          
           }
 
