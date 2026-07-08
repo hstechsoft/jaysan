@@ -1,0 +1,1 @@
+CREATE or REPLACE view stock_view as  (SELECT * from jaysan_stock inner join stock_reserve on jaysan_stock.stock_id = stock_reserve.stock_id)

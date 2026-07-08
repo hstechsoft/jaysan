@@ -279,6 +279,7 @@ $(document).ready(function () {
         }
         else {
             get_manual_stock(process_id);
+          
         }
 
     });
@@ -331,6 +332,17 @@ $(document).ready(function () {
         }
     });
 
+
+    $("#showDemandBtn").on("click", function () {
+// if the demand table is already visible, hide it, otherwise show it also change icon
+        if ($(".demand_tbl").is(":visible")) {
+            $(".demand_tbl").hide();
+            $(this).html('<i class="fas fa-eye"></i>');
+        } else {
+            $(".demand_tbl").show();
+            $(this).html('<i class="fas fa-eye-slash"></i>');
+        }
+    });
 
 
 
@@ -461,7 +473,7 @@ function get_manual_stock(process_id) {
                         <h5>No Stock Details Found</h5>
                     </div>
                 `);
-
+  $("#bom_material_table_body").append('<p class="text-center text-muted small">Loading...</p>');
                 $("#stock_details_modal").modal("show");
                 return;
             }
@@ -628,7 +640,7 @@ function get_manual_stock(process_id) {
 
                         type.reserve_details.forEach(detail => {
 
-                            if (detail.reserve_qty > 0) {
+                            if (detail.reserve_qty >= 0) {
                                 html += `
                                         <tr>
 
@@ -657,7 +669,7 @@ function get_manual_stock(process_id) {
 
                     });
 
-                    html += `</tbody></table>${other}</div></div></div>`;
+                    html += `</tbody></table></div></div></div>`;
 
                 });
 
@@ -676,6 +688,11 @@ function get_manual_stock(process_id) {
 
             $("#stock_details_modal .modal-body").html(html);
 
+            // get demand material details
+            get_demand_material_details(process_id);
+            get_external_material_details(process_id);
+
+
             $("#stock_details_modal").modal("show");
         },
 
@@ -683,6 +700,114 @@ function get_manual_stock(process_id) {
             salert("Error", "Network issue", "error");
         }
     });
+}
+
+
+function get_external_material_details(process_id) {
+      $.ajax({
+        url: "php/get_jobwork_reserve.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+            
+        },
+
+        success: function (response) {
+console.log("External Material Details Response:", response);
+$("#demand_material_jobwork_table_body").empty();
+            if (response.trim() == "0 result") {
+                 
+                $("#demand_material_jobwork_table_body").append(`
+                    <tr>
+                        <td colspan="3" class="text-center">No External Material Details Found</td>
+                    </tr>
+                `);
+            }
+
+            else
+            {
+                var demandData = JSON.parse(response);
+                // card with table
+                
+                var body_html = '';
+                var total_reserved_qty = 0;
+                demandData.forEach(demand => {
+                    total_reserved_qty += parseFloat(demand.reserved_qty);
+                    body_html += `<tr>
+                        <td>${demand.godown_name == null ? '' : demand.godown_name}${demand.dep_name == null ? '' : '|' + demand.dep_name}${demand.sec_name == null ? '' : '|' + demand.sec_name}</td>
+                        <td>${demand.reserved_qty}</td>
+                    </tr>`;
+                });
+                // show total reserved qty in the last row
+                body_html += `<tr>
+                    <td class="text-end"><b>Total Reserved Qty</b></td>
+                    <td><b>${total_reserved_qty}</b></td>
+                </tr>`;
+                $("#demand_material_jobwork_table_body").append(body_html);
+            }
+
+        },
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+         });
+
+}
+
+function get_demand_material_details(process_id) {
+      $.ajax({
+        url: "php/get_input_demand.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+            
+        },
+
+        success: function (response) {
+            $("#demand_material_table_body").empty();
+console.log("Demand Material Details Response:", response);
+            if (response.trim() === "0 result") {
+                
+                $("#demand_material_table_body").append(`
+                    <tr>
+                        <td colspan="3" class="text-center">No Demand Material Details Found</td>
+                    </tr>
+                `);
+            }
+
+            else
+            {
+                var demandData = JSON.parse(response);
+                // card with table
+                var total_required_qty = 0;
+                var body_html = '';
+                demandData.forEach(demand => {
+                    total_required_qty += parseFloat(demand.required_qty);
+                    body_html += `<tr>
+                        <td>${demand.godown_name == null ? '' : demand.godown_name}${demand.dep_name == null ? '' : '|' + demand.dep_name}${demand.sec_name == null ? '' : '|' + demand.sec_name}</td>
+                        <td>${demand.required_qty}</td>
+                        <td>${demand.total_reserve_qty}</td>
+                        <td>${demand.needed}</td>
+                    </tr>`;
+                });
+             
+
+                // show total required qty in the last row
+                body_html += `<tr>
+                    <td class="text-end" colspan="3"><b>Total Required Qty</b></td>
+                    <td><b>${total_required_qty}</b></td>
+                </tr>`;
+                $("#demand_material_table_body").append(body_html);
+            }
+
+        },
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+         });
+
 }
 
 function update_manual_process_stock1(godown, dep, sec, process_id, part_id, qty, stock_reserve, reserve_type) {
