@@ -288,6 +288,7 @@ $result_reservation = $conn->query($sql_reservation);
             $stock_id = $r_reservation['stock_id']; 
             $available_qty = $r_reservation['available_qty'];
             $godown_string = $r_reservation['godown_string'];
+            $same_godown = false;
             if($godown_string_db == $godown_string)
             {
              $same_godown = true;
@@ -372,6 +373,16 @@ throw new Exception("No raw material found for the process id: " . $work_process
 // } else {
 //   throw new Exception("Error inserting work order: " . $conn->error);
 // }
+
+
+// delete all reserve record whose reserve_qty = 0
+$sql_delete_zero_reserve = "delete from stock_reserve where reserve_qty = 0";
+if ($conn->query($sql_delete_zero_reserve) === TRUE) {
+  
+  $result_json['messages']['result6'][] = "zero reserve records deleted successfully";
+} else {
+  throw new Exception("Error deleting zero reserve records: " . $conn->error);
+}
 $result_json['success'] = true;
  $conn->commit();
 
