@@ -20,16 +20,14 @@ return $data;
 
   
 
- $sql = "with
+ $sql = "
+with
     srv as (
-        select process_id, part_id
-        from stock_reserve_view
-        WHERE
-            process_id = $process_id
+  select output_part,process_id from process_wel_tbl WHERE process_id = $process_id
     )
 select
     srv.process_id,
-    srv.part_id,
+    srv.output_part as part_id,
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'godown',
@@ -60,9 +58,9 @@ select
     sum(ifnull(srv1.reserve_qty, 0)) as total_reserve_qty,
     sum(srv1.qty) as total_qty
 from srv
-  left join stock_reserve_view srv1 on CASE
-       WHEN srv.part_id IS NOT NULL
-           THEN srv.part_id = srv1.part_id
+  inner join stock_reserve_view srv1 on CASE
+       WHEN srv.output_part IS NOT NULL
+           THEN srv.output_part = srv1.part_id
        ELSE
            srv.process_id = srv1.process_id
    END";

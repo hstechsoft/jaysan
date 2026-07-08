@@ -87,12 +87,14 @@ $stock_id = 0;
             exit();
         }
     }
+
+  
    require_once 'stock_distribution.php';
    
    $result = stock_distribution($conn,$stock_id,$qty,$process_id);
-
+echo "\n result:".$result;
    if ($result) {
-       echo "ok";
+    //    echo "ok";
    } else {
        echo "error distributing stock".$result;
    }
