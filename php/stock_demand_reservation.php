@@ -53,6 +53,10 @@ if ($result_total_unaassigned_qty->num_rows > 0) {
     throw new Exception("No unaassigned qty found for the work_process_id: " . $work_process_id);
 }
 
+$result_json['demand_array'] = $demand_array;
+$result_json['total_unaassigned_qty'] = $total_unaassigned_qty;
+
+
 
 
 if($total_unaassigned_qty < $work_order_qty) {
