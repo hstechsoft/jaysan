@@ -77,7 +77,10 @@ while($work_order_qty > 0 && count($demand_array) > 0) {
         // assign only the remaining work order qty to the demand
         $assign_qty = $work_order_qty;
     }
-
+$result_json['assignments'][] = array(
+        "demand_id" => $demand_id,
+        "assigned_qty" => $assign_qty
+    );
     // insert work order record for the demand
     $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id)";
    
