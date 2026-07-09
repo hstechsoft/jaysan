@@ -54,8 +54,8 @@ if ($result_total_unaassigned_qty->num_rows > 0) {
     throw new Exception("No unaassigned qty found for the work_process_id: " . $work_process_id);
 }
 
-$result_json['demand_array'] = $demand_array;
-$result_json['total_unaassigned_qty'] = $total_unaassigned_qty;
+$result_json['demand_array'][] = $demand_array;
+$result_json['total_unaassigned_qty'][] = $total_unaassigned_qty;
 
 
 
@@ -111,7 +111,7 @@ $result_json['assignments'][] = array(
 $sql = "select iwp.input_part_id, iwp.previous_process_id,iwp.qty* $work_order_qty1 as required_qty from input_wel_parts iwp 
 where iwp.process_id = $work_process_id";
 
-$result_json['messages']['raw material query'] = $sql;
+$result_json['messages']['raw material query'][] = $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -131,7 +131,7 @@ if ($result->num_rows > 0) {
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.part_id = $input_part_id";
       }
 
-      $result_json['messages']['demand query'] = $sql_demand_reservation;
+      $result_json['messages']['demand query'][] = $sql_demand_reservation;
       
         $total_holded_qty = 0;
         // get demand reservation for the input part id
@@ -207,7 +207,7 @@ $same_godown = current(array_filter($demand_array, function ($item) {
 }));
 
 
-$result_json['messages']['raw material result'] = $same_godown['same_godown'] ?? false;
+$result_json['messages']['raw material result'][] = $same_godown['same_godown'] ?? false;
 
 
 $stock_to_be_released = min($required_qty, $total_holded_qty);
@@ -311,7 +311,7 @@ $same_godown = current(array_filter($stock_reservation_array, function ($item) {
 }));
 
 
-$result_json['stock_reservation_array'] = $stock_reservation_array;
+$result_json['stock_reservation_array'][] = $stock_reservation_array;
 
 if($same_godown['same_godown']?? false)
   {
