@@ -195,7 +195,7 @@ if($godown_string_db == $godown_string)
            
         );
 
-    }
+    
 
 
 // if holded qty > 0 need to release the holded qty  first relese same godown qty first then other godown qty
@@ -304,11 +304,15 @@ $result_reservation = $conn->query($sql_reservation);
           }
     }
 
-    
 
 $same_godown = current(array_filter($stock_reservation_array, function ($item) {
-    return $item['same_godown'] == true;
+    return is_array($item) && ($item['same_godown'] ?? false);
 }));
+    
+
+// $same_godown = current(array_filter($stock_reservation_array, function ($item) {
+//     return $item['same_godown'] == true;
+// }));
 
 
 $result_json['stock_reservation_array'][] = $stock_reservation_array;
@@ -358,7 +362,10 @@ if($stock_to_be_reserved > 0)
     }
 
 }
+
     }
+    }
+    // -----------------
     
  else {
 throw new Exception("No raw material found for the process id: " . $work_process_id);
@@ -384,7 +391,7 @@ if ($conn->query($sql_delete_zero_reserve) === TRUE) {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
 $result_json['success'] = true;
-//  $conn->commit();
+  $conn->commit();
 
 }
 catch (Exception $e) {
