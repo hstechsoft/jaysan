@@ -203,18 +203,17 @@ if($total_holded_qty > 0)
   {
     // 1st find same godown qty and release it
 $same_godown = current(array_filter($demand_array, function ($item) {
-    return $item['same_godown'] == true;
+    return is_array($item) && ($item['same_godown'] ?? false);
 }));
 
 
-
-$result_json['messages']['raw material result'] = $same_godown['same_godown'];
+$result_json['messages']['raw material result'] = $same_godown['same_godown'] ?? false;
 
 
 $stock_to_be_released = min($required_qty, $total_holded_qty);
 
 // if same godown qty found then release it
-if($same_godown['same_godown'])
+if($same_godown['same_godown'] ?? false)
   {
     foreach($demand_array as $item)
     {
@@ -314,7 +313,7 @@ $same_godown = current(array_filter($stock_reservation_array, function ($item) {
 
 $result_json['stock_reservation_array'] = $stock_reservation_array;
 
-if($same_godown['same_godown'])
+if($same_godown['same_godown']?? false)
   {
  foreach($stock_reservation_array as $item)
     {
@@ -385,7 +384,7 @@ if ($conn->query($sql_delete_zero_reserve) === TRUE) {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
 $result_json['success'] = true;
- $conn->commit();
+//  $conn->commit();
 
 }
 catch (Exception $e) {
