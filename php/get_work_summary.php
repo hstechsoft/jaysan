@@ -30,7 +30,7 @@ return $data;
 }
 
 $result_json = array();
-
+$process_time_array = [];
 $result_json['process_part_array'] = $process_part_array;
 $result_json['break_time_array'] = $break_time_array;
 // check break_time_array is array and not empty
@@ -89,7 +89,7 @@ if ($result_qr_sts->num_rows > 0) {
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(time_diff(start_time, IFNULL(end_time, NOW()), 'minute')) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id and work_done_id = $work_done_id;";
@@ -119,7 +119,7 @@ if(count($break_time_array) > 0) {
 
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
-$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
+$sql_get_production_entry_time = "SELECT sum(time_diff(start_time, end_time, 'minute')) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
@@ -244,7 +244,8 @@ $conn->begin_transaction();
 $total_min_time = 0;
 $total_max_time = 0;
 $free_time = 0;
-$process_time_array = [];
+$total_required_qty = 0;
+
 $current_work_id = 0;
 
 if($qr_work_id > 0) {
@@ -278,6 +279,8 @@ else {
 
 
 foreach($process_part_array as $process_part) {
+    // $process_time_array = [];
+    $total_required_qty += $process_part['required_qty'];
     $process_id = $process_part['process_id'];
      $required_qty = $process_part['required_qty'];
      $machine_id = $process_part['machine_id'];
@@ -305,6 +308,16 @@ else {
     $conn->close();
     exit; 
 }
+}
+// echo "total_work_duration_minutes: $total_work_duration_minutes";
+// echo "<br>";
+// echo "total_min_time: $total_min_time";
+// echo "<br>";
+// echo "total_max_time: $total_max_time";
+// echo "<pre>";
+// print_r($process_time_array);
+// echo "</pre>";
+// exit();
 
 if($total_work_duration_minutes < $total_min_time) {
     $conn->rollback();
@@ -334,15 +347,31 @@ if($total_work_duration_minutes > $total_max_time) {
         exit; 
 
     }
+    $inserted_id = $conn->insert_id;
+    $result_json['inserted_work_process'][] = [
+        "work_process_id" => $inserted_id,
+        "work_id" => $work_done_id,
+        "process_id" => $pr_id,
+        "work_time_per_unit" => $pr_time,
+        "qty" => $required_qty1,
+        "current_work_id" => $current_work_id,
+        "part_id" => $part_id
+    ];
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
+    echo "Total work duration is within the acceptable range. Total work duration: $total_work_duration_minutes minutes, Minimum required time: $total_min_time minutes, Maximum allowed time: $total_max_time minutes.";
+   
     // this is correct on time  so we sum all min time and that time we reduce from total work time then we calulate excess time and distubute to all process
        $excess_time = $total_work_duration_minutes - $total_min_time;
 
-    $time_to_distribute = ($excess_time + $total_min_time )/$required_qty;
+    $time_to_distribute = ($excess_time + $total_min_time )/$total_required_qty;
+echo "excess_time: $excess_time";
+echo "<br>";
+echo "time_to_distribute: $time_to_distribute";
+echo "<br>";
 
-    
+     exit();
 
     $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
@@ -359,11 +388,23 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
             $conn->close();
             exit; 
         }
+        // get inserted id 
+        $inserted_id = $conn->insert_id;
+        // display inserted record in result_json
+        $result_json['inserted_work_process'][] = [
+            "work_process_id" => $inserted_id,
+            "work_id" => $work_done_id,
+            "process_id" => $pr_id,
+            "work_time_per_unit" => $pr_time,
+            "qty" => $required_qty1,
+            "current_work_id" => $current_work_id,
+            "part_id" => $part_id
+        ];
 
      
     }
 }
-}
+
 
 
 if($production_id > 0 && $production_id != 'NULL')
@@ -375,10 +416,10 @@ $sql_get_time = "with work_details as (SELECT
     sum(
         work_process.qty * work_process.work_time_per_unit
     ) as total_process_time,
-    TIMESTAMPDIFF(
-        MINUTE,
+    time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
+        qr_work_entry.end_time,
+        'minute'
     ) as process_duration
  
 FROM qr_work_entry
@@ -415,21 +456,21 @@ if ($result_time->num_rows > 0) {
     }
     else
         {
-$sql_get_time = "  SELECT  TIMESTAMPDIFF(
-        MINUTE,
+$sql_get_time = "  SELECT  time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
+        qr_work_entry.end_time,
+        'minute'
     ) as process_duration,qr_work_entry.qr_work_id,
     sum(work_time_per_unit*qty) as total_work_time, 
-    if(TIMESTAMPDIFF(
-        MINUTE,
+    if(time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
-    ) - sum(work_time_per_unit*qty) > 0,  (TIMESTAMPDIFF(
-        MINUTE,
+        qr_work_entry.end_time,
+        'minute'
+    ) - sum(work_time_per_unit*qty) > 0,  (time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
-    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(TIMESTAMPDIFF(MINUTE, qr1.start_time, qr1.end_time)) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
+        qr_work_entry.end_time,
+        'minute'
+    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(time_diff(qr1.start_time, qr1.end_time, 'minute')) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
      LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
      WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
 $result_time = $conn->query($sql_get_time);
@@ -502,7 +543,7 @@ if ($result_time->num_rows > 0) {
 
 
 // get total break time for the current work done id on;y unfinished entry
-$get_total_qr_unfinished = "SELECT ifnull(sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)), 0) AS total_qr_time FROM qr_work_entry 
+$get_total_qr_unfinished = "SELECT ifnull(sum(time_diff(start_time, end_time, 'minute')), 0) AS total_qr_time FROM qr_work_entry 
 
 WHERE production_id > 0 and end_time is not null and work_done_id = $work_done_id and production_id not in (select production_id from qr_work_entry where work_done_id = $work_done_id and production_id > 0 and work_sts = 'finished' and end_time is not null)";
 $result_qr_unfinished = $conn->query($get_total_qr_unfinished);
@@ -520,7 +561,7 @@ JSON_ARRAYAGG(JSON_OBJECT('part_id',work_process.part_id,'qty',work_process.qty,
 
 sum(work_process.qty * work_process.work_time_per_unit) as total_process_time,
 
-TIMESTAMPDIFF(MINUTE,qr_work_entry.start_time,qr_work_entry.end_time) as total_time,
+time_diff(qr_work_entry.start_time,qr_work_entry.end_time,'minute') as total_time,
 COUNT(work_process.process_id) as total_processes,
 pv.worked_process_data,
 if(pv.production_id>0,JSON_OBJECT('worked_process_data',pv.worked_process_data,'process_total_time',pv.process_total_time,'process_total_time',pv.process_total_time,'production_entry_data',pv.production_entry_data,'total_free_time',pv.total_free_time,'total_proess_count',pv.total_proess_count,'total_qr_work_time',pv.total_qr_work_time,'total_work_count',pv.total_work_count),null) as production_data
@@ -562,7 +603,7 @@ SUM(CASE WHEN extra_time_master.ex_type != 'break' THEN work_break.break_time EL
   left join work_break on qr_summary_wob.qr_work_id = work_break.current_work_id
    left join extra_time_master on work_break.ext_id = extra_time_master.ext_id    GROUP BY qr_summary_wob.qr_work_id
   )
-SELECT qr_work_id,start_date, end_date,TIMESTAMPDIFF(MINUTE, start_date, now()) as total_work_duration, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data,if(qr_summary.production_id>0,null,extra_work_data) as extra_work_data, total_process_time, total_break_time, total_extra_work_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
+SELECT qr_work_id,start_date, end_date,time_diff(start_date,now(),'minute') as total_work_duration, emp_id, start_time, end_time, free_time, qr_summary.production_id, reason, work_sts, if(qr_summary.production_id>0,worked_process_data,process_data) as process_data, if(qr_summary.production_id>0,null,break_data) as break_data,if(qr_summary.production_id>0,null,extra_work_data) as extra_work_data, total_process_time, total_break_time, total_extra_work_time, total_time, total_processes,production_data, if(ap.ass_id>0, JSON_OBJECT('dated',ap.dated,'emergency_order',ap.emergency_order,'chasis_no',ap.chasis_no), null) as assign_product_data FROM qr_summary 
 left  join machine_production_taken mpt on qr_summary.production_id = mpt.production_id
 left join assign_product ap on mpt.ass_id = ap.ass_id";
 $result_report = $conn->query($sql_report);

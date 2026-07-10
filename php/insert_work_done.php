@@ -83,7 +83,7 @@ if ($result_qr_sts->num_rows > 0) {
   $total_break_duration_minutes = 0;
 // if production_id > 0 all time for that production 
 if($production_id > 0 && $production_id != 'NULL') {
-    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(TIMESTAMPDIFF(MINUTE, start_time, IFNULL(end_time, NOW()))) AS total_duration_minutes
+    $sql_get_all_qr_time = "SELECT start_time, ifnull(end_time, now()) as end_time,sum(time_diff(start_time, IFNULL(end_time, NOW()), 'minute')) AS total_duration_minutes
 
 FROM qr_work_entry 
 WHERE production_id = $production_id and work_done_id = $work_done_id;";
@@ -113,7 +113,7 @@ if(count($break_time_array) > 0) {
 
 $total_qr_time = 0;
 // get all production entry where start time greater than current_process_start_time and end time is null or end time less than now and sum total process time and break time for those entry and add to total_work_duration_minutes and total_break_duration_minutes
-$sql_get_production_entry_time = "SELECT sum(TIMESTAMPDIFF(MINUTE, start_time, end_time)) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
+$sql_get_production_entry_time = "SELECT sum(time_diff(start_time, end_time, 'minute')) AS total_qr_time FROM qr_work_entry WHERE production_id > 0 and start_time >= '$current_process_start_time' and end_time <= now() and end_time is not null and work_done_id = $work_done_id";
 $result_production_entry_time = $conn->query($sql_get_production_entry_time);
 if ($result_production_entry_time->num_rows > 0) {
     while($row = $result_production_entry_time->fetch_assoc()) {
@@ -252,6 +252,7 @@ else {
 
 
 foreach($process_part_array as $process_part) {
+    $process_time_array = [];
     $process_id = $process_part['process_id'];
      $required_qty = $process_part['required_qty'];
      $machine_id = $process_part['machine_id'];
@@ -350,10 +351,10 @@ $sql_get_time = "with work_details as (SELECT
     sum(
         work_process.qty * work_process.work_time_per_unit
     ) as total_process_time,
-    TIMESTAMPDIFF(
-        MINUTE,
+    time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
+        qr_work_entry.end_time,
+        'minute'
     ) as process_duration
  
 FROM qr_work_entry
@@ -390,21 +391,21 @@ if ($result_time->num_rows > 0) {
     }
     else
         {
-$sql_get_time = "  SELECT  TIMESTAMPDIFF(
-        MINUTE,
+$sql_get_time = "  SELECT  time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
+        qr_work_entry.end_time,
+        'minute'
     ) as process_duration,qr_work_entry.qr_work_id,
     sum(work_time_per_unit*qty) as total_work_time, 
-    if(TIMESTAMPDIFF(
-        MINUTE,
+    if(time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
-    ) - sum(work_time_per_unit*qty) > 0,  (TIMESTAMPDIFF(
-        MINUTE,
+        qr_work_entry.end_time,
+        'minute'
+    ) - sum(work_time_per_unit*qty) > 0,  (time_diff(
         qr_work_entry.start_time,
-        qr_work_entry.end_time
-    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(TIMESTAMPDIFF(MINUTE, qr1.start_time, qr1.end_time)) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
+        qr_work_entry.end_time,
+        'minute'
+    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(time_diff(qr1.start_time, qr1.end_time, 'minute')) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
      LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
      WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
 $result_time = $conn->query($sql_get_time);

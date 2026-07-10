@@ -86,7 +86,7 @@ JSON_ARRAYAGG(JSON_OBJECT('part_id',work_process.part_id,'qty',work_process.qty,
 
 sum(work_process.qty * work_process.work_time_per_unit) as total_process_time,
 
-TIMESTAMPDIFF(MINUTE,qr_work_entry.start_time,qr_work_entry.end_time) as total_time,
+time_diff(qr_work_entry.start_time,qr_work_entry.end_time,'minute') as total_time,
 COUNT(work_process.process_id) as total_processes,
 pv.worked_process_data,
 if(pv.production_id>0,JSON_OBJECT('worked_process_data',pv.worked_process_data,'process_total_time',pv.process_total_time,'process_total_time',pv.process_total_time,'production_entry_data',pv.production_entry_data,'total_free_time',pv.total_free_time,'total_proess_count',pv.total_proess_count,'total_qr_work_time',pv.total_qr_work_time,'total_work_count',pv.total_work_count),null) as production_data
