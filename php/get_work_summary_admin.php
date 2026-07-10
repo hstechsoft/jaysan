@@ -279,7 +279,7 @@ else {
 
 
 foreach($process_part_array as $process_part) {
-    $process_time_array = [];
+    // $process_time_array = [];
     $process_id = $process_part['process_id'];
      $required_qty = $process_part['required_qty'];
      $machine_id = $process_part['machine_id'];
@@ -306,6 +306,8 @@ else {
     echo json_encode($result_json);
     $conn->close();
     exit; 
+}
+
 }
 
 if($total_work_duration_minutes < $total_min_time) {
@@ -339,17 +341,20 @@ if($total_work_duration_minutes > $total_max_time) {
 }
 }
 else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration_minutes <= $total_max_time) {
-    // this is correct on time  so we sum all min time and that time we reduce from total work time then we calulate excess time and distubute to all process
+ 
        $excess_time = $total_work_duration_minutes - $total_min_time;
 
-    $time_to_distribute = ($excess_time + $total_min_time )/$required_qty;
-
-    
+$total_slack_time = $total_max_time - $total_min_time;
 
     $result_json['process_time_array'] = $process_time_array;
     foreach($process_time_array as $process_time) {
         //  insert into work_process
         $pr_id = $process_time['process_id'];
+// set pr_time as mintime amd withion max time so we can distribute excess time to all process based on their min time
+     $process_slack_time = ($process_time['required_qty'] * $process_time['max_time']) - ($process_time['min_time'] * $process_time['required_qty']);
+$process_extra_time = $excess_time*($process_slack_time / $total_slack_time);
+$total_process_time = ($process_time['min_time'] * $process_time['required_qty']) + $process_extra_time;
+$time_to_distribute = round($total_process_time / $process_time['required_qty'], 2);
         $pr_time =  $time_to_distribute;
         $required_qty1 = $process_time['required_qty'];
         $part_id = $process_time['part_id'];
@@ -361,10 +366,23 @@ else if ($total_work_duration_minutes >= $total_min_time && $total_work_duration
             $conn->close();
             exit; 
         }
+        // get inserted id 
+        $inserted_id = $conn->insert_id;
+        // display inserted record in result_json
+        $result_json['inserted_work_process'][] = [
+            "work_process_id" => $inserted_id,
+            "min_time" => $process_time['min_time'],
+            "max_time" => $process_time['max_time'],
+            "work_id" => $work_done_id,
+            "process_id" => $pr_id,
+            "work_time_per_unit" => $pr_time,
+            "qty" => $required_qty1,
+            "current_work_id" => $current_work_id,
+            "part_id" => $part_id
+        ];
 
      
     }
-}
 }
 
 
