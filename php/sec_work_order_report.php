@@ -8,7 +8,9 @@
    $sec_id = test_input($_GET['sec_id']);
     $process_id = test_input($_GET['process_id']);
 
-
+$godown_id =sql_nullable($godown_id);
+$dep_id =sql_nullable($dep_id);
+$sec_id =sql_nullable($sec_id);
  
  
 function test_input($data) {
@@ -23,7 +25,7 @@ return $data;
 
 
 
- $sql = "select iv.work_process_id,iv.godown,iv.dep,iv.sec,iv.work_orders,iv.pending_process_qty,JSON_ARRAYAGG(JSON_OBJECT(
+ $sql = "with demand_material as(select iv.work_process_id,iv.godown,iv.dep,iv.sec,iv.work_orders,iv.pending_process_qty,JSON_ARRAYAGG(JSON_OBJECT(
     'input_part_id',iv.input_part_id,
     'part_name',if(iv.input_part_id is null ,jpv.final_part,pt.part_name),
     'qty',iv.required_qty,
@@ -33,8 +35,11 @@ return $data;
 )) as raw_materials_needed from input_part_demand_view iv
 left join parts_tbl pt on iv.input_part_id = pt.part_id
 left join jaysan_process_view jpv on iv.previous_process_id = jpv.process_id
-where iv.godown = $godown_id and iv.dep <=> $dep_id and iv.sec <=> $sec_id and iv.work_process_id = $process_id
-GROUP BY iv.work_process_id,iv.godown,iv.dep,iv.sec";
+where iv.godown = $godown_id and iv.dep <=> $dep_id and iv.sec <=> $sec_id and iv.work_process_id <=> $process_id
+GROUP BY iv.work_process_id,iv.godown,iv.dep,iv.sec)
+select dm.*,jpv.* from demand_material dm
+inner join jaysan_process_view jpv on dm.work_process_id = jpv.process_id
+";
 
 
 $result = $conn->query($sql);
