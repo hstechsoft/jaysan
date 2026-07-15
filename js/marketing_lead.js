@@ -557,12 +557,14 @@ window.receiveScanResult = function (result) {
 // Global callbacks called by the Android app
 window.onUploadSuccess = function (response) {
   console.log("Upload Success:", response);
-  alert("Photo uploaded successfully!");
+  // salert("Success", "Photo uploaded successfully!", "success");
+  salert("Success", response, "success");
+
 };
 
 window.onUploadError = function (error) {
   console.error("Upload Error:", error);
-  alert("Upload failed. Error code: " + error);
+  salert("Error", "Upload failed. Error code: " + error, "error");
 };
 
 // End Update
