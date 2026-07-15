@@ -45,12 +45,19 @@ window.onLocationReceived = function (lat, lng) {
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
 
-    if (clicked_capture_live_pic == 1) {
-      $(".waiting").addClass("d-none");
-      $("#lead_attachment_mobile").prop("disabled", true);
-      clicked_capture_live_pic = 0;
-      captureWithDbData();
+    if ($('#mlead_form')[0].checkValidity()) {
+      if (clicked_capture_live_pic == 1) {
+        $(".waiting").addClass("d-none");
+        $("#lead_attachment_mobile").prop("disabled", true);
+        clicked_capture_live_pic = 0;
+        captureWithDbData();
+      }
     }
+    else{
+      salert("Warning", "Fill All Fields.", "warning");
+    }
+
+
   }
   else {
     $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
@@ -181,70 +188,69 @@ $(document).ready(function () {
       insert_mlead();
     }
     else {
-      alert(attach_id)
       salert("Warning", "Please fill all fields and upload attachment", "warning");
     }
 
   });
 
 
-  $('#lead_attachment').on('change', function () {
-    var filename = $(this).val();
-    var property = this.files[0];
-    if (!property) {
-      return; // No file selected
-    }
-    var file_name = property.name;
-    var file_extension = file_name.split('.').pop().toLowerCase();
-    {
-      var form_data = new FormData();
-      form_data.append("file", property);
-      form_data.append("emp_name", current_user_name)
-      // Show the overlay and reset progress bar
-      $('#uploadOverlay').removeClass('d-none');
-      $('#uploadProgressBar').css('width', '0%').attr('aria-valuenow', 0);
+  // $('#lead_attachment').on('change', function () {
+  //   var filename = $(this).val();
+  //   var property = this.files[0];
+  //   if (!property) {
+  //     return; // No file selected
+  //   }
+  //   var file_name = property.name;
+  //   var file_extension = file_name.split('.').pop().toLowerCase();
+  //   {
+  //     var form_data = new FormData();
+  //     form_data.append("file", property);
+  //     form_data.append("emp_name", current_user_name)
+  //     // Show the overlay and reset progress bar
+  //     $('#uploadOverlay').removeClass('d-none');
+  //     $('#uploadProgressBar').css('width', '0%').attr('aria-valuenow', 0);
 
-      $.ajax({
-        url: 'upload_lead_attachment.php',
-        method: 'POST',
-        data: form_data,
-        contentType: false,
-        cache: false,
-        processData: false,
-        beforeSend: function () {
-          //  $('#msg').html('Loading......');
-          console.log('Loading......');
-          $('#mlead_add_btn').prop("disabled", true)
-        },
-        xhr: function () {
-          var xhr = new window.XMLHttpRequest();
-          xhr.upload.addEventListener("progress", function (evt) {
-            if (evt.lengthComputable) {
-              var percentComplete = Math.round((evt.loaded / evt.total) * 100);
-              $('#uploadProgressBar').css('width', percentComplete + '%').attr('aria-valuenow', percentComplete);
-            }
-          }, false);
-          return xhr;
-        },
-        success: function (data) {
-          $('#uploadOverlay').addClass('d-none');
-          $('#mlead_add_btn').prop("disabled", false)
-          attach_id = data.trim();
-          console.log(attach_id);
+  //     $.ajax({
+  //       url: 'upload_lead_attachment.php',
+  //       method: 'POST',
+  //       data: form_data,
+  //       contentType: false,
+  //       cache: false,
+  //       processData: false,
+  //       beforeSend: function () {
+  //         //  $('#msg').html('Loading......');
+  //         console.log('Loading......');
+  //         $('#mlead_add_btn').prop("disabled", true)
+  //       },
+  //       xhr: function () {
+  //         var xhr = new window.XMLHttpRequest();
+  //         xhr.upload.addEventListener("progress", function (evt) {
+  //           if (evt.lengthComputable) {
+  //             var percentComplete = Math.round((evt.loaded / evt.total) * 100);
+  //             $('#uploadProgressBar').css('width', percentComplete + '%').attr('aria-valuenow', percentComplete);
+  //           }
+  //         }, false);
+  //         return xhr;
+  //       },
+  //       success: function (data) {
+  //         $('#uploadOverlay').addClass('d-none');
+  //         $('#mlead_add_btn').prop("disabled", false)
+  //         attach_id = data.trim();
+  //         console.log(attach_id);
 
 
-          $("#uploaded_img").attr("src", "attachment/mlead/" + attach_id + "/attach_" + attach_id + "." + file_extension);
-          // $('#msg').html(data);
-          salert("Upload Result", data, "success")
-        }
-      });
+  //         $("#uploaded_img").attr("src", "attachment/mlead/" + attach_id + "/attach_" + attach_id + "." + file_extension);
+  //         // $('#msg').html(data);
+  //         salert("Upload Result", data, "success")
+  //       }
+  //     });
 
-    }
+  //   }
 
-    var filePath = filename.replace(/^.*\\/, "");
+  //   var filePath = filename.replace(/^.*\\/, "");
 
-    console.log(filePath);
-  });
+  //   console.log(filePath);
+  // });
 
 
 
@@ -254,40 +260,40 @@ $(document).ready(function () {
 
 });
 
-function insert_mlead() {
+// function insert_mlead() {
 
-  $.ajax({
-    url: "php/insert_mlead.php",
-    type: "post", //send it through get method
-    data: {
-      cus_name: $('#cus_name').val(),
-      company_name: $('#company_name').val(),
-      address: $('#address').val(),
-      phone: $('#phone').val(),
-      description: $('#description').val(),
-      dated: get_cur_millis(),
-      emp_id: current_user_id,
-      attach_id: attach_id,
-      latti: $("#lat_input").val(),
-      longi: $("#lng_input").val()
-
-
-
-    },
-    success: function (response) {
-      console.log(response);
-
-      location.reload()
+//   $.ajax({
+//     url: "php/insert_mlead.php",
+//     type: "post", //send it through get method
+//     data: {
+//       cus_name: $('#cus_name').val(),
+//       company_name: $('#company_name').val(),
+//       address: $('#address').val(),
+//       phone: $('#phone').val(),
+//       description: $('#description').val(),
+//       dated: get_cur_millis(),
+//       emp_id: current_user_id,
+//       attach_id: attach_id,
+//       latti: $("#lat_input").val(),
+//       longi: $("#lng_input").val()
 
 
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  });
+
+//     },
+//     success: function (response) {
+//       console.log(response);
+
+//       location.reload()
 
 
-}
+//     },
+//     error: function (xhr) {
+//       //Do Something to handle error
+//     }
+//   });
+
+
+// }
 
 
 
@@ -512,10 +518,18 @@ function captureWithDbData() {
     // Data you want to save in your MySQL DB along with the file
     var dbParams = JSON.stringify({
       "emp_name": current_user_name,
+      "cus_name": $('#cus_name').val(),
+      "company_name": $('#company_name').val(),
+      "address": $('#address').val(),
+      "phone": $('#phone').val(),
+      "description": $('#description').val(),
+      "emp_id": current_user_id,
+      "latti": $("#lat_input").val(),
+      "longi": $("#lng_input").val(),
     });
 
     // Optional: Override the default upload URL
-    var uploadUrl = 'https://jaysan.cloud/upload_lead_attachment.php';
+    var uploadUrl = 'https://jaysan.cloud/php/upload_lead_attachment.php';
 
     // Call the app's camera
     window.AndroidBridge.takePhoto(dbParams, uploadUrl);
