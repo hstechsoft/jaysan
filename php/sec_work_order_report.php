@@ -31,8 +31,11 @@ left join parts_tbl pt on iv.input_part_id = pt.part_id
 left join jaysan_process_view jpv on iv.previous_process_id = jpv.process_id
 where  iv.work_process_id <=> $process_id
 GROUP BY iv.work_process_id,iv.godown,iv.dep,iv.sec)
-select dm.*,jpv.* from demand_material dm
+select dm.*,jpv.*,creditors.creditor_name as godown_name, dep.dep_name, sec.sec_name from demand_material dm
 inner join jaysan_process_view jpv on dm.work_process_id = jpv.process_id
+left join creditors on dm.godown = creditors.creditor_id
+left join department dep on dm.dep = dep.dep_id
+left join dep_section sec on dm.sec = sec.dep_sec_id
 ";
 
 
