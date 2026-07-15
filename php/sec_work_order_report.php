@@ -3,15 +3,9 @@
 <?php
  include 'db_head.php';
 
- $godown_id = test_input($_GET['godown_id']);
-  $dep_id = test_input($_GET['dep_id']);
-   $sec_id = test_input($_GET['sec_id']);
+
     $process_id = test_input($_GET['process_id']);
 
-$godown_id =sql_nullable($godown_id);
-$dep_id =sql_nullable($dep_id);
-$sec_id =sql_nullable($sec_id);
- 
  
 function test_input($data) {
 $data = trim($data);
