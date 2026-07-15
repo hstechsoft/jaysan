@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'php/db_head.php';
 $emp_name = $_POST['emp_name'];
 $sql ="SELECT max(lead_id) as insert_key FROM marketing_lead";
@@ -95,7 +98,7 @@ if ($_FILES['file']['name'] != '') {
         imagedestroy($src);
     }
 
-    echo $target_path;
+    echo $lead_id;
 } else {
     echo "There was an error uploading the file, please try again!";
 }
