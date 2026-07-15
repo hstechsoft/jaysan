@@ -279,7 +279,7 @@ $(document).ready(function () {
         }
         else {
             get_manual_stock(process_id);
-          
+
         }
 
     });
@@ -334,7 +334,7 @@ $(document).ready(function () {
 
 
     $("#showDemandBtn").on("click", function () {
-// if the demand table is already visible, hide it, otherwise show it also change icon
+        // if the demand table is already visible, hide it, otherwise show it also change icon
         if ($(".demand_tbl").is(":visible")) {
             $(".demand_tbl").hide();
             $(this).html('<i class="fas fa-eye"></i>');
@@ -473,7 +473,7 @@ function get_manual_stock(process_id) {
                         <h5>No Stock Details Found</h5>
                     </div>
                 `);
-  $("#bom_material_table_body").append('<p class="text-center text-muted small">Loading...</p>');
+                $("#bom_material_table_body").append('<p class="text-center text-muted small">Loading...</p>');
                 $("#stock_details_modal").modal("show");
                 return;
             }
@@ -659,8 +659,8 @@ function get_manual_stock(process_id) {
                                         </tr>
                                     `;
                             }
-                            else{
-                                 html += `<tr><td colspan='3' class="text-danger text-center">Nothing Reserved</td></tr>`;
+                            else {
+                                html += `<tr><td colspan='3' class="text-danger text-center">Nothing Reserved</td></tr>`;
                             }
 
 
@@ -691,6 +691,7 @@ function get_manual_stock(process_id) {
             // get demand material details
             get_demand_material_details(process_id);
             get_external_material_details(process_id);
+            sec_work_order_report(process_id);
 
 
             $("#stock_details_modal").modal("show");
@@ -704,20 +705,20 @@ function get_manual_stock(process_id) {
 
 
 function get_external_material_details(process_id) {
-      $.ajax({
+    $.ajax({
         url: "php/get_jobwork_reserve.php",
         type: "get",
         data: {
 
             process_id: process_id,
-            
+
         },
 
         success: function (response) {
-console.log("External Material Details Response:", response);
-$("#demand_material_jobwork_table_body").empty();
+            console.log("External Material Details Response:", response);
+            $("#demand_material_jobwork_table_body").empty();
             if (response.trim() == "0 result") {
-                 
+
                 $("#demand_material_jobwork_table_body").append(`
                     <tr>
                         <td colspan="3" class="text-center">No External Material Details Found</td>
@@ -725,11 +726,10 @@ $("#demand_material_jobwork_table_body").empty();
                 `);
             }
 
-            else
-            {
+            else {
                 var demandData = JSON.parse(response);
                 // card with table
-                
+
                 var body_html = '';
                 var total_reserved_qty = 0;
                 demandData.forEach(demand => {
@@ -751,34 +751,193 @@ $("#demand_material_jobwork_table_body").empty();
         error: function () {
             salert("Error", "Network issue", "error");
         }
-         });
+    });
+
+}
+
+
+function sec_work_order_report(process_id) {
+    $.ajax({
+        url: "php/sec_work_order_report.php",
+        type: "get",
+        data: {
+
+            process_id: process_id,
+
+        },
+
+        success: function (response) {
+            console.log(" Material summary Details Response:", response);
+            $("#demand_material_summary_table_body").empty();
+            if (response.trim() == "0 result") {
+
+                $("#demand_material_summary_table_body").append(`
+                    <tr>
+                        <td colspan="8" class="text-center">No Material Summary Details Found</td>
+                    </tr>
+                `);
+            }
+
+            else {
+                var obj = JSON.parse(response);
+
+                var body_html = "";
+                var count = 0;
+
+                obj.forEach(function (item) {
+
+                    count++;
+
+                    var input_parts = JSON.parse(item.input_parts || "[]");
+                    var raw_materials = JSON.parse(item.raw_materials_needed || "[]");
+                    var work_orders = JSON.parse(item.work_orders || "[]");
+
+                    //=========================
+                    // Input Parts
+                    //=========================
+                    var input_parts_html = `
+                            <ul class="list-group list-group-flush small">
+                                ${input_parts.map(function (part) {
+                                            return `
+                                        <li class="list-group-item px-2 py-1 d-flex justify-content-between align-items-center">
+                                            <span>${part.part}</span>
+                                            <span class="badge bg-primary rounded-pill">${part.qty}</span>
+                                        </li>
+                                    `;
+                                        }).join("")}
+                            </ul>
+                        `;
+
+                    //=========================
+                    // Raw Materials
+                    //=========================
+                    var raw_materials_html = `
+                            <ul class="list-group list-group-flush small">
+                                ${raw_materials.map(function (part) {
+                                            return `
+                                        <li class="list-group-item px-2 py-1 d-flex justify-content-between align-items-center">
+                                            <span>${part.part_name}</span>
+                                            <span class="badge bg-secondary rounded-pill">${part.qty}</span>
+                                            <span class="badge bg-warning text-dark rounded-pill">${part.needed_qty}</span>
+                                        </li>
+                                    `;
+                                        }).join("")}
+                            </ul>
+                        `;
+
+                    //=========================
+                    // Work Orders
+                    //=========================
+                    var work_orders_html = `
+                            <ul class="list-group list-group-flush small">
+                                ${work_orders.map(function (wo) {
+
+                                            return `
+                                        <li class="list-group-item px-2 py-2">
+
+                                            <div class="d-flex justify-content-between">
+                                                <strong>${wo.work_order_no ?? ('WO-' + wo.work_order_id)}</strong>
+                                                <span class="badge bg-warning text-dark">
+                                                    Pending : ${wo.pending_qty}
+                                                </span>
+                                            </div>
+
+                                            <div class="row mt-1 g-1">
+
+                                                <div class="col-6">
+                                                    <small class="text-muted">Qty</small><br>
+                                                    <strong>${wo.qty}</strong>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <small class="text-muted">Age</small><br>
+                                                    <strong>${wo.days} Days</strong>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <small class="text-muted">Date</small><br>
+                                                    <strong>${wo.dated}</strong>
+                                                </div>
+
+                                            </div>
+
+                                        </li>
+                                    `;
+
+                                        }).join("")}
+                            </ul>
+                        `;
+
+
+                    body_html += `
+                                <tr>
+
+                                    <td class="align-middle">${count}</td>
+
+                                    <td class="align-middle">
+                                        <strong>${item.godown_name}</strong><br>
+                                        <small class="text-muted">
+                                            ${item.dep_name ?? ''} ${item.sec_name ? ' / ' + item.sec_name : ''}
+                                        </small>
+                                    </td>
+
+                                    <td class="align-middle">${input_parts_html}</td>
+
+                                    <td class="align-middle">
+                                        <span class="badge bg-info text-dark">
+                                            ${item.process_name}
+                                        </span>
+                                    </td>
+
+                                    <td class="align-middle">${item.final_part}</td>
+
+                                    <td class="text-center align-middle fw-bold">
+                                        ${item.pending_process_qty}
+                                    </td>
+
+                                    <td class="align-middle">${raw_materials_html}</td>
+
+                                    <td class="align-middle">${work_orders_html}</td>
+
+                                </tr>
+                            `;
+
+                });
+
+                $("#demand_material_summary_table_body").html(body_html);
+            }
+
+        },
+        error: function () {
+            salert("Error", "Network issue", "error");
+        }
+    });
 
 }
 
 function get_demand_material_details(process_id) {
-      $.ajax({
+    $.ajax({
         url: "php/get_input_demand.php",
         type: "get",
         data: {
 
             process_id: process_id,
-            
+
         },
 
         success: function (response) {
             $("#demand_material_table_body").empty();
-console.log("Demand Material Details Response:", response);
+            console.log("Demand Material Details Response:", response);
             if (response.trim() === "0 result") {
-                
+
                 $("#demand_material_table_body").append(`
                     <tr>
-                        <td colspan="3" class="text-center">No Demand Material Details Found</td>
+                        <td colspan="4" class="text-center">No Demand Material Details Found</td>
                     </tr>
                 `);
             }
 
-            else
-            {
+            else {
                 var demandData = JSON.parse(response);
                 // card with table
                 var total_required_qty = 0;
@@ -792,7 +951,7 @@ console.log("Demand Material Details Response:", response);
                         <td>${demand.needed}</td>
                     </tr>`;
                 });
-             
+
 
                 // show total required qty in the last row
                 body_html += `<tr>
@@ -806,7 +965,7 @@ console.log("Demand Material Details Response:", response);
         error: function () {
             salert("Error", "Network issue", "error");
         }
-         });
+    });
 
 }
 

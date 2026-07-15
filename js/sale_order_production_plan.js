@@ -131,7 +131,10 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
       var response = JSON.parse(response);
 
       if (response.success === true) {
-        alert("Success", "Demand created successfully.", "success");
+        salert("Success", "Demand created successfully.", "success");
+        setTimeout(()=>{
+          window.location.reload();
+        }, 500);
 
       }
 

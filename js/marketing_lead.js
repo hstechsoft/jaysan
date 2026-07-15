@@ -166,6 +166,7 @@ $(document).ready(function () {
 
 
   check_login();
+  get_today_leads();
 
 
   $("#mlead_form").submit(function () {
@@ -175,11 +176,12 @@ $(document).ready(function () {
 
 
   $('#mlead_add_btn').on('click', function () {
-    
+
     if ($('#mlead_form')[0].checkValidity() && attach_id > 0) {
       insert_mlead();
     }
     else {
+      alert(attach_id)
       salert("Warning", "Please fill all fields and upload attachment", "warning");
     }
 
@@ -228,6 +230,8 @@ $(document).ready(function () {
           $('#uploadOverlay').addClass('d-none');
           $('#mlead_add_btn').prop("disabled", false)
           attach_id = data.trim();
+          console.log(attach_id);
+
 
           $("#uploaded_img").attr("src", "attachment/mlead/" + attach_id + "/attach_" + attach_id + "." + file_extension);
           // $('#msg').html(data);
@@ -248,14 +252,13 @@ $(document).ready(function () {
 
 
 
-
 });
 
 function insert_mlead() {
 
   $.ajax({
     url: "php/insert_mlead.php",
-    type: "get", //send it through get method
+    type: "post", //send it through get method
     data: {
       cus_name: $('#cus_name').val(),
       company_name: $('#company_name').val(),

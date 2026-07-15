@@ -341,6 +341,7 @@ function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp
       var response = JSON.parse(response);
 
       if (response.success === true) {
+        
         get_demand_work_report($("#part").data("part_id") || 'all', "all", $("#godown").data("godown_id") || '', $("#department").data("dept_id") || '', $("#section").data("sec_id") || '');
       }
 

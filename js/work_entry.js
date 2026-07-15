@@ -2407,7 +2407,7 @@ function get_employee_work_report(work_done_id, emp_name) {
                             <div class="card-header bg-primary text-white">
                                 Work Details
                             </div>
-                            <div class="card-body p-2" style="max-height: 25vh; overflow-y: auto;">
+                            <div class="card-body p-2" style="max-height: 82vh; overflow-y: auto;">
                                 <table class="table table-bordered table-sm">
                                     <thead style="position: sticky; z-index: 5; top: 0; background-color: #d1e5ff">
                                         <tr>
@@ -2427,7 +2427,7 @@ function get_employee_work_report(work_done_id, emp_name) {
                             <div class="card-header bg-primary text-white">
                                 Extra Work / Break Details
                             </div>
-                            <div class="card-body p-2" style="max-height: 25vh; overflow-y: auto;">
+                            <div class="card-body p-2" style="max-height: 82vh; overflow-y: auto;">
                                 <table class="table table-bordered table-sm">
                                     <thead style="position: sticky; z-index: 5; top: 0; background-color: #d1e5ff">
                                         <tr>
@@ -4873,7 +4873,7 @@ function get_section_wise_process(godown_id, dep_id, sec_id, machine_id) {
             count = count + 1;
 
 
-            tb += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td><button class='btn btn-outline-primary small' data-part_id=${obj.outpart} data-process_id=${obj.process_id} >Add</button></td></tr>`;
+            tb += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td><span class='badge bg-danger me-3'>${obj.min_time} min</span><span class='badge bg-success'>${obj.max_time} max</span></td><td><button class='btn btn-outline-primary small' data-part_id=${obj.outpart} data-process_id=${obj.process_id} >Add</button></td></tr>`;
 
             tb_process += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td><input class="form-check-input" name="default_process" type="radio" value="" id="" data-part_id=${obj.outpart} data-process_id=${obj.process_id}></td></tr>`;
 
