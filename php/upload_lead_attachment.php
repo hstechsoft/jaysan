@@ -9,10 +9,10 @@ include 'php/db_head.php';
  $address = test_input($_POST['address']);
  $phone = test_input($_POST['phone']);
  $description = test_input($_POST['description']);
- $dated = test_input($_POST['dated']);
-//  $phone_id = test_input($_POST['phone_id']);
+
+
  $emp_id = test_input($_POST['emp_id']);
- $attach_id = test_input($_POST['attach_id']);
+
  $latti = test_input($_POST['latti']);
  $longi = test_input($_POST['longi']);
  
@@ -20,7 +20,7 @@ $emp_name = $_POST['emp_name'];
 $dated = time() * 1000;
 $lead_id = 0;
 $sql_insert_lead = "INSERT  INTO  marketing_lead (cus_name,phone,description,dated,emp_id,attach_id,latti,longi,company_name,address)
- VALUES ($cus_name,$phone,$description,$dated,$emp_id,$attach_id,$latti,$longi,$company_name,$address)";
+ VALUES ('$cus_name','$phone','$description',$dated,$emp_id,'NULL','$latti','$longi','$company_name','$address')";
 $conn->query($sql_insert_lead);
 $lead_id = $conn->insert_id;
 
@@ -118,6 +118,13 @@ if ($_FILES['file']['name'] != '') {
         }
 
         imagedestroy($src);
+    }
+
+    // update target_path in marketing_lead table
+    $sql_update = "UPDATE marketing_lead SET attach_id = '$target_path' WHERE lead_id = $lead_id";
+    if ($conn->query($sql_update) === TRUE) {
+    } else {
+        echo "Error updating record: " . $conn->error;
     }
 
     echo $lead_id;
