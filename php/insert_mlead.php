@@ -14,7 +14,7 @@
  $latti = test_input($_POST['latti']);
  $longi = test_input($_POST['longi']);
  
-
+echo $emp_id;
 
 function test_input($data) {
 $data = trim($data);
