@@ -2,12 +2,13 @@
  include 'db_head.php';
 
 
- $dated = test_input($_GET['dated']);
+
  // $today_end = test_input($_GET['today_end']);
  $emp_id = test_input($_GET['emp_id']);
  $all_leads = test_input($_GET['all_leads']);
 $date_query = 1;
 // convert date to timestamp in query
+$dated = date("Y-m-d");
 $today_start = strtotime($dated . ' 00:00:00') *1000;
 $today_end = strtotime($dated . ' 23:59:59') *1000;
  if ($all_leads == "all") {
