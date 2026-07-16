@@ -25,7 +25,7 @@ return $data;
 
 
 
-$sql = "SELECT * FROM `marketing_lead` WHERE emp_id = $emp_id and $date_query";
+$sql = "SELECT * FROM `marketing_lead` WHERE emp_id = $emp_id and $date_query order by dated desc";
 
 
 $result = $conn->query($sql);
