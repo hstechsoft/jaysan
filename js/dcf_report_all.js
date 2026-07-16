@@ -98,12 +98,51 @@ $(document).ready(function () {
     document.getElementById("dcf_report").scrollIntoView({
       behavior: "smooth"
     });
+    $("#pdf_button").val($(this).val())
     get_dcf_details($(this).val())
   })
 
 
   $('#print_button').on('click', function () {
     print()
+
+  });
+
+  $("#pdf_button").on("click", function () {
+
+    var dcf_id = $(this).val();
+
+    if (dcf_id < 1 || dcf_id == undefined) {
+      salert("Warning", "Select The DCF First!.", "warning");
+      return;
+    }
+
+    const element = document.getElementById("dcf_report");
+
+    const opt = {
+      margin: [5, 5, 5, 5],
+      filename: "DCF-" + dcf_id + ".pdf",
+      image: {
+        type: "jpeg",
+        quality: 1
+      },
+      html2canvas: {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        scrollY: 0
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait"
+      },
+      pagebreak: {
+        mode: ["avoid-all", "css", "legacy"]
+      }
+    };
+
+    html2pdf().set(opt).from(element).save();
 
   });
 
