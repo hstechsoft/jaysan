@@ -174,13 +174,22 @@ $(document).ready(function () {
 
 
   check_login();
-  get_today_leads();
+  get_today_leads("all");
 
 
   $("#mlead_form").submit(function () {
     $("#mlead_add_btn").attr("disabled", true);
   });
 
+
+  $("#all_lead_btn").on("change", function () {
+    if ($(this).is("checked")) {
+      get_today_leads('');
+    }
+    else {
+      get_today_leads("all");
+    }
+  })
 
 
   $('#mlead_add_btn').on('click', function () {
@@ -298,16 +307,20 @@ $(document).ready(function () {
 
 
 
-function get_today_leads() {
+function get_today_leads(type) {
 
+  console.log(type);
+  
 
   $.ajax({
     url: "php/get_today_lead.php",
     type: "get", //send it through get method
     data: {
-      today_start: get_today_start_millis(),
-      today_end: get_today_end_millis(),
-      emp_id: current_user_id
+      // today_start: get_today_start_millis(),
+      // today_end: get_today_end_millis(),
+      emp_id: current_user_id,
+      all_leads: type,
+
 
 
 
@@ -326,7 +339,7 @@ function get_today_leads() {
           obj.forEach(function (obj) {
 
             count = count + 1;
-            $('#mlead_table').append("<tr><td>" + count + "</td><td>" + obj.cus_name + "</td><td>" + obj.phone + "</td><td>" + obj.description + "</td></tr>")
+            $('#mlead_table').append(`<tr><td>${count} </td><td> ${obj.cus_name}</td><td> ${obj.phone}</td><td> ${obj.description}</td><td><img src="/attachment/mlead/${obj.lead_id}/attach_${obj.lead_id}.jpg" class="img-fluid"></td></tr>`)
 
           });
 
@@ -560,6 +573,12 @@ window.onUploadSuccess = function (response) {
   console.log("Upload Success:", response);
   // salert("Success", "Photo uploaded successfully!", "success");
   salert("Success", response, "success");
+
+  if (response.trim() == "ok") {
+    setTimeout(() => {
+      window.location.reload();
+    }, 500)
+  }
 
 };
 
