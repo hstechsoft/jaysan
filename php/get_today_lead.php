@@ -11,7 +11,7 @@ $date_query = 1;
 $dated = date("Y-m-d");
 $today_start = strtotime($dated . ' 00:00:00') *1000;
 $today_end = strtotime($dated . ' 23:59:59') *1000;
- if ($all_leads == "all") {
+ if ($all_leads != "all") {
    $date_query = "dated between  $today_start and  $today_end";
  }
 
