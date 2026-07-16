@@ -101,6 +101,28 @@
         font-size: 9px;
         padding: 1px;
       }
+
+
+      #dcf_report {
+        background: #fff;
+        color: #000;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      td,
+      th {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
     }
   </style>
 
@@ -255,10 +277,12 @@
 
 
       <div class="d-flex justify-content-center mt-1">
-        <button class="btn btn-primary" id="print_button">
+        <button class="btn btn-primary d-none d-md-block" id="print_button">
           <i class="bi bi-printer"></i> Print
         </button>
-
+        <button class="btn btn-primary d-md-none" id="pdf_button">
+          <i class="fa-solid fa-download fa-swing"></i> PDF
+        </button>
       </div>
 
     </div>
@@ -294,6 +318,10 @@
 
   <!-- Include html2pdf from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+  <!-- pdf  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script src="js/printThis.js" type="module"></script>
 

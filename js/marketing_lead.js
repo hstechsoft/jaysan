@@ -45,16 +45,12 @@ window.onLocationReceived = function (lat, lng) {
     $("#lat_input").val(lat);
     $("#lng_input").val(lng);
 
-    if ($('#mlead_form')[0].checkValidity()) {
-      if (clicked_capture_live_pic == 1) {
-        $(".waiting").addClass("d-none");
-        $("#lead_attachment_mobile").prop("disabled", true);
-        clicked_capture_live_pic = 0;
-        captureWithDbData();
-      }
-    }
-    else{
-      salert("Warning", "Fill All Fields.", "warning");
+
+    if (clicked_capture_live_pic == 1) {
+      $(".waiting").addClass("d-none");
+      $("#lead_attachment_mobile").prop("disabled", true);
+      clicked_capture_live_pic = 0;
+      captureWithDbData();
     }
 
 
@@ -143,12 +139,17 @@ $(document).ready(function () {
   // 1. Capture a live photo (Auto-compressed to < 256KB)
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
+    if ($('#mlead_form')[0].checkValidity()) {
 
-    clicked_capture_live_pic = 1;
+      clicked_capture_live_pic = 1;
 
-    $(".waiting").removeClass("d-none");
+      $(".waiting").removeClass("d-none");
 
-    AndroidBridge.getLocation();
+      AndroidBridge.getLocation();
+    }
+    else {
+      salert("Warning", "Fill All Fields.", "warning");
+    }
 
 
   });
