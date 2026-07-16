@@ -1,8 +1,16 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
-include 'php/db_head.php';
+
+include 'db_head.php';
+
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+
+return $data;
+}
+
 
  $cus_name = test_input($_POST['cus_name']);
  $company_name = test_input($_POST['company_name']);
@@ -39,7 +47,7 @@ $lead_id = $conn->insert_id;
 
 if ($_FILES['file']['name'] != '') {
     $dirname = $lead_id;
-    $target_path = "attachment/mlead/" . $dirname . "/";
+    $target_path = "../attachment/mlead/" . $dirname . "/";
   
     if (!file_exists($target_path)) {
         mkdir($target_path, 0755, true);
@@ -127,7 +135,7 @@ if ($_FILES['file']['name'] != '') {
         echo "Error updating record: " . $conn->error;
     }
 
-    echo $lead_id;
+    echo "ok";
 } else {
     echo "There was an error uploading the file, please try again!";
 }

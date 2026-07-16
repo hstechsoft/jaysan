@@ -15,7 +15,8 @@ $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
 $sec = sql_nullable($sec);
 
-$godown_string = $godown.$dep.$sec;
+// $godown_string = $godown.$dep.$sec;
+$godown_string = $godown;
 
  $same_godown_string = "";
 function test_input($data) {
@@ -123,11 +124,20 @@ if ($result->num_rows > 0) {
     $required_qty = $r['required_qty'];
 
 
- $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
+//  $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
+//         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.process_id = $previous_process_id";
+//     if($input_part_id>0)
+//       {
+//            $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
+//         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.part_id = $input_part_id";
+//       }
+
+
+ $sql_demand_reservation = "select js.*,js.godown as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.process_id = $previous_process_id";
     if($input_part_id>0)
       {
-           $sql_demand_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
+           $sql_demand_reservation = "select js.*,js.godown as godown_string,sr.reserve_qty,sr.stock_reserve_id from stock_reserve_view js 
         left join stock_reserve sr on js.stock_id = sr.stock_id and sr.reserve_type = 'demand' where    js.part_id = $input_part_id";
       }
 
@@ -272,11 +282,11 @@ if($same_godown['same_godown'] ?? false)
 $stock_reservation_array = array();
 $stock_to_be_reserved = $required_qty;
 
- $sql_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string from stock_reserve_view js 
+ $sql_reservation = "select js.*,js.godown as godown_string from stock_reserve_view js 
          where    js.process_id = $previous_process_id";
     if($input_part_id>0)
       {
-           $sql_reservation = "select js.*,concat(ifnull(js.godown,'NULL'),ifnull(js.dep,'NULL'),ifnull(js.sec,'NULL')) as godown_string from stock_reserve_view js 
+           $sql_reservation = "select js.*,js.godown as godown_string from stock_reserve_view js 
          where    js.part_id = $input_part_id";
       }
 
@@ -287,9 +297,9 @@ $result_reservation = $conn->query($sql_reservation);
            
             $stock_id = $r_reservation['stock_id']; 
             $available_qty = $r_reservation['available_qty'];
-            $godown_string = $r_reservation['godown_string'];
+            $godown_string_db = $r_reservation['godown_string'];
             $same_godown_chk = false;
-            if($same_godown_string == $godown_string)
+            if($godown_string_db == $godown_string)
             {
              $same_godown_chk = true;
             }
@@ -391,7 +401,7 @@ if ($conn->query($sql_delete_zero_reserve) === TRUE) {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
 $result_json['success'] = true;
-  $conn->commit();
+   $conn->commit();
 
 }
 catch (Exception $e) {
