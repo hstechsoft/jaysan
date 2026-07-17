@@ -171,7 +171,7 @@
 
                 <th scope='col' class="d-flex justify-content-between">#
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="all_lead_btn" >
+                    <input class="form-check-input" type="checkbox" id="all_lead_btn">
                   </div>
                 </th>
                 <th scope='col'>cus_name</th>
@@ -193,6 +193,26 @@
     </div>
 
     <div class="d-none waiting"><i class="fas fa-spinner fa-spin"></i> Waiting for GPS...</div>
+
+    <div class="modal fade" id="imagePreviewModal">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <button class="btn btn-sm btn-primary me-2" id="zoom_in">+</button>
+            <button class="btn btn-sm btn-secondary me-2" id="zoom_out">-</button>
+            <button class="btn btn-sm btn-warning" id="reset_zoom">Reset</button>
+
+            <button class="btn-close ms-auto" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body text-center overflow-auto" style="height:80vh;">
+            <img id="preview_img" src="" style="transform:scale(1);transform-origin:center center;transition:.2s;">
+          </div>
+
+        </div>
+      </div>
+    </div>
 
   </div>
   <div id='footer' class="mt-auto"></div>

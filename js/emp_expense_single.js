@@ -52,6 +52,17 @@ $(document).ready(function () {
     $("#exp_amount").val("");
     get_expense_approve_sts("no");
 
+    if (!$("#bulk_delete_btn").hasClass("d-none")) {
+
+      $("#bulk_delete_btn").addClass("d-none");
+      $("#bulk_delete_cancel_btn").addClass("d-none");
+      isSelectionMode = false;
+
+    }
+    document.getElementById("exp_table").scrollIntoView({
+      behavior: "smooth"
+    });
+
   });
 
 
@@ -62,7 +73,16 @@ $(document).ready(function () {
     $("#exp_description").val("");
     $("#exp_amount").val("");
     get_expense_approve_sts("decline");
+    if (!$("#bulk_delete_btn").hasClass("d-none")) {
 
+      $("#bulk_delete_btn").addClass("d-none");
+      $("#bulk_delete_cancel_btn").addClass("d-none");
+      isSelectionMode = false;
+
+    }
+    document.getElementById("exp_table").scrollIntoView({
+      behavior: "smooth"
+    });
   });
 
 
@@ -143,7 +163,7 @@ $(document).ready(function () {
     }
     else {
       $("#fuel_vehicel_type").prop("disabled", true);
-      $("#exp_category").val($("#fuel_check_box").data("cate") ? $("#fuel_check_box").data("cate"):"null");
+      $("#exp_category").val($("#fuel_check_box").data("cate") ? $("#fuel_check_box").data("cate") : "null");
       $("#start_km").prop("disabled", true);
       $("#end_km").prop("disabled", true);
       $("#fuel_add").prop("disabled", true);
@@ -179,10 +199,10 @@ $(document).ready(function () {
     var total_km = parseFloat(ekm) - parseFloat(skm);
     var km_amount = parseFloat(v_type) * total_km
     if (v_type == 3) {
-      $("#exp_description").val("Two wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+      $("#exp_description").val("Two wheeler " + skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
 
     } else {
-      $("#exp_description").val("Four wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+      $("#exp_description").val("Four wheeler " + skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
 
     }
 
@@ -234,7 +254,7 @@ $(document).ready(function () {
         $("#bulk_delete_btn").removeClass("d-none");
         $("#bulk_delete_cancel_btn").removeClass("d-none");
 
-      }, 2000);  // 2-second long press
+      }, 1000);  // 1-second long press
     }
   });
 
@@ -523,7 +543,7 @@ function get_expenses_single(exp_date) {
 }
 
 function insert_emp_expense(date, category, description, amount) {
-console.log(date, category, description, amount, current_user_id, work_id);
+  console.log(date, category, description, amount, current_user_id, work_id);
 
   let exp_date = date;
 
