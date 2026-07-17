@@ -265,6 +265,47 @@ $(document).ready(function () {
 
 
 
+  let zoom = 1;
+
+  $("#mlead_table").on("click", "tr img", function () {
+
+    $("#preview_img").attr("src", $(this).attr("src"));
+
+    zoom = 1;
+    $("#preview_img").css("transform", "scale(1)");
+
+    $("#imagePreviewModal").modal("show");
+  });
+
+  $("#zoom_in").click(function () {
+    zoom += 0.2;
+    $("#preview_img").css("transform", "scale(" + zoom + ")");
+  });
+
+  $("#zoom_out").click(function () {
+    if (zoom > 0.4) {
+      zoom -= 0.2;
+      $("#preview_img").css("transform", "scale(" + zoom + ")");
+    }
+  });
+
+  $("#reset_zoom").click(function () {
+    zoom = 1;
+    $("#preview_img").css("transform", "scale(1)");
+  });
+
+  $("#preview_img").on("wheel", function (e) {
+
+    e.preventDefault();
+
+    if (e.originalEvent.deltaY < 0) {
+      zoom += 0.1;
+    } else if (zoom > 0.3) {
+      zoom -= 0.1;
+    }
+
+    $(this).css("transform", "scale(" + zoom + ")");
+  });
 
 
 
