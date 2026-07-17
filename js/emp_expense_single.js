@@ -19,10 +19,65 @@ $(document).ready(function () {
   check_login();
 
   get_expense_summary_single();
-  get_exp_cat_all()
+  // get_exp_cat_all()
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $('#pay_date').val(get_today_date());
+
+  $('#exp_category').on('input',function(){
+     //check the value not empty
+    //  alert()
+         if($('#exp_category').val() !="")
+         {
+           $('#exp_category').autocomplete({
+             //get data from databse return as array of object which contain label,value
+  
+             source: function(request, response) {
+               $.ajax({
+                 url: "php/get_exp_cat_auto.php",
+                 type: "get", //send it through get method
+                 data: {
+                 
+                  cat: $('#exp_category').val(),
+  
+               },
+               dataType: "json", 
+                 success: function (data) {
+  
+               console.log(data);
+               response($.map(data, function(item) {
+                 return {
+                     label: item.exp_cat,
+                     value: item.exp_cat,
+                     // id: item.part_id,
+                     // part_name: item.part_name
+                 };
+             }));
+  
+                 }
+  
+               });
+             },
+             minLength: 2,
+             cacheLength: 0,
+             select: function(event, ui) {
+  
+             //   $(this).data("selected-part_id", ui.item.id);
+             //   $('#part_name_out').data("selected-part_id", ui.item.id);
+             //   $('#part_name_out').val(ui.item.part_name)
+             //  get_bom(ui.item.id)
+  
+  
+             } ,
+  
+           }).autocomplete("instance")._renderItem = function(ul, item) {
+             return $("<li>")
+                 .append("<div>"+item.label+ "</div>")
+                 .appendTo(ul);
+         };
+         }
+  
+        });
 
   $('#sel_all_chk').change(function () {
     if (this.checked) {
@@ -780,49 +835,49 @@ function formatDateYYYYMMDD(ms) {
 
 
 
-function get_exp_cat_all() {
-  $.ajax({
-    url: "php/get_exp_cat_all.php",
-    type: "get", //send it through get method
-    data: {
+// function get_exp_cat_all() {
+//   $.ajax({
+//     url: "php/get_exp_cat_all.php",
+//     type: "get", //send it through get method
+//     data: {
 
 
 
-    },
-    success: function (response) {
-      console.log(response)
+//     },
+//     success: function (response) {
+//       console.log(response)
 
-      if (response.trim() != "error") {
-        if (response.trim() != "0 result") {
-          var obj = JSON.parse(response);
-
-
-
-          obj.forEach(function (obj) {
-
-
-            $("#exp_category").append(" <option>" + obj.exp_cat + "</option>");
-
-          });
-        }
+//       if (response.trim() != "error") {
+//         if (response.trim() != "0 result") {
+//           var obj = JSON.parse(response);
 
 
 
+//           obj.forEach(function (obj) {
 
+
+//             $("#exp_category").append(" <option>" + obj.exp_cat + "</option>");
+
+//           });
+//         }
 
 
 
 
-      }
 
 
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  });
 
-}
+
+//       }
+
+
+//     },
+//     error: function (xhr) {
+//       //Do Something to handle error
+//     }
+//   });
+
+// }
 
 function insert_expense() {
   console.log($('#exp_table tr').length)

@@ -220,10 +220,10 @@ $(document).ready(function () {
           reader.readAsDataURL(res);
         },
         error: function (xhr) {
-          alert("Error generating PDF: " + xhr.statusText);
+          salert("Error", "Error generating PDF: " + xhr.statusText, "error");
         }
       });
-
+                                      
     } else {
       // You are in a regular mobile or desktop browser
       salert("Warning", "Try Later Sometimes!", "warning")
