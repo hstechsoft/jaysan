@@ -339,7 +339,7 @@ function get_today_leads(type) {
           obj.forEach(function (obj) {
 
             count = count + 1;
-            $('#mlead_table').append(`<tr><td>${count} </td><td> ${obj.cus_name}</td><td> ${obj.phone}</td><td> ${obj.description}</td><td><img src="/attachment/mlead/${obj.lead_id}/attach_${obj.lead_id}.jpg" class="img-fluid"></td></tr>`)
+            $('#mlead_table').append(`<tr><td>${count} </td><td> ${obj.cus_name}</td><td> ${obj.phone}</td><td> ${obj.description}</td><td><img src="/attachment/mlead/${obj.lead_id}/attach_${obj.lead_id}.jpg" class="img-fluid " style="max-width: 10vw; max-height: 10vh;"></td></tr>`)
 
           });
 
