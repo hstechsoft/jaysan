@@ -315,10 +315,10 @@
               Expenditure Table
             </div>
 
-            <div class="card-body" id="">
-              <div class="text-center d-flex justify-content-between mt-3">
+            <div class="card-body" id="" style="max-height: 70vh; overflow-y: auto;">
+              <div class="text-center d-flex justify-content-between mt-3" style="position: sticky; top: 0; z-index: 5;">
                 <button id="bulk_delete_btn" class="btn btn-danger d-none"><i class="fa fa-trash"></i></button>
-                <button id="bulk_delete_cancel_btn" class="btn btn-close d-none"></button>
+                <button id="bulk_delete_cancel_btn"  class="btn d-none border border-dark rounded-pill bg-secondary text-light p-2"><i class="fa-solid fa-xmark"></i></button>
               </div>
               <ul class="list-group" id="exp_table">
               </ul>
