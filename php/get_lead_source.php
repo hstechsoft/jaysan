@@ -15,7 +15,7 @@ return $data;
 }
 
 
-$sql = "SELECT lead_source FROM lead  GROUP BY lead_source UNION SELECT lead_source FROM api  GROUP BY lead_source UNION SELECT lead_source FROM marketing_lead  GROUP BY lead_source ";
+$sql = "SELECT lead_source FROM `lead`  GROUP BY lead_source UNION SELECT lead_source FROM api  GROUP BY lead_source UNION SELECT lead_source FROM marketing_lead  GROUP BY lead_source ";
 
 $result = $conn->query($sql);
 

@@ -52,7 +52,7 @@ $last_id_work = $conn->insert_id;
 
 if($lead_source != "")
 {
-  $sql_insert_lead = "INSERT INTO `lead` (`cus_id`,`work_id`,`lead_des`,`lead_source`,`dated`,`status`) VALUES ('$cus_id','$last_id_work','',' $lead_source',UNIX_TIMESTAMP(CURRENT_TIMESTAMP())*1000,'assign')";
+  $sql_insert_lead = "INSERT INTO `lead` (`cus_id`,`work_id`,`lead_des`,`lead_source`,`dated`,`status`) VALUES ('$cus_id','$last_id_work','','$lead_source',UNIX_TIMESTAMP(CURRENT_TIMESTAMP())*1000,'assign')";
   // echo $sql_insert_lead;
   if ($conn->query($sql_insert_lead) === TRUE) {
   } else {
@@ -65,6 +65,15 @@ if($lead_source != "")
   //   echo json_encode(['error' => 'Lead insert failed: ' . $stmt_lead->error]);
   // }
   // $stmt_lead->close();
+
+  // update customer cus_lead_source
+
+  $sql_update_cus = "UPDATE customer SET cus_lead_source = '$lead_source' WHERE cus_id = '$cus_id'";
+  if ($conn->query($sql_update_cus) === TRUE) {
+  } else {
+    throw new Exception("Customer update failed: " . $conn->error);
+  }
+
 }
     if($current_work_id  == "")
     { 
