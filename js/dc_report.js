@@ -85,7 +85,9 @@ function get_work_order_report() {
 
                 let woDetails = JSON.parse(item.work_order_details);
 
-                woDetails.forEach((wo) => {
+                let rowSpan = woDetails.length;
+
+                woDetails.forEach((wo, woIndex) => {
 
                     // ===========================
                     // Work Order Details
@@ -105,23 +107,23 @@ function get_work_order_report() {
                                 </div>
                             `;
 
-                                        createdDateHtml += `
+                        createdDateHtml += `
                                 <div class="mb-2">
                                     ${workOrder.created_date}
                                 </div>
                             `;
 
-                                        ageHtml += `
+                        ageHtml += `
                                 <div class="mb-2">
                                     ${workOrder.hour_since} Hrs
                                 </div>
                             `;
 
-                                        workOrderNoHtml += `
+                        workOrderNoHtml += `
                                 <div class="mb-2">
                                     ${workOrder.work_order_no ?? "-"}
                                 </div>
-                            `;              
+                            `;
 
                     });
 
@@ -239,76 +241,66 @@ function get_work_order_report() {
                     // ===========================
 
                     $("#dc_report_tbody").append(`
+                                <tr>
 
-            <tr>
+                                    ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td>
+                                        ` : "" }
 
-                <td>${index + 1}</td>
+                                    <td>${employeeHtml}</td>
 
-                <td>${employeeHtml}</td>
+                                    <td>${createdDateHtml}</td>
 
-                <td>${createdDateHtml}</td>
+                                    <td>${ageHtml}</td>
 
-                <td>${ageHtml}</td>
+                                    <td>${workOrderNoHtml}</td>
 
-                <td>${workOrderNoHtml}</td>
+                                    <td>${godownDetails}</td>
 
-                <td>${godownDetails}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info">${wo.total_process}</span>
+                                    </td>
 
-                <td class="text-center">
-                    <span class="badge bg-info">
-                        ${wo.total_process}
-                    </span>
-                </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-secondary">${wo.total_pending_process}</span>
+                                    </td>
 
-                <td class="text-center">
-                    <span class="badge bg-secondary">
-                        ${wo.total_pending_process}
-                    </span>
-                </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-warning text-dark">${wo.total_exreserve_qty}</span>
+                                    </td>
 
-                <td class="text-center">
-                    <span class="badge bg-warning text-dark">
-                        ${wo.total_exreserve_qty}
-                    </span>
-                </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success">${wo.total_internal_reserve_qty}</span>
+                                    </td>
 
-                <td class="text-center">
-                    <span class="badge bg-success">
-                        ${wo.total_internal_reserve_qty}
-                    </span>
-                </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-primary">${wo.total_required_qty}</span>
+                                    </td>
 
-                <td class="text-center">
-                    <span class="badge bg-primary">
-                        ${wo.total_required_qty}
-                    </span>
-                </td>
+                                    <td style="min-width:320px;">
+                                        ${inputDetails}
+                                    </td>
 
-                <td style="min-width:320px;">
-                    ${inputDetails}
-                </td>
+                                    ${woIndex === 0 ? `
+                                        <td rowspan="${rowSpan}" class="align-middle text-center">
+                                            <span class="badge bg-primary">
+                                                ${item.total_input_required_qty}
+                                            </span>
+                                        </td>
 
-                <td class="text-center">
-                    <span class="badge bg-primary">
-                        ${item.total_input_required_qty}
-                    </span>
-                </td>
+                                        <td rowspan="${rowSpan}" class="align-middle text-center">
+                                            <span class="badge bg-danger">
+                                                ${item.total_input_needed}
+                                            </span>
+                                        </td>
 
-                <td class="text-center">
-                    <span class="badge bg-danger">
-                        ${item.total_input_needed}
-                    </span>
-                </td>
+                                        <td rowspan="${rowSpan}" class="align-middle text-center">
+                                            <span class="badge bg-success">
+                                                ${item.total_internal_reserve_qty}
+                                            </span>
+                                        </td> ` : "" }
 
-                <td class="text-center">
-                    <span class="badge bg-success">
-                        ${item.total_internal_reserve_qty}
-                    </span>
-                </td>
-
-            </tr>
-
-        `);
+                                </tr>
+                         `);
 
                 });
 
