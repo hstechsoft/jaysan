@@ -101,11 +101,8 @@ sum(total_reserve_qty) as total_internal_reserve_qty,
 
 rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty, previous_process_id, input_details from rm_group 
 -- WHERE process_id = 2796 and godown = 1087 and dep <=> null and sec<=> null
-) 
-
--- select * from rm_con
-
-select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
+), 
+cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
     'work_order_details', work_order_details,
     'godown', godown,
     'dep', dep,
@@ -128,7 +125,9 @@ sum(total_required_qty) as total_input_required_qty,
 sum(needed) as total_input_needed,
 sum(total_internal_reserve_qty) as total_internal_reserve_qty,
 total_exreserve_qty
-from rm_con GROUP BY process_id";
+from rm_con GROUP BY process_id)
+select work_order_details,cr.process_id,total_process,total_pending_process,total_input_required_qty,total_input_needed,total_internal_reserve_qty,total_exreserve_qty,jpv.input_parts,jpv.process_name,jpv.godown_details,jpv.final_part from cr
+inner join jaysan_process_view jpv on jpv.process_id = cr.process_id";
  
 
 

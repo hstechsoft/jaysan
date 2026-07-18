@@ -31,7 +31,7 @@ return $data;
 left join process_wel_tbl pwt_final on process_wel_tbl.final_process_id = pwt_final.process_id
 left join parts_tbl pt_final on pwt_final.output_part = pt_final.part_id
 
-  where js.godown <=> $godown and  sr.reserve_type = 'work_order' GROUP BY js.stock_id),
+  where js.godown <=> $godown and  sr.reserve_type = 'job_work_order' GROUP BY js.stock_id),
   
 transport as (select part_id,process_id,sum(qty) as qty from transport_parts inner join transport_dc on transport_parts.transport_dc_id = transport_dc.transport_dc_id WHERE transport_dc.sts <> 'finished' and transport_dc.des_godown <=> $godown GROUP BY part_id,process_id)
 
