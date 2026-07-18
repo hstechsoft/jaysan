@@ -20,7 +20,35 @@
 
 
     <style>
+        #input_godown_details_modal .card {
+            border-radius: 10px;
+        }
 
+        #input_godown_details_modal .list-group-item {
+            border: 0;
+            border-bottom: 1px solid #ececec;
+        }
+
+        #input_godown_details_modal .list-group-item:last-child {
+            border-bottom: 0;
+        }
+
+        #input_godown_details_modal .badge {
+            font-size: .72rem;
+        }
+
+        #input_godown_details_modal .card-header {
+            font-size: .9rem;
+        }
+
+        #input_godown_details_modal .modal-body {
+            max-height: 65vh;
+        }
+
+        #input_godown_details_modal .list-group {
+            max-height: 55vh;
+            overflow-y: auto;
+        }
     </style>
 
 
@@ -53,23 +81,16 @@
 
             <div class="table-responsive">
                 <table class="table caption-top table-bordered table-striped ">
-                    <thead>
+                    <thead class="small">
                         <tr>
                             <th>#</th>
+                            <th>Part & Process</th>
                             <th>Employee</th>
-                            <th>Created Date</th>
-                            <th>Age</th>
                             <th>Work Order No</th>
                             <th>Godown Details</th>
-                            <th>Total Process</th>
-                            <th>Pending Process</th>
-                            <th>External Reserved</th>
-                            <th>Internal Reserved</th>
                             <th>Required Qty</th>
-                            <th style="min-width:320px;">Input Details</th>
-                            <th>Total Input Required</th>
-                            <th>Total Input Needed</th>
-                            <th>Total Internal Reserved</th>
+                            <th style="min-width:200px;">Input Details</th>
+                            <th style="min-width:200px;">Total Input Summary</th>
                         </tr>
                     </thead>
                     <tbody class="small" id="dc_report_tbody">
@@ -84,6 +105,61 @@
 
 
 
+        <!-- Modal -->
+        <div class="modal fade" id="input_godown_details_modal" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header bg-secondary text-white py-2">
+                        <h6 class="modal-title fw-bold mb-0 text-center" id="input_godown_details_modalLabel"></h6>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body p-3">
+
+                        <div class="row g-3">
+
+                            <!-- Input Parts -->
+                            <div class="col-lg-4">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-light py-2 fw-semibold">
+                                        <i class="fas fa-cubes text-primary me-1"></i>
+                                        Input Parts
+                                    </div>
+
+                                    <div class="card-body p-2">
+                                        <div id="input_details" class="list-group list-group-flush small"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Godown Details -->
+                            <div class="col-lg-8">
+                                <div class="card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-light py-2 fw-semibold">
+                                        <i class="fas fa-warehouse text-success me-1"></i>
+                                        Godown Details
+                                    </div>
+
+                                    <div class="card-body p-2">
+                                        <div id="godown_details" class="list-group list-group-flush small"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer py-2">
+                        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 

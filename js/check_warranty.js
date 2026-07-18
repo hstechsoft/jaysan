@@ -78,7 +78,7 @@ get_deler_report()
             {
               date_query_start = "'"+  ($('#search_start_date').val()) + "'"
               date_query_end = "'"+  ($('#search_end_date').val())+ "'"
-              // get_deler_report()
+              get_deler_report()
           
               console.log(date_query_start)
             }

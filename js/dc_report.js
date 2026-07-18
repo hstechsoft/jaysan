@@ -59,6 +59,94 @@ $(document).ready(function () {
     get_work_order_report()
 
 
+    $("#dc_report_tbody ").on("click", "tr td .input_godown_details_btn", function () {
+
+        $("#input_details").empty();
+        $("#godown_details").empty();
+        $("#input_godown_details_modalLabel").empty();
+
+        var final_part = $(this).data("final_part");
+        var process_name = $(this).data("process_name");
+
+        var input_parts = decodeURIComponent($(this).data("input_parts"));
+        input_parts = JSON.parse(input_parts);
+
+        var godown_details = decodeURIComponent($(this).data("godown_details"));
+        godown_details = JSON.parse(godown_details)
+
+        $("#input_godown_details_modal").modal("show");
+        $("#input_godown_details_modalLabel").html(final_part + ` - <span class="badge bg-primary">${process_name}</span>`);
+
+
+        input_parts.forEach(function (item) {
+
+            $("#input_details").append(`
+                    <div class="list-group-item py-2 px-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">${item.part}</span>
+
+                            <span class="badge bg-primary rounded-pill">
+                                ${item.qty}
+                            </span>
+                        </div>
+                    </div>
+                `);
+
+        });
+
+
+
+        godown_details.forEach(function (item) {
+
+            $("#godown_details").append(`
+                    <div class="list-group-item py-2">
+
+                        <div class="d-flex justify-content-between align-items-start">
+
+                            <div>
+                                <div class="fw-semibold">
+                                    <i class="fas fa-warehouse text-success me-1"></i>
+                                    ${item.godown_name}
+                                </div>
+
+                                <small class="text-muted">
+                                    ${item.department ?? '-'}
+                                    ${item.section ? ' / ' + item.section : ''}
+                                </small>
+                            </div>
+
+                            <div class="text-end">
+
+                                <span class="badge bg-warning text-dark">
+                                    ₹ ${item.cost}
+                                </span>
+
+                                <br>
+
+                                <span class="badge bg-success mt-1">
+                                    Max ${item.max_time}m
+                                </span>
+
+                                <span class="badge bg-danger mt-1">
+                                    Min ${item.min_time}m
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `);
+
+        });
+
+
+        console.log(input_parts);
+        console.log(godown_details);
+        console.log(final_part, process_name);
+
+    })
+
 
 });
 
@@ -87,6 +175,14 @@ function get_work_order_report() {
 
                 let rowSpan = woDetails.length;
 
+                let total_input_required_qty = parseFloat(item.total_input_required_qty) || 0;
+                let total_input_needed = parseFloat(item.total_input_needed) || 0;
+                let total_internal_reserve_qty = parseFloat(item.total_internal_reserve_qty) || 0;
+
+                let total_internal_reserve_qtyPer = total_input_required_qty > 0 ? (total_internal_reserve_qty / total_input_required_qty) * 100 : 0;
+
+                let total_input_neededPer = total_input_required_qty > 0 ? (total_input_needed / total_input_required_qty) * 100 : 0;
+
                 woDetails.forEach((wo, woIndex) => {
 
                     // ===========================
@@ -101,8 +197,8 @@ function get_work_order_report() {
 
                         employeeHtml += `
                                 <div class="mb-2">
-                                    <span class="badge bg-primary">
-                                        ${workOrder.created_by}
+                                    <span class="badge bg-secondary">
+                                        ${workOrder.created_by} - ${workOrder.created_date} - ${workOrder.hour_since} Hrs
                                     </span>
                                 </div>
                             `;
@@ -133,17 +229,24 @@ function get_work_order_report() {
                     let godownDetails = `
                         <div class="small">
 
-                            <strong>${wo.creditor_name ?? "-"}</strong>
+                            <strong>${wo.creditor_name ?? " "}</strong>
 
                             <hr class="my-1">
 
-                            <strong>Department :</strong>
-                            ${wo.dep_name ?? "-"}
+                            <strong class='d-none'>Department :</strong>
+                            ${wo.dep_name ?? " "}
 
                             <br>
 
-                            <strong>Section :</strong>
-                            ${wo.sec_name ?? "-"}
+                            <strong class='d-none'>Section :</strong>
+                            ${wo.sec_name ?? " "}
+
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="badge bg-info" title="Total Process">${wo.total_process}</span>
+                                <span class="badge bg-secondary" title="Pending Process">${wo.total_pending_process}</span>
+                                <span class="badge bg-warning text-dark" title="External Reserved">${wo.total_exreserve_qty}</span>
+                                <span class="badge bg-success" title="Internal Reserved">${wo.total_internal_reserve_qty}</span>
+                            </div>
 
                         </div>
                     `;
@@ -196,6 +299,8 @@ function get_work_order_report() {
 
                                 </div>
 
+                                <span class="text-primary">Total Required: ${required}</span>
+
                                 <div class="progress mt-1" style="height:18px;">
 
                                     <!-- Internal Reserved -->
@@ -243,61 +348,66 @@ function get_work_order_report() {
                     $("#dc_report_tbody").append(`
                                 <tr>
 
-                                    ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td>
-                                        ` : "" }
+                                    ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td><td rowspan="${rowSpan}" class="align-middle text-center">${item.final_part} <span class="badge bg-primary input_godown_details_btn" data-final_part="${item.final_part}" data-process_name="${item.process_name}" data-godown_details=${encodeURIComponent(item.godown_details)} data-input_parts=${encodeURIComponent(item.input_parts)}>${item.process_name}</span></td>
+                                        ` : ""}
 
-                                    <td>${employeeHtml}</td>
+                                    <td class="align-middle text-center">${employeeHtml}</td>
 
-                                    <td>${createdDateHtml}</td>
+                                    <td class="align-middle text-center">${workOrderNoHtml}</td>
 
-                                    <td>${ageHtml}</td>
+                                    <td  class="align-middle text-center">${godownDetails}</td>
 
-                                    <td>${workOrderNoHtml}</td>
-
-                                    <td>${godownDetails}</td>
-
-                                    <td class="text-center">
-                                        <span class="badge bg-info">${wo.total_process}</span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <span class="badge bg-secondary">${wo.total_pending_process}</span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <span class="badge bg-warning text-dark">${wo.total_exreserve_qty}</span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <span class="badge bg-success">${wo.total_internal_reserve_qty}</span>
-                                    </td>
-
-                                    <td class="text-center">
+                                    <td class="align-middle text-center">
                                         <span class="badge bg-primary">${wo.total_required_qty}</span>
                                     </td>
 
-                                    <td style="min-width:320px;">
+                                    <td  class="align-middle text-center" style="min-width:320px;">
                                         ${inputDetails}
                                     </td>
 
                                     ${woIndex === 0 ? `
                                         <td rowspan="${rowSpan}" class="align-middle text-center">
-                                            <span class="badge bg-primary">
-                                                ${item.total_input_required_qty}
-                                            </span>
-                                        </td>
+                                            <div class="small fw-bold mb-1">
+                                                Required : ${total_input_required_qty}
+                                            </div>
 
-                                        <td rowspan="${rowSpan}" class="align-middle text-center">
-                                            <span class="badge bg-danger">
-                                                ${item.total_input_needed}
-                                            </span>
-                                        </td>
+                                            <div class="progress" style="height:20px;">
 
-                                        <td rowspan="${rowSpan}" class="align-middle text-center">
-                                            <span class="badge bg-success">
-                                                ${item.total_internal_reserve_qty}
-                                            </span>
-                                        </td> ` : "" }
+                                                <div class="progress-bar bg-success"
+                                                    style="width:${total_internal_reserve_qtyPer}%"
+                                                    title="Reserved ${total_internal_reserve_qty}">
+                                                    ${total_internal_reserve_qty}
+                                                </div>
+
+                                                <div class="progress-bar bg-danger"
+                                                    style="width:${total_input_neededPer}%"
+                                                    title="Needed ${total_input_needed}">
+                                                    ${total_input_needed}
+                                                </div>
+
+                                            </div>
+
+                                            <div class="d-flex justify-content-between small mt-1">
+                                                <span class="text-success">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Reserved: ${total_internal_reserve_qty}
+                                                </span>
+
+                                                <span class="text-danger">
+                                                    <i class="fas fa-exclamation-circle"></i>
+                                                    Needed: ${total_input_needed}
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between small mt-2">
+                                                <span class="badge bg-primary">
+                                                    Total Process: ${Number(item.total_process)}
+                                                </span>
+                                                <span class="badge bg-warning  text-dark">
+                                                    Total Pending Process: ${Number(item.total_pending_process)}
+                                                </span>
+                                            </div>
+                                        </td>` : ""}
 
                                 </tr>
                          `);
