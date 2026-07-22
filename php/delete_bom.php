@@ -25,7 +25,7 @@ $sql_get_part_id = "select bo.part_id,bi.bom_id,parts_tbl.part_name
 from bom_output bo
 left join bom_input bi on bo.part_id = bi.part_id
 left join bom_output bo_i on bi.bom_id = bo_i.bom_id
-left join parts_tbl on bi.part_id = parts_tbl.part_id
+left join parts_tbl on bo_i.part_id = parts_tbl.part_id
 WHERE bo.bom_id = $bom_id;";
 
 $result = $conn->query($sql_get_part_id);
