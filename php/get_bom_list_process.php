@@ -16,12 +16,10 @@ return $data;
 
 
 
- $sql = "SELECT
-
-pout.part_name as out_part_name,
+ $sql = "SELECT pout.part_name as out_part_name,
 ifnull(count(process_wel_tbl.process_id),0) as process_availble,
 bom_input.part_id,
-bom_input.qty,
+bom_input.qty-bom_input.sub_ass_qty as qty,
 parts_tbl.part_name,
 parts_tbl.sub_ass,
 bom_input.bom_id,
@@ -35,8 +33,7 @@ INNER JOIN parts_tbl pout on bom_output.part_id = pout.part_id
 INNER JOIN parts_tbl on bom_input.part_id = parts_tbl.part_id 
 left join process_wel_tbl on bom_input.part_id = process_wel_tbl.output_part and process_wel_tbl.cat = 'out'
 left join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
-WHERE bom_output.part_id = $part_id and bom_output.component_cat = $component_cat GROUP by bom_input.part_id
-";
+WHERE bom_output.part_id = $part_id and bom_output.component_cat = $component_cat and bom_input.qty-bom_input.sub_ass_qty > 0 GROUP by bom_input.part_id";
 
 $result = $conn->query($sql);
 
