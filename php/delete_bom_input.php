@@ -16,6 +16,23 @@ return $data;
 $result_json = array();
 $part_array = array();
 
+// get bom id from bom_input table
+$sql_get_bom_id = "   select group_concat(bom_output.bom_id) as bom_id from bom_input
+   inner join  bom_output on bom_input.part_id = bom_output.part_id
+    WHERE bom_in_id = $bom_in_id";
+    $result = $conn->query($sql_get_bom_id);
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $bom_id = $row['bom_id'];
+    $result_json['deleted_bom_id'] = $bom_id;
+  }
+} else {
+  $bom_id = 0;
+  $result_json['deleted_bom_id'] = $bom_id;
+}
+
+
+
 $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
 
         /* ========= Anchor ========= */
@@ -34,7 +51,7 @@ $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
       INNER JOIN parts_tbl in_part
     
     ON in_part.part_id = bi.part_id
-        WHERE bo.bom_id  = $bom_in_id and out_part.sub_ass = 1 
+        WHERE bo.bom_id  = $bom_id and out_part.sub_ass = 1 
  
         UNION ALL
 
@@ -66,10 +83,11 @@ $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
    inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
    ";
 
-   echo $sql_get_sub_parts;
+
 
 $result = $conn->query($sql_get_sub_parts);
 if ($result->num_rows > 0) {
+  $result_json['sub_bom_parts'] = true;
   while($row = $result->fetch_assoc()) {
     $part_array[] = $row;
   }
