@@ -40,7 +40,7 @@ if ($result->num_rows > 0) {
   }
   
 // if there is record exit and show error message
-  http_response_code(400);
+
   echo "Cannot delete BOM because it is used in part: " . $result_json[0]['part_name'] . " (ID: " . $result_json[0]['part_id'] . ")";
   $conn->close();
   exit();
