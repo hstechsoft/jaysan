@@ -66,6 +66,8 @@ $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
    inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
    ";
 
+   echo $sql_get_sub_parts;
+
 $result = $conn->query($sql_get_sub_parts);
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
