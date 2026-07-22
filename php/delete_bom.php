@@ -21,6 +21,7 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
+$part_array = array();
 
 // get bom_input of bom id and get part id
 $sql_get_part_id = "select bo.part_id,bi.bom_id,parts_tbl.part_name
@@ -34,14 +35,15 @@ $result = $conn->query($sql_get_part_id);
 if ($result->num_rows > 0) {
   
   while($row = $result->fetch_assoc()) {
-    $result_json[] = $row;
+    $part_array[] = $row;
     
 
   }
   
 // if there is record exit and show error message
 $result_json['success'] = false;
-$result_json['message'] = "Cannot delete BOM because it is used in part: " . $result_json[0]['part_name'] . " (ID: " . $result_json[0]['part_id'] . ")";
+$result_json['message'] = "BOM cannot be deleted because it is used in other BOMs";
+$result_json['data'] = $part_array;
   echo json_encode($result_json);
   $conn->close();
   exit();
