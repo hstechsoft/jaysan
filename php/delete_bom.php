@@ -7,7 +7,7 @@
 echo $bom_id;
 if($bom_id <= 0)
 {
-  http_response_code(400);
+ 
   echo "bom_id is required";
   $conn->close();
   exit();
