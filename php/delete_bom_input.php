@@ -17,9 +17,10 @@ $result_json = array();
 $part_array = array();
 
 // get bom id from bom_input table
-$sql_get_bom_id = "   select group_concat(bom_output.bom_id) as bom_id from bom_input
+$sql_get_bom_id = "select group_concat(bom_output.bom_id) as bom_id from bom_input
    inner join  bom_output on bom_input.part_id = bom_output.part_id
-    WHERE bom_in_id = $bom_in_id";
+   inner join parts_tbl on bom_output.part_id = parts_tbl.part_id
+    WHERE bom_in_id = $bom_in_id and parts_tbl.sub_ass = 1 group by bom_input.part_id;";
     $result = $conn->query($sql_get_bom_id);
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
