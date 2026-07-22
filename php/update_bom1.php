@@ -118,7 +118,7 @@ $response['parent_bom_id'] = $bom_id;
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
-            CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS VARCHAR(500))
+            CAST(CONCAT(h.path, '>', (SELECT part_name FROM parts_tbl WHERE part_id = boc.part_id)) AS char)
 
 
             FROM bom_output boc
@@ -372,7 +372,7 @@ foreach ($boms as $main_bom_id) {
                 pt.sub_ass,
                 h.level + 1,
                 boc.component_cat,
-            CAST(CONCAT(h.path, '>', outpart.part_name) AS VARCHAR(500))
+            CAST(CONCAT(h.path, '>', outpart.part_name) AS char)
 
 
             FROM bom_output boc
