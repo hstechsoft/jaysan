@@ -1029,7 +1029,7 @@ function delete_bom(bom_id) {
         success: function (response) {
             console.log(response);
 
-                    var response = JSON.parse(response)
+            var response = JSON.parse(response)
 
             if (response.success) {
 
@@ -1042,7 +1042,7 @@ function delete_bom(bom_id) {
 
                 if (response.data && response.data.length > 0) {
 
-                    
+
                     response.data.forEach(function (item) {
                         res += `
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -1106,7 +1106,7 @@ function delete_bom_input(bom_in_id) {
 
                 get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
             }
-            else{
+            else {
                 salert("Warning", response, "warning");
             }
 
@@ -1419,12 +1419,12 @@ function get_bom(part_id, component_cat, mat) {
 
                         obj.forEach(function (obj) {
                             var bom_data = JSON.parse(obj.bom_data);
-                            count++;
+
                             if (obj.level == 0) {
 
                                 bom_data.forEach(function (item) {
 
-
+                                    count++;
                                     // if (item.sub_ass == 0) {
                                     $('#bom_table').append(`
                                             <tr class='small'>
@@ -1520,7 +1520,6 @@ function get_bom(part_id, component_cat, mat) {
 
                                 bom_data.forEach(function (item) {
 
-                                    count++;
 
                                     var sub_ass = "";
                                     var subHTML = "";
@@ -1536,6 +1535,8 @@ function get_bom(part_id, component_cat, mat) {
                                     // $("#update_btn").val(item.bom_id);
 
                                     if (item.corrected_qty > 0) {
+
+                                        count++;
                                         $('#bom_table').append(`
                                             <tr class='small'>
                                                 <td>${count}</td>
