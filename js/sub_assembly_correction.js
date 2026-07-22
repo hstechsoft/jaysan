@@ -467,14 +467,14 @@ $(document).ready(function () {
     $("#bom_table").on("focusout", ".qty-editable", function () {
 
         console.log($(this).data('part-id'), $(this).text().trim(), $('#update_part_btn').val());
-        
-        if(Number( $(this).text().trim()) <= 0 || $(this).text().trim() == ''){
+
+        if (Number($(this).text().trim()) <= 0 || $(this).text().trim() == '') {
             $(this).text(1)
             shw_toast("Warning", "Atleast One Qty Need");
             return;
         }
 
-        if(!$(this).data('part-id') || !$('#update_part_btn').val()){
+        if (!$(this).data('part-id') || !$('#update_part_btn').val()) {
             shw_toast("Warning", "Data Missing!, Try Later.");
             return;
         }
@@ -530,7 +530,7 @@ $(document).ready(function () {
                                                     Allocate
                                                 </button>
                                                 <button class=" btn btn-outline-danger cancle_btn" >
-                                                    Cancle
+                                                    Cancel
                                                 </button>
                                             </td>` : ""}
                                         </tr>
@@ -734,7 +734,7 @@ $(document).ready(function () {
     //                                             <button class="btn btn-outline-primary allocate_btn" data-bom_id=${obj.parent_bom_id}>
     //                                                 Allocate
     //                                             </button>
-                                                
+
     //                                             <button class=" btn btn-outline-danger cancle_btn" >
     //                                                 Cancle
     //                                             </button>
@@ -781,10 +781,21 @@ $(document).ready(function () {
             $("#default_bom").removeClass("d-none").val(partId);
         }
         get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
-
+        $("#bom_delete_btn").val($('#bom_list_select').find(':selected').data("bom_id"));
 
 
     });
+
+    $("#bom_delete_btn").on("click", function () {
+        var bom_id = $(this).val() || 0;
+
+        if (bom_id > 0) {
+            delete_bom(bom_id);
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+    })
 
     $("#default_bom").click(function () {
         if ($('#bom_list_select').find(':selected').data('part_id') !== null || $('#bom_list_select').find(':selected').data('bom_id') !== null) {
@@ -1003,7 +1014,76 @@ $(document).ready(function () {
 
 });
 
+function delete_bom(bom_id) {
 
+    console.log(bom_id);
+
+
+    $.ajax({
+        url: "php/delete_bom.php",
+        type: "post", //send it through get method
+        data: {
+            bom_id: bom_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+                    var response = JSON.parse(response)
+
+            if (response.success) {
+
+                get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+            }
+            else {
+
+                let res = `<h6>This BOM is used in the following BOM(s):</h6>`;
+                res += `<ul class="list-group mt-2">`;
+
+                if (response.data && response.data.length > 0) {
+
+                    
+                    response.data.forEach(function (item) {
+                        res += `
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                ${item.part_name}
+                                <span class="badge bg-primary">BOM ID: ${item.bom_id}</span>
+                            </li>`;
+                    });
+
+                } else {
+
+                    res += `<li class="list-group-item">${response.message}</li>`;
+
+                }
+
+                res += `</ul>`;
+
+                swal({
+                    title: "Warning",
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: res
+                        }
+                    },
+                    icon: "warning"
+                });
+            }
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function delete_bom_input(bom_in_id) {
 
@@ -1020,10 +1100,14 @@ function delete_bom_input(bom_in_id) {
         success: function (response) {
             console.log(response);
 
+            var response = JSON.parse(response);
 
-            if (response.trim() == "ok") {
+            if (response.success) {
 
                 get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+            }
+            else{
+                salert("Warning", response, "warning");
             }
 
 
@@ -1165,7 +1249,8 @@ function selectAutocompleteByPartId(partId, component_cat) {
     }, 200); // Adjust timeout if needed
 
     setTimeout(function () {
-        $('#bom_list_select').val(component_cat)
+        // $('#bom_list_select').val(component_cat)
+        $('#bom_list_select').val(component_cat).trigger('change');
 
     }, 1000)
 }
@@ -1334,13 +1419,13 @@ function get_bom(part_id, component_cat, mat) {
 
                         obj.forEach(function (obj) {
                             var bom_data = JSON.parse(obj.bom_data);
+                            count++;
                             if (obj.level == 0) {
 
                                 bom_data.forEach(function (item) {
 
 
                                     // if (item.sub_ass == 0) {
-                                    count++;
                                     $('#bom_table').append(`
                                             <tr class='small'>
                                                 <td>${count}</td>
