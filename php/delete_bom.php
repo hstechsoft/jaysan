@@ -4,7 +4,7 @@
  $bom_id = test_input($_POST['bom_id']);
 //  convert bom_id to numeric value
  $bom_id = intval($bom_id);
-echo $bom_id;
+
 if($bom_id <= 0)
 {
  
@@ -40,8 +40,9 @@ if ($result->num_rows > 0) {
   }
   
 // if there is record exit and show error message
-
-  echo "Cannot delete BOM because it is used in part: " . $result_json[0]['part_name'] . " (ID: " . $result_json[0]['part_id'] . ")";
+$result_json['success'] = false;
+$result_json['message'] = "Cannot delete BOM because it is used in part: " . $result_json[0]['part_name'] . " (ID: " . $result_json[0]['part_id'] . ")";
+  echo json_encode($result_json);
   $conn->close();
   exit();
 
@@ -52,9 +53,14 @@ if ($result->num_rows > 0) {
  $sql =  "delete from bom_output where bom_id = $bom_id;";
 
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+   
+    $result_json['success'] = true;
+    $result_json['message'] = "BOM deleted successfully";
+    echo json_encode($result_json);
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    $result_json['success'] = false;
+    $result_json['message'] = "Error: " . $sql . "<br>" . $conn->error;
+    echo json_encode($result_json);
   }
 $conn->close();
 
