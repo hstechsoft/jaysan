@@ -31,6 +31,9 @@ if ($result->num_rows > 0) {
   $result_json['deleted_bom_id'] = $bom_id;
 }
 
+if($bom_id > 0)
+{
+
 
 
 $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
@@ -80,7 +83,7 @@ $sql_get_sub_parts = " WITH RECURSIVE bom_hi AS (
    )
 
    SELECT bom_hi.*,parts_tbl.part_name from bom_hi
-   inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
+   inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id group by bom_hi.input_part
    ";
 
 
@@ -100,7 +103,7 @@ $result_json['data'] = $part_array;
 echo json_encode($result_json);
 $conn->close();
 exit();
-
+}
  $sql =  "DELETE  FROM bom_input WHERE bom_in_id =  $bom_in_id";
 
   if ($conn->query($sql) === TRUE) {
