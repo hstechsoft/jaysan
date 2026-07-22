@@ -16,6 +16,22 @@ return $data;
 $result_json = array();
 $part_array = array();
 
+$ori_bom_id = 0;
+try 
+{
+  $conn->begin_transaction();
+// get bom_id from bom_input table
+$sql_get_bom_id = "select bom_id from bom_input where bom_in_id = $bom_in_id";
+$result = $conn->query($sql_get_bom_id);
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $ori_bom_id = $row['bom_id'];
+  }
+} else {
+  $ori_bom_id = 0;
+}
+
+
 // get bom id from bom_input table
 $sql_get_bom_id = "select group_concat(bom_output.bom_id) as bom_id from bom_input
    inner join  bom_output on bom_input.part_id = bom_output.part_id
@@ -99,20 +115,52 @@ if ($result->num_rows > 0) {
   $part_array = array();
 }
 
-
-$result_json['data'] = $part_array;
-echo json_encode($result_json);
-$conn->close();
-exit();
+if(count($part_array) > 0)
+{
+//  reduce part qty in bom_input table
+  foreach($part_array as $part)
+  {
+    $input_part_id = $part['input_part'];
+    $qty = $part['qty'];
+    $sql_update_qty = "update bom_input set sub_ass_qty = sub_ass_qty - $qty where part_id = $input_part_id and bom_id = $ori_bom_id";
+    if ($conn->query($sql_update_qty) === TRUE) {
+      // qty updated successfully
+    } else {
+      // error updating qty
+      $result_json['success'] = false;
+      $result_json['message'] = "Error updating qty for part_id: " . $input_part_id . " in bom_id: " . $bom_id;
+      echo json_encode($result_json);
+      $conn->close();
+      exit();
+    }
+  }
 }
+
+
+
+}
+
+
+
  $sql =  "DELETE  FROM bom_input WHERE bom_in_id =  $bom_in_id";
 
   if ($conn->query($sql) === TRUE) {
-   echo "ok";
+   $conn->commit();
+    $result_json['success'] = true;
+    $result_json['message'] = "BOM input deleted successfully";
+    echo json_encode($result_json);
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    throw new Exception("Error deleting bom_input: " . $conn->error);
   }
-$conn->close();
+  $conn->close();
+} catch (Exception $e) {
+  $conn->rollback();
+  $result_json['success'] = false;
+  $result_json['message'] = $e->getMessage();
+  echo json_encode($result_json);
+  $conn->close();
+  exit();
+}
 
  ?>
 
