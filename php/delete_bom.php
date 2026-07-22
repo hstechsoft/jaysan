@@ -2,7 +2,7 @@
  include 'db_head.php';
 
  $bom_id = test_input($_POST['bom_id']);
-
+echo $bom_id;
 if($bom_id == "''")
 {
   http_response_code(400);
