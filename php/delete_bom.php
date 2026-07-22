@@ -2,8 +2,10 @@
  include 'db_head.php';
 
  $bom_id = test_input($_POST['bom_id']);
+//  convert bom_id to numeric value
+ $bom_id = intval($bom_id);
 echo $bom_id;
-if($bom_id == "''")
+if($bom_id <= 0)
 {
   http_response_code(400);
   echo "bom_id is required";
