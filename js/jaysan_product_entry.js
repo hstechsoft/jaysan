@@ -473,7 +473,7 @@ $('#sub_type_table').append("<tr><td>"+count+"</td><td>"+obj.subtype_name+"</td>
    
    $.ajax({
      url: "php/insert_jaysan_model_subtype.php",
-     type: "get", //send it through get method
+     type: "POST", //send it through get method
      data: {
      mtid : mtid,
 subtype_name :  $('#product_sub_type').val()
