@@ -252,7 +252,7 @@ function get_order_details1(ass_id) {
 
           })
 
-          get_assign_sts(ass_id)
+          // get_assign_sts(ass_id)
 
           //  html2canvas(document.querySelector("#order_form")).then(canvas => {
           //   let imgData = canvas.toDataURL("image/png");
