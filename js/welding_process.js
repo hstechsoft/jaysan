@@ -3431,7 +3431,7 @@ function del_process_list(process_id) {
         console.log(response);
         if (response.trim() == "ok") {
           issaved = "yes"
-          // location.reload()
+          location.reload()
         }
       }
     });
