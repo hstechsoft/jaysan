@@ -1754,6 +1754,7 @@ $(document).ready(function () {
     var process_id = $(this).data("process_id");
     var is_default = $(this).data("is_default");
 
+    $("#del_btn").val(process_id);
 
     if (part_id && component_cat) {
       $("#multi_process").modal("hide")
@@ -1790,6 +1791,12 @@ $(document).ready(function () {
   });
 
   $("#del_btn").on("click", function () {
+
+    var process_id = $(this).val();
+    if(process_id <= 0 ){
+      salert("Warning", "Data Missing!, Try Later.", "warning");
+      return;
+    }
     swal({
       title: "Are you sure - delete? ",
       text: "You will not be recover this  again!",
@@ -1802,7 +1809,7 @@ $(document).ready(function () {
     }).then(function (isConfirm) {
       if (isConfirm) {
 
-        del_process_list()
+        del_process_list(process_id)
 
 
       }
@@ -3371,40 +3378,40 @@ function insert_department(go_id, dept_name) {
   });
 }
 
-function del_process_list() {
+function del_process_list(process_id) {
 
-  var del_process_list = [];
-  var tbl_valid = true;
-  $("#welding_table tr").each(function () {
+  // var del_process_list = [];
+  // var tbl_valid = true;
+  // $("#welding_table tr").each(function () {
 
-    if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
-      shw_toast("Warning", "Invalid/Missing Data")
-      tbl_valid = false
-    }
-  })
+  //   if ($(this).find("td").eq(1).find("li").length < 1 || $(this).find("td").eq(2).find("li").length < 1) {
+  //     shw_toast("Warning", "Invalid/Missing Data")
+  //     tbl_valid = false
+  //   }
+  // })
 
-  if (tbl_valid == true) {
-
-
+  // if (tbl_valid == true) {
 
 
 
-    $("#welding_table tr").each(function () {
 
 
-      var processPart = $(this).find("td").eq(2).find("li");
+  //   $("#welding_table tr").each(function () {
 
 
-
-      console.log();
+  //     var processPart = $(this).find("td").eq(2).find("li");
 
 
 
-      del_process_list.push(processPart.data('pid') || 0)
+  //     console.log();
 
-    })
 
-    console.log(del_process_list);
+
+  //     del_process_list.push(processPart.data('pid') || 0)
+
+  //   })
+
+    console.log(process_id);
 
 
 
@@ -3415,7 +3422,7 @@ function del_process_list() {
       method: 'POST',
       data: {
 
-        did: del_process_list,
+        did: process_id,
 
         // inputPartsData: inputPartsData,
 
@@ -3431,7 +3438,7 @@ function del_process_list() {
 
 
 
-  }
+  // }
 
 }
 
