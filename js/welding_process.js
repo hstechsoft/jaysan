@@ -3422,7 +3422,7 @@ function del_process_list(process_id) {
       method: 'POST',
       data: {
 
-        did: process_id,
+        process_id: process_id,
 
         // inputPartsData: inputPartsData,
 
