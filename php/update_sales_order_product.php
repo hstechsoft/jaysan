@@ -57,6 +57,7 @@ if ($conn->query($sql) === TRUE) {
   $last_opid = $opid;
   foreach ($subtype_details as $subtype_id) {
     $sql_insert_subtype_details = "INSERT INTO sales_order_subtype (opid, msid) VALUES ('$last_opid', '$subtype_id');";
+    echo "Inserting subtype details: $sql_insert_subtype_details\n";
     if ($conn->query($sql_insert_subtype_details) === TRUE) {
         // Successfully inserted subtype details
     } else {
