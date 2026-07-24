@@ -17,7 +17,7 @@ $sql_check = "SELECT jaysan_subtype_link.part_id,part_name
 FROM jaysan_subtype_link
 inner join parts_tbl on jaysan_subtype_link.part_id = parts_tbl.part_id
 WHERE msid IN ($msid_string)
-GROUP BY part_id
+GROUP BY jaysan_subtype_link.part_id
 HAVING COUNT(DISTINCT msid) = ".count($msid_array).";";
 $result = $conn->query($sql_check);
 if ($result->num_rows > 0) {
@@ -35,8 +35,8 @@ $sql_check_part = "SELECT jaysan_subtype_link.part_id,part_name,mtid
 FROM jaysan_subtype_link
 inner join parts_tbl on jaysan_subtype_link.part_id = parts_tbl.part_id
 inner join jaysan_product_view on jaysan_subtype_link.msid = jaysan_product_view.msid
-WHERE part_id = $part_id
-GROUP BY part_id";
+WHERE jaysan_subtype_link.part_id = $part_id
+GROUP BY jaysan_subtype_link.part_id";
 
 $result_part = $conn->query($sql_check_part);
 if ($result_part->num_rows > 0) {
