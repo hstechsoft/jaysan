@@ -32,6 +32,11 @@ function test_input($data)
   return $data;
 }
 
+echo "oid: $oid, type_id: $type_id, model_id: $model_id, sub_type: $sub_type, required_qty: $required_qty, price: $price, billing_amount: $billing_amount, opid: $opid, customer_id: $customer_id, subtype_details: " . implode(',', $subtype_details) . "\n";
+
+exit()
+
+
 // delete sales_order_subtype record
 $sql_delete_subtype = "DELETE FROM sales_order_subtype WHERE opid =  $opid";
 if($conn->query($sql_delete_subtype) === TRUE){
