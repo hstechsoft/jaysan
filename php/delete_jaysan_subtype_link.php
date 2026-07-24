@@ -14,13 +14,13 @@ $data = "'".$data."'";
 return $data;
 }
 
-
+$sql_delete = "DELETE FROM jaysan_subtype_link WHERE link_id = $link_id";
  
 
-  if ($conn->query($sql) === TRUE) {
+  if ($conn->query($sql_delete) === TRUE) {
    echo "ok";
   } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Error: " . $sql_delete . "<br>" . $conn->error;
   }
 $conn->close();
 
