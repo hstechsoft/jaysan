@@ -84,7 +84,7 @@ try
     $conn->begin_transaction();
 for ($i = 0; $i < count($msid_array); $i++) {
     $msid = test_input($msid_array[$i]);
-    $sql = "INSERT INTO jaysan_subtype_link (part_id, msid) VALUES ($part_id, $msid) on duplicate key update part_id = $part_id, msid = $msid";
+    $sql = "INSERT INTO jaysan_subtype_link (part_id, msid) VALUES ($part_id, $msid)";
 
     if ($conn->query($sql) === TRUE) {
         
