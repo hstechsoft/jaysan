@@ -13,7 +13,7 @@ $msid_array = json_decode(($_POST['msid']), true);
 // get array as comma separated string
 $msid_string = implode(',', $msid_array);
 // check same combination of  msid already exists in the table
-$sql_check = "SELECT part_id,part_name
+$sql_check = "SELECT jaysan_subtype_link.part_id,part_name
 FROM jaysan_subtype_link
 inner join parts_tbl on jaysan_subtype_link.part_id = parts_tbl.part_id
 WHERE msid IN ($msid_string)
