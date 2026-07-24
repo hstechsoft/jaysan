@@ -31,7 +31,7 @@ exit();
 
 $mtid = 0;
 // check same part_id  already exists in the table
-$sql_check_part = "SELECT part_id,part_name,mtid
+$sql_check_part = "SELECT jaysan_subtype_link.part_id,part_name,mtid
 FROM jaysan_subtype_link
 inner join parts_tbl on jaysan_subtype_link.part_id = parts_tbl.part_id
 inner join jaysan_product_view on jaysan_subtype_link.msid = jaysan_product_view.msid
