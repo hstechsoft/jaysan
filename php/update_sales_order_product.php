@@ -22,6 +22,8 @@ else
   $subtype_details = explode(',', $subtype_details);
 }
 
+print_r($subtype_details);
+
 
 function test_input($data)
 {
