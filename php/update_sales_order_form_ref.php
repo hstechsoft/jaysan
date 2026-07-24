@@ -140,11 +140,24 @@ if ($conn->multi_query($sql)) {
       $qty = $product['qty']; 
       $price = $product['price']; 
        $billing_amount = $product['billing_amount']; 
+      $subtype_details = $product['subtype_details'];
+
+      $subtype_details = explode(',', $subtype_details);
+
+
   
       $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price,billing_amount) VALUES ( $sales_oid, '$type', '$model', '$subtype', '$qty','$price','$billing_amount');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
-          
+                 $last_opid = $conn->insert_id;
+     foreach ($subtype_details as $subtype_id) {
+        $sql_insert_subtype_details = "INSERT INTO sales_order_subtype (opid, msid) VALUES ('$last_opid', '$subtype_id');";
+        if ($conn->query($sql_insert_subtype_details) === TRUE) {
+            // Successfully inserted subtype details
+        } else {
+            throw new Exception("Error: " . $sql_insert_subtype_details . "<br>" . $conn->error);
+        }
+     }
       } else {
           echo "Error: " . $sql_insert_subtype . "<br>" . $conn->error;
       }

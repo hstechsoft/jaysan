@@ -33,6 +33,7 @@ $productDetails = ($_GET['productDetails']);
 $paymentDetails = isset($_GET['paymentDetails']) ? $_GET['paymentDetails'] : 0;
 $paymentadvanceDetails = isset($_GET['paymentadvanceDetails']) ? $_GET['paymentadvanceDetails'] : 0;
 $sparesDetails = isset($_GET['sparesDetails']) ? $_GET['sparesDetails'] : 0;
+
  
 function test_input($data) {
 $data = trim($data);
@@ -306,11 +307,24 @@ foreach ($sparesDetails as $spare)
       $qty = $product['qty']; 
       $price = $product['price']; 
        $billing_amount = $product['billing_amount']; 
-  
+      // comma separated list of subtype_details ids
+      $subtype_details = $product['subtype_details'];
+  // convert comma separated list to array
+      $subtype_details = explode(',', $subtype_details);
+
       $sql_insert_subtype = "INSERT INTO sales_order_product (oid, type_id, model_id, sub_type, required_qty,price,billing_amount) VALUES ( '$oid', '$type', '$model', '$subtype', '$qty','$price','$billing_amount');";
 
       if ($conn->query($sql_insert_subtype) === TRUE) {
-          
+          // get the last inserted opid and insert into sales_order_subtype table
+          $last_opid = $conn->insert_id;
+     foreach ($subtype_details as $subtype_id) {
+        $sql_insert_subtype_details = "INSERT INTO sales_order_subtype (opid, msid) VALUES ('$last_opid', '$subtype_id');";
+        if ($conn->query($sql_insert_subtype_details) === TRUE) {
+            // Successfully inserted subtype details
+        } else {
+            throw new Exception("Error: " . $sql_insert_subtype_details . "<br>" . $conn->error);
+        }
+     }
       } else {
           throw new Exception("Error: " . $sql_insert_subtype . "<br>" . $conn->error);
       }
