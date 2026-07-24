@@ -1454,12 +1454,13 @@ function update_customer_subgroup_master(sub_group_id, sub_group_name) {
 
 function get_all_subtypename() {
 
+    console.log($("#product_sub_model").val() , $("#sub_model_auto").val())
 
     $.ajax({
         url: "php/get_jaysan_model_subtypename.php",
         type: "get", //send it through get method
         data: {
-            product_id: $("#product").val() || $("#product_auto").val(),
+            type_id: $("#product_sub_model").val() || $("#sub_model_auto").val(),
         },
         success: function (response) {
 
