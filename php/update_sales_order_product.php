@@ -22,7 +22,7 @@ else
   $subtype_details = explode(',', $subtype_details);
 }
 
-print_r($subtype_details);
+
 
 
 function test_input($data)
@@ -33,8 +33,6 @@ function test_input($data)
   $data = "'" . $data . "'";
   return $data;
 }
-
-echo "oid: $oid, type_id: $type_id, model_id: $model_id, sub_type: $sub_type, required_qty: $required_qty, price: $price, billing_amount: $billing_amount, opid: $opid, customer_id: $customer_id, subtype_details: " . implode(',', $subtype_details) . "\n";
 
 
 
@@ -57,7 +55,7 @@ if ($conn->query($sql) === TRUE) {
   $last_opid = $opid;
   foreach ($subtype_details as $subtype_id) {
     $sql_insert_subtype_details = "INSERT INTO sales_order_subtype (opid, msid) VALUES ($last_opid, '$subtype_id');";
-    echo "Inserting subtype details: $sql_insert_subtype_details\n";
+   
     if ($conn->query($sql_insert_subtype_details) === TRUE) {
         // Successfully inserted subtype details
     } else {
