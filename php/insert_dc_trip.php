@@ -109,8 +109,8 @@ $transport_ids_str = implode(',', $all_transport_ids);
 
 
         foreach ($dc_parts as $part) {
-            $part_id = test_input($part['part_id']);
-           $part_pre_process_id  = test_input($part['part_pre_process_id']);
+            $part_id = sql_nullable($part['part_id']);
+           $part_pre_process_id  = sql_nullable($part['part_pre_process_id']);
             $rate = test_input($part['rate']);
             $qty = test_input($part['qty']);
             $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
