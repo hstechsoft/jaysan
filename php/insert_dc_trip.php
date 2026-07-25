@@ -86,7 +86,7 @@ try {
             $remark = "Reserved for DC #".$dc_id;
             $stock_id = $location['stock_id'];
             $reserve_qty = $location['qty'];
-              $sql_reserve = "INSERT INTO stock_reserve (reserve_type, emp_id, remark, stock_id, reserve_qty) VALUES ('$reserve_type' , $emp_id, '$remark', $stock_id, $reserve_qty)";
+              $sql_reserve = "INSERT INTO stock_reserve (reserve_type, emp_id, remark, stock_id, reserve_qty) VALUES ('$reserve_type' , $emp_id, '$remark', $stock_id, $reserve_qty) on duplicate key update reserve_qty = reserve_qty + $reserve_qty";
             //   get reserve id
             if ($conn->query($sql_reserve) === TRUE) {
                 $reserve_id = $conn->insert_id;

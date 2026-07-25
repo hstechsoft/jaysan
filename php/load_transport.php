@@ -2,6 +2,7 @@
  include 'db_head.php';
 $transport_godown = test_input($_GET['transport_godown']);
 $stock_json = json_decode($_GET['stock_json'], true);
+$transport_dc_id = test_input($_GET['transport_dc_id'])??0;
 
 
  
@@ -32,8 +33,8 @@ foreach ($stock_json as $stock) {
         $row_stock = $result_stock->fetch_assoc();
         $stock_id = $row_stock['stock_id'];
         $stock_qty = $row_stock['stock_qty'];
-        $part_id = $row_stock['part_id'];
-        $process_id = $row_stock['process_id'];
+        $part_id = sql_nullable($row_stock['part_id']);
+        $process_id = sql_nullable($row_stock['process_id']);
         $batch_id = $row_stock['batch_id'];
 if ($qty > $stock_qty) {
   throw new Exception("Quantity to transport cannot be greater than stock quantity for stock id $stock_id");
@@ -44,8 +45,10 @@ if ($qty > $stock_qty) {
             throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error);
         }
 
+        
+
         // check if stock with same part id, process id, godown and batch id exists in transport godown
-        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id = $part_id AND process_id = $process_id AND godown = $transport_godown AND batch_id = '$batch_id'";
+        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id <=> $part_id AND process_id <=> $process_id AND godown = $transport_godown AND batch_id = '$batch_id'";
         $result_check_stock = $conn->query($sql_check_stock);
         if ($result_check_stock->num_rows > 0) {
             // stock exists in transport godown, update quantity
@@ -82,9 +85,21 @@ if ($qty > $stock_qty) {
         
         
         // update stock reserve with completed qty + qty
-   $sql_update_reserve = "UPDATE stock_reserve SET  reserve_qty = ifnull(completed_qty, 0) + $qty, reserve_status = if(reserve_qty - (ifnull(completed_qty, 0) + $qty),'finish','active') WHERE stock_reserve_id = $stock_reserve_id";
-                if (!$conn->query($sql_update_reserve)) {
-                    throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
+//    $sql_update_reserve = "UPDATE stock_reserve SET  reserve_qty = ifnull(reserve_qty, 0) + $qty, reserve_status = if(reserve_qty - (ifnull(completed_qty, 0) + $qty),'finish','active') WHERE stock_reserve_id = $stock_reserve_id";
+//                 if (!$conn->query($sql_update_reserve)) {
+//                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
+//                 }
+
+// reduce stock reserve qty by qty and if reserve qty is 0 then delete that record
+
+$sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
+                if (!$conn->query($sql_reduce_reserve)) {
+                    throw new Exception("Error reducing stock reserve id $stock_reserve_id: " . $conn->error);
+                }
+                // if reserve_qty is 0 then delete that record
+                $sql_delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty = 0";
+                if (!$conn->query($sql_delete_reserve)) {
+                    throw new Exception("Error deleting stock reserve id $stock_reserve_id with 0 reserve qty: " . $conn->error);
                 }
 
         
@@ -94,17 +109,19 @@ if ($qty > $stock_qty) {
                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
                 }
 
-         $transport_dc_id = 0;
-// get transport_dc_id 
-$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
-$result_check_transport = $conn->query($sql_check_transport);
-        if ($result_check_transport->num_rows > 0) {
-            // stock exists in transport godown, update quantity
-            $row_check_transport = $result_check_transport->fetch_assoc();
-            $transport_dc_id = $row_check_transport['transport_dc_id'];
-        } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
-        }   
+// // get transport_dc_id 
+// $sql_check_transport = "SELECT transport_dc_id from transport_parts
+// inner join transport_dc on transport_parts.transport_dc_id = transport_dc.transport_dc_id
+//  WHERE reserve_id = $stock_reserve_id and ";
+
+// $result_check_transport = $conn->query($sql_check_transport);
+//         if ($result_check_transport->num_rows > 0) {
+//             // stock exists in transport godown, update quantity
+//             $row_check_transport = $result_check_transport->fetch_assoc();
+//             $transport_dc_id = $row_check_transport['transport_dc_id'];
+//         } else {
+//             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
+//         }   
 
 
     // update current transport in transport parts with $transport_godown and sts as transport
