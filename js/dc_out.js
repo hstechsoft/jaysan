@@ -31,6 +31,42 @@ $(document).ready(function () {
     );
 
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                console.log("Latitude:", position.coords.latitude);
+                console.log("Longitude:", position.coords.longitude);
+                console.log("Accuracy:", position.coords.accuracy + " meters");
+                        get_godown_location1(position.coords.latitude, position.coords.longitude)
+            },
+            function (error) {
+                console.log(error.message);
+                $(".overlay_e").removeClass("d-none")
+            }
+        );
+    } else {
+        console.log("Geolocation is not supported.");
+    }
+
+
+
+    // const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    // window.open(url, "_blank");
+
+    $("#godown_list_tbody").on("click", ".select_btn", function () {
+        let godown_name = $(this).data("creditor_name");
+        let godown_id = $(this).val();
+
+        if (godown_id && godown_name) {
+            $("#godown_list_modal").modal("hide");
+            $("#current_godown").data("godown_id", godown_id).text(godown_name);
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Again.", "warning");
+        }
+
+    })
+
     $(".part_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
@@ -53,6 +89,7 @@ $(document).ready(function () {
 
     $('#godown').on('input', function () {
         $(this).removeData("godown_id");
+        $("#dc_type").val('').trigger("change");
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -113,6 +150,7 @@ $(document).ready(function () {
 
     $('#from_godown').on('input', function () {
         $(this).removeData("from_godown_id");
+        $("#dc_type").val('').trigger("change");
 
         //check the value not empty
         if ($('#from_godown').val() != "") {
@@ -161,6 +199,15 @@ $(document).ready(function () {
         }
 
     });
+
+    $("#dc_type").on("change", function () {
+        if ($(this).val() != '') {
+            $(".check_dc_type").removeClass("d-none");
+        }
+        else {
+            $(".check_dc_type").addClass("d-none");
+        }
+    })
 
     $('#source_godown_search').on('input', function () {
         $(this).removeData("source_godown_search_id");
@@ -735,9 +782,10 @@ $(document).ready(function () {
 
     $("#add_to_table").on("click", function () {
 
-        let godown_id = $('#godown').data("godown_id");
+        let current_godown = $("#current_godown").data("godown_id")
+        let destination = $('#godown').data("godown_id");
         let bill_to = $('#godown').val();
-        let from_godown_id = $('#from_godown').data("from_godown_id");
+        let source_godown = $('#from_godown').data("from_godown_id");
         let ship_to = $('#ship_to').val();
         let dc_no = $("#dc_no").val();
         let dc_date = $("#dc_date").val();
@@ -745,8 +793,8 @@ $(document).ready(function () {
         let vehicle_type = $("#vehicle_type").val();
         let vehicle_no = $("#vehicle_no").val() || '';
         let driver_name = $("#driver_name").val() || '';
-        let contact_no = $("#contact_no").val() || '';
-        let vehicle_description = $("#vehicle_description").val() || '';
+        let driver_contact = $("#contact_no").val() || '';
+        let transport_des = $("#vehicle_description").val() || '';
         let e_invoice = $("#e_invoice").val() || '';
         let mode_of_payment = $("#mode_of_payment").val() || '';
         let supplier_ref_order_no = $("#supplier_ref_order_no").val() || '';
@@ -762,7 +810,10 @@ $(document).ready(function () {
 
         let transport_godown = null;
 
-        let parts = [];
+        let dc_from = '';
+        let dc_to = '';
+
+        let dc_parts = [];
         let dc_parts_location = [];
         let dc_process = [];
 
@@ -785,12 +836,12 @@ $(document).ready(function () {
             console.log(stock_id_qty);
 
             if (is_checked) {
-                // parts.push({
-                //     part_id: part_id,
-                //     part_pre_process_id: part_pre_process_id,
-                //     qty: qty,
-                //     rate: rate,
-                // });
+                dc_parts.push({
+                    part_id: part_id,
+                    part_pre_process_id: part_pre_process_id,
+                    qty: qty,
+                    rate: rate,
+                });
                 stock_id_qty.forEach(item => {
                     dc_parts_location.push({
                         emp_id: emp_id,
@@ -813,10 +864,10 @@ $(document).ready(function () {
             }
         });
 
-        // if (parts.length == 0) {
-        //     salert("Warning", "Please select at least one part", "warning");
-        //     return;
-        // }
+        if (dc_parts.length == 0) {
+            salert("Warning", "Please select at least one part", "warning");
+            return;
+        }
 
         // if (dc_process.length == 0) {
         //     salert("Warning", "Process Data Missing", "warning");
@@ -828,16 +879,16 @@ $(document).ready(function () {
             return;
         }
 
-        // if (!dc_date || !dc_no) {
-        //     salert("Warning", "Enter DC/No And DC Date", "warning");
-        //     return;
-        // }
+        if (!dc_date) {
+            salert("Warning", "Enter DC Date", "warning");
+            return;
+        }
 
         // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
-        console.log(emp_id, from_godown_id, godown_id, dc_parts_location);
+        console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
 
-        insert_dc_trip(emp_id, from_godown_id, godown_id, JSON.stringify(dc_parts_location), transport_dc_id);
+        insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -884,20 +935,73 @@ $(document).ready(function () {
     })
 
 
-    $(".one_to_many, .many_to_one").on("click", function () {
-        $(".one_to_many, .many_to_one").removeClass("active");
-        $(this).addClass("active");
-        if ($(this).hasClass('one_to_many')) {
-            $(".one_to_many_card").removeClass('d-none');
-            $(".many_to_one_card").addClass('d-none');
-        } else {
-            $(".one_to_many_card").addClass('d-none');
-            $(".many_to_one_card").removeClass('d-none');
-        }
-    });
-
 });
 
+
+
+function get_godown_location1(lat, lng) {
+
+    $.ajax({
+        url: "php/get_godown_location.php",
+        type: "get",
+        data: {
+            latti: lat,
+            longi: lng,
+        },
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() !== "error") {
+                $("#godown_list_tbody").empty();
+                if (response.trim() !== "0 result") {
+                    var obj = JSON.parse(response);
+                    if (obj.length == 1) {
+                        obj.forEach(function (item) {
+                            $(".dc_filess").prop("disabled", false);
+                            $("#current_godown").data("godown_id", item.creditor_id).text(item.creditor_name);
+                        })
+                    }
+                    else {
+                        $("#godown_list_modal").modal("show");
+                        var count = 0;
+                        obj.forEach(function (item) {
+                            count += 1;
+                            $("#godown_list_tbody").append(`
+                                <li class="list-group-item godown-item">
+                                    <div class="godown-details">
+                                        <h6 class="godown-name mb-1">${item.creditor_name}</h6>
+                                        <span class="godown-distance">
+                                            <i class="fa-solid fa-location-dot me-1"></i>
+                                            ${item.distance_m} Meters Away
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-success btn-sm select_btn"
+                                        value="${item.creditor_id}"
+                                        data-creditor_name="${item.creditor_name}">
+                                        <i class="fa-solid fa-circle-check me-1"></i>
+                                        Select
+                                    </button>
+                                </li>
+                            `);
+                        });
+                        $("#godown_status").text('Found ' + count + ' Godown').addClass("bg-success");
+
+                    }
+                }
+                else {
+                    $("#godown_status").text('No Godown').addClass("bg-danger");
+                }
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 function get_dcout_order_details(transport_dc_id) {
 
@@ -1210,20 +1314,42 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location, transport_dc_id) {
+function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts) {
 
-    console.log(emp_id, from_godown_id, godown_id, dc_parts_location, transport_dc_id);
+    console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
     $.ajax({
         url: "php/insert_dc_trip.php",
         type: "post", //send it through get method
         data: {
 
+            current_godown: current_godown,
+            destination: destination,
+            source_godown: source_godown,
+            dc_no: dc_no,
+            dc_date: dc_date,
+            transport_mode: transport_mode,
+            transport_des: transport_des,
+            vehicle_no: vehicle_no,
+            driver_name: driver_name,
+            driver_contact: driver_contact,
+            mode_of_payment: mode_of_payment,
+            supplier_ref_order_no: supplier_ref_order_no,
+            dispatch_doc_no: dispatch_doc_no,
+            dispatched_through: dispatched_through,
+            date_time_of_issue: date_time_of_issue,
+            duration_of_process: duration_of_process,
+            nature_of_processing: nature_of_processing,
+            challan_no: challan_no,
             emp_id: emp_id,
-            destination: godown_id,
-            source_godown: from_godown_id,
+            dc_type: dc_type,
+            dc_from: dc_from,
+            dc_to: dc_to,
+            bill_to: bill_to,
+            ship_to: ship_to,
             dc_parts_location: dc_parts_location,
             transport_dc_id: transport_dc_id,
+            dc_parts: dc_parts,
         },
         success: function (response) {
             console.log(response);
@@ -1248,7 +1374,7 @@ function insert_dc_trip(emp_id, from_godown_id, godown_id, dc_parts_location, tr
 
             // });
             if (response.trim() == "ok") {
-                window.location.reload();
+                // window.location.reload();
             }
             else {
                 salert("Warning", response, "warning");
