@@ -66,6 +66,7 @@ if ($qty > $stock_qty) {
                 throw new Exception("Error updating stock id $existing_stock_id in transport godown: " . $conn->error);
             }
             $new_stock_id = $existing_stock_id;
+
         } else {
 
 
@@ -79,9 +80,10 @@ if ($qty > $stock_qty) {
 
 
         
- 
 
         }   
+
+     
         
         
         // update stock reserve with completed qty + qty
@@ -90,24 +92,26 @@ if ($qty > $stock_qty) {
 //                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
 //                 }
 
-// reduce stock reserve qty by qty and if reserve qty is 0 then delete that record
 
-$sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
-                if (!$conn->query($sql_reduce_reserve)) {
-                    throw new Exception("Error reducing stock reserve id $stock_reserve_id: " . $conn->error);
-                }
-                // if reserve_qty is 0 then delete that record
-                $sql_delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty = 0";
-                if (!$conn->query($sql_delete_reserve)) {
-                    throw new Exception("Error deleting stock reserve id $stock_reserve_id with 0 reserve qty: " . $conn->error);
-                }
-
-        
-
-                $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
+    $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
+    echo $sql_update_reserve;
                 if (!$conn->query($sql_update_reserve)) {
                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
                 }
+
+// // reduce stock reserve qty by qty and if reserve qty is 0 then delete that record
+
+// $sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
+//                 if (!$conn->query($sql_reduce_reserve)) {
+//                     throw new Exception("Error reducing stock reserve id $stock_reserve_id: " . $conn->error);
+//                 }
+//                 // if reserve_qty is 0 then delete that record
+//                 $sql_delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty = 0";
+//                 if (!$conn->query($sql_delete_reserve)) {
+//                     throw new Exception("Error deleting stock reserve id $stock_reserve_id with 0 reserve qty: " . $conn->error);
+//                 }
+
+            
 
 // // get transport_dc_id 
 // $sql_check_transport = "SELECT transport_dc_id from transport_parts
@@ -132,11 +136,14 @@ $sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty
 
 } 
 
+
+
+
   
 
 
 }
-$conn->commit();
+ $conn->commit();
 echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
