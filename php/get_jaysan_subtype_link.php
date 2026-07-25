@@ -31,7 +31,7 @@ return $data;
 
 
 // get msid from jaysan_product_view
-$sql_get_msid = "SELECT parts_tbl.part_name, jpv.product_id,jpv.model_id,jpv.mtid,jpv.product_name,jpv.model_name,jpv.type_name,JSON_ARRAYAGG(JSON_OBJECT('msid', jpv.msid, 'subtype_name', jpv.subtype_name,'link_id', jaysan_subtype_link.link_id)) as sub_type FROM jaysan_product_view jpv
+$sql_get_msid = "SELECT parts_tbl.part_id,parts_tbl.part_name, jpv.product_id,jpv.model_id,jpv.mtid,jpv.product_name,jpv.model_name,jpv.type_name,JSON_ARRAYAGG(JSON_OBJECT('msid', jpv.msid, 'subtype_name', jpv.subtype_name,'link_id', jaysan_subtype_link.link_id)) as sub_type FROM jaysan_product_view jpv
  INNER JOIN jaysan_subtype_link on jpv.msid = jaysan_subtype_link.msid
  inner join parts_tbl on jaysan_subtype_link.part_id = parts_tbl.part_id
   WHERE ".$product_query." AND ".$model_query." AND ".$type_query." GROUP BY parts_tbl.part_id";
