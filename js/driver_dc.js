@@ -122,12 +122,13 @@ $(document).ready(function () {
 
     $(".dc_details").on("click", ".driver_confrim_btn", function () {
         var stock_json = $(this).data("stock_id_qty");
+        var transport_dc_id = $(this).val();
 
         var dc_type = $("#dc_switch").is(":checked") ? 1 : 0;
         console.log(stock_json);
 
-        if (stock_json.length > 0 && dc_type == 0) {
-            load_transport(JSON.stringify(stock_json));
+        if (stock_json.length > 0 && dc_type == 0 && transport_dc_id > 0) {
+            load_transport(JSON.stringify(stock_json), transport_dc_id);
         }
         else if (stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0) {
             un_load_transport(JSON.stringify(stock_json), $('#godown').data("godown_id"))
@@ -682,7 +683,7 @@ function get_transport_parts_dc(godown_id) {
 
                         html += `
                                 <div class="text-end mt-2">
-                                    <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class="fa fa-circle-check"></i>Confirm</button>
+                                    <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id}><i class="fa fa-circle-check"></i>Confirm</button>
                                 </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);
@@ -711,7 +712,7 @@ function get_transport_parts_dc(godown_id) {
 
 }
 
-function load_transport(stock_json) {
+function load_transport(stock_json, transport_dc_id) {
 
     $.ajax({
         url: "php/load_transport.php",
@@ -720,6 +721,7 @@ function load_transport(stock_json) {
 
             transport_godown: 1233,
             stock_json: stock_json,
+            transport_dc_id: transport_dc_id,
         },
         success: function (response) {
             console.log(response);
@@ -855,7 +857,7 @@ function get_transport_unload_parts(godown_id) {
 
                         html += `
                                     <div class="text-end mt-2">
-                                        <button class="btn btn-success btn-sm driver_confrim_btn"data-stock_id_qty='${JSON.stringify(stock_id_qty)}'><i class="fa fa-circle-check"></i>Confirm</button>
+                                        <button class="btn btn-success btn-sm driver_confrim_btn"data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id}><i class="fa fa-circle-check"></i>Confirm</button>
                                     </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);

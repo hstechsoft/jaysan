@@ -554,15 +554,18 @@ $(document).ready(function () {
       $("#extra_payment").val(0);
       var count = 0
       var sub_type = ""
+      var sub_type_ids = ""
       $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
         sub_type = sub_type + $(this).parent().text().trim() + ","
+        sub_type_ids += $(this).val() + ","
 
       });
 
       sub_type = sub_type.slice(0, -1); // Remove the last comma
+      sub_type_ids = sub_type_ids.slice(0, -1); // Remove the last comma
       //console.logsub_type);
 
       // var amt = parseFloat($("#machine_price").val() || 0) * parseFloat($("#qty").val() || 0)
@@ -580,7 +583,7 @@ $(document).ready(function () {
       if (count >= 1) {
 
         var len = $('#sales_product tr').length + 1
-        $('#sales_product').append(" <tr class='small'> <td>" + len + "</td> <td>" + $('#product :selected').text() + "</td> <td data-model_id='" + $('#pmodel').val() + "'>" + $('#pmodel :selected').text() + "</td> <td data-type_id='" + $('#ptype').val() + "'>" + $('#ptype :selected').text() + "</td> <td>" + sub_type + "</td> <td>" + $('#qty').val() + "</td><td>" + $('#machine_price').val() + "</td><td>" + $('#billing_price').val() + "</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+        $('#sales_product').append(" <tr class='small'> <td>" + len + "</td> <td>" + $('#product :selected').text() + "</td> <td data-model_id='" + $('#pmodel').val() + "'>" + $('#pmodel :selected').text() + "</td> <td data-type_id='" + $('#ptype').val() + "'>" + $('#ptype :selected').text() + "</td> <td  data-sub_type_ids="+sub_type_ids+">" + sub_type + "</td> <td>" + $('#qty').val() + "</td><td>" + $('#machine_price').val() + "</td><td>" + $('#billing_price').val() + "</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
 
         $('#product_details_mobile_view').append(`
                 <div class="card mobile-product-card mb-3">
@@ -686,18 +689,22 @@ $(document).ready(function () {
       var total_qty = parseFloat($('#required_qty').val() || 0);
       total_qty = total_qty + parseFloat($('#qty').val())
       var sub_type = ""
+      var sub_type_ids = ""
       $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
         sub_type = sub_type + $(this).parent().text().trim() + ","
+        sub_type_ids += $(this).val() + ","
 
       });
 
       sub_type = sub_type.slice(0, -1);
+      sub_type_ids = sub_type_ids.slice(0, -1); // Remove the last comma
+
       $("#update_order_btn").trigger("click")
 
-      insert_sales_order_product(oid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), 'null')
+      insert_sales_order_product(oid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), 'null', sub_type_ids)
     }
 
     else
@@ -855,18 +862,21 @@ $(document).ready(function () {
     var opid = $(this).data("opid")
     var oid = $(this).data("oid")
     var sub_type = ""
+    var sub_type_ids = ""
     var count = 0
     $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
       count = count + 1;
       //console.log$(this).parent().text());
       sub_type = sub_type + $(this).parent().text().trim() + ","
+      sub_type_ids = sub_type_ids + $(this).val()+ ","
     });
     //console.logsub_type);
 
     sub_type = sub_type.slice(0, -1);
+    sub_type_ids = sub_type_ids.slice(0, -1);
 
     if (count >= 1 && opid > 0 && oid > 0 && $('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "" && $('#billing_price').val() > 0 && $('#machine_price').val() > 0 && cus_id > 0) {
-      update_sales_order_product(oid, opid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), cus_id);
+      update_sales_order_product(oid, opid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), cus_id, sub_type_ids);
       setTimeout(function () {
         $("#update_order_btn").trigger("click")
       }, 1000)
@@ -2042,7 +2052,7 @@ function insert_sale_order_spares(oid, qno, remark, amount, dcf_no) {
 
 }
 
-function insert_sales_order_product(oid, type_id, model_id, sub_type, required_qty, price, billing_amount, opid) {
+function insert_sales_order_product(oid, type_id, model_id, sub_type, required_qty, price, billing_amount, opid, sub_type_ids) {
 
   //console.logoid, type_id, model_id, sub_type, required_qty, price, billing_amount, opid);
 
@@ -2059,7 +2069,8 @@ function insert_sales_order_product(oid, type_id, model_id, sub_type, required_q
       price: price,
       billing_amount: billing_amount,
       opid: opid,
-      customer_id: cus_id
+      customer_id: cus_id,
+      subtype_details: sub_type_ids,
 
 
     },
@@ -2101,9 +2112,9 @@ function insert_sales_order_product(oid, type_id, model_id, sub_type, required_q
 
 }
 
-function update_sales_order_product(oid, opid, type_id, model_id, sub_type, required_qty, price, billing_amount, cus_id) {
+function update_sales_order_product(oid, opid, type_id, model_id, sub_type, required_qty, price, billing_amount, cus_id, sub_type_ids) {
 
-  //console.logoid, opid, type_id, model_id, sub_type, required_qty, price, billing_amount, cus_id);
+  console.log(oid, opid, type_id, model_id, sub_type, required_qty, price, billing_amount, cus_id, sub_type_ids);
 
 
   $.ajax({
@@ -2118,36 +2129,37 @@ function update_sales_order_product(oid, opid, type_id, model_id, sub_type, requ
       price: price,
       billing_amount: billing_amount,
       opid: opid,
-      customer_id: cus_id
+      customer_id: cus_id,
+      subtype_details: sub_type_ids
 
 
     },
     success: function (response) {
 
-      //console.log
+      console.log(response)
 
-      if (response.toString().includes("ok")) {
+      // if (response.toString().includes("ok")) {
 
-        $("#update_sale_product_btn, #cancel_sale_product_btn").addClass("d-none");
-        $("#add_sale_product_btn").removeClass("d-none");
-        $('#product').val("")
-        $('#pmodel').val("")
-        $('#pmodel').attr('disabled', true)
-        $('#ptype').val("")
-        $('#ptype').attr('disabled', true)
-        $('#qty').val("1")
-        $('#product_sub_type_card').addClass('d-none')
-        $('#sub_type_div').empty()
-        $('#required_qty').val("")
-        $("#billing_price").val("")
-        $("#machine_price").val("")
-        $("#credit_amount").text("0")
-        shw_toast("Success", "Product Updated", "success")
-        get_sales_advance(cus_id);
-        get_jaysan_sales_product(oid);
+      //   $("#update_sale_product_btn, #cancel_sale_product_btn").addClass("d-none");
+      //   $("#add_sale_product_btn").removeClass("d-none");
+      //   $('#product').val("")
+      //   $('#pmodel').val("")
+      //   $('#pmodel').attr('disabled', true)
+      //   $('#ptype').val("")
+      //   $('#ptype').attr('disabled', true)
+      //   $('#qty').val("1")
+      //   $('#product_sub_type_card').addClass('d-none')
+      //   $('#sub_type_div').empty()
+      //   $('#required_qty').val("")
+      //   $("#billing_price").val("")
+      //   $("#machine_price").val("")
+      //   $("#credit_amount").text("0")
+      //   shw_toast("Success", "Product Updated", "success")
+      //   get_sales_advance(cus_id);
+      //   get_jaysan_sales_product(oid);
 
 
-      }
+      // }
 
 
 
@@ -4358,7 +4370,7 @@ function get_sales_order_approval(approve_sts) {
 
 
             let proText = obj.pro.toLowerCase();
-            console.log(proText);
+            // console.log(proText);
 
             let ddu = "d-none";
 
@@ -5491,10 +5503,11 @@ function insert_sales_order_form() {
     var model = $(this).find('td:eq(2)').attr('data-model_id');
     var type = $(this).find('td:eq(3)').attr('data-type_id');
     var subtype = $(this).find('td:eq(4)').text();
+    var subtype_details = $(this).find('td:eq(4)').data("sub_type_ids");
     var qty = $(this).find('td:eq(5)').text();
     var price = $(this).find('td:eq(6)').text();
     var billing_amount = $(this).find('td:eq(7)').text();
-    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount });
+    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount, subtype_details: subtype_details});
   });
 
   var sparesDetails = [];
@@ -5639,10 +5652,11 @@ function update_sales_order_form() {
     var model = $(this).find('td:eq(2)').attr('data-model_id');
     var type = $(this).find('td:eq(3)').attr('data-type_id');
     var subtype = $(this).find('td:eq(4)').text();
+    var subtype_details = $(this).find('td:eq(4)').data("sub_type_ids");
     var qty = $(this).find('td:eq(5)').text();
     var price = $(this).find('td:eq(6)').text();
     var billing_amount = $(this).find('td:eq(7)').text();
-    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount });
+    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount, subtype_details: subtype_details });
 
   });
 
