@@ -50,6 +50,8 @@ raw_material as(select
    iv.required_qty,
    iv.total_reserve_qty,
    iv.needed,
+   iv.dc_qty,
+   iv.transport_qty,
    sum(sv.reserve_qty) as total_exreserve_qty
    
 from
@@ -84,6 +86,8 @@ rm_group as (select
 sum(total_exreserve_qty) as total_exreserve_qty,
 sum(required_qty) as total_required_qty,
 sum(total_reserve_qty) as total_internal_reserve_qty,
+sum(dc_qty) as total_dc_qty,
+sum(transport_qty) as total_transport_qty,
     previous_process_id,
        JSON_ARRAYAGG(JSON_OBJECT(
         'input_part_id', rm.input_part_id,
@@ -91,6 +95,8 @@ sum(total_reserve_qty) as total_internal_reserve_qty,
         'previous_process_id', rm.previous_process_id,
         'required_qty', rm.required_qty,
         'total_reserve_qty', rm.total_reserve_qty,
+        'dc_qty', rm.dc_qty,
+        'transport_qty', rm.transport_qty,
         'needed', rm.needed,
         'ex_qty',rm.total_exreserve_qty
     )) as input_details
@@ -99,7 +105,7 @@ sum(total_reserve_qty) as total_internal_reserve_qty,
 
   from raw_material rm GROUP BY rm.process_id,rm.godown,rm.dep,rm.sec),
 
-rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty, previous_process_id, input_details from rm_group 
+rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty,total_dc_qty,total_transport_qty, previous_process_id, input_details from rm_group
 -- WHERE process_id = 2796 and godown = 1087 and dep <=> null and sec<=> null
 ), 
 cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
@@ -116,6 +122,8 @@ cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
     'total_exreserve_qty', total_exreserve_qty,
     'total_required_qty', total_required_qty,
     'total_internal_reserve_qty', total_internal_reserve_qty,
+    'total_dc_qty', total_dc_qty,
+    'total_transport_qty', total_transport_qty,
     'previous_process_id', previous_process_id,
     'input_details', input_details
 )) as work_order_details,
