@@ -251,7 +251,17 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
 
 
 
-echo "ok";
+
+           require_once 'print_dc.php';
+            $result = print_dc($dc_id, $conn);
+
+
+$rows = [];
+$rows[] = $result;
+
+header('Content-Type: application/json');
+echo json_encode($rows);
+
 
 
         
