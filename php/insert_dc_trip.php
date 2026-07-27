@@ -7,6 +7,13 @@ $current_godown = test_input($_POST['current_godown']);
 
 $destination = test_input($_POST['destination']);
 $source_godown = test_input($_POST['source_godown']);
+if($source_godown == $destination)
+{
+    echo "source and destination godown cannot be same";
+    exit;
+}
+
+$result_json = array();
 
 if ($current_godown == $destination) {
   $dc = "out_dc";
@@ -248,7 +255,7 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
    
         }
 
-
+$result_json['success'] = true;
 
 
 
@@ -257,10 +264,10 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
 
 
 $rows = [];
-$rows[] = $result;
+$result_json['data'] = $result;
 
 header('Content-Type: application/json');
-echo json_encode($rows);
+echo json_encode($result_json);
 
 
 
@@ -272,7 +279,9 @@ echo json_encode($rows);
      
     }
 } catch (Exception $e) {
-    echo "Transaction failed: " . $e->getMessage();
+    $result_json['success'] = false;
+    $result_json['error'] = $e->getMessage();
+    echo json_encode($result_json);
     $conn->rollback();
 }
 
