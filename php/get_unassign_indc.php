@@ -2,7 +2,7 @@
  include 'db_head.php';
 
  $godown_id = test_input($_GET['godown_id']);
- echo '$godown_id: ' . $godown_id;
+ 
  $transport_dc_id = test_input($_GET['transport_dc_id']);
 $transport_dc_query = 1;
 if($transport_dc_id > 0)
@@ -28,7 +28,7 @@ left join parts_tbl pt2 on tp.part_id = pt2.part_id
 left join jaysan_process jp on pwt.process = jp.process_id 
 left join creditors on tdc.source_godown = creditors.creditor_id 
 where tdc.source_godown = $godown_id  and $transport_dc_query and tp.dc_check = 0";
-echo $sql;
+
 
 $result = $conn->query($sql);
 
