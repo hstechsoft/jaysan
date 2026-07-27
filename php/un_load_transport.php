@@ -80,7 +80,29 @@ foreach ($stock_json as $stock) {
 
         }
 
+               $transport_dc_id = 0;
+// get transport_dc_id 
+$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
+$result_check_transport = $conn->query($sql_check_transport);
+        if ($result_check_transport->num_rows > 0) {
+            // stock exists in transport godown, update quantity
+            $row_check_transport = $result_check_transport->fetch_assoc();
+            $transport_dc_id = $row_check_transport['transport_dc_id'];
+        } else {
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
+        } 
 
+// reduce stock reserve qty
+$update_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
+if (!$conn->query($update_reserve)) {
+    throw new Exception("Error reducing reserve qty for stock reserve id $stock_reserve_id: " . $conn->error);
+}
+
+// if reserve qty is 0 then delete it
+$delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty <= 0";
+if (!$conn->query($delete_reserve)) {
+    throw new Exception("Error deleting stock reserve id $stock_reserve_id: " . $conn->error);
+}
 
             // using that new_stock_id update stock reserve with new stock id and reserve qty
                 $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
@@ -104,17 +126,7 @@ foreach ($stock_json as $stock) {
         throw new Exception("Error checking destination godown for id $des_godown: " . $conn->error);
     }
 
-          $transport_dc_id = 0;
-// get transport_dc_id 
-$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
-$result_check_transport = $conn->query($sql_check_transport);
-        if ($result_check_transport->num_rows > 0) {
-            // stock exists in transport godown, update quantity
-            $row_check_transport = $result_check_transport->fetch_assoc();
-            $transport_dc_id = $row_check_transport['transport_dc_id'];
-        } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$sql_check_transport . $conn->error);
-        }   
+     
 // UPDATE transport_dc SET current_transport = $des_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id
 
     if($creditor_group == 'transport') {
