@@ -31,10 +31,8 @@ return $data;
 
  $sql = "with iv_deatils as(select iv.work_process_id,iv.work_orders,iv.pending_process_qty,iv.input_part_id, 
 if(iv.input_part_id is null,concat('semi finished part (',pt_final.part_name,')'),pt.part_name) as input_part_name,
-iv.previous_process_id,iv.required_qty,iv.godown,creditors.creditor_name,department.dep_name,dep_section.sec_name,iv.dep,iv.sec,iv.total_reserve_qty,iv.needed,iv.dc_qty,iv.transport_qty from input_part_demand_view iv 
-left join creditors on iv.godown <=> creditors.creditor_id
- left join department on iv.dep <=> department.dep_id
- left join dep_section on iv.sec <=> dep_section.dep_sec_id
+iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_qty,iv.needed,iv.dc_qty,iv.transport_qty from input_part_demand_view iv 
+
  left join parts_tbl pt on iv.input_part_id <=> pt.part_id
  left join process_wel_tbl pwt on iv.previous_process_id <=> pwt.process_id
  left join process_wel_tbl pwt_final on pwt.final_process_id <=> pwt_final.process_id
@@ -43,7 +41,7 @@ left join creditors on iv.godown <=> creditors.creditor_id
     select sv.part_id, sv.process_id, sum(sv.reserve_qty) as total_reserve_qty, JSON_ARRAYAGG(JSON_OBJECT(
         'same_godown', if(sv.godown = '$source_godown',true,false),
         'godown', sv.godown,
-        'godown_name', creditor_name,
+        'godown_name', creditors.creditor_name,
         'dep', sv.dep,
         'dep_name', department.dep_name,
         'sec', sv.sec,
@@ -51,15 +49,19 @@ left join creditors on iv.godown <=> creditors.creditor_id
         'reserve_qty', sv.reserve_qty,
         'stock_reserve_id', sv.stock_reserve_id,
         'stock_id', sv.stock_id
-    )) as stock_reserve_details from stock_view sv WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is null
+    )) as stock_reserve_details from stock_view sv 
+    left join creditors on sv.godown <=> creditors.creditor_id
+ left join department on sv.dep <=> department.dep_id
+ left join dep_section on sv.sec <=> dep_section.dep_sec_id 
+    WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is null
     group by sv.process_id
 
     union all
 
     select sv.part_id, sv.process_id, sum(sv.reserve_qty) as total_reserve_qty, JSON_ARRAYAGG(JSON_OBJECT(
         'same_godown', if(sv.godown = '$source_godown',true,false),
-       'godown', sv.godown,
-        'godown_name', creditor_name,
+        'godown', sv.godown,
+        'godown_name', creditors.creditor_name,
         'dep', sv.dep,
         'dep_name', department.dep_name,
         'sec', sv.sec,
@@ -67,7 +69,11 @@ left join creditors on iv.godown <=> creditors.creditor_id
         'reserve_qty', sv.reserve_qty,
         'stock_reserve_id', sv.stock_reserve_id,
         'stock_id', sv.stock_id
-    )) as stock_reserve_details from stock_view sv WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is not null
+    )) as stock_reserve_details from stock_view sv 
+     left join creditors on sv.godown <=> creditors.creditor_id
+ left join department on sv.dep <=> department.dep_id
+ left join dep_section on sv.sec <=> dep_section.dep_sec_id
+    WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is not null
     group by sv.part_id
  )
  select iv.work_process_id,iv.work_orders,iv.pending_process_qty,iv.godown,creditors.creditor_name ,department.dep_name,dep_section.sec_name,iv.dep,iv.sec,
