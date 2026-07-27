@@ -55,7 +55,7 @@ $demand_id = $conn->insert_id;
 
 
 
-    $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date,demand_id) VALUES ('INTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now(),$demand_id)";
+    $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date,demand_id) VALUES ('EXTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now(),$demand_id)";
 
     if (!$conn->query($sql_insert_work_order)) {
         throw new Exception("Error inserting record: " . $conn->error);
@@ -70,34 +70,87 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $input_part_id = sql_nullable($row['input_part_id']);
         $previous_process_id = sql_nullable($row['previous_process_id']);
-        $qty = $row['qty'];
-echo "input_part_id: " . $input_part_id . ", previous_process_id: " . $previous_process_id . ", qty: " . $qty . "<br>";
-       
-// get stock id from stock table where process_id = $previous_process_id and input_part_id = $input_part_id
-        $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE process_id <=> $previous_process_id AND part_id <=> $input_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
-        
-        $result_stock = $conn->query($sql_get_stock_id);
-        if ($result_stock->num_rows > 0) {
-            while($row_stock = $result_stock->fetch_assoc()) {
-                $stock_id = $row_stock['stock_id'];
-              
-            }
-        } else {
-          // insert into stock table with qty = 0 and get the stock_id
-          $sql_insert_stock = "INSERT INTO jaysan_stock (part_id,process_id,qty,godown,dep,sec,remark) VALUES ($input_part_id,$previous_process_id,0,$godown,$dep,$sec,'created from work order')";
-          if (!$conn->query($sql_insert_stock)) {
-              throw new Exception("Error inserting record: " . $conn->error);
-          }
-          $stock_id = $conn->insert_id;
+        $input_qty = $row['qty'];
+echo "input_part_id: " . $input_part_id . ", previous_process_id: " . $previous_process_id . ", qty: " . $input_qty . "<br>";
+
+
+{
+    
+$output_part = $value['output_part'];
+    $process_id = $value['process_id'];
+    $part_id = $value['output_part'];
+    $qty = $value['qty'];
+    // get stock  from stock table and reserve that stock until $qty = 0
+$sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE process_id = $previous_process_id AND available_qty > 0 ORDER BY stock_id ASC";
+    if($input_part_id > 0)
+        {
+            
+            $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE part_id = $input_part_id AND available_qty > 0 ORDER BY stock_id ASC";
         }
 
+    
+    $result = $conn->query($sql_get_stock);
+    while ($row = $result->fetch_assoc()) {
+        
+        $stock_id = $row['stock_id'];
+        $available_qty = $row['available_qty'];
 
-        // insert reserve record into stock_reserve table with work_order_id and stock_id and qty
-        $sql_insert_stock_reserve = "INSERT INTO stock_reserve (reserve_type, reserve_type_id, emp_id,remark,stock_id,reserve_qty) VALUES ('work_order',$work_order_id,$created_by,'reserved  for work order',$stock_id,$qty)";
-        if (!$conn->query($sql_insert_stock_reserve)) {
-            throw new Exception("Error inserting record: " . $conn->error);
+        if ($qty <= 0) {
+            break;
+        }
+
+        if ($available_qty >= $qty) {
+            // Reserve the required quantity from this stock insert on duplicate key update reserved_qty = reserved_qty + $qty
+            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $qty, 'demand')
+            ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
+            $conn->query($sql_reserve_stock);
+            $result_json['message'] = "Reserved $qty from Stock ID: $stock_id";
+            $qty = 0; // All required quantity has been reserved
+        } else {
+            // Reserve all available quantity from this stock and continue to the next stock
+            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $available_qty, 'demand')
+            ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $available_qty";
+            $conn->query($sql_reserve_stock);
+            $result_json['message'] = "Reserved $available_qty from Stock ID: $stock_id";
+            $qty -= $available_qty; // Decrease the remaining required quantity
         }
     }
+
+    if ($qty > 0) {
+        $result_json['warning'] = "Not enough stock available to reserve the required quantity for Process ID: $previous_process_id. Remaining quantity to reserve: $qty";
+    }
+}
+       
+// // get stock id from stock table where process_id = $previous_process_id and input_part_id = $input_part_id
+//         $sql_get_stock_id = "SELECT stock_id FROM jaysan_stock WHERE process_id <=> $previous_process_id AND part_id <=> $input_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+        
+//         $result_stock = $conn->query($sql_get_stock_id);
+//         if ($result_stock->num_rows > 0) {
+//             while($row_stock = $result_stock->fetch_assoc()) {
+//                 $stock_id = $row_stock['stock_id'];
+              
+//             }
+//         } else {
+//           // insert into stock table with qty = 0 and get the stock_id
+//           $sql_insert_stock = "INSERT INTO jaysan_stock (part_id,process_id,qty,godown,dep,sec,remark) VALUES ($input_part_id,$previous_process_id,0,$godown,$dep,$sec,'created from work order')";
+//           if (!$conn->query($sql_insert_stock)) {
+//               throw new Exception("Error inserting record: " . $conn->error);
+//           }
+//           $stock_id = $conn->insert_id;
+//         }
+
+
+//         // insert reserve record into stock_reserve table with work_order_id and stock_id and qty
+//         $sql_insert_stock_reserve = "INSERT INTO stock_reserve (reserve_type, reserve_type_id, emp_id,remark,stock_id,reserve_qty) VALUES ('work_order',$work_order_id,$created_by,'reserved  for work order',$stock_id,$qty)";
+//         if (!$conn->query($sql_insert_stock_reserve)) {
+//             throw new Exception("Error inserting record: " . $conn->error);
+//         }
+//     }
+
+
+
+
+
 }
 
 

@@ -62,7 +62,7 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
     )) as stock_reserve_details from stock_view sv WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is not null
     group by sv.part_id
  )
- select iv.work_process_id,iv.work_orders,iv.pending_process_qty,iv.godown,iv.dep,iv.sec,
+ select iv.work_process_id,iv.work_orders,iv.pending_process_qty,iv.godown,creditors.creditor_name ,department.dep_name,dep_section.sec_name,iv.dep,iv.sec,
  JSON_ARRAYAGG(JSON_OBJECT(
      'input_part_id', iv.input_part_id,
      'input_part_name', iv.input_part_name,
@@ -79,6 +79,9 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
  jpv.process_name,
  jpv.input_parts
  from iv_deatils iv  
+ left join creditors on iv.godown <=> creditors.creditor_id
+ left join department on iv.dep <=> department.dep_id
+ left join dep_section on iv.sec <=> dep_section.dep_sec_id
  left join jaysan_process_view jpv on iv.work_process_id <=> jpv.process_id
  left join job_work_reserved jwr on iv.input_part_id <=> jwr.part_id and iv.previous_process_id <=> jwr.process_id where $process_query and $godown_query GROUP BY iv.work_process_id,iv.godown
 
