@@ -76,16 +76,16 @@ echo "input_part_id: " . $input_part_id . ", previous_process_id: " . $previous_
 
 {
     
-$output_part = $value['output_part'];
-    $process_id = $value['process_id'];
-    $part_id = $value['output_part'];
-    $qty = $value['qty'];
+
+    
+
+    $total_input_qty = $input_qty * $qty;
     // get stock  from stock table and reserve that stock until $qty = 0
-$sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE process_id = $previous_process_id AND available_qty > 0 ORDER BY stock_id ASC";
+$sql_get_stock = "SELECT godown,stock_id,available_qty FROM stock_reserve_view WHERE process_id = $previous_process_id AND available_qty > 0 ORDER BY (godown = $godown) DESC";
     if($input_part_id > 0)
         {
             
-            $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE part_id = $input_part_id AND available_qty > 0 ORDER BY stock_id ASC";
+            $sql_get_stock = "SELECT godown,stock_id,available_qty FROM stock_reserve_view WHERE part_id = $input_part_id AND available_qty > 0 ORDER BY (godown = $godown) DESC";
         }
 
     
@@ -94,30 +94,36 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
         
         $stock_id = $row['stock_id'];
         $available_qty = $row['available_qty'];
+        $stock_godown = $row['godown'];
 
-        if ($qty <= 0) {
+        if ($total_input_qty <= 0) {
             break;
         }
+        $reservation_type = 'work_order';
+        if($stock_godown != $godown)
+        {
+           $reservation_type = 'job_work_order';
+        }
 
-        if ($available_qty >= $qty) {
-            // Reserve the required quantity from this stock insert on duplicate key update reserved_qty = reserved_qty + $qty
-            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $qty, 'demand')
-            ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
+        if ($available_qty >= $total_input_qty) {
+            // Reserve the required quantity from this stock insert on duplicate key update reserved_qty = reserved_qty + $total_input_qty
+            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $total_input_qty, '$reservation_type')
+            ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $total_input_qty";
             $conn->query($sql_reserve_stock);
-            $result_json['message'] = "Reserved $qty from Stock ID: $stock_id";
-            $qty = 0; // All required quantity has been reserved
+            $result_json['message'] = "Reserved $total_input_qty from Stock ID: $stock_id";
+            $total_input_qty = 0; // All required quantity has been reserved
         } else {
             // Reserve all available quantity from this stock and continue to the next stock
-            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $available_qty, 'demand')
+            $sql_reserve_stock = "INSERT INTO stock_reserve (stock_id, reserve_qty,reserve_type) VALUES ($stock_id, $available_qty, '$reservation_type')
             ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $available_qty";
             $conn->query($sql_reserve_stock);
             $result_json['message'] = "Reserved $available_qty from Stock ID: $stock_id";
-            $qty -= $available_qty; // Decrease the remaining required quantity
+            $total_input_qty -= $available_qty; // Decrease the remaining required quantity
         }
     }
 
-    if ($qty > 0) {
-        $result_json['warning'] = "Not enough stock available to reserve the required quantity for Process ID: $previous_process_id. Remaining quantity to reserve: $qty";
+    if ($total_input_qty > 0) {
+        $result_json['warning'] = "Not enough stock available to reserve the required quantity for Process ID: $previous_process_id. Remaining quantity to reserve: $total_input_qty";
     }
 }
        
@@ -154,7 +160,7 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
 }
 
 
-
+}
 
     $conn->commit();
     echo "ok";  

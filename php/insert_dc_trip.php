@@ -145,7 +145,42 @@ $transport_ids_str = implode(',', $all_transport_ids);
             $emp_id = $emp_id;
             $remark = "Reserved for DC #".$dc_id;
             $stock_id = $location['stock_id'];
+            $stock_reserve_id = $location['stock_reserve_id'];
             $reserve_qty = $location['qty'];
+
+// get stock reserve details from stock_reserve table for stock_id and reserve_type = 'job_work_order' and stock_reserve_id = $stock_reserve_id
+ $reserved_qty = 0;
+$sql_get_stock_reserve = "SELECT reserve_qty FROM stock_view WHERE stock_id = $stock_id AND reserve_type = 'job_work_order' AND stock_reserve_id = $stock_reserve_id";
+$result_stock_reserve = $conn->query($sql_get_stock_reserve);
+if ($result_stock_reserve->num_rows > 0) {
+    $row_stock_reserve = $result_stock_reserve->fetch_assoc();
+    $reserved_qty = $row_stock_reserve['reserve_qty'];
+
+} else {
+    $reserved_qty = 0;
+}
+if ($reserved_qty < $reserve_qty) {
+    throw new Exception("Not enough reserved stock available for Stock ID: $stock_id. Required: $reserve_qty, Reserved: $reserved_qty");
+}
+
+// update stock_reserve table for stock_id and reserve_type = 'job_work_order' and stock_reserve_id = $stock_reserve_id and decrease reserve_qty by $reserve_qty
+$sql_update_stock_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $reserve_qty WHERE stock_id = $stock_id AND reserve_type = 'job_work_order' AND stock_reserve_id = $stock_reserve_id";
+if ($conn->query($sql_update_stock_reserve) === TRUE) {
+}
+    else {
+        throw new Exception("Error updating stock reserve: " . $conn->error);
+    }
+
+    // if reserve_qty = 0 then delete the record from stock_reserve table
+    $sql_delete_stock_reserve = "DELETE FROM stock_reserve WHERE reserve_qty <= 0";
+    if ($conn->query($sql_delete_stock_reserve) === TRUE) {
+    }
+    else
+        {
+            throw new Exception("Error deleting stock reserve: " . $conn->error);
+        }
+
+
               $sql_reserve = "INSERT INTO stock_reserve (reserve_type, emp_id, remark, stock_id, reserve_qty) VALUES ('$reserve_type' , $emp_id, '$remark', $stock_id, $reserve_qty) on duplicate key update reserve_qty = reserve_qty + $reserve_qty";
             //   get reserve id
             if ($conn->query($sql_reserve) === TRUE) {
@@ -157,7 +192,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
             
 
 
-            // if stock taken from other then source godown need to insert in_dc_tracking
+           
             // check godown of stock id
             $sql_godown = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
             $result_godown = $conn->query($sql_godown);
