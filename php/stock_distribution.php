@@ -8,17 +8,24 @@ try
     {
 
     // get godown, dep, sec from stock id
-    $sql_stock = "SELECT godown, dep, sec FROM jaysan_stock WHERE stock_id = $stock_id";
+    $sql_stock = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
     $result_stock = $conn->query($sql_stock);
     if ($result_stock->num_rows > 0) {
         $row_stock = $result_stock->fetch_assoc();
         $godown = sql_nullable($row_stock['godown']);
         $dep = sql_nullable($row_stock['dep']);
         $sec = sql_nullable($row_stock['sec']);
+        $in_process_id = sql_nullable($row_stock['process_id']);
+        $in_part_id = sql_nullable($row_stock['part_id']);
+
     } else {
         throw new Exception("Stock id $stock_id not found in jaysan_stock");
     }
 echo "godown:".$godown." dep:".$dep." sec:".$sec;
+
+
+// get there is still demand
+
         $conn->begin_transaction();
 // get work order demand and assign if demand 
 // $sql_work_order_demand = "with
@@ -89,15 +96,11 @@ echo "godown:".$godown." dep:".$dep." sec:".$sec;
 //     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
 //     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
 
-// getpart_id from process_wel_tbl for that process_id
-$sql_part_id = "select output_part from process_wel_tbl where process_id = $process_id ";
-$result_part_id = $conn->query($sql_part_id);
-$row_part_id = $result_part_id->fetch_assoc();
-$part_id = $row_part_id['output_part'];
+
 // select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = 16293 and godown = 7 and dep <=> null and sec <=> null GROUP BY input_part_id, godown, dep, sec
-$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id = $process_id and godown = $godown and dep <=> $dep and sec <=> $sec GROUP BY input_part_id, godown, dep, sec";
-if($part_id !=null)
-$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $part_id and godown = $godown and dep <=> $dep and sec <=> $sec GROUP BY input_part_id, godown, dep, sec";
+$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id = $in_process_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
+if($in_part_id !=null)
+$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $in_part_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
 
 
          echo "<br>SQL Work Order Demand: ".$sql_work_order_demand;
@@ -230,11 +233,11 @@ if($remaining_reserve_qty >= $qty){
 
 $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
 left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and stock_view.reserve_type = 'job_work_order'
- where previous_process_id = $process_id  GROUP BY input_part_id";
-if($part_id !=null)
+ where previous_process_id = $in_process_id  GROUP BY input_part_id";
+if($in_part_id !=null)
 $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
 left join stock_view on input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
- where input_part_id = $part_id  GROUP BY input_part_id";
+ where input_part_id = $in_part_id  GROUP BY input_part_id";
         //   echo "<br>SQL Job Work Order Demand: ".$sql_job_work_order_demand;
         $result_job_work_order_demand = $conn->query($sql_job_work_order_demand);
         if ($result_job_work_order_demand->num_rows > 0) {
