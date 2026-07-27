@@ -4,9 +4,9 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 
-const transport_dc_id = parseInt(urlParams.get("transport_dc_id")) || 0;
-const godown_id = parseInt(urlParams.get("godown_id")) || 0;
-const godown_name = urlParams.get("name") || "";
+// const transport_dc_id = parseInt(urlParams.get("transport_dc_id")) || 0;
+// const godown_id = parseInt(urlParams.get("godown_id")) || 0;
+// const godown_name = urlParams.get("name") || "";
 
 var attach_id = 0;
 
@@ -45,6 +45,37 @@ $(document).ready(function () {
         }
     });
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                console.log("Latitude:", position.coords.latitude);
+                console.log("Longitude:", position.coords.longitude);
+                console.log("Accuracy:", position.coords.accuracy + " meters");
+                get_godown_location_dc_in(position.coords.latitude, position.coords.longitude)
+            },
+            function (error) {
+                console.log(error.message);
+                $(".overlay_e").removeClass("d-none")
+            }
+        );
+    } else {
+        console.log("Geolocation is not supported.");
+    }
+
+    $("#godown_list_tbody").on("click", ".select_btn", function () {
+        let godown_name = $(this).data("creditor_name");
+        let godown_id = $(this).val();
+
+        if (godown_id && godown_name) {
+            $("#godown_list_modal").modal("hide");
+            $("#godown").data("godown_id", godown_id).val(godown_name);
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Again.", "warning");
+        }
+
+    })
+
 
     $("#part_search").on("keyup", function () {
 
@@ -63,11 +94,11 @@ $(document).ready(function () {
     check_login();
     get_dc_attachment1('', '', '', 'create');
 
-    if (transport_dc_id > 0 && godown_id > 0) {
-        $("#vendor").text(godown_name)
-        $('#godown').data("godown_id", godown_id).val(godown_name);
-        get_unassign_indc(transport_dc_id, godown_id);
-    }
+    // if (transport_dc_id > 0 && godown_id > 0) {
+    //     $("#vendor").text(godown_name)
+    //     $('#godown').data("godown_id", godown_id).val(godown_name);
+    //     get_unassign_indc(transport_dc_id, godown_id);
+    // }
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -114,7 +145,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-
+                    get_unassign_indc(0, ui.item.id);
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
@@ -575,6 +606,69 @@ function insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no,
 
 }
 
+function get_godown_location_dc_in(lat, lng) {
+
+    $.ajax({
+        url: "php/get_godown_location.php",
+        type: "get",
+        data: {
+            latti: lat,
+            longi: lng,
+        },
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() !== "error") {
+                $("#godown_list_tbody").empty();
+                if (response.trim() !== "0 result") {
+                    var obj = JSON.parse(response);
+                    if (obj.length == 1) {
+                        obj.forEach(function (item) {
+                            $(".dc_filess").prop("disabled", false);
+                            $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                        })
+                    }
+                    else {
+                        $("#godown_list_modal").modal("show");
+                        var count = 0;
+                        obj.forEach(function (item) {
+                            count += 1;
+                            $("#godown_list_tbody").append(`
+                                <li class="list-group-item godown-item">
+                                    <div class="godown-details">
+                                        <h6 class="godown-name mb-1">${item.creditor_name}</h6>
+                                        <span class="godown-distance">
+                                            <i class="fa-solid fa-location-dot me-1"></i>
+                                            ${item.distance_m} Meters Away
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-success btn-sm select_btn"
+                                        value="${item.creditor_id}"
+                                        data-creditor_name="${item.creditor_name}">
+                                        <i class="fa-solid fa-circle-check me-1"></i>
+                                        Select
+                                    </button>
+                                </li>
+                            `);
+                        });
+                        $("#godown_status").text('Found ' + count + ' Godown').addClass("bg-success");
+
+                    }
+                }
+                else {
+                    $("#godown_status").text('No Godown').addClass("bg-danger");
+                }
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 
 

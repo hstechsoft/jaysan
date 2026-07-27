@@ -27,21 +27,21 @@ $(document).ready(function () {
 
     // Current Location
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function (position) {
-                console.log("Latitude:", position.coords.latitude);
-                console.log("Longitude:", position.coords.longitude);
-                console.log("Accuracy:", position.coords.accuracy + " meters");
-                get_godown_locations(position.coords.latitude, position.coords.longitude)
-            },
-            function (error) {
-                console.log(error.message);
-            }
-        );
-    } else {
-        console.log("Geolocation is not supported.");
-    }
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(
+    //         function (position) {
+    //             console.log("Latitude:", position.coords.latitude);
+    //             console.log("Longitude:", position.coords.longitude);
+    //             console.log("Accuracy:", position.coords.accuracy + " meters");
+    //             get_godown_locations(position.coords.latitude, position.coords.longitude)
+    //         },
+    //         function (error) {
+    //             console.log(error.message);
+    //         }
+    //     );
+    // } else {
+    //     console.log("Geolocation is not supported.");
+    // }
 
     $("#summary_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
@@ -246,6 +246,8 @@ function get_work_order_report() {
                                 <span class="badge bg-secondary" title="Pending Process">${wo.total_pending_process}</span>
                                 <span class="badge bg-warning text-dark" title="External Reserved">${wo.total_exreserve_qty}</span>
                                 <span class="badge bg-success" title="Internal Reserved">${wo.total_internal_reserve_qty}</span>
+                                <span class="badge bg-dark" title="DC Reserved Qty">${wo.total_dc_qty ?? 0}</span>
+                                <span class="badge bg-primary" title="Transport Qty">${wo.total_transport_qty ?? 0}</span>
                             </div>
 
                         </div>
