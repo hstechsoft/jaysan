@@ -104,6 +104,13 @@ if (!$conn->query($delete_reserve)) {
     throw new Exception("Error deleting stock reserve id $stock_reserve_id: " . $conn->error);
 }
 
+
+// insert on duplicate key update stock reserve with typr = work_order
+$update_reserve_qty = "INSERT INTO stock_reserve (stock_id, reserve_type, reserve_type_id, reserve_qty) VALUES ($new_stock_id, 'work_order', $transport_dc_id, $qty) ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
+if (!$conn->query($update_reserve_qty)) {
+    throw new Exception("Error updating stock reserve for new stock id $new_stock_id: " . $conn->error);
+}
+
             // using that new_stock_id update stock reserve with new stock id and reserve qty
                 $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
                 if (!$conn->query($sql_update_reserve)) {
