@@ -32,8 +32,8 @@ foreach ($stock_json as $stock) {
         $row_stock = $result_stock->fetch_assoc();
         $stock_id = $row_stock['stock_id'];
         $stock_qty = $row_stock['stock_qty'];
-        $part_id = $row_stock['part_id'];
-        $process_id = $row_stock['process_id'];
+        $part_id = sql_nullable($row_stock['part_id']);
+        $process_id = sql_nullable($row_stock['process_id']);
         $batch_id = $row_stock['batch_id'];
 // reduce stock qty from stock id(reduce from transport godown stock)
          $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty WHERE stock_id = $stock_id";
