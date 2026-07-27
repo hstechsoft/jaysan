@@ -43,7 +43,7 @@ left join creditors on iv.godown <=> creditors.creditor_id
     select sv.part_id, sv.process_id, sum(sv.reserve_qty) as total_reserve_qty, JSON_ARRAYAGG(JSON_OBJECT(
         'same_godown', if(sv.godown = '$source_godown',true,false),
         'godown', sv.godown,
-        'godown_name', creditors.creditor_name,
+        'godown_name', creditor_name,
         'dep', sv.dep,
         'dep_name', department.dep_name,
         'sec', sv.sec,
@@ -59,7 +59,7 @@ left join creditors on iv.godown <=> creditors.creditor_id
     select sv.part_id, sv.process_id, sum(sv.reserve_qty) as total_reserve_qty, JSON_ARRAYAGG(JSON_OBJECT(
         'same_godown', if(sv.godown = '$source_godown',true,false),
        'godown', sv.godown,
-        'godown_name', creditors.creditor_name,
+        'godown_name', creditor_name,
         'dep', sv.dep,
         'dep_name', department.dep_name,
         'sec', sv.sec,
