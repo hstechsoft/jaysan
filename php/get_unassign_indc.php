@@ -2,6 +2,7 @@
  include 'db_head.php';
 
  $godown_id = test_input($_GET['godown_id']);
+ echo '$godown_id: ' . $godown_id;
  $transport_dc_id = test_input($_GET['transport_dc_id']);
 $transport_dc_query = 1;
 if($transport_dc_id > 0)
