@@ -27,7 +27,7 @@ return $data;
     'previous_process_name',jpv.process_name,
     'needed_qty',iv.needed,
     'dc_qty',iv.dc_qty,
-    'transport_qty',iv.transport_qty,
+    'transport_qty',iv.transport_qty
 )) as raw_materials_needed from input_part_demand_view iv
 left join parts_tbl pt on iv.input_part_id = pt.part_id
 left join jaysan_process_view jpv on iv.previous_process_id = jpv.process_id
