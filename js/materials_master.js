@@ -139,6 +139,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
+                    get_parts_tbl(ui.item.id);
 
 
                 },

@@ -158,8 +158,8 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("selected-part_id", ui.item.id);
-          $("#minimum_order_qty").val(ui.item.min_order_qty);
-          $("#reorder_quantity").val(ui.item.reorder_qty);
+          $("#minimum_order_qty").val(ui.item.min_order_qty ?? 0);
+          $("#reorder_quantity").val(ui.item.reorder_qty ?? 0);
           // get part details
           var sts_array = [];
           get_material_request_form_parts_search(ui.item.id, 'all', "created");
@@ -644,6 +644,7 @@ function get_material_request_form_details(mrf_id) {
 
     },
     success: function (response) {
+      console.log(response);
       mrf_id_g = mrf_id; // Set the global mrf_id variable
 
       if (response.trim() != "error") {
@@ -663,6 +664,7 @@ function get_material_request_form_details(mrf_id) {
           $("#requirement_date").val(obj.req_date);
           $("#last_purchase_date").val(obj.last_purchase_date);
           $("#last_purchase_qty").val(obj.last_purchase_qty);
+          $("#uom").val(obj.uom);
 
           if (obj.bom_production == 1) {
             $("#bom_production_yes").prop("checked", true);
