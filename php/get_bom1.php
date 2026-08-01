@@ -17,12 +17,13 @@ return $data;
 
 
  $sql = "
-   WITH RECURSIVE bom_hi AS (
+     WITH RECURSIVE bom_hi AS (
 
         /* ========= Anchor ========= */
         SELECT
         bo.bom_id,
         pt_hi.part_name as inpart_name,
+        pt_hi.baseunits,
             bo.part_id AS output_part,
             part_out.part_name AS output_part_name,
             bi.bom_in_id as bom_in_id,
@@ -44,6 +45,7 @@ return $data;
         SELECT
         boc.bom_id,
          pt.part_name as inpart_name,
+         pt.baseunits,
             boc.part_id AS output_part,
             part_out.part_name AS output_part_name,
             bi.bom_in_id as bom_in_id,  
@@ -70,6 +72,7 @@ return $data;
    SELECT JSON_ARRAYAGG(JSON_OBJECT(
        'output_part', output_part,
        'inpart_name', inpart_name,
+       'baseunits', baseunits,
        'bom_in_id', bom_in_id,
        'input_part', input_part,
        'qty', qty,
@@ -85,7 +88,7 @@ return $data;
    bom_id,
    level
    FROM bom_hi
-   GROUP BY level, output_part;";
+   GROUP BY level, output_part";
 
 $result = $conn->query($sql);
 
