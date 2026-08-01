@@ -60,6 +60,8 @@ in_wel as ( SELECT JSON_ARRAYAGG(
             iwp.input_part_id,
             'part_name',
             inpart.part_name,
+            'baseunits',
+            inpart.baseunits,
             'previous_process_id',
             iwp.previous_process_id,
             'qty',
