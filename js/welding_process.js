@@ -3649,7 +3649,7 @@ function get_bom_process_details1(process_id) {
             var input_p = JSON.parse(obj.input_parts);
 
             input_p.forEach(function (item) {
-              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-id=" + item.id + " data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + (item.process_name ?? "") + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3' data-id=" + item.id + " data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
+              in_tbl += " <li class='list-group-item d-flex justify-content-between' data-id=" + item.id + " data-part-id=" + item.input_part_id + " data-part-qty=" + item.qty + " data-process_title=" + item.qty + " data-in_previous_process_id=" + item.previous_process_id + ">  <p class='my-auto'>" + (item.part_name == null ? "Previous Process" : item.part_name) + " <b class='bg-warning'>" + (item.process_name ?? "") + "</b> <br> Qty : <span contenteditable='true' class= 'px-2 qty-editable'>" + item.qty + "</span> <span class='badge bg-secondary'>" + item.baseunits + "</span></p>  <button class='btn btn-sm btn-outline-danger border-0 m-0 p-0 px-3' data-id=" + item.id + " data-ori_process-id=" + obj.process_id + "><i class='fa fa-trash' aria-hidden='true'></i></button> </li>"
             })
             console.log(obj.in_tbl);
 
