@@ -19,6 +19,8 @@ return $data;
  distinct material_request_form.mrf_id,
     material_request_form.*,
     parts_tbl.part_name,
+    parts_tbl.reorder_qty,
+    parts_tbl.min_order_qty,
     pre_emp.emp_name as prepared_by_name,
 DATE_FORMAT(material_request_form.req_date, '%Y-%m-%d') as req_date,
 DATE_FORMAT(material_request_form.last_purchase_date, '%Y-%m-%d') as last_purchase_date,
