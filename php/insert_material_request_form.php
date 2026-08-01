@@ -27,6 +27,7 @@ $data = "'".$data."'";
 return $data;
 }
 
+
 $sql = "SET time_zone = '+05:30';";
 $sql .= "INSERT INTO material_request_form (uom,
     emp_id, part_id, bom_production, order_type, shortfall_qty, stock_for_sufficent_days, req_qty,
