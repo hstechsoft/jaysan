@@ -293,7 +293,8 @@ $(document).ready(function () {
                                     label: item.part_name + "-" + item.part_no,
                                     value: item.part_name,
                                     id: item.part_id,
-                                    part_no: item.part_no
+                                    part_no: item.part_no,
+                                    uom: item.baseunits,
                                 };
                             }));
 
@@ -308,6 +309,7 @@ $(document).ready(function () {
                     $(this).data("selected-part_id", ui.item.id);
                     $('#part_no').data("selected-part_id", ui.item.id);
                     $('#part_no').val(ui.item.part_no)
+                    $('#uom').val(ui.item.uom)
                     $('#qty').focus()
                 },
 
@@ -350,6 +352,7 @@ $(document).ready(function () {
 
                 var partId = $('#part_no').data('selected-part_id');
                 var qty = $('#qty').val()
+                var uom = $('#uom').val()
 
 
 
@@ -361,7 +364,7 @@ $(document).ready(function () {
                 {
 
 
-                    $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + partId + ">" + $('#part_name').val() + " </td> <td contenteditable='true' class='qty-editable'>" + qty + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
+                    $('#bom_table').append("<tr class='small'> <td>" + count + "</td> <td data-part-id=" + partId + ">" + $('#part_name').val() + " </td> <td contenteditable='true' class='qty-editable'>" + qty + "</td><td>" + uom + "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>")
                 }
 
 
@@ -1438,6 +1441,7 @@ function get_bom(part_id, component_cat, mat) {
                                                 <td>
                                                     ${item.qty}
                                                 </td>
+                                                <td>${item.baseunits}</td>
                                                 <td>
                                                     <button class='btn btn-outline-danger border-0' value='${item.bom_in_id}' disabled>
                                                         <i class='fa fa-trash'></i>
@@ -1551,7 +1555,7 @@ function get_bom(part_id, component_cat, mat) {
                                                 <td contenteditable='true' class='qty-editable' data-part-id="${item.input_part}">
                                                     ${item.corrected_qty > 0 ? item.corrected_qty : 0}
                                                 </td>
-
+                                                <td>${item.baseunits}</td>
                                                 <td>
                                                     <button class='btn btn-outline-danger border-0'  value='${item.bom_in_id}'>
                                                         <i class='fa fa-trash'></i>

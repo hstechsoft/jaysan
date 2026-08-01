@@ -291,7 +291,8 @@
                   id="alice_name_heading"></p>
                 <p></p>
                 <div>
-                  <button class="btn btn-outline-dark btn-sm" onclick="window.open('bom_sale_order_map.html', '_blank')">BOM & Product Map</button>
+                  <button class="btn btn-outline-dark btn-sm"
+                    onclick="window.open('bom_sale_order_map.html', '_blank')">BOM & Product Map</button>
                 </div>
               </div>
               <div class="card-body d-flex justify-content-between">
@@ -352,10 +353,14 @@
                       </div>
                     </div>
 
-                    <div class=" my-auto mx-3">
+                    <div class=" my-auto mx-3 d-flex gap-2">
                       <div class='input-group mb-2 w-75'>
 
                         <input id='qty' type='number' class='form-control' placeholder="Qty">
+                      </div>
+                      <div class='input-group mb-2 w-75'>
+
+                        <input id='uom' type='number' class='form-control' placeholder="UOM" disabled>
                       </div>
                     </div>
 
@@ -406,6 +411,7 @@
 
                         <th scope='col'>Input Parts</th>
                         <th scope='col'>qty</th>
+                        <th scope='col'>UOM</th>
                         <!-- <th scope='col'>Sub Assembly Qty</th> -->
                         <th scope='col'>Delete</th>
 
