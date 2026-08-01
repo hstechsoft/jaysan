@@ -34,7 +34,7 @@ inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id and fm.g
  WHERE part_no 
   LIKE  '$part'";
   else
-        $sql = "SELECT part_name,part_no,parts_tbl.part_id FROM `parts_tbl` 
+        $sql = "SELECT part_name,part_no,parts_tbl.part_id,baseunits FROM `parts_tbl` 
 inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id 
  WHERE part_no 
   LIKE  '$part'";
@@ -47,7 +47,7 @@ if($godwon_id != 'NULL' || $department_id != 'NULL' || $section_id != 'NULL')
  inner  join finished_godown_master fm on fm.part_id = parts_tbl.part_id and fm.godown_id = $godwon_id and fm.dep_id = $department_id and fm.dep_sec_id = $section_id
  WHERE part_name LIKE  '$part'";
     else
- $sql = "SELECT part_name,part_no,parts_tbl.part_id FROM parts_tbl WHERE part_name LIKE  '$part'";
+ $sql = "SELECT part_name,part_no,parts_tbl.part_id,baseunits FROM parts_tbl WHERE part_name LIKE  '$part'";
 
     }
 
