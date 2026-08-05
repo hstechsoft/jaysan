@@ -1036,7 +1036,8 @@ function delete_bom(bom_id) {
 
             if (response.success) {
 
-                get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
+                window.location.reload();
+                // get_bom($('#part_no_out').data('selected-part_id'), $('#bom_list_select').val())
             }
             else {
 
@@ -1573,6 +1574,10 @@ function get_bom(part_id, component_cat, mat) {
                         });
 
                         $('#bom_table').get(0).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                    if (count == 1) {
+                        $('#bom_table').find("tr:first").find("button").prop("disabled", true);
                     }
                 }
                 else {
