@@ -29,6 +29,13 @@ $sql = "INSERT INTO expense_payment (paid_amount,paid_date,emp_id)
           $firebase_uids[] = $row['firebase_uid'];
       }
   }
+  // remove '' in paid_amount and paid_date
+  $paid_amount = str_replace("'", "", $paid_amount);
+  $paid_date = str_replace("'", "", $paid_date);
+
+  // convert paid_date to a more readable format
+  $paid_date = date("F j, Y", strtotime($paid_date));
+
     
  require __DIR__ . '/send_fcm.php';
     $title = "Advance Paid: $paid_amount";
