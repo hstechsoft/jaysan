@@ -17,8 +17,7 @@ function test_input($data) {
 
     $sql = "SET time_zone = '+05:30';"; 
     $sql .=  $query;
-    echo $sql;
-
+ 
 // Execute the multi_query
 if ($conn->multi_query($sql)) {
     // This loop is used to handle multiple result sets
