@@ -34,7 +34,8 @@ $sql = "INSERT INTO expense_payment (paid_amount,paid_date,emp_id)
   $paid_date = str_replace("'", "", $paid_date);
 
   // convert milliseconds to date format
-$paid_date = date('Y-m-d', $paid_date / 1000);
+$paid_date = date('d-m-Y H:i:s', $paid_date / 1000);
+// 
 
     
  require __DIR__ . '/send_fcm.php';
