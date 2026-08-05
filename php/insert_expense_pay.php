@@ -42,8 +42,9 @@ $paid_date = date('d-m-Y H:i:s', $paid_date / 1000);
     $title = "Advance Paid: $paid_amount";
     $body = "Your advance payment of $paid_amount has been processed on $paid_date. Please check your account for details.";
     $url = "https://jaysan.cloud/emp_expense_single.html";
+    $image_url = "https://media.tenor.com/ixRLM8lWPnIAAAAM/when-i-got-salary-during-lockdown-rich.gif"; // Replace with your desired image URL
   
-  send_fcm($firebase_uids, $title, $body, $url);
+  send_fcm($firebase_uids, $title, $body, $url, $image_url);
   } 
    else {
     echo "Error: " . $sql . "<br>" . $conn->error;

@@ -2,20 +2,24 @@
 
 include "firebase_token.php";
 
-function send_fcm(array $tokens, string $title, string $body, string $url)
+function send_fcm(array $tokens, string $title, string $body, string $url, string $image_url = '')
 {
     $accessToken = getFirebaseAccessToken();
     $projectId = "jaysan-8fa8d";
+  
 // echo "Access Token: " . $accessToken . "<br>";
     foreach ($tokens as $fcm_token) {
 
         $payload = [
             "message" => [
                 "token" => $fcm_token,
+                
                 "notification" => [
                     "title" => $title,
                     "body"  => $body,
-                    // "image" => $image_url ?? "https://5.imimg.com/data5/SELLER/Default/2022/9/DU/WF/FQ/24355906/jaysan-round-baler.jpg"
+                    // if an image URL is provided, include it in the notification payload
+                    "image" => $image_url
+                    
                 ],
                 "data" => [
                     "url" => $url
