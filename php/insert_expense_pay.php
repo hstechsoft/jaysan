@@ -19,6 +19,23 @@ $sql = "INSERT INTO expense_payment (paid_amount,paid_date,emp_id)
 
 
   if ( $conn->query($sql) === TRUE) {
+
+  // get  firebase tokens from database
+  $sql_get_tokens = "SELECT firebase_uid FROM employee WHERE emp_id = $emp_id";
+  $result = $conn->query($sql_get_tokens);
+  $firebase_uids = array();
+  if ($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()) {
+          $firebase_uids[] = $row['firebase_uid'];
+      }
+  }
+    
+ require __DIR__ . '/send_fcm.php';
+    $title = "Advance Paid: $paid_amount";
+    $body = "Your advance payment of $paid_amount has been processed on $paid_date. Please check your account for details.";
+    $url = "https://jaysan.cloud/emp_expense_single.html";
+  
+  send_fcm($firebase_uids, $title, $body, $url);
   } 
    else {
     echo "Error: " . $sql . "<br>" . $conn->error;
