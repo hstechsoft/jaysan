@@ -2,6 +2,7 @@
 var role = localStorage.getItem("ls_emp_role")
 var cun = localStorage.getItem("ls_uname")
 var phone_id = localStorage.getItem("app_phone_id")
+var emp_id = localStorage.getItem("ls_uid")
 // var phone_id = "cbbfc05f5d5a3abe";
 var start = ''
 
@@ -23,9 +24,20 @@ $(document).ajaxError(function (event, xhr) {
 
 });
 
+$(document).on("click", ".closeAdvance", function () {
 
+    $("#advanceCard").fadeOut(300);
+
+});
 
 $(document).ready(function () {
+
+  if (emp_id > 0) {
+    setTimeout(function () {
+
+      get_exp_sum(emp_id);
+    }, 1000)
+  }
 
   if (phone_id && phone_id !== "null") {
 
@@ -197,6 +209,47 @@ $(document).ready(function () {
 
 
 
+function get_exp_sum(emp_id) {
+
+  $.ajax({
+    url: "php/get_exp_sum.php",
+    type: "GET",
+    data: {
+      emp_id: emp_id,
+    },
+    success: function (response) {
+
+
+      console.log(response);
+
+      let data = JSON.parse(response);
+
+      let total_due = data[0].total_due;
+
+      if (parseFloat(total_due) != 0) {
+
+        $("#advanceCard").removeClass("d-none");
+
+        $("#amount").text("₹ " + total_due);
+
+        if (parseFloat(total_due) > 0) {
+          $("#advanceCard").find(".card-header").css("background-color", "#ff0000")
+          $("#message").text('Need to update expense. For the above advance amount')
+        }
+        else {
+          $("#advanceCard .card-header").css("background-color", "#009238")
+          $("#message").text('For the above expense amount, Amount is not yet released.')
+        }
+
+      }
+
+
+    },
+    error: function (xhr, status, error) {
+      console.error("Menu load failed:", error);
+    }
+  });
+}
 
 
 function get_app_menu(phone_id) {

@@ -1007,3 +1007,75 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
     margin-left: 0px !important;
   }
 }
+
+
+
+/* advance  */
+.advance{
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 220px;
+    z-index: 1055;
+    animation: slideIn .4s ease;
+
+}
+
+@keyframes slideIn{
+
+    from{
+
+        transform: translateX(100%);
+        opacity: 0;
+
+    }
+
+    to{
+
+        transform: translateX(0);
+        opacity: 1;
+
+    }
+
+}
+
+#advanceCard .card{
+
+    border-left: 5px solid #ffc107;
+
+}
+
+#advanceCard .card-header{
+
+    font-size: 18px;
+    font-weight: 600;
+
+}
+
+#advanceCard .card-body{
+
+    font-size: 14px;
+
+}
+
+#closeAdvance:focus{
+  
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .advance{
+
+        width: calc(100% - 20px);
+
+        right: 10px;
+
+        left: 10px;
+
+        top: 70px;
+
+    }
+
+}

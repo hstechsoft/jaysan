@@ -92,7 +92,7 @@ function get_temp_stock_request() {
 
 
                     });
-                }else{
+                } else {
                     $("#request_tbody").append(`<tr><td class='text-center text-danger' colspan='6'>No Request Found</td></tr>`);
                 }
 
@@ -110,7 +110,7 @@ function get_temp_stock_request() {
 function update_temp_jaysan_stock(qty, update_emp_name, request_id) {
 
     console.log(qty, update_emp_name, request_id);
-    
+
     $.ajax({
         url: "php/update_temp_jaysan_stock.php",
         type: "get",
@@ -124,8 +124,8 @@ function update_temp_jaysan_stock(qty, update_emp_name, request_id) {
         success: function (response) {
 
             console.log(response);
-            
-            if(response.trim() == "ok"){
+
+            if (response.trim() == "ok") {
                 window.location.reload();
             }
 

@@ -25,6 +25,8 @@ $(document).ready(function () {
   get_payment_history();
   get_employee();
 
+  
+
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $("#search_emp_txt").on("keyup", function () {
@@ -238,6 +240,9 @@ function get_employee() {
 
         });
 
+        if(emp_id > 0){
+          $("#sel_usr_in").val(emp_id);
+        }
 
       }
 

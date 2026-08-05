@@ -32,15 +32,15 @@
         style="background-color: #ff943a; color: white;">
 
         <!-- User Info -->
-        <div class="d-flex align-items-center gap-2">
-            <a href="user_index.html">
+        <a href="user_index.html" style="text-decoration: none;">
+            <div class="d-flex align-items-center gap-2">
                 <i class="fa-regular fa-circle-user text-white fs-5"></i>
                 <div class="lh-sm">
                     <span class="fw-semibold small d-block" id="uname"></span>
                     <span class="text-white small" id="role_name_txt"></span>
                 </div>
-            </a>
-        </div>
+            </div>
+        </a>
 
         <!-- Close Button -->
         <button type="button" class="btn-close text-white btn-sm" data-bs-dismiss="offcanvas"></button>
@@ -77,15 +77,17 @@
             <i class="fa fa-times fs-0" style="color: #ff943a;"></i>
         </button>
         <div class="sidebar-user ">
-            <div class="sidebar-user-info">
-                <i class="fa-regular fa-circle-user user-icon"></i>
+            <a href="user_index.html" style="text-decoration: none;">
+                <div class="sidebar-user-info">
+                    <i class="fa-regular fa-circle-user user-icon"></i>
 
-                <div class="user-text">
-                    <p class="welcome-text">Hey <span id="role_name_txtt"></span></p>
-                    <p class="username" id="unamee"></p>
+                    <div class="user-text">
+                        <p class="welcome-text">Hey <span id="role_name_txtt"></span></p>
+                        <p class="username" id="unamee"></p>
+                    </div>
+
                 </div>
-
-            </div>
+            </a>
 
         </div>
 
@@ -815,4 +817,29 @@
 
 
     </aside>
+</div>
+
+
+<div class="advance d-none" id="advanceCard">
+
+    <div class="card shadow border-0 rounded-3">
+
+        <div class="card-header d-flex text-light justify-content-between align-items-center">
+
+            <strong id="amount"></strong>
+
+            <button type="button" class="btn btn-sm closeAdvance" id="closeAdvance" >X</button>
+
+        </div>
+
+        <div class="card-body py-2">
+
+            <small id="message">
+                
+            </small>
+
+        </div>
+
+    </div>
+
 </div>
