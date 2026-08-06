@@ -3,7 +3,22 @@
 
  
 
- $sql = "SELECT SUM(CASE when exp_approve = 'no' then exp_amount ELSE 0 END)as un_approve, SUM(CASE when exp_approve = 'yes' then exp_amount ELSE 0 END)as approve,  SUM(CASE when exp_approve = 'decline' then exp_amount ELSE 0 END)as decline,exp_emp_id,employee.emp_name,sum(DISTINCT  IFNULL(expense_payment.paid_amount,0))as amount_paid FROM expense INNER JOIN employee on expense.exp_emp_id = employee.emp_id LEFT join expense_payment on expense_payment.emp_id = expense.exp_emp_id GROUP by exp_emp_id";
+ $sql = " with approved_exp as (select sum(exp_amount) as total_amount,exp_emp_id from expense WHERE exp_approve = 'yes' GROUP BY exp_emp_id),
+    declined_exp as (select sum(exp_amount) as total_declined,exp_emp_id from expense WHERE exp_approve = 'decline' GROUP BY exp_emp_id),
+    unapproved_exp as (select sum(exp_amount) as total_unapproved,exp_emp_id from expense WHERE exp_approve = 'no' GROUP BY exp_emp_id),
+    paid_exp as (SELECT sum(ep.paid_amount) as total_paid,ep.emp_id from expense_payment ep GROUP BY ep.emp_id)
+    SELECT
+        ifnull(total_amount,0) as approve,
+        ifnull(total_declined,0) as decline,
+        ifnull(total_unapproved,0) as un_approve,
+        ifnull(total_paid,0) as amount_paid,
+        emp.emp_id
+    FROM
+        employee emp
+        LEFT JOIN approved_exp on emp.emp_id = approved_exp.exp_emp_id
+        LEFT JOIN declined_exp on emp.emp_id = declined_exp.exp_emp_id
+        LEFT JOIN unapproved_exp on emp.emp_id = unapproved_exp.exp_emp_id
+        LEFT JOIN paid_exp on emp.emp_id = paid_exp.emp_id";
 
 $result = $conn->query($sql);
 
