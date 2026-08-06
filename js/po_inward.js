@@ -93,12 +93,15 @@ $(document).ready(function () {
                     console.log(response);
 
                     $.ajax({
-                        url: "php/get_po_report_search_auto.php",
+                        url: "php/get_part_name_auto_wel.php",
                         type: "get",
                         dataType: "json",
                         data: {
                             part: $('#part').val(),
-                            term: "part"
+                            term: "name",
+                            godwon_id: '',
+                            department_id: '',
+                            section_id: '',
                         },
                         success: function (data) {
                             console.log(data);
@@ -638,7 +641,7 @@ $(document).ready(function () {
             shw_toast("Warning", "Please fill all required fields");
             return;
         }
-$("#po_report_btn").prop("disabled", true);
+        $("#po_report_btn").prop("disabled", true);
         insert_grn(dc_no, dc_date, details_po, dc_type);
     });
 

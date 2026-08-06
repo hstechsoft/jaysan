@@ -41,6 +41,19 @@ $(document).ready(function () {
     get_current_work_details(current_user_id);
     get_all_extra_time();
 
+
+    $("#openScannerBtn").on("click", function (event) {
+        event.preventDefault();
+        console.log(window.AndroidBridge);
+
+        if (window.AndroidBridge) {
+            AndroidBridge.openScanner();
+        }
+        else{
+            alert("This Is For Mobile App Only");
+        }
+    });
+
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
     if ($("#worked_section").val() != null) {
@@ -62,41 +75,41 @@ $(document).ready(function () {
     let html5QrCode;
     let isScanning = false;
 
-    $("#openScannerBtn").click(function () {
+    // $("#openScannerBtn").click(function () {
 
-        if (isScanning) return;
+    //     if (isScanning) return;
 
-        $("#qr-reader").removeClass("d-none");
+    //     $("#qr-reader").removeClass("d-none");
 
-        html5QrCode = new Html5Qrcode("qr-reader");
+    //     html5QrCode = new Html5Qrcode("qr-reader");
 
-        Html5Qrcode.getCameras().then(devices => {
+    //     Html5Qrcode.getCameras().then(devices => {
 
-            if (devices && devices.length) {
+    //         if (devices && devices.length) {
 
-                // Prefer back camera on mobile
-                let cameraId = devices.find(device =>
-                    device.label.toLowerCase().includes("back")
-                )?.id || devices[0].id;
+    //             // Prefer back camera on mobile
+    //             let cameraId = devices.find(device =>
+    //                 device.label.toLowerCase().includes("back")
+    //             )?.id || devices[0].id;
 
-                html5QrCode.start(
-                    cameraId,
-                    {
-                        fps: 10,
-                        qrbox: { width: 250, height: 250 }
-                    },
-                    onScanSuccess
-                );
+    //             html5QrCode.start(
+    //                 cameraId,
+    //                 {
+    //                     fps: 10,
+    //                     qrbox: { width: 250, height: 250 }
+    //                 },
+    //                 onScanSuccess
+    //             );
 
-                isScanning = true;
-            }
+    //             isScanning = true;
+    //         }
 
-        }).catch(err => {
-            salert("Error", "Camera access denied or not supported", "error");
-            console.error(err);
-        });
+    //     }).catch(err => {
+    //         salert("Error", "Camera access denied or not supported", "error");
+    //         console.error(err);
+    //     });
 
-    });
+    // });
 
     $("#start_work").click(function () {
 
@@ -934,6 +947,13 @@ function sec_details() {
 
     return { godown_id, dep_id, sec_id };
 }
+
+
+window.receiveScanResult = function (result) {
+    console.log("Scanned result: " + result);
+
+    $("#job_ass_id").val(result);
+};
 
 function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id) {
 

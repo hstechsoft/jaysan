@@ -1064,15 +1064,33 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 /* Mobile */
 
-@media(max-width:768px){
+
+@media(max-width:1024px){
 
     .advance{
 
-        width: calc(100% - 20px);
+        width: 220px !important;
 
         right: 10px;
 
-        left: 10px;
+        /* left: 165px; */
+
+        top: 70px;
+
+    }
+
+}
+
+
+@media(max-width:767px){
+
+    .advance{
+
+        width: 170px !important;
+
+        right: 10px;
+
+        /* left: 165px; */
 
         top: 70px;
 

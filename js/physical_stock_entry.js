@@ -3,22 +3,7 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
-var physical_stock_array = [];
-var top_req_count = 0;
-var clicked = 0
-let stockData = [];
-// console.log(current_user_name);
-
 $(document).ready(function () {
-
-
-    $("#stock_tabel_search").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-
-        $("#stock_tbady tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
 
 
     $("#menu_bar").load('menu.html',
@@ -38,10 +23,33 @@ $(document).ready(function () {
         }
     );
 
+    // Current Location
 
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(
+    //       function (position) {
+    //         console.log("Latitude:", position.coords.latitude);
+    //         console.log("Longitude:", position.coords.longitude);
+    //         console.log("Accuracy:", position.coords.accuracy + " meters");
+    //         get_godown_locations(position.coords.latitude, position.coords.longitude)
+    //       },
+    //       function (error) {
+    //         console.log(error.message);
+    //       }
+    //     );
+    //   } else {
+    //     console.log("Geolocation is not supported.");
+    //   }
+
+    $("#summary_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#all_bom_table tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
     check_login();
-    get_jaysan_stock();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -53,9 +61,6 @@ $(document).ready(function () {
         $('#stock_godown').val('').data('godown_id', '');
         $('#stock_department').val('').data('dept_id', '');
         $('#stock_section').val('').data("sec_id", '');
-        $("#d_min_max").addClass("d-none");
-        $("#s_min_max").addClass("d-none");
-        $("#u_min_max").addClass("d-none");
 
         if ($('#stock_part').val() != "") {
             $('#stock_part').autocomplete({
@@ -126,17 +131,13 @@ $(document).ready(function () {
         $(this).data("godown_id", '');
         $('#stock_department').val('').data('dept_id', '');
         $('#stock_section').val('').data("sec_id", '');
-        $("#d_min_max").addClass("d-none");
-        $("#s_min_max").addClass("d-none");
-        $("#u_min_max").addClass("d-none");
         $("#dep_add_btn").addClass("d-none");
         $("#sec_add_btn").addClass("d-none");
         $("#unit_add_btn").removeClass("d-none");
 
         //check the value not empty
         if ($('#stock_godown').val() != "") {
-            $("#stock_unit_min_qty").val("");
-            $("#stock_unit_max_qty").val("");
+
             $('#stock_godown').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
@@ -176,16 +177,10 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("godown_id") != '') {
-                        $("#u_min_max").removeClass("d-none");
                         $("#unit_add_btn").addClass("d-none");
                         $("#dep_add_btn").removeClass("d-none");
                     }
                     console.log(ui.item.min, ui.item.max);
-
-                    if (ui.item.min != null && ui.item.max != null) {
-                        $("#stock_unit_min_qty").val(ui.item.min);
-                        $("#stock_unit_max_qty").val(ui.item.max);
-                    }
 
 
                 },
@@ -202,7 +197,7 @@ $(document).ready(function () {
     $("#unit_add_btn").on("click", function () {
         var unit = $("#stock_godown").val();
         if (unit !== '') {
-            insert_creditors(unit);
+            insert_creditors1(unit);
         }
     })
 
@@ -213,7 +208,7 @@ $(document).ready(function () {
             salert('Warning', "Data Missing", "warning");
             return;
         }
-        insert_department(go_id, dept_name);
+        insert_department1(go_id, dept_name);
     })
 
     $('#stock_department').on('input', function () {
@@ -221,16 +216,12 @@ $(document).ready(function () {
 
         $(this).data("dept_id", '');
         $('#stock_section').val('').data("sec_id", '');
-        $("#d_min_max").addClass("d-none");
-        $("#s_min_max").addClass("d-none");
         $("#sec_add_btn").addClass("d-none");
         $("#dep_add_btn").removeClass('d-none')
 
         //check the value not empty
         if ($('#stock_department').val() != "") {
 
-            $("#stock_department_min_qty").val("");
-            $("#stock_department_max_qty").val("");
             $('#stock_department').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
@@ -270,13 +261,8 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("dept_id") != '') {
-                        $("#d_min_max").removeClass('d-none');
                         $("#dep_add_btn").addClass('d-none')
                         $("#sec_add_btn").removeClass('d-none')
-                    }
-                    if (ui.item.min != null && ui.item.max != null) {
-                        $("#stock_department_min_qty").val(ui.item.min);
-                        $("#stock_department_max_qty").val(ui.item.max);
                     }
 
 
@@ -302,20 +288,17 @@ $(document).ready(function () {
             salert('Warning', "Data Missing", "warning");
             return;
         }
-        insert_dep_section(dept_id, sec_name);
+        insert_dep_section1(dept_id, sec_name);
     })
 
     $('#stock_section').on('input', function () {
 
 
         $(this).data("sec_id", '');
-        $("#s_min_max").addClass("d-none");
         $("#sec_add_btn").removeClass('d-none');
 
         //check the value not empty
         if ($('#stock_section').val() != "") {
-            $("#stock_section_min_qty").val('');
-            $("#stock_section_max_qty").val('');
             $('#stock_section').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
@@ -355,12 +338,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     if ($(this).data("sec_id") != '') {
-                        $("#s_min_max").removeClass("d-none");
                         $("#sec_add_btn").addClass('d-none')
-                    }
-                    if (ui.item.min != null && ui.item.max != null) {
-                        $("#stock_section_min_qty").val(ui.item.min);
-                        $("#stock_section_max_qty").val(ui.item.max);
                     }
 
 
@@ -383,15 +361,6 @@ $(document).ready(function () {
         var section = $("#stock_section").data('sec_id') || '';
         var qty = $("#stock_qty").val() || 0;
         var material_type = $("#material_type").val();
-
-        var u_min = $("#stock_unit_min_qty").val() || 0;
-        var u_max = $("#stock_unit_max_qty").val() || 0;
-
-        var d_min = $("#stock_department_min_qty").val() || 0;
-        var d_max = $("#stock_department_max_qty").val() || 0;
-
-        var s_min = $("#stock_section_min_qty").val() || 0;
-        var s_max = $("#stock_section_max_qty").val() || 0;
 
         let stock_master = [];
 
@@ -451,7 +420,7 @@ $(document).ready(function () {
                         type: "get", //send it through get method
                         data: {
 
-                            part_name: $('#search_stock_part').val(),
+                            part: $('#search_stock_part').val(),
 
 
                         },
@@ -650,37 +619,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
-    $("#stock_table").on("keydown", "input", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            e.stopPropagation();
-
-            console.log("Enter pressed in:", this.id);
-
-            var part_query = $("#search_stock_part").data('process_id') || $("#search_stock_part").attr('data-process_id') || $("#stock_part").data('process_id') || $("#stock_part").attr('data-process_id') || '';
-            var creditor_query = $("#search_stock_unit").data('godown_id') || $("#search_stock_unit").attr('data-godown_id') || '';
-            var dep_query = $("#search_stock_dep").data('dept_id') || $("#search_stock_dep").attr('data-dept_id') || '';
-            var sec_query = $("#search_stock_sec").data('sec_id') || $("#search_stock_sec").attr('data-sec_id') || '';
-            var qty_query = $("#search_stock_qty").val() || '';
-            var from_date = $("#search_stock_f_date").val() || '';
-            var to_date = $("#search_stock_e_date").val() || '';
-
-            console.log({ part_query, creditor_query, dep_query, sec_query, qty_query, from_date, to_date });
-            fetchStock();
-            // get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
-        }
-        else {
-            // get_jaysan_stock();
-
-        }
-    });
-
-
-
-
     $("#clear_stock_insert_btn").on("click", function () {
 
         $("#search_stock_part").val('');
@@ -693,352 +631,8 @@ $(document).ready(function () {
 
     })
 
-    let enterPressed = false;
-
-    $("#stock_tbady").on("focus", "span[contenteditable]", function () {
-        // Store original value on focus
-        $(this).data("original", $(this).text().trim());
-        enterPressed = false;
-    }).on("keydown", "span[contenteditable]", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            enterPressed = true;
-
-            var part = $(this).data("part_id") || '';
-            var godown = $(this).data("unit_id") || '';
-            var department = $(this).data("dep_id") || '';
-            var section = $(this).data("sec_id") || '';
-            var qty = $(this).text().trim();
-            var stock_master_json = "{}";
-
-            console.log("part", part, "godown", godown, "department", department, "section", section, "qty", qty);
-
-            insert_jaysan_stock(part, godown, department, section, qty, stock_master_json);
-
-            // remove focus after save
-            $(this).blur();
-        }
-    })
-        .on("blur", "span[contenteditable]", function () {
-            // If Enter not pressed, restore original value
-            if (!enterPressed) {
-                $(this).text($(this).data("original"));
-            }
-        });
-
-
-
-
-
-    $("#printExcel").on("click", function () {
-
-        if (!stockData || stockData.length === 0) {
-            alert("No data to export");
-            return;
-        }
-
-        let excelData = [];
-
-        stockData.forEach(item => {
-            let unitTotals = [];
-
-            try {
-                unitTotals = JSON.parse(item.unit_total || "[]");
-            } catch {
-                unitTotals = [];
-            }
-
-            if (unitTotals.length === 0) {
-                excelData.push({
-                    Part: item.part_name,
-                    Unit: "",
-                    Department: "",
-                    Section: "",
-                    Qty: item.total_stock
-                });
-                return;
-            }
-
-            unitTotals.forEach(unit => {
-                (unit.department_details || []).forEach(dep => {
-                    (dep.section_details || []).forEach(sec => {
-                        excelData.push({
-                            Part: item.part_name,
-                            Unit: unit.unit,
-                            Department: dep.department,
-                            Section: sec.section,
-                            Qty: sec.Section_qty ?? ""
-                        });
-                    });
-                });
-            });
-        });
-
-        let ws = XLSX.utils.json_to_sheet(excelData);
-
-        ws["!cols"] = Object.keys(excelData[0]).map(k => ({
-            wch: Math.max(k.length, ...excelData.map(r => (r[k] || "").toString().length)) + 2
-        }));
-
-        let wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Stock Data");
-
-        let today = new Date().toISOString().split("T")[0];
-        XLSX.writeFile(wb, `StockData_${today}.xlsx`);
-    });
-
-
-
-
-
-
-    let reqIdArray = [];
-    let totalQty = 0;
-    let part_idddd = '';
-
-    $("#stock_tbady").on("click", "#req_details_btn", function () {
-
-        $("#request_modal_body").empty();
-        reqIdArray = [];
-        totalQty = 0;
-        part_idddd = '';
-
-        var requested_detail = $(this).attr("data-req_details");
-        // console.log(requested_detail);
-
-        part_idddd = $(this).data('part_id');
-
-        if (requested_detail !== '') {
-            requested_detail = JSON.parse(requested_detail);
-
-
-            reqIdArray = [];
-            totalQty = 0;
-
-            requested_detail.forEach(group => {
-
-                group.req_details.forEach(item => {
-
-                    reqIdArray.push(item.req_id);
-                    totalQty += Number(item.qty);
-
-                    $("#request_modal_body").append(`
-                <li class="list-group-item d-flex justify-content-between" style='font-size: 12px'>
-                    <span> ${item.emp} - ${item.store_type} - ${item.store} - ${item.dated}</span>
-                    <strong class='text-success'> ${item.qty}</strong>
-                </li>
-            `);
-                });
-
-            });
-        }
-
-
-        // Total Qty at bottom
-        $("#request_modal_body").append(`
-        <li class="list-group-item list-group-item-info text-end  d-flex justify-content-between"  style='font-size: 12px'>
-            <strong>Total Qty:</strong><strong contenteditable id='mrf_req_qty' class='px-3 py-1'> ${totalQty}</strong>
-        </li>
-    `);
-
-        $("#requestModal").modal("show");
-    });
-
-    $("#stock_allocate_btn").on("click", function () {
-        $("#requestModal").modal("hide");
-
-        window.open(
-            'store_stock_allocate.html?part_id=' + part_idddd + '&req=1',
-            '_blank'
-        );
-    });
-
-
-    $("#req_detai").on("click", function () {
-
-        $("#requestModal").modal("hide");
-        var q = $("#mrf_req_qty").text().trim();
-        console.log(reqIdArray);
-        var r_arr = reqIdArray.length > 0 ? encodeURIComponent(JSON.stringify(reqIdArray)) : '';
-
-
-
-        window.location.href =
-            'material_request_form.html'
-            + '?part_id_para=' + part_idddd
-            + '&qty_para=' + q
-            + '&req_id_para=' + r_arr;
-    });
-
-
-    //     $("#toggel_stock_part_group").on("change", function () {
-    //     var min_order_query = '';
-    //     var request_query = '';
-    //     var creditor_query = '';
-    //     var dep_query = '';
-    //     var sec_query = '';
-    //     var part_query = '';
-
-    //     if ($(this).is(":checked")) {
-    //         min_order_query = 1;
-    //     }
-    //     if (clicked == 0) {
-    //         request_query = 1;
-    //     }
-    //     if($("#search_stock_unit").data("godown_id") !== undefined){
-    //         creditor_query = $("#search_stock_unit").data("godown_id");
-    //     }
-    //     if($("#search_stock_dep").data("dept_id") !== undefined){
-    //         creditor_query = $("#search_stock_dep").data("dept_id");
-    //     }
-    //     if($("#search_stock_sec").data("sec_id") !== undefined){
-    //         creditor_query = $("#search_stock_sec").data("sec_id");
-    //     }
-    //     if($("#search_stock_part").data("process_id") !== undefined){
-    //         creditor_query = $("#search_stock_part").data("process_id");
-    //     }
-    //     get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
-    // })
-
-
-
-    // $("#reqest_btn_top").on("click", function () {
-    //     // top_req_count = 0;
-
-    //     var min_order_query = '';
-    //     var request_query = '';
-    //     var creditor_query = '';
-    //     var dep_query = '';
-    //     var sec_query = '';
-    //     var part_query = '';
-
-    //     if ($("#toggel_stock_part_group").is(":checked")) {
-    //         min_order_query = 1;
-    //     }
-    //     if ($("#search_stock_unit").data("godown_id") !== undefined) {
-    //         creditor_query = $("#search_stock_unit").data("godown_id");
-    //     }
-    //     if ($("#search_stock_dep").data("dept_id") !== undefined) {
-    //         creditor_query = $("#search_stock_dep").data("dept_id");
-    //     }
-    //     if ($("#search_stock_sec").data("sec_id") !== undefined) {
-    //         creditor_query = $("#search_stock_sec").data("sec_id");
-    //     }
-    //     if ($("#search_stock_part").data("process_id") !== undefined) {
-    //         creditor_query = $("#search_stock_part").data("process_id");
-    //     }
-    //     console.log(top_req_count);
-
-    //     if (clicked == 0) {
-    //         var request_query = 1;
-    //         get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
-    //         clicked = 1;
-    //         $("#text_span").text("All");
-    //         $("#span_req_count").addClass("d-none");
-
-    //     }
-    //     else {
-    //         get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
-    //         clicked = 0;
-    //         $("#text_span").text("Requested");
-    //         $("#span_req_count").removeClass("d-none");
-    //     }
-    // })
-
-
-    // $("#toggel_stock_part_reduce").on("change", function () {
-    //     var min_order_query = '';
-    //     var request_query = '';
-    //     var creditor_query = '';
-    //     var dep_query = '';
-    //     var sec_query = '';
-    //     var part_query = '';
-
-    //     if ($("#toggel_stock_part_group").is(":checked")) {
-    //         min_order_query = 1;
-    //     }
-    //     if (clicked == 0) {
-    //         request_query = 1;
-    //     }
-    //     if ($("#search_stock_unit").data("godown_id") !== undefined) {
-    //         creditor_query = $("#search_stock_unit").data("godown_id");
-    //     }
-    //     if ($("#search_stock_dep").data("dept_id") !== undefined) {
-    //         creditor_query = $("#search_stock_dep").data("dept_id");
-    //     }
-    //     if ($("#search_stock_sec").data("sec_id") !== undefined) {
-    //         creditor_query = $("#search_stock_sec").data("sec_id");
-    //     }
-    //     if ($("#search_stock_part").data("process_id") !== undefined) {
-    //         creditor_query = $("#search_stock_part").data("process_id");
-    //     }
-    //     get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
-    //     console.log($(this).is(":checked"));
-
-    // })
-
-
-    $("#toggel_stock_part_group").on("change", function () {
-        fetchStock();
-    });
-
-    $("#reqest_btn_top").on("click", function () {
-
-        if (clicked === 0) {
-            clicked = 1;
-            $("#text_span").text("All");
-            $("#span_req_count").addClass("d-none");
-        } else {
-            clicked = 0;
-            $("#text_span").text("Requested");
-            $("#span_req_count").removeClass("d-none");
-        }
-
-        fetchStock();
-    });
-
-    $("#toggel_stock_part_reduce").on("change", function () {
-        fetchStock();
-    });
-
-
-
-
-
 
 });
-
-function buildStockFilters() {
-    return {
-        min_order_query: $("#toggel_stock_part_group").is(":checked") ? 1 : '',
-        request_query: clicked === 1 ? 1 : '',
-        creditor_query: $("#search_stock_unit").data("godown_id") || '',
-        dep_query: $("#search_stock_dep").data("dept_id") || '',
-        sec_query: $("#search_stock_sec").data("sec_id") || '',
-        part_query: $("#search_stock_part").data("process_id") || ''
-    };
-}
-function fetchStock() {
-    const f = buildStockFilters();
-
-    get_jaysan_stock(
-        f.min_order_query,
-        '',
-        '',
-        f.creditor_query,
-        f.dep_query,
-        f.sec_query,
-        f.part_query,
-        '',
-        f.request_query
-    );
-}
-
-
-
-
-
-
 
 
 
@@ -1411,7 +1005,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
 
 
-function insert_creditors(unit) {
+function insert_creditors1(unit) {
 
     $.ajax({
         url: "php/insert_creditors.php",
@@ -1447,7 +1041,7 @@ function insert_creditors(unit) {
 
 }
 
-function insert_department(go_id, dept_name) {
+function insert_department1(go_id, dept_name) {
     console.log(go_id);
 
     $.ajax({
@@ -1481,7 +1075,7 @@ function insert_department(go_id, dept_name) {
     });
 }
 
-function insert_dep_section(dept_id, sec_name) {
+function insert_dep_section1(dept_id, sec_name) {
     $.ajax({
         url: "php/insert_dep_section.php",
         type: "get", //send it through get method
@@ -1508,53 +1102,6 @@ function insert_dep_section(dept_id, sec_name) {
         }
     });
 }
-
-function insert_new_process(processId) {
-
-    $.ajax({
-        url: "php/insert_nprocess.php",
-        type: "get", //send it through get method
-        data: {
-
-            process_id: processId,
-            edit_process_id: edit_process_id,
-            input_part_id: sel_input_part_id,
-            output_part_id: sel_output_part_id,
-        },
-        success: function (response) {
-            console.log(response);
-
-
-
-            if (response.trim()) {
-                sessionStorage.setItem('editProcessId', response.trim());
-                sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
-                // Reload the page
-                location.reload();
-            }
-
-
-
-
-
-        },
-        error: function (xhr) {
-            //Do Something to handle error
-        }
-    });
-
-
-
-
-}
-
-
-
-
-
-
-
-
 
 
 

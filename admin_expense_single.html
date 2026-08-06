@@ -21,7 +21,17 @@
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
+<style>
+  @media  (max-width: 767px){
+    .table>:not(caption)>*>* {
+      padding: 3px;
+    }
 
+    .input-group{
+      width: 100% !important;
+    }
+  }
+</style>
 
 
 
@@ -55,8 +65,8 @@
           <!-- Modal body -->
           <div class="modal-body overflow-scroll">
             <div>
-              <table id="exp_payment_tbl1" class="table   table-bordered border-dark border-opacity-50 text-center ">
-                <thead>
+              <table id="exp_payment_tbl1" class="table  small table-bordered border-dark border-opacity-50 text-center ">
+                <thead class="small">
                   <tr>
 
                     <th colspan="3" scope="col" class="bg-info bg-opacity-25">Employee Payment History</th>
@@ -76,7 +86,7 @@
 
                   </tr>
                 </thead>
-                <tbody class="align-middle " id="exp_payment_tbl">
+                <tbody class="align-middle small" id="exp_payment_tbl">
 
 
 
@@ -140,10 +150,10 @@
         </div>
       </div>
     </div>
-    <div class="page-wrapper">
+    <div class="page-wrapper mt-5 mt-md-0">
       <div class="card mt-3 ">
         <div class="card-header">
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="d-md-flex justify-content-between align-items-center">
 
             <div class="input-group  w-25">
               <label class="input-group-text" for="sel_usr_in"><span>
@@ -154,8 +164,8 @@
               </select>
             </div>
             <h6 id="selected_usr"></h6>
-            <button type="button" id="pay_emp_btn" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Pay</button>
-            <button class="btn btn-primary" id="view_history_btn"><i class="fa-solid fa-book-open"></i> History</button>
+            <button type="button" id="pay_emp_btn" class="btn btn-primary mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-plus"></i> Pay</button>
+            <button class="btn btn-primary mb-2 mb-md-0 btn-sm" id="view_history_btn"><i class="fa-solid fa-book-open"></i> History</button>
             <div class="input-group  w-25">
               <label class="input-group-text" for="sel_exp_sts_in"><span>
                   <i class="fa-solid fa-briefcase h6"></i>
@@ -174,11 +184,11 @@
         </div>
         <div class="card-body table_report d-flex justify-content-between gap-2">
 
-          <table id="exp_table_single1" class="table   table-bordered border-dark border-opacity-50 text-center ">
+          <table id="exp_table_single1" class="table small  table-bordered border-dark border-opacity-50 text-center ">
             <thead>
               <tr>
 
-                <th colspan="6" scope="col" class="bg-info bg-opacity-25">Employee Expense Status</th>
+                <th colspan="6" scope="col" class="bg-info bg-opacity-25 small">Employee Expense Status</th>
 
               </tr>
               <tr>
@@ -199,7 +209,7 @@
 
               </tr>
             </thead>
-            <tbody class="align-middle " id="exp_table_single">
+            <tbody class="align-middle small" id="exp_table_single">
 
 
 
