@@ -16,7 +16,12 @@ return $data;
 
 
 //report for web lead only
- $sql = "SELECT ifnull( sum(ifnull(expense.exp_amount, 0)) - sum(ifnull(expense_payment.paid_amount, 0)),0 )as total_due FROM expense inner join expense_payment on expense.exp_emp_id = expense_payment.emp_id where expense.exp_approve = 'yes' and expense.exp_emp_id = $emp_id";
+ $sql = "with exp as (select sum(exp_amount) as total_amount,exp_emp_id from expense WHERE exp_emp_id = $emp_id and exp_approve = 'yes'),
+exp_payment as (SELECT sum(ep.paid_amount) as total_paid,ep.emp_id from expense_payment ep WHERE ep.emp_id = $emp_id)
+
+
+SELECT ifnull(total_amount,0) - ifnull(total_paid,0) as total_due  FROM exp left JOIN  exp_payment on exp.exp_emp_id = exp_payment.emp_id
+";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
