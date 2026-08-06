@@ -19,7 +19,8 @@
         LEFT JOIN approved_exp on emp.emp_id = approved_exp.exp_emp_id
         LEFT JOIN declined_exp on emp.emp_id = declined_exp.exp_emp_id
         LEFT JOIN unapproved_exp on emp.emp_id = unapproved_exp.exp_emp_id
-        LEFT JOIN paid_exp on emp.emp_id = paid_exp.emp_id";
+        LEFT JOIN paid_exp on emp.emp_id = paid_exp.emp_id where approved_exp.total_amount is not null or declined_exp.total_declined is not null or unapproved_exp.total_unapproved is not null or paid_exp.total_paid is not null
+    ORDER BY emp.emp_id";
 
 $result = $conn->query($sql);
 
