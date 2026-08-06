@@ -20,7 +20,7 @@ return $data;
 exp_payment as (SELECT sum(ep.paid_amount) as total_paid,ep.emp_id from expense_payment ep WHERE ep.emp_id = $emp_id)
 
 
-SELECT ifnull(total_amount,0) - ifnull(total_paid,0) as total_due  FROM exp left JOIN  exp_payment on exp.exp_emp_id = exp_payment.emp_id
+SELECT ifnull(total_paid,0) - ifnull(total_amount,0)  as total_due  FROM exp left JOIN  exp_payment on exp.exp_emp_id = exp_payment.emp_id
 ";
 $result = $conn->query($sql);
 
