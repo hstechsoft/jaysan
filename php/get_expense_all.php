@@ -12,7 +12,8 @@
         ifnull(total_declined,0) as decline,
         ifnull(total_unapproved,0) as un_approve,
         ifnull(total_paid,0) as amount_paid,
-        emp.emp_id
+        emp.emp_id,
+        emp.emp_name,
     FROM
         employee emp
         LEFT JOIN approved_exp on emp.emp_id = approved_exp.exp_emp_id
