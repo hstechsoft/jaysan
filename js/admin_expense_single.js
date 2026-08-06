@@ -16,16 +16,20 @@ firebase.initializeApp(firebaseConfig);
 var cus_id = '0';
 var urlParams = new URLSearchParams(window.location.search);
 var emp_id = urlParams.get('emp_id');
-var his_query = "SELECT * FROM expense_payment   where emp_id=" + $("#sel_usr_in").val()
+var his_query = "SELECT * FROM expense_payment   where emp_id=" + emp_id
 var query_exp = "SELECT * FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + emp_id
 $(document).ready(function () {
 
   check_login();
   get_expense();
   get_payment_history();
-  get_employee();
+  // get_employee();
 
-  
+  if (emp_id > 1) {
+   $("#sel_usr_in").data("emp_id", emp_id);
+
+  }
+
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -57,20 +61,78 @@ $(document).ready(function () {
 
   });
 
+  $('#sel_usr_in').on('input', function () {
+    //check the value not empty
+    if ($('#sel_usr_in').val() != "") {
+      $('#sel_usr_in').data("emp_id", '');
+
+      $('#sel_usr_in').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_employee_auto.php",
+            type: "get", //send it through get method
+            data: {
+
+              emp_name: request.term
+
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.emp_name,
+                  value: item.emp_name,
+                  cus_id: item.emp_id,
+                  phone: item.cus_phone,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("emp_id", ui.item.cus_id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          //  get_bom(ui.item.id)
+
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div style='font-size:12px;'><strong>" + item.label + "</strong></div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
   $('#sel_usr_in').change(function () {
 
-    if ($('#sel_usr_in').find(":selected").val() > 0) {
+    if ($('#sel_usr_in').data("emp_id") != undefined && $('#sel_usr_in').data("emp_id") != '') {
 
       if ($('#sel_exp_sts_in').find(":selected").val() != "0") {
-        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').find(":selected").val() + " and exp_approve = '" + $('#sel_exp_sts_in').find(":selected").val() + "'"
+        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').data("emp_id") + " and exp_approve = '" + $('#sel_exp_sts_in').find(":selected").val() + "'"
 
-        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').find(":selected").val()
+        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').data("emp_id")
         get_payment_history()
         get_expense();
       }
       else {
-        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').find(":selected").val()
-        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').find(":selected").val()
+        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').data("emp_id")
+        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').data("emp_id")
         get_payment_history()
         get_expense();
       }
@@ -84,10 +146,10 @@ $(document).ready(function () {
 
     if ($('#sel_exp_sts_in').find(":selected").val() != "0") {
 
-      if ($('#sel_usr_in').find(":selected").val() > 0) {
-        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').find(":selected").val() + " and exp_approve = '" + $('#sel_exp_sts_in').find(":selected").val() + "'"
+      if ($('#sel_usr_in').data("emp_id") != undefined && $('#sel_usr_in').data("emp_id") != '') {
+        query_exp = "SELECT expense.*,employee.emp_name FROM expense inner join employee on employee.emp_id = expense.exp_emp_id where exp_emp_id=" + $('#sel_usr_in').data("emp_id") + " and exp_approve = '" + $('#sel_exp_sts_in').find(":selected").val() + "'"
 
-        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').find(":selected").val()
+        his_query = "SELECT * FROM expense_payment   where emp_id=" + $('#sel_usr_in').data("emp_id")
         get_payment_history()
         get_expense();
       }
@@ -113,7 +175,7 @@ $(document).ready(function () {
 
 
   $('#pay_emp_btn').click(function () {
-    if ($("#sel_usr_in").val() == "Select User") {
+    if ($("#sel_usr_in").data() == "") {
       salert("Amount", "Select The Employee", "warning")
       return
     }
@@ -166,7 +228,7 @@ function insert_emp_pay() {
     url: "php/insert_expense_pay.php",
     type: "get", //send it through get method
     data: {
-      emp_id: $("#sel_usr_in").val(),
+      emp_id: $("#sel_usr_in").data("emp_id"),
       paid_amount: $("#emp_pay_amount").val(),
       paid_date: paid_date
 
@@ -215,53 +277,53 @@ function update_expense(exp_id, exp_approve) {
 
 }
 
-function get_employee() {
+// function get_employee() {
 
 
-  $.ajax({
-    url: "php/get_employee.php",
-    type: "get", //send it through get method
+//   $.ajax({
+//     url: "php/get_employee.php",
+//     type: "get", //send it through get method
 
-    success: function (response) {
-
-
-      if (response.trim() != "error") {
-
-        var obj = JSON.parse(response);
+//     success: function (response) {
 
 
+//       if (response.trim() != "error") {
 
-        obj.forEach(function (obj) {
-
-
-          $("#sel_usr_in").append(" <option value='" + obj.emp_id + "'>" + obj.emp_name + "</option>");
+//         var obj = JSON.parse(response);
 
 
 
-        });
+//         obj.forEach(function (obj) {
 
-        if(emp_id > 0){
-          $("#sel_usr_in").val(emp_id);
-        }
 
-      }
-
-      else {
-        salert("Error", "User ", "error");
-      }
+//           $("#sel_usr_in").append(" <option value='" + obj.emp_id + "'>" + obj.emp_name + "</option>");
 
 
 
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  });
+//         });
+
+//         if(emp_id > 0){
+//           $("#sel_usr_in").val(emp_id);
+//         }
+
+//       }
+
+//       else {
+//         salert("Error", "User ", "error");
+//       }
+
+
+
+//     },
+//     error: function (xhr) {
+//       //Do Something to handle error
+//     }
+//   });
 
 
 
 
-}
+// }
 
 
 function check_login() {
@@ -307,6 +369,7 @@ function get_expense() {
             $("#exp_table_single").append(" <tr> <td>" + count + "</td> <td>" + millis_to_date(parseFloat(obj.exp_date)) + "</td><td>" + obj.exp_cat + " " + obj.exp_des + "</td> <td>" + obj.exp_amount + "</td> <td>" + exp_sts + "</td> <td><input class='form-check-input' value = '" + obj.exp_id + "'type='checkbox' value=''> </td> </tr>")
 
             $("#selected_usr").text("Employee - " + obj.emp_name);
+            $("#sel_usr_in").val(obj.emp_name);
           });
 
 
