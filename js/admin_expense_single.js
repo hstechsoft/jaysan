@@ -26,7 +26,7 @@ $(document).ready(function () {
   // get_employee();
 
   if (emp_id > 1) {
-   $("#sel_usr_in").data("emp_id", emp_id);
+    $("#sel_usr_in").data("emp_id", emp_id);
 
   }
 
@@ -169,13 +169,17 @@ $(document).ready(function () {
 
 
   $('#view_history_btn').click(function () {
+    if ($("#sel_usr_in").data("emp_id") == undefined) {
+      salert("Amount", "Select The Employee", "warning")
+      return
+    }
     $('#history_model').modal('show');
   });
 
 
 
   $('#pay_emp_btn').click(function () {
-    if ($("#sel_usr_in").data() == "") {
+    if ($("#sel_usr_in").data("emp_id") == undefined) {
       salert("Amount", "Select The Employee", "warning")
       return
     }

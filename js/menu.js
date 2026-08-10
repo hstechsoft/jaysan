@@ -220,8 +220,6 @@ function get_exp_sum(emp_id) {
     success: function (response) {
 
 
-      console.log(response);
-
       let data = JSON.parse(response);
 
       let total_due = data[0].total_due;

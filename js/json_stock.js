@@ -451,7 +451,8 @@ $(document).ready(function () {
                         type: "get", //send it through get method
                         data: {
 
-                            part_name: $('#search_stock_part').val(),
+                            part: $('#search_stock_part').val(),
+                            term: 'part',
 
 
                         },
