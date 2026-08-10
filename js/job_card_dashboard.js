@@ -33,6 +33,14 @@ $(document).ready(function () {
         });
     });
 
+    $("#scanned_product_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#scanned_data_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     check_login();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))

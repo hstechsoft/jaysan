@@ -69,7 +69,7 @@ function get_all_expense() {
 
             count = count + 1;
             var bal = parseInt(obj.amount_paid) - parseInt(obj.approve);
-            $("#exp_table").append(" <tr> <td>" + count + "</td> <td>" + obj.emp_name + "</td><td>" + obj.un_approve + "</td> <td>" + obj.decline + "</td> <td>" + obj.approve + "</td> <td>" + obj.amount_paid + "</td>  <td>" + bal + "</td><td><a target='_blank' href=' admin_expense_single.html?emp_id=" + obj.exp_emp_id + "' class='btn btn-primary btn-sm' role='button'>View</a></td> </tr>")
+            $("#exp_table").append(" <tr> <td>" + count + "</td> <td>" + obj.emp_name + "</td><td>" + obj.un_approve + "</td> <td>" + obj.decline + "</td> <td>" + obj.approve + "</td> <td>" + obj.amount_paid + "</td>  <td>" + bal + "</td><td><a target='_blank' href=' admin_expense_single.html?emp_id=" + obj.emp_id + "' class='btn btn-primary btn-sm' role='button'>View</a></td> </tr>")
 
 
           });
