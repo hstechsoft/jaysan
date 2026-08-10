@@ -11,12 +11,22 @@ $process_id = test_input($_POST['process_id']);
 
 
  
- 
+ if($part_id > 0 )
+  {
+    $process_id = "null";
+  }
+
+  $part_id = sql_nullable($part_id);
+  $process_id = sql_nullable($process_id);
+  $godown = sql_nullable($godown);
+  $dep = sql_nullable($dep);
+  $sec = sql_nullable($sec);
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-$data = "'".$data."'";
+
 return $data;
 }
 
