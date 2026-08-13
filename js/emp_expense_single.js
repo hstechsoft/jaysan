@@ -19,65 +19,79 @@ $(document).ready(function () {
   check_login();
 
   get_expense_summary_single();
+
+  if (current_user_id != '' || current_user_id != undefined || current_user_id > 0) {
+    get_expense("SELECT * FROM expense INNER JOIN employee ON employee.emp_id = expense.exp_emp_id WHERE exp_emp_id=" + current_user_id + " ORDER BY expense.exp_date DESC");
+  }
+
+  $("#status").change(function () {
+    var status = $(this).val();
+
+    if (status == 'all') {
+      get_expense("SELECT * FROM expense INNER JOIN employee ON employee.emp_id = expense.exp_emp_id WHERE exp_emp_id=" + current_user_id + " ORDER BY expense.exp_date DESC");
+      return;
+    }
+
+    get_expense("SELECT * FROM expense INNER JOIN employee ON employee.emp_id = expense.exp_emp_id WHERE exp_emp_id='" + current_user_id + "' AND exp_approve ='" + status + "' ORDER BY expense.exp_date DESC")
+  })
   // get_exp_cat_all()
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $('#pay_date').val(get_today_date());
 
-  $('#exp_category').on('input',function(){
-     //check the value not empty
+  $('#exp_category').on('input', function () {
+    //check the value not empty
     //  alert()
-         if($('#exp_category').val() !="")
-         {
-           $('#exp_category').autocomplete({
-             //get data from databse return as array of object which contain label,value
-  
-             source: function(request, response) {
-               $.ajax({
-                 url: "php/get_exp_cat_auto.php",
-                 type: "get", //send it through get method
-                 data: {
-                 
-                  cat: $('#exp_category').val(),
-  
-               },
-               dataType: "json", 
-                 success: function (data) {
-  
-               console.log(data);
-               response($.map(data, function(item) {
-                 return {
-                     label: item.exp_cat,
-                     value: item.exp_cat,
-                     // id: item.part_id,
-                     // part_name: item.part_name
-                 };
-             }));
-  
-                 }
-  
-               });
-             },
-             minLength: 2,
-             cacheLength: 0,
-             select: function(event, ui) {
-  
-             //   $(this).data("selected-part_id", ui.item.id);
-             //   $('#part_name_out').data("selected-part_id", ui.item.id);
-             //   $('#part_name_out').val(ui.item.part_name)
-             //  get_bom(ui.item.id)
-  
-  
-             } ,
-  
-           }).autocomplete("instance")._renderItem = function(ul, item) {
-             return $("<li>")
-                 .append("<div>"+item.label+ "</div>")
-                 .appendTo(ul);
-         };
-         }
-  
-        });
+    if ($('#exp_category').val() != "") {
+      $('#exp_category').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_exp_cat_auto.php",
+            type: "get", //send it through get method
+            data: {
+
+              cat: $('#exp_category').val(),
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.exp_cat,
+                  value: item.exp_cat,
+                  // id: item.part_id,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          //   $(this).data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          //  get_bom(ui.item.id)
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div>" + item.label + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
 
   $('#sel_all_chk').change(function () {
     if (this.checked) {
@@ -264,6 +278,27 @@ $(document).ready(function () {
     $("#exp_amount").val(km_amount);
   })
 
+  $("#bill_image").on("change", function () {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      this.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      $("#preview_bill_image")
+        .attr("src", e.target.result)
+        .fadeIn();
+    };
+
+    reader.readAsDataURL(file);
+  });
 
   $("#add_expense").click(function () {
 
@@ -294,6 +329,22 @@ $(document).ready(function () {
   });
 
 
+
+  $("#upload_bill").on("click", function (event) {
+    event.preventDefault();
+
+    var date = $("#exp_date").val();
+    var category = $("#exp_category").val();
+    var description = $("#exp_description").val();
+    var amount = $("#exp_amount").val();
+
+    if (category == null || date == "" || amount == "") {
+      salert("Warning", "Data missing", "warning");
+      return;
+    }
+
+    captureWithDbData(date, category, description, amount);
+  });
 
   console.log(isSelectionMode);
 
@@ -486,6 +537,83 @@ $(document).ready(function () {
 });
 //
 
+function captureWithDbData(date, category, description, amount) {
+  console.log("capture");
+
+  var params = {
+    "exp_des": description,
+    "exp_cat": category,
+    "exp_amount": amount,
+    "exp_date": date,
+    "exp_emp_id": current_user_id,
+    "exp_work_id": work_id
+
+  };
+
+  if (window.AndroidBridge) {
+    // Kotlin will take the photo, compress it, 
+    // and include these params in the POST request to app_upload.php
+    AndroidBridge.takePhoto("php/insert_emp_expenses.php", JSON.stringify(params));
+  }
+}
+
+function get_expense(query) {
+
+
+
+  $.ajax({
+    url: "php/get_expense_single.php",
+    type: "get", //send it through get method
+    data: {
+      query: query
+
+    },
+    success: function (response) {
+      console.log(response)
+      if (response.trim() != "error") {
+        $("#expense_tbody").empty();
+        if (response.trim() != "0 result") {
+          var obj = JSON.parse(response);
+
+
+          var count = 0
+          obj.forEach(function (obj) {
+
+            count = count + 1;
+
+
+            var exp_sts = ""
+            if (obj.exp_approve == "yes")
+              exp_sts = "Approved"
+            else if (obj.exp_approve == "no")
+              exp_sts = "Not Approved"
+            else if (obj.exp_approve == "decline")
+              exp_sts = "Declined"
+            $("#expense_tbody").append(" <tr> <td>" + count + "</td> <td>" + millis_to_date(parseFloat(obj.exp_date)) + "</td><td>" + obj.exp_cat + " " + obj.exp_des + "</td> <td>" + obj.exp_amount + "</td> <td>" + exp_sts + "</td></tr>")
+
+          });
+
+
+        }
+        else {
+
+          $("#expense_tbody").append("<tr> <td colspan='5' class='text-center text-danger'>No Data Expense Found </td> </tr>");
+        }
+      }
+
+      else {
+        salert("Error", "User ", "error");
+      }
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+}
 
 function get_expense_summary_single() {
   $.ajax({
@@ -600,23 +728,18 @@ function get_expenses_single(exp_date) {
 function insert_emp_expense(date, category, description, amount) {
   console.log(date, category, description, amount, current_user_id, work_id);
 
+  let formData = new FormData($("#expense_form")[0]);
+  formData.append("exp_emp_id", current_user_id);
+  formData.append("exp_work_id", work_id);
+
   let exp_date = date;
 
   $.ajax({
     url: "php/insert_emp_expenses.php",
-    type: "get", //send it through get method
-    data: {
-      exp_des: description,
-      exp_cat: category,
-      exp_amount: parseFloat(amount),
-      exp_date: date,
-      exp_emp_id: current_user_id,
-      exp_work_id: work_id
-
-
-
-
-    },
+    type: "POST", //send it through get method
+    data: formData,
+    processData: false,
+    contentType: false,
     success: function (response) {
       console.log(response)
       if (response.trim() == "ok") {
@@ -634,6 +757,15 @@ function insert_emp_expense(date, category, description, amount) {
           // })
 
           get_expenses_single(exp_date);
+          $("#status").trigger("change");
+
+          $("#exp_category").val("");
+          $("#exp_description").val("");
+          $("#exp_amount").val("");
+          $("#fuel_check_box").prop("checked", false).trigger("change");
+          $("#fuel_vehicel_type").val("");
+          $("#start_km").val("");
+          $("#end_km").val("");
 
         }
 
@@ -676,6 +808,9 @@ function update_expenses(data) {
           // })
 
           if (response.trim() == "ok") {
+
+            $("#status").trigger("change");
+
             if (button_type == 0) {
               get_expenses_single(exp_date)
             }

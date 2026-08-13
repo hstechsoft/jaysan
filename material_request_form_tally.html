@@ -268,7 +268,39 @@
 
 
 
+      <div class="modal fade" id="reject_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="reject_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered   ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="reject_modalLabel">Reject MRF</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating mb-3">
+                <textarea class="form-control rounded-3" placeholder="" id="reject_reason" required
+                  style="height: 120px"></textarea>
+                <label for="reject_reason">reject_reason</label>
+                <span class="text-danger">*</span>
+                <div class="invalid-feedback">
+                  Kindly Enter Vaild
+                </div>
+              </div>
 
+              <div class="form-floating mb-3">
+                <select class="form-select" id="reject_to">
+                  <option selected value="mrf">MRF</option>
+                </select>
+                <label for="reject_to">Reject to</label>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-danger " id="reject_btn">Reject</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
 
@@ -284,29 +316,8 @@
     </div>
 
 
-    <footer class=" text-light mt-auto" style="background-color: #ff953d;">
-      <div class=" py-1 mx-5">
-        <div class="row align-items-center text-center text-md-start">
 
-          <!-- Copyright -->
-          <div class="col-md-6 mb-2 mb-md-0">
-            <p class="mb-0 small">
-              © 2025 <strong class="fw-semibold text-primary">Jaysan Agri Industrial</strong>. All Rights
-              Reserved.
-            </p>
-          </div>
-
-          <!-- Developer Credit -->
-          <div class="col-md-6 text-md-end">
-            <p class="mb-0 small">
-              Developed by
-              <strong class="fw-semibold text-primary">HS Techsoft</strong>
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </footer>
+    <div id='footer' class="mt-auto"></div>
 
 
     <!-- jQuery -->

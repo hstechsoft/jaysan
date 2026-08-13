@@ -192,6 +192,29 @@ $(document).ready(function () {
     get_tally_stock_details(tally_mrf_id_g);
   });
 
+  $("#material_requset_form_tally_table").on("click", "tr .reject_btn ", function (event) {
+    event.preventDefault();
+
+    tally_mrf_id_g = $(this).val();
+    if (tally_mrf_id_g > 0) {
+      $("#reject_btn").val(tally_mrf_id_g)
+      $("#reject_modal").modal("show");
+    } else {
+      salert("Warning", "Data Missing! Try Later.", "warning");
+    }
+
+  });
+
+  $("#reject_btn").on("click", function () {
+    
+    if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
+      update_reject_tally($(this).val(), $("#reject_to").val())
+    }
+    else {
+      shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
+    }
+  });
+
   $("#material_requset_form_tally_table").on("click", "tr td button", function (event) {
     // var mrf_id = $(this).val();
     // get_material_request_form_details_print(mrf_id);
@@ -296,6 +319,45 @@ $(document).ready(function () {
 
 
 
+function update_reject_tally(mrf_id, reject_to) {
+
+  console.log(mrf_id, reject_to);
+  
+
+  $.ajax({
+    url: "php/update_material_request_form_status.php",
+    type: "get", //send it through get method
+    data: {
+      status: "tally_rejected-" + reject_to,
+      mrf_id: mrf_id,
+      emp_id: current_user_id
+
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        location.reload()
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
 function update_material_request_form_tally() {
   $("#stock_table_body tr").each(function () {
     var godown_id = $(this).data("godown-id");
@@ -381,7 +443,7 @@ function get_phy_stock_details(mrf_id) {
 
           });
           $("#details").text($("#details").text() + uom1);
-          
+
         }
         else {
           // $("#@id@") .append("<td colspan='3' scope='col'>No Data</td>");
@@ -530,7 +592,7 @@ function get_material_request_form_list_tally(sts_array, emp_id) {
               "<tr data-part_name = '" + obj.part_name + "'><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>");
+              "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td class = 'd-flex'><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 reject_btn btn-animate' id=''><i class='fa-solid fa-file-circle-xmark'></i></i></button></td></tr>");
 
           });
 

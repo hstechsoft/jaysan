@@ -243,14 +243,14 @@
             </div>
 
             <div class="card-body m-0 p-0" id="">
-              <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="" novalidate
+              <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="expense_form" novalidate
                 onsubmit="return false">
 
                 <div class="row">
 
                   <div class="col-md-6">
                     <div class="form-floating mb-2">
-                      <input type="date" class="form-control rounded-3" id="exp_date" placeholder="" required>
+                      <input type="date" class="form-control rounded-3" id="exp_date" placeholder="" name="exp_date" required>
                       <label for="exp_date">Date
                         <span class="text-danger">*</span> </label>
 
@@ -262,14 +262,14 @@
 
                   <div class="col-md-6">
                     <div class="form-floating mb-2">
-                      <input type="text" class="form-control rounded-3" id="exp_category" placeholder="">
+                      <input type="text" class="form-control rounded-3" id="exp_category" placeholder="" name="exp_cat">
                       <label for="exp_category">Expense </label>
                     </div>
                   </div>
 
                   <div class="col-md-6">
                     <div class="form-floating mb-3">
-                      <textarea class="form-control rounded-3" placeholder="" id="exp_description" required
+                      <textarea class="form-control rounded-3" placeholder="" id="exp_description" name="exp_des" required
                         style="height: 120px"></textarea>
                       <label for="exp_description">Description</label>
                     </div>
@@ -277,7 +277,7 @@
 
                   <div class="col-md-6">
                     <div class="form-floating mb-2">
-                      <input type="number" class="form-control rounded-3" id="exp_amount" placeholder="" required>
+                      <input type="number" class="form-control rounded-3" id="exp_amount" name="exp_amount" placeholder="" required>
                       <label for="exp_amount">Amount
                         <span class="text-danger">*</span> </label>
 
@@ -290,7 +290,7 @@
                   <div class="col-md-6 d-none d-md-block mb-2">
                     <label for="bill_image">Bill
                       <span class="text-danger">*</span> </label>
-                    <input type="file" class="form-control rounded-3" id="bill_image" placeholder="" required>
+                    <input type="file" class="form-control rounded-3" id="bill_image" name="file" placeholder="" required>
 
                     <div class="invalid-feedback">
                       Kindly Enter Vaild Data
@@ -304,7 +304,7 @@
                       <button type="button" class="btn btn-primary" id="upload_bill">
                         <i class="fa-solid fa-photo-film"></i>
                       </button>
-                      Upload Bill 
+                      Upload Bill
                     </div>
                   </div>
 
@@ -312,8 +312,9 @@
                     <img src="no_image.jpg" alt="Bill Image" id="preview_bill_image" width="200" height="200">
                   </div>
 
+
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary " id="add_expense">ADD</button>
+                    <button type="submit" class="btn btn-primary d-none d-md-block" id="add_expense">ADD</button>
                   </div>
                   <div class="text-center  d-flex justify-content-between">
                     <button type="submit" class="btn btn-primary d-none" id="update_expense">Update</button>
@@ -380,6 +381,55 @@
             </div>
 
           </div>
+        </div>
+
+        <div class="col-12 mt-3">
+
+          <div class="accordion" id="expense">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">
+                  Expense Info
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
+                data-bs-parent="#expense">
+                <div class="accordion-body">
+
+                  <div class="table-responsive">
+                    <table class="table caption-top table-bordered table-striped smal">
+                      <thead class="small">
+
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">
+                            <select class="form-select form-select-sm w-100" id="status" style="font-size: 12px !important;">
+                              <option value="all" selected>All</option>
+                              <option value="yes">Approved</option>
+                              <option value="no">Unapproved</option>
+                              <option value="decline">Declined</option>
+                            </select>
+                          </th>
+
+                        </tr>
+                      </thead>
+                      <tbody id="expense_tbody">
+
+
+                      </tbody>
+
+
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 

@@ -779,7 +779,7 @@ function get_jaysan_physical_stock(process_id, godown, dep, sec, qty, part_id, e
     console.log("fd " + godown, "td " + dep, "g " + sec, "d " + qty, "s " + part_id, "p " + emp_id);
 
     $.ajax({
-        url: "php//get_jaysan_physical_stock.php",
+        url: "php/get_jaysan_physical_stock.php",
         type: "get", //send it through get method
         data: {
 
@@ -844,7 +844,7 @@ function get_jaysan_physical_stock(process_id, godown, dep, sec, qty, part_id, e
 
                         // iterate units -> departments -> sections and build rows
                         unitTotals.forEach(function (unitObj, unitIndex) {
-                            var unitName = unitObj.godown;
+                            var unitName = unitObj.godown_name;
                             // compute unit rowspan = total sections inside this unit
                             var unitRowSpan = 0;
                             if (Array.isArray(unitObj.stock_details)) {
@@ -908,9 +908,9 @@ function get_jaysan_physical_stock(process_id, godown, dep, sec, qty, part_id, e
 
                                     // Section and Section_qty
 
-                                    if (secObj.section == 'null') { dep_stock_qty = secObj.qty };
+                                    if (secObj.section === null) { dep_stock_qty = secObj.qty };
 
-                                    tr += `<td> ${secObj.sec != 'null' ? `No-section` : ''}</td>`;
+                                    tr += `<td> ${secObj.sec !== null ? secObj.sec_name : `No-section`}</td>`;
 
                                     tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable class='px-3 py-1' data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown}' data-dep_id='${depObj.dep}' data-sec_id='${secObj.sec}' data-process_id='${item.process_id}'>${secObj.qty != null ? secObj.qty : ""}</span></td>`;
 

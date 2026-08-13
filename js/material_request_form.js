@@ -783,7 +783,7 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
             var reject = '';
 
 
-            if (obj.emp_id == current_user_id && (obj.status == "created" || obj.status == "purchase_rejected-mrf" || obj.status == "md_rejected-mrf"))
+            if (obj.emp_id == current_user_id && (obj.status == "created" || obj.status == "tally_rejected-mrf" || obj.status == "purchase_rejected-mrf" || obj.status == "md_rejected-mrf"))
 
               edit_btn = "";
 
@@ -791,7 +791,10 @@ function get_material_request_form_list(sts_array, emp_id, receive_filter) {
 
               edit_btn = "disabled";
 
-            if (obj.status == "purchase_rejected-mrf") {
+            if (obj.status == "tally_rejected-mrf") {
+              reject = `<span class='badge bg-danger blink'>Tally Rejected</span>`
+            }
+            else if (obj.status == "purchase_rejected-mrf") {
               reject = `<span class='badge bg-danger blink'>Purchase Rejected</span>`
             }
             else if (obj.status == "md_rejected-mrf") {
