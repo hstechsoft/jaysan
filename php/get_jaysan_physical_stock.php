@@ -170,6 +170,8 @@ JSON_ARRAYAGG(
     JSON_OBJECT(
         'godown',
         godown,
+        'godown_name',
+        creditor_name,
         'qty',
         qty,
         'stock_details',
