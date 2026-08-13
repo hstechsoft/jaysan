@@ -61,6 +61,36 @@ $(document).ready(function () {
 
   });
 
+  let panzoom;
+
+  $("#exp_table_single").on("click", ".exp-img", function () {
+
+    let image = $(this).data("image");
+
+    $("#previewImage").attr("src", image);
+
+    $("#imageModal").modal("show");
+
+    setTimeout(function () {
+
+      if (panzoom) {
+        panzoom.destroy();
+      }
+
+      panzoom = Panzoom(document.getElementById("previewImage"), {
+        maxScale: 5,
+        minScale: 1,
+        contain: "outside"
+      });
+
+      document.getElementById("previewImage")
+        .parentElement
+        .addEventListener("wheel", panzoom.zoomWithWheel);
+
+    }, 300);
+
+  });
+
   $('#sel_usr_in').on('input', function () {
     //check the value not empty
     if ($('#sel_usr_in').val() != "") {
@@ -370,7 +400,7 @@ function get_expense() {
               exp_sts = "Not Approved"
             else if (obj.exp_approve == "decline")
               exp_sts = "Declined"
-            $("#exp_table_single").append(" <tr> <td>" + count + "</td> <td>" + millis_to_date(parseFloat(obj.exp_date)) + "</td><td>" + obj.exp_cat + " " + obj.exp_des + "</td> <td>" + obj.exp_amount + "</td> <td>" + exp_sts + "</td> <td><input class='form-check-input' value = '" + obj.exp_id + "'type='checkbox' value=''> </td> </tr>")
+            $("#exp_table_single").append(" <tr> <td>" + count + "</td> <td>" + millis_to_date(parseFloat(obj.exp_date)) + "</td><td>" + obj.exp_cat + " " + obj.exp_des + "</td> <td>" + obj.exp_amount + "</td> <td>" + exp_sts + "</td><td><img scr='' width='100' height='100'  class='exp-img' data-image='' style='cursor:pointer'></td> <td><input class='form-check-input' value = '" + obj.exp_id + "'type='checkbox' value=''> </td> </tr>")
 
             $("#selected_usr").text("Employee - " + obj.emp_name);
             $("#sel_usr_in").val(obj.emp_name);
@@ -380,7 +410,7 @@ function get_expense() {
         }
         else {
 
-          $("#exp_table_single").append("<tr> <td colspan='6'>No Data  </td> </tr>");
+          $("#exp_table_single").append("<tr> <td colspan='7'>No Data  </td> </tr>");
         }
       }
 

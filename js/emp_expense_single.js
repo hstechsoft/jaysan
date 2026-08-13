@@ -288,6 +288,20 @@ $(document).ready(function () {
       this.value = "";
       return;
     }
+    let allowed = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp"
+    ];
+
+    if (!allowed.includes(file.type)) {
+
+      salert("Error", "Only JPG, JPEG, PNG and WEBP images are allowed.", "error");
+      $(this).val("");
+      return;
+
+    }
 
     const reader = new FileReader();
 
@@ -745,27 +759,18 @@ function insert_emp_expense(date, category, description, amount) {
       if (response.trim() == "ok") {
 
         {
-          // swal({
-          //   title: "Added",
-          //   text: "Expenses added Successfully!",
-          //   icon: "success",
-          //   showConfirmButton: true,
-          //   dangerMode: false,
-          // }).then(function () {
-          //   location.reload()
+          window.location.reload()
 
-          // })
+          // get_expenses_single(exp_date);
+          // $("#status").trigger("change");
 
-          get_expenses_single(exp_date);
-          $("#status").trigger("change");
-
-          $("#exp_category").val("");
-          $("#exp_description").val("");
-          $("#exp_amount").val("");
-          $("#fuel_check_box").prop("checked", false).trigger("change");
-          $("#fuel_vehicel_type").val("");
-          $("#start_km").val("");
-          $("#end_km").val("");
+          // $("#exp_category").val("");
+          // $("#exp_description").val("");
+          // $("#exp_amount").val("");
+          // $("#fuel_check_box").prop("checked", false).trigger("change");
+          // $("#fuel_vehicel_type").val("");
+          // $("#start_km").val("");
+          // $("#end_km").val("");
 
         }
 

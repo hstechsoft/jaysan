@@ -21,17 +21,17 @@
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
-<style>
-  @media  (max-width: 767px){
-    .table>:not(caption)>*>* {
-      padding: 3px;
-    }
+  <style>
+    @media (max-width: 767px) {
+      .table>:not(caption)>*>* {
+        padding: 3px;
+      }
 
-    .input-group{
-      width: 100% !important;
+      .input-group {
+        width: 100% !important;
+      }
     }
-  }
-</style>
+  </style>
 
 
 
@@ -65,7 +65,8 @@
           <!-- Modal body -->
           <div class="modal-body overflow-scroll">
             <div>
-              <table id="exp_payment_tbl1" class="table  small table-bordered border-dark border-opacity-50 text-center ">
+              <table id="exp_payment_tbl1"
+                class="table  small table-bordered border-dark border-opacity-50 text-center ">
                 <thead class="small">
                   <tr>
 
@@ -160,14 +161,16 @@
                   <i class="fa-solid fa-briefcase h6"></i>
                 </span></label>
 
-                <input type="text" class="form-control" placeholder="Employee"  id="sel_usr_in">
+              <input type="text" class="form-control" placeholder="Employee" id="sel_usr_in">
               <!-- <select class="form-select" id="sel_usr_in">
                 <option selected>Select User</option>
               </select> -->
             </div>
             <h6 id="selected_usr"></h6>
-            <button type="button" id="pay_emp_btn" class="btn btn-primary mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-plus"></i> Pay</button>
-            <button class="btn btn-primary mb-2 mb-md-0 btn-sm" id="view_history_btn"><i class="fa-solid fa-book-open"></i> History</button>
+            <button type="button" id="pay_emp_btn" class="btn btn-primary mb-2 mb-md-0 btn-sm"><i
+                class="fa-solid fa-plus"></i> Pay</button>
+            <button class="btn btn-primary mb-2 mb-md-0 btn-sm" id="view_history_btn"><i
+                class="fa-solid fa-book-open"></i> History</button>
             <div class="input-group  w-25">
               <label class="input-group-text" for="sel_exp_sts_in"><span>
                   <i class="fa-solid fa-briefcase h6"></i>
@@ -190,7 +193,7 @@
             <thead>
               <tr>
 
-                <th colspan="6" scope="col" class="bg-info bg-opacity-25 small">Employee Expense Status</th>
+                <th colspan="7" scope="col" class="bg-info bg-opacity-25 small">Employee Expense Status</th>
 
               </tr>
               <tr>
@@ -204,6 +207,7 @@
 
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
+                <th scope="col">Image</th>
                 <th scope="col">
                   <input class="form-check-input" type="checkbox" id="sel_all_chk" value="">
                 </th>
@@ -245,8 +249,25 @@
 
     </div>
   </div>
+
+  <div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Bill Preview</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center" style="overflow:hidden;">
+          <img id="previewImage" src="" style="max-width:100%; max-height:80vh; cursor:grab;">
+        </div>
+
+      </div>
+    </div>
+  </div>
   <!-- content -->
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
 
 
@@ -268,6 +289,8 @@
 
   <!-- Sweet alert -->
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- zoom in and out -->
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom/dist/panzoom.min.js"></script>
 
 
   <!-- external js -->

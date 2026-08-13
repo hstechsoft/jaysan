@@ -228,7 +228,7 @@ function get_exp_sum(emp_id) {
 
         $("#advanceCard").removeClass("d-none");
 
-        $("#amount").text("₹ " + total_due);
+        $("#exp_amount").text("₹ " + total_due);
 
         if (parseFloat(total_due) > 0) {
           $("#advanceCard").find(".card-header").css("background-color", "#ff0000")
