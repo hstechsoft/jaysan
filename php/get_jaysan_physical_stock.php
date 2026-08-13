@@ -38,10 +38,10 @@ if($sec != 'NULL') {
 }
 
 if($part_id != 'NULL') {
-    $part_query = "part_id = $part_id";
+    $part_query = "phy.part_id = $part_id";
 }
 if($process_id != 'NULL') {
-    $process_query = "process_id = $process_id";
+    $process_query = "phy.process_id = $process_id";
 }
  
 function test_input($data) {
