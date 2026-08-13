@@ -124,7 +124,7 @@ sec_wise as (
             qty,
             'stock_id',
             stock_id,
-            sec_name,
+            'sec_name',
             sec_name
         )
     ) as stock_details
