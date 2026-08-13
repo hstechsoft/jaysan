@@ -2,12 +2,12 @@
 <?php
  include 'db_head.php';
 
- $exp_des =test_input($_GET['exp_des']);
- $exp_cat =test_input($_GET['exp_cat']);
- $exp_amount =test_input($_GET['exp_amount']);
- $exp_date =($_GET['exp_date']);
- $exp_emp_id =test_input($_GET['exp_emp_id']);
- $exp_work_id =test_input($_GET['exp_work_id']);
+ $exp_des =test_input($_POST['exp_des']);
+ $exp_cat =test_input($_POST['exp_cat']);
+ $exp_amount =test_input($_POST['exp_amount']);
+ $exp_date =($_POST['exp_date']);
+ $exp_emp_id =test_input($_POST['exp_emp_id']);
+ $exp_work_id =test_input($_POST['exp_work_id']);
 
 
 
