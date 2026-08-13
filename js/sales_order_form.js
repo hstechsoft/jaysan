@@ -3149,6 +3149,8 @@ function get_jaysan_model_subtype() {
 function change_price() {
   let min_price = parseFloat($("#billing_price").data("min")) || 0;
   let max_price = parseFloat($("#billing_price").data("max")) || 0;
+
+  $("#mrp_amount").prop("checked", false);
   $(".sub_type_chk").each(function (index, el) {
 
     if ($(this).is(":checked")) {

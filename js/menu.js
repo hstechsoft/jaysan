@@ -26,7 +26,7 @@ $(document).ajaxError(function (event, xhr) {
 
 $(document).on("click", ".closeAdvance", function () {
 
-    $("#advanceCard").fadeOut(300);
+    $("#exp_advanceCard").fadeOut(300);
 
 });
 
@@ -226,17 +226,17 @@ function get_exp_sum(emp_id) {
 
       if (parseFloat(total_due) != 0) {
 
-        $("#advanceCard").removeClass("d-none");
+        $("#exp_advanceCard").removeClass("d-none");
 
-        $("#amount").text("₹ " + total_due);
+        $("#exp_amount").text("₹ " + total_due);
 
         if (parseFloat(total_due) > 0) {
-          $("#advanceCard").find(".card-header").css("background-color", "#ff0000")
-          $("#message").text('Need to update expense. For the above advance amount')
+          $("#exp_advanceCard").find(".card-header").css("background-color", "#ff0000")
+          $(".message").text('Need to update expense. For the above advance amount')
         }
         else {
-          $("#advanceCard .card-header").css("background-color", "#009238")
-          $("#message").text('For the above expense amount, Amount is not yet released.')
+          $("#exp_advanceCard .card-header").css("background-color", "#009238")
+          $(".message").text('For the above expense amount, Amount is not yet released.')
         }
 
       }
