@@ -57,6 +57,7 @@ if ($result_get_empname->num_rows > 0) {
 
 if ($_FILES['file']['name'] != '') {
     $dirname = $exp_emp_id;
+
     $target_path = "../attachment/expense/" . $dirname . "/";
   
     if (!file_exists($target_path)) {
@@ -64,7 +65,7 @@ if ($_FILES['file']['name'] != '') {
     }
 
     $FileType = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));    
-    $target_path = $target_path . "attach_" . $exp_emp_id . "." . $FileType; 
+    $target_path = $target_path . "exp_" . $exp_id . "." . $FileType; 
 
     // Resize the image
     $max_width = 800;  // Set the desired width
