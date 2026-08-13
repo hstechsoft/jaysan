@@ -1203,7 +1203,6 @@ $(document).ready(function () {
     }
     else
       //console.log$('#amount').val(), $('#payment_date').val(), $('#ref_no').val(), $('#utr_no').val(), edit_sec, oid, cus_id, $('#extra_payment').val());
-console.log($('#amount').val() , $('#payment_date').val(), $('#ref_no').val(), $('#utr_no').val(), edit_sec);
 
       shw_toast("Error", "Please fill all details ", "error")
 
