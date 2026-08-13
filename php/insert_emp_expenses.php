@@ -6,7 +6,7 @@
  $exp_cat =test_input($_POST['exp_cat']);
  $exp_amount =test_input($_POST['exp_amount']);
  $exp_date =($_POST['exp_date']);
- $exp_emp_id =test_input($_POST['exp_emp_id']);
+ $exp_emp_id =($_POST['exp_emp_id']);
  $exp_work_id =test_input($_POST['exp_work_id']);
 
 
