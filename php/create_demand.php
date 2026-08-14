@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- $proces_id = isset($_POST['process_id']) ? test_input($_POST['process_id']) : '2796';
+ $proces_id = isset($_POST['proces_id']) ? test_input($_POST['proces_id']) : '2796';
  $created_by = isset($_POST['created_by']) ? test_input($_POST['created_by']) : '141';
  $plan_name = isset($_POST['plan_name']) ? test_input($_POST['plan_name']) : 'Plan for Process ID: '.$proces_id;
  $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
@@ -43,6 +43,7 @@ if ($conn->affected_rows > 0) {
 // insert into production_planner_parts table for each assign_id in $assign_id_array
 foreach ($assign_id_array as $assign_id) {
     $sql_insert_planner_parts = "INSERT INTO production_planner_parts (planner_id, assign_id) VALUES ($plan_id, $assign_id)";
+
     $conn->query($sql_insert_planner_parts);
     if ($conn->affected_rows > 0) {
         $result_json['message'] = "Inserted assign_id: $assign_id into production_planner_parts";
@@ -53,9 +54,12 @@ foreach ($assign_id_array as $assign_id) {
 
 
 $tree = buildTree($conn, $proces_id, $required_qty);
+
+
 $partIds = [];
 $processIds = [];
 collectPartIds($tree, $partIds);
+
 collectProcessIds($tree, $processIds);
 
 // Convert keys to normal array
@@ -65,6 +69,8 @@ $partIds = array_keys($partIds);
 // if partid null do not add in comma separated string
 $part_ids = [];
 $process_ids = [];
+
+
 foreach ($partIds as $key => $partId) {
     
    if (!is_null($partId) && $partId !== '' && $partId !== '0' && $partId !== 'NULL' && $partId > 0) {
@@ -78,6 +84,9 @@ $part_ids_str = implode(',', $part_ids);
 
 $processIds = array_keys($processIds);
 
+
+
+
 foreach ($processIds as $key => $processId) {
     
    if (!is_null($processId) && $processId !== '' && $processId !== '0' && $processId !== 'NULL' && $processId > 0) {
@@ -86,15 +95,19 @@ foreach ($processIds as $key => $processId) {
  
 }
 $process_ids_str = implode(',', $process_ids);
-
+$partStock = [];
+if(count($part_ids) > 0) {
 $partStock = buildPartStock($conn, $part_ids_str);
-$processStock = buildProcessStock($conn, $process_ids_str);
-
-
+}
+$processStock = [];
+if(count($process_ids) > 0) {
+    $processStock = buildProcessStock($conn, $process_ids_str);
+}
 
 $demandReserve = [];
 $demands = [];
 $summary = [];
+
 planTree($tree, $partStock, $processStock, $demandReserve, $demands, $summary);
 
 // get array as for each
@@ -146,6 +159,7 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
 }
 
 
+
 foreach ($demands as $key => $value) {
      $process_id = sql_nullable($value['process_id']);
     $qty = $value['qty'];
@@ -153,7 +167,9 @@ foreach ($demands as $key => $value) {
 
     // insert into demands table if not exist else update qty = qty + $qty
     $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
+  
     $conn->query($sql_insert_demand);
+  
     if ($conn->affected_rows > 0) {
         $result_json['message'] = "Inserted demand for Process ID: $process_id, Quantity: $qty";
     }
@@ -162,6 +178,8 @@ foreach ($demands as $key => $value) {
             throw new Exception("Error inserting demand for Process ID: $process_id, Quantity: $qty: " . $conn->error);
         }
 }
+
+
     
 $conn->commit();
 $result_json['success'] = true;
