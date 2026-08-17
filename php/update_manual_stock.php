@@ -46,13 +46,6 @@ if ($result->num_rows > 0) {
 }
 
 
-if($part_id == "null" || $part_id == null || $part_id == "NULL")
-{
-}
-else
-    {
-        $process_id = "NULL";
-    }
     {
 
 $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  qty + $qty, remark = '$remark' ";
@@ -62,8 +55,17 @@ $stock_id = 0;
   if ($conn->query($sql) === TRUE) {
 
     $stock_id = $conn->insert_id;
-    echo "ok";
- 
+
+
+   require_once 'stock_distribution.php';
+   
+   $result = stock_distribution($conn,$stock_id,$qty,$process_id);
+echo "\n result:".$result;
+   if ($result) {
+    //    echo "ok";
+   } else {
+       echo "error distributing stock".$result;
+   }
 
 
 
