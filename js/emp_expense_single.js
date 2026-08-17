@@ -322,6 +322,9 @@ $(document).ready(function () {
     var description = $("#exp_description").val();
     var amount = $("#exp_amount").val();
 
+    console.log(category, date, amount);
+    
+
     if (category == null || date == "" || amount == "") {
       salert("Warning", "Data missing", "warning");
       return;
