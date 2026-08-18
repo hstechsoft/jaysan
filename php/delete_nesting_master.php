@@ -19,6 +19,9 @@ return $data;
  $sql =  "DELETE  FROM nesting_master WHERE nes_master_id =  $nes_master_id";
 
   if ($conn->query($sql) === TRUE) {
+
+  // delete if any attachments in folder 
+
    echo "ok";
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

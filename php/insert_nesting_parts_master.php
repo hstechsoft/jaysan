@@ -20,6 +20,7 @@ return $data;
 
       $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty) VALUES ($nes_master_id, $part_id, $qty)";
       if ($conn->query($sql_insert_parts) === TRUE) {
+        echo "ok";
       } else {
         echo "Error: " . $sql_insert_parts . "<br>" . $conn->error;
       }
