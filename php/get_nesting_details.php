@@ -85,8 +85,8 @@ group by
             nest_part.part_name
         )
     ) as nesting_parts_details,
-     total_assigned_qty,
-     remaining_qty,
+     ifnull(total_assigned_qty, 0) as total_assigned_qty,
+     ifnull(remaining_qty, 0) as remaining_qty,
     laser_assigned_details
     from
     nesting_details nd
