@@ -1,7 +1,6 @@
 <?php
  include 'db_head.php';
 
-$nes_master_id = test_input($_GET['nes_master_id']);
 $nes_part_id = test_input($_GET['nes_part_id']);
 
  
