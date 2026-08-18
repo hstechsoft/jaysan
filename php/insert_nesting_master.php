@@ -38,7 +38,7 @@ foreach ($laser_parts as $parts) {
       $qty = $parts['qty'];
 
       $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty) VALUES ($nes_master_id, $part_id, $qty)";
-      echo $sql_insert_parts;
+     
       if ($conn->query($sql_insert_parts) === TRUE) {
       } else {
         throw new Exception("Error: " . $sql_insert_parts . "<br>" . $conn->error);
