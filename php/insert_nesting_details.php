@@ -30,12 +30,13 @@ try {
 
 // get nesting id from nesting_master table if exists else insert new record in nesting_master table and get id
 $nesting_id = 0;
-$sql_check_nesting = "SELECT nesting_id FROM nesting_master WHERE nesting_name = $nesting_name";
+$sql_check_nesting = "SELECT nes_master_id FROM nesting_master WHERE nesting_name = $nesting_name";
  $result_check_nesting = $conn->query($sql_check_nesting);
 if ($result_check_nesting->num_rows > 0) {
     $row = $result_check_nesting->fetch_assoc();
-    $nesting_id = $row['nesting_id'];
+    $nesting_id = $row['nes_master_id'];
 } 
+
  
 
 // if no nesting id found then insert new record in nesting_master table and get id
