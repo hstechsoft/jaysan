@@ -31,7 +31,27 @@ return $data;
 }
 
 
- $sql = "select
+ $sql = "with nesting_assign as (
+ select JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'assign_date', laser_job_card.assign_date,
+            'shift', laser_job_card.shift,
+            'machine_id', laser_job_card.machine_id,
+            'assigned_by', laser_job_card.assigned_by,
+            'status', laser_job_card.status,
+            'scarp_weight', laser_job_card.scarp_weight,
+            'job_card_id', laser_job_card.job_card_id,
+            'scarp_qty', laser_job_card.scarp_qty
+        )
+    ) as laser_assigned_details, nes_work.material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, sum(ifnull(laser_job_card.qty, 0)) - ifnull(nes_work.material_qty, 0) as remaining_qty, nes_work.nesting_id
+from
+    laser_job_card
+    inner join nesting_details nes_work on laser_job_card.nesting_details_id = nes_work.nesting_details_id
+group by
+    nes_work.nesting_id
+ )
+    
+ select
     nd.created_by,
     nd.material_qty,
     nd.nesting_details_id,
@@ -56,8 +76,13 @@ return $data;
             'part_name',
             nest_part.part_name
         )
-    ) as nesting_parts_details  from
+    ) as nesting_parts_details,
+     total_assigned_qty,
+     remaining_qty,
+    laser_assigned_details,
+    from
     nesting_details nd
+    left join nesting_assign na on nd.nesting_id = na.nesting_id
     left join nesting_master mas on nd.nesting_id = mas.nes_master_id
     left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
