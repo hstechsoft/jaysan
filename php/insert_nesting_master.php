@@ -75,7 +75,7 @@ $target_path = $target_path . "laser_" . $nes_master_id . "." . $FileType;
 
 
         if(move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
-            echo  "File Uploaded Successfully";
+          
             // update path in db
             $sql_update_master = "UPDATE nesting_master SET path = 'attachment/laser/nesting/laser_" . $nes_master_id . "." . $FileType . "' WHERE nes_master_id = $nes_master_id";
   
@@ -93,7 +93,7 @@ $target_path = $target_path . "laser_" . $nes_master_id . "." . $FileType;
 
 // commint transaction
 $conn->commit();
-
+echo "ok";
 }
 catch(Exception $e)
 {
