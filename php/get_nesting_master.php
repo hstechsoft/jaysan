@@ -37,13 +37,23 @@ nesting_master.path,
 nesting_master.run_time,
 nesting_master.nesting_type,
 nesting_master.std_length,
-employee.emp_name as created_by_name
+employee.emp_name as created_by_name,
+JSON_ARRAYAGG(JSON_OBJECT(
+  
+    'godown_name', stock_full_view.godown_name,
+    'dep_name', stock_full_view.dep_name,
+    'sec_name', stock_full_view.sec_name,
+    'available_qty', stock_full_view.available_qty,
+    'reserves', stock_full_view.reserves
+)) as stock_info
 
  from nesting_parts
 left join nesting_master on nesting_parts.nesting_id = nesting_master.nes_master_id
 left join parts_tbl nes_part on nes_part.part_id = nesting_master.material_id
-LEFT join employee on nesting_master.created_by = employee.emp_id 
+LEFT join employee on nesting_master.created_by = employee.emp_id
+left join stock_full_view on nesting_master.material_id = stock_full_view.part_id
 where $master_query
+group by nesting_parts.nesting_id
 ";
 
 $result = $conn->query($sql);
