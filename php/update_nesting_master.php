@@ -26,7 +26,7 @@ return $data;
   if ($conn->query($sql_insert_master) === TRUE) {
 echo "ok";
   } else {
-   echo "Error: " . $sql_insert_master . "<br>" . $conn->error;
+   echo "Error: duplicate entry for nesting name. Please use a different name."; ;
   }
 
 
