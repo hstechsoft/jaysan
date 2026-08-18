@@ -24,12 +24,17 @@ try {
  $sql_insert_master = "UPDATE nesting_master SET created_by = $created_by, nesting_name = $nesting_name, material_id = $material_id, nesting_type = $nesting_type, std_length = $std_length, run_time = $run_time WHERE nes_master_id = $nes_master_id";
 
   if ($conn->query($sql_insert_master) === TRUE) {
-    echo "ok";
+
   } else {
     throw new Exception("Error: " . $sql_insert_master . "<br>" . $conn->error);  
   }
+
+  $conn->commit();
+      echo "ok";
 } catch (Exception $e) {
   echo 'Message: ' .$e->getMessage();
+  // rollback transaction
+  $conn->rollback();
 }
 
 
