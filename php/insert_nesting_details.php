@@ -105,7 +105,7 @@ $target_path = $target_path . "laser_" . $nesting_id . "." . $FileType;
    throw new Exception("Error: " . $sql_update_master . "<br>" . $conn->error);
   }
         } else{
-            echo "There was an error uploading the file, please try again!";
+            throw new Exception("Sorry, there was an error uploading your file.");
         }
 
         
@@ -156,15 +156,12 @@ $target_path = $target_path . "laser_" . $nesting_id . "." . $FileType;
 //     throw new Exception("Error updating record: " . $conn->error);
 // }
 
-$response['status'] = 'success';
+echo "ok";
 
 $conn->commit();
-echo json_encode($response);
 } catch (Exception $e) {
-    $response['status'] = 'error';
-    $response['message'] = $e->getMessage();
+    echo "Error: " . $e->getMessage();
     $conn->rollback();
-    echo json_encode($response);
 }
 $conn->close();
 
