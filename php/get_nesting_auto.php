@@ -20,7 +20,7 @@ $nesting_name  = "%" .  $nesting_name ."%";
 
 
 
-$sql = "select * from  nesting_master WHERE nesting_id LIKE  '$nesting_name'";
+$sql = "select * from  nesting_master WHERE nesting_name LIKE  '$nesting_name'";
 
 
 $result = $conn->query($sql);
