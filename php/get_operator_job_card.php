@@ -4,9 +4,22 @@ $shift = test_input($_GET['shift']);
 $machine_id = test_input($_GET['machine_id']);
 $status = test_input($_GET['status']);
 $status_query = 1;
+$shift_query = 1;
+$machine_id_query = 1;
+
 if($status != 'all'){
   $status_query = "laser_job_card.status = '$status'";
 }
+
+if($shift != 'all'){
+  $shift_query = "laser_job_card.shift = '$shift'";
+}
+
+if($machine_id != 'all'){
+  $machine_id_query = "laser_job_card.machine_id = $machine_id";
+}
+
+
 
 function test_input($data) {
 $data = trim($data);
@@ -31,7 +44,7 @@ nesting_view.*
 
 from
    laser_job_card
-    left join  nesting_view on nesting_view.nesting_details_id = laser_job_card.nesting_details_id where laser_job_card.shift = '$shift' and laser_job_card.machine_id = $machine_id and $status_query";
+    left join  nesting_view on nesting_view.nesting_details_id = laser_job_card.nesting_details_id where $shift_query and $machine_id_query and $status_query";
 
 $result = $conn->query($sql);
 
