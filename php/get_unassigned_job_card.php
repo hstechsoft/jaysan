@@ -69,7 +69,7 @@ group by
     left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
     left join parts_tbl mat_part on mas.material_id = mat_part.part_id
-    left join employee emp on nd.created_by = emp.emp_id where remaining_qty > 0";
+    left join employee emp on nd.created_by = emp.emp_id where  ifnull(remaining_qty, 0) > 0";
 
 $result = $conn->query($sql);
 
