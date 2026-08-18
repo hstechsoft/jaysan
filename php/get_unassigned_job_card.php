@@ -24,7 +24,7 @@ return $data;
             'job_card_id', laser_job_card.job_card_id,
             'scarp_qty', laser_job_card.scarp_qty
         )
-    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, sum(ifnull(laser_job_card.qty, 0)) - ifnull(nes_work.material_qty, 0) as remaining_qty, nes_work.nesting_id
+    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, ifnull(sum(ifnull(laser_job_card.qty, 0)), 0) as total_assigned_qty, ifnull(sum(ifnull(laser_job_card.qty, 0)) - ifnull(nes_work.material_qty, 0), 0) as remaining_qty, nes_work.nesting_id
 from
     laser_job_card
     inner join nesting_details nes_work on laser_job_card.nesting_details_id = nes_work.nesting_details_id
@@ -59,8 +59,8 @@ group by
             nest_part.part_name
         )
     ) as nesting_parts_details,
-    ifnull(total_assigned_qty, 0) as total_assigned_qty,
-    ifnull(remaining_qty, 0) as remaining_qty,
+     ifnull(total_assigned_qty, 0) as total_assigned_qty,
+     ifnull(remaining_qty, 0) as remaining_qty,
     laser_assigned_details
     from
     nesting_details nd
@@ -69,7 +69,8 @@ group by
     left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
     left join parts_tbl mat_part on mas.material_id = mat_part.part_id
-    left join employee emp on nd.created_by = emp.emp_id where  ifnull(remaining_qty, 0) > 0 group by nd.nesting_id";
+    left join employee emp on nd.created_by = emp.emp_id
+  WHERE 1 group by nd.nesting_id";
 
 $result = $conn->query($sql);
 
