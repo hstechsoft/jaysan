@@ -79,7 +79,7 @@ group by
     ) as nesting_parts_details,
      total_assigned_qty,
      remaining_qty,
-    laser_assigned_details,
+    laser_assigned_details
     from
     nesting_details nd
     left join nesting_assign na on nd.nesting_id = na.nesting_id
