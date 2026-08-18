@@ -27,7 +27,8 @@ return $data;
         laser_job_card
         
         inner join jaysan_machine on laser_job_card.machine_id = jaysan_machine.jmid
-        inner join employee on laser_job_card.assigned_by = employee.emp_id WHERE laser_job_card.machine_id = $machine_id and laser_job_card.shift = '$shift' and laser_job_card.status = 'created' ORDER by laser_job_card.job_card_id ASC LIMIT 1
+        inner join employee on laser_job_card.assigned_by = employee.emp_id WHERE laser_job_card.machine_id = $machine_id and laser_job_card.shift = '$shift' and laser_job_card.status = 'created' ORDER by laser_job_card.job_card_id ASC 
+        -- LIMIT 1
 )
 SELECT
  machine_id,
