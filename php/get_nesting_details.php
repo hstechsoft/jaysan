@@ -9,6 +9,9 @@ $nesting_name_query = 1;
 $material_id = test_input($_GET['material_id']);
 $material_id_query = 1;
 
+$remaining_qty_query = 1;
+$remaining_qty = test_input($_GET['remaining_qty']);
+
 if($created_by != ''){
     $created_by_query = "mas.created_by = $created_by";
 }
@@ -21,6 +24,10 @@ if($material_id != ''){
     $material_id_query = "mas.material_id = $material_id";
 }
  
+
+if($remaining_qty > 0){
+    $remaining_qty_query = "remaining_qty > 0";
+}
  
 function test_input($data) {
 $data = trim($data);
@@ -89,7 +96,7 @@ group by
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
     left join parts_tbl mat_part on mas.material_id = mat_part.part_id
     left join employee emp on nd.created_by = emp.emp_id
-  WHERE $created_by_query and $nesting_name_query and $material_id_query  group by nd.nesting_id";
+  WHERE $created_by_query and $nesting_name_query and $material_id_query and $remaining_qty_query group by nd.nesting_id";
 
 
 $result = $conn->query($sql);
