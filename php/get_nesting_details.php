@@ -63,6 +63,7 @@ group by
     mas.nesting_name,
     mas.material_id,
     mas.path,
+    mas.nesting_type,
     mas.std_length,
     mas.run_time,
     JSON_ARRAYAGG(
