@@ -50,10 +50,10 @@ return $data;
             'job_card_id', laser_job_card.job_card_id,
             'scarp_qty', laser_job_card.scarp_qty
         )
-    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, ifnull(sum(ifnull(laser_job_card.qty, 0)), 0) as total_assigned_qty, ifnull(sum(ifnull(laser_job_card.qty, 0)) - ifnull(nes_work.material_qty, 0), 0) as remaining_qty, nes_work.nesting_id
+    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, ifnull(nes_work.material_qty, 0) - sum(ifnull(laser_job_card.qty, 0))  as remaining_qty, nes_work.nesting_id
 from
-    laser_job_card
-    inner join nesting_details nes_work on laser_job_card.nesting_details_id = nes_work.nesting_details_id
+   nesting_details nes_work
+    left join  laser_job_card  on laser_job_card.nesting_details_id = nes_work.nesting_details_id
 group by
     nes_work.nesting_id
  )
