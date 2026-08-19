@@ -11,11 +11,11 @@ button, select{
   text-transform: capitalize;
 }
 td:hover {
-  background-color: rgb(255, 210, 143) !important;
+  background-color: rgb(126 178 255) !important;
 }
 
 tr:hover {
-  background-color: rgb(255, 234, 204) !important;
+  background-color: rgb(214 223 242) !important;
 }
 
 
@@ -485,7 +485,8 @@ body {
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
+  /* left: 0; */
   /* width: var(--sidebar-collapsed-w); */
   width: 52px;
   height: 100vh;
@@ -686,8 +687,10 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 .flyout {
   position: absolute;
   top: -15px;
-  left: 100%;
-  margin-left: 0px;
+  /* left: 100%;
+  margin-left: 0px; */
+  right: 100%;
+  margin-right: 0px;
   width: 240px;
   background: #fff;
   border-radius: 8px;
@@ -728,8 +731,10 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 .sub-flyout {
   position: absolute;
   top: 0;
-  left: 100%;
-  margin-left: 0px;
+  right: 100%;
+  margin-right: 0px;
+  /* left: 100%;
+  margin-left: 0px; */
   width: 210px;
   background: #fff;
   border-radius: 8px;
@@ -772,7 +777,8 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 /* ARROW ROTATION */
 .arrow {
-  margin-left: auto;
+  margin-right: auto;
+  /* margin-left: auto; */
   transition: transform var(--transition);
 }
 
@@ -811,13 +817,16 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
 
 .page-wrapper {
   padding-top: 10px;
+  margin-right: 0px;
+  transition: margin-right var(--transition);
   margin-left: 0px;
   transition: margin-left var(--transition);
 }
 
 
 .sidebar .expanded:hover~.page-wrapper {
-  margin-left: 285px !important;
+  margin-right: 285px !important;
+  /* margin-left: 285px !important; */
 }
 
 #page_start {
@@ -1004,7 +1013,8 @@ aside.sidebar:not(.expanded) .sidebar-user-info {
   }
 
   .page-wrapper {
-    margin-left: 0px !important;
+    margin-right: 0px !important;
+    /* margin-left: 0px !important; */
   }
 }
 

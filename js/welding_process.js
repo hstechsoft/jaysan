@@ -1510,6 +1510,7 @@ $(document).ready(function () {
                   <td>${extra_obj.dep_sec_machine_name}</td>
                   <td><span class='badge bg-secondary'>${extra_obj.min_time}</span> <span class='badge bg-primary'>${extra_obj.max_time}</span></td>
                   <td>${extra_obj.cost}</td>
+                  <td>${extra_obj.qty}</td>
                   <td>
                     <i class='fa fa-pen pe-2 text-warning edit_extra btn' data-wtid=${extra_obj.wtid}></i>
                     <i class='fa fa-trash text-danger delete_extra btn' data-wtid=${extra_obj.wtid}></i>
@@ -2233,6 +2234,7 @@ $(document).ready(function () {
           <td>${machine}</td>
           <td>${min} ${max}</td>
           <td>${cost}</td>
+          <td></td>
           <td>
             <i class='fa fa-pen pe-2 text-warning edit_extra btn'></i>
             <i class='fa fa-trash text-danger delete_extra btn'></i>
@@ -2264,7 +2266,13 @@ $(document).ready(function () {
     var max = $("#max_time").val();
     var cost = $("#cost").val();
 
+    var openning_stock = $("#openning_stock").val() || 0;
+
     var is_default = $("#is_default").is(":checked") ? 1 : 0;
+
+    if(godown_id && openning_stock >=0 && ori_process_id){
+      update_manual_stock(openning_stock, ori_process_id, godown_id, depart_id, section_id);
+    }
 
     if (godown_id && process_id && ori_process_id) {
 
@@ -2819,6 +2827,45 @@ function update_work_time_master1(process_id, ori_process_id, godown_id, depart_
       if (response.trim() == "ok") {
 
         shw_toast("Success", "Updated Successfully!");
+        get_bom_process_details1($("#ma_name").data("pro_id"));
+      }
+      else {
+        salert("Warning", response, "warning");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+}
+
+function update_manual_stock(openning_stock, ori_process_id, godown_id, depart_id, section_id) {
+
+  console.log(openning_stock, ori_process_id, godown_id, depart_id, section_id);
+
+
+  $.ajax({
+    url: "php/update_manual_stock.php",
+    type: "post", //send it through get method
+    data: {
+      process_id: ori_process_id,
+      dep: depart_id,
+      sec: section_id,
+      godown: godown_id,
+      qty: openning_stock,
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        shw_toast("Success", "Openning Stock Updated Successfully!");
         get_bom_process_details1($("#ma_name").data("pro_id"));
       }
       else {

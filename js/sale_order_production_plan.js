@@ -97,7 +97,7 @@ $(document).ready(function () {
 
     });
 
-    console.log(plan_name, selected_qty, process_id, assign_id.length);
+    console.log("P "+ plan_name, "s "+ selected_qty, "pi "+process_id, "a "+ assign_id.length);
     
 
     if (plan_name && selected_qty && process_id && assign_id.length > 0) {

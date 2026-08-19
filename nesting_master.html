@@ -21,6 +21,12 @@
 
     <style>
 
+        table td,
+        tr{
+            text-align: center;
+            vertical-align: middle;
+        }
+
     </style>
 
 
@@ -69,7 +75,7 @@
                         <div class="row g-2">
 
                             <!-- Nesting -->
-                            <div class="col-md-6">
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-object-group"></i>
@@ -91,7 +97,7 @@
                             </div>
 
                             <!-- Standard Length -->
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-tape"></i>
@@ -99,7 +105,7 @@
                                     <input type="number" class="form-control" id="std_length"
                                         placeholder="Standard Length" required>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Runtime -->
                             <div class="col-md-6">
@@ -107,34 +113,34 @@
                                     <span class="input-group-text">
                                         <i class="fa-regular fa-clock"></i>
                                     </span>
-                                    <input type="number" class="form-control" id="run_time" placeholder="Run Time (Min)"
+                                    <input type="number" class="form-control" id="run_time" placeholder="Run Time (In Min)"
                                         required>
                                 </div>
                             </div>
 
-                            <!-- Size -->
+                            <!-- Dimension -->
                             <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-ruler-combined"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="size" placeholder="Size" required>
+                                    <input type="text" class="form-control" id="dimension" placeholder="Dimension" required>
                                 </div>
                             </div>
 
                             <!-- Product -->
-                            <div class="col-12">
+                            <!-- <div class="col-12 ">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-box-open"></i>
                                     </span>
                                     <input type="text" class="form-control" id="product" placeholder="Product" required>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <!-- File -->
-                            <div class="col-12">
+                            <div class="col-md-8">
                                 <label class="small fw-semibold text-danger mb-1">
                                     <i class="fa-solid fa-file-pdf me-1"></i>
                                     Upload PDF Only
@@ -142,6 +148,12 @@
 
                                 <input type="file" class="form-control form-control-sm" id="nest_file">
                             </div>
+
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-small btn-primary d-none" id="view_file"><i class="fa-solid fa-file-lines"></i> View File</button>
+                            </div>
+
+
 
                         </div>
 
@@ -162,7 +174,7 @@
                                 </div>
 
                                 <div class="col-5">
-                                    <input type="text" class="form-control form-control-sm" id="nested_part_qty"
+                                    <input type="number" min="1" class="form-control form-control-sm" id="nested_part_qty"
                                         placeholder="Qty">
                                 </div>
 
@@ -179,8 +191,8 @@
 
                         <!-- Table -->
                         <div class="table-responsive mt-3" style="max-height: 30vh; overflow-y: auto;">
-                            <table class="table table-sm table-hover text-center align-middle border">
-                                <thead class="table-primary"
+                            <table class="table table-sm table-hover text-center align-middle border small">
+                                <thead class="table-primary small"
                                     style=" position: sticky;  z-index: 5; top: 0; background-color: rgb(193, 216, 236);">
                                     <tr>
                                         <th>
@@ -200,7 +212,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody id="nesting_parts_tbody"></tbody>
+                                <tbody id="nesting_parts_tbody" class="small"></tbody>
 
                             </table>
                         </div>
@@ -236,22 +248,21 @@
                     <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
-                            <thead style="position: sticky; z-index: 5; top: 0; background-color: rgb(214, 229, 241);">
+                            <thead class="small" style="position: sticky; z-index: 5; top: 0; background-color: rgb(214, 229, 241);">
 
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nesting Name</th>
                                     <th scope="col">Material</th>
-                                    <th scope="col">Standard Length</th>
-                                    <th scope="col">Process Time</th>
-                                    <th scope="col">Size</th>
-                                    <th scope="col">Product</th>
+                                    <th scope="col">Run Time</th>
+                                    <th scope="col">Dimension</th>
+                                    <th scope="col">Type</th>
                                     <th scope="col">Nested Parts</th>
                                     <th scope="col">Action</th>
 
                                 </tr>
                             </thead>
-                            <tbody id="nesting_details_tbody">
+                            <tbody class="small" id="nesting_details_tbody">
 
 
 

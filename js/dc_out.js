@@ -1717,7 +1717,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
             console.log(response);
             console.log(typeof response);
 
-            var le = response;
+            var le = JSON.parse(response);
 
             le.forEach(function (i) {
 
@@ -1726,6 +1726,8 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
                     const project = window.location.pathname.split('/')[1];
 
+                    console.log(`${window.location.origin}/${project}/${i.download_url}`);
+                    
                     window.open(`${window.location.origin}/${project}/${i.download_url}`, '_blank');
 
                     setTimeout(() => {

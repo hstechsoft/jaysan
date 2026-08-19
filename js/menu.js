@@ -26,7 +26,7 @@ $(document).ajaxError(function (event, xhr) {
 
 $(document).on("click", ".closeAdvance", function () {
 
-    $("#exp_advanceCard").fadeOut(300);
+  $("#exp_advanceCard").fadeOut(300);
 
 });
 
@@ -54,7 +54,12 @@ $(document).ready(function () {
       .addClass("btn-danger fw-bold");
   }
 
-
+// To stop the number increase and decrease action in input number field
+  $('input[type="number"]').on('wheel', function (e) {
+    if (document.activeElement === this) {
+      e.preventDefault();
+    }
+  });
 
 
 
@@ -65,11 +70,11 @@ $(document).ready(function () {
 
       if (sidebarState == "1") {
         $("#normal_view").removeClass("d-none");
-        $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
+        $(".page-wrapper").css("margin-right", "var(--sidebar-collapsed-w)");
         $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
       } else {
         $("#normal_view").addClass("d-none");
-        $(".page-wrapper").css("margin-left", "0px");
+        $(".page-wrapper").css("margin-right", "0px");
         $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
       }
 
@@ -79,12 +84,12 @@ $(document).ready(function () {
         if (!$("#normal_view").hasClass("d-none")) {
 
           localStorage.setItem("sidebar_state", "1");
-          $(".page-wrapper").css("margin-left", "var(--sidebar-collapsed-w)");
+          $(".page-wrapper").css("margin-right", "var(--sidebar-collapsed-w)");
           $("#fa-bars i").removeClass("fa-bars").addClass("fa-times");
         }
         else {
           localStorage.setItem("sidebar_state", "0");
-          $(".page-wrapper").css("margin-left", "0px");
+          $(".page-wrapper").css("margin-right", "0px");
           $("#fa-bars i").removeClass("fa-times").addClass("fa-bars");
         }
       });

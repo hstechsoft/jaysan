@@ -54,11 +54,11 @@ $(document).ready(function () {
 
     $("#nesting_job_card_tbody, .nesting_job_card_mobile").on("click", ".allocate_btn", function () {
         let machine_id = $(this).data("machine_id");
-        let nesting_id = $(this).data("nesting_id");
+        let nesting_details_id = $(this).data("nesting_details_id");
 
-        if (machine_id && nesting_id) {
+        if (machine_id && nesting_details_id) {
             $("#assign_Work_btn").data("machine_id", machine_id)
-            $("#assign_Work_btn").data("nesting_id", nesting_id)
+            $("#assign_Work_btn").data("nesting_details_id", nesting_details_id)
 
             $("#assignWorkModal").modal("show");
         }
@@ -70,16 +70,16 @@ $(document).ready(function () {
     $("#assign_Work_btn").on("click", function () {
 
         let machine_id = $("#machine").val();
-        let nesting_id = $(this).data("nesting_id");
+        let nesting_details_id = $(this).data("nesting_details_id");
         let shift = $("#shift").val();
         let assign_date = $("#assign_date").val();
         let qty = $("#qty").val();
 
-        console.log(machine_id, shift, assign_date, current_user_id, nesting_id);
+        console.log(machine_id, shift, assign_date, current_user_id, nesting_details_id);
 
-        if (machine_id > 0 && nesting_id > 0 && shift && assign_date && qty > 0) {
+        if (machine_id > 0 && nesting_details_id > 0 && shift && assign_date && qty > 0) {
 
-            laser_job_card_create(machine_id, shift, assign_date, current_user_id, nesting_id, qty);
+            laser_job_card_create(machine_id, shift, assign_date, current_user_id, nesting_details_id, qty);
         }
         else {
             salert("Warning", "Data Missing!, Try Later.", "warning");
@@ -87,7 +87,7 @@ $(document).ready(function () {
 
     })
 
-    $(".close_model_btn").on("click", function(){
+    $(".close_model_btn").on("click", function () {
 
         $("#machine").val('');
         $("#shift").val('');
@@ -99,9 +99,9 @@ $(document).ready(function () {
 
 
 
-function laser_job_card_create(machine_id, shift, assign_date, assigned_by, nesting_id, qty) {
+function laser_job_card_create(machine_id, shift, assign_date, assigned_by, nesting_details_id, qty) {
 
-    console.log(machine_id, shift, assign_date, assigned_by, nesting_id, qty);
+    console.log(machine_id, shift, assign_date, assigned_by, nesting_details_id, qty);
 
     $.ajax({
         url: "php/laser_job_card_create.php",
@@ -111,7 +111,7 @@ function laser_job_card_create(machine_id, shift, assign_date, assigned_by, nest
             shift: shift,
             assign_date: assign_date,
             assigned_by: assigned_by,
-            nesting_id: nesting_id,
+            nesting_details_id: nesting_details_id,
             qty: qty,
         },
         success: function (response) {
@@ -153,7 +153,6 @@ function get_unassigned_job_card(show_all) {
                     obj.forEach(function (item, index) {
                         index++;
 
-                        let filePath = item.path.replace(/.*nesting[\\/]/, 'nesting/');
 
 
                         $("#nesting_job_card_tbody").append(`
@@ -162,16 +161,17 @@ function get_unassigned_job_card(show_all) {
                                 <td>${item.nesting_name}</td>
                                 <td>${item.material_name}</td>
                                 <td>
-                                    <span class='badge bg-success'>Remaining: ${item.remaining_qty}</span>
-                                    <span class='badge bg-secondary'>Total: ${item.material_qty}</span>
+                                    <span class='badge bg-success'>Total: ${item.material_qty}</span>
+                                    <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
+                                    <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
                                 </td>
                                 <td>${item.run_time}</td>
-                                <td>${item.product}</td>
+                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</td>
                                 <td>${item.emp_name}</td>
                                 <td>
-                                    <button class="btn btn-outline-primary view_btn" data-path="${filePath}">View</button>
-                                    <button class="btn btn-outline-secondary allocate_btn" 
-                                        data-nesting_id="${item.nesting_id}" 
+                                    <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
+                                    <button class="btn btn-outline-secondary btn-sm allocate_btn" 
+                                        data-nesting_details_id="${item.nesting_details_id}" 
                                         data-machine_id="${item.machine_id}">
                                         Allocate
                                     </button>
@@ -192,8 +192,9 @@ function get_unassigned_job_card(show_all) {
                                     <div class="small text-muted mb-2">${item.material_name}</div>
 
                                     <div class="mb-2">
-                                        <span class='badge bg-success'>Remain: ${item.remaining_qty}</span>
-                                        <span class='badge bg-secondary'>Total: ${item.material_qty}</span>
+                                        <span class='badge bg-success'>Total: ${item.material_qty}</span>
+                                        <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
+                                        <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
                                     </div>
 
                                     <div class="d-flex justify-content-between small mb-2">
@@ -202,15 +203,15 @@ function get_unassigned_job_card(show_all) {
                                     </div>
 
                                     <div class="small mb-2">
-                                        📦 ${item.product}
+                                        <span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}
                                     </div>
 
                                     <div class="d-flex gap-2">
-                                        <button class="btn btn-sm btn-primary w-50 view_btn" data-path="${filePath}">
+                                        <button class="btn btn-sm btn-primary w-50 view_btn btn-sm" data-path="${item.path}">
                                             View
                                         </button>
-                                        <button class="btn btn-sm btn-secondary w-50 allocate_btn" 
-                                            data-nesting_id="${item.nesting_id}" 
+                                        <button class="btn btn-sm btn-secondary w-50 allocate_btn btn-sm" 
+                                            data-nesting_details_id="${item.nesting_details_id}" 
                                             data-machine_id="${item.machine_id}">
                                             Allocate
                                         </button>

@@ -818,6 +818,12 @@ function update_expenses(data) {
           if (response.trim() == "ok") {
 
             $("#status").trigger("change");
+            $("#exp_date").val('');
+            $("#exp_category").val('');
+            $("#exp_amount").val('');
+            $("#exp_description").val('');
+            $("#bill_image").val('');
+            $("#preview_bill_image").prop('src', 'no_image.jpg');
 
             if (button_type == 0) {
               get_expenses_single(exp_date)

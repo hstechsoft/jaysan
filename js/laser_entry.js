@@ -33,14 +33,75 @@ $(document).ready(function () {
     });
 
     check_login();
+    get_nesting_master1('');
+    get_nesting_details('');
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
+    $('#nesting_name').on('input', function () {
+
+        $(this).data("nesting_id", '');
+
+
+        //check the value not empty
+        if ($('#nesting_name').val() != "") {
+            $('#nesting_name').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_nesting_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            nesting_name: $("#nesting_name").val(),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.nesting_name,
+                                    value: item.nesting_name,
+                                    id: item.nes_master_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("nesting_id", ui.item.id);
+                    get_nesting_master1(ui.item.id);
+                    get_nesting_master_single1(ui.item.id)
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    console.log(ui.item.id);
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     $('#material_id').on('input', function () {
 
 
-        $(this).data("material_id", '');
+        $(this).data("part_id", '');
 
 
         //check the value not empty
@@ -79,7 +140,7 @@ $(document).ready(function () {
                 cacheLength: 0,
                 select: function (event, ui) {
 
-                    $(this).data("material_id", ui.item.id);
+                    $(this).data("part_id", ui.item.id);
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     console.log(ui.item.id);
@@ -159,9 +220,9 @@ $(document).ready(function () {
 
     $("#nest_file").on("change", function () {
         var file = this.files[0];
-        
+
         if (file && file.type === "application/pdf") {
-            
+
         }
         else {
             $("#nest_file").val("");
@@ -186,7 +247,7 @@ $(document).ready(function () {
         else if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && update_btn == 1) {
 
 
-            $("#nesting_parts_tbody").append(`<tr data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td><button class='btn btn-danger delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
+            $("#nesting_parts_tbody").append(`<tr data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td><button class='btn btn-outline-danger btn-sm delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
 
 
             $("#nested_parts").val('');
@@ -227,11 +288,11 @@ $(document).ready(function () {
 
     $("#add_nesting_btn").on("click", function () {
 
-        let nesting_name = $("#nesting_name").val();
-        let material_id = $("#material_id").data("material_id");
-        let material_qty = $("#material_qty").val();
-        let run_time = $("#run_time").val();
-        let product = $("#product").val();
+        let nesting_name = $("#nesting_name").val() || '';
+        let material_id = $("#material_id").data("part_id") || 0;
+        let material_qty = $("#material_qty").val() || 0;
+        let run_time = $("#run_time").val() || 0;
+        let std_length = $("#dimension").val() || '';
         let created_by = current_user_id;
         let nested_arr = [];
 
@@ -239,16 +300,16 @@ $(document).ready(function () {
             $("#nesting_parts_tbody tr").each(function () {
                 nested_arr.push({
                     part_id: $(this).data("part_id"),
-                    quantity: $(this).find("td").eq(1).text().trim()
+                    qty: $(this).find("td").eq(1).text().trim()
                 })
             })
         }
 
-        console.log(nested_arr);
+        console.log(nesting_name, material_id, material_qty, run_time, std_length, nested_arr);
 
         let file = $("#nest_file")[0].files[0];
 
-        if (nesting_name && material_id && material_qty && run_time && product && nested_arr.length > 0 && file) {
+        if (nesting_name != '' && material_id > 0 && material_qty > 0 && run_time > 0 && std_length != '' && nested_arr.length > 0) {
 
             let formData = new FormData();
 
@@ -257,10 +318,11 @@ $(document).ready(function () {
             formData.append("material_id", material_id);
             formData.append("material_qty", material_qty);
             formData.append("run_time", run_time);
-            formData.append("product", product);
+            formData.append("nesting_type", 'temp');
+            formData.append("std_length", std_length);
 
 
-            formData.append("nesting_parts", JSON.stringify(nested_arr));
+            formData.append("laser_parts", JSON.stringify(nested_arr));
 
             formData.append("file", file);
 
@@ -276,9 +338,8 @@ $(document).ready(function () {
 
 
 
-    get_nesting_details();
 
-    $("#nesting_details_tbody").on("click", ".view_btn", function () {
+    $("#work_nesting_details_tbody").on("click", ".view_btn", function () {
         let path = $(this).data("path");
 
         // open in new tab
@@ -287,58 +348,42 @@ $(document).ready(function () {
 
     $("#nesting_details_tbody").on("click", ".edit_btn", function () {
 
-        $("#add_nesting_btn").addClass('d-none');
-        $("#update_nesting_btn").removeClass('d-none');
+        var nes_master_id = $(this).val() || 0;
 
-        var nesting_parts_details = $(this).data("nesting_parts_details");
-
-        if (typeof nesting_parts_details === "string") {
-            nesting_parts_details = JSON.parse(nesting_parts_details);
-        }
-
-        var material_id = $(this).data("material_id");
-        var nesting_id = $(this).data("nesting_id");
-        var path = $(this).data("path");
-
-        var row = $(this).closest("tr");
-
-        var nesting_name = row.find("td").eq(1).text().trim();
-        var material_name = row.find("td").eq(2).text().trim();
-        var material_qty = row.find("td").eq(3).text().trim();
-        var time = row.find("td").eq(4).text().trim();
-        var product = row.find("td").eq(5).text().trim();
-
-        $("#update_nesting_btn").val(nesting_id);
-        $("#nesting_name").val(nesting_name);
-        $("#material_id").val(material_name).data('material_id', material_id);
-        $("#material_qty").val(material_qty);
-        $("#run_time").val(time);
-        $("#product").val(product);
-        $("#nest_file").val('');
-
-        $("#nesting_parts_tbody").empty();
-
-        if (nesting_parts_details && nesting_parts_details.length > 0) {
-            nesting_parts_details.forEach(function (item) {
-                $("#nesting_parts_tbody").append(`
-                <tr data-part_id="${item.part_id}" data-nes_part_id="${item.nes_part_id}">
-                    <td>${item.part_name}</td>
-                    <td>${item.qty}</td>
-                    <td>
-                        <button class='btn btn-danger delete_btn'>
-                            <i class='fa fa-trash'></i>
-                        </button>
-                    </td>
-                </tr>
-            `);
-            });
+        if (nes_master_id > 0) {
+            get_nesting_master_single1(nes_master_id);
+        } else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
         }
 
     });
 
     $("#clear_btn").on("click", function () {
-        clear_form();
-    })
+
+
+        $("#update_nesting_btn, #view_file").addClass("d-none");
+        $("#add_nesting_btn").removeClass("d-none");
+
+        $("#nesting_name").val('');
+        $("#material_id").data("part_id", '').val('');
+        $("#run_time").val('');
+        $("#dimension").val('');
+
+        $("#update_nesting_btn, #nested_part_add_btn, #view_file").val('');
+        $("#nesting_parts_tbody").empty();
+
+    });
+
+
+    $("#view_file").on("click", function () {
+        var path = $(this).val() || 'attachment/laser/nesting/laser_10.pdf'
+        if (path == '') {
+            salert("Warning", 'Path Not Fetched, Try Later.', 'warning');
+            return;
+        }
+
+        window.open(path, "_blank");
+    });
 
     $("#update_nesting_btn").on("click", function () {
 
@@ -400,21 +445,6 @@ $(document).ready(function () {
 
 
 
-function clear_form() {
-
-    $("#nesting_name").val('');
-    $("#material_id").val('').data('material_id', '');
-    $("#material_qty").val('');
-    $("#run_time").val('');
-    $("#product").val('');
-    $("#nest_file").val('');
-    $("#nested_parts").val('');
-    $("#nested_part_qty").val('');
-
-    $("#nesting_parts_tbody").empty();
-
-}
-
 
 function delete_nesting_parts(nes_part_id) {
 
@@ -430,7 +460,7 @@ function delete_nesting_parts(nes_part_id) {
             console.log(response);
 
             if (response.trim() == "ok") {
-                
+
             }
         },
         error: function (xhr) {
@@ -546,6 +576,166 @@ function update_nesting_document(formData) {
 
 }
 
+function get_nesting_master1(nes_master_id) {
+
+    $.ajax({
+        url: "php/get_nesting_master.php",
+        type: "get", //send it through get method
+        data: {
+
+            nes_master_id: nes_master_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != 'error') {
+                $("#nesting_details_tbody").empty();
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+
+                        count += 1;
+
+                        var part = JSON.parse(item.nesting_parts) || '';
+                        var parts = ``;
+
+                        if (part != '') {
+                            parts = `<ul class="list-group">`;
+                            part.forEach(function (p) {
+
+                                parts += `<li class="list-group-item p-1"><strong class='small'>${p.part_name}</strong> <span class='badge bg-primary'>${p.qty} Qty</span></li>`;
+
+                            });
+
+                            parts += `</ul>`;
+                        };
+
+
+                        var stock_info = JSON.parse(item.stock_info) || '';
+                        var stock = ``;
+
+                        if (stock_info != '') {
+                            stock_info.forEach(function (s) {
+                                stock += `<strong class='small'>${s.godown_name} ${s.dep_name != null ? "-" + s.dep_name : ''} ${s.sec_name != null ? "-" + s.sec_name : ''} <span class='badge bg-primary'>${s.available_qty} Qty</span></strong><br>`
+                            })
+                        }
+
+                        $("#nesting_details_tbody").append(`
+                            <tr>
+                                <td>${count}</td><td>${item.nesting_name}</td>
+                                <td>${item.nesting_material}</td>
+                                <td>${stock}</td>
+                                <td>${item.run_time}</td>
+                                <td>${item.std_length}</td>
+                                <td>${parts}</td>
+                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
+                                <td>
+                                    <div  class='d-flex justify-content-between'>
+                                        <button type='button' class='btn btn-sm edit_btn btn-outline-warning mx-2' value=${item.nesting_id}><i class='fa fa-pen'></i></button>
+                                        <button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${item.nesting_id}><i class='fa fa-trash'></i></button>
+                                    </div>
+                                </td>
+                            </tr>`);
+                    })
+                }
+                else {
+                    $("#nesting_details_tbody").append(`<tr><td colspan='7' class='text-center text-dange'>No Standard Nesting Found.</td></tr>`);
+                }
+            }
+            else {
+                salert("Error", response, "error");
+            }
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_nesting_master_single1(nes_master_id) {
+
+    $.ajax({
+        url: "php/get_nesting_master.php",
+        type: "get", //send it through get method
+        data: {
+
+            nes_master_id: nes_master_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != 'error') {
+
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+
+                    $("#view_file").removeClass("d-none");
+
+                    obj.forEach(function (item) {
+
+                        count += 1;
+
+                        var part = JSON.parse(item.nesting_parts) || ''
+                        var parts = ``;
+
+                        if (part != '') {
+                            $("#nesting_parts_tbody").empty();
+
+                            part.forEach(function (p) {
+
+                                parts += `<tr data-part_id=${p.part_id}><td>${p.part_name} </td><td>${p.qty} </td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
+
+                            });
+
+                            $("#nesting_parts_tbody").append(parts);
+                        }
+
+
+                        $("#nesting_name").val(item.nesting_name);
+                        $("#material_id").data("part_id", item.material_id).val(item.nesting_material);
+                        $("#run_time").val(item.run_time);
+                        $("#dimension").val(item.std_length);
+
+                        $("#view_file").val(item.path);
+                        $("#update_nesting_btn, #nested_part_add_btn").val(item.nesting_id)
+
+                    })
+                }
+                else {
+
+                }
+            }
+            else {
+                salert("Error", response, "error");
+            }
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 function get_nesting_details() {
 
     console.log();
@@ -556,7 +746,8 @@ function get_nesting_details() {
         data: {
             created_by: '',
             nesting_name: '',
-            material_id: ''
+            material_id: '',
+            remaining_qty: 0
 
         },
         success: function (response) {
@@ -564,7 +755,7 @@ function get_nesting_details() {
 
             if (response.trim() != "error") {
 
-                $("#nesting_details_tbody").empty();
+                $("#work_nesting_details_tbody").empty();
 
                 if (response.trim() != '0 result') {
 
@@ -577,31 +768,32 @@ function get_nesting_details() {
                         let nesting_parts_details = '<ul class="list-group">';
                         nesting.forEach(function (obj) {
 
-                            nesting_parts_details += `<li class="list-group-item">${obj.part_name} <span class='badge bg-secondary'>${obj.qty}</span></li>`;
+                            nesting_parts_details += `<li class="list-group-item p-1">${obj.part_name} <span class='badge bg-secondary'>${obj.qty} Qty</span></li>`;
                         })
 
                         nesting_parts_details += `</ul>`;
 
-                        // convert path to web path
-                        let filePath = item.path.replace(/.*nesting[\\/]/, 'nesting/');
 
-                        $("#nesting_details_tbody").append(`
+                        $("#work_nesting_details_tbody").append(`
                             <tr>
                                 <td>${index}</td>
                                 <td>${item.nesting_name}</td>
                                 <td>${item.material_name}</td>
-                                <td>${item.material_qty}</td>
+                                <td>
+                                   <div class='d-flex justify-content-between'><span class='badge bg-success' title='Total Qty: ${item.material_qty}'>${item.material_qty}</span>
+                                    <span class='badge bg-primary' title='Assigned Qty: ${item.total_assigned_qty}'>${item.total_assigned_qty}</span><span class='badge bg-danger' title='Remaining Qty: ${item.remaining_qty}'>${item.remaining_qty}</span></div>
+                                </td>
                                 <td>${item.run_time}</td>
-                                <td>${item.product}</td>
+                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</td>
                                 <td>${item.emp_name}</td>
                                 <td>${nesting_parts_details}</td>
                                 <td>
                                     <div  class='d-flex justify-content-between'>
-                                        <button type="button" class="btn btn-outline-primary view_btn" data-path="${filePath}">
+                                        <button type="button" class="btn btn-outline-primary btn-sm view_btn me-2" data-path="${item.path}">
                                             <i class="fa-solid fa-eye fa-beat"></i>
                                         </button>
-                                        <button type="button" class="btn btn-warning  edit_btn" data-path=${item.path} data-nesting_parts_details='${item.nesting_parts_details}'  data-nesting_id="${item.nesting_id}"  data-material_id="${item.material_id}">
-                                            <i class='fa fa-edit fa-beat'></i>
+                                        <button type="button" class="btn btn-outline-danger btn-sm  delete_btn" data-nesting_details_id='${item.nesting_details_id}'>
+                                            <i class='fa fa-trash fa-beat'></i>
                                         </button>
                                     </div>    
                                 </td>
@@ -611,7 +803,7 @@ function get_nesting_details() {
 
                 }
                 else {
-                    $("#nesting_details_tbody").append(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $("#work_nesting_details_tbody").append(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
                 }
             }
         },

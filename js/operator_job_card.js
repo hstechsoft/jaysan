@@ -114,7 +114,7 @@ $(document).ready(function () {
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
-                    <input type="number" 
+                    <input type="number"  min='1'
                         class="form-control form-control-sm li_scrap_qty" 
                         placeholder="Enter scrap">
 
@@ -250,6 +250,7 @@ function get_operator_job_card(shift, machine_id) {
         data: {
             shift: shift,
             machine_id: machine_id,
+            status: 'all'
         },
         success: function (response) {
             console.log(response);
@@ -268,8 +269,6 @@ function get_operator_job_card(shift, machine_id) {
                     obj.forEach(function (item, index) {
                         index++;
 
-                        let filePath = item.path.replace(/.*nesting[\\/]/, 'nesting/');
-
                         let nesting = JSON.parse(item.nesting_parts_details);
                         let nesting_parts_details = '<ul class="list-group">';
                         nesting.forEach(function (obj) {
@@ -285,15 +284,14 @@ function get_operator_job_card(shift, machine_id) {
                                 <td>${item.nesting_name}</td>
                                 <td>${item.part_name}</td>
                                 <td>
-                                    <span class='badge bg-success pe-2'>${item.total_material_qty}</span> <strong>Assigned Date: ${item.assign_date}</strong>
+                                    <span class='badge bg-success d-none pe-2'>${item.material_qty}</span> <strong>Assigned Date: ${item.assign_date}</strong>
                                 </td>
                                 
-                                <td>${item.run_time}</td>
-                                <td>${item.product}</td>
-                                <td>${item.created_name}</td>
+                                <td>${item.master_run_time}</td>
+                                <td>${item.emp_name}</td>
                                 <td>${nesting_parts_details}</td>
                                 <td>
-                                    <button class="btn btn-outline-primary view_btn" data-path="${filePath}"><i class="fa-solid fa-eye fa-beat"></i></button>
+                                    <button class="btn btn-outline-primary view_btn" data-path="${item.path}"><i class="fa-solid fa-eye fa-beat"></i></button>
                                     <button class="btn btn-outline-success laser_work_entry_btn" 
                                         data-job_card_id="${item.job_card_id}" 
                                         data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
@@ -317,23 +315,20 @@ function get_operator_job_card(shift, machine_id) {
                                     <div class="small text-muted mb-2">${item.part_name}</div>
 
                                     <div class="mb-2">
-                                        <span class='badge bg-success pe-2'>Remain: ${item.total_material_qty}</span>
+                                        <span class='badge bg-success d-none pe-2'>Remain: ${item.total_material_qty}</span>
                                         <strong> Assigned Date: ${item.assign_date}</strong>
                                     </div>
 
                                     <div class="d-flex justify-content-between small mb-2">
-                                        <span>⏱ ${item.run_time}</span>
-                                        <span>👤 ${item.created_name}</span>
+                                        <span>⏱ ${item.master_run_time}</span>
+                                        <span>👤 ${item.emp_name}</span>
                                     </div>
 
-                                    <div class="small mb-2">
-                                        📦 ${item.product}
-                                    </div>
 
                                     ${nesting_parts_details}
 
                                     <div class=" d-flex justify-content-between mt-2">
-                                        <button class="btn btn-sm btn-outline-primary view_btn" data-path="${filePath}">
+                                        <button class="btn btn-sm btn-outline-primary view_btn" data-path="${item.path}">
                                             <i class="fa-solid fa-eye fa-beat"></i>
                                         </button>
                                          <button class="btn btn-outline-success laser_work_entry_btn" 
@@ -351,7 +346,7 @@ function get_operator_job_card(shift, machine_id) {
                     });
 
                 } else {
-                    $("#operator_job_card_tbody").html(`<tr><td colspan='9' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $("#operator_job_card_tbody").html(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
                     $(".operator_job_card_mobile").html(`<div class='text-center text-danger'>No Data Found</div>`);
                 }
             }

@@ -24,6 +24,7 @@
         th {
             font-size: 12px;
             vertical-align: middle;
+            text-align: center;
         }
 
         .nesting_job_card_mobile .card {
@@ -121,7 +122,6 @@
                                     <th scope="col">Material</th>
                                     <th scope="col">Material Qty</th>
                                     <th scope="col">Process Time</th>
-                                    <th scope="col">Product</th>
                                     <th scope="col">Employee</th>
                                     <th scope="col">Nested Parts</th>
                                     <th scope="col">Action</th>
@@ -166,7 +166,7 @@
 
 
                     <div class="form-floating mb-2">
-                        <input type="number" class="form-control rounded-3" id="scarp_weight" placeholder="" required>
+                        <input type="number" class="form-control rounded-3" min="1" id="scarp_weight" placeholder="" required>
                         <label for="scarp_weight">Scarp weight
                             <span class="text-danger">* In Kgs</span> </label>
 
@@ -176,7 +176,7 @@
                     </div>
 
                     <div class="form-floating mb-2">
-                        <input type="number" class="form-control rounded-3" id="scarp_qty" placeholder="" required>
+                        <input type="number" class="form-control rounded-3" min="1" id="scarp_qty" placeholder="" required>
                         <label for="scarp_qty">Scarp Qty
                             <span class="text-danger">*</span> </label>
 
