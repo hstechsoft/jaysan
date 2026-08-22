@@ -29,23 +29,25 @@
 <body>
 
 
-    <div class="container-fluid p-0 m-0">
+    <!-- top bar -->
+
+
+
+    <!-- navbar -->
+
+    <section id="menu_bar">
+
+    </section>
+
+
+    <!-- content -->
+
+
+    <div class="container-fluid mb-2">
         <!-- top bar -->
 
 
-
-        <!-- navbar -->
-
-        <section id="menu_bar">
-
-        </section>
-
-
-        <!-- content -->
-
-
-
-        <div class="container-fluid mt-3 ">
+        <div class=" page-wrapper mt-5 mt-md-0">
 
             <form id="estimation_form">
                 <div class="card mt-3 ">
@@ -234,173 +236,173 @@
                                     class="fa-solid fa-plus"></i></span> Add</button>
                     </div>
                 </div>
-        </div>
 
-        </form>
-
-
-
-        <table id="pro_table1" class="table  mt-2 table-bordered border-dark border-opacity-50 text-center ">
-            <thead>
-                <tr>
-
-                    <th colspan="8" scope="col" class="bg-info bg-opacity-25">
-                        <div class="d-flex justify-content-between gap-3">
-                            <h6>Products</h6>
-                            <h6>Total : &#x20B9 <span id="total_amt">0</span></h6>
-                        </div>
-                    </th>
-
-                </tr>
-
-                <tr>
-
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Hsn Code</th>
-                    <th scope="col">Tax Rate</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Qty</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Delete</th>
-
-                </tr>
-            </thead>
-            <tbody class="align-middle " id="pro_table">
+            </form>
 
 
 
-
-            </tbody>
-        </table>
-
-        <section id="submit_block">
-
-            <div class="d-flex justify-content-around mt-2" id="">
-                <div class='form-check'>
-                    <label class='form-check-label' for='print_preview'>
-                        Preview
-                    </label>
-                    <input class='form-check-input' checked type='checkbox' value='' id='print_preview'>
-
-                </div>
-                <div class="visually-hidden">
-                    <div class="input-group ">
-                        <label class="input-group-text" for="shipping_txt"><span>
-                                <i class="fa-solid fa-edit h6"></i>
-                            </span></label>
-                        <input type="number" id="shipping_txt" class="form-control" placeholder="Shipping Charges"
-                            aria-label="Username" aria-describedby="basic-addon1">
-                    </div>
-                </div>
-
-                <div>
-                    <button type="button" class="btn btn-danger text-center" id="print_btn">print</button>
-                </div>
-
-                <div>
-                    <button type="button" class="btn btn-danger text-center" id="submit_btn">Submit</button>
-                </div>
-
-            </div>
-        </section>
-
-    </div>
-
-
-    <div class=" container border border-3 border-danger mt-3" id="print_area">
-
-
-        <div class="card-body print_font" id="print">
-            <p class="text-center fw-bold">Estimation</p>
-            <table class="table table-bordered table-responsive m-0 ">
-                <tbody>
-                    <tr>
-                        <td colspan="2">
-                            <div class="d-flex justify-content-between">
-
-                                <div class="d-flex justify-content-start gap-4 col-5">
-                                    <div>
-                                        <img id="print_logo_preview" class="img-fluid" style="width: 70px;" src="" alt>
-                                    </div>
-
-                                    <div>
-                                        <img id="print_logo_preview1" class="img-fluid" style="width: 70px;" src="" alt>
-                                    </div>
-
-
-                                </div>
-                                <div class="text-end">
-                                    <strong> <span id="print_company_name"></span> </strong> <br>
-                                    <span id="print_company_addr">
-
-                                    </span>
-
-                                </div>
-                            </div>
-                        </td>
-
-
-                    </tr>
-                    <tr>
-                        <td class=" m-0 p-0">
-                            <div class="card ">
-                                <div class="card-header fw-bold">
-                                    Bill To :
-                                </div>
-                                <div class="card-body">
-                                    <strong> <span id="print_cus_name"></span> </strong> <br>
-                                    <span id="print_cus_addr">
-
-                                    </span>
-                                </div>
-                            </div>
-
-
-
-
-                        </td>
-                        <td class="text-end align-middle">
-                            <div>
-                                Estimation No : <span id="print_qno">
-
-                                </span> <br>
-                                Date :
-                                <span id="print_date">
-
-                                </span> <br>
-                                Estimation Through :
-                                <span id="print_estt">
-                                    n/a
-                                </span> <br>
-
-                            </div>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-bordered m-0 ">
+            <table id="pro_table1" class="table  mt-2 table-bordered border-dark border-opacity-50 text-center ">
                 <thead>
                     <tr>
+
+                        <th colspan="8" scope="col" class="bg-info bg-opacity-25">
+                            <div class="d-flex justify-content-between gap-3">
+                                <h6>Products</h6>
+                                <h6>Total : &#x20B9 <span id="total_amt">0</span></h6>
+                            </div>
+                        </th>
+
+                    </tr>
+
+                    <tr>
+
                         <th scope="col">#</th>
-                        <th scope="col">Item Description</th>
-                        <th scope="col">HSN/SAC</th>
-                        <th scope="col">GST Rate</th>
-                        <th scope="col">Price/Unit</th>
-                        <th scope="col">QTY</th>
-                        <th scope="col">Total</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Hsn Code</th>
+                        <th scope="col">Tax Rate</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Qty</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Delete</th>
+
                     </tr>
                 </thead>
-                <tbody id="print_pro_table" class="align-middle">
+                <tbody class="align-middle " id="pro_table">
+
+
+
 
                 </tbody>
             </table>
 
-            <table class="table table-bordered m-0 ">
-                <tbody>
-                    <tr>
-                        <!-- <td class="m-0 p-0">
+            <section id="submit_block">
+
+                <div class="d-flex justify-content-around mt-2" id="">
+                    <div class='form-check'>
+                        <label class='form-check-label' for='print_preview'>
+                            Preview
+                        </label>
+                        <input class='form-check-input' checked type='checkbox' value='' id='print_preview'>
+
+                    </div>
+                    <div class="visually-hidden">
+                        <div class="input-group ">
+                            <label class="input-group-text" for="shipping_txt"><span>
+                                    <i class="fa-solid fa-edit h6"></i>
+                                </span></label>
+                            <input type="number" id="shipping_txt" class="form-control" placeholder="Shipping Charges"
+                                aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-danger text-center" id="print_btn">print</button>
+                    </div>
+
+                    <div>
+                        <button type="button" class="btn btn-danger text-center" id="submit_btn">Submit</button>
+                    </div>
+
+                </div>
+            </section>
+
+
+
+            <div class=" container border border-3 border-danger mt-3" id="print_area">
+
+
+                <div class="card-body print_font" id="print">
+                    <p class="text-center fw-bold">Estimation</p>
+                    <table class="table table-bordered table-responsive m-0 ">
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex justify-content-between">
+
+                                        <div class="d-flex justify-content-start gap-4 col-5">
+                                            <div>
+                                                <img id="print_logo_preview" class="img-fluid" style="width: 70px;"
+                                                    src="" alt>
+                                            </div>
+
+                                            <div>
+                                                <img id="print_logo_preview1" class="img-fluid" style="width: 70px;"
+                                                    src="" alt>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="text-end">
+                                            <strong> <span id="print_company_name"></span> </strong> <br>
+                                            <span id="print_company_addr">
+
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td class=" m-0 p-0">
+                                    <div class="card ">
+                                        <div class="card-header fw-bold">
+                                            Bill To :
+                                        </div>
+                                        <div class="card-body">
+                                            <strong> <span id="print_cus_name"></span> </strong> <br>
+                                            <span id="print_cus_addr">
+
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </td>
+                                <td class="text-end align-middle">
+                                    <div>
+                                        Estimation No : <span id="print_qno">
+
+                                        </span> <br>
+                                        Date :
+                                        <span id="print_date">
+
+                                        </span> <br>
+                                        Estimation Through :
+                                        <span id="print_estt">
+                                            n/a
+                                        </span> <br>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered m-0 ">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Item Description</th>
+                                <th scope="col">HSN/SAC</th>
+                                <th scope="col">GST Rate</th>
+                                <th scope="col">Price/Unit</th>
+                                <th scope="col">QTY</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="print_pro_table" class="align-middle">
+
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered m-0 ">
+                        <tbody>
+                            <tr>
+                                <!-- <td class="m-0 p-0">
                                     <div class="card border-0">
                                         <div class="card-header text-center fw-bold">
                                             Amount in Words
@@ -411,35 +413,39 @@
                                     </div>
                                 </td> -->
 
-                        <td rowspan="2" class="m-0 p-0">
-                            <div class="card border-0">
-                                <div class="card-header   text-center fw-bold">
-                                    Bank Details
-                                </div>
-                                <div class="card-body text-end">
-                                    <span id="print_bank"> </span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-7"> Terms <br> <span id="print_terms">
+                                <td rowspan="2" class="m-0 p-0">
+                                    <div class="card border-0">
+                                        <div class="card-header   text-center fw-bold">
+                                            Bank Details
+                                        </div>
+                                        <div class="card-body text-end">
+                                            <span id="print_bank"> </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-7"> Terms <br> <span id="print_terms">
 
-                            </span></td>
-                    </tr>
-                    <!-- <tr>
+                                    </span></td>
+                            </tr>
+                            <!-- <tr>
                                 <td >Customer Signature</td>
                                 <td class=" text-end">for <span id="print_com_name"></span> <br><br><br></td>
                             </tr> -->
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
 
 
+
+                </div>
+            </div>
 
         </div>
     </div>
 
-    </div>
+    
+    <div id='footer' class="mt-auto"></div>
 
 
 

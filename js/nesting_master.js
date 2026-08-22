@@ -187,22 +187,23 @@ $(document).ready(function () {
     var part_id = $("#nested_parts").data("part_id") || 0;
     var nested_parts = $("#nested_parts").val() || '';
     var nested_part_qty = $("#nested_part_qty").val() || 0;
+    var nested_part_weight = $("#nested_part_weight").val() || 0;
 
-    if (part_id > 0 && nested_part_qty > 0 && nes_master_id == 0) {
-      $("#nesting_parts_tbody").append(`<tr data-part_id=${part_id} data-qty=${nested_part_qty}><td>${nested_parts}</td><td>${nested_part_qty}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+    if (part_id > 0 && nested_part_qty > 0 && nes_master_id == 0 && nested_part_weight > 0) {
+      $("#nesting_parts_tbody").append(`<tr data-part_id="${part_id}" data-qty="${nested_part_qty}" data-weight="${nested_part_weight}"><td>${nested_parts}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
 
       $("#nested_parts").data("part_id", '').val('');
-      $("#nested_part_qty").val('');
+      $("#nested_part_qty, #nested_part_weight").val('');
 
     }
-    else if (part_id > 0 && nested_part_qty > 0 && nes_master_id > 0) {
+    else if (part_id > 0 && nested_part_qty > 0 && nes_master_id > 0 && nested_part_weight > 0) {
       insert_nesting_parts_master(nes_master_id, part_id, nested_part_qty);
 
       $("#nested_parts").data("part_id", '').val('');
-      $("#nested_part_qty").val('');
+      $("#nested_part_qty, #nested_part_weight").val('');
     }
     else {
-      salert("Warning", "Need Both Fields.", "warning");
+      salert("Warning", "Need All Three Fields.", "warning");
     }
   });
 
@@ -399,7 +400,7 @@ function get_nesting_master_single(nes_master_id) {
 
               part.forEach(function (p) {
 
-                parts += `<tr><td>${p.part_name} </td><td>${p.qty} </td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
+                parts += `<tr><td>${p.part_name} </td><td>${p.qty} </td><td>${''}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
 
               });
 

@@ -55,17 +55,31 @@ $(document).ready(function () {
     $("#nesting_job_card_tbody, .nesting_job_card_mobile").on("click", ".allocate_btn", function () {
         let machine_id = $(this).data("machine_id");
         let nesting_details_id = $(this).data("nesting_details_id");
+        let remaining_qty = $(this).data("remaining_qty") || 0;
 
-        if (machine_id && nesting_details_id) {
-            $("#assign_Work_btn").data("machine_id", machine_id)
-            $("#assign_Work_btn").data("nesting_details_id", nesting_details_id)
+        if (machine_id && nesting_details_id && remaining_qty > 0) {
+            $("#assign_Work_btn").data("machine_id", machine_id);
+            $("#assign_Work_btn").data("nesting_details_id", nesting_details_id);
+            $("#qty").data("remaining_qty", remaining_qty);
 
             $("#assignWorkModal").modal("show");
         }
         else {
-            salert("Warning", "Data Missing!, Try Later.", "warning");
+            salert("Warning", "Data Missing/ Qty Is Lesser Than 1, Try Later.", "warning");
         }
     });
+
+    $("#qty").on("focusout", function(){
+        var entered_qty = $(this).val();
+        var remaining_qty = $(this).data("remaining_qty");
+        
+        if(entered_qty <= 0){
+            $(this).val(remaining_qty);
+        }
+        else if(entered_qty > remaining_qty){
+            $(this).val(remaining_qty);
+        }
+    })
 
     $("#assign_Work_btn").on("click", function () {
 
@@ -172,7 +186,8 @@ function get_unassigned_job_card(show_all) {
                                     <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
                                     <button class="btn btn-outline-secondary btn-sm allocate_btn" 
                                         data-nesting_details_id="${item.nesting_details_id}" 
-                                        data-machine_id="${item.machine_id}">
+                                        data-machine_id="${item.machine_id}"
+                                        data-remaining_qty="${item.remaining_qty}">
                                         Allocate
                                     </button>
                                 </td>
@@ -212,7 +227,8 @@ function get_unassigned_job_card(show_all) {
                                         </button>
                                         <button class="btn btn-sm btn-secondary w-50 allocate_btn btn-sm" 
                                             data-nesting_details_id="${item.nesting_details_id}" 
-                                            data-machine_id="${item.machine_id}">
+                                            data-machine_id="${item.machine_id}"
+                                            data-remaining_qty="${item.remaining_qty}">
                                             Allocate
                                         </button>
                                     </div>

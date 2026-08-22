@@ -47,7 +47,7 @@ $(document).ready(function () {
       $("#exp_table_single tr").each(function () {
 
         var this_row = $(this);
-        this_row.find('td:eq(5) input:checkbox')[0].checked = true
+        this_row.find('td:eq(6) input:checkbox')[0].checked = true
       });
     }
 
@@ -55,7 +55,7 @@ $(document).ready(function () {
       $("#exp_table_single tr").each(function () {
 
         var this_row = $(this);
-        this_row.find('td:eq(5) input:checkbox')[0].checked = false
+        this_row.find('td:eq(6) input:checkbox')[0].checked = false
       });
     }
 
@@ -231,8 +231,8 @@ $(document).ready(function () {
     $("#exp_table_single tr").each(function () {
       console.log($('#sel_expc_sts_in').find(":selected").val())
       var this_row = $(this);
-      if (this_row.find('td:eq(5) input:checkbox')[0].checked)
-        update_expense((this_row.find('td:eq(5) input:checkbox')[0].value), $('#sel_expc_sts_in').find(":selected").val())
+      if (this_row.find('td:eq(6) input:checkbox')[0].checked)
+        update_expense((this_row.find('td:eq(6) input:checkbox')[0].value), $('#sel_expc_sts_in').find(":selected").val())
       // console.log(this_row.find('td:eq(5) input:checkbox')[0].value)
       else
         console.log("no")

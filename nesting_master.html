@@ -20,13 +20,11 @@
 
 
     <style>
-
         table td,
-        tr{
+        tr {
             text-align: center;
             vertical-align: middle;
         }
-
     </style>
 
 
@@ -113,18 +111,30 @@
                                     <span class="input-group-text">
                                         <i class="fa-regular fa-clock"></i>
                                     </span>
-                                    <input type="number" class="form-control" id="run_time" placeholder="Run Time (In Min)"
-                                        required>
+                                    <input type="number" min="1" class="form-control" id="run_time"
+                                        placeholder="Run Time (In Min)" required>
                                 </div>
                             </div>
 
                             <!-- Dimension -->
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-ruler-combined"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="dimension" placeholder="Dimension" required>
+                                    <input type="text" class="form-control" id="dimension" placeholder="Dimension"
+                                        required>
+                                </div>
+                            </div>
+
+                            <!-- weight -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-classic fa-solid fa-scale-unbalanced-flip"></i>
+                                    </span>
+                                    <input type="number" min="1" class="form-control" id="weight" placeholder="Weight (In Kgs)"
+                                        required>
                                 </div>
                             </div>
 
@@ -150,7 +160,8 @@
                             </div>
 
                             <div class="col-md-4">
-                                <button type="button" class="btn btn-small btn-primary d-none" id="view_file"><i class="fa-solid fa-file-lines"></i> View File</button>
+                                <button type="button" class="btn btn-small btn-primary d-none" id="view_file"><i
+                                        class="fa-solid fa-file-lines"></i> View File</button>
                             </div>
 
 
@@ -168,14 +179,21 @@
                             </h6>
 
                             <div class="row g-2">
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input type="text" class="form-control form-control-sm" id="nested_parts"
                                         placeholder="Part Name">
                                 </div>
 
-                                <div class="col-5">
-                                    <input type="number" min="1" class="form-control form-control-sm" id="nested_part_qty"
-                                        placeholder="Qty">
+                                <div class="col-3">
+                                    <input type="number" min="1" class="form-control form-control-sm"
+                                        id="nested_part_qty" placeholder="Qty">
+                                </div>
+
+
+                                <!-- weight -->
+                                <div class="col-3">
+                                        <input type="number" min="1" class="form-control form-control-sm" id="nested_part_weight"
+                                            placeholder="Weight (Kgs)" >
                                 </div>
 
                                 <div class="col-2 d-grid">
@@ -203,6 +221,11 @@
                                         <th>
                                             <i class="fa-solid fa-sort-numeric-up me-1"></i>
                                             Qty
+                                        </th>
+
+                                        <th>
+                                            <i calss="fa-classic fa-solid fa-scale-unbalanced-flip"></i>
+                                            Weight
                                         </th>
 
                                         <th>
@@ -246,9 +269,10 @@
                 <div class="col-md-8">
 
                     <div class="table-responsive" style="max-height: 80vh; overflow-y: auto;">
-                        <table class="table caption-top table-bordered table-striped ">
+                        <table class="table caption-top small table-striped ">
                             <caption></caption>
-                            <thead class="small" style="position: sticky; z-index: 5; top: 0; background-color: rgb(214, 229, 241);">
+                            <thead class="small"
+                                style="position: sticky; z-index: 5; top: 0; background-color: rgb(214, 229, 241);">
 
                                 <tr>
                                     <th scope="col">#</th>

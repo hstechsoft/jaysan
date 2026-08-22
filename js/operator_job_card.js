@@ -116,7 +116,7 @@ $(document).ready(function () {
                 <div class="d-flex align-items-center gap-2">
                     <input type="number"  min='1'
                         class="form-control form-control-sm li_scrap_qty" 
-                        placeholder="Enter scrap">
+                        placeholder="Enter scrap" data-qty="${obj.qty}">
 
                     <label class="form-check-label small">
                         <input class="form-check-input chech_field me-1" type="checkbox">
@@ -139,6 +139,14 @@ $(document).ready(function () {
 
     });
 
+    $("#nested_parts").on("focusout", ".li_scrap_qty", function(){
+        var qty = $(this).attr("data-qty");
+        var entered_qty = $(this).val();
+
+        if(entered_qty > qty){
+            $(this).val(qty);
+        }
+    })
 
     $("#assign_Work_entry_btn").on("click", function () {
 

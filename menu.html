@@ -69,25 +69,25 @@
     <div class="right-space"></div>
 </div>
 
-<div class="d-none" id="normal_view">
+<div class="" id="normal_view">
 
     <aside class="sidebar d-none d-md-block" id="sidebar" aria-label="Main sidebar">
 
-        <button id="close_sidebar" class="btn mx-3 p-0">
+        <!-- <button id="close_sidebar" class="btn mx-3 p-0">
             <i class="fa fa-times fs-0" style="color: #ff943a;"></i>
-        </button>
+        </button> -->
         <div class="sidebar-user ">
-            <a href="user_index.html" style="text-decoration: none;">
-                <div class="sidebar-user-info">
-                    <i class="fa-regular fa-circle-user user-icon"></i>
+            <div class="sidebar-user-info">
+                <i class="fa-regular fa-circle-user user-icon " id="menu-user-icon-expended"></i>
 
-                    <div class="user-text">
+                <div class="user-text">
+                    <a href="user_index.html" style="text-decoration: none;">
                         <p class="welcome-text">Hey <span id="role_name_txtt"></span></p>
                         <p class="username" id="unamee"></p>
-                    </div>
-
+                    </a>
                 </div>
-            </a>
+
+            </div>
 
         </div>
 
@@ -283,7 +283,7 @@
                     <a id="admin_employee_report" class="list-group-item visually-hidden"
                         href="admin_employee_report.html">Detailed
                         Report</a>
-                    <a id="admin_employee_report_self" class="list-group-item"
+                    <a id="admin_employee_report_self" class="list-group-item visually-hidden"
                         href="admin_employee_report_self.html">Detailed
                         Report Self</a>
                     <a id="attendance_report" class="list-group-item visually-hidden"
@@ -626,7 +626,8 @@
 
                 <div class="flyout">
                     <a id="json_stock" class="submenu-item visually-hidden" href="json_stock.html">Stock Entry</a>
-                    <a id="physical_stock_entry" class="submenu-item visually-hidden" href="physical_stock_entry.html">Physical Stock Entry</a>
+                    <a id="physical_stock_entry" class="submenu-item visually-hidden"
+                        href="physical_stock_entry.html">Physical Stock Entry</a>
                     <a id="store_stock" class="submenu-item visually-hidden" href="store_stock.html">Store Stock
                         Entry</a>
                     <a id="store_stock_allocate" class="submenu-item visually-hidden"
@@ -656,7 +657,8 @@
 
                 <div class="collapse" id="collape_exchange">
                     <a id="json_stock" class="submenu-item visually-hidden" href="json_stock.html">Stock Entry</a>
-                    <a id="physical_stock_entry" class="submenu-item visually-hidden" href="physical_stock_entry.html">Physical Stock Entry</a>
+                    <a id="physical_stock_entry" class="submenu-item visually-hidden"
+                        href="physical_stock_entry.html">Physical Stock Entry</a>
                     <a id="store_stock" class="submenu-item visually-hidden" href="store_stock.html">Store Stock
                         Entry</a>
                     <a id="store_stock_allocate" class="submenu-item visually-hidden"
@@ -830,14 +832,14 @@
 
             <strong class="adv_exp_amount"></strong>
 
-            <button type="button" class="btn btn-sm closeAdvance" id="closeAdvance" >X</button>
+            <button type="button" class="btn btn-sm closeAdvance" id="closeAdvance">X</button>
 
         </div>
 
         <div class="card-body py-2">
 
             <small class="message">
-                
+
             </small>
 
         </div>

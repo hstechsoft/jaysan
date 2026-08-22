@@ -2389,7 +2389,7 @@ $(document).ready(function () {
     usedQty = usedQty - newQty;
     let remaining = bomQty - usedQty;
 
-    if (newQty > remaining) {
+    if (newQty > remaining && partId != null) {
       salert("Warning", "Only " + bomQty + " allowed");
       span.text(currentQty);
       return;
