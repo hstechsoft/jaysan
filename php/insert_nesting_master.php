@@ -104,7 +104,7 @@ foreach ($laser_parts as $parts) {
   // allow only pdf
 
 // check if file is uploaded 
-echo $_FILES['file']['name'];
+echo 'file: ' . $_FILES['file']['name'];
   if($_FILES['file']['name'] != ''){
   
 //   echo $_FILES['file']['demo'];
