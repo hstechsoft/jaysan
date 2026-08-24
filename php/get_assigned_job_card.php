@@ -64,7 +64,7 @@ group by
     laser_assigned_details
     from
     nesting_details nd
-    left join nesting_assign na on nd.nesting_id = na.nesting_id
+    inner join nesting_assign na on nd.nesting_id = na.nesting_id
     left join nesting_master mas on nd.nesting_id = mas.nes_master_id
     left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
