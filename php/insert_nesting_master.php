@@ -80,13 +80,12 @@ foreach ($laser_parts as $parts) {
 
 
         
-    if($cat == 'out')
-        {
+
             $new_process_id_display =$new_process_id;
             include_once 'update_final_process_id.php';
             update_final_id($conn, $new_process_id);
 
-        }
+        
 
 
 
