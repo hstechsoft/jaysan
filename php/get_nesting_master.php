@@ -39,6 +39,8 @@ nesting_master.path,
 nesting_master.run_time,
 nesting_master.nesting_type,
 nesting_master.std_length,
+nesting_master.weight,
+nesting_master.scarp_weight,
 employee.emp_name as created_by_name,
 JSON_ARRAYAGG(JSON_OBJECT(
   
