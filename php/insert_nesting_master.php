@@ -62,6 +62,31 @@ foreach ($laser_parts as $parts) {
       }
 
       if($process_id == 0){
+
+// get bom from bom_tbl where output_part_id = $part_id and process_id = 1
+$bom_id = 0;
+        $sql_get_bom = "SELECT bom_id FROM bom_output WHERE part_id = $part_id AND component_cat = 'laser cutting'";
+        $result_get_bom = $conn->query($sql_get_bom);
+        if ($result_get_bom->num_rows > 0) {
+            $bom_id = $result_get_bom->fetch_assoc()['bom_id'];
+        }
+// if bom_id =0 insert new record in bom_output with part_id = $part_id and component_cat = 'laser cutting' and process_id = 1
+        if($bom_id == 0){
+          
+            $sql_insert_bom = "INSERT INTO bom_output (part_id, component_cat) VALUES ($part_id, 'laser cutting')";
+            if ($conn->query($sql_insert_bom) === TRUE) {
+                $bom_id = $conn->insert_id;
+            } else {
+                throw new Exception("Error: " . $sql_insert_bom . "<br>" . $conn->error);
+            }
+
+            // insert bom_input
+            $sql_insert_bom_input = "INSERT INTO bom_input (bom_id, part_id, qty) VALUES ($bom_id, $material_id, $out_weight)";
+            if ($conn->query($sql_insert_bom_input) !== TRUE) {
+                throw new Exception("Error: " . $sql_insert_bom_input . "<br>" . $conn->error);
+            }
+        }
+
         // get process_id from jaysan_process where process_title = 'laser cutting'
         $sql_get_process_id = "SELECT process_id FROM jaysan_process WHERE process_name = 'laser cutting'";
         $result_get_process_id = $conn->query($sql_get_process_id);
