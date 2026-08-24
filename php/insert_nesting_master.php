@@ -96,7 +96,7 @@ $bom_id = 0;
         }
 
         // insert new record in process_wel_tbl with process_id, output_part = $part_id, process_name = 'laser cutting'
-        $sql_insert_process_wel_tbl = "INSERT INTO process_wel_tbl (process, output_part, component_cat, process_title) VALUES ($process, $part_id, 'laser cutting', 'laser cutting')";
+        $sql_insert_process_wel_tbl = "INSERT INTO process_wel_tbl (process, output_part, component_cat, process_title,cat) VALUES ($process, $part_id, 'laser cutting', 'laser cutting','out')";
         if ($conn->query($sql_insert_process_wel_tbl) === TRUE) {
         $new_process_id = $conn->insert_id;
         } else {
