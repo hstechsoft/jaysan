@@ -48,6 +48,10 @@ foreach ($laser_parts as $parts) {
         throw new Exception("Error: " . $sql_insert_parts . "<br>" . $conn->error);
       }
 
+
+      // create process_wel_tbl 
+      // get process_id from process_wel_tbl where process_title = 'laser cutting' and 
+
 }
 
   // insert attachment  
