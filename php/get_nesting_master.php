@@ -27,8 +27,7 @@ return $data;
     'part_id', nesting_parts.part_id,
     'qty', nesting_parts.qty,
     'part_name', parts_tbl.part_name,
-    'weight', nesting_parts.weight,
-    'scarp_weight', nesting_parts.scarp_weight
+    'weight', nesting_parts.weight
 )) as nesting_parts from nesting_parts
 inner join parts_tbl on nesting_parts.part_id = parts_tbl.part_id GROUP BY nesting_parts.nesting_id
 )
