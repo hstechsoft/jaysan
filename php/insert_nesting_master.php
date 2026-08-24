@@ -8,6 +8,8 @@ $material_id = test_input($_POST['material_id']);
 $nesting_type = test_input($_POST['nesting_type']);
 $std_length = test_input($_POST['std_length']);
 $run_time = test_input($_POST['run_time']);
+$weight = test_input($_POST['weight']);
+$scarp_weight = test_input($_POST['scarp_weight']);
 
 
 $laser_parts = json_decode($_POST['laser_parts'], true);
@@ -24,7 +26,7 @@ return $data;
 $nes_master_id = 0;
 try
 {
- $sql_insert_master = "INSERT INTO nesting_master ( created_by,path,nesting_name,material_id,nesting_type,std_length,run_time) VALUES ($created_by,'',$nesting_name,$material_id,$nesting_type,$std_length,$run_time)";
+ $sql_insert_master = "INSERT INTO nesting_master ( created_by,path,nesting_name,material_id,nesting_type,std_length,run_time,weight,scarp_weight) VALUES ($created_by,'',$nesting_name,$material_id,$nesting_type,$std_length,$run_time,$weight,$scarp_weight)";
 
   if ($conn->query($sql_insert_master) === TRUE) {
 // get inserted id 
@@ -36,8 +38,10 @@ $nes_master_id  = $conn->insert_id;
 foreach ($laser_parts as $parts) {
       $part_id = $parts['part_id'];
       $qty = $parts['qty'];
+      $weight = $parts['weight'];
+      $scarp_weight = $parts['scarp_weight'];
 
-      $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty) VALUES ($nes_master_id, $part_id, $qty)";
+      $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty, weight, scarp_weight) VALUES ($nes_master_id, $part_id, $qty, $weight, $scarp_weight)";
      
       if ($conn->query($sql_insert_parts) === TRUE) {
       } else {
