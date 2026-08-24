@@ -105,7 +105,7 @@ foreach ($laser_parts as $parts) {
 
 // check if file is uploaded  if not then skip this step
 echo 'file: ' . ($_FILES['file']['name'] ?? 'No file');
-  if($_FILES['file']['name'] != ''){
+ if (!empty($_FILES['file']['name'])) {
   
 //   echo $_FILES['file']['demo'];
         $FileType = strtolower(pathinfo($_FILES['file']['name'],PATHINFO_EXTENSION));
