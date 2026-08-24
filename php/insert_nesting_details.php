@@ -154,7 +154,7 @@ $bom_id = 0;
   // allow only pdf
 
 
-  if($_FILES['file']['name'] != ''){
+ if (!empty($_FILES['file']['name'])) {
   
 //   echo $_FILES['file']['demo'];
         $FileType = strtolower(pathinfo($_FILES['file']['name'],PATHINFO_EXTENSION));
