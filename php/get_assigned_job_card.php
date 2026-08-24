@@ -28,7 +28,7 @@ return $data;
 from
    nesting_details nes_work
     inner join  laser_job_card  on laser_job_card.nesting_details_id = nes_work.nesting_details_id
-    where laser_job_card.status = 'created'
+    
 group by
     nes_work.nesting_id
  )

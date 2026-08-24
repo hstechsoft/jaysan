@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql =  "DELETE  FROM  laser_job_card WHERE job_card_id =  $job_card_id";
+ $sql =  "DELETE  FROM  laser_job_card WHERE job_card_id =  $job_card_id and status = 'created'";
 
   if ($conn->query($sql) === TRUE) {
 echo "ok";
