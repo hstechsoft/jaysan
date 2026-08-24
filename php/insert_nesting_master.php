@@ -63,7 +63,7 @@ foreach ($laser_parts as $parts) {
 
       if($process_id == 0){
         // get process_id from jaysan_process where process_title = 'laser cutting'
-        $sql_get_process_id = "SELECT process_id FROM jaysan_process WHERE process_title = 'laser cutting'";
+        $sql_get_process_id = "SELECT process_id FROM jaysan_process WHERE process_name = 'laser cutting'";
         $result_get_process_id = $conn->query($sql_get_process_id);
         if ($result_get_process_id->num_rows > 0) {
             $row = $result_get_process_id->fetch_assoc();
