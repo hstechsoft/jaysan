@@ -4,6 +4,10 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
+let donutChart = null;
+let donutChartModal = null;
+let barChart = null;
+let barChartModal = null;
 $(document).ready(function () {
 
 
@@ -1751,10 +1755,25 @@ function get_process_summary_godown(process_id) {
                 return;
             }
 
-            $("#timing_dounut_chart").empty();
-            $("#timing_dounut_chart_modal").empty();
-            $("#cost_bar_chart").empty();
-            $("#cost_bar_chart_modal").empty();
+            if (donutChart) {
+                donutChart.destroy();
+                donutChart = null;
+            }
+
+            if (donutChartModal) {
+                donutChartModal.destroy();
+                donutChartModal = null;
+            }
+
+            if (barChart) {
+                barChart.destroy();
+                barChart = null;
+            }
+
+            if (barChartModal) {
+                barChartModal.destroy();
+                barChartModal = null;
+            }
 
             if (response.trim() === "0 result") {
                 $("#bom_required_material_table_body").append("<tr><td>No BOM Material</td></tr>");
@@ -1843,7 +1862,7 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
-            var donutChart = new ApexCharts(
+            donutChart = new ApexCharts(
                 document.querySelector("#timing_dounut_chart"),
                 donutOptions
             );
@@ -1899,7 +1918,7 @@ function get_process_summary_godown(process_id) {
             };
 
 
-            var donutChartModal = new ApexCharts(
+            donutChartModal = new ApexCharts(
                 document.querySelector("#timing_dounut_chart_modal"),
                 donutOptions1
             );
@@ -1973,7 +1992,7 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
-            var barChart = new ApexCharts(
+            barChart = new ApexCharts(
                 document.querySelector("#cost_bar_chart"),
                 barOptions
             );
@@ -2047,7 +2066,7 @@ function get_process_summary_godown(process_id) {
             };
 
 
-            var barChartModal = new ApexCharts(
+            barChartModal = new ApexCharts(
                 document.querySelector("#cost_bar_chart_modal"),
                 barOptions1
             );
