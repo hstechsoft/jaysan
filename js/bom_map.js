@@ -1743,13 +1743,18 @@ function get_process_summary_godown(process_id) {
 
         success: function (response) {
 
-            $("#timing_dounut_chart, #timing_dounut_chart_modal").empty();
-            $("#cost_bar_chart, #cost_bar_chart_modal").empty();
+            console.log(response);
+            
 
             if (response.trim() === "error") {
                 salert("Error", "Server Error", "error");
                 return;
             }
+
+            $("#timing_dounut_chart").empty();
+            $("#timing_dounut_chart_modal").empty();
+            $("#cost_bar_chart").empty();
+            $("#cost_bar_chart_modal").empty();
 
             if (response.trim() === "0 result") {
                 $("#bom_required_material_table_body").append("<tr><td>No BOM Material</td></tr>");
@@ -1779,7 +1784,12 @@ function get_process_summary_godown(process_id) {
             let totalMin = minTimes.reduce((a, b) => a + b, 0);
             let totalMax = maxTimes.reduce((a, b) => a + b, 0);
 
-            $("#donut_center_text, #donut_center_text_modal").html(`
+            $("#donut_center_text").html(`
+                <div>Min: ${totalMin} mins</div>
+                <div>Max: ${totalMax} mins</div>
+            `);
+
+            $("#donut_center_text_modal").html(`
                 <div>Min: ${totalMin} mins</div>
                 <div>Max: ${totalMax} mins</div>
             `);
@@ -1832,6 +1842,12 @@ function get_process_summary_godown(process_id) {
                     align: "center"
                 }
             };
+            
+            var donutChart = new ApexCharts(
+                document.querySelector("#timing_dounut_chart"),
+                donutOptions
+            );
+            donutChart.render();
 
             var donutOptions1 = {
                 chart: {
@@ -1882,11 +1898,6 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
-            var donutChart = new ApexCharts(
-                document.querySelector("#timing_dounut_chart"),
-                donutOptions
-            );
-            donutChart.render();
 
             var donutChartModal = new ApexCharts(
                 document.querySelector("#timing_dounut_chart_modal"),
@@ -1894,6 +1905,11 @@ function get_process_summary_godown(process_id) {
             );
             donutChartModal.render();
 
+            var barChart = new ApexCharts(
+                document.querySelector("#cost_bar_chart"),
+                barOptions
+            );
+            barChart.render();
 
             // 📊 BAR CHART (Cost comparison)
             var barOptions = {
@@ -1962,7 +1978,7 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
-             var barOptions1 = {
+            var barOptions1 = {
                 chart: {
                     type: 'bar',
                     // height: 320,
@@ -2028,11 +2044,6 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
-            var barChart = new ApexCharts(
-                document.querySelector("#cost_bar_chart"),
-                barOptions
-            );
-            barChart.render();
 
             var barChartModal = new ApexCharts(
                 document.querySelector("#cost_bar_chart_modal"),
