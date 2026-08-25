@@ -5,6 +5,9 @@
  $mrf_id = test_input($_GET['mrf_id']);
 $tally_stock_array = json_decode($_GET['tally_stock_array'],true);
 $tally_stock_approved_by = test_input($_GET['tally_stock_approved_by']);
+$root_cause = isset($_GET['root_cause']) ? test_input($_GET['root_cause']) : "''";
+$preventive_action = isset($_GET['preventive_action']) ? test_input($_GET['preventive_action']) : "''";
+$corrective_action = isset($_GET['corrective_action']) ? test_input($_GET['corrective_action']) : "''";
 
  
 function test_input($data) {
@@ -16,7 +19,7 @@ return $data;
 }
 // Set time zone and insert in a single query using multi_query
 $sql = "SET time_zone = '+05:30';";
-$sql .= "UPDATE material_request_form SET  status='tally_stock_approved' , 	tally_stock_approved_by = $tally_stock_approved_by,form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'> tally stock Modified by ', (SELECT emp_name FROM employee WHERE emp_id = $tally_stock_approved_by), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i'),' </li>') WHERE mrf_id=$mrf_id;";
+$sql .= "UPDATE material_request_form SET  status='tally_stock_approved' ,root_cause = $root_cause, preventive_action = $preventive_action, corrective_action = $corrective_action, tally_stock_approved_by = $tally_stock_approved_by,form_history =  CONCAT(form_history ,'<li class = \'list-group-item\'> tally stock Modified by ', (SELECT emp_name FROM employee WHERE emp_id = $tally_stock_approved_by), ' on ', DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i'),' </li>') WHERE mrf_id=$mrf_id;";
 
 if ($conn->multi_query($sql)) {
     // Advance through all results to reach the insert
