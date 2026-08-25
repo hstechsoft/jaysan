@@ -1833,6 +1833,55 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
+            var donutOptions1 = {
+                chart: {
+                    type: 'donut',
+                    // height: 330
+                },
+
+                series: maxTimes,
+
+                labels: companyNames.map(name =>
+                    name.length > 20 ? name.substring(0, 20) + '...' : name
+                ),
+
+                legend: {
+                    position: 'bottom'
+                },
+
+                dataLabels: {
+                    enabled: false
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: function (val, opts) {
+                            let index = opts.seriesIndex;
+                            let min = minTimes[index];
+                            let max = maxTimes[index];
+
+                            return `Min: ${min} mins | Max: ${max} mins`;
+                        }
+                    }
+                },
+
+                // 🔥 STATIC CENTER CONTENT
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: false
+                            }
+                        }
+                    }
+                },
+
+                title: {
+                    text: "Max Time by Company",
+                    align: "center"
+                }
+            };
+
             var donutChart = new ApexCharts(
                 document.querySelector("#timing_dounut_chart"),
                 donutOptions
@@ -1841,7 +1890,7 @@ function get_process_summary_godown(process_id) {
 
             var donutChartModal = new ApexCharts(
                 document.querySelector("#timing_dounut_chart_modal"),
-                donutOptions
+                donutOptions1
             );
             donutChartModal.render();
 
@@ -1913,6 +1962,72 @@ function get_process_summary_godown(process_id) {
                 }
             };
 
+             var barOptions1 = {
+                chart: {
+                    type: 'bar',
+                    // height: 320,
+                    background: '#f8f9fa' // 🎨 light background
+                },
+
+                colors: ['#008FFB', '#168612', '#FEB019', '#FF4560', '#775DD0', '#3F51B5'],
+
+                series: [{
+                    name: "Cost",
+                    data: costs
+                }],
+
+                xaxis: {
+                    categories: companyNames.map(name =>
+                        name.length > 15 ? name.substring(0, 15) + '...' : name
+                    ),
+                    labels: {
+                        rotate: -30,
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        borderRadius: 5,
+                        columnWidth: '50%',
+                        distributed: true,
+                        dataLabels: {
+                            position: 'center' // 🔥 inside bar
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 5,
+                        distributed: true
+                    }
+                },
+
+                dataLabels: {
+                    enabled: true,
+                    formatter: val => "₹" + val,
+                    style: {
+                        fontSize: '11px',
+                        colors: ['#000000']
+                    }
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: val => "₹" + val
+                    }
+                },
+
+                title: {
+                    text: "Cost by Company",
+                    align: "center"
+                }
+            };
+
             var barChart = new ApexCharts(
                 document.querySelector("#cost_bar_chart"),
                 barOptions
@@ -1921,7 +2036,7 @@ function get_process_summary_godown(process_id) {
 
             var barChartModal = new ApexCharts(
                 document.querySelector("#cost_bar_chart_modal"),
-                barOptions
+                barOptions1
             );
             barChartModal.render();
 
