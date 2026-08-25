@@ -439,6 +439,13 @@ $(document).ready(function () {
 
     });
 
+    $("#timing_dounut_chart").on("dblclick", function () {
+        $("#timeModal").modal("show");
+    });
+
+    $("#cost_bar_chart").on("dblclick", function () {
+        $("#costModal").modal("show");
+    })
 });
 
 
@@ -798,13 +805,13 @@ function sec_work_order_report(process_id) {
                     var input_parts_html = `
                             <ul class="list-group list-group-flush small">
                                 ${input_parts.map(function (part) {
-                                            return `
+                        return `
                                         <li class="list-group-item px-2 py-1 d-flex justify-content-between align-items-center">
                                             <span>${part.part}</span>
                                             <span class="badge bg-primary rounded-pill">${part.qty}</span>
                                         </li>
                                     `;
-                                        }).join("")}
+                    }).join("")}
                             </ul>
                         `;
 
@@ -814,14 +821,14 @@ function sec_work_order_report(process_id) {
                     var raw_materials_html = `
                             <ul class="list-group list-group-flush small">
                                 ${raw_materials.map(function (part) {
-                                            return `
+                        return `
                                         <li class="list-group-item px-2 py-1 d-flex justify-content-between align-items-center">
                                             <span>${part.part_name}</span>
                                             <span class="badge bg-secondary rounded-pill">${part.qty}</span>
                                             <span class="badge bg-warning text-dark rounded-pill">${part.needed_qty}</span>
                                         </li>
                                     `;
-                                        }).join("")}
+                    }).join("")}
                             </ul>
                         `;
 
@@ -832,7 +839,7 @@ function sec_work_order_report(process_id) {
                             <ul class="list-group list-group-flush small">
                                 ${work_orders.map(function (wo) {
 
-                                            return `
+                        return `
                                         <li class="list-group-item px-2 py-2">
 
                                             <div class="d-flex justify-content-between">
@@ -864,7 +871,7 @@ function sec_work_order_report(process_id) {
                                         </li>
                                     `;
 
-                                        }).join("")}
+                    }).join("")}
                             </ul>
                         `;
 
@@ -1736,8 +1743,8 @@ function get_process_summary_godown(process_id) {
 
         success: function (response) {
 
-            $("#timing_dounut_chart").empty();
-            $("#cost_bar_chart").empty();
+            $("#timing_dounut_chart, #timing_dounut_chart_modal").empty();
+            $("#cost_bar_chart, #cost_bar_chart_modal").empty();
 
             if (response.trim() === "error") {
                 salert("Error", "Server Error", "error");
@@ -1772,7 +1779,7 @@ function get_process_summary_godown(process_id) {
             let totalMin = minTimes.reduce((a, b) => a + b, 0);
             let totalMax = maxTimes.reduce((a, b) => a + b, 0);
 
-            $("#donut_center_text").html(`
+            $("#donut_center_text, #donut_center_text_modal").html(`
                 <div>Min: ${totalMin} mins</div>
                 <div>Max: ${totalMax} mins</div>
             `);
@@ -1831,6 +1838,12 @@ function get_process_summary_godown(process_id) {
                 donutOptions
             );
             donutChart.render();
+
+            var donutChartModal = new ApexCharts(
+                document.querySelector("#timing_dounut_chart_modal"),
+                donutOptions
+            );
+            donutChartModal.render();
 
 
             // 📊 BAR CHART (Cost comparison)
@@ -1905,6 +1918,12 @@ function get_process_summary_godown(process_id) {
                 barOptions
             );
             barChart.render();
+
+            var barChartModal = new ApexCharts(
+                document.querySelector("#cost_bar_chart_modal"),
+                barOptions
+            );
+            barChartModal.render();
 
         },
 

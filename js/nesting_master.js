@@ -197,7 +197,7 @@ $(document).ready(function () {
 
     }
     else if (part_id > 0 && nested_part_qty > 0 && nes_master_id > 0 && nested_part_weight > 0) {
-      insert_nesting_parts_master(nes_master_id, part_id, nested_part_qty);
+      insert_nesting_parts_master(nes_master_id, part_id, nested_part_qty, nested_part_weight);
 
       $("#nested_parts").data("part_id", '').val('');
       $("#nested_part_qty, #nested_part_weight").val('');
@@ -211,7 +211,6 @@ $(document).ready(function () {
 
     var row = $(this).closest('tr');
     var nes_part_id = $(this).val() || 0;
-    alert(nes_part_id)
 
     Swal.fire({
       title: "Are You Sure?",
@@ -281,20 +280,23 @@ $(document).ready(function () {
     var run_time = $("#run_time").val() || 0;
     var dimension = $("#dimension").val() || 0;
     var file = $("#nest_file")[0].files[0];
+    var weight = $("#weight").val() || 0;
+    var scrap_weight = $("#scrap_weight").val() || 0;
 
-    if (!file) {
-      salert("Warning", "Please select a file.", "warning");
-      return;
-    }
+    // if (!file) {
+    //   salert("Warning", "Please select a file.", "warning");
+    //   return;
+    // }
 
     var parts = [];
 
     $("#nesting_parts_tbody tr").each(function () {
       var part_id = $(this).data('part_id') || 0;
       var qty = $(this).data('qty') || 0;
+      var weight = $(this).data("weight") || 0;
 
-      if (part_id > 0 && qty > 0) {
-        parts.push({ part_id: part_id, qty: qty });
+      if (part_id > 0 && qty > 0 && weight > 0) {
+        parts.push({ part_id: part_id, qty: qty, weight: weight });
       }
       else {
         salert("Warning", "Data Missing!, Try Again.", "warning");
@@ -302,15 +304,15 @@ $(document).ready(function () {
 
     });
 
-    console.log(nesting_name, part_id, run_time, dimension, parts);
+    console.log(nesting_name, part_id, run_time, dimension, parts, weight, scrap_weight);
 
 
-    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || parts.length <= 0) {
+    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || parts.length <= 0 || weight <= 0) {
       salert("Warning", "All Fields Are Required.", "warning");
       return;
     }
 
-    insert_nesting_master(nesting_name, part_id, run_time, dimension, file, JSON.stringify(parts));
+    insert_nesting_master(nesting_name, part_id, run_time, dimension, file,  weight, scrap_weight, JSON.stringify(parts));
   })
 
   $("#update_nesting_btn").on("click", function () {
@@ -321,16 +323,18 @@ $(document).ready(function () {
     var part_id = $("#material_id").data("part_id") || 0;
     var run_time = $("#run_time").val() || 0;
     var dimension = $("#dimension").val() || 0;
+    var weight = $("#weight").val() || 0;
+    var scrap_weight = $("#scrap_weight").val() || 0;
 
-    console.log(nesting_name, part_id, run_time, dimension);
+    console.log(nesting_name, part_id, run_time, dimension, weight, scrap_weight);
 
 
-    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || nes_master_id <= 0) {
+    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || nes_master_id <= 0 || weight <= 0) {
       salert("Warning", "All Fields Are Required.", "warning");
       return;
     }
 
-    update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension);
+    update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension, weight, scrap_weight);
   });
 
   $("#view_file").on("click", function () {
@@ -400,7 +404,7 @@ function get_nesting_master_single(nes_master_id) {
 
               part.forEach(function (p) {
 
-                parts += `<tr><td>${p.part_name} </td><td>${p.qty} </td><td>${''}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
+                parts += `<tr><td>${p.part_name} </td><td>${p.qty} </td><td>${p.weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
 
               });
 
@@ -412,6 +416,8 @@ function get_nesting_master_single(nes_master_id) {
             $("#material_id").data("part_id", item.material_id).val(item.nesting_material);
             $("#run_time").val(item.run_time);
             $("#dimension").val(item.std_length);
+            $("#weight").val(item.weight);
+            $("#scrap_weight").val(item.scarp_weight);
 
             $("#view_file").val(item.path);
             $("#update_nesting_btn, #nested_part_add_btn").val(item.nesting_id)
@@ -516,7 +522,7 @@ function get_nesting_master() {
 
 }
 
-function insert_nesting_master(nesting_name, part_id, run_time, dimension, file, parts) {
+function insert_nesting_master(nesting_name, part_id, run_time, dimension, file, weight, scrap_weight, parts) {
 
 
   let formData = new FormData($("#nesting_entry_form")[0]);
@@ -527,12 +533,14 @@ function insert_nesting_master(nesting_name, part_id, run_time, dimension, file,
   formData.append("nesting_type", "std");
   formData.append("std_length", dimension);
   formData.append("run_time", run_time);
+  formData.append("weight", weight);
+  formData.append("scarp_weight", scrap_weight);
   formData.append("laser_parts", parts);
   formData.append("file", file);
 
   $.ajax({
     url: "php/insert_nesting_master.php",
-    type: "post", //send it through get method
+    type: "post",
     data: formData,
     processData: false,
     contentType: false,
@@ -609,7 +617,7 @@ function upload_nesting(nes_master_id, file) {
 
 }
 
-function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension) {
+function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension, weight, scrap_weight) {
 
   $.ajax({
     url: "php/update_nesting_master.php",
@@ -622,7 +630,9 @@ function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, d
       material_id: part_id,
       nesting_type: 'std',
       std_length: dimension,
-      run_time: run_time
+      run_time: run_time,
+      weight: weight,
+      scarp_weight: scrap_weight,
     },
     success: function (response) {
       console.log(response);
@@ -654,7 +664,7 @@ function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, d
 
 }
 
-function insert_nesting_parts_master(nes_master_id, part_id, qty) {
+function insert_nesting_parts_master(nes_master_id, part_id, qty, nesting_part_weight) {
 
   $.ajax({
     url: "php/insert_nesting_parts_master.php",
@@ -664,6 +674,7 @@ function insert_nesting_parts_master(nes_master_id, part_id, qty) {
       nes_master_id: nes_master_id,
       part_id: part_id,
       qty: qty,
+      weight: nesting_part_weight
     },
     success: function (response) {
       console.log(response);
@@ -744,7 +755,7 @@ function delete_nesting_parts_master(nes_part_id) {
       if (response.trim()) {
         salert("Success", "Standard Nesting Part Deleted.", "success");
         get_nesting_master();
-        get_nesting_master_single(nes_master_id)
+        get_nesting_master_single($("#update_nesting_btn").val())
         $("#clear_btn").trigger("click");
       }
 

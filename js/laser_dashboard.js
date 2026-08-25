@@ -78,7 +78,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("nesting_id", ui.item.id);
-                    filter();
+                    // filter();
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     console.log(ui.item.id);
@@ -139,7 +139,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("part_id", ui.item.id);
-                    filter();
+                    // filter();
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     console.log(ui.item.id);
@@ -199,7 +199,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $("#employee").data("emp_id", ui.item.cus_id);
-                    filter();
+                    // filter();
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
@@ -232,7 +232,11 @@ $(document).ready(function () {
 
 $("#pending").change(function(){
     filter();
-})
+});
+
+$("#nesting_name, #material_id, #employee").on('focusout', function(){
+    filter();
+});
 
 
 function filter() {
@@ -291,6 +295,10 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
                             laser_assigned_details = ` <div class="accordion accordion-flush small" id="laserAccordion"> `;
 
                             laser.forEach(function (l, index) {
+
+                                if(item.total_assigned_qty <= index){
+                                    return;
+                                }
 
                                 let statusClass = l.status === 'finished' ? 'bg-success' : 'bg-warning text-dark';
 
@@ -435,7 +443,7 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
 
                 }
                 else {
-                    $("#work_nesting_details_tbody").append(`<tr><td colspan='9' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $("#work_nesting_details_tbody").append(`<tr><td colspan='10' class='text-center text-danger'>No Data Found</td></tr>`);
                 }
             }
         },

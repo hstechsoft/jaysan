@@ -66,7 +66,7 @@
                                 <i class="fa-solid fa-layer-group me-2"></i>
                                 Nesting Entry
                             </h5>
-                            <small class="text-muted">Create nesting details quickly</small>
+                            <small class="text-muted">Create/Alter Nesting For Laser Work quickly</small>
                             <hr>
                         </div>
 
@@ -74,7 +74,7 @@
                         <div class="row g-2">
 
                             <!-- Nesting -->
-                            <div class="col-md-6">
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-object-group"></i>
@@ -85,7 +85,7 @@
                             </div>
 
                             <!-- Material -->
-                            <div class="col-md-6">
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-cubes"></i>
@@ -114,6 +114,28 @@
                                     </span>
                                     <input type="number" class="form-control" id="run_time" placeholder="Run Time (Min)"
                                         required>
+                                </div>
+                            </div>
+
+                            <!-- weight -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-classic fa-solid fa-scale-unbalanced-flip"></i>
+                                    </span>
+                                    <input type="number" min="1" class="form-control" id="weight"
+                                        placeholder="Weight (In Kgs)" required>
+                                </div>
+                            </div>
+
+                            <!-- Scrap weight -->
+                            <div class="col-md-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">
+                                        <i class="fa-solid fa-dumpster-fire"></i>
+                                    </span>
+                                    <input type="number" min="1" class="form-control" id="scrap_weight"
+                                        placeholder="Scrap Weight (Kgs)" required>
                                 </div>
                             </div>
 
@@ -168,14 +190,20 @@
                             </h6>
 
                             <div class="row g-2">
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input type="text" class="form-control form-control-sm" id="nested_parts"
                                         placeholder="Part Name">
                                 </div>
 
-                                <div class="col-5">
-                                    <input type="number" min="1" class="form-control form-control-sm" id="nested_part_qty"
-                                        placeholder="Qty">
+                                <div class="col-2">
+                                    <input type="number" min="1" class="form-control form-control-sm"
+                                        id="nested_part_qty" placeholder="Qty">
+                                </div>
+
+                                <!-- weight -->
+                                <div class="col-4">
+                                    <input type="number" min="1" class="form-control form-control-sm"
+                                        id="nested_part_weight" placeholder="Weight(Kgs)">
                                 </div>
 
                                 <div class="col-2 d-grid">
@@ -203,6 +231,11 @@
                                         <th>
                                             <i class="fa-solid fa-sort-numeric-up me-1"></i>
                                             Qty
+                                        </th>
+
+                                        <th>
+                                            <i calss="fa-classic fa-solid fa-scale-unbalanced-flip"></i>
+                                            Weight
                                         </th>
 
                                         <th>

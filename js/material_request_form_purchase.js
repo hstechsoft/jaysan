@@ -592,7 +592,7 @@ $(document).ready(function () {
     event.preventDefault();
     // TODO: handle click here
     if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
-      update_reject($(this).data("mrf_id"), $("#reject_to").val())
+      update_reject($(this).data("mrf_id"), $("#reject_to").val(), $("#reject_reason").val())
     }
     else {
       shw_toast("Warning", "Enter Reason And Select Reject To", "warning")
@@ -677,7 +677,7 @@ function get_bom_list_wel(part_id) {
 
 }
 
-function update_reject(mrf_id, reject_to) {
+function update_reject(mrf_id, reject_to, reject_reason) {
 
 
   $.ajax({
@@ -686,7 +686,8 @@ function update_reject(mrf_id, reject_to) {
     data: {
       status: "purchase_rejected-" + reject_to,
       mrf_id: mrf_id,
-      emp_id: current_user_id
+      emp_id: current_user_id,
+      reason: reject_reason
 
     },
     success: function (response) {
@@ -801,6 +802,7 @@ function get_mrf_purchase_details(mrf_id, part_id) {
             $("#raw_material_rate").val(obj.raw_material_rate)
             $("#purchase_email").val(obj.po_email)
             $("#approx_delivery_days").val(obj.approx_delivery_days)
+            $("#raw_material_stock").val(obj.raw_material_stock)
 
           });
 
@@ -1153,6 +1155,8 @@ function insert_material_request_form_purchase() {
   if ($("#batch_table tr").length == 0) {
     if ($("#order_qty").val() == "" || parseInt($("#order_qty").val()) == 0 || $("#order_date").val() == "") {
       salert("Error", "Please enter order date and order quantity", "error");
+      $("#material_request_form_purchase_btn").prop("disabled", false)
+      return;
     }
     else {
       batch_details.push({ order_date: $("#order_date").val(), qty: $("#order_qty").val() });
@@ -1231,6 +1235,8 @@ function update_material_request_form_purchase() {
   if ($("#batch_table tr").length == 0) {
     if ($("#order_qty").val() == "" || parseInt($("#order_qty").val()) == 0 || $("#order_date").val() == "") {
       salert("Error", "Please enter order date and order quantity", "error");
+      $("#material_request_form_purchase_update_btn").prop("disabled", false)
+      return;
     }
     else {
       batch_details.push({ order_date: $("#order_date").val(), qty: $("#order_qty").val() });

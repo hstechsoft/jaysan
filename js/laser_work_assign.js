@@ -32,6 +32,15 @@ $(document).ready(function () {
         });
     });
 
+    
+    $("#assigned_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#assinged_nesting_job_card_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
     check_login();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
@@ -42,6 +51,7 @@ $(document).ready(function () {
 
 
     get_unassigned_job_card('');
+    get_assigned_job_card();
 
     get_all_machine();
 
@@ -69,14 +79,14 @@ $(document).ready(function () {
         }
     });
 
-    $("#qty").on("focusout", function(){
+    $("#qty").on("focusout", function () {
         var entered_qty = $(this).val();
         var remaining_qty = $(this).data("remaining_qty");
-        
-        if(entered_qty <= 0){
+
+        if (entered_qty <= 0) {
             $(this).val(remaining_qty);
         }
-        else if(entered_qty > remaining_qty){
+        else if (entered_qty > remaining_qty) {
             $(this).val(remaining_qty);
         }
     })
@@ -99,7 +109,7 @@ $(document).ready(function () {
             salert("Warning", "Data Missing!, Try Later.", "warning");
         }
 
-    })
+    });
 
     $(".close_model_btn").on("click", function () {
 
@@ -107,11 +117,63 @@ $(document).ready(function () {
         $("#shift").val('');
         $("#assign_date").val('');
         $("#qty").val(1);
-    })
+    });
+
+    $("#assinged_nesting_job_card_tbody, .assinged_nesting_job_card_mobile").on("click", ".delete_btn", function () {
+
+        var row = $(this).closest('tr');
+        var job_card_id = $(this).val() || 0;
+
+        Swal.fire({
+            title: "Are You Sure?",
+            text: "Do You Want To Delete This?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete!"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                if (job_card_id > 0) {
+                    delete_laser_jobcard(job_card_id);
+                }
+                else {
+                    salert("Error", "Data Missing!, Try Later", "error");
+                }
+            }
+
+        });
+
+    });
 });
 
 
 
+function delete_laser_jobcard(job_card_id) {
+
+    console.log(job_card_id);
+
+    $.ajax({
+        url: "php/delete_laser_jobcard.php",
+        type: "POST",
+        data: {
+            job_card_id: job_card_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                salert("Success", "Deleted Successfully.", "success");
+                setTimeout(() => {
+                    get_assigned_job_card();
+                }, 1000)
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+}
 
 function laser_job_card_create(machine_id, shift, assign_date, assigned_by, nesting_details_id, qty) {
 
@@ -180,7 +242,7 @@ function get_unassigned_job_card(show_all) {
                                     <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
                                 </td>
                                 <td>${item.run_time}</td>
-                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</td>
+                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
                                 <td>${item.emp_name}</td>
                                 <td>
                                     <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
@@ -218,7 +280,7 @@ function get_unassigned_job_card(show_all) {
                                     </div>
 
                                     <div class="small mb-2">
-                                        <span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}
+                                        <span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span>
                                     </div>
 
                                     <div class="d-flex gap-2">
@@ -242,6 +304,119 @@ function get_unassigned_job_card(show_all) {
                 } else {
                     $("#nesting_job_card_tbody").html(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
                     $(".nesting_job_card_mobile").html(`<div class='text-center text-danger'>No Data Found</div>`);
+                }
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
+
+}
+
+function get_assigned_job_card() {
+
+
+    $.ajax({
+        url: "php/get_assigned_job_card.php",
+        type: "GET",
+        data: {},
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != "error") {
+
+
+                $("#assinged_nesting_job_card_tbody").empty();
+                $(".assinged_nesting_job_card_mobile").empty();
+
+                if (response.trim() != '0 result') {
+
+                    var obj = JSON.parse(response);
+
+
+                    obj.forEach(function (item, index) {
+                        index++;
+
+
+                        var work = JSON.parse(item.laser_assigned_details);
+
+                        work.forEach(function (obj) {
+
+
+                                $("#assinged_nesting_job_card_tbody").append(`
+                                <tr>
+                                    <td>${index}</td>
+                                    <td>${item.nesting_name}</td>
+                                    <td>${item.material_name}</td>
+                                    <td>
+                                        <span class='badge bg-success'>Total: ${item.material_qty}</span>
+                                        <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
+                                        <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
+                                    </td>
+                                    <td>${item.run_time} <span class='ms-2 badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
+                                    <td>
+                                        <div class="small mb-2"><strong class='${obj.status == 'finished' ? 'text-success' : 'text-primary'}'>${obj.status}</strong> <span class='badge bg-secondary'>${obj.assign_date}</span></div>
+                                    </td>
+                                    <td>${item.emp_name}</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
+                                        <button class="btn btn-sm btn-danger delete_btn btn-sm ${obj.status == 'finished' ? 'd-none' : ''}" value="${obj.job_card_id}"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `);
+
+
+                                $(".assinged_nesting_job_card_mobile").append(`
+                                <div class="card mb-3 shadow-sm border-0 rounded-3">
+                                    <div class="card-body p-3">
+
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0 fw-bold">${item.nesting_name}</h6>
+                                            <span class="badge bg-primary">${index}</span>
+                                        </div>
+
+                                        <div class="small text-muted mb-2">${item.material_name}</div>
+
+                                        <div class="mb-2">
+                                            <span class='badge bg-success'>Total: ${item.material_qty}</span>
+                                            <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
+                                            <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between small mb-2">
+                                            <span>⏱ ${item.run_time}</span>
+                                            <span>👤 ${item.emp_name}</span>
+                                        </div>
+
+                                        <div class="small mb-2">
+                                            <span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span>
+                                        </div>
+
+                                        <div class="small mb-2">
+                                            <strong class='${obj.status == 'finished' ? 'text-success' : 'text-primary'}'>${obj.status}</strong> <span class='badge bg-secondary'>${obj.assign_date}</span>
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-sm btn-primary w-50 view_btn btn-sm" data-path="${item.path}">
+                                                View
+                                            </button>
+                                            <button class="btn btn-sm btn-danger w-50 delete_btn btn-sm ${obj.status == 'finished' ? 'd-none' : ''}" value="${obj.job_card_id}">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            `);
+
+                        });
+
+                    });
+
+                } else {
+                    $("#assinged_nesting_job_card_tbody").html(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $(".assinged_nesting_job_card_mobile").html(`<div class='text-center text-danger'>No Data Found</div>`);
                 }
             }
         },

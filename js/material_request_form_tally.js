@@ -206,7 +206,7 @@ $(document).ready(function () {
   });
 
   $("#reject_btn").on("click", function () {
-    
+
     if ($("#reject_reason").val() != "" && $("#reject_to").val() != null) {
       update_reject_tally($(this).val(), $("#reject_to").val())
     }
@@ -322,7 +322,7 @@ $(document).ready(function () {
 function update_reject_tally(mrf_id, reject_to) {
 
   console.log(mrf_id, reject_to);
-  
+
 
   $.ajax({
     url: "php/update_material_request_form_status.php",
@@ -468,7 +468,6 @@ function get_phy_stock_details(mrf_id) {
 
 function get_tally_stock_details(mrf_id) {
 
-
   $.ajax({
     url: "php/get_internal_godown_stock_tally.php",
     type: "get", //send it through get method
@@ -491,7 +490,17 @@ function get_tally_stock_details(mrf_id) {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#stock_table_body').append("<tr  data-godown-id='" + obj.godown_id + "'><td>" + obj.godown_name + "</td><td>" + obj.qty + "</td><td><button type='button' class='btn btn-outline-danger border-0 ' id=''><i class='fa fa-trash' aria-hidden='true'></i></button></td></tr>")
+
+            var tally_stock = JSON.parse(obj.tally_stock);
+
+            tally_stock.forEach(function (item) {
+
+              $('#stock_table_body').append("<tr  data-godown-id='" + item.godown_id + "'><td>" + item.godown_name + "</td><td>" + item.qty + "</td><td><button type='button' class='btn btn-outline-danger border-0 ' id=''><i class='fa fa-trash' aria-hidden='true'></i></button></td></tr>")
+            });
+
+            $("#root_cause_text").val(obj.root_cause);
+            $("#corrective_action_text").val(obj.corrective_action);
+            $("#preventive_action_text").val(obj.preventive_action);
 
           });
 

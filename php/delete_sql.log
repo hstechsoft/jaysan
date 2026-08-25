@@ -15,3 +15,11 @@
 [2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
 [2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
 [2026-04-10 10:25:15] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2753
+[2026-08-25 07:33:26] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_tally.php | SQL:DELETE FROM internal_godown_stock_tally WHERE mrf_id='1432'
+[2026-08-25 07:39:47] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_tally.php | SQL:DELETE FROM internal_godown_stock_tally WHERE mrf_id='1432'
+[2026-08-25 07:49:33] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_purchase.php | SQL:DELETE  FROM mrf_batch WHERE mrf_id =  '1432'
+[2026-08-25 07:58:54] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_purchase.php | SQL:DELETE  FROM mrf_batch WHERE mrf_id =  '1432'
+[2026-08-25 07:59:51] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_tally.php | SQL:DELETE FROM internal_godown_stock_tally WHERE mrf_id='1432'
+[2026-08-25 08:12:04] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form.php | SQL:DELETE FROM internal_godown_stock_physical WHERE mrf_id='1450'
+[2026-08-25 08:12:15] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_tally.php | SQL:DELETE FROM internal_godown_stock_tally WHERE mrf_id='1450'
+[2026-08-25 08:15:19] | USER:236 | IP:::1 | FILE:/jaysan/php/update_material_request_form_purchase.php | SQL:DELETE  FROM mrf_batch WHERE mrf_id =  '1450'
