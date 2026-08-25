@@ -8,11 +8,20 @@ $reason = isset($_GET['reason']) ? ($_GET['reason']) : "''";
 
 if ($reason != "''")
 {
-  $reason  = "because".$reason; 
+  $reason  = "because ".$reason; 
 }
 
+//  purchase_rejected-mrf,purchase_rejected-tally
  
- 
+ if($status == "'purchase_rejected-mrf'" || $status == "'purchase_rejected-tally'" )
+  {
+      // delete purchase entry
+    $sql_delete = "DELETE FROM mrf_purchase WHERE mrf_id = $mrf_id";
+    $conn->query($sql_delete);
+    // delete mrf_batch
+    $sql_delete_batch = "DELETE FROM mrf_batch WHERE mrf_id = $mrf_id";
+    $conn->query($sql_delete_batch);
+  }
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
