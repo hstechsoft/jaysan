@@ -26,7 +26,7 @@ FROM
     internal_godown_stock_tally tally_stock
 INNER JOIN internal_godown ON tally_stock.godown_id = internal_godown.internal_godown_id 
 inner join material_request_form mrf on tally_stock.mrf_id = mrf.mrf_id
-WHERE mrf_id =  $mrf_id";
+WHERE tally_stock.mrf_id =  $mrf_id";
 
 $result = $conn->query($sql);
 
