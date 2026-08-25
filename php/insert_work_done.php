@@ -730,13 +730,21 @@ if($result_sec_stock->num_rows > 0) {
   foreach($process_part_array as $process_part) {
         $part_id = $process_part['part_id'];
         $required_qty = $process_part['required_qty'];
+
         $process_id = $process_part['process_id'];
 
         $production_qty = $required_qty;
-       
+       $insert_process_id = "NULL";
+    //    if part id   > 0 then process_id is null else process_id is process_id
+    if($part_id > 0) {
+        $insert_process_id = "NULL";
+    }
+    else {
+        $insert_process_id = $process_id;
+    }
 $batch_id = "j".$work_done_id;
     // insert output stock for the process part
-    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
+    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $insert_process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
 
     if ($conn->query($sql_insert_output) === TRUE) {
 // get stock_id
