@@ -25,7 +25,9 @@ if($status == "'md_rejected-mrf'" || $status == "'md_rejected-tally'" )
     // delete purchase entry
     $sql_delete = "DELETE FROM mrf_purchase WHERE mrf_id = $mrf_id";
     $conn->query($sql_delete);
-    
+    // de;ete mrf_batch
+    $sql_delete_batch = "DELETE FROM mrf_batch WHERE mrf_id = $mrf_id";
+    $conn->query($sql_delete_batch);
 
   }
 
