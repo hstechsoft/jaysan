@@ -16,17 +16,20 @@ return $data;
 
 
  $sql = "SELECT
-    tally_stock.qty,
-    internal_godown.godown_name,
-    internal_godown.internal_godown_id as godown_id,
+    json_arrayagg(
+    JSON_OBJECT('qty', tally_stock.qty,
+      'godown_name', internal_godown.godown_name,
+      'godown_id', internal_godown.internal_godown_id
+    ))  as tally_stock,
+  mrf.mrf_id,
 mrf.corrective_action,
 mrf.preventive_action,
 mrf.root_cause
 FROM
     internal_godown_stock_tally tally_stock
 INNER JOIN internal_godown ON tally_stock.godown_id = internal_godown.internal_godown_id 
-inner join material_request_form mrf on tally_stock.mrf_id = mrf.mrf_id
-WHERE tally_stock.mrf_id =  $mrf_id";
+inner join material_request_form mrf on tally_stock.mrf_id = mrf.mrf_id 
+WHERE tally_stock.mrf_id =  $mrf_id group by mrf.mrf_id";
 
 $result = $conn->query($sql);
 
