@@ -1744,7 +1744,7 @@ function get_process_summary_godown(process_id) {
         success: function (response) {
 
             console.log(response);
-            
+
 
             if (response.trim() === "error") {
                 salert("Error", "Server Error", "error");
@@ -1842,7 +1842,7 @@ function get_process_summary_godown(process_id) {
                     align: "center"
                 }
             };
-            
+
             var donutChart = new ApexCharts(
                 document.querySelector("#timing_dounut_chart"),
                 donutOptions
@@ -1905,11 +1905,6 @@ function get_process_summary_godown(process_id) {
             );
             donutChartModal.render();
 
-            var barChart = new ApexCharts(
-                document.querySelector("#cost_bar_chart"),
-                barOptions
-            );
-            barChart.render();
 
             // 📊 BAR CHART (Cost comparison)
             var barOptions = {
@@ -1977,6 +1972,13 @@ function get_process_summary_godown(process_id) {
                     align: "center"
                 }
             };
+
+            var barChart = new ApexCharts(
+                document.querySelector("#cost_bar_chart"),
+                barOptions
+            );
+            barChart.render();
+
 
             var barOptions1 = {
                 chart: {
