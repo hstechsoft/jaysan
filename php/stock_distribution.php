@@ -1,6 +1,6 @@
 <?php
 // 
-function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id)
+function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
 {
     $process_id = sql_nullable($process_id);
     $result_json = [];
