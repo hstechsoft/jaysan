@@ -528,10 +528,10 @@ $remaining_consume_qty = 0;
 
 
  if($qty_to_consume > 0) {
-$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'   order by stock_id ";
+$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'   order by stock_id ";
 
 if($part_id != 'NULL') {
-   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'  order by stock_id";
+   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'  order by stock_id";
 }
 
 $result_sec_stock = $conn->query($sql_get_sec_stock);
@@ -589,10 +589,10 @@ if($result_sec_stock->num_rows > 0) {
 //  if  consume still available then check same dep 
 
  if($qty_to_consume > 0) {
-$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id ";
+$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id ";
 
 if($part_id != 'NULL') {
-   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id";
+   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id";
 }
 
 $result_sec_stock = $conn->query($sql_get_sec_stock);
@@ -649,10 +649,10 @@ if($result_sec_stock->num_rows > 0) {
 
 
  if($qty_to_consume > 0) {
-$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id ";
+$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id ";
 
 if($part_id != 'NULL') {
-   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,js.stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id";
+   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id";
 }
 
 $result_sec_stock = $conn->query($sql_get_sec_stock);
