@@ -787,7 +787,7 @@ foreach($work_order_array as $work_order) {
     $reduce_qty = min($production_qty, $pending_qty);
     $production_qty -= $reduce_qty;
     // update work order in the database
-    $sql_update_work_order = "UPDATE work_order SET pending_qty = pending_qty - $reduce_qty WHERE work_order_id = $work_order_id";
+    $sql_update_work_order = "UPDATE work_order SET completed_qty = completed_qty + $reduce_qty WHERE work_order_id = $work_order_id";
     if ($conn->query($sql_update_work_order) !== TRUE) {
         $result_json['message'] = "Error updating work order: " . $conn->error;
         echo json_encode($result_json);
