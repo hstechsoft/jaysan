@@ -261,7 +261,7 @@ if($remaining_reserve_qty >= $qty){
 //    echo "<br>SQL Reserve: ".$sql_reserve;
     if($conn->query($sql_reserve)) {
        $qty = 0;
-       $conn->commit();
+    //    $conn->commit();
        return "ok";
    }
    else
