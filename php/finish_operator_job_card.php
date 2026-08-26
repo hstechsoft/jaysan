@@ -82,8 +82,8 @@ if($is_final_output == 'no') {
       throw new Exception("Error inserting into stock: " . $conn->error);
   }
 
-//   require_once 'stock_distribution.php';
-// stock_distribution($conn, $stock_id, $produced_qty);
+  require_once 'stock_distribution.php';
+stock_distribution($conn, $stock_id, $produced_qty);
 
 
 $work_order_array = [];
