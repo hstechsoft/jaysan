@@ -21,7 +21,7 @@ try
     } else {
         throw new Exception("Stock id $stock_id not found in jaysan_stock");
     }
-echo "godown:".$godown." dep:".$dep." sec:".$sec;
+
 
 
 // get there is still demand
@@ -103,7 +103,7 @@ if($in_part_id !=null)
 $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $in_part_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
 
 
-         echo "<br>SQL Work Order Demand: ".$sql_work_order_demand;
+       
         $result_work_order_demand = $conn->query($sql_work_order_demand);
         if ($result_work_order_demand->num_rows > 0) {
             while ($row_work_order_demand = $result_work_order_demand->fetch_assoc()) {
