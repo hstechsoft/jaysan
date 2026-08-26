@@ -57,20 +57,25 @@ foreach ($produced_parts as $part) {
     }
 
     // get process id 
-    $process_sql = "select pwt.process_id from process_wel_tbl pwt
-inner join jaysan_process jp on pwt.process =  jp.process_id 
-inner join input_wel_parts iwp on pwt.process_id = iwp.process_id
- WHERE jp.process_name = 'laser cutting' and component_cat = 'laser cutting' and pwt.output_part = '$part_id' and iwp.input_part_id = '$material_id' limit 1";
+    $is_final_output = 'no';
+    $process_sql = "select jpv.process_id, jpv.output_part, if(jpv.final_part_id = jpv.output_part,'yes','no') as is_final_output from  jaysan_process_view jpv
+ WHERE jpv.process_name = 'laser cutting' and jpv.final_part_id = '$part_id' limit 1";
     $process_result = $conn->query($process_sql);
     if ($process_result->num_rows > 0) {
         $process_row = $process_result->fetch_assoc();
         $process_id = $process_row['process_id'];
+        $is_final_output = $process_row['is_final_output'];
     } else {
         throw new Exception("Process not found for part: " . $part_id . " and material: " . $material_id);
     }
+    $batch_id = "l".$job_card_id;
 // insert into stock
-$batch_id = "l".$job_card_id;
-  $sql_insert_output = "INSERT INTO jaysan_stock (part_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $godown, $dep, $sec, $produced_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
+  $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
+if($is_final_output == 'no') {
+      $sql_insert_output = "INSERT INTO jaysan_stock (part_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $godown, $dep, $sec, $produced_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
+} 
+
+
   if ($conn->query($sql_insert_output) === TRUE) {
       $stock_id = $conn->insert_id;
   } else {
