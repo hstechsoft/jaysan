@@ -42,12 +42,90 @@ $(document).ready(function () {
 
 
 
-    get_all_machine();
 
     $("#shift").on("change", function () {
         $("#machine").val('');
         $("#operator_job_card_tbody").empty();
         $(".operator_job_card_mobile").empty();
+    })
+
+    $('#godown').on('input', function () {
+        $(this).removeData("godown_id");
+        if ($(this).val().trim() === '') {
+            $(this).removeData("godown_id");
+        }
+
+        $("#department").empty();
+        $("#section").empty();
+        $("#machine").empty();
+
+        //check the value not empty
+        if ($('#godown').val() != "") {
+            $('#godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+                    get_department(ui.item.id);
+                    $("#department_add_btn").removeClass("d-none");
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+
+    $("#department").on("change", function () {
+
+        $("#section").empty();
+        $("#machine").empty();
+
+        get_dep_section($(this).val());
+    })
+
+    $("#section").on("change", function () {
+
+        $("#machine").empty();
+
+        // get_dep_sec_machine($(this).val());
+
+        get_all_machine();
+
     })
 
     $("#machine").on("change", function () {
@@ -65,7 +143,7 @@ $(document).ready(function () {
             get_operator_job_card(shift, machine);
         }
         else {
-            salert("Warning", "Fill Both Field", "warning");
+            salert("Warning", "Fill All Field", "warning");
         }
     })
 
@@ -77,6 +155,9 @@ $(document).ready(function () {
         var machine_id = $(this).data("machine_id");
         var job_card_id = $(this).data("job_card_id");
         var nesting = $(this).data("nesting_parts_details");
+        var raw_mat_weight = $(this).data("raw_mat_weight") || 0;
+
+        $("#raw_material_weight").val(raw_mat_weight).data("raw_material_weight", raw_material_weight);
 
         $("#assign_Work_entry_btn").data({
             "machine_id": machine_id,
@@ -139,11 +220,11 @@ $(document).ready(function () {
 
     });
 
-    $("#nested_parts").on("focusout", ".li_scrap_qty", function(){
+    $("#nested_parts").on("focusout", ".li_scrap_qty", function () {
         var qty = $(this).attr("data-qty");
         var entered_qty = $(this).val();
 
-        if(entered_qty > qty){
+        if (entered_qty > qty) {
             $(this).val(qty);
         }
     })
@@ -153,6 +234,11 @@ $(document).ready(function () {
         var job_card_id = $(this).data("job_card_id");
         var machine_id = $(this).data("machine_id");
 
+        var godown = $("#godown").data("godown_id") || 0;
+        var dep = $("#department").val() || 0;
+        var sec = $("#section").val() || 0;
+
+        var material_weight = $("#raw_material_weight").val() || 0;
         var scrap_weight = $("#scarp_weight").val() || 0;
         var scarp_qty = $("#scarp_qty").val() || 0;
         var remark = $("#remark").val() || '';
@@ -184,7 +270,7 @@ $(document).ready(function () {
 
         });
 
-        console.log(job_card_id, machine_id, scrap_weight, scarp_qty, remark, produced_parts);
+        console.log(job_card_id, machine_id, scrap_weight, scarp_qty, remark, produced_parts, material_weight, godown, dep, sec);
 
 
         if (!isValid) {
@@ -192,13 +278,17 @@ $(document).ready(function () {
             return;
         }
 
-        if (job_card_id > 0 && machine_id > 0 && produced_parts.length > 0) {
+        if (job_card_id > 0 && machine_id > 0 && produced_parts.length > 0 && material_weight > 0 && godown > 0) {
             finish_operator_job_card(
                 job_card_id,
                 current_user_id,
                 scrap_weight,
                 scarp_qty,
                 remark,
+                godown,
+                dep,
+                sec,
+                material_weight,
                 JSON.stringify(produced_parts)
             );
         } else {
@@ -207,7 +297,7 @@ $(document).ready(function () {
 
     });
 
-        $("#operator_job_card_tbody, .operator_job_card_mobile").on("click", ".view_btn", function () {
+    $("#operator_job_card_tbody, .operator_job_card_mobile").on("click", ".view_btn", function () {
         let path = $(this).data("path");
 
 
@@ -219,9 +309,9 @@ $(document).ready(function () {
 
 
 
-function finish_operator_job_card(job_card_id, current_user_id, scrap_weight, scarp_qty, remark, produced_parts) {
+function finish_operator_job_card(job_card_id, current_user_id, scrap_weight, scarp_qty, remark, godown, dep, sec, material_weight, produced_parts) {
 
-    console.log(job_card_id, current_user_id, scrap_weight, scarp_qty, remark, produced_parts);
+    console.log(job_card_id, current_user_id, scrap_weight, scarp_qty, remark, godown, dep, sec, material_weight, produced_parts);
 
     $.ajax({
         url: "php/finish_operator_job_card.php",
@@ -232,16 +322,21 @@ function finish_operator_job_card(job_card_id, current_user_id, scrap_weight, sc
             scarp_weight: scrap_weight,
             scarp_qty: scarp_qty,
             remark: remark,
+            godown: godown,
+            dep: dep,
+            sec: sec,
+            material_weight: material_weight,
             produced_parts: produced_parts,
         },
         success: function (response) {
             console.log(response);
 
             if (response.trim() == "ok") {
-                window.location.reload();
+                // window.location.reload();
             }
         },
         error: function (xhr) {
+            salert("Error", xhr, "error")
             console.log(xhr);
         }
     });
@@ -277,7 +372,7 @@ function get_operator_job_card(shift, machine_id) {
                     obj.forEach(function (item, index) {
                         index++;
 
-                        let nesting = JSON.parse(item.nesting_parts_details);
+                        let nesting = JSON.parse(item.nesting_parts_details) || [];
                         let nesting_parts_details = '<ul class="list-group">';
                         nesting.forEach(function (obj) {
 
@@ -303,7 +398,8 @@ function get_operator_job_card(shift, machine_id) {
                                     <button class="btn btn-outline-success laser_work_entry_btn" 
                                         data-job_card_id="${item.job_card_id}" 
                                         data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
-                                        data-machine_id="${item.machine_id}">
+                                        data-machine_id="${item.machine_id}"
+                                        data-raw_mat_weight="${item.raw_mat_weight}">
                                         <i class="fa-solid fa-person-running fa-bounce"></i>
                                     </button>
                                 </td>
@@ -342,7 +438,8 @@ function get_operator_job_card(shift, machine_id) {
                                          <button class="btn btn-outline-success laser_work_entry_btn" 
                                             data-job_card_id="${item.job_card_id}" 
                                             data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
-                                            data-machine_id="${item.machine_id}">
+                                            data-machine_id="${item.machine_id}"
+                                            data-raw_mat_weight="${item.raw_mat_weight}">
                                             <i class="fa-solid fa-person-running fa-bounce"></i>
                                         </button>
                                     </div>
@@ -406,6 +503,166 @@ function get_all_machine() {
     });
 
 }
+
+function get_department(godown_id) {
+
+    $.ajax({
+        url: "php/get_department.php",
+        type: "get", //send it through get method
+        data: {
+            godown_id: godown_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#department").empty();
+                if (response.trim() != "0 result") {
+
+
+
+                    $("#department").append(`<option selected disabled value="">Choose...</option>`);
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        $("#department").append(`<option value="${obj.dep_id}">${obj.dep_name}</option>`)
+
+
+                        // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#department_da").append("<li disabled><a class='dropdown-item'  >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+function get_dep_section(dept_id) {
+
+    $.ajax({
+        url: "php/get_dep_section.php",
+        type: "get", //send it through get method
+        data: {
+            dep_id: dept_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#section").empty();
+                if (response.trim() != "0 result") {
+
+
+                    $("#section").append(`<option selected disabled value="">Choose...</option>`);
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        $("#section").append(`<option value="${obj.dep_sec_id}">${obj.sec_name}</option>`);
+
+
+                        // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
+
+
+                    });
+
+
+                }
+                else {
+                    // $("#section_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
+
+// function get_dep_sec_machine(sec_id) {
+
+//     $.ajax({
+//         url: "php/get_dep_sec_machine.php",
+//         type: "get", //send it through get method
+//         data: {
+//             sec_id: sec_id
+
+//         },
+//         success: function (response) {
+//             console.log(response);
+
+
+//             if (response.trim() != "error") {
+//                 $("#machine").empty();
+//                 if (response.trim() != "0 result") {
+
+//                     $("#machine").append(`<option selected disabled value="">Choose...</option>`);
+
+//                     var obj = JSON.parse(response);
+//                     var count = 0
+
+//                     obj.forEach(function (obj) {
+//                         count = count + 1;
+
+//                         $("#machine").append(`<option value="${obj.dep_sec_machine_id}">${obj.machine_name}</option>`);
+//                     });
+
+
+//                 }
+//                 else {
+//                     // $("#machine_da").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+
+//                 }
+//             }
+
+//         },
+//         error: function (xhr) {
+//             //Do Something to handle error
+//         }
+//     });
+
+
+// }
 
 
 

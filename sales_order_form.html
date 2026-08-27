@@ -1831,109 +1831,108 @@
 
 
 
-        </div>
-
-        <div id='footer' class="mt-auto">
-
-
-        <!-- MODAL -->
-
-        <div class="modal fade" id="cusTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="cusTypeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cusTypeModalLabel">Update Customer Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="cus_group" placeholder="">
-                            <label for="cus_group">Customer Group </label>
-                        </div>
-                        <div class="form-floating mb-2 d-none" id="cus_sub_group_tgl">
-                            <input type="text" class="form-control rounded-3" id="cus_sub_group" placeholder="">
-                            <label for="cus_sub_group">Sub Group </label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                        <button type="button" class="btn btn-primary" id="cus_type_update_btn">Update</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="spareModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Spares Quotation</h5>
-                        <button type="button" class="btn-close spare_close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class='input-group mt-2'>
-                            <label class='input-group-text ' for='quotation_no'><span>
-                                    Quotation no
-                                </span>
-                            </label>
-                            <input id='quotation_no' type='text' class='form-control'>
-
-                        </div>
-
-                        <div class='input-group mt-2'>
-                            <label class='input-group-text ' for='quotation_amount'><span>
-                                    Quotation Amount
-                                </span>
-                            </label>
-                            <input id='quotation_amount' type='number' class='form-control'>
-
-                        </div>
-
-                        <div class='input-group mt-2'>
-                            <label class='input-group-text ' for='quotation_remark'><span>
-                                    Quotation remark
-                                </span>
-                            </label>
-                            <input id='quotation_remark' type='text' class='form-control'>
-
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary add_quotation_btn"
-                            data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary " id="add_quotation_btn">Add</button>
-                        <button type="submit" class="btn btn-primary d-none" id="update_quotation_btn">Update</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="calenderModal" tabindex="-1" aria-labelledby="calenderModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="calenderModalLabel">Assigned Production Date</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="calendar"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+
+
+    <!-- MODAL -->
+
+    <div class="modal fade" id="cusTypeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="cusTypeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cusTypeModalLabel">Update Customer Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control rounded-3" id="cus_group" placeholder="">
+                        <label for="cus_group">Customer Group </label>
+                    </div>
+                    <div class="form-floating mb-2 d-none" id="cus_sub_group_tgl">
+                        <input type="text" class="form-control rounded-3" id="cus_sub_group" placeholder="">
+                        <label for="cus_sub_group">Sub Group </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary" id="cus_type_update_btn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="spareModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Spares Quotation</h5>
+                    <button type="button" class="btn-close spare_close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class='input-group mt-2'>
+                        <label class='input-group-text ' for='quotation_no'><span>
+                                Quotation no
+                            </span>
+                        </label>
+                        <input id='quotation_no' type='text' class='form-control'>
+
+                    </div>
+
+                    <div class='input-group mt-2'>
+                        <label class='input-group-text ' for='quotation_amount'><span>
+                                Quotation Amount
+                            </span>
+                        </label>
+                        <input id='quotation_amount' type='number' class='form-control'>
+
+                    </div>
+
+                    <div class='input-group mt-2'>
+                        <label class='input-group-text ' for='quotation_remark'><span>
+                                Quotation remark
+                            </span>
+                        </label>
+                        <input id='quotation_remark' type='text' class='form-control'>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary add_quotation_btn"
+                        data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary " id="add_quotation_btn">Add</button>
+                    <button type="submit" class="btn btn-primary d-none" id="update_quotation_btn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="calenderModal" tabindex="-1" aria-labelledby="calenderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="calenderModalLabel">Assigned Production Date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="calendar"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='footer' class="mt-auto">
+        
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -1951,9 +1950,7 @@
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
         crossorigin="anonymous"></script>
 
-         <script src="
-https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js
-"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
 

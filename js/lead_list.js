@@ -38,6 +38,18 @@ $(document).ready(function(){
  check_login();
  get_lead();
 
+ $('#leads_table').on("click", ".map_btn", function(){
+  var lat = $(this).data("lat");
+  var lon = $(this).data("lon");
+if(lat != '' && lon != ''){
+
+  window.open(`https://www.google.com/maps?q=${lat},${lon}`)
+}
+else{
+  salert("Warning", "Location Not Found.", "warning")
+}
+ })
+
  $("#search_cus_btn").click(function()
  {
 console.log(cus_id)
@@ -238,7 +250,7 @@ $.ajax({
       if (response.trim() != "error") {
         if (response.trim() != "0 result") {
        var obj = JSON.parse(response);
-      
+      obj = obj.sort((a,b)=> Number(b.lead_id) - Number(a.lead_id))
       var count = 0;
       console.log(obj)
       obj.forEach(function (obj) {
@@ -251,7 +263,7 @@ $.ajax({
 
         
       count = count + 1;
-      $('#leads_table').append("<tr><td>"+count+"</td><td>"+millis_to_date(parseFloat(obj.dated))+"</td><td>"+obj.emp_name+"</td><td>"+obj.cus_name+"</td><td>"+obj.phone+"</td><td>"+obj.description+"</td><td>"+attach+"</td></td>  <td>" + "<a target='_blank' value='"+obj.lead_id + "' href='create_customer.html?phone_no=" + obj.phone + "&phone_name=" + obj.cus_name + "&lead_source=" + "marketing"  + "&latti=" + obj.latti + "&longi=" + obj.longi+ "&company_name=" + obj.company_name+"&address=" + obj.address+ "' class='btn btn-primary btn-sm' role='button' value ="+obj.api_id + ">Add</a>" + "</td><td>"+"<button value='"+obj.lead_id + "' type='button' class='btn text-danger' > <i class='fa-solid fa-trash-can'></i></button>"+"</td></tr>")
+      $('#leads_table').append("<tr><td>"+count+"</td><td>"+millis_to_date(parseFloat(obj.dated))+"</td><td>"+obj.emp_name+"</td><td>"+obj.cus_name+"</td><td>"+obj.phone+"</td><td>"+obj.description+"</td><td>"+attach+"</td></td>  <td>" + "<a target='_blank' value='"+obj.lead_id + "' href='create_customer.html?phone_no=" + obj.phone + "&phone_name=" + obj.cus_name + "&lead_source=" + "marketing"  + "&latti=" + obj.latti + "&longi=" + obj.longi+ "&company_name=" + obj.company_name+"&address=" + obj.address+ "' class='btn btn-primary btn-sm' role='button' value ="+obj.api_id + ">Add</a>" + "</td><td>"+"<button value='"+obj.lead_id + "' type='button' class='btn text-danger' > <i class='fa-solid fa-trash-can'></i></button></td><td><button class='btn btn-outline-success btn-sm map_btn' data-lat='" + obj.latti + "' data-lon='" + obj.longi+ "'> <i class='fa fa-map-marker-alt me-1'></i></button></td></tr>")
         
        });
       
@@ -259,7 +271,7 @@ $.ajax({
       
       }
       else{
-        $("#leads_table") .append("<tr class = 'text-bg-danger'><td colspan='9' scope='col'>No Data</td></tr>");
+        $("#leads_table") .append("<tr class = 'text-bg-danger'><td colspan='10' scope='col'>No Data</td></tr>");
       }
       }
       

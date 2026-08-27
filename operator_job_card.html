@@ -35,11 +35,11 @@
             transform: scale(1.01);
         }
 
-        .list-group-item{
+        .list-group-item {
             font-size: 12px;
         }
 
-        button{
+        button {
             font-size: 12px !important;
         }
     </style>
@@ -89,6 +89,35 @@
                             </div>
                         </div>
 
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="godown" placeholder="" required>
+                            <label for="godown">Godown</label>
+
+                            <div class="invalid-feedback">
+                                Kindly Enter Vaild Data
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="department" required>
+                                <option selected disabled value="">Choose...</option>
+                            </select>
+                            <label for="department">Department</label>
+                            <div class="invalid-feedback">
+                                Kindly Select Vaild
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="section" required>
+                                <option selected disabled value="">Choose...</option>
+                            </select>
+                            <label for="section">Section</label>
+                            <div class="invalid-feedback">
+                                Kindly Select Vaild
+                            </div>
+                        </div>
+
                         <div class="form-floating mb-3">
                             <select class="form-select" id="machine" required>
                                 <option selected disabled value="">Choose...</option>
@@ -115,7 +144,7 @@
                         <table class="table caption-top table-bordered table-striped ">
                             <caption></caption>
                             <thead style="position: sticky; z-index: 5; top: 0; background-color: rgb(202, 222, 240);">
- 
+
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nesting Name</th>
@@ -164,9 +193,20 @@
                 </div>
                 <div class="modal-body">
 
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control rounded-3" min="1" id="raw_material_weight"
+                            placeholder="" required>
+                        <label for="raw_material_weight">Raw Material weight
+                            <span class="text-danger">* In Kgs</span> </label>
+
+                        <div class="invalid-feedback">
+                            Kindly Enter Vaild Data
+                        </div>
+                    </div>
 
                     <div class="form-floating mb-2">
-                        <input type="number" class="form-control rounded-3" min="1" id="scarp_weight" placeholder="" required>
+                        <input type="number" class="form-control rounded-3" min="1" id="scarp_weight" placeholder=""
+                            required>
                         <label for="scarp_weight">Scarp weight
                             <span class="text-danger">* In Kgs</span> </label>
 
@@ -176,7 +216,8 @@
                     </div>
 
                     <div class="form-floating mb-2">
-                        <input type="number" class="form-control rounded-3" min="1" id="scarp_qty" placeholder="" required>
+                        <input type="number" class="form-control rounded-3" min="1" id="scarp_qty" placeholder=""
+                            required>
                         <label for="scarp_qty">Scarp Qty
                             <span class="text-danger">*</span> </label>
 
