@@ -21,34 +21,34 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
-$part_array = array();
+// $part_array = array();
 
-// get bom_input of bom id and get part id
-$sql_get_part_id = "select bo.part_id,bi.bom_id,parts_tbl.part_name
-from bom_output bo
-inner join bom_input bi on bo.part_id = bi.part_id
-inner join bom_output bo_i on bi.bom_id = bo_i.bom_id
-inner join parts_tbl on bo_i.part_id = parts_tbl.part_id
-WHERE bo.bom_id = $bom_id;";
+// // get bom_input of bom id and get part id
+// $sql_get_part_id = "select bo.part_id,bi.bom_id,parts_tbl.part_name
+// from bom_output bo
+// inner join bom_input bi on bo.part_id = bi.part_id
+// inner join bom_output bo_i on bi.bom_id = bo_i.bom_id
+// inner join parts_tbl on bo_i.part_id = parts_tbl.part_id
+// WHERE bo.bom_id = $bom_id;";
 
-$result = $conn->query($sql_get_part_id);
-if ($result->num_rows > 0) {
+// $result = $conn->query($sql_get_part_id);
+// if ($result->num_rows > 0) {
   
-  while($row = $result->fetch_assoc()) {
-    $part_array[] = $row;
+//   while($row = $result->fetch_assoc()) {
+//     $part_array[] = $row;
     
 
-  }
+//   }
   
-// if there is record exit and show error message
-$result_json['success'] = false;
-$result_json['message'] = "BOM cannot be deleted because it is used in other BOMs";
-$result_json['data'] = $part_array;
-  echo json_encode($result_json);
-  $conn->close();
-  exit();
+// // if there is record exit and show error message
+// $result_json['success'] = false;
+// $result_json['message'] = "BOM cannot be deleted because it is used in other BOMs";
+// $result_json['data'] = $part_array;
+//   echo json_encode($result_json);
+//   $conn->close();
+//   exit();
 
-}
+// }
 
 
 
