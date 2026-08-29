@@ -44,8 +44,8 @@
             </div>
         </div>
     </div>
-    
-        <section id="menu_bar" ></section>
+
+    <section id="menu_bar"></section>
     <div class="container-fluid ">
         <!-- top bar -->
 
@@ -178,7 +178,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="dc_bill">
                                     <label class="form-check-label small" for="dc_bill">
-                                        It's DC No?
+                                        It's Invoice?
                                     </label>
                                 </div>
                             </div>
@@ -241,9 +241,9 @@
 
                                 <div class="col-6 d-flex align-items-center">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="dc_bill">
-                                        <label class="form-check-label small" for="dc_bill">
-                                            It's DC No?
+                                        <input class="form-check-input" type="checkbox" id="dc_billl">
+                                        <label class="form-check-label small" for="dc_billl">
+                                            It's Invoice?
                                         </label>
                                     </div>
                                 </div>
@@ -329,7 +329,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-8 d-flex justify-content-between">
+                                <!-- <div class="col-md-8 d-flex justify-content-between">
                                     <div class="form-check">
                                         <input class="form-check-input select_po_uds" type="checkbox" id="unit_chkk">
                                         <label class="form-check-label" for="unit_chkk">Unit</label>
@@ -345,14 +345,20 @@
                                         <label class="form-check-label" for="section_chkk">Section</label>
                                     </div>
 
+                                </div> -->
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control mt-2" id="unit_autoo"
+                                        placeholder="Enter Unit">
                                 </div>
 
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control mt-2 d-none" id="unit_autoo"
-                                        placeholder="Enter Unit">
-                                    <input type="text" class="form-control mt-2 d-none" id="department_autoo"
+                                    <input type="text" class="form-control mt-2" id="department_autoo"
                                         placeholder="Enter Department">
-                                    <input type="text" class="form-control mt-2 d-none" id="section_autoo"
+                                </div>
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control mt-2" id="section_autoo"
                                         placeholder="Enter Section">
                                 </div>
 
@@ -360,7 +366,7 @@
 
                             </div>
 
-                            <div>
+                            <div class="mt-2">
                                 <button type="submit" class="btn btn-primary" id="entry_po_add_btn">Add</button>
                                 <button type="submit" class="btn btn-primary d-none"
                                     id="entry_po_update_btn">Update</button>
@@ -440,7 +446,7 @@
 
                     <div class="modal-body">
 
-                        <div class="form-check">
+                        <!-- <div class="form-check">
                             <input class="form-check-input select_uds" type="checkbox" id="unit_chk">
                             <label class="form-check-label" for="unit_chk">Unit</label>
                         </div>
@@ -453,13 +459,12 @@
                         <div class="form-check">
                             <input class="form-check-input select_uds" type="checkbox" id="section_chk">
                             <label class="form-check-label" for="section_chk">Section</label>
-                        </div>
+                        </div> -->
 
-                        <input type="text" class="form-control mt-2 d-none" id="unit_auto" placeholder="Enter Unit">
-                        <input type="text" class="form-control mt-2 d-none" id="department_auto"
+                        <input type="text" class="form-control mt-2" id="unit_auto" placeholder="Enter Unit">
+                        <input type="text" class="form-control mt-2" id="department_auto"
                             placeholder="Enter Department">
-                        <input type="text" class="form-control mt-2 d-none" id="section_auto"
-                            placeholder="Enter Section">
+                        <input type="text" class="form-control mt-2" id="section_auto" placeholder="Enter Section">
 
                         <div class="mt-3">
                             <label class="form-label">Quantity</label>
@@ -477,36 +482,39 @@
             </div>
         </div>
 
+    </div>
 
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <div id='footer' class="mt-auto">
 
-        <!-- jQuery UI -->
-        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <!-- jQuery UI CSS -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <!-- jQuery UI -->
+            <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-
-        <!-- bootstrap include -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-            crossorigin="anonymous"></script>
-
-        <!-- font awesome -->
-        <!-- <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script> -->
-
-        <!-- Sweet alert -->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <!-- jQuery UI CSS -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-        <!-- external js -->
-        <script src="js/po_inward.js" type="module"></script>
-        <script src="js/menu.js" type="module"></script>
-        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+            <!-- bootstrap include -->
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+                integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+                integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+                crossorigin="anonymous"></script>
+
+            <!-- font awesome -->
+            <!-- <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script> -->
+
+            <!-- Sweet alert -->
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+            <!-- external js -->
+            <script src="js/po_inward.js" type="module"></script>
+            <script src="js/menu.js" type="module"></script>
+            <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>
 

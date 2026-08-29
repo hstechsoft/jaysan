@@ -413,12 +413,15 @@ $(document).ready(function () {
                     console.log(response);
 
                     $.ajax({
-                        url: "php/get_po_report_search_auto.php",
+                        url: "php/get_part_name_auto_wel.php",
                         type: "get",
                         dataType: "json",
                         data: {
+                            term: "name",
                             part: request.term,
-                            term: "part"
+                            godwon_id: '',
+                            department_id: '',
+                            section_id: '',
                         },
                         success: function (data) {
                             console.log(data);
@@ -702,7 +705,7 @@ $(document).ready(function () {
         if ($(this).data("mrf_id") > 0) {
             get_material_request_form_details_print1($(this).data("mrf_id"));
         }
-        else{
+        else {
             salert("Warning", "Data Missing!, Try Later.", "warning");
         }
 
@@ -955,7 +958,7 @@ function get_po_dashboard(part, emp_id, raw_material, fdate, tdate, company) {
                     //    get_sales_order()
                 }
                 else {
-                    $("#po_dashboard_details").append("<tr><td colspan='4' class='text-danger text-center'>No data found </td></tr>")
+                    $("#po_dashboard_details").append("<tr><td colspan='5' class='text-danger text-center'>No data found </td></tr>")
                 }
             }
             else {

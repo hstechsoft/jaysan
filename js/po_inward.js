@@ -133,115 +133,332 @@ $(document).ready(function () {
         }
     });
 
-    $('#section_autoo').on('input', function () {
-        // alert()
-        //check the value not empty
-        if ($('#section_autoo').val() !== "") {
-            $('#section_autoo').autocomplete({
-                //get data from databse return as array of object which contain label,value
+    // $('#section_autoo').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#section_autoo').val() !== "") {
+    //         $('#section_autoo').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
 
-                source: function (request, response) {
-                    $.ajax({
-                        url: "php/get_sections_full_auto.php",
-                        type: "get", //send it through get method
-                        data: {
-                            term: request.term,
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_sections_full_auto.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
 
-                        },
-                        dataType: "json",
-                        success: function (data) {
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
 
-                            console.log(data);
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.sec_name,
-                                    value: item.sec_name,
-                                    id: item.dep_sec_id,
-                                    dep: item.dep_id,
-                                    godown: item.godown_id,
-                                };
-                            }));
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.sec_name,
+    //                                 value: item.sec_name,
+    //                                 id: item.dep_sec_id,
+    //                                 dep: item.dep_id,
+    //                                 godown: item.godown_id,
+    //                             };
+    //                         }));
 
-                        }
+    //                     }
 
-                    });
-                },
-                minLength: 2,
-                cacheLength: 0,
-                select: function (event, ui) {
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
 
-                    $(this).data("sec_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
-
-
-                },
-
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div>" + item.label + "</div>")
-                    .appendTo(ul);
-            };
-        }
-
-    });
-
-    $('#department_autoo').on('input', function () {
-        // alert()
-        //check the value not empty
-        if ($('#department_autoo').val() !== "") {
-            $('#department_autoo').autocomplete({
-                //get data from databse return as array of object which contain label,value
-
-                source: function (request, response) {
-                    $.ajax({
-                        url: "php/get_departments_auto2.php",
-                        type: "get", //send it through get method
-                        data: {
-                            term: request.term,
-
-                        },
-                        dataType: "json",
-                        success: function (data) {
-
-                            console.log(data);
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.dep_name,
-                                    value: item.dep_name,
-                                    id: item.dep_id,
-                                    godown: item.godown_id,
-                                };
-                            }));
-
-                        }
-
-                    });
-                },
-                minLength: 2,
-                cacheLength: 0,
-                select: function (event, ui) {
-
-                    $(this).data("dep_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
+    //                 $(this).data("sec_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
 
 
-                },
+    //             },
 
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div>" + item.label + "</div>")
-                    .appendTo(ul);
-            };
-        }
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
 
-    });
+    // });
+
+    // $('#department_autoo').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#department_autoo').val() !== "") {
+    //         $('#department_autoo').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
+
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_departments_auto2.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
+
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.dep_name,
+    //                                 value: item.dep_name,
+    //                                 id: item.dep_id,
+    //                                 godown: item.godown_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("dep_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
+
+    // $('#unit_autoo').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#unit_autoo').val() !== "") {
+    //         $('#unit_autoo').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
+
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_creditors_auto.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
+
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.creditor_name,
+    //                                 value: item.creditor_name,
+    //                                 id: item.creditor_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("godown_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
+
+
+
+    // $('#section_auto').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#section_auto').val() !== "") {
+    //         $('#section_auto').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
+
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_sections_full_auto.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
+
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.sec_name,
+    //                                 value: item.sec_name,
+    //                                 id: item.dep_sec_id,
+    //                                 dep: item.dep_id,
+    //                                 godown: item.godown_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("sec_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
+
+    // $('#department_auto').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#department_auto').val() !== "") {
+    //         $('#department_auto').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
+
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_departments_auto2.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
+
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.dep_name,
+    //                                 value: item.dep_name,
+    //                                 id: item.dep_id,
+    //                                 godown: item.godown_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("dep_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
+
+    // $('#unit_auto').on('input', function () {
+    //     // alert()
+    //     //check the value not empty
+    //     if ($('#unit_auto').val() !== "") {
+    //         $('#unit_auto').autocomplete({
+    //             //get data from databse return as array of object which contain label,value
+
+    //             source: function (request, response) {
+    //                 $.ajax({
+    //                     url: "php/get_creditors_auto.php",
+    //                     type: "get", //send it through get method
+    //                     data: {
+    //                         term: request.term,
+
+    //                     },
+    //                     dataType: "json",
+    //                     success: function (data) {
+
+    //                         console.log(data);
+    //                         response($.map(data, function (item) {
+    //                             return {
+    //                                 label: item.creditor_name,
+    //                                 value: item.creditor_name,
+    //                                 id: item.creditor_id,
+    //                             };
+    //                         }));
+
+    //                     }
+
+    //                 });
+    //             },
+    //             minLength: 2,
+    //             cacheLength: 0,
+    //             select: function (event, ui) {
+
+    //                 $(this).data("godown_id", ui.item.id);
+    //                 //   $('#part_name_out').data("selected-part_id", ui.item.id);
+    //                 //   $('#part_name_out').val(ui.item.part_name)
+
+
+    //             },
+
+    //         }).autocomplete("instance")._renderItem = function (ul, item) {
+    //             return $("<li>")
+    //                 .append("<div>" + item.label + "</div>")
+    //                 .appendTo(ul);
+    //         };
+    //     }
+
+    // });
 
     $('#unit_autoo').on('input', function () {
-        // alert()
+
+        $(this).removeData("godown_id");
+        if ($(this).val().trim() === '') {
+            $(this).removeData("godown_id");
+        }
+
+        $('#department_autoo').val('').removeData("dep_id");
+        $('#section_autoo').val('').removeData("sec_id");
+
         //check the value not empty
-        if ($('#unit_autoo').val() !== "") {
+        if ($('#unit_autoo').val() != "") {
             $('#unit_autoo').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
@@ -252,6 +469,7 @@ $(document).ready(function () {
                         data: {
                             term: request.term,
 
+
                         },
                         dataType: "json",
                         success: function (data) {
@@ -261,7 +479,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.creditor_name,
                                     value: item.creditor_name,
-                                    id: item.creditor_id,
+                                    id: item.creditor_id
                                 };
                             }));
 
@@ -274,89 +492,36 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
 
 
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
-                    .append("<div>" + item.label + "</div>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
                     .appendTo(ul);
             };
         }
 
     });
 
+    $('#department_autoo').on('input', function () {
 
+        $(this).data("dep_id", "");
+        $('#section_autoo').val('').removeData("sec_id");
 
-    $('#section_auto').on('input', function () {
-        // alert()
         //check the value not empty
-        if ($('#section_auto').val() !== "") {
-            $('#section_auto').autocomplete({
+        if ($('#department_autoo').val() != "") {
+            $('#department_autoo').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
                 source: function (request, response) {
                     $.ajax({
-                        url: "php/get_sections_full_auto.php",
+                        url: "php/get_departments_auto.php",
                         type: "get", //send it through get method
                         data: {
                             term: request.term,
-
-                        },
-                        dataType: "json",
-                        success: function (data) {
-
-                            console.log(data);
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.sec_name,
-                                    value: item.sec_name,
-                                    id: item.dep_sec_id,
-                                    dep: item.dep_id,
-                                    godown: item.godown_id,
-                                };
-                            }));
-
-                        }
-
-                    });
-                },
-                minLength: 2,
-                cacheLength: 0,
-                select: function (event, ui) {
-
-                    $(this).data("sec_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
-
-
-                },
-
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                return $("<li>")
-                    .append("<div>" + item.label + "</div>")
-                    .appendTo(ul);
-            };
-        }
-
-    });
-
-    $('#department_auto').on('input', function () {
-        // alert()
-        //check the value not empty
-        if ($('#department_auto').val() !== "") {
-            $('#department_auto').autocomplete({
-                //get data from databse return as array of object which contain label,value
-
-                source: function (request, response) {
-                    $.ajax({
-                        url: "php/get_departments_auto2.php",
-                        type: "get", //send it through get method
-                        data: {
-                            term: request.term,
+                            godown_id: $("#unit_autoo").data("godown_id")
 
                         },
                         dataType: "json",
@@ -367,8 +532,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.dep_name,
                                     value: item.dep_name,
-                                    id: item.dep_id,
-                                    godown: item.godown_id,
+                                    id: item.dep_id
                                 };
                             }));
 
@@ -381,15 +545,64 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("dep_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
 
 
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
-                    .append("<div>" + item.label + "</div>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#section_autoo').on('input', function () {
+        $(this).data("sec_id", "");
+
+        //check the value not empty
+        if ($('#section_autoo').val() != "") {
+            $('#section_autoo').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            dep_id: $("#department_autoo").data("dep_id")
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
                     .appendTo(ul);
             };
         }
@@ -397,9 +610,17 @@ $(document).ready(function () {
     });
 
     $('#unit_auto').on('input', function () {
-        // alert()
+
+        $(this).removeData("godown_id");
+        if ($(this).val().trim() === '') {
+            $(this).removeData("godown_id");
+        }
+
+        $('#department_auto').val('').removeData("dep_id");
+        $('#section_auto').val('').removeData("sec_id");
+
         //check the value not empty
-        if ($('#unit_auto').val() !== "") {
+        if ($('#unit_auto').val() != "") {
             $('#unit_auto').autocomplete({
                 //get data from databse return as array of object which contain label,value
 
@@ -410,6 +631,7 @@ $(document).ready(function () {
                         data: {
                             term: request.term,
 
+
                         },
                         dataType: "json",
                         success: function (data) {
@@ -419,7 +641,7 @@ $(document).ready(function () {
                                 return {
                                     label: item.creditor_name,
                                     value: item.creditor_name,
-                                    id: item.creditor_id,
+                                    id: item.creditor_id
                                 };
                             }));
 
@@ -432,15 +654,117 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
-                    //   $('#part_name_out').val(ui.item.part_name)
 
 
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
                 return $("<li>")
-                    .append("<div>" + item.label + "</div>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#department_auto').on('input', function () {
+
+        $(this).data("dep_id", "");
+        $('#section_auto').val('').removeData("sec_id");
+
+        //check the value not empty
+        if ($('#department_auto').val() != "") {
+            $('#department_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_departments_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            godown_id: $("#unit_auto").data("godown_id")
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.dep_name,
+                                    value: item.dep_name,
+                                    id: item.dep_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("dep_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#section_auto').on('input', function () {
+        $(this).data("sec_id", "");
+
+        //check the value not empty
+        if ($('#section_auto').val() != "") {
+            $('#section_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            dep_id: $("#department_auto").data("dep_id")
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
                     .appendTo(ul);
             };
         }
@@ -494,9 +818,9 @@ $(document).ready(function () {
 
         // Reset modal fields
         $("#qty").val("");
-        $("#unit_auto, #department_auto, #section_auto")
-            .data({ godown_id: "", dept_id: "", sec_id: "" })
-            .addClass("d-none");
+        // $("#unit_auto, #department_auto, #section_auto")
+        //     .data({ godown_id: "", dept_id: "", sec_id: "" })
+        //     .addClass("d-none");
 
         $(".form-check-input").prop("checked", false);
 
@@ -515,28 +839,28 @@ $(document).ready(function () {
     /* -----------------------------
         ONLY ONE CHECKBOX + SHOW INPUT
     ------------------------------ */
-    $(".select_uds").on("change", function () {
+    // $(".select_uds").on("change", function () {
 
-        $(".select_uds").not(this).prop("checked", false);
+    //     $(".select_uds").not(this).prop("checked", false);
 
-        $("#unit_auto, #department_auto, #section_auto")
-            .addClass("d-none")
-            .val("");
+    //     $("#unit_auto, #department_auto, #section_auto")
+    //         .addClass("d-none")
+    //         .val("");
 
-        if (this.checked) {
-            switch (this.id) {
-                case "unit_chk":
-                    $("#unit_auto").removeClass("d-none");
-                    break;
-                case "department_chk":
-                    $("#department_auto").removeClass("d-none");
-                    break;
-                case "section_chk":
-                    $("#section_auto").removeClass("d-none");
-                    break;
-            }
-        }
-    });
+    //     if (this.checked) {
+    //         switch (this.id) {
+    //             case "unit_chk":
+    //                 $("#unit_auto").removeClass("d-none");
+    //                 break;
+    //             case "department_chk":
+    //                 $("#department_auto").removeClass("d-none");
+    //                 break;
+    //             case "section_chk":
+    //                 $("#section_auto").removeClass("d-none");
+    //                 break;
+    //         }
+    //     }
+    // });
 
 
     /* -----------------------------
@@ -577,19 +901,33 @@ $(document).ready(function () {
         }
 
         // Store selection
-        if ($("#unit_chk").is(":checked")) {
-            store_id = $("#unit_auto").data("godown_id");
-            store_type = "godown";
-        }
-        else if ($("#department_chk").is(":checked")) {
-            store_id = $("#department_auto").data("dep_id");
-            store_type = "dep";
-        }
-        else if ($("#section_chk").is(":checked")) {
+        // if ($("#unit_chk").is(":checked")) {
+        //     store_id = $("#unit_auto").data("godown_id");
+        //     store_type = "godown";
+        // }
+        // else if ($("#department_chk").is(":checked")) {
+        //     store_id = $("#department_auto").data("dep_id");
+        //     store_type = "dep";
+        // }
+        // else if ($("#section_chk").is(":checked")) {
+        //     store_id = $("#section_auto").data("sec_id");
+        //     store_type = "sec";
+        // }
+
+        if ($("#section_auto").data("sec_id") != undefined && $("#section_auto").data("sec_id") != '' && $("#section_auto").data("sec_id") > 0) {
             store_id = $("#section_auto").data("sec_id");
             store_type = "sec";
         }
 
+        else if ($("#department_auto").data("dep_id") != undefined && $("#department_auto").data("dep_id") != '' && $("#department_auto").data("dep_id") > 0) {
+            store_id = $("#department_auto").data("dep_id");
+            store_type = "dep";
+        }
+
+        else if ($("#unit_auto").data("godown_id") != undefined && $("#unit_auto").data("godown_id") != '' && $("#unit_auto").data("godown_id") > 0) {
+            store_id = $("#unit_auto").data("godown_id");
+            store_type = "godown";
+        }
         else {
             salert("Warning", "Please select Unit / Department / Section", "warning");
             return;
@@ -615,8 +953,10 @@ $(document).ready(function () {
     $("#po_report_btn").on("click", function () {
 
         let details_po = [];
+        let po_idd = $(this).val() || 0;
 
         $("#poreport_item_table tr").each(function () {
+
 
             let po_id = $(this).data("jaysan_po_material_id");
             let qty = parseFloat($(this).find("td").eq(5).text());
@@ -642,7 +982,7 @@ $(document).ready(function () {
             return;
         }
         $("#po_report_btn").prop("disabled", true);
-        insert_grn(dc_no, dc_date, details_po, dc_type);
+        insert_grn(dc_no, dc_date, details_po, dc_type, po_idd);
     });
 
 
@@ -774,28 +1114,28 @@ $(document).ready(function () {
 
     });
 
-    $(".select_po_uds").on("change", function () {
+    // $(".select_po_uds").on("change", function () {
 
-        $(".select_po_uds").not(this).prop("checked", false);
+    //     $(".select_po_uds").not(this).prop("checked", false);
 
-        $("#unit_autoo, #department_autoo, #section_autoo")
-            .addClass("d-none")
-            .val("");
+    //     $("#unit_autoo, #department_autoo, #section_autoo")
+    //         .addClass("d-none")
+    //         .val("");
 
-        if (this.checked) {
-            switch (this.id) {
-                case "unit_chkk":
-                    $("#unit_autoo").removeClass("d-none");
-                    break;
-                case "department_chkk":
-                    $("#department_autoo").removeClass("d-none");
-                    break;
-                case "section_chkk":
-                    $("#section_autoo").removeClass("d-none");
-                    break;
-            }
-        }
-    });
+    //     if (this.checked) {
+    //         switch (this.id) {
+    //             case "unit_chkk":
+    //                 $("#unit_autoo").removeClass("d-none");
+    //                 break;
+    //             case "department_chkk":
+    //                 $("#department_autoo").removeClass("d-none");
+    //                 break;
+    //             case "section_chkk":
+    //                 $("#section_autoo").removeClass("d-none");
+    //                 break;
+    //         }
+    //     }
+    // });
 
     // ADD ROW
     let t_price = 0;
@@ -815,18 +1155,34 @@ $(document).ready(function () {
         var e_store_type = '';
 
         // Store selection
-        if ($("#unit_chkk").is(":checked")) {
-            e_store_id = $("#unit_autoo").data("godown_id");
-            e_store_type = "godown";
-        }
-        else if ($("#department_chkk").is(":checked")) {
-            e_store_id = $("#department_autoo").data("dep_id");
-            e_store_type = "dep";
-        }
-        else if ($("#section_chkk").is(":checked")) {
+        // if ($("#unit_chkk").is(":checked")) {
+        //     e_store_id = $("#unit_autoo").data("godown_id");
+        //     e_store_type = "godown";
+        // }
+        // else if ($("#department_chkk").is(":checked")) {
+        //     e_store_id = $("#department_autoo").data("dep_id");
+        //     e_store_type = "dep";
+        // }
+        // else if ($("#section_chkk").is(":checked")) {
+        //     e_store_id = $("#section_autoo").data("sec_id");
+        //     e_store_type = "sec";
+        // }
+
+        if ($("#section_autoo").data("sec_id") != undefined && $("#section_autoo").data("sec_id") != '' && $("#section_autoo").data("sec_id") > 0) {
             e_store_id = $("#section_autoo").data("sec_id");
             e_store_type = "sec";
         }
+
+        else if ($("#department_autoo").data("dep_id") != undefined && $("#department_autoo").data("dep_id") != '' && $("#department_autoo").data("dep_id") > 0) {
+            e_store_id = $("#department_autoo").data("dep_id");
+            e_store_type = "dep";
+        }
+
+        else if ($("#unit_autoo").data("godown_id") != undefined && $("#unit_autoo").data("godown_id") != '' && $("#unit_autoo").data("godown_id") > 0) {
+            e_store_id = $("#unit_autoo").data("godown_id");
+            e_store_type = "godown";
+        }
+
         else {
             salert("Warning", "Please select Unit / Department / Section", "warning");
             return;
@@ -864,8 +1220,8 @@ $(document).ready(function () {
                     <td>${qty}</td>
                     <td>${uom}</td>
                     <td>
-                        <button type="button" class="btn btn-warning edit_po_c_btn"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-danger delete_po_c_btn"><i class="fa fa-trash"></i></button>
+                        <button type="button" class="btn btn-warning edit_po_c_btn d-none"><i class="fa fa-edit "></i></button>
+                        <button type="button" class="btn btn-danger delete_po_c_btn btn-sm"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
                 `);
@@ -1023,6 +1379,10 @@ $(document).ready(function () {
         $("#entry_uom").val("null");
         $("#entry_discount").val("");
         $("#entry_address").val("");
+
+        $("#unit_autoo").val('').removeData("godown_id");
+        $("#department_autoo").val('').removeData("dep_id");
+        $("#section_autoo").val('').removeData("sec_id");
     }
 
     function recalcTotals() {
@@ -1111,8 +1471,8 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 }
 
 
-function insert_grn(dc_no, dc_date, details_po, dc_type) {
-    console.log(details_po, dc_date, dc_no, dc_type, current_user_id);
+function insert_grn(dc_no, dc_date, details_po, dc_type, po_idd) {
+    console.log(details_po, dc_date, dc_no, dc_type, current_user_id, po_idd);
     $.ajax({
         url: "php/insert_grn.php",
         type: "get", //send it through get method
@@ -1130,7 +1490,22 @@ function insert_grn(dc_no, dc_date, details_po, dc_type) {
             console.log(response);
 
             if (response.trim() == "ok") {
-                location.reload();
+                // location.reload();
+                $("#poreport_search").trigger("click");
+                setTimeout(() => {
+
+                    get_po_receive_sts(po_idd);
+
+                }, 800);
+
+                $("#po_report_btn").val(0).prop("disabled", false);
+                $("#dc_bill").prop("checked", false);
+                $("#dc_no").val('');
+                $("#dc_date").val('');
+                $("#po_report_input").addClass("d-none");
+                $("#unit_auto").val('').removeData("godown_id");
+                $("#department_auto").val('').removeData("dep_id");
+                $("#section_auto").val('').removeData("sec_id");
 
             }
 
@@ -1150,6 +1525,8 @@ function insert_grn(dc_no, dc_date, details_po, dc_type) {
 
 
 function get_po_receive_sts(po_id) {
+    console.log(po_id);
+
     $.ajax({
         url: "php/get_po_receive_sts.php",
         type: "get", //send /it through get method
@@ -1171,6 +1548,8 @@ function get_po_receive_sts(po_id) {
 
 
                     obj.forEach(function (obj, index) {
+
+                        $("#po_report_btn").val(obj.jaysan_po_id);
                         count += 1;
                         var rjd = "";
                         var org_qty = parseInt(obj.qty) - parseInt(obj.total_received);
@@ -1224,7 +1603,7 @@ function get_po_receive_sts(po_id) {
                         }
 
 
-                        $("#poreport_item_table").append("<tr data-org_qty=" + org_qty + " data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td class='clickk'>0</td></tr>")
+                        $("#poreport_item_table").append("<tr data-org_qty=" + org_qty + " data-jaysan_po_material_id=" + obj.jaysan_po_material_id + " style='font-size: 12px'><td>" + count + "</td><td>" + obj.part_name + "</td><td>" + obj.qty + "</td><td><ul class='list-group'  style='height:auto; overflow-y:auto;'>" + rjd + "</ul></td><td>" + obj.total_received + "</td><td class='clickk'><button class='btn btn-outline-primary btn-sm'><i class='fa-solid fa-trowel-bricks'></i></button></td></tr>")
                     });
                 }
                 else {
