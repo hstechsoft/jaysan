@@ -41,7 +41,7 @@ foreach ($laser_parts as $parts) {
       $out_weight = $parts['weight'];
  
 
-      $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty, weight) VALUES ($nes_master_id, $part_id, $qty, $weight)";
+      $sql_insert_parts = "INSERT INTO nesting_parts (nesting_id, part_id, qty, weight) VALUES ($nes_master_id, $part_id, $qty, $out_weight)";
      
       if ($conn->query($sql_insert_parts) === TRUE) {
       } else {
