@@ -101,7 +101,7 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
 
   where $process_query and $godown_query GROUP BY iv.work_process_id,iv.godown";
  
- echo "sql: " . $sql . "<br>";
+//  echo "sql: " . $sql . "<br>";
 
 $result = $conn->query($sql);
 
