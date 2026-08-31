@@ -38,7 +38,7 @@ if ($result_material->num_rows > 0) {
 } else {
     throw new Exception("Material not found for job card: " . $job_card_id);
 }
-echo "Material ID: " . $material_id . "\n";
+
 
 // get
 
@@ -61,7 +61,7 @@ foreach ($produced_parts as $part) {
     $is_final_output = 'no';
     $process_sql = "select jpv.process_id, jpv.output_part, if(jpv.final_part_id = jpv.output_part,'yes','no') as is_final_output from  jaysan_process_view jpv
  WHERE jpv.process_name = 'laser cutting' and jpv.final_part_id = '$part_id' limit 1";
- echo "Process SQL: " . $process_sql . "\n";
+
     $process_result = $conn->query($process_sql);
     if ($process_result->num_rows > 0) {
         $process_row = $process_result->fetch_assoc();
