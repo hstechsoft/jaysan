@@ -62,7 +62,8 @@ left join jaysan_process_view jpv on ds.process_id <=> jpv.process_id and ds.par
 left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query and $godown_query and $dep_query and $dep_sec_query)
 
 select * from final_summary group by part_id,process_id";
-  echo "SQL: " . $sql . "<br>";
+  // echo "SQL: " . $sql . "<br>";
+  
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
