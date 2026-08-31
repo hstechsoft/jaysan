@@ -98,7 +98,7 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
  left join dep_section on iv.sec <=> dep_section.dep_sec_id
  left join jaysan_process_view jpv on iv.work_process_id <=> jpv.process_id
  left join job_work_reserved jwr on iv.input_part_id <=> jwr.part_id
-
+  and iv.previous_process_id <=> jwr.process_id 
   where $process_query and $godown_query GROUP BY iv.work_process_id,iv.godown";
  
 //  echo "sql: " . $sql . "<br>";
