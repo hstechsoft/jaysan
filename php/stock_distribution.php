@@ -26,7 +26,7 @@ try
 
 // get there is still demand
 
-        $conn->begin_transaction();
+        // $conn->begin_transaction();
 // get work order demand and assign if demand 
 // $sql_work_order_demand = "with
 //     demand as (
@@ -120,8 +120,8 @@ if($remaining_reserve_qty >= $qty){
 
    if($conn->query($sql_reserve)) {
        $qty = 0;
-       $conn->commit();
-       return "ok";
+    //    $conn->commit();
+       return true;
    }
    else
     {
@@ -261,8 +261,8 @@ if($remaining_reserve_qty >= $qty){
 //    echo "<br>SQL Reserve: ".$sql_reserve;
     if($conn->query($sql_reserve)) {
        $qty = 0;
-       $conn->commit();
-       return "ok";
+    //    $conn->commit();
+       return true;
    }
    else
     {
@@ -290,7 +290,7 @@ if($remaining_reserve_qty >= $qty){
         // else {
         //     throw new Exception("No job work order demand found for godown $godown, dep $dep, sec $sec");
         // }
-          $conn->commit();
+        //   $conn->commit();
           
 return true;
 
@@ -302,8 +302,8 @@ return true;
     }
      
     catch (Exception $e) {
-        $conn->rollback();
-       return  false;
+        // $conn->rollback();
+        throw new Exception("Stock distribution failed");
         // echo "Transaction failed: " . $e->getMessage();
     }
 
