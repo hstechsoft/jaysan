@@ -158,7 +158,7 @@ $sql_get_stock = "SELECT stock_id,available_qty FROM stock_reserve_view WHERE pr
     }
 }
 
-
+$result_json['demand'] =$demands;
 
 foreach ($demands as $key => $value) {
      $process_id = sql_nullable($value['process_id']);
