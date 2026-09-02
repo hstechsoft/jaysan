@@ -181,8 +181,9 @@ foreach ($demands as $key => $value) {
 
 
     
-// $conn->commit();
-// $result_json['success'] = true;
+ $conn->commit();
+
+ $result_json['success'] = true;
  
 
 }
