@@ -218,7 +218,8 @@ $(document).ready(function () {
 
     });
 
-    $("#nest_file").on("change", function () {
+    $("#nest_file").on("change", 
+        function () {
         var file = this.files[0];
 
         if (file && file.type === "application/pdf") {
@@ -228,6 +229,10 @@ $(document).ready(function () {
             $("#nest_file").val("");
             salert("Warning", "PDF Files Only.", "warning");
         }
+    });
+
+    $("#weight").on("focusout", function () {
+        scrap_weight();
     })
 
     $("#nested_part_add_btn").on("click", function () {
@@ -236,6 +241,7 @@ $(document).ready(function () {
         let nested_part_id = $("#nested_parts").data("part_id");
         let nested_part_qty = $("#nested_part_qty").val();
         let nested_part_weight = $("#nested_part_weight").val();
+        var total_weight = Number(nested_part_qty) * Number(nested_part_weight);
 
         let update_btn = $("#update_nesting_btn").hasClass("d-none") ? 1 : 0;
 
@@ -248,11 +254,16 @@ $(document).ready(function () {
         else if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && nested_part_weight > 0 && update_btn == 1) {
 
 
-            $("#nesting_parts_tbody").append(`<tr data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button class='btn btn-outline-danger btn-sm delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
+            $("#nesting_parts_tbody").append(`<tr data-total_weight="${total_weight}" data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button class='btn btn-outline-danger btn-sm delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
 
+            var sw = scrap_weight();
 
-            $("#nested_parts").val('');
-            $("#nested_part_qty, #nested_part_weight").val('');
+            if (sw !== false && sw >= 0) {
+
+                $("#nested_parts").data("part_id", '').val('');
+                $("#nested_part_qty, #nested_part_weight").val('');
+
+            }
 
         } else {
             salert("Warning", "Enter Part First & Its Qty", "warning");
@@ -483,7 +494,26 @@ $(document).ready(function () {
 });
 
 
+function scrap_weight() {
 
+    var scrap_weight = 0;
+    var weight = 0;
+    var material_weight = parseFloat($("#weight").val()) || 0;
+    $("#nesting_parts_tbody tr").each(function () {
+        weight += parseFloat($(this).data("total_weight")) || 0;
+    });
+
+    scrap_weight = material_weight - weight;
+
+    if (material_weight < weight) {
+        salert("Warning", "Scrap Weight Is More Than Raw Material Weight!, Recently Added Part Isn't Added.", "warning");
+        $("#nesting_parts_tbody").find("tr:last").remove();
+        return false;
+    }
+    $("#scrap_weight").val(parseFloat(scrap_weight).toFixed(2));
+    return scrap_weight;
+
+}
 
 function delete_nesting_parts(nes_part_id) {
 
@@ -767,7 +797,7 @@ function get_nesting_master_single1(nes_master_id) {
 
                             part.forEach(function (p) {
 
-                                parts += `<tr data-part_id=${p.part_id}><td>${p.part_name} </td><td>${p.qty} </td><td>${p.weight} </td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
+                                parts += `<tr data-total_weight="${parseFloat(p.qty) * parseFloat(p.weight)}" data-part_id=${p.part_id}><td>${p.part_name} </td><td>${p.qty} </td><td>${p.weight} </td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
 
                             });
 

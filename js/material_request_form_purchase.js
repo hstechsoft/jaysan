@@ -904,14 +904,16 @@ function insert_creditors() {
     url: "php/insert_creditors.php",
     type: "get", //send it through get method
     data: {
+      creditors_email: $('#creditor_email').val(),
       creditor_name: $('#creditor_name').val(),
       creditor_phone: $('#creditor_phone').val(),
       creditor_gst: $('#creditor_gst').val(),
-      creditors_email: $('#creditors_email').val()
 
     },
     success: function (response) {
 
+      console.log(response);
+      
 
       if (response.trim() == "ok") {
         $("#creditors_modal").modal('hide');

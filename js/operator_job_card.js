@@ -273,10 +273,10 @@ $(document).ready(function () {
         console.log(job_card_id, machine_id, scrap_weight, scarp_qty, remark, produced_parts, material_weight, godown, dep, sec);
 
 
-        if (!isValid) {
-            salert("Warning", "Work is pending. Please complete all parts.", "warning");
-            return;
-        }
+        // if (!isValid) {
+        //     salert("Warning", "Work is pending. Please complete all parts.", "warning");
+        //     return;
+        // }
 
         if (job_card_id > 0 && machine_id > 0 && produced_parts.length > 0 && material_weight > 0 && godown > 0) {
             finish_operator_job_card(

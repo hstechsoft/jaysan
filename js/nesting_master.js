@@ -160,6 +160,10 @@ $(document).ready(function () {
 
   });
 
+  $("#weight").on("focusout", function () {
+    scrap_weight();
+  })
+
   $("#nest_file").on("change", function () {
     var nes_master_id = $("#update_nesting_btn").val() || 0;
     var file = $(this)[0].files[0];
@@ -188,19 +192,43 @@ $(document).ready(function () {
     var nested_parts = $("#nested_parts").val() || '';
     var nested_part_qty = $("#nested_part_qty").val() || 0;
     var nested_part_weight = $("#nested_part_weight").val() || 0;
+    var total_weight = Number(nested_part_qty) * Number(nested_part_weight);
+
+    if ($("#weight").val() == '' || $("#weight").val() == undefined) {
+      salert("Warning", "Enter the Raw Material Weight First", "warning");
+      return;
+    }
 
     if (part_id > 0 && nested_part_qty > 0 && nes_master_id == 0 && nested_part_weight > 0) {
-      $("#nesting_parts_tbody").append(`<tr data-part_id="${part_id}" data-qty="${nested_part_qty}" data-weight="${nested_part_weight}"><td>${nested_parts}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+      $("#nesting_parts_tbody").append(`<tr data-total_weight="${total_weight}" data-part_id="${part_id}" data-qty="${nested_part_qty}" data-weight="${nested_part_weight}"><td>${nested_parts}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
 
-      $("#nested_parts").data("part_id", '').val('');
-      $("#nested_part_qty, #nested_part_weight").val('');
+      var sw = scrap_weight();
+
+      if (sw !== false && sw >= 0) {
+
+        $("#nested_parts").data("part_id", '').val('');
+        $("#nested_part_qty, #nested_part_weight").val('');
+
+      }
 
     }
     else if (part_id > 0 && nested_part_qty > 0 && nes_master_id > 0 && nested_part_weight > 0) {
-      insert_nesting_parts_master(nes_master_id, part_id, nested_part_qty, nested_part_weight);
 
-      $("#nested_parts").data("part_id", '').val('');
-      $("#nested_part_qty, #nested_part_weight").val('');
+      $("#nesting_parts_tbody").append(`<tr data-total_weight="${total_weight}" data-part_id="${part_id}" data-qty="${nested_part_qty}" data-weight="${nested_part_weight}"><td>${nested_parts}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+
+      var sw = scrap_weight();
+
+      if (sw !== false && sw >= 0) {
+
+        insert_nesting_parts_master(nes_master_id, part_id, nested_part_qty, nested_part_weight);
+        setTimeout(() => {
+          $("#update_nesting_btn").trigger("click");
+        }, 1000);
+
+        $("#nested_parts").data("part_id", '').val('');
+        $("#nested_part_qty, #nested_part_weight").val('');
+      }
+
     }
     else {
       salert("Warning", "Need All Three Fields.", "warning");
@@ -210,6 +238,8 @@ $(document).ready(function () {
   $("#nesting_parts_tbody").on("click", ".delete_btn", function () {
 
     var row = $(this).closest('tr');
+    var part_weight = row.data("total_weight") || 0;
+    var scrap_weigth = parseFloat($("#scrap_weight").val() || 0) + parseFloat(part_weight)
     var nes_part_id = $(this).val() || 0;
 
     Swal.fire({
@@ -221,12 +251,19 @@ $(document).ready(function () {
     }).then((result) => {
 
       if (result.isConfirmed) {
+
         if (nes_part_id > 0) {
+          $("#scrap_weight").val(scrap_weigth);
+
+          row.remove();
           delete_nesting_parts_master(nes_part_id);
+          $("#update_nesting_btn").trigger("click");
         }
         else {
           row.remove();
+          scrap_weight();
         }
+        scrap_weight();
       }
 
     });
@@ -312,7 +349,7 @@ $(document).ready(function () {
       return;
     }
 
-    insert_nesting_master(nesting_name, part_id, run_time, dimension, file,  weight, scrap_weight, JSON.stringify(parts));
+    insert_nesting_master(nesting_name, part_id, run_time, dimension, file, weight, scrap_weight, JSON.stringify(parts));
   })
 
   $("#update_nesting_btn").on("click", function () {
@@ -357,6 +394,12 @@ $(document).ready(function () {
     $("#material_id").data("part_id", '').val('');
     $("#run_time").val('');
     $("#dimension").val('');
+    $("#weight").val('');
+    $("#scrap_weight").val('');
+
+    $("#nested_parts").val('').removeData("part_id");
+    $("#nested_part_qty").val('');
+    $("#nested_part_weight").val('');
 
     $("#update_nesting_btn, #nested_part_add_btn, #view_file").val('');
     $("#nesting_parts_tbody").empty();
@@ -367,6 +410,26 @@ $(document).ready(function () {
 
 });
 
+function scrap_weight() {
+
+  var scrap_weight = 0;
+  var weight = 0;
+  var material_weight = parseFloat($("#weight").val()) || 0;
+  $("#nesting_parts_tbody tr").each(function () {
+    weight += parseFloat($(this).data("total_weight")) || 0;
+  });
+
+  scrap_weight = material_weight - weight;
+
+  if (material_weight < weight) {
+    salert("Warning", "Scrap Weight Is More Than Raw Material Weight!, Recently Added Part Isn't Added.", "warning");
+    $("#nesting_parts_tbody").find("tr:last").remove();
+    return false;
+  }
+  $("#scrap_weight").val(parseFloat(scrap_weight).toFixed(2));
+  return scrap_weight;
+
+}
 
 function get_nesting_master_single(nes_master_id) {
 
@@ -404,7 +467,7 @@ function get_nesting_master_single(nes_master_id) {
 
               part.forEach(function (p) {
 
-                parts += `<tr><td>${p.part_name} </td><td>${p.qty} </td><td>${p.weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
+                parts += `<tr data-total_weight="${parseFloat(p.qty) * parseFloat(p.weight)}"><td>${p.part_name} </td><td>${p.qty} </td><td>${p.weight}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${p.nes_part_id}><i class='fa fa-trash'></i></button></td></tr>`;
 
               });
 
@@ -480,6 +543,7 @@ function get_nesting_master() {
 
               });
 
+              parts += `<li class="list-group-item p-1"><strong class='small'>MS Scrap</strong> <span class='badge bg-primary'>${item.scarp_weight} Qty</span></li>`;
               parts += `</ul>`;
             };
 
@@ -490,7 +554,7 @@ function get_nesting_master() {
                 <td>${item.nesting_material}</td>
                 <td>${item.run_time}</td>
                 <td>${item.std_length}</td>
-                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
+                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span> <br> <span class="badge bg-secondary">${item.created_by_name}</span></td>
                 <td>${parts}</td>
                 <td>
                   <div class='d-flex justify-content-between'>
@@ -683,9 +747,9 @@ function insert_nesting_parts_master(nes_master_id, part_id, qty, nesting_part_w
 
       if (response.trim()) {
         salert("Success", "Standard Nesting Parts Updated.", "success");
-        get_nesting_master();
-        get_nesting_master_single(nes_master_id)
-        $("#clear_btn").trigger("click");
+        // get_nesting_master();
+        // get_nesting_master_single(nes_master_id)
+        // $("#clear_btn").trigger("click");
       }
 
 
@@ -754,9 +818,9 @@ function delete_nesting_parts_master(nes_part_id) {
 
       if (response.trim()) {
         salert("Success", "Standard Nesting Part Deleted.", "success");
-        get_nesting_master();
-        get_nesting_master_single($("#update_nesting_btn").val())
-        $("#clear_btn").trigger("click");
+        // get_nesting_master();
+        // get_nesting_master_single($("#update_nesting_btn").val())
+        // $("#clear_btn").trigger("click");
       }
 
 

@@ -532,7 +532,7 @@ function get_manual_stock(process_id) {
                         </div>
                         <div  class="bg-light border rounded-3 p-1">
                             <strong>Total Qty :</strong>
-                            ${parseInt(result.total_reserve_qty) + parseInt(result.total_available_qty)}
+                            ${parseFloat(result.total_reserve_qty) + parseFloat(result.total_available_qty)}
                         </div>
                     </div>
                 `;

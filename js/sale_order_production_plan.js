@@ -135,9 +135,9 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
 
       if (response.success === true) {
         salert("Success", "Demand created successfully.", "success");
-        setTimeout(()=>{
-          window.location.reload();
-        }, 500);
+        // setTimeout(()=>{
+        //   window.location.reload();
+        // }, 500);
 
       }
 

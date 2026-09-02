@@ -342,7 +342,7 @@ function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp
 
       if (response.success === true) {
         
-        get_demand_work_report($("#part").data("part_id") || 'all', "all", $("#godown").data("godown_id") || '', $("#department").data("dept_id") || '', $("#section").data("sec_id") || '');
+        // get_demand_work_report($("#part").data("part_id") || 'all', "all", $("#godown").data("godown_id") || '', $("#department").data("dept_id") || '', $("#section").data("sec_id") || '');
       }
 
 
@@ -382,7 +382,7 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
 
       if (response.trim() != "error") {
         $('#planed_work_order_tbody').empty();
-        if (response.trim() != "0 result") {
+        if (response.trim() != "0 results") {
           var obj = JSON.parse(response);
           var count = 0;
           var godown_list = ``;

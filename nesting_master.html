@@ -133,19 +133,19 @@
                                     <span class="input-group-text">
                                         <i class="fa-classic fa-solid fa-scale-unbalanced-flip"></i>
                                     </span>
-                                    <input type="number" min="1" class="form-control" id="weight" placeholder="Weight (In Kgs)"
-                                        required>
+                                    <input type="number" min="1" class="form-control" id="weight"
+                                        placeholder="Weight (In Kgs)" required>
                                 </div>
                             </div>
 
-                             <!-- Scrap weight -->
+                            <!-- Scrap weight -->
                             <div class="col-md-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-dumpster-fire"></i>
                                     </span>
-                                    <input type="number" min="1" class="form-control" id="scrap_weight" placeholder="Scrap Weight (Kgs)"
-                                        required>
+                                    <input type="number" min="1" class="form-control" id="scrap_weight"
+                                        placeholder="Scrap Weight (Kgs)" readonly required>
                                 </div>
                             </div>
 
@@ -180,6 +180,116 @@
                         </div>
 
 
+                        <!-- Godown & Machine -->
+
+                        <div class="mt-4">
+
+                            <h6 class="fw-bold text-secondary mb-2">
+                                <i class="fa-solid fa-cash-register me-2"></i>
+                                Machine
+                            </h6>
+
+                            <div class="row g-2">
+
+                                <div class="col-12">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="godown" placeholder="">
+                                        <label for="godown">Godown
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12">
+
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Department</button>
+                                        <ul class="dropdown-menu" id="department_da">
+                                        </ul>
+                                        <input type="text" class="form-control"
+                                            aria-label="Text input with dropdown button" id="department">
+                                        <button type="submit" class="btn btn-primary d-none" id="department_add_btn"><i
+                                                class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Section</button>
+                                        <ul class="dropdown-menu" id="section_da">
+                                        </ul>
+                                        <input type="text" class="form-control"
+                                            aria-label="Text input with dropdown button" id="section">
+                                        <button type="submit" class="btn btn-primary d-none" id="section_add_btn"><i
+                                                class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="input-group mb-3">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Machine</button>
+                                        <ul class="dropdown-menu" id="machine_da">
+                                        </ul>
+                                        <input type="text" class="form-control"
+                                            aria-label="Text input with dropdown button" id="machine">
+                                        <button type="submit" class="btn btn-primary d-none" id="machine_add_btn"><i
+                                                class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="min_time" placeholder="">
+                                        <label for="min_time">Min Time
+                                            <span class="text-danger">in Mins*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
+                                        <label for="max_time">Max Time
+                                            <span class="text-danger">in Mins*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="cost" value="0"
+                                            placeholder="">
+                                        <label for="cost">Cost
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input " type="checkbox" value="" id="is_default"
+                                            style="height: 20px;">
+                                        <label class="form-check-label" for="is_default">
+                                            Is Default?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
 
                         <!-- Nested Parts -->
                         <div class="mt-4">
@@ -203,8 +313,8 @@
 
                                 <!-- weight -->
                                 <div class="col-4">
-                                        <input type="number" min="1" class="form-control form-control-sm" id="nested_part_weight"
-                                            placeholder="Weight(Kgs)" >
+                                    <input type="number" min="1" class="form-control form-control-sm"
+                                        id="nested_part_weight" placeholder="Weight(Kgs)">
                                 </div>
 
                                 <div class="col-2 d-grid">
