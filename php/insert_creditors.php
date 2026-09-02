@@ -1,7 +1,6 @@
 <?php
  include 'db_head.php';
-// pront all paarmeters
-print_r($_GET);
+
  $creditor_name = test_input($_GET['creditor_name']);
 $creditor_phone = test_input($_GET['creditor_phone']);
 $creditor_gst = test_input($_GET['creditor_gst']);
