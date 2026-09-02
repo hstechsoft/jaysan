@@ -427,14 +427,7 @@ $same_dep = current(array_filter($stock_reservation_array, function ($item) {
 $same_godown = current(array_filter($stock_reservation_array, function ($item) {
     return is_array($item) && ($item['same_godown'] ?? false);
 }));
-echo "Same Section: ";
-print_r($same_sec);
-echo "Same Department: ";
-print_r($same_dep);
-echo "Same Godown: ";
-print_r($same_godown);
 
-echo "------------";
     
 
 // $same_godown = current(array_filter($stock_reservation_array, function ($item) {
@@ -562,8 +555,8 @@ if ($conn->query($sql_delete_zero_reserve) === TRUE) {
 } else {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
-// $result_json['success'] = true;
-    // $conn->commit();
+ $result_json['success'] = true;
+     $conn->commit();
 
 }
 catch (Exception $e) {
