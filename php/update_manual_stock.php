@@ -45,6 +45,10 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+// output partis  > 0 then process_id is null
+
+if($part_id>0)
+    $process_id = "NULL";
 
     {
 
