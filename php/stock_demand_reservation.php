@@ -427,7 +427,12 @@ $same_dep = current(array_filter($stock_reservation_array, function ($item) {
 $same_godown = current(array_filter($stock_reservation_array, function ($item) {
     return is_array($item) && ($item['same_godown'] ?? false);
 }));
-
+echo "Same Section: ";
+print_r($same_sec);
+echo "Same Department: ";
+print_r($same_dep);
+echo "Same Godown: ";
+print_r($same_godown);
 
 echo "------------";
     
@@ -440,27 +445,27 @@ echo "------------";
 $result_json['stock_reservation_array'][] = $stock_reservation_array;
 
 
-if($same_sec['same_sec']?? false)
-  {
- foreach($stock_reservation_array as $item)
-    {
-      if($item['same_sec'] == true && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
-      {
-        $stock_id = $item['stock_id'];
-        $available_qty = $item['available_qty'];
+// if($same_sec['same_sec']?? false)
+//   {
+//  foreach($stock_reservation_array as $item)
+//     {
+//       if($item['same_sec'] == true && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
+//       {
+//         $stock_id = $item['stock_id'];
+//         $available_qty = $item['available_qty'];
    
-        $stock_to_be_reserved_same_sec = min($available_qty, $stock_to_be_reserved); 
-        // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_sec
-        $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_same_sec,'work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_sec";
-        if ($conn->query($sql_release) === TRUE) {
-          $result_json['messages']['result4'][] = "stock internally reserved successfully";
-       $stock_to_be_reserved -= $stock_to_be_reserved_same_sec;
-        } else {
-          throw new Exception("Error updating record: " . $conn->error);
-        }
-      }
-    }
-  }
+//         $stock_to_be_reserved_same_sec = min($available_qty, $stock_to_be_reserved); 
+//         // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_sec
+//         $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_same_sec,'work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_sec";
+//         if ($conn->query($sql_release) === TRUE) {
+//           $result_json['messages']['result4'][] = "stock internally reserved successfully";
+//        $stock_to_be_reserved -= $stock_to_be_reserved_same_sec;
+//         } else {
+//           throw new Exception("Error updating record: " . $conn->error);
+//         }
+//       }
+//     }
+//   }
 
 if($same_sec['same_sec']?? false)
   {
