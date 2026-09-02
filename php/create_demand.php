@@ -111,6 +111,9 @@ $summary = [];
 planTree($tree, $partStock, $processStock, $demandReserve, $demands, $summary);
 
 // get array as for each
+
+// print_r($demandReserve);
+$result_json['demandReserve'] = $demandReserve;
 foreach ($demandReserve as $key => $value) {
     
 $output_part = $value['output_part'];
@@ -165,6 +168,35 @@ foreach ($demands as $key => $value) {
     $qty = $value['qty'];
     $part_id = sql_nullable($value['output_part']);
 
+
+$process_name = "";
+
+    // get process_name,outputpart from jaysan_process_view
+$sql_get_process = "SELECT process_name, final_part FROM jaysan_process_view WHERE process_id = " . $value['process_id'];
+$result_process = $conn->query($sql_get_process);
+$process_name = '';
+$output_part_from_view = '';
+if ($row_process = $result_process->fetch_assoc()) {
+   $result_json['demand'][$key]['process_name'] = $row_process['process_name'];
+   $result_json['demand'][$key]['output_part'] = $row_process['final_part'];
+$process_name = $row_process['process_name'];
+    // echo "process: " . $row_process['process_name'] . ' - part: ' . $row_process['final_part'] . "\n";
+}
+if($process_name == "purchase" || $process_name == "PURCHASE") {
+// insert this demand into mrf request table
+$sql_insert_mrf_request = "INSERT INTO mrf_request( part_id, qty, plan_id, process_id) VALUES ($part_id, $qty, $plan_id, $process_id)";
+
+    $conn->query($sql_insert_mrf_request);
+    if ($conn->affected_rows > 0) {
+        $result_json['message'] = "Inserted MRF request for Process ID: $process_id, Quantity: $qty";
+    }
+    else
+        {
+            throw new Exception("Error inserting MRF request for Process ID: $process_id, Quantity: $qty: " . $conn->error);
+        }
+}
+else
+    {
     // insert into demands table if not exist else update qty = qty + $qty
     $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
   
@@ -177,13 +209,16 @@ foreach ($demands as $key => $value) {
         {
             throw new Exception("Error inserting demand for Process ID: $process_id, Quantity: $qty: " . $conn->error);
         }
+    }
+
+
 }
 
 
     
  $conn->commit();
 
- $result_json['success'] = true;
+//  $result_json['success'] = true;
  
 
 }
