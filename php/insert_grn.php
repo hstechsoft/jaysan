@@ -81,13 +81,16 @@ if ($result->num_rows > 0) {
    $sec = sql_nullable($sec);
 
 
-    $check_sql = "SELECT qty FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =(select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
+    $check_sql = "SELECT qty,stock_id FROM jaysan_stock WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id =(select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
 
 $result = $conn->query($check_sql);
-
+$stock_id = 0;
 if ($result->num_rows > 0) {
   // Record exists, update it
-  $qty_stock = $qty + $result->fetch_assoc()['qty'];
+  // get stock_id
+  $row = $result->fetch_assoc();
+  $qty_stock = $qty + $row['qty'];
+  $stock_id = $row['stock_id'];
   $remark = "inward stock updated dc". $dc_no1;
   $sql_stock = "UPDATE jaysan_stock   SET emp_id = $received_by, qty= $qty_stock,remark= '$remark' ,dated = NOW()
       WHERE (godown <=> $godown )AND (dep <=> $dep )AND (sec <=> $sec )AND (part_id = (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id) )";
@@ -100,16 +103,21 @@ if ($result->num_rows > 0) {
     
 } else {
   // Record doesn't exist, insert it
+  // get new stock_id after insert
   $remark = "inward stock inserted dc" . $dc_no1;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark,emp_id) 
       VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,'$remark',$received_by)";
 
         if ($conn->query($sql_stock) === TRUE) {
+          $stock_id = $conn->insert_id;
         }
   else {
     echo "Error: " . $sql_stock . "<br>" . $conn->error;
   }
 }
+
+  require_once 'stock_distribution.php';
+stock_distribution($conn, $stock_id, $qty);
 
 
   
