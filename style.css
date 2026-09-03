@@ -501,7 +501,8 @@ body {
   flex-direction: column;
   transition: width var(--transition);
   z-index: 1000;
-  overflow: visible !important;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 
 
