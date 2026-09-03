@@ -6,7 +6,7 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
     $result_json = [];
 try
     {
-echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
+// echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
     $sql_stock = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
     $result_stock = $conn->query($sql_stock);
@@ -120,10 +120,10 @@ echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, proces
                 // $reserve_type = $row_work_order_demand['reserve_type'];
                
                 $remaining_reserve_qty = $row_work_order_demand['remaining_reserve_qty'];
-                echo "<br>Remaining Reserve Qty: " . $remaining_reserve_qty;
-                echo "<br>Requested Qty: " . $qty;
+                // echo "<br>Remaining Reserve Qty: " . $remaining_reserve_qty;
+                // echo "<br>Requested Qty: " . $qty;
                 
-                echo "<br>SQL Query: " . $sql_work_order_demand;
+                // echo "<br>SQL Query: " . $sql_work_order_demand;
        if($remaining_reserve_qty > 0){
 if($remaining_reserve_qty >= $qty){
     // reserve full qty 
@@ -308,9 +308,9 @@ left join job_work_summary j on s.previous_process_id <=> j.process_id and s.inp
 if($remaining_reserve_qty >= $qty){
     // reserve full qty 
 
-    echo "<br>Reserving full qty: ".$qty;
+    // echo "<br>Reserving full qty: ".$qty;
     $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$qty) on duplicate key update reserve_qty = reserve_qty + $qty";
-    echo "<br>SQL Reserve: ".$sql_reserve;
+    // echo "<br>SQL Reserve: ".$sql_reserve;
     if($conn->query($sql_reserve)) {
        $qty = 0;
     //    $conn->commit();
@@ -323,9 +323,9 @@ if($remaining_reserve_qty >= $qty){
            }
            else
             {
-                echo "<br>Reserving remaining qty: ".$remaining_reserve_qty;
+                // echo "<br>Reserving remaining qty: ".$remaining_reserve_qty;
                 $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$remaining_reserve_qty) on duplicate key update reserve_qty = reserve_qty + $remaining_reserve_qty";
-                 echo "<br>SQL Reserve: ".$sql_reserve;
+                 // echo "<br>SQL Reserve: ".$sql_reserve;
                 if($conn->query($sql_reserve)) {
                     $qty -= $remaining_reserve_qty;
                 }
