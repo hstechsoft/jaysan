@@ -218,7 +218,7 @@ else
     
  $conn->commit();
 
-//  $result_json['success'] = true;
+  $result_json['success'] = true;
  
 
 }

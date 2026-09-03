@@ -53,7 +53,7 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
     left join creditors on sv.godown <=> creditors.creditor_id
  left join department on sv.dep <=> department.dep_id
  left join dep_section on sv.sec <=> dep_section.dep_sec_id 
-    WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is null
+    WHERE sv.reserve_type ='job_work_order' and sv.part_id is null
     group by sv.process_id
 
     union all
@@ -73,7 +73,7 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
      left join creditors on sv.godown <=> creditors.creditor_id
  left join department on sv.dep <=> department.dep_id
  left join dep_section on sv.sec <=> dep_section.dep_sec_id
-    WHERE sv.reserve_type =\"job_work_order\" and sv.part_id is not null
+    WHERE sv.reserve_type ='job_work_order' and sv.part_id is not null
     group by sv.part_id
  )
  select iv.work_process_id,iv.work_orders,iv.pending_process_qty,iv.godown,creditors.creditor_name ,department.dep_name,dep_section.sec_name,iv.dep,iv.sec,
@@ -97,8 +97,10 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
  left join department on iv.dep <=> department.dep_id
  left join dep_section on iv.sec <=> dep_section.dep_sec_id
  left join jaysan_process_view jpv on iv.work_process_id <=> jpv.process_id
- left join job_work_reserved jwr on iv.input_part_id <=> jwr.part_id
-  and iv.previous_process_id <=> jwr.process_id 
+ left join job_work_reserved jwr on case
+ when iv.input_part_id is not null then jwr.part_id = iv.input_part_id
+ else jwr.process_id = iv.previous_process_id
+ end
   where $process_query and $godown_query GROUP BY iv.work_process_id,iv.godown";
  
 //  echo "sql: " . $sql . "<br>";

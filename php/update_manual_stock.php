@@ -46,9 +46,14 @@ if ($result->num_rows > 0) {
 }
 
 // output partis  > 0 then process_id is null
-
-if($part_id>0)
-    $process_id = "NULL";
+echo "Part ID: " . $part_id . "\n";
+// check part_id not null
+echo $process_id . "\n";
+if($part_id > 0 && $part_id != "NULL")
+    {
+ $process_id = "NULL";
+    }
+   
 
     {
 
