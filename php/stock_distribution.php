@@ -258,7 +258,7 @@ left join stock_view on input_part_demand_view.input_part_id <=> stock_view.part
 if($remaining_reserve_qty >= $qty){
     // reserve full qty 
     $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$qty) on duplicate key update reserve_qty = reserve_qty + $qty";
-//    echo "<br>SQL Reserve: ".$sql_reserve;
+    echo "<br>SQL Reserve: ".$sql_reserve;
     if($conn->query($sql_reserve)) {
        $qty = 0;
     //    $conn->commit();
@@ -272,7 +272,7 @@ if($remaining_reserve_qty >= $qty){
            else
             {
                 $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$remaining_reserve_qty) on duplicate key update reserve_qty = reserve_qty + $remaining_reserve_qty";
-                // echo "<br>SQL Reserve: ".$sql_reserve;
+                 echo "<br>SQL Reserve: ".$sql_reserve;
                 if($conn->query($sql_reserve)) {
                     $qty -= $remaining_reserve_qty;
                 }
