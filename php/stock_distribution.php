@@ -6,7 +6,7 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
     $result_json = [];
 try
     {
-
+echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
     $sql_stock = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
     $result_stock = $conn->query($sql_stock);
