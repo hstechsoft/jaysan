@@ -17,7 +17,7 @@ return $data;
 }
 $term = "%".$term."%";
 
- $sql = "SELECT * FROM   jaysan_machine WHERE machine_name	 like  '$term' and sec_id =  '$sec_id'";
+ $sql = "SELECT * FROM   jaysan_machine WHERE machine_name	 like  '$term' and dep_sec_id =  '$sec_id'";
 
 $result = $conn->query($sql);
 
