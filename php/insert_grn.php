@@ -88,6 +88,7 @@ $stock_id = 0;
 if ($result->num_rows > 0) {
   // Record exists, update it
   // get stock_id
+  echo "Record exists, updating stock...<br>";
   $row = $result->fetch_assoc();
   $qty_stock = $qty + $row['qty'];
   $stock_id = $row['stock_id'];
@@ -104,6 +105,8 @@ if ($result->num_rows > 0) {
 } else {
   // Record doesn't exist, insert it
   // get new stock_id after insert
+
+  echo "Inserting new stock record";
   $remark = "inward stock inserted dc" . $dc_no1;
   $sql_stock = "INSERT INTO jaysan_stock (godown,dep,sec,part_id,qty,remark,emp_id) 
       VALUES ($godown,$dep,$sec, (select po_material_id from jaysan_po_material where jaysan_po_material_id = $jaysan_po_material_id),$qty,'$remark',$received_by)";
@@ -115,7 +118,7 @@ if ($result->num_rows > 0) {
     echo "Error: " . $sql_stock . "<br>" . $conn->error;
   }
 }
-
+echo "Stock id - ". $stock_id;
   require_once 'stock_distribution.php';
 stock_distribution($conn, $stock_id, $qty);
 
