@@ -98,9 +98,16 @@ echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, proces
 
 
 // select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = 16293 and godown = 7 and dep <=> null and sec <=> null GROUP BY input_part_id, godown, dep, sec
-$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id = $in_process_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
-if($in_part_id !=null)
-$sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $in_part_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
+// -----------ref
+// $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id = $in_process_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
+// if($in_part_id !=null)
+// $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $in_part_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
+
+
+// get demaned material from input_part_demand_view
+ $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown = $godown  GROUP BY input_part_id,previous_process_id, godown";
+
+
 
 
        
@@ -113,6 +120,10 @@ $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty 
                 // $reserve_type = $row_work_order_demand['reserve_type'];
                
                 $remaining_reserve_qty = $row_work_order_demand['remaining_reserve_qty'];
+                echo "<br>Remaining Reserve Qty: " . $remaining_reserve_qty;
+                echo "<br>Requested Qty: " . $qty;
+                
+                echo "<br>SQL Query: " . $sql_work_order_demand;
        if($remaining_reserve_qty > 0){
 if($remaining_reserve_qty >= $qty){
     // reserve full qty 
@@ -231,13 +242,52 @@ if($remaining_reserve_qty >= $qty){
 //     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
 //     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
 
-$sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
-left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and stock_view.reserve_type = 'job_work_order'
- where previous_process_id = $in_process_id  GROUP BY input_part_id";
-if($in_part_id !=null)
-$sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
-left join stock_view on input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
- where input_part_id = $in_part_id  GROUP BY input_part_id";
+// $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
+// left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and stock_view.reserve_type = 'job_work_order'
+//  where previous_process_id = $in_process_id  GROUP BY input_part_id";
+// if($in_part_id !=null)
+// $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
+// left join stock_view on input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
+//  where input_part_id = $in_part_id  GROUP BY input_part_id";
+
+
+//  $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
+// left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
+//  where previous_process_id <=> $in_process_id and input_part_demand_view.input_part_id <=> $in_part_id  GROUP BY input_part_id, previous_process_id";
+
+$sql_job_work_order_demand = "with summary_input_demand as(
+    SELECT
+        input_part_id,
+        previous_process_id,
+      
+        sum(ifnull(needed,0)) as total_needed
+    FROM input_part_demand_view
+    where input_part_id <=> $in_part_id
+    and previous_process_id <=> $in_process_id
+    GROUP BY input_part_id, previous_process_id
+),
+job_work_summary as(
+    SELECT
+        process_id,
+        part_id,
+        sum(ifnull(reserve_qty,0)) as total_reserved
+    FROM stock_view
+    WHERE reserve_type = 'job_work_order'
+    AND part_id <=> $in_part_id AND process_id <=> $in_process_id
+    GROUP BY process_id, part_id
+)
+select 
+    s.input_part_id,
+    s.previous_process_id,
+    s.total_needed,
+    j.total_reserved,
+    s.total_needed - ifnull(j.total_reserved,0) as remaining_reserve_qty
+from summary_input_demand s
+left join job_work_summary j on s.previous_process_id <=> j.process_id and s.input_part_id <=> j.part_id;";
+
+
+
+
         //   echo "<br>SQL Job Work Order Demand: ".$sql_job_work_order_demand;
         $result_job_work_order_demand = $conn->query($sql_job_work_order_demand);
         if ($result_job_work_order_demand->num_rows > 0) {
