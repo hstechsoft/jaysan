@@ -1827,8 +1827,8 @@ $(document).ready(function () {
     }
 
     $('#department').val('').removeData("dept_id");
-    $('#section').val('').removeData("section_id");
-    $('#machine').val('').removeData("machine_id");
+    $('#section').val('').removeData("sec_id");
+    $('#machine').val('').removeData("mach_id");
     $('#min_time').val('');
     $('#max_time').val('');
     $('#cost').val('');
@@ -1895,8 +1895,8 @@ $(document).ready(function () {
 
     $(this).data("dept_id", "");
     $("#department_add_btn").removeClass("d-none");
-    $('#section').val('').removeData("section_id");
-    $('#machine').val('').removeData("machine_id");
+    $('#section').val('').removeData("sec_id");
+    $('#machine').val('').removeData("mach_id");
     $('#min_time').val('');
     $('#max_time').val('');
     $('#cost').val('');
@@ -1988,7 +1988,7 @@ $(document).ready(function () {
     $(this).data("sec_id", "");
 
 
-    $('#machine').val('').removeData("machine_id");
+    $('#machine').val('').removeData("mach_id");
     $('#min_time').val('');
     $('#max_time').val('');
     $('#cost').val('');
@@ -2109,7 +2109,7 @@ $(document).ready(function () {
                 return {
                   label: item.machine_name,
                   value: item.machine_name,
-                  id: item.dep_sec_machine_id
+                  id: item.jmid
                 };
               }));
 

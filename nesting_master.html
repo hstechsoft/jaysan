@@ -106,7 +106,7 @@
                             </div> -->
 
                             <!-- Runtime -->
-                            <div class="col-md-6">
+                            <div class="col-md-6 d-none">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-regular fa-clock"></i>
@@ -117,7 +117,7 @@
                             </div>
 
                             <!-- Dimension -->
-                            <div class="col-md-6">
+                            <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-ruler-combined"></i>
@@ -191,81 +191,66 @@
 
                             <div class="row g-2">
 
-                                <div class="col-12">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="godown" placeholder="">
-                                        <label for="godown">Godown
-                                            <span class="text-danger">*</span> </label>
-
-                                        <div class="invalid-feedback">
-                                            Kindly Enter Vaild Data
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-dumpster-fire"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="godown" placeholder="Godown"
+                                            required>
                                     </div>
                                 </div>
 
 
-                                <div class="col-12">
-
-                                    <div class="input-group mb-3">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">Department</button>
-                                        <ul class="dropdown-menu" id="department_da">
-                                        </ul>
-                                        <input type="text" class="form-control"
-                                            aria-label="Text input with dropdown button" id="department">
-                                        <button type="submit" class="btn btn-primary d-none" id="department_add_btn"><i
-                                                class="fa fa-plus"></i></button>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-warehouse"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="department"
+                                            placeholder="Department" required>
                                     </div>
                                 </div>
-                                <div class="col-12">
 
-                                    <div class="input-group mb-3">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">Section</button>
-                                        <ul class="dropdown-menu" id="section_da">
-                                        </ul>
-                                        <input type="text" class="form-control"
-                                            aria-label="Text input with dropdown button" id="section">
-                                        <button type="submit" class="btn btn-primary d-none" id="section_add_btn"><i
-                                                class="fa fa-plus"></i></button>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-boxes-stacked"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="section"
+                                            placeholder="Section" required>
                                     </div>
                                 </div>
-                                <div class="col-12">
 
-                                    <div class="input-group mb-3">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">Machine</button>
-                                        <ul class="dropdown-menu" id="machine_da">
-                                        </ul>
-                                        <input type="text" class="form-control"
-                                            aria-label="Text input with dropdown button" id="machine">
-                                        <button type="submit" class="btn btn-primary d-none" id="machine_add_btn"><i
-                                                class="fa fa-plus"></i></button>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-tractor"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="machine"
+                                            placeholder="Machine" required>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="min_time" placeholder="">
-                                        <label for="min_time">Min Time
-                                            <span class="text-danger">in Mins*</span> </label>
 
-                                        <div class="invalid-feedback">
-                                            Kindly Enter Vaild Data
-                                        </div>
+                                <div class="col-md-5">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-clock"></i>
+                                        </span>
+                                        <input type="number" min="1" class="form-control" id="run_timee"
+                                            placeholder="Run Time Mins" required>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control rounded-3" id="max_time" placeholder="">
-                                        <label for="max_time">Max Time
-                                            <span class="text-danger">in Mins*</span> </label>
-
-                                        <div class="invalid-feedback">
-                                            Kindly Enter Vaild Data
-                                        </div>
+                                <div class="col-md-5">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-clock"></i>
+                                        </span>
+                                        <input type="number" min="1" class="form-control" id="handling_time"
+                                            placeholder="Handling Time Mins" required>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <!-- <div class="col-6">
                                     <div class="form-floating mb-2">
                                         <input type="text" class="form-control rounded-3" id="cost" value="0"
                                             placeholder="">
@@ -285,11 +270,52 @@
                                             Is Default?
                                         </label>
                                     </div>
+                                </div> -->
+                            
+                                <div class="col-md-2 d-grid">
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill"
+                                        id="nested_machine_add_btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
                                 </div>
+
                             </div>
 
                         </div>
 
+                        
+                        <!-- Table -->
+                        <div class="table-responsive mt-3" style="max-height: 30vh; overflow-y: auto;">
+                            <table class="table table-sm table-hover text-center align-middle border small">
+                                <thead class="table-primary small"
+                                    style=" position: sticky;  z-index: 5; top: 0; background-color: rgb(193, 216, 236);">
+                                    <tr>
+                                        <th>
+                                            <i class="fa-solid fa-tractor me-1"></i>
+                                            Machine
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-regular fa-clock me-1"></i>
+                                            Run Time
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-regular fa-clock me-1"></i>
+                                            Handling Time
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-solid fa-gear me-1"></i>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="nesting_machine_tbody" class="small"></tbody>
+
+                            </table>
+                        </div>
 
                         <!-- Nested Parts -->
                         <div class="mt-4">

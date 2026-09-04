@@ -218,22 +218,297 @@ $(document).ready(function () {
 
     });
 
-    $("#nest_file").on("change", 
-        function () {
-        var file = this.files[0];
+    $('#godown').on('input', function () {
 
-        if (file && file.type === "application/pdf") {
+        $(this).removeData("godown_id");
+        if ($(this).val().trim() === '') {
+            $(this).removeData("godown_id");
+        }
 
+        $('#department').val('').removeData("dept_id");
+        $('#section').val('').removeData("sec_id");
+        $('#machine').val('').removeData("mach_id");
+
+        //check the value not empty
+        if ($('#godown').val() != "") {
+            $('#godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
         }
-        else {
-            $("#nest_file").val("");
-            salert("Warning", "PDF Files Only.", "warning");
-        }
+
     });
+
+    $('#department').on('input', function () {
+
+        $(this).data("dept_id", "");
+        $('#section').val('').removeData("sec_id");
+        $('#machine').val('').removeData("mach_id");
+
+        //check the value not empty
+        if ($('#department').val() != "") {
+            $('#department').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_departments_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            godown_id: $("#godown").data("godown_id")
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.dep_name,
+                                    value: item.dep_name,
+                                    id: item.dep_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("dept_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#section').on('input', function () {
+
+        $(this).data("sec_id", "");
+
+
+        $('#machine').val('').removeData("mach_id");
+
+        //check the value not empty
+        if ($('#section').val() != "") {
+            $('#section').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sections_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            dep_id: $("#department").data("dept_id"),
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.sec_name,
+                                    value: item.sec_name,
+                                    id: item.dep_sec_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("sec_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#machine').on('input', function () {
+
+        $(this).data("mach_id", "");
+
+        if ($('#machine').val() != "") {
+
+            $('#machine').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_sec_machine_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+                            sec_id: $("#section").data("sec_id"),
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.machine_name,
+                                    value: item.machine_name,
+                                    id: item.jmid
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("mach_id", ui.item.id);
+                    // get_dep_section(ui.item.id)
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#nest_file").on("change",
+        function () {
+            var file = this.files[0];
+
+            if (file && file.type === "application/pdf") {
+
+            }
+            else {
+                $("#nest_file").val("");
+                salert("Warning", "PDF Files Only.", "warning");
+            }
+        });
 
     $("#weight").on("focusout", function () {
         scrap_weight();
-    })
+    });
+
+
+
+    $("#nested_machine_add_btn").on("click", function () {
+
+        var godown_id = $("#godown").data("godown_id") || 0;
+        var department_id = $("#department").data("dept_id") || 0;
+        var section_id = $("#section").data("sec_id") || 0;
+        var machine_id = $("#machine").data("mach_id") || 0;
+        var machine = $("#machine").val() || '';
+        var runtime = $("#run_timee").val() || 0;
+        var handling_time = $("#handling_time").val() || 0;
+        console.log(godown_id, department_id, section_id, machine_id, machine, runtime, handling_time);
+        if (godown_id <= 0 || department_id <= 0 || section_id <= 0 || machine_id <= 0 || machine == '' || runtime <= 0 || handling_time <= 0) {
+            salert('warning', 'Please Fill All Fields.', 'warning');
+            return;
+        }
+        else {
+            $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-machine_id="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+
+            $("#godown, #department, #section, #machine, #run_timee, #handling_time").val('').removeData("godown_id").removeData("dept_id").removeData("sec_id").removeData("mach_id");
+        }
+
+    });
+
+    $("#nesting_machine_tbody").on("click", ".delete_btn", function () {
+
+        var row = $(this).closest('tr');
+        // var nes_part_id = $(this).val() || 0;
+
+        Swal.fire({
+            title: "Are You Sure?",
+            text: "Do You Want To Delete This?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete!"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                // if (nes_part_id > 0) {
+                //   $("#scrap_weight").val(scrap_weigth);
+
+                //   row.remove();
+                //   delete_nesting_parts_master(nes_part_id);
+                //   $("#update_nesting_btn").trigger("click");
+                // }
+                // else {
+                row.remove();
+                //   scrap_weight();
+                // }
+                // scrap_weight();
+            }
+
+        });
+
+    });
 
     $("#nested_part_add_btn").on("click", function () {
 

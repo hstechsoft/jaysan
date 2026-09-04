@@ -180,6 +180,142 @@
                         </div>
 
 
+                        <!-- Godown & Machine -->
+
+                        <div class="mt-4">
+
+                            <h6 class="fw-bold text-secondary mb-2">
+                                <i class="fa-solid fa-cash-register me-2"></i>
+                                Machine
+                            </h6>
+
+                            <div class="row g-2">
+
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-dumpster-fire"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="godown" placeholder="Godown"
+                                            required>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-warehouse"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="department"
+                                            placeholder="Department" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-boxes-stacked"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="section"
+                                            placeholder="Section" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-tractor"></i>
+                                        </span>
+                                        <input type="text" min="1" class="form-control" id="machine"
+                                            placeholder="Machine" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-clock"></i>
+                                        </span>
+                                        <input type="number" min="1" class="form-control" id="run_timee"
+                                            placeholder="Run Time Mins" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-clock"></i>
+                                        </span>
+                                        <input type="number" min="1" class="form-control" id="handling_time"
+                                            placeholder="Handling Time Mins" required>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="cost" value="0"
+                                            placeholder="">
+                                        <label for="cost">Cost
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input " type="checkbox" value="" id="is_default"
+                                            style="height: 20px;">
+                                        <label class="form-check-label" for="is_default">
+                                            Is Default?
+                                        </label>
+                                    </div>
+                                </div> -->
+
+                                <div class="col-md-2 d-grid">
+                                    <button type="button" class="btn btn-primary btn-sm rounded-pill"
+                                        id="nested_machine_add_btn">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Table -->
+                        <div class="table-responsive mt-3" style="max-height: 30vh; overflow-y: auto;">
+                            <table class="table table-sm table-hover text-center align-middle border small">
+                                <thead class="table-primary small"
+                                    style=" position: sticky;  z-index: 5; top: 0; background-color: rgb(193, 216, 236);">
+                                    <tr>
+                                        <th>
+                                            <i class="fa-solid fa-tractor me-1"></i>
+                                            Machine
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-regular fa-clock me-1"></i>
+                                            Run Time
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-regular fa-clock me-1"></i>
+                                            Handling Time
+                                        </th>
+
+                                        <th>
+                                            <i class="fa-solid fa-gear me-1"></i>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="nesting_machine_tbody" class="small"></tbody>
+
+                            </table>
+                        </div>
 
                         <!-- Nested Parts -->
                         <div class="mt-4">

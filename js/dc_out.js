@@ -832,6 +832,9 @@ $(document).ready(function () {
             // let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
             let part_pre_process_id = $(this).data("part_pre_process_id");
+            let godown_id = $(this).data("godown_id");
+            let department_id = $(this).data("department_id");
+            let section_id = $(this).data("section_id");
             // let process_name = $(this).find("td").eq(1).text();
             // let process_id = $(this).data("process_id");
             let qty = parseFloat($(this).find(".qty_input").val()) || 0;
@@ -848,6 +851,9 @@ $(document).ready(function () {
             dc_parts.push({
                 part_id: part_id,
                 part_pre_process_id: part_pre_process_id,
+                godown_id: godown_id,
+                department_id: department_id,
+                section_id: section_id,
                 qty: qty,
                 rate: rate,
             });
@@ -871,6 +877,8 @@ $(document).ready(function () {
             // }
             // }
         });
+
+        console.log(dc_parts);
 
         if (dc_parts.length == 0) {
             salert("Warning", "Please select at least one part", "warning");
@@ -896,7 +904,7 @@ $(document).ready(function () {
         console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
 
-        insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
+        // insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -960,11 +968,14 @@ $(document).ready(function () {
 
         let currentRow = $(this).closest("tr");
         let work_process_id = currentRow.data("work_process_id");
+        let godown_id = currentRow.data("godown_id");
+        let department_id = currentRow.data("department_id");
+        let section_id = currentRow.data("section_id");
 
         let rows = $("#dc_list_tbody").find("tr[data-work_process_id='" + work_process_id + "']");
 
         let process = currentRow.find("span").text().trim();
-        let part = currentRow.find("strong").text().trim();
+        let part = currentRow.find('td:eq(3)').find("strong").text().trim();
 
         let chk_count = 0;
 
@@ -991,7 +1002,10 @@ $(document).ready(function () {
                     data-part_pre_process_id="${chk.data("previous_process_id")}"
                     data-part_id="${chk.data("input_part_id")}"
                     data-stock_reserve_id="${chk.data("stock_reserve_id")}"
-                    data-stock_id="${chk.data("stock_id")}">
+                    data-stock_id="${chk.data("stock_id")}"
+                    data-godown_id="${godown_id}"
+                    data-department_id="${department_id}"
+                    data-section_id="${section_id}">
 
                     <td>${part}</td>
 
@@ -1086,7 +1100,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                             if (reserve.length == 0) {
 
-                                let html = `<tr data-work_process_id=${item.work_process_id}>`;
+                                let html = `<tr data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
                                 if (firstMainRow) {
 
@@ -1095,6 +1109,10 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                         <td rowspan="${totalRowspan}">
                                             ${item.creditor_name}
+                                            
+                                            ${item.dep_name ? " - " + item.dep_name : ""}
+
+                                            ${item.sec_name ? " - " + item.sec_name : ""}
                                         </td>
 
                                         <td rowspan="${totalRowspan}">
@@ -1157,7 +1175,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                 reserve.forEach(function (stock, reserveIndex) {
 
-                                    let html = `<tr  data-work_process_id=${item.work_process_id}>`;
+                                    let html = `<tr  data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
 
                                     if (firstMainRow) {
@@ -1169,6 +1187,10 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                             <td rowspan="${totalRowspan}">
                                                 ${item.creditor_name}
+                                                
+                                                ${item.dep_name ? " - " + item.dep_name : ""}
+
+                                                ${item.sec_name ? " - " + item.sec_name : ""}
                                             </td>
 
                                             <td rowspan="${totalRowspan}">
@@ -1727,7 +1749,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
                     const project = window.location.pathname.split('/')[1];
 
                     console.log(`${window.location.origin}/${project}/${i.download_url}`);
-                    
+
                     window.open(`${window.location.origin}/${project}/${i.download_url}`, '_blank');
 
                     setTimeout(() => {
@@ -1736,9 +1758,9 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
                 }
                 else {
-                        salert("Warning", i.error, "warning");
-                    }
-                });
+                    salert("Warning", i.error, "warning");
+                }
+            });
             // if (response.trim() == "ok") {
             //     // window.location.reload();
             // }
