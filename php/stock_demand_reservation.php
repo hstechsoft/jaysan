@@ -460,12 +460,23 @@ $result_json['stock_reservation_array'][] = $stock_reservation_array;
 //     }
 //   }
 
-if($same_sec['same_sec']?? false)
+$result_json['same_place_details'] = [
+    'same_godown' => $same_godown['same_godown'] ?? false,
+    'same_dep' => $same_dep['same_dep'] ?? false,
+    'same_sec' => $same_sec['same_sec'] ?? false
+];
+
+$result_json['messages']['result4'][] = "starting stock reservation process";
+$result_json['messages']['result4'][] = "current stock to be reserved: " . $stock_to_be_reserved;
+
+if($same_sec['same_sec']?? false && $stock_to_be_reserved > 0)
   {
+    $result_json['messages']['result4'][] = "reserving stock in the same section";
  foreach($stock_reservation_array as $item)
     {
       if($item['same_sec'] == true && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
       {
+        $result_json['messages']['result4'][] = "reserving stock from stock_id: " . $item['stock_id'];
         $stock_id = $item['stock_id'];
         $available_qty = $item['available_qty'];
    
@@ -482,12 +493,14 @@ if($same_sec['same_sec']?? false)
     }
   }
 
-if($same_dep['same_dep']?? false)
+if($same_dep['same_dep']?? false && $stock_to_be_reserved > 0)
   {
+    $result_json['messages']['result4'][] = "reserving stock in the same department";
  foreach($stock_reservation_array as $item)
     {
       if($item['same_dep'] == true && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
       {
+        $result_json['messages']['result4'][] = "reserving stock from stock_id: " . $item['stock_id'];
         $stock_id = $item['stock_id'];
         $available_qty = $item['available_qty'];
    
@@ -503,12 +516,40 @@ if($same_dep['same_dep']?? false)
       }
     }
   }
-if($stock_to_be_reserved > 0)
+
+
+  if($same_godown['same_godown']?? false && $stock_to_be_reserved > 0)
+  {
+    $result_json['messages']['result4'][] = "reserving stock in the same godown";
+ foreach($stock_reservation_array as $item)
+    {
+      if($item['same_godown'] == true && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
+      {
+        $result_json['messages']['result4'][] = "reserving stock from stock_id: " . $item['stock_id'];
+        $stock_id = $item['stock_id'];
+        $available_qty = $item['available_qty'];
+   
+        $stock_to_be_reserved_same_godown = min($available_qty, $stock_to_be_reserved); 
+        // release the reserve qty insert on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown
+        $sql_release = "insert into stock_reserve (stock_id,reserve_qty,reserve_type) values ($stock_id,$stock_to_be_reserved_same_godown,'work_order') on duplicate key update reserve_qty = reserve_qty + $stock_to_be_reserved_same_godown";
+        if ($conn->query($sql_release) === TRUE) {
+          $result_json['messages']['result4'][] = "stock internally reserved successfully";
+       $stock_to_be_reserved -= $stock_to_be_reserved_same_godown;
+        } else {
+          throw new Exception("Error updating record: " . $conn->error);
+        }
+      }
+    }
+  }
+  
+if( $stock_to_be_reserved > 0)
 {
+  $result_json['messages']['result5'][] = "reserving stock in other godowns";
   foreach($stock_reservation_array as $item)
     {
       if($item['same_godown'] == false && $item['same_dep'] == false && $item['same_sec'] == false && $stock_to_be_reserved > 0 && $item['available_qty'] > 0)
       {
+        $result_json['messages']['result5'][] = "reserving stock from stock_id: " . $item['stock_id'];
         $stock_id = $item['stock_id'];
         $available_qty = $item['available_qty'];
         
@@ -550,12 +591,13 @@ throw new Exception("No raw material found for the process id: " . $work_process
 // delete all reserve record whose reserve_qty = 0
 $sql_delete_zero_reserve = "delete from stock_reserve where reserve_qty = 0";
 if ($conn->query($sql_delete_zero_reserve) === TRUE) {
-  
-  $result_json['messages']['result6'][] = "zero reserve records deleted successfully";
+  // get deleted zero reserve records
+  $deleted_zero_reserve_records = $conn->affected_rows;
+  $result_json['messages']['result6'][] = "zero reserve records deleted successfully. Total deleted: " . $deleted_zero_reserve_records;
 } else {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
- $result_json['success'] = true;
+  $result_json['success'] = true;
      $conn->commit();
 
 }
