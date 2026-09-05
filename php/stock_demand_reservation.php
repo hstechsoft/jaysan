@@ -462,6 +462,24 @@ if($same_place['same_place']?? false && $stock_to_be_reserved > 0)
         if ($conn->query($sql_release) === TRUE) {
           $result_json['messages']['result4'][] = "stock internally reserved successfully";
        $stock_to_be_reserved -= $stock_to_be_reserved_same_place;
+
+
+// insert on duplicate key input_demand
+
+$demand_part_id = sql_nullable($input_part_id);
+$demand_process_id = sql_nullable($previous_process_id);
+if($input_part_id !== null) {
+  $demand_process_id = "NULL";
+}
+		
+$sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$demand_part_id,$demand_process_id,'work_order',$stock_to_be_reserved_same_place) on duplicate key update qty = qty + $stock_to_be_reserved_same_place";
+if ($conn->query($sql_input_demand) === TRUE) {
+  $result_json['messages']['result4'][] = "input demand updated successfully";
+} else {
+  throw new Exception("Error updating input demand: " . $conn->error);
+}
+
+
         } else {
           throw new Exception("Error updating record: " . $conn->error);
         }
@@ -488,6 +506,19 @@ if($same_place['same_place']?? false && $stock_to_be_reserved > 0)
         if ($conn->query($sql_release) === TRUE) {
           $result_json['messages']['result4'][] = "stock internally reserved successfully as transfer";
        $stock_to_be_reserved -= $stock_to_be_reserved_same_godown;
+       
+$demand_part_id = sql_nullable($input_part_id);
+$demand_process_id = sql_nullable($previous_process_id);
+if($input_part_id !== null) {
+  $demand_process_id = "NULL";
+}
+		
+$sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$demand_part_id,$demand_process_id,'stock_transfer',$stock_to_be_reserved_same_godown) on duplicate key update qty = qty + $stock_to_be_reserved_same_godown";
+if ($conn->query($sql_input_demand) === TRUE) {
+  $result_json['messages']['result4'][] = "input demand updated successfully";
+} else {
+  throw new Exception("Error updating input demand: " . $conn->error);
+}
 
 // insert stock_allocation
 $part_id_allocation = $input_part_id;
