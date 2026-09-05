@@ -142,7 +142,7 @@ sum(ifnull(total_dc_qty,0)) as total_dc_qty,
 sum(ifnull(total_transport_qty,0)) as total_transport_qty,
 sum(ifnull(total_exreserve_qty,0)) as total_exreserve_qty
 from rm_con GROUP BY process_id)
-select work_order_details,cr.process_id,total_process,total_stock_allocation_qty,total_pending_process,total_input_required_qty,total_input_needed,total_internal_reserve_qty,total_exreserve_qty,jpv.input_parts,jpv.process_name,jpv.godown_details,jpv.final_part from cr
+select work_order_details,cr.process_id,total_process,total_stock_allocation_qty,total_pending_process,total_input_required_qty,total_input_needed,total_internal_reserve_qty,total_transport_qty,total_dc_qty,total_exreserve_qty,jpv.input_parts,jpv.process_name,jpv.godown_details,jpv.final_part from cr
 inner join jaysan_process_view jpv on jpv.process_id = cr.process_id";
  
 
