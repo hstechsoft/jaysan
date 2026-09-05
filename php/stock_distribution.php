@@ -177,7 +177,7 @@ return true;
      
     catch (Exception $e) {
         // $conn->rollback();
-        throw new Exception("Stock distribution failed");
+        throw new Exception($e->getMessage());
         // echo "Transaction failed: " . $e->getMessage();
     }
 
