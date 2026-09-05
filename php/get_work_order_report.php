@@ -122,6 +122,7 @@ cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
     'sec_name', sec_name,
     'total_process', total_process,
     'total_pending_process', total_pending_process,
+    'total_stock_allocation_qty', total_stock_allocation_qty,
 
     'total_exreserve_qty', total_exreserve_qty,
     'total_required_qty', total_required_qty,
