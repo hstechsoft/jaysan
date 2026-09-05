@@ -47,11 +47,12 @@ raw_material as(select
    GROUP_CONCAT(sv.stock_reserve_id) as stock_reserve_ids,
    iv.input_part_id,
    if(iv.input_part_id is null ,CONCAT('semi finished part ',pt_final.part_name), pt.part_name) as input_part_name,
-   iv.required_qty,
-   iv.total_reserve_qty,
-   iv.needed,
-   iv.dc_qty,
-   iv.transport_qty,
+   ifnull(iv.required_qty,0) as required_qty,
+   ifnull(iv.total_reserve_qty,0) as total_reserve_qty,
+   ifnull(iv.needed,0) as needed,
+   ifnull(iv.dc_qty,0) as dc_qty,
+   ifnull(iv.transport_qty,0) as transport_qty,
+   ifnull(iv.stock_allocation_qty,0) as stock_allocation_qty,
    sum(sv.reserve_qty) as total_exreserve_qty
    
 from
@@ -85,9 +86,11 @@ rm_group as (select
   needed,
 sum(total_exreserve_qty) as total_exreserve_qty,
 sum(required_qty) as total_required_qty,
+sum(needed) as total_needed,
 sum(total_reserve_qty) as total_internal_reserve_qty,
 sum(dc_qty) as total_dc_qty,
 sum(transport_qty) as total_transport_qty,
+sum(stock_allocation_qty) as total_stock_allocation_qty,
     previous_process_id,
        JSON_ARRAYAGG(JSON_OBJECT(
         'input_part_id', rm.input_part_id,
@@ -97,6 +100,7 @@ sum(transport_qty) as total_transport_qty,
         'total_reserve_qty', rm.total_reserve_qty,
         'dc_qty', rm.dc_qty,
         'transport_qty', rm.transport_qty,
+        'stock_allocation_qty', rm.stock_allocation_qty,
         'needed', rm.needed,
         'ex_qty',rm.total_exreserve_qty
     )) as input_details
@@ -105,7 +109,7 @@ sum(transport_qty) as total_transport_qty,
 
   from raw_material rm GROUP BY rm.process_id,rm.godown,rm.dep,rm.sec),
 
-rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty,total_dc_qty,total_transport_qty, previous_process_id, input_details from rm_group
+rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,total_needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty,total_dc_qty,total_transport_qty,total_stock_allocation_qty, previous_process_id, input_details from rm_group
 -- WHERE process_id = 2796 and godown = 1087 and dep <=> null and sec<=> null
 ), 
 cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
@@ -127,12 +131,15 @@ cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
     'previous_process_id', previous_process_id,
     'input_details', input_details
 )) as work_order_details,
-sum(total_process) as total_process,
-sum(total_pending_process) as total_pending_process,
-sum(total_required_qty) as total_input_required_qty,
-sum(needed) as total_input_needed,
-sum(total_internal_reserve_qty) as total_internal_reserve_qty,
-total_exreserve_qty
+sum(ifnull(total_process,0)) as total_process,
+sum(ifnull(total_pending_process,0)) as total_pending_process,
+sum(ifnull(total_required_qty,0)) as total_input_required_qty,
+sum(ifnull(total_needed,0)) as total_input_needed,
+sum(ifnull(total_internal_reserve_qty,0)) as total_internal_reserve_qty,
+sum(ifnull(total_stock_allocation_qty,0)) as total_stock_allocation_qty,
+sum(ifnull(total_dc_qty,0)) as total_dc_qty,
+sum(ifnull(total_transport_qty,0)) as total_transport_qty,
+sum(ifnull(total_exreserve_qty,0)) as total_exreserve_qty
 from rm_con GROUP BY process_id)
 select work_order_details,cr.process_id,total_process,total_pending_process,total_input_required_qty,total_input_needed,total_internal_reserve_qty,total_exreserve_qty,jpv.input_parts,jpv.process_name,jpv.godown_details,jpv.final_part from cr
 inner join jaysan_process_view jpv on jpv.process_id = cr.process_id";
