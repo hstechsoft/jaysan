@@ -116,14 +116,36 @@ $transport_ids_str = implode(',', $all_transport_ids);
 
 
         foreach ($dc_parts as $part) {
+            
             $part_id = sql_nullable($part['part_id']);
+            
            $part_pre_process_id  = sql_nullable($part['part_pre_process_id']);
+            if($part_id >0)
+                {
+
+           $part_pre_process_id  = "NULL";
+                }
+
             $rate = test_input($part['rate']);
             $qty = test_input($part['qty']);
+            $godown = sql_nullable($part['godown_id']);
+            $dep = sql_nullable($part['department_id']);
+            $sec = sql_nullable($part['section_id']);
+            $work_process_id = isset($part['work_process_id']) ? sql_nullable($part['work_process_id']) : "2941";
             $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
+            echo $sql_part;
             if (!$conn->query($sql_part)) {
                 throw new Exception("Error inserting part: " . $conn->error.$sql_part);
             }
+
+
+		
+$sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$part_id,$part_pre_process_id,'dc',$qty) on duplicate key update qty = qty + $qty";
+if ($conn->query($sql_input_demand) === TRUE) {
+  $result_json['messages']['result4'][] = "input demand updated successfully";
+} else {
+  throw new Exception("Error updating input demand: " . $conn->error);
+}
 
 
 
