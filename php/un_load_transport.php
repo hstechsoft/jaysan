@@ -5,7 +5,7 @@ $stock_json = json_decode($_GET['stock_json'], true);
 
 // unload transport parts from transport godown to destination godown
  
- 
+ $distribution_stock_id = 0;
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -49,6 +49,7 @@ foreach ($stock_json as $stock) {
             // stock exists in transport godown, update quantity
             $row_check_stock = $result_check_stock->fetch_assoc();
             $existing_stock_id = $row_check_stock['stock_id'];
+            $distribution_stock_id = $existing_stock_id;
         } else {
             $existing_stock_id = null;
         }
@@ -71,6 +72,7 @@ foreach ($stock_json as $stock) {
         $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id) VALUES ($part_id, $process_id, $des_godown, $qty, '$batch_id')";
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
+            $distribution_stock_id = $new_stock_id;
         } else {
             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " . $conn->error." query: $sql_insert_stock");
         }   
@@ -199,7 +201,7 @@ foreach($dc_demand_array as $dc_demand) {
 $sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
 $conn->query($sql_delete_input_demand);
 require_once 'stock_distribution.php';
-echo "result-" . stock_distribution($conn, $existing_stock_id, $qty);
+echo "result-" . stock_distribution($conn, $distribution_stock_id, $qty);
 
 }
 $conn->commit();

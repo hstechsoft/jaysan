@@ -10,7 +10,7 @@ try
 // echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
     $sql_stock = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
-   
+   echo "SQL Stock Query: $sql_stock<br>";
     $result_stock = $conn->query($sql_stock);
     if ($result_stock->num_rows > 0) {
         $row_stock = $result_stock->fetch_assoc();
