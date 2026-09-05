@@ -156,7 +156,7 @@ if (!$conn->query($delete_reserve)) {
 
   // get  input demand array where transport_dc_id,cat as dc,part_id,process_id matches
   $dc_demand_array = array();
-$sql = "SELECT * FROM input_demand WHERE godown = '$des_godown' AND cat = 'transport' AND part_id <=> $part_id AND process_id <=> $process_id";
+$sql = "SELECT * FROM input_demand WHERE godown = $des_godown AND cat = 'transport' AND part_id <=> $part_id AND process_id <=> $process_id";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while($row = mysqli_fetch_assoc($result)) {
