@@ -48,7 +48,7 @@ $sql = "with
                     'process_name',
                     jp.process_name,
                     'qty',
-                    sr.reserve_qty,
+                    tp.qty,
                     'stock_id',
                     sr.stock_id,
                     'godown',

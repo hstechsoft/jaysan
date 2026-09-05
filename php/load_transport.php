@@ -17,6 +17,17 @@ return $data;
 
 try {
 
+// get des_godown from  transport_dc
+$sql_transport_dc = "SELECT des_godown FROM transport_dc WHERE transport_dc_id = $transport_dc_id";
+$result_transport_dc = $conn->query($sql_transport_dc);
+if ($result_transport_dc->num_rows > 0) {
+    $row_transport_dc = $result_transport_dc->fetch_assoc();
+    $des_godown = $row_transport_dc['des_godown'];
+} else {
+    throw new Exception("Transport DC id $transport_dc_id not found");
+}
+
+
   $conn->begin_transaction();
 
 
@@ -81,7 +92,9 @@ if ($qty > $stock_qty) {
 
         
 
-        }   
+        }  
+        
+        
 
      
         
@@ -128,23 +141,31 @@ if ($qty > $stock_qty) {
 //         }   
 
 
-    // update current transport in transport parts with $transport_godown and sts as transport
-    $sql_update_transport = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
-    if (!$conn->query($sql_update_transport)) {
-        throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
-    }
+
+
+
 
 } 
 
 
-
+echo "des_godown: " . $des_godown;
+echo "part_id: " . $part_id;
+echo "transport_dc_id: " . $transport_dc_id;
+echo "process_id: " . $process_id;
 
   
 
 
 }
- $conn->commit();
-echo "ok";
+
+
+    // update current transport in transport parts with $transport_godown and sts as transport
+    $sql_update_transport = "UPDATE transport_dc SET current_transport = $transport_godown, sts = 'transport' WHERE transport_dc_id = $transport_dc_id";
+    if (!$conn->query($sql_update_transport)) {
+        throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
+    }
+//  $conn->commit();
+// echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();

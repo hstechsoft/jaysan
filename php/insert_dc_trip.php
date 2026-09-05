@@ -132,7 +132,8 @@ $transport_ids_str = implode(',', $all_transport_ids);
             $dep = sql_nullable($part['department_id']);
             $sec = sql_nullable($part['section_id']);
             $work_process_id = isset($part['work_process_id']) ? sql_nullable($part['work_process_id']) : "2941";
-            $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
+            // onduplicate key update
+       $sql_part = "INSERT INTO dc_parts (dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($dc_id, $part_id, $part_pre_process_id, $rate, $qty) on duplicate key update qty = qty + $qty";
             echo $sql_part;
             if (!$conn->query($sql_part)) {
                 throw new Exception("Error inserting part: " . $conn->error.$sql_part);
@@ -261,8 +262,8 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
              $stock_part_id = sql_nullable($stock_part_id);
              $stock_process_id = sql_nullable($stock_process_id);
 
-                    // add parts to in_dc_parts 
-                    $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id,dc_check) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id, $dc_check)";
+                    // add parts to in_dc_parts on duplicate key update add qty
+                  $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id,dc_check) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id, $dc_check) on duplicate key update qty = qty + $reserve_qty";
                     if (!$conn->query($sql_in_dc_parts)) {
                         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
                     }
