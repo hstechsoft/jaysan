@@ -200,6 +200,7 @@ $sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
 $conn->query($sql_delete_input_demand);
 require_once 'stock_distribution.php';
 stock_distribution($conn, $existing_stock_id, $qty);
+
 }
 $conn->commit();
 echo "ok";
