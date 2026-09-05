@@ -246,6 +246,7 @@ function get_work_order_report() {
                                 <span class="badge bg-secondary" title="Pending Process">${wo.total_pending_process}</span>
                                 <span class="badge bg-warning text-dark" title="External Reserved">${wo.total_exreserve_qty}</span>
                                 <span class="badge bg-success" title="Internal Reserved">${wo.total_internal_reserve_qty}</span>
+                                <span class="badge bg-light text-dark" title="Internal Stock Transfer">${wo.total_stock_allocation_qty}</span>
                                 <span class="badge bg-dark" title="DC Reserved Qty">${wo.total_dc_qty ?? 0}</span>
                                 <span class="badge bg-primary" title="Transport Qty">${wo.total_transport_qty ?? 0}</span>
                             </div>
@@ -321,9 +322,14 @@ function get_work_order_report() {
 
                                 </div>
 
+                                <!-- Stock Transfer -->
+                                <small class="text-success d-block mt-2">
+                                    Internal Stock Transfer : ${input.stock_allocation_qty} 
+                                </small>
+
                                 <!-- External Reserve -->
                                 <small class="text-muted d-block mt-2">
-                                    External Availability
+                                    External Availability 
                                 </small>
 
                                 <div class="progress" style="height:10px;">
