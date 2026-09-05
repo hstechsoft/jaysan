@@ -32,88 +32,9 @@ $result_json['stock_details'] = [
     'part_id' => $in_part_id
 ];
 
-// get there is still demand
-
-        // $conn->begin_transaction();
-// get work order demand and assign if demand 
-// $sql_work_order_demand = "with
-//     demand as (
-//         select
-//            iwp.process_id,
-//            sum(work_order.qty) as work_order_qty,
-//             sum(iwp.qty) as input_qty,
-//            sum(work_order.qty * iwp.qty) as total_production_qty,
-//             iwp.previous_process_id,
-//             iwp.input_part_id,
-//             work_order.godown,
-//             work_order.dep,
-//             work_order.sec
-//         from
-//             input_wel_parts iwp
-//             inner join demand on iwp.process_id = demand.process_id
-//             inner join work_order on demand.demand_id = work_order.demand_id
-//         WHERE
-//             iwp.previous_process_id <=> $process_id group by godown,dep,sec
-//     ),
-//     self_demand as (
-//         select *
-//         from demand
-//         where
-//             godown <=> $godown
-//             and dep <=> $dep
-//             and sec <=> $sec
-//     ) ,
-//     reserved_stock as (
-//               select   
-//         sr.stock_reserve_id,
-//         js.part_id,
-//         js.process_id,
-//         js.godown,
-//         js.dep,
-//         js.sec,
-//         js.stock_id,
-//         sr.reserve_qty,
-//         sr.reserve_type,
-//         js.qty as stock_qty
-//         from jaysan_stock js 
-//          LEFT join stock_reserve sr on sr.stock_id = js.stock_id and reserve_type = 'work_order' 
-//           where   js.godown <=> $godown and js.dep <=> $dep and js.sec <=> $sec
-//     )
-
-
-
-// select
-//     self_demand.process_id,
-//     self_demand.work_order_qty,
-//     self_demand.input_qty,
-//     self_demand.total_production_qty,
-//     self_demand.previous_process_id,
-//     self_demand.input_part_id,
-//     self_demand.godown,
-//     self_demand.dep,
-//     self_demand.sec,
-//     js.stock_id,
-//     js.stock_qty,
-//     js.stock_reserve_id,
-//     js.reserve_qty,
-//     js.reserve_type,
-//   self_demand.total_production_qty-ifnull(js.reserve_qty,0) as remaining_reserve_qty
-
-// from
-//     self_demand
-//     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
-//     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
-
-
-// select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = 16293 and godown = 7 and dep <=> null and sec <=> null GROUP BY input_part_id, godown, dep, sec
-// -----------ref
-// $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where previous_process_id = $in_process_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
-// if($in_part_id !=null)
-// $sql_work_order_demand = "select sum(ifnull(needed,0)) as remaining_reserve_qty from input_part_demand_view where input_part_id = $in_part_id and godown = $godown  GROUP BY input_part_id, godown, dep, sec";
-
-
-// get demaned material from input_part_demand_view
- $sql_work_order_demand = "select sum(ifnull(required_qty,0)) - (sum(ifnull(dc_qty,0)) + sum(ifnull(transport_qty,0)) +total_reserve_qty ) as remaining_reserve_qty from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown = $godown  GROUP BY input_part_id,previous_process_id, godown";
+$demand_insert_qty = $qty;
+$demand_array = array();
+ $sql_work_order_demand = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec  ";
 
 $result_json['sql_work_order_demand'] = $sql_work_order_demand;
 
@@ -122,250 +43,126 @@ $result_json['sql_work_order_demand'] = $sql_work_order_demand;
         $result_work_order_demand = $conn->query($sql_work_order_demand);
         if ($result_work_order_demand->num_rows > 0) {
             while ($row_work_order_demand = $result_work_order_demand->fetch_assoc()) {
-                // $stock_reserve_id = $row_work_order_demand['stock_reserve_id'];
-                // $reserve_qty = $row_work_order_demand['reserve_qty'];
-                // $stock_qty = $row_work_order_demand['qty'];
-                // $reserve_type = $row_work_order_demand['reserve_type'];
-               
-                $remaining_reserve_qty = $row_work_order_demand['remaining_reserve_qty'];
-                // echo "<br>Remaining Reserve Qty: " . $remaining_reserve_qty;
-                // echo "<br>Requested Qty: " . $qty;
-                
-                // echo "<br>SQL Query: " . $sql_work_order_demand;
-                $result_json['remaining_reserve_qty'] = $remaining_reserve_qty;
-       if($remaining_reserve_qty > 0){
-if($remaining_reserve_qty >= $qty){
-    $result_json['action'] = 'reserve_full_qty';
-    // reserve full qty 
-    $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'work_order',$qty) on duplicate key update reserve_qty = reserve_qty + $qty";
-
-   if($conn->query($sql_reserve)) {
-       $qty = 0;
-    //    $conn->commit();
-    echo json_encode($result_json);
-       return true;
-   }
-   else
-    {
-        throw new Exception("Error reserving stock: " . $conn->error);
-    }
-           }
-           else
-            {
-                $result_json['action'] = 'reserve_partial_qty';
-                $result_json['remaining_reserve_qty'] = $remaining_reserve_qty;
-                $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'work_order',$remaining_reserve_qty) on duplicate key update reserve_qty = reserve_qty + $remaining_reserve_qty";
-                if($conn->query($sql_reserve)) {
-                    $qty -= $remaining_reserve_qty;
-                }
-                else
-                {
-                    throw new Exception("Error reserving stock: " . $conn->error);
-                }
-
-            }
-
-       }
+          $demand_array[] = $row_work_order_demand;
             }
         }
         
-        
-        $result_json['remaining_qty'] = $qty;
-        
-        // else {
-        //     throw new Exception("No work order demand found for godown $godown, dep $dep, sec $sec");
-        // }
+
+        foreach($demand_array as $demand){
+            // process each demand item here
+           
+  
+    $work_process_id = $demand['work_process_id'];
+    $godown = $demand['godown'];
+    $dep = $demand['dep'];
+    $sec = $demand['sec'];
+    $input_part_id = sql_nullable($demand['input_part_id']);
+    $previous_process_id = sql_nullable($demand['previous_process_id']);
+    $needed = $demand['needed'];
+    $reduce_qty = min($needed,$demand_insert_qty);
+// insert on duplicate key update stock_reserve
+$sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'work_order') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
+$conn->query($sql_reserve_work_order);
 
 
+// insert input_demand on duplicate key update
+$sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $godown, $dep, $sec, 'work_order', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+$conn->query($sql_input_demand);
 
-        // get external work order demand and assign if demand
+$demand_insert_qty -= $reduce_qty;
+if($demand_insert_qty <= 0){
+    break;
+}
 
+        }
+     
+     
 
-//         $sql_job_work_order_demand = "with
-//     demand as (
-//         select
-//             iwp.process_id,
-//            sum(work_order.qty) as work_order_qty,
-//             sum(iwp.qty) as input_qty,
-//            sum(work_order.qty * iwp.qty) as total_production_qty,
-//             iwp.previous_process_id,
-//             iwp.input_part_id,
-//             work_order.godown,
-//             work_order.dep,
-//             work_order.sec
-//         from
-//             input_wel_parts iwp
-//             inner join demand on iwp.process_id = demand.process_id
-//             inner join work_order on demand.demand_id = work_order.demand_id
-//         WHERE
-//             iwp.previous_process_id <=> $process_id group by godown,dep,sec
-//     ),
-//     self_demand as (
-//         select *
-//         from demand
-//         where
-//              NOT (
-//     godown <=> $godown
-//     AND dep <=> $dep
-//     AND sec <=> $sec
-// )
-//     ) 
+        // if demand_insert_qty still remains check same godown
 
-//     ,
-//     reserved_stock as (
-//    select   
-//         sr.stock_reserve_id,
-//         js.part_id,
-//         js.process_id,
-//         js.godown,
-//         js.dep,
-//         js.sec,
-//         js.stock_id,
-//         sr.reserve_qty,
-//         sr.reserve_type,
-//         js.qty as stock_qty
-//         from jaysan_stock js 
-//          LEFT join stock_reserve sr on sr.stock_id = js.stock_id and reserve_type = 'job_work_order' 
-//         where
-//             NOT (
-//     godown <=> $godown
-//     AND dep <=> $dep
-//     AND sec <=> $sec
-// )
-//     )
-
-
-
-// select
-//     self_demand.process_id,
-//     self_demand.work_order_qty,
-//     self_demand.input_qty,
-//     self_demand.total_production_qty,
-//     self_demand.previous_process_id,
-//     self_demand.input_part_id,
-//     self_demand.godown,
-//     self_demand.dep,
-//     self_demand.sec,
-//     js.stock_id,
-//     js.stock_qty,
-//     js.stock_reserve_id,
-//     js.reserve_qty,
-//     js.reserve_type,
-//   self_demand.total_production_qty-ifnull(js.reserve_qty,0) as remaining_reserve_qty
-
-// from
-//     self_demand
-//     left join reserved_stock js on self_demand.input_part_id <=> js.part_id
-//     and self_demand.previous_process_id <=> js.process_id and  self_demand.godown <=> js.godown and self_demand.dep <=> js.dep and self_demand.sec <=> js.sec"; 
-
-// $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
-// left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and stock_view.reserve_type = 'job_work_order'
-//  where previous_process_id = $in_process_id  GROUP BY input_part_id";
-// if($in_part_id !=null)
-// $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
-// left join stock_view on input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
-//  where input_part_id = $in_part_id  GROUP BY input_part_id";
-
-
-//  $sql_job_work_order_demand = "select sum(ifnull(input_part_demand_view.needed,0))  - sum(ifnull(stock_view.reserve_qty,0)) as remaining_reserve_qty from input_part_demand_view
-// left join stock_view on input_part_demand_view.previous_process_id <=> stock_view.process_id and input_part_demand_view.input_part_id <=> stock_view.part_id and stock_view.reserve_type = 'job_work_order'
-//  where previous_process_id <=> $in_process_id and input_part_demand_view.input_part_id <=> $in_part_id  GROUP BY input_part_id, previous_process_id";
-
-$sql_job_work_order_demand = "with summary_input_demand as(
-    SELECT
-        input_part_id,
-        previous_process_id,
-      
-         sum(ifnull(required_qty,0)) - (sum(ifnull(dc_qty,0)) + sum(ifnull(transport_qty,0)) +total_reserve_qty )  as total_needed
-    FROM input_part_demand_view
-    where input_part_id <=> $in_part_id
-    and previous_process_id <=> $in_process_id
-    GROUP BY input_part_id, previous_process_id
-),
-job_work_summary as(
-    SELECT
-        process_id,
-        part_id,
-        sum(ifnull(reserve_qty,0)) as total_reserved
-    FROM stock_view
-    WHERE reserve_type = 'job_work_order'
-    AND part_id <=> $in_part_id AND process_id <=> $in_process_id
-    GROUP BY process_id, part_id
-)
-select 
-    s.input_part_id,
-    s.previous_process_id,
-    s.total_needed,
-    j.total_reserved,
-    s.total_needed - ifnull(j.total_reserved,0) as remaining_reserve_qty
-from summary_input_demand s
-left join job_work_summary j on s.previous_process_id <=> j.process_id and s.input_part_id <=> j.part_id;";
-
-
-$result_json['job_work_order_demand'] = $sql_job_work_order_demand;
-
-        //   echo "<br>SQL Job Work Order Demand: ".$sql_job_work_order_demand;
-        $result_job_work_order_demand = $conn->query($sql_job_work_order_demand);
-        if ($result_job_work_order_demand->num_rows > 0) {
-            while ($row_job_work_order_demand = $result_job_work_order_demand->fetch_assoc()) {
-                // $stock_reserve_id = $row_job_work_order_demand['stock_reserve_id'];
-                // $reserve_qty = $row_job_work_order_demand['reserve_qty'];
-                // $stock_qty = $row_job_work_order_demand['qty'];
-                // $reserve_type = $row_job_work_order_demand['reserve_type'];
-                // $part_id = $row_job_work_order_demand['input_part_id'];
-                // $process_id = $row_job_work_order_demand['previous_process_id'];
-                //  $jobWork_stock_id = $row_job_work_order_demand['stock_id'];
-                //  echo $jobWork_stock_id;
-                //  if($jobWork_stock_id == null){
-                //     throw new Exception("No stock found for job work order demand for godown kindly add 0 stock for godown ".$row_job_work_order_demand['godown']." dep ".$row_job_work_order_demand['dep']." sec ".$row_job_work_order_demand['sec']." and part id ".$row_job_work_order_demand['input_part_id']." and process id ".$row_job_work_order_demand['previous_process_id']);
-                //  }
-                $remaining_reserve_qty = $row_job_work_order_demand['remaining_reserve_qty'];
-                $result_json['remaining_reserve_qty1'] = $remaining_reserve_qty;
-       if($remaining_reserve_qty > 0){
-if($remaining_reserve_qty >= $qty){
-    // reserve full qty 
-
-    // echo "<br>Reserving full qty: ".$qty;
-    $result_json['action_ex'] = 'reserve_full_qty';
-    $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$qty) on duplicate key update reserve_qty = reserve_qty + $qty";
-    // echo "<br>SQL Reserve: ".$sql_reserve;
-    if($conn->query($sql_reserve)) {
-       $qty = 0;
-    //    $conn->commit();
-    
-    echo json_encode($result_json);
-    
-       return true;
-   }
-   else
-    {
-        throw new Exception("Error reserving stock: " . $conn->error);
-    }
-           }
-           else
-            {
-                $result_json['action_ex'] = 'reserve_partial_qty';
-                // echo "<br>Reserving remaining qty: ".$remaining_reserve_qty;
-                $sql_reserve = "insert into stock_reserve (stock_id,reserve_type,reserve_qty) values ($stock_id,'job_work_order',$remaining_reserve_qty) on duplicate key update reserve_qty = reserve_qty + $remaining_reserve_qty";
-                 // echo "<br>SQL Reserve: ".$sql_reserve;
-                if($conn->query($sql_reserve)) {
-                    $qty -= $remaining_reserve_qty;
-                }
-                else
-                {
-                    throw new Exception("Error reserving stock: " . $conn->error);
-                }
-
-            }
-
-       }
+$demand_array = array();
+ $sql_work_order_demand_godown = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown ";
+$result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
+        $result_work_order_demand_godown = $conn->query($sql_work_order_demand_godown);
+        if ($result_work_order_demand_godown->num_rows > 0) {
+            while ($row_work_order_demand_godown = $result_work_order_demand_godown->fetch_assoc()) {
+                $demand_array[] = $row_work_order_demand_godown;
             }
         }
+
+
+                foreach($demand_array as $demand){
+            // process each demand item here
+           
+  
+    $work_process_id = $demand['work_process_id'];
+    $godown = $demand['godown'];
+    $dep = $demand['dep'];
+    $sec = $demand['sec'];
+    $input_part_id = sql_nullable($demand['input_part_id']);
+    $previous_process_id = sql_nullable($demand['previous_process_id']);
+    $needed = $demand['needed'];
+    $reduce_qty = min($needed,$demand_insert_qty);
+// insert on duplicate key update stock_reserve
+$sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'stock_transfer') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
+$conn->query($sql_reserve_work_order);
+
+
+// insert input_demand on duplicate key update
+$sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $godown, $dep, $sec, 'stock_transfer', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+$conn->query($sql_input_demand);
+
+$demand_insert_qty -= $reduce_qty;
+if($demand_insert_qty <= 0){
+    break;
+}
+
+        }
+
+
+        // if demand_insert_qty still remains then reserve it as job_work_order
+
+$demand_array = array();
+// get details where godown not equal to the current godown
+ $sql_work_order_demand_outside = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <> $godown ";
+ $result_json['sql_work_order_demand_outside'] = $sql_work_order_demand_outside;
+        $result_work_order_demand_outside = $conn->query($sql_work_order_demand_outside);
+        if ($result_work_order_demand_outside->num_rows > 0) {
+            while ($row_work_order_demand_outside = $result_work_order_demand_outside->fetch_assoc()) {
+                $demand_array[] = $row_work_order_demand_outside;
+            }
+        }
+
+
+                        foreach($demand_array as $demand){
+            // process each demand item here
+           
+  
+    $work_process_id = $demand['work_process_id'];
+    $godown = $demand['godown'];
+    $dep = $demand['dep'];
+    $sec = $demand['sec'];
+    $input_part_id = sql_nullable($demand['input_part_id']);
+    $previous_process_id = sql_nullable($demand['previous_process_id']);
+    $needed = $demand['needed'];
+    $reduce_qty = min($needed,$demand_insert_qty);
+// insert on duplicate key update stock_reserve
+$sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'job_work_order') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
+$conn->query($sql_reserve_work_order);
+
+
+
+
+$demand_insert_qty -= $reduce_qty;
+if($demand_insert_qty <= 0){
+    break;
+}
+
+        }
+
+
         
-        // else {
-        //     throw new Exception("No job work order demand found for godown $godown, dep $dep, sec $sec");
-        // }
-        //   $conn->commit();
+   
 
         echo json_encode($result_json);
           

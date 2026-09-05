@@ -107,7 +107,7 @@ if ($qty > $stock_qty) {
 
 
     $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
-    echo $sql_update_reserve;
+
                 if (!$conn->query($sql_update_reserve)) {
                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
                 }
@@ -148,15 +148,57 @@ if ($qty > $stock_qty) {
 } 
 
 
-echo "des_godown: " . $des_godown;
-echo "part_id: " . $part_id;
-echo "transport_dc_id: " . $transport_dc_id;
-echo "process_id: " . $process_id;
 
+// get  input demand array where transport_dc_id,cat as dc,part_id,process_id matches
+  $dc_demand_array = array();
+$sql = "SELECT * FROM input_demand WHERE godown = '$des_godown' AND cat = 'dc' AND part_id <=> $part_id AND process_id <=> $process_id";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        $dc_demand_array[] = $row;
+    }
+}
+
+$demand_insert_qty = $qty;
+foreach($dc_demand_array as $dc_demand) {
+    // process each dc_demand here
+    $input_demand_id = $dc_demand['input_demand_id'];
+    $demand_qty = $dc_demand['qty'];
+    $work_process_id = $dc_demand['work_process_id'];
+    $dep = $dc_demand['dep'];
+    $sec = $dc_demand['sec'];
+    $part_id = sql_nullable($dc_demand['part_id']);
+    $process_id = sql_nullable($dc_demand['process_id']);
+    $reduce_qty = min($demand_qty,$demand_insert_qty);
+// update input_demand table to reduce the qty by $reduce_qty
+    $sql_update_input_demand = "UPDATE input_demand SET qty = qty - $reduce_qty WHERE input_demand_id = $input_demand_id";
+    if (!$conn->query($sql_update_input_demand)) {
+        throw new Exception("Error updating input demand id $input_demand_id: " . $conn->error);
+    }
+
+    // insert on duplicate key update cat  as transport in input_demand
+    $sql_insert_transport = "INSERT INTO input_demand (work_process_id,dep,sec,godown, cat, part_id, process_id, qty) VALUES ($work_process_id, '$dep', '$sec', '$des_godown', 'transport', $part_id, $process_id, $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+    if (!$conn->query($sql_insert_transport)) {
+        throw new Exception("Error inserting/updating transport in input demand for part id $part_id and process id $process_id: " . $conn->error);
+    }
+    
+      $demand_insert_qty -= $reduce_qty;
+
+    // if qty is reduced to zero, break the loop
+    if ($demand_insert_qty <= 0) {
+        break;
+    }
   
 
 
 }
+
+// delete input_demand rows where qty is zero
+$sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
+$conn->query($sql_delete_input_demand);
+
+}
+
 
 
     // update current transport in transport parts with $transport_godown and sts as transport
@@ -164,8 +206,9 @@ echo "process_id: " . $process_id;
     if (!$conn->query($sql_update_transport)) {
         throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
     }
-//  $conn->commit();
-// echo "ok";
+   
+  $conn->commit();
+ echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();

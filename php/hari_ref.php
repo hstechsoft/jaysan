@@ -3,7 +3,7 @@
 include 'db_head.php';
 
   require_once 'stock_distribution.php';
-stock_distribution($conn, 1792, 1);
+stock_distribution($conn, 1801, 1);
 
 $conn->close();
 

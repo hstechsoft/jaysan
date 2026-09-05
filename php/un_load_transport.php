@@ -106,17 +106,17 @@ if (!$conn->query($delete_reserve)) {
 }
 
 
-// insert on duplicate key update stock reserve with typr = work_order
-$update_reserve_qty = "INSERT INTO stock_reserve (stock_id, reserve_type, reserve_type_id, reserve_qty) VALUES ($new_stock_id, 'work_order', $transport_dc_id, $qty) ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
-if (!$conn->query($update_reserve_qty)) {
-    throw new Exception("Error updating stock reserve for new stock id $new_stock_id: " . $conn->error);
-}
+// // insert on duplicate key update stock reserve with typr = work_order
+// $update_reserve_qty = "INSERT INTO stock_reserve (stock_id, reserve_type, reserve_type_id, reserve_qty) VALUES ($new_stock_id, 'work_order', $transport_dc_id, $qty) ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
+// if (!$conn->query($update_reserve_qty)) {
+//     throw new Exception("Error updating stock reserve for new stock id $new_stock_id: " . $conn->error);
+// }
 
-            // using that new_stock_id update stock reserve with new stock id and reserve qty
-                $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
-                if (!$conn->query($sql_update_reserve)) {
-                    throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
-                }
+//             // using that new_stock_id update stock reserve with new stock id and reserve qty
+//                 $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
+//                 if (!$conn->query($sql_update_reserve)) {
+//                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
+//                 }
 
 
 
@@ -154,8 +154,51 @@ if (!$conn->query($update_reserve_qty)) {
  
 } 
 
+  // get  input demand array where transport_dc_id,cat as dc,part_id,process_id matches
+  $dc_demand_array = array();
+$sql = "SELECT * FROM input_demand WHERE godown = '$des_godown' AND cat = 'transport' AND part_id <=> $part_id AND process_id <=> $process_id";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+        $dc_demand_array[] = $row;
+    }
+}
+
+
+$demand_insert_qty = $qty;
+foreach($dc_demand_array as $dc_demand) {
+    // process each dc_demand here
+    $input_demand_id = $dc_demand['input_demand_id'];
+    $demand_qty = $dc_demand['qty'];
+    $work_process_id = $dc_demand['work_process_id'];
+    $dep = $dc_demand['dep'];
+    $sec = $dc_demand['sec'];
+    $part_id = sql_nullable($dc_demand['part_id']);
+    $process_id = sql_nullable($dc_demand['process_id']);
+    $reduce_qty = min($demand_qty,$demand_insert_qty);
+// update input_demand table to reduce the qty by $reduce_qty
+    $sql_update_input_demand = "UPDATE input_demand SET qty = qty - $reduce_qty WHERE input_demand_id = $input_demand_id";
+    if (!$conn->query($sql_update_input_demand)) {
+        throw new Exception("Error updating input demand id $input_demand_id: " . $conn->error);
+    }
+
+  
+    
+      $demand_insert_qty -= $reduce_qty;
+
+    // if qty is reduced to zero, break the loop
+    if ($demand_insert_qty <= 0) {
+        break;
+    }
   
 
+
+}
+
+// delete input_demand rows where qty is zero
+$sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
+$conn->query($sql_delete_input_demand);
+require_once 'stock_distribution.php';
 
 }
 $conn->commit();
