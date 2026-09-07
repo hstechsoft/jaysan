@@ -1,5 +1,6 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
  include 'db_head.php';
 $emp_id = test_input($_POST['emp_id']);
 $qr_work_id = test_input($_POST['qr_work_id']) ;
