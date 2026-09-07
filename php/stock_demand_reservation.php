@@ -468,6 +468,7 @@ if($same_place['same_place']?? false && $stock_to_be_reserved > 0)
 
 $demand_part_id = sql_nullable($input_part_id);
 $demand_process_id = sql_nullable($previous_process_id);
+
 if($input_part_id !== null) {
   $demand_process_id = "NULL";
 }
@@ -509,11 +510,13 @@ if ($conn->query($sql_input_demand) === TRUE) {
        
 $demand_part_id = sql_nullable($input_part_id);
 $demand_process_id = sql_nullable($previous_process_id);
+
 if($input_part_id !== null) {
   $demand_process_id = "NULL";
 }
 		
 $sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$demand_part_id,$demand_process_id,'stock_transfer',$stock_to_be_reserved_same_godown) on duplicate key update qty = qty + $stock_to_be_reserved_same_godown";
+echo "input demand query: " . $sql_input_demand;
 if ($conn->query($sql_input_demand) === TRUE) {
   $result_json['messages']['result4'][] = "input demand updated successfully";
 } else {
