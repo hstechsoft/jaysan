@@ -167,7 +167,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
           
             
             $part_id = sql_nullable($part['part_id']);
-                  $qty = test_input($part['qty']);
+            $qty = test_input($part['qty']);
            $part_pre_process_id  = sql_nullable($part['part_pre_process_id']);
             $godown = sql_nullable($part['godown_id']);
             $dep = sql_nullable($part['department_id']);
@@ -175,7 +175,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
             $work_process_id = isset($part['work_process_id']) ? sql_nullable($part['work_process_id']) : "2941";
 
     
-            if($part_id >0)
+            if($part_id !="NULL" )
                 {
 
            $part_pre_process_id  = "NULL";

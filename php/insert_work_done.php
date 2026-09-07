@@ -558,25 +558,25 @@ if($result_sec_stock->num_rows > 0) {
         }
 
 
-        // // reduce reserve stock
-        // $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
-        // if ($conn->query($sql_update_reserve) !== TRUE) {
-        //     $result_json['message'] = "Error updating reserve stock: " . $conn->error;
-        //     echo json_encode($result_json);
-        //     $conn->rollback();
-        //     $conn->close();
-        //     exit;
-        // }
+        // reduce reserve stock
+        $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
+        if ($conn->query($sql_update_reserve) !== TRUE) {
+            $result_json['message'] = "Error updating reserve stock: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->rollback();
+            $conn->close();
+            exit;
+        }
 
         // delete reserve stock if reserve_qty is 0
-        // $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
-        // if ($conn->query($sql_delete_reserve) !== TRUE) {
-        //     $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
-        //     echo json_encode($result_json);
-        //     $conn->rollback();
-        //     $conn->close();
-        //     exit;
-        // }
+        $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
+        if ($conn->query($sql_delete_reserve) !== TRUE) {
+            $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->rollback();
+            $conn->close();
+            exit;
+        }
 
     }
     }
