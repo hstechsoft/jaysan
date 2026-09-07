@@ -129,7 +129,7 @@ foreach($work_order_array as $work_order) {
     }
 
       require_once 'stock_distribution.php';
-stock_distribution($conn, $stock_id, $produced_qty);
+stock_distribution($conn, $stock_id, $reduce_qty);
 
 }
 
