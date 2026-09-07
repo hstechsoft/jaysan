@@ -29,12 +29,15 @@ if ($result->num_rows > 0) {
  $req_no = $row['req_no'];
 
   }
+  
+  if($req_no !== null){
     $sql_update_req = "UPDATE emp_material_request SET req_status = 'delivered' WHERE emp_material_request_id = $req_no";
     if ($conn->query($sql_update_req) === TRUE) {
     }
     else {
     echo "Error: " . $sql_update_req . "<br>" . $conn->error;
     }
+  }
    
 
 }
