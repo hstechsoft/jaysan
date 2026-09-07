@@ -78,9 +78,9 @@ if($laser_process_part != "NULL")
     {
         $process_id = "NULL";
     }
+
+
   $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id,part_id) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id', $laser_process_part) ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
-
-
 
   if ($conn->query($sql_insert_output) === TRUE) {
       $stock_id = $conn->insert_id;
@@ -88,7 +88,7 @@ if($laser_process_part != "NULL")
       throw new Exception("Error inserting into stock: " . $conn->error);
   }
 
-
+echo "Stock ID: " . $stock_id;
 
 
 $work_order_array = [];
