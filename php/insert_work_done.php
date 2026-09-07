@@ -756,6 +756,7 @@ $batch_id = "j".$work_done_id;
 $dstock_id = 0;
     // insert output stock for the process part
     $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $insert_process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
+    echo $sql_insert_output;
 
     if ($conn->query($sql_insert_output) === TRUE) {
 // get stock_id
