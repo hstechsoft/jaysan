@@ -63,7 +63,7 @@ foreach ($produced_parts as $part) {
     $is_final_output = 'no';
     $process_sql = "select jpv.process_id, jpv.output_part, if(jpv.final_part_id = jpv.output_part,'yes','no') as is_final_output from  jaysan_process_view jpv
  WHERE jpv.process_name = 'laser cutting' and jpv.final_part_id = '$part_id' limit 1";
-echo "Process SQL: " . $process_sql . "<br>";
+
     $process_result = $conn->query($process_sql);
     if ($process_result->num_rows > 0) {
         $process_row = $process_result->fetch_assoc();
@@ -129,8 +129,8 @@ foreach($work_order_array as $work_order) {
 }
     }
 
-      require_once 'stock_distribution.php';
-stock_distribution($conn, $stock_id, $sd_qty);
+//       require_once 'stock_distribution.php';
+// stock_distribution($conn, $stock_id, $sd_qty);
 
 }
 
@@ -325,7 +325,7 @@ if ($conn->query($sql) === TRUE) {
 } else {
     throw new Exception("Error updating job card: " . $conn->error);
 }
- $conn->commit();
+//  $conn->commit();
 }catch(Exception $e){
     $conn->rollback();
     echo "Error: " . $e->getMessage();
