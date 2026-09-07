@@ -106,9 +106,9 @@ $result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
            
   
     $work_process_id = $demand['work_process_id'];
-    $godown = $demand['godown'];
-    $dep = $demand['dep'];
-    $sec = $demand['sec'];
+    $tgodown = $demand['godown'];
+    $tdep = $demand['dep'];
+    $tsec = $demand['sec'];
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
@@ -117,6 +117,25 @@ $result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
 $sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'stock_transfer') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
 
 $conn->query($sql_reserve_work_order);
+
+
+$from_godown = ($godown);
+$from_dep = ($dep);
+$from_sec = ($sec);
+
+$to_godown = sql_nullable($tgodown);
+$to_dep = sql_nullable($tdep);
+$to_sec = sql_nullable($tsec);
+
+ $sql_allocation = "INSERT INTO stock_allocation ( part_id,from_sec,from_dep,from_godown,to_godown,to_dep,to_sec,qty,process_id) VALUES ($input_part_id,$from_sec,$from_dep,$from_godown,$to_godown,$to_dep,$to_sec,$reduce_qty,$previous_process_id)";
+
+$result_json['messages']['result4'][] = "executing stock allocation query";
+$result_json['messages']['result4'][] = "stock allocation query: " . $sql_allocation;
+  if ($conn->query($sql_allocation) === TRUE) {
+    $result_json['messages']['result4'][] = "stock allocation updated successfully";
+  } else {
+    throw new Exception("Error updating stock allocation: " . $conn->error);
+  }
 
 
 // insert input_demand on duplicate key update
