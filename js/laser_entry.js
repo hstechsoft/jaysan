@@ -465,7 +465,7 @@ $(document).ready(function () {
         var runtime = $("#run_timee").val() || 0;
         var handling_time = $("#handling_time").val() || 0;
         console.log(godown_id, department_id, section_id, machine_id, machine, runtime, handling_time);
-        if (godown_id <= 0 || department_id <= 0 || section_id <= 0 || machine_id <= 0 || machine == '' || runtime <= 0 || handling_time <= 0) {
+        if (godown_id <= 0 || department_id <= 0 || section_id <= 0 || machine_id <= 0 || machine == '' || handling_time <= 0) {
             salert('warning', 'Please Fill All Fields.', 'warning');
             return;
         }
@@ -595,11 +595,11 @@ $(document).ready(function () {
             })
         }
 
-        console.log(nesting_name, material_id, material_qty, run_time, std_length, weight, scrap_weight, nested_arr);
+        console.log(nesting_name, material_id, material_qty,  std_length, weight, scrap_weight, nested_arr);
 
         let file = $("#nest_file")[0].files[0];
 
-        if (nesting_name != '' && material_id > 0 && material_qty > 0 && run_time > 0 && std_length != '' && weight > 0 && nested_arr.length > 0) {
+        if (nesting_name != '' && material_id > 0 && material_qty > 0 && std_length != '' && weight > 0 && nested_arr.length > 0) {
 
             let formData = new FormData();
 
@@ -732,9 +732,9 @@ $(document).ready(function () {
 
 
         let file = $("#nest_file")[0].files[0];
-        console.log(nesting_id, nesting_name, material_id, material_qty, run_time, weight, scrap_weight, nested_arr, file);
+        console.log(nesting_id, nesting_name, material_id, material_qty, weight, scrap_weight, nested_arr, file);
 
-        if (nesting_id > 0 && nesting_name && material_id && material_qty && run_time && weight > 0 && nested_arr.length > 0) {
+        if (nesting_id > 0 && nesting_name && material_id && material_qty &&  weight > 0 && nested_arr.length > 0) {
 
             let formData = new FormData();
 

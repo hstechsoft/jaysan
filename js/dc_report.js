@@ -176,12 +176,21 @@ function get_work_order_report() {
                 let rowSpan = woDetails.length;
 
                 let total_input_required_qty = parseFloat(item.total_input_required_qty) || 0;
+                let total_stock_allocation_qty = parseFloat(item.total_stock_allocation_qty) || 0;
+                let total_dc_qty = parseFloat(item.total_dc_qty) || 0;
+                let total_transport_qty = parseFloat(item.total_transport_qty) || 0;
                 let total_input_needed = parseFloat(item.total_input_needed) || 0;
                 let total_internal_reserve_qty = parseFloat(item.total_internal_reserve_qty) || 0;
 
                 let total_internal_reserve_qtyPer = total_input_required_qty > 0 ? (total_internal_reserve_qty / total_input_required_qty) * 100 : 0;
 
                 let total_input_neededPer = total_input_required_qty > 0 ? (total_input_needed / total_input_required_qty) * 100 : 0;
+
+                let total_stock_allocation_qtyPer = total_stock_allocation_qty > 0 ? (total_stock_allocation_qty / total_input_required_qty) * 100 : 0;
+
+                let total_dc_qtyPer = total_dc_qty > 0 ? (total_dc_qty / total_input_required_qty) * 100 : 0;
+                
+                let total_transport_qtyPer = total_transport_qty > 0 ? (total_transport_qty / total_input_required_qty) * 100 : 0;
 
                 woDetails.forEach((wo, woIndex) => {
 
@@ -243,12 +252,12 @@ function get_work_order_report() {
 
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="badge bg-info" title="Total Process">${wo.total_process}</span>
-                                <span class="badge bg-secondary" title="Pending Process">${wo.total_pending_process}</span>
-                                <span class="badge bg-warning text-dark" title="External Reserved">${wo.total_exreserve_qty}</span>
-                                <span class="badge bg-success" title="Internal Reserved">${wo.total_internal_reserve_qty}</span>
-                                <span class="badge bg-light text-dark" title="Internal Stock Transfer">${wo.total_stock_allocation_qty}</span>
-                                <span class="badge bg-dark" title="DC Reserved Qty">${wo.total_dc_qty ?? 0}</span>
-                                <span class="badge bg-primary" title="Transport Qty">${wo.total_transport_qty ?? 0}</span>
+                                <span class="badge bg-light text-dark" title="Total Pending Process">${wo.total_pending_process}</span>
+                                <span class="badge bg-warning text-dark" title="Total External Reserved">${wo.total_exreserve_qty}</span>
+                                <span class="badge bg-success" title="Total Internal Reserved">${wo.total_internal_reserve_qty}</span>
+                                <span class="badge bg-primary" title="Total Internal Stock Transfer">${wo.total_stock_allocation_qty}</span>
+                                <span class="badge bg-dark" title="Total DC Reserved Qty">${wo.total_dc_qty ?? 0}</span>
+                                <span class="badge bg-secondary" title="Total Transport Qty">${wo.total_transport_qty ?? 0}</span>
                             </div>
 
                         </div>
@@ -264,12 +273,18 @@ function get_work_order_report() {
                     wo.input_details.forEach((input) => {
 
                         let required = parseFloat(input.required_qty) || 0;
+                        let dc_qty = parseFloat(input.dc_qty) || 0;
+                        let transport_qty = parseFloat(input.transport_qty) || 0;
                         let reserved = parseFloat(input.total_reserve_qty) || 0;
+                        let stock_transfer = parseFloat(input.stock_allocation_qty) || 0;
                         let external = parseFloat(input.ex_qty) || 0;
                         let needed = parseFloat(input.needed) || 0;
 
                         // Percentage calculations
                         let reservedPer = required > 0 ? (reserved / required) * 100 : 0;
+                        let transport_qtyPer = required > 0 ? (transport_qty / required) * 100 : 0;
+                        let dc_qtyPer = required > 0 ? (dc_qty / required) * 100 : 0;
+                        let stock_transferPer = required > 0 ? (stock_transfer / required) * 100 : 0;
                         let neededPer = required > 0 ? (needed / required) * 100 : 0;
                         let externalPer = required > 0 ? (external / required) * 100 : 0;
 
@@ -307,14 +322,35 @@ function get_work_order_report() {
                                 <div class="progress mt-1" style="height:18px;">
 
                                     <!-- Internal Reserved -->
-                                    <div class="progress-bar bg-success"
+                                    <div class="progress-bar progress-bar-striped bg-success"
                                         style="width:${reservedPer}%"
                                         title="Internal Reserved : ${reserved}">
                                         ${reserved > 0 ? reserved : ""}
                                     </div>
 
+                                    <!-- Stock Transfer -->
+                                    <div class="progress-bar progress-bar-striped bg-primary"
+                                        style="width:${stock_transferPer}%"
+                                        title="Internal Stock Transfer : ${stock_transfer}">
+                                        ${stock_transfer > 0 ? stock_transfer : ""}
+                                    </div>
+
+                                    <!-- DC Qty -->
+                                    <div class="progress-bar progress-bar-striped bg-dark text-white"
+                                        style="width:${dc_qtyPer}%"
+                                        title="DC Qty : ${dc_qty}">
+                                        ${dc_qty > 0 ? dc_qty : ""}
+                                    </div>
+
+                                    <!-- Transport Qty -->
+                                    <div class="progress-bar progress-bar-striped bg-secondary"
+                                        style="width:${transport_qtyPer}%"
+                                        title="Transport Qty : ${transport_qty}">
+                                        ${transport_qty > 0 ? transport_qty : ""}
+                                    </div>
+
                                     <!-- Needed -->
-                                    <div class="progress-bar bg-danger"
+                                    <div class="progress-bar progress-bar-striped bg-danger"
                                         style="width:${neededPer}%"
                                         title="Needed : ${needed}">
                                         ${needed > 0 ? needed : ""}
@@ -334,7 +370,7 @@ function get_work_order_report() {
 
                                 <div class="progress" style="height:10px;">
 
-                                    <div class="progress-bar bg-warning"
+                                    <div class="progress-bar progress-bar-striped bg-warning"
                                         style="width:${externalPer}%"
                                         title="External Reserved : ${external}">
                                     </div>
@@ -376,20 +412,38 @@ function get_work_order_report() {
                                     ${woIndex === 0 ? `
                                         <td rowspan="${rowSpan}" class="align-middle text-center">
                                             <div class="small fw-bold mb-1">
-                                                Required : ${total_input_required_qty}
+                                                Total Required : ${total_input_required_qty}
                                             </div>
 
                                             <div class="progress" style="height:20px;">
 
                                                 <div class="progress-bar bg-success"
                                                     style="width:${total_internal_reserve_qtyPer}%"
-                                                    title="Reserved ${total_internal_reserve_qty}">
+                                                    title="Total Reserved ${total_internal_reserve_qty}">
                                                     ${total_internal_reserve_qty}
+                                                </div>
+
+                                                <div class="progress-bar bg-primary"
+                                                    style="width:${total_stock_allocation_qtyPer}%"
+                                                    title="Total Stock Transfer ${total_stock_allocation_qty}">
+                                                    ${total_stock_allocation_qty}
+                                                </div>
+
+                                                <div class="progress-bar bg-dark text-white"
+                                                    style="width:${total_dc_qtyPer}%"
+                                                    title="Total DC Qty ${total_dc_qty}">
+                                                    ${total_dc_qty}
+                                                </div>
+
+                                                <div class="progress-bar bg-secondary"
+                                                    style="width:${total_transport_qtyPer}%"
+                                                    title="Total Transport Qty ${total_transport_qty}">
+                                                    ${total_transport_qty}
                                                 </div>
 
                                                 <div class="progress-bar bg-danger"
                                                     style="width:${total_input_neededPer}%"
-                                                    title="Needed ${total_input_needed}">
+                                                    title="Total Needed ${total_input_needed}">
                                                     ${total_input_needed}
                                                 </div>
 
@@ -399,6 +453,11 @@ function get_work_order_report() {
                                                 <span class="text-success">
                                                     <i class="fas fa-check-circle"></i>
                                                     Reserved: ${total_internal_reserve_qty}
+                                                </span>
+
+                                                <span class="text-primary">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Stock Transfer: ${total_stock_allocation_qty}
                                                 </span>
 
                                                 <span class="text-danger">

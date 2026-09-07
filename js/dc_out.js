@@ -1794,7 +1794,6 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
         },
         success: function (response) {
             console.log(response);
-            console.log(typeof response);
 
             var le = JSON.parse(response);
 

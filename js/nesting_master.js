@@ -617,7 +617,7 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
     console.log(nesting_name, part_id, run_time, dimension, parts, weight, scrap_weight);
 
 
-    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || parts.length <= 0 || weight <= 0) {
+    if (nesting_name == '' || part_id <= 0 || dimension <= 0 || parts.length <= 0 || weight <= 0) {
       salert("Warning", "All Fields Are Required.", "warning");
       return;
     }
