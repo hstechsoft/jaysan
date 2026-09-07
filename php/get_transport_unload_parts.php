@@ -24,7 +24,7 @@ left join jaysan_process jp on pwt.process = jp.process_id
 left join delivery_challan dc on tdc.dc_id = dc.dc_id
 
 
- WHERE tdc.current_transport = $transport_godown and tdc.sts <> 'create' and tdc.sts = 'transport' and tdc.des_godown = $des_godown and tdc.dc_id > 0
+ WHERE tdc.current_transport = $transport_godown and tdc.sts <> 'create' and tdc.sts = 'transport' and tdc.des_godown = $des_godown 
 group by tdc.dc_id";
  
 
