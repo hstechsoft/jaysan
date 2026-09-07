@@ -736,26 +736,20 @@ if($result_sec_stock->num_rows > 0) {
         $production_qty = $required_qty;
        $insert_process_id = "NULL";
 // get process_id,output_part from process_wel_tbl
-$sql_get_proces_details = "SELECT process_id, output_part FROM process_wel_tbl WHERE process_id = $process_id";
+$sql_get_proces_details = "SELECT  output_part FROM process_wel_tbl WHERE process_id = $process_id";
 $result_proces_details = $conn->query($sql_get_proces_details);
 if ($result_proces_details->num_rows > 0) {
     $row_proces_details = $result_proces_details->fetch_assoc();
-    $process_id = $row_proces_details['process_id'];
-    $output_part = $row_proces_details['output_part'];
+   
+    $part_id = sql_nullable($row_proces_details['output_part']);
 }
 
 
-    //    if part id   > 0 then process_id is null else process_id is process_id
-    if($part_id > 0) {
-        $insert_process_id = "NULL";
-    }
-    else {
-        $insert_process_id = $process_id;
-    }
+
 $batch_id = "j".$work_done_id;
 $dstock_id = 0;
     // insert output stock for the process part
-    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $insert_process_id, $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
+    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id) VALUES ($part_id, $process_id , $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
     echo $sql_insert_output;
 
     if ($conn->query($sql_insert_output) === TRUE) {
