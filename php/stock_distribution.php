@@ -113,6 +113,7 @@ $result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
     $reduce_qty = min($needed,$demand_insert_qty);
+    echo "Reducing quantity for work_process_id $work_process_id: $reduce_qty\n";
 // insert on duplicate key update stock_reserve
 $sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'stock_transfer') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
 
