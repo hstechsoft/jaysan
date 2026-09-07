@@ -15,4 +15,3 @@
 [2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
 [2026-04-10 10:23:45] | USER:141 | IP:::1 | FILE:/jaysanERP/php/del_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 0
 [2026-04-10 10:25:15] | USER:141 | IP:::1 | FILE:/jaysanERP/php/update_wel_process1.php | SQL:DELETE from process_wel_tbl WHERE process_id = 2753
-[2026-09-07 10:08:30] | USER:236 | IP:::1 | FILE:/jaysan/php/delete_work_time_master.php | SQL:DELETE  FROM work_time_master WHERE wtid =  '832'
