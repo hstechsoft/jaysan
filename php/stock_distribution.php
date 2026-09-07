@@ -257,7 +257,7 @@ $total_reduced_qty += $reduced_qty;
                 $sql_update_stock_reserve = "UPDATE stock_reserve sr
 inner join jaysan_stock js on sr.stock_id = js.stock_id
  SET sr.reserve_qty = sr.reserve_qty - $total_reduced_qty
- WHERE  js.part_id <=> $input_part_id AND js.process_id <=> $previous_process_id AND js.godown <=> $godown AND js.dep <=> $dep AND js.sec <=> $sec and sr.cat = 'work_order'";
+ WHERE  js.part_id <=> $input_part_id AND js.process_id <=> $previous_process_id AND js.godown <=> $godown AND js.dep <=> $dep AND js.sec <=> $sec and sr.reserve_type = 'work_order'";
                 $conn->query($sql_update_stock_reserve);
             }
 
