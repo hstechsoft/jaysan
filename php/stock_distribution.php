@@ -140,6 +140,8 @@ $result_json['messages']['result4'][] = "stock allocation query: " . $sql_alloca
 
 // insert input_demand on duplicate key update
 $sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $godown, $dep, $sec, 'stock_transfer', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+
+echo "Executing SQL: $sql_input_demand\n";
 $conn->query($sql_input_demand);
 
 
