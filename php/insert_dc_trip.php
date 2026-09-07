@@ -6,14 +6,18 @@ $dc_check = 1;
 $current_godown = test_input($_POST['current_godown']);
 
 $destination = test_input($_POST['destination']);
+
+$result_json = array();
+
 $source_godown = test_input($_POST['source_godown']);
+
 if($source_godown == $destination)
 {
     echo "source and destination godown cannot be same";
     exit;
 }
 
-$result_json = array();
+
 
 if ($current_godown == $destination) {
   $dc = "out_dc";
@@ -60,6 +64,7 @@ $dc_parts = json_decode($_POST['dc_parts'], true);
 
 
 // check dc part on dc_to location and exit if any part is already in dc_to location
+
 foreach ($dc_parts_location as $location) {
       $stock_id = $location['stock_id'];
 // get godown id from stock id
@@ -105,17 +110,21 @@ return $data;
 try {
     $conn->begin_transaction();
 
+
+
   if($current_godown != $destination)
 {
     $sql = "INSERT INTO delivery_challan (dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to,mode_of_payment,supplier_ref_order_no,dispatch_doc_no,dispatched_through,date_time_of_issue,duration_of_process,nature_of_processing,challan_no) VALUES ($dc_no, $dc_date, $transport_mode, $transport_des, $vehicle_no, $driver_name, $driver_contact, $emp_id, $dc_type, $dc_from, $dc_to, $bill_to, $ship_to,$mode_of_payment,$supplier_ref_order_no,$dispatch_doc_no,$dispatched_through,$date_time_of_issue,$duration_of_process,$nature_of_processing,$challan_no)";
     if ($conn->query($sql) === TRUE) {
         $dc_id = $conn->insert_id;
+  
 // insert dc parts
 $all_transport_ids = array_column($dc_parts, 'transport_id');
 $transport_ids_str = implode(',', $all_transport_ids);
 
 
         foreach ($dc_parts as $part) {
+      
             
             $part_id = sql_nullable($part['part_id']);
             
@@ -143,12 +152,6 @@ $transport_ids_str = implode(',', $all_transport_ids);
 
 
 		
-$sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$part_id,$part_pre_process_id,'dc',$qty) on duplicate key update qty = qty + $qty";
-if ($conn->query($sql_input_demand) === TRUE) {
-  $result_json['messages']['result4'][] = "input demand updated successfully";
-} else {
-  throw new Exception("Error updating input demand: " . $conn->error);
-}
 
 
 
@@ -156,6 +159,41 @@ if ($conn->query($sql_input_demand) === TRUE) {
 
     }
 }
+
+
+
+
+        foreach ($dc_parts as $part) {
+          
+            
+            $part_id = sql_nullable($part['part_id']);
+                  $qty = test_input($part['qty']);
+           $part_pre_process_id  = sql_nullable($part['part_pre_process_id']);
+            $godown = sql_nullable($part['godown_id']);
+            $dep = sql_nullable($part['department_id']);
+            $sec = sql_nullable($part['section_id']);
+            $work_process_id = isset($part['work_process_id']) ? sql_nullable($part['work_process_id']) : "2941";
+
+    
+            if($part_id >0)
+                {
+
+           $part_pre_process_id  = "NULL";
+                }
+
+   
+
+		
+$sql_input_demand = "insert into input_demand (work_process_id,godown,dep,sec,part_id,process_id,cat,qty) values ($work_process_id,$godown,$dep,$sec,$part_id,$part_pre_process_id,'dc',$qty) on duplicate key update qty = qty + $qty";
+if ($conn->query($sql_input_demand) === TRUE) {
+  
+} else {
+  throw new Exception("Error updating input demand: " . $conn->error);
+}
+
+
+
+        }
 
     {
     
@@ -280,24 +318,24 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
    
         }
 
-$result_json['success'] = true;
+ $result_json['success'] = true;
 
 
 
            require_once 'print_dc.php';
-            $result = print_dc($dc_id, $conn);
+             $result = print_dc($dc_id, $conn);
 
 
-$rows = [];
-$result_json['data'] = $result;
+ $rows = [];
+ $result_json['data'] = $result;
 
-header('Content-Type: application/json');
-echo json_encode($result_json);
+ header('Content-Type: application/json');
+ echo json_encode($result_json);
 
 
 
         
-        // $conn->commit();
+        $conn->commit();
 
 // print dc
 
