@@ -74,6 +74,7 @@ foreach ($produced_parts as $part) {
         throw new Exception("Process not found for part: " . $part_id . " and material: " . $material_id);
     }
     $batch_id = "l".$job_card_id;
+    $wprocess_id = $process_id;
 // insert into stock
 if($laser_process_part != "NULL")
     {
@@ -98,7 +99,8 @@ if($produced_qty > 0 )
 //    get work_order_id to update 
 $sql_get_work_order_id = "select wo.work_order_id,pending_qty from demand 
 inner join work_order wo on demand.demand_id = wo.demand_id
-where wo.godown <=> $godown and wo.dep <=> $dep and wo.sec <=> $sec and demand.process_id <=> $process_id";
+where wo.godown <=> $godown and wo.dep <=> $dep and wo.sec <=> $sec and demand.process_id <=> $wprocess_id";
+echo "SQL Get Work Order ID: " . $sql_get_work_order_id . "<br>";
 $result_work_order = $conn->query($sql_get_work_order_id);
 if ($result_work_order->num_rows > 0) {
     while($row_work_order = $result_work_order->fetch_assoc()) {
