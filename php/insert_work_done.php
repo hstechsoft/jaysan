@@ -735,6 +735,16 @@ if($result_sec_stock->num_rows > 0) {
 
         $production_qty = $required_qty;
        $insert_process_id = "NULL";
+// get process_id,output_part from process_wel_tbl
+$sql_get_proces_details = "SELECT process_id, output_part FROM process_wel_tbl WHERE process_id = $process_id";
+$result_proces_details = $conn->query($sql_get_proces_details);
+if ($result_proces_details->num_rows > 0) {
+    $row_proces_details = $result_proces_details->fetch_assoc();
+    $process_id = $row_proces_details['process_id'];
+    $output_part = $row_proces_details['output_part'];
+}
+
+
     //    if part id   > 0 then process_id is null else process_id is process_id
     if($part_id > 0) {
         $insert_process_id = "NULL";
