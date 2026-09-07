@@ -49,6 +49,7 @@ foreach ($produced_parts as $part) {
     $scarp_qty = $part['scarp_qty'];
   
     $produced_qty = $quantity - $scarp_qty;
+    $sd_qty = $produced_qty;
 
     $sql = "INSERT INTO laser_produced_parts (job_card_id, part_id, produced_qty, scarp_qty) VALUES ('$job_card_id', '$part_id', '$produced_qty', '$scarp_qty')";
     if ($conn->query($sql) === TRUE) {
@@ -129,7 +130,7 @@ foreach($work_order_array as $work_order) {
     }
 
       require_once 'stock_distribution.php';
-stock_distribution($conn, $stock_id, $reduce_qty);
+stock_distribution($conn, $stock_id, $sd_qty);
 
 }
 
