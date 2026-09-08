@@ -8,7 +8,7 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
    
 try
     {
-  $conn->begin_transaction();
+//   $conn->begin_transaction();
         $result_json['status'] = 'started';
 // echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
@@ -269,7 +269,7 @@ select * from demand_join WHERE excess_needed > 0";
 
         echo json_encode($result_json);
           
-// return true;
+ return true;
         //  $conn->commit();
 
 
@@ -280,9 +280,9 @@ select * from demand_join WHERE excess_needed > 0";
     }
      
     catch (Exception $e) {
-          $conn->rollback();
-        //  throw new Exception($e->getMessage());
-          echo "Transaction failed: " . $e->getMessage();
+        //   $conn->rollback();
+          throw new Exception($e->getMessage());
+        //   echo "Transaction failed: " . $e->getMessage();
     }
 
 }
