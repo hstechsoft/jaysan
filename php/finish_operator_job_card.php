@@ -222,7 +222,7 @@ $raw_part_id = $material_id;
 
 $work_process_id = sql_nullable($consume['work_process_id']);
 $produced_qty = $consume['qty'];
-$part_id =sql_nullable($consume['part_id']);
+$part_id =sql_nullable($consume['output_part']);
 
 
 if($part_id != "NULL")
