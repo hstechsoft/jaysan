@@ -36,7 +36,7 @@ $result_json['stock_details'] = [
     'process_id' => $process_id,
     'part_id' => $in_part_id
 ];
-
+// getting demand for the current stock item
 $demand_insert_qty = $qty;
 $demand_array = array();
  $sql_work_order_demand = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
@@ -53,7 +53,7 @@ $result_json['sql_work_order_demand'] = $sql_work_order_demand;
             }
         }
         
-
+// processing each demand item and reserve it as work order if its same place
         foreach($demand_array as $demand){
             // process each demand item here
            
@@ -88,7 +88,8 @@ if($demand_insert_qty <= 0){
      
 
         // if demand_insert_qty still remains check same godown
-
+          if($demand_insert_qty > 0)
+{
 $demand_array = array();
  $sql_work_order_demand_godown = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown ";
 
@@ -152,10 +153,12 @@ if($demand_insert_qty <= 0){
 }
 
         }
+    }
 
 
         // if demand_insert_qty still remains then reserve it as job_work_order
-
+          if($demand_insert_qty > 0)
+{
 $demand_array = array();
 // get details where godown not equal to the current godown
  $sql_work_order_demand_outside = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <> $godown ";
@@ -195,13 +198,14 @@ if($demand_insert_qty <= 0){
 }
 
         }
+}
 
 
-
+// reduce stock reserve,input_demand based on excessive needed quantity
 $negative_demand_array = array();
         // recompute stock reserve
         // check input_demand_view to see needed  less then 0
-        $sql_recompute_stock_reserve = "select * from input_part_demand_view where  previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and needed < 0";
+        $sql_recompute_stock_reserve = "select * from input_part_demand_view where  needed < 0";
         $result_recompute_stock_reserve = $conn->query($sql_recompute_stock_reserve);
         if ($result_recompute_stock_reserve->num_rows > 0) {
             while ($row_recompute_stock_reserve = $result_recompute_stock_reserve->fetch_assoc()) {
@@ -262,12 +266,51 @@ inner join jaysan_stock js on sr.stock_id = js.stock_id
  SET sr.reserve_qty = sr.reserve_qty - $total_reduced_qty
  WHERE  js.part_id <=> $input_part_id AND js.process_id <=> $previous_process_id AND js.godown <=> $godown AND js.dep <=> $dep AND js.sec <=> $sec and sr.reserve_type = 'work_order'";
                 $conn->query($sql_update_stock_reserve);
+
+                // delete zero qty stock reserve records
+                $sql_delete_zero_stock_reserve = "DELETE FROM stock_reserve WHERE reserve_qty <= 0";
+                $conn->query($sql_delete_zero_stock_reserve);
             }
 
         }
 // we reduced stock reserve based on the total reduced quantity from input_demand
 // we also need to check if there are any remaining negative demands that need to be addressed and reduce jobwork_order
 
+        // recompute stock reserve
+        // check input_demand_view to see needed  less then 0
+        $sql_recompute_jobwork = "with total_demand as(SELECT input_part_id,previous_process_id,godown,dep,sec,sum(needed) as total_needed FROM `input_part_demand_view` group by input_part_id,previous_process_id,godown,dep,sec),
+job_work_reserve as (
+    select stock_id,part_id,process_id,reserve_qty,godown,dep,sec,stock_reserve_id
+    from stock_view WHERE reserve_type = 'job_work_order'
+) ,
+demand_join as (
+    select td.input_part_id, td.previous_process_id, td.godown, td.dep, td.sec, td.total_needed, jwr.stock_reserve_id,jwr.stock_id, jwr.reserve_qty, ifnull(jwr.reserve_qty,0) - td.total_needed as excess_needed
+    from total_demand td
+    left join job_work_reserve jwr
+    on td.input_part_id <=> jwr.part_id
+    and td.previous_process_id <=> jwr.process_id
+    and td.godown <=> jwr.godown
+    and td.dep <=> jwr.dep
+    and td.sec <=> jwr.sec
+)
+
+select * from demand_join WHERE excess_needed > 0";
+        $result_recompute_jobwork = $conn->query($sql_recompute_jobwork);
+        if ($result_recompute_jobwork->num_rows > 0) {
+            while ($row_recompute_jobwork = $result_recompute_jobwork->fetch_assoc()) {
+                // process each row where needed < 0
+                $negative_demand_array[] = $row_recompute_jobwork;
+                $excess_needed = $row_recompute_jobwork['excess_needed'];
+                $stock_reserve_id = $row_recompute_jobwork['stock_reserve_id'];
+
+                // reduce the job work order reserve by the excess needed
+                if ($excess_needed > 0 && $stock_reserve_id) {
+                    $sql_update_stock_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $excess_needed WHERE stock_reserve_id = $stock_reserve_id";
+                    $conn->query($sql_update_stock_reserve);
+                }
+            }
+        }
+        $result_json['more_negative_demand_array'] = $negative_demand_array;
 
 
 
