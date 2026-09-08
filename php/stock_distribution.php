@@ -4,6 +4,8 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
 {
     $process_id = sql_nullable($process_id);
     $result_json = [];
+
+   
 try
     {
   $conn->begin_transaction();
@@ -202,6 +204,7 @@ $demand_array = array();
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
+    
     $reduce_qty = min($needed,$demand_insert_qty);
 // insert on duplicate key update stock_reserve
 $sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'job_work_order') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
@@ -224,16 +227,20 @@ if($demand_insert_qty <= 0){
 $negative_demand_array = array();
         // recompute stock reserve
         // check input_demand_view to see needed  less then 0
-        $sql_recompute_stock_reserve = "select * from input_part_demand_view where  needed < 0";
+        $sql_recompute_stock_reserve = "select * from input_part_demand_view inner join stock_view on input_part_demand_view.input_part_id = stock_view.part_id and input_part_demand_view.previous_process_id = stock_view.process_id and input_part_demand_view.godown <=> stock_view.godown and input_part_demand_view.dep <=> stock_view.dep and input_part_demand_view.sec <=> stock_view.sec where  needed < 0";
         $result_recompute_stock_reserve = $conn->query($sql_recompute_stock_reserve);
         if ($result_recompute_stock_reserve->num_rows > 0) {
             while ($row_recompute_stock_reserve = $result_recompute_stock_reserve->fetch_assoc()) {
                 // process each row where needed < 0
                 $negative_demand_array[] = $row_recompute_stock_reserve;
+                $result_json['reduce_qty'] = abs($row_recompute_stock_reserve['needed']);
+               
             }
         }
         $result_json['negative_demand_array'] = $negative_demand_array;
-   
+  
+
+
 // reduce stock reserve based on negative demand
         foreach($negative_demand_array as $negative_demand){
           $work_process_id = $negative_demand['work_process_id'];
@@ -246,36 +253,14 @@ $negative_demand_array = array();
 
             $reduced_qty = 0;
             $total_reduced_qty = 0;
-            // loop through input_demand records if needed
-            while($reduce_qty > 0 ){
-// get  input_demand record for this negative demand
-        $sql_get_input_demand = "SELECT qty,input_demand_id FROM input_demand WHERE work_process_id <=> $work_process_id AND part_id <=> $input_part_id AND process_id <=> $previous_process_id AND godown <=> $godown AND dep <=> $dep AND sec <=> $sec and cat = 'work_order'";
-        $result_get_input_demand = $conn->query($sql_get_input_demand);
-    //    get the qty from input_demand record
-        if ($result_get_input_demand->num_rows > 0) {
-            $input_demand_record = $result_get_input_demand->fetch_assoc();
-            $input_demand_qty = $input_demand_record['qty'];
-            $input_demand_id = $input_demand_record['input_demand_id'];
-        } else {
-            $input_demand_qty = 0;
-            $input_demand_id = null;
-        }
-$reduced_qty = min($reduce_qty, $input_demand_qty);
-$total_reduced_qty += $reduced_qty;
 
-// update input_demand record to reduce the qty
-            if($input_demand_id !== null){
-                $sql_update_input_demand = "UPDATE input_demand SET qty = qty - $reduced_qty WHERE input_demand_id <=> $input_demand_id";
-                $conn->query($sql_update_input_demand);
-            }
-            $reduce_qty -= $reduced_qty;
+
+
+// get 
+          
         
-            }
+            
 
-
-            // delete zero qty input_demand records
-            $sql_delete_zero_input_demand = "DELETE FROM input_demand WHERE qty <= 0";
-            $conn->query($sql_delete_zero_input_demand);
 
 
             // reduce stock reserve based on total reduced qty
