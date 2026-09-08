@@ -66,9 +66,9 @@ $result_json['sql_work_order_demand'] = $sql_work_order_demand;
            
   
     $work_process_id = $demand['work_process_id'];
-    $godown = $demand['godown'];
-    $dep = $demand['dep'];
-    $sec = $demand['sec'];
+    $godown = sql_nullable($demand['godown']);
+    $dep = sql_nullable($demand['dep']);
+    $sec = sql_nullable($demand['sec']);
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
@@ -115,9 +115,9 @@ $result_json['sql_work_order_demand_samegodown'] = $sql_work_order_demand_godown
            
   
     $work_process_id = $demand['work_process_id'];
-    $tgodown = $demand['godown'];
-    $tdep = $demand['dep'];
-    $tsec = $demand['sec'];
+    $tgodown = sql_nullable($demand['godown']);
+    $tdep = sql_nullable($demand['dep']);
+    $tsec = sql_nullable($demand['sec']);
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
@@ -214,10 +214,10 @@ select * from demand_join WHERE needed > 0 and input_part_id <=> $in_part_id and
             // process each demand item here
            
   
-    $work_process_id = $demand['work_process_id'];
-    $godown = $demand['godown'];
-    $dep = $demand['dep'];
-    $sec = $demand['sec'];
+   
+    $godown = sql_nullable($demand['godown']);
+    $dep = sql_nullable($demand['dep']);
+    $sec = sql_nullable($demand['sec']);
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];

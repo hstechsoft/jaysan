@@ -165,8 +165,9 @@ foreach($dc_demand_array as $dc_demand) {
     $input_demand_id = $dc_demand['input_demand_id'];
     $demand_qty = $dc_demand['qty'];
     $work_process_id = $dc_demand['work_process_id'];
-    $dep = $dc_demand['dep'];
-    $sec = $dc_demand['sec'];
+    $godown = sql_nullable($dc_demand['godown']);
+    $dep = sql_nullable($dc_demand['dep']);
+    $sec = sql_nullable($dc_demand['sec']);
     $part_id = sql_nullable($dc_demand['part_id']);
     $process_id = sql_nullable($dc_demand['process_id']);
     $reduce_qty = min($demand_qty,$demand_insert_qty);

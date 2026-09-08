@@ -3,6 +3,8 @@ error_reporting(E_ALL);
  include 'db_head.php';
 $dc = "out_dc";
 $dc_check = 1;
+// here current godown is dc happening place
+// source and destinations are the godowns involved in the delivery challan 
 $current_godown = test_input($_POST['current_godown']);
 
 $destination = test_input($_POST['destination']);
@@ -63,8 +65,7 @@ $dc_parts = json_decode($_POST['dc_parts'], true);
 
 
 
-// check dc part on dc_to location and exit if any part is already in dc_to location
-
+// check dc part and exit if source and destination godown is same
 foreach ($dc_parts_location as $location) {
       $stock_id = $location['stock_id'];
 // get godown id from stock id
@@ -111,7 +112,7 @@ try {
     $conn->begin_transaction();
 
 
-
+// genrate dc only on current godown is not the same as the destination godown
   if($current_godown != $destination)
 {
     $sql = "INSERT INTO delivery_challan (dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to,mode_of_payment,supplier_ref_order_no,dispatch_doc_no,dispatched_through,date_time_of_issue,duration_of_process,nature_of_processing,challan_no) VALUES ($dc_no, $dc_date, $transport_mode, $transport_des, $vehicle_no, $driver_name, $driver_contact, $emp_id, $dc_type, $dc_from, $dc_to, $bill_to, $ship_to,$mode_of_payment,$supplier_ref_order_no,$dispatch_doc_no,$dispatched_through,$date_time_of_issue,$duration_of_process,$nature_of_processing,$challan_no)";
@@ -172,7 +173,7 @@ $transport_ids_str = implode(',', $all_transport_ids);
             $godown = sql_nullable($part['godown_id']);
             $dep = sql_nullable($part['department_id']);
             $sec = sql_nullable($part['section_id']);
-            $work_process_id = isset($part['work_process_id']) ? sql_nullable($part['work_process_id']) : "2941";
+            $work_process_id = $part['work_process_id'];
 
     
             if($part_id !="NULL" )
