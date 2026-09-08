@@ -6,11 +6,12 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
     $result_json = [];
 try
     {
+  
         $result_json['status'] = 'started';
 // echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
     $sql_stock = "SELECT * FROM jaysan_stock WHERE stock_id = $stock_id";
-   echo "SQL Stock Query: $sql_stock<br>";
+ 
     $result_stock = $conn->query($sql_stock);
     if ($result_stock->num_rows > 0) {
         $row_stock = $result_stock->fetch_assoc();
@@ -49,6 +50,7 @@ $result_json['sql_work_order_demand'] = $sql_work_order_demand;
         $result_work_order_demand = $conn->query($sql_work_order_demand);
         if ($result_work_order_demand->num_rows > 0) {
             while ($row_work_order_demand = $result_work_order_demand->fetch_assoc()) {
+                $result_json['demand_row'][] = $row_work_order_demand;
           $demand_array[] = $row_work_order_demand;
             }
         }
@@ -85,7 +87,7 @@ if($demand_insert_qty <= 0){
 
         }
      
-     
+     $result_json['remaining_demand_insert_qty_after_wo'] = $demand_insert_qty;
 
         // if demand_insert_qty still remains check same godown
           if($demand_insert_qty > 0)
@@ -93,10 +95,11 @@ if($demand_insert_qty <= 0){
 $demand_array = array();
  $sql_work_order_demand_godown = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown ";
 
-$result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
+$result_json['sql_work_order_demand_samegodown'] = $sql_work_order_demand_godown;
         $result_work_order_demand_godown = $conn->query($sql_work_order_demand_godown);
         if ($result_work_order_demand_godown->num_rows > 0) {
             while ($row_work_order_demand_godown = $result_work_order_demand_godown->fetch_assoc()) {
+                $result_json['demand_row_samegodown'][] = $row_work_order_demand_godown;
                 $demand_array[] = $row_work_order_demand_godown;
             }
         }
@@ -113,13 +116,19 @@ $result_json['sql_work_order_demand_godown'] = $sql_work_order_demand_godown;
     $input_part_id = sql_nullable($demand['input_part_id']);
     $previous_process_id = sql_nullable($demand['previous_process_id']);
     $needed = $demand['needed'];
+       $result_json['needed'][] = $needed;
+    $result_json['demand_insert_qty'][] = $demand_insert_qty;
     $reduce_qty = min($needed,$demand_insert_qty);
-    echo "Reducing quantity for work_process_id $work_process_id: $reduce_qty\n";
+    $result_json['reduce_qty'][] = $reduce_qty;
+    // put it in array
+
+  
 // insert on duplicate key update stock_reserve
 $sql_reserve_work_order = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($stock_id, $reduce_qty, 'stock_transfer') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $reduce_qty";
 
 $conn->query($sql_reserve_work_order);
-
+$result_json['sql_reserve_work_order'][] = $sql_reserve_work_order;
+$result_json['reserve_qty_stockreserve'][] = $reduce_qty;
 
 $from_godown = ($godown);
 $from_dep = ($dep);
@@ -141,19 +150,29 @@ $result_json['messages']['result4'][] = "stock allocation query: " . $sql_alloca
 
 
 // insert input_demand on duplicate key update
-$sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $godown, $dep, $sec, 'stock_transfer', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+$sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $to_godown, $to_dep, $to_sec, 'stock_transfer', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+$result_json['sql_input_demand'][] = $sql_input_demand;
 
-echo "Executing SQL: $sql_input_demand\n";
 $conn->query($sql_input_demand);
 
-
-$demand_insert_qty -= $reduce_qty;
+    $result_json['details'][] = array(
+       
+        'needed' => $needed,
+        'demand_insert_qty' => $demand_insert_qty,
+        'reduce_qty' => $reduce_qty,
+        'update_summary' => $demand_insert_qty . ' - ' . $reduce_qty,
+        'after_upadte_demand' => round($demand_insert_qty - $reduce_qty, 5)
+    );
+ 
+$demand_insert_qty = round($demand_insert_qty - $reduce_qty, 5);
 if($demand_insert_qty <= 0){
     break;
 }
 
         }
     }
+
+    $result_json['remaining_demand_insert_qty_after_st'] = $demand_insert_qty;
 
 
         // if demand_insert_qty still remains then reserve it as job_work_order
@@ -317,6 +336,7 @@ select * from demand_join WHERE excess_needed > 0";
         echo json_encode($result_json);
           
 return true;
+        //  $conn->commit();
 
 
     
@@ -326,9 +346,9 @@ return true;
     }
      
     catch (Exception $e) {
-        // $conn->rollback();
-        throw new Exception($e->getMessage());
-        // echo "Transaction failed: " . $e->getMessage();
+        //  $conn->rollback();
+         throw new Exception($e->getMessage());
+        //  echo "Transaction failed: " . $e->getMessage();
     }
 
 }
