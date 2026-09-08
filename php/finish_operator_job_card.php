@@ -231,7 +231,7 @@ if($part_id != "NULL")
     }
      if($qty_to_consume <= 0) break;
 // get input demand for this part
- $sql_input_demand = "select input_demand_id,qty from input_part_demand_view where previous_process_id <=> $work_process_id and input_part_id <=> $part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec and cat = 'work_order'";
+ $sql_input_demand = "select input_demand_id,qty from input_demand where process_id <=> $work_process_id and part_id <=> $part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec and cat = 'work_order'";
  $result_input_demand = $conn->query($sql_input_demand);
  if($result_input_demand->num_rows > 0) {
      while($row = $result_input_demand->fetch_assoc()) {
@@ -241,7 +241,7 @@ if($part_id != "NULL")
 
    $take_qty  = min($input_demand_qty, $qty_to_consume);
 //    reduce input demand by $take_qty
-$sql_update_input_demand = "update input_part_demand set qty = qty - $take_qty where input_demand_id = $input_demand_id";
+$sql_update_input_demand = "update input_demand set qty = qty - $take_qty where input_demand_id = $input_demand_id";
 if ($conn->query($sql_update_input_demand) !== TRUE) {
     $result_json['message'] = "Error updating input demand: " . $conn->error;
     echo json_encode($result_json);
@@ -251,7 +251,7 @@ if ($conn->query($sql_update_input_demand) !== TRUE) {
 }
 
 //    delete input demand if qty is 0
-$sql_delete_input_demand = "delete from input_part_demand where qty <= 0 and input_demand_id = $input_demand_id";
+$sql_delete_input_demand = "delete from input_demand where qty <= 0 and input_demand_id = $input_demand_id";
 if ($conn->query($sql_delete_input_demand) !== TRUE) {
     $result_json['message'] = "Error deleting input demand: " . $conn->error;
     echo json_encode($result_json);
