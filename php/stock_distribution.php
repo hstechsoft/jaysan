@@ -80,9 +80,9 @@ $conn->query($sql_reserve_work_order);
 $sql_input_demand = "INSERT INTO input_demand ( work_process_id, process_id, part_id, godown, dep, sec, cat,qty) VALUES ($work_process_id, $previous_process_id, $input_part_id, $godown, $dep, $sec, 'work_order', $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
 ;
 $conn->query($sql_input_demand);
+$demand_insert_qty = round($demand_insert_qty-$reduce_qty, 5);
 
-
-$demand_insert_qty -= $reduce_qty;
+// $demand_insert_qty -= $reduce_qty;
 if($demand_insert_qty <= 0){
     break;
 }
@@ -182,7 +182,21 @@ if($demand_insert_qty <= 0){
 {
 $demand_array = array();
 // get details where godown not equal to the current godown
- $sql_work_order_demand_outside = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <> $godown ";
+ $sql_work_order_demand_outside = "with total_demand as(SELECT input_part_id,previous_process_id,godown,dep,sec,sum(needed) as total_needed FROM `input_part_demand_view` group by input_part_id,previous_process_id),
+job_work_reserve as (
+    select stock_id,part_id,process_id,sum(reserve_qty) as reserve_qty,godown,dep,sec,stock_reserve_id
+    from stock_view WHERE reserve_type = 'job_work_order' GROUP BY part_id,process_id
+) ,
+demand_join as (
+    select td.input_part_id, td.previous_process_id, td.godown, td.dep, td.sec, td.total_needed, jwr.stock_reserve_id,jwr.stock_id, jwr.reserve_qty, 
+    td.total_needed-ifnull(jwr.reserve_qty,0) as needed
+    from total_demand td
+    left join job_work_reserve jwr
+    on td.input_part_id <=> jwr.part_id
+    and td.previous_process_id <=> jwr.process_id
+ 
+)
+select * from demand_join WHERE needed > 0 and input_part_id <=> $in_part_id and previous_process_id <=> $in_process_id";
 
  $result_json['sql_work_order_demand_outside'] = $sql_work_order_demand_outside;
         $result_work_order_demand_outside = $conn->query($sql_work_order_demand_outside);
@@ -223,18 +237,18 @@ if($demand_insert_qty <= 0){
 }
 
 
-
-
+$negative_demand_array = array();
+    
 
 // we reduced stock reserve based on the total reduced quantity from input_demand
 // we also need to check if there are any remaining negative demands that need to be addressed and reduce jobwork_order
 
         // recompute stock reserve
         // check input_demand_view to see needed  less then 0
-        $sql_recompute_jobwork = "with total_demand as(SELECT input_part_id,previous_process_id,godown,dep,sec,sum(needed) as total_needed FROM `input_part_demand_view` group by input_part_id,previous_process_id,godown,dep,sec),
+        $sql_recompute_jobwork = "with total_demand as(SELECT input_part_id,previous_process_id,godown,dep,sec,sum(needed) as total_needed FROM `input_part_demand_view` group by input_part_id,previous_process_id),
 job_work_reserve as (
-    select stock_id,part_id,process_id,reserve_qty,godown,dep,sec,stock_reserve_id
-    from stock_view WHERE reserve_type = 'job_work_order'
+    select stock_id,part_id,process_id,sum(reserve_qty) as reserve_qty,godown,dep,sec,stock_reserve_id
+    from stock_view WHERE reserve_type = 'job_work_order' GROUP BY part_id,process_id
 ) ,
 demand_join as (
     select td.input_part_id, td.previous_process_id, td.godown, td.dep, td.sec, td.total_needed, jwr.stock_reserve_id,jwr.stock_id, jwr.reserve_qty, ifnull(jwr.reserve_qty,0) - td.total_needed as excess_needed
@@ -242,11 +256,8 @@ demand_join as (
     left join job_work_reserve jwr
     on td.input_part_id <=> jwr.part_id
     and td.previous_process_id <=> jwr.process_id
-    and td.godown <=> jwr.godown
-    and td.dep <=> jwr.dep
-    and td.sec <=> jwr.sec
+ 
 )
-
 select * from demand_join WHERE excess_needed > 0";
         $result_recompute_jobwork = $conn->query($sql_recompute_jobwork);
         if ($result_recompute_jobwork->num_rows > 0) {
