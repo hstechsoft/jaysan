@@ -185,8 +185,8 @@ foreach($dc_demand_array as $dc_demand) {
     }
 
   
-    
-      $demand_insert_qty -= $reduce_qty;
+    $demand_insert_qty  = round($demand_insert_qty-$reduce_qty, 5);
+    //  $demand_insert_qty -= $reduce_qty;
 
     // if qty is reduced to zero, break the loop
     if ($demand_insert_qty <= 0) {

@@ -182,7 +182,8 @@ foreach($dc_demand_array as $dc_demand) {
         throw new Exception("Error inserting/updating transport in input demand for part id $part_id and process id $process_id: " . $conn->error);
     }
     
-      $demand_insert_qty -= $reduce_qty;
+    //  $demand_insert_qty -= $reduce_qty;
+      $demand_insert_qty  = round($demand_insert_qty-$reduce_qty, 5);
 
     // if qty is reduced to zero, break the loop
     if ($demand_insert_qty <= 0) {

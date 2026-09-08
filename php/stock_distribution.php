@@ -223,60 +223,9 @@ if($demand_insert_qty <= 0){
 }
 
 
-// reduce stock reserve,input_demand based on excessive needed quantity
-$negative_demand_array = array();
-        // recompute stock reserve
-        // check input_demand_view to see needed  less then 0
-        $sql_recompute_stock_reserve = "select * from input_part_demand_view inner join stock_view on input_part_demand_view.input_part_id = stock_view.part_id and input_part_demand_view.previous_process_id = stock_view.process_id and input_part_demand_view.godown <=> stock_view.godown and input_part_demand_view.dep <=> stock_view.dep and input_part_demand_view.sec <=> stock_view.sec where  needed < 0";
-        $result_recompute_stock_reserve = $conn->query($sql_recompute_stock_reserve);
-        if ($result_recompute_stock_reserve->num_rows > 0) {
-            while ($row_recompute_stock_reserve = $result_recompute_stock_reserve->fetch_assoc()) {
-                // process each row where needed < 0
-                $negative_demand_array[] = $row_recompute_stock_reserve;
-                $result_json['reduce_qty'] = abs($row_recompute_stock_reserve['needed']);
-               
-            }
-        }
-        $result_json['negative_demand_array'] = $negative_demand_array;
-  
-
-
-// reduce stock reserve based on negative demand
-        foreach($negative_demand_array as $negative_demand){
-          $work_process_id = $negative_demand['work_process_id'];
-          $input_part_id = sql_nullable($negative_demand['input_part_id']);
-          $previous_process_id = sql_nullable($negative_demand['previous_process_id']);
-          $godown = sql_nullable($negative_demand['godown']);
-          $dep = sql_nullable($negative_demand['dep']);
-          $sec = sql_nullable($negative_demand['sec']);
-            $reduce_qty = abs($negative_demand['needed']);
-
-            $reduced_qty = 0;
-            $total_reduced_qty = 0;
 
 
 
-// get 
-          
-        
-            
-
-
-
-            // reduce stock reserve based on total reduced qty
-            if($total_reduced_qty > 0){
-                $sql_update_stock_reserve = "UPDATE stock_reserve sr
-inner join jaysan_stock js on sr.stock_id = js.stock_id
- SET sr.reserve_qty = sr.reserve_qty - $total_reduced_qty
- WHERE  js.part_id <=> $input_part_id AND js.process_id <=> $previous_process_id AND js.godown <=> $godown AND js.dep <=> $dep AND js.sec <=> $sec and sr.reserve_type = 'work_order'";
-                $conn->query($sql_update_stock_reserve);
-
-                // delete zero qty stock reserve records
-                $sql_delete_zero_stock_reserve = "DELETE FROM stock_reserve WHERE reserve_qty <= 0";
-                $conn->query($sql_delete_zero_stock_reserve);
-            }
-
-        }
 // we reduced stock reserve based on the total reduced quantity from input_demand
 // we also need to check if there are any remaining negative demands that need to be addressed and reduce jobwork_order
 
