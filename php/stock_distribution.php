@@ -9,6 +9,9 @@ function stock_distribution(mysqli $conn,$stock_id,$qty,$process_id = null)
 try
     {
 //   $conn->begin_transaction();
+// delete 0 reserve in stock_reserve table
+$sql_delete_zero_reserve = "DELETE FROM stock_reserve WHERE reserve_qty = 0";
+$conn->query($sql_delete_zero_reserve);
         $result_json['status'] = 'started';
 // echo "<br>Starting stock distribution for stock_id: $stock_id, qty: $qty, process_id: $process_id<br>";
     // get godown, dep, sec from stock id
