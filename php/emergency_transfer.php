@@ -33,7 +33,7 @@ if ($result->num_rows > 0) {
        if(stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty)) {
            // stock transfer successful
         //    update allocation_status as received allocation_qty ,received_qty
-           $sql_update_allocation = "UPDATE stock_allocation SET allocation_status = 'received', received_qty = $qty WHERE allocation_id = $allocation_id";
+           $sql_update_allocation = "UPDATE stock_allocation SET allocation_status = 'received', received_qty = $qty,allocation_qty = $qty WHERE allocation_id = $allocation_id";
            $conn->query($sql_update_allocation);
            echo "ok";
        }

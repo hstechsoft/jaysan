@@ -293,6 +293,8 @@ select * from demand_join WHERE excess_needed > 0";
 
     }
      
+
+    
     catch (Exception $e) {
         //   $conn->rollback();
           throw new Exception($e->getMessage());
