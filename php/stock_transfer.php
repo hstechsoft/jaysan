@@ -18,6 +18,8 @@ function stock_transfer(mysqli $conn, $part_id, $process_id, $from_godown, $from
     $to_dep = sql_nullable($to_dep);
     $to_sec = sql_nullable($to_sec);
     $reduce_qty = 0;
+    echo "Part ID: $part_id, Process ID: $process_id, From Godown: $from_godown, From Dep: $from_dep, From Sec: $from_sec, To Godown: $to_godown, To Dep: $to_dep, To Sec: $to_sec, Qty: $qty";
+    exit();
     $sql_input_demand_to = "SELECT qty,input_demand_id FROM input_demand WHERE godown = $to_godown AND dep = $to_dep AND sec = $to_sec AND part_id <=> $part_id AND process_id <=> $process_id and cat = 'stock_transfer'";
     $result_input_demand_to = $conn->query($sql_input_demand_to);
     $input_demand_to = array();
