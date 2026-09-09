@@ -13,7 +13,7 @@ return $data;
 }
 
 // get stock allocation details
-$sql = "SELECT  part_id, qty, from_godown, from_dep, from_sec, to_godown, to_dep, to_sec, process_id FROM stock_allocation WHERE allocation_id = $allocation_id and allocation_status = 'created'";
+$sql = "SELECT  part_id, qty, from_godown, from_dep, from_sec, to_godown, to_dep, to_sec, process_id FROM stock_allocation WHERE allocation_id = $allocation_id ";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $stock_allocation = $result->fetch_assoc();
@@ -27,13 +27,13 @@ if ($result->num_rows > 0) {
     $to_sec = $stock_allocation['to_sec'];
     $process_id = $stock_allocation['process_id'];
 
-  
+  $aqty = $qty;
     require_once 'stock_transfer.php'; // include the stock_transfer function file
     if($qty > 0)
        if(stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty)) {
            // stock transfer successful
         //    update allocation_status as received allocation_qty ,received_qty
-           $sql_update_allocation = "UPDATE stock_allocation SET allocation_status = 'received', received_qty = $qty,allocation_qty = $qty WHERE allocation_id = $allocation_id";
+           $sql_update_allocation = "UPDATE stock_allocation SET allocation_status = 'received', received_qty = $aqty,allocation_qty = $aqty WHERE allocation_id = $allocation_id";
            $conn->query($sql_update_allocation);
            echo "ok";
        }
