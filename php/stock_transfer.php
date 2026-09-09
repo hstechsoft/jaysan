@@ -25,6 +25,7 @@ $conn->begin_transaction();
 
     $sql_input_demand_to = "SELECT qty,input_demand_id FROM input_demand WHERE godown = $to_godown AND dep = $to_dep AND sec = $to_sec AND part_id <=> $part_id AND process_id <=> $process_id and cat = 'stock_transfer'";
     $result_input_demand_to = $conn->query($sql_input_demand_to);
+    echo "SQL: $sql_input_demand_to\n";
     $input_demand_to = array();
     if ($result_input_demand_to->num_rows > 0) {
         while ($row_input_demand_to = $result_input_demand_to->fetch_assoc()) {
