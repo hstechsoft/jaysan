@@ -98,7 +98,7 @@ if($demand_insert_qty <= 0){
           if($demand_insert_qty > 0)
 {
 $demand_array = array();
- $sql_work_order_demand_godown = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown ";
+ $sql_work_order_demand_godown = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown and needed > 0";
 
 $result_json['sql_work_order_demand_samegodown'] = $sql_work_order_demand_godown;
         $result_work_order_demand_godown = $conn->query($sql_work_order_demand_godown);
