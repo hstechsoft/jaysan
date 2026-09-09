@@ -5,7 +5,10 @@ function stock_transfer(mysqli $conn, $part_id, $process_id, $from_godown, $from
     // we need to reduce stock from from and insert stock to to
     // 1. need to reduce stock reserve for from godown
     // 2. need to reduce input_demand for to godown
+try
+{
 
+$conn->begin_transaction();
     // get input_demand for the to godown
     $input_demand_id = 0;
     $ip_demand_qty = 0;
@@ -18,8 +21,8 @@ function stock_transfer(mysqli $conn, $part_id, $process_id, $from_godown, $from
     $to_dep = sql_nullable($to_dep);
     $to_sec = sql_nullable($to_sec);
     $reduce_qty = 0;
-    echo "Part ID: $part_id, Process ID: $process_id, From Godown: $from_godown, From Dep: $from_dep, From Sec: $from_sec, To Godown: $to_godown, To Dep: $to_dep, To Sec: $to_sec, Qty: $qty";
-    exit();
+
+
     $sql_input_demand_to = "SELECT qty,input_demand_id FROM input_demand WHERE godown = $to_godown AND dep = $to_dep AND sec = $to_sec AND part_id <=> $part_id AND process_id <=> $process_id and cat = 'stock_transfer'";
     $result_input_demand_to = $conn->query($sql_input_demand_to);
     $input_demand_to = array();
@@ -31,6 +34,7 @@ function stock_transfer(mysqli $conn, $part_id, $process_id, $from_godown, $from
     }
 
     $reduce_qty = min($ip_demand_qty,$qty);
+    echo "Reducing input_demand for to godown by $reduce_qty\n";
 
     // update the input_demand for the to godown
     if ($reduce_qty > 0) {
@@ -53,6 +57,9 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
   $reserve_qty = 0;
   // get stock_reserve for the from godown
   $sql_get_reserve = "SELECT reserve_qty,stock_reserve_id FROM stock_view WHERE godown = $from_godown AND dep = $from_dep AND sec = $from_sec AND part_id <=> $part_id AND process_id <=> $process_id and reserve_type = 'stock_transfer'";
+
+  echo "Getting stock reserve for from godown\n.";
+  echo "SQL: $sql_get_reserve\n";
   $result_get_reserve = $conn->query($sql_get_reserve);
   $reserve = array();
   if ($result_get_reserve->num_rows > 0) {
@@ -63,10 +70,13 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
   }
 
   $reduce_qty = min($reserve_qty,$qty);
+  echo "Reducing stock reserve for from godown by $reduce_qty\n";
 
   // update the stock_reserve for the from godown
   if ($reduce_qty > 0) {
       $sql_update_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $reduce_qty WHERE stock_reserve_id = $stock_reserve_id";
+      echo "SQL: $sql_update_reserve\n";
+      echo "Updating stock reserve for stock_reserve_id: $stock_reserve_id by $reduce_qty\n";
       if ($conn->query($sql_update_reserve) !== TRUE) {
           throw new Exception("Failed to update stock_reserve for stock_reserve_id: $stock_reserve_id");
       }
@@ -79,12 +89,16 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
 
 //   reduce the stock from the from godown 
 $stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty WHERE godown = $from_godown AND dep = $from_dep AND sec = $from_sec AND part_id <=> $part_id AND process_id <=> $process_id";
+echo "SQL: $stock_reduction\n";
 if ($conn->query($stock_reduction) !== TRUE) {
     throw new Exception("Failed to reduce stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id");
+} else {
+    echo "Reduced stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id by $qty\n";
 }
 $stock_id= 0;
 // add the stock to the to godown ,insert on duplicate key update and get stock_id
 $stock_addition = "INSERT INTO jaysan_stock (godown, dep, sec, part_id, process_id, qty) VALUES ($to_godown, $to_dep, $to_sec, $part_id, $process_id, $qty) ON DUPLICATE KEY UPDATE qty = qty + $qty";
+echo "SQL: $stock_addition\n";
 // get stock_id
 
   if ($conn->query($stock_addition) === TRUE) {
@@ -92,9 +106,17 @@ $stock_addition = "INSERT INTO jaysan_stock (godown, dep, sec, part_id, process_
   } else {
       throw new Exception("Failed to add jaysan_stock for godown: $to_godown, dep: $to_dep, sec: $to_sec, part_id: $part_id, process_id: $process_id");
   }
+  
 
-  require_once 'stock_distribution.php';
-  stock_distribution($conn, $stock_id, $qty);
+} catch (Exception $e) {
+    $conn->rollback();
+    echo "Error: " . $e->getMessage();
+}
+    // echo "Error: " . $e->getMessage();
+}
+echo "Stock transfer completed for stock_id: $stock_id, qty: $qty\n";
+//   require_once 'stock_distribution.php';
+//   stock_distribution($conn, $stock_id, $qty);
 
 
 
