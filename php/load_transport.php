@@ -178,7 +178,7 @@ foreach($dc_demand_array as $dc_demand) {
     }
 
     // insert on duplicate key update cat  as transport in input_demand
-    $sql_insert_transport = "INSERT INTO input_demand (work_process_id,dep,sec,godown, cat, part_id, process_id, qty) VALUES ($work_process_id, '$dep', '$sec', '$des_godown', 'transport', $part_id, $process_id, $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
+    $sql_insert_transport = "INSERT INTO input_demand (work_process_id,dep,sec,godown, cat, part_id, process_id, qty) VALUES ($work_process_id, $dep, $sec, $godown, 'transport', $part_id, $process_id, $reduce_qty) ON DUPLICATE KEY UPDATE qty = qty + $reduce_qty";
     if (!$conn->query($sql_insert_transport)) {
         throw new Exception("Error inserting/updating transport in input demand for part id $part_id and process id $process_id: " . $conn->error);
     }
