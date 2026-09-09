@@ -89,7 +89,7 @@ $stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty WHERE godown <=> $f
 if ($conn->query($stock_reduction) !== TRUE) {
     throw new Exception("Failed to reduce stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id");
 } else {
-    echo "Reduced stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id by $qty\n";
+    // echo "Reduced stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id by $qty\n";
 }
 $stock_id= 0;
 // add the stock to the to godown ,insert on duplicate key update and get stock_id
