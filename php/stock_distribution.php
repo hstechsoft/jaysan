@@ -45,7 +45,7 @@ $result_json['stock_details'] = [
 // getting demand for the current stock item
 $demand_insert_qty = $qty;
 $demand_array = array();
- $sql_work_order_demand = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+ $sql_work_order_demand = "select * from input_part_demand_view where previous_process_id <=> $in_process_id and input_part_id <=> $in_part_id and godown <=> $godown and dep <=> $dep and sec <=> $sec and needed > 0";
 
 $result_json['sql_work_order_demand'] = $sql_work_order_demand;
 
