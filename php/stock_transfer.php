@@ -23,7 +23,7 @@ $conn->begin_transaction();
     $reduce_qty = 0;
 
 
-    $sql_input_demand_to = "SELECT qty,input_demand_id FROM input_demand WHERE godown = $to_godown AND dep = $to_dep AND sec = $to_sec AND part_id <=> $part_id AND process_id <=> $process_id and cat = 'stock_transfer'";
+    $sql_input_demand_to = "SELECT qty,input_demand_id FROM input_demand WHERE godown <=> $to_godown AND dep <=> $to_dep AND sec <=> $to_sec AND part_id <=> $part_id AND process_id <=> $process_id and cat = 'stock_transfer'";
     $result_input_demand_to = $conn->query($sql_input_demand_to);
     echo "SQL: $sql_input_demand_to\n";
     $input_demand_to = array();
@@ -57,7 +57,7 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
   $reduce_qty = 0;
   $reserve_qty = 0;
   // get stock_reserve for the from godown
-  $sql_get_reserve = "SELECT reserve_qty,stock_reserve_id FROM stock_view WHERE godown = $from_godown AND dep = $from_dep AND sec = $from_sec AND part_id <=> $part_id AND process_id <=> $process_id and reserve_type = 'stock_transfer'";
+  $sql_get_reserve = "SELECT reserve_qty,stock_reserve_id FROM stock_view WHERE godown <=> $from_godown AND dep <=> $from_dep AND sec <=> $from_sec AND part_id <=> $part_id AND process_id <=> $process_id and reserve_type = 'stock_transfer'";
 
   echo "Getting stock reserve for from godown\n.";
   echo "SQL: $sql_get_reserve\n";
@@ -89,7 +89,7 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
 
 
 //   reduce the stock from the from godown 
-$stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty WHERE godown = $from_godown AND dep = $from_dep AND sec = $from_sec AND part_id <=> $part_id AND process_id <=> $process_id";
+$stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty WHERE godown <=> $from_godown AND dep <=> $from_dep AND sec <=> $from_sec AND part_id <=> $part_id AND process_id <=> $process_id";
 echo "SQL: $stock_reduction\n";
 if ($conn->query($stock_reduction) !== TRUE) {
     throw new Exception("Failed to reduce stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id");
