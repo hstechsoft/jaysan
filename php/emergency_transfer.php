@@ -13,7 +13,7 @@ return $data;
 }
 
 // get stock allocation details
-$sql = "SELECT  part_id, qty, from_godown, from_dep, from_sec, to_godown, to_dep, to_sec, process_id FROM stock_allocation WHERE allocation_id = $allocation_id";
+$sql = "SELECT  part_id, qty, from_godown, from_dep, from_sec, to_godown, to_dep, to_sec, process_id FROM stock_allocation WHERE allocation_id = $allocation_id and allocation_status = 'created'";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $stock_allocation = $result->fetch_assoc();
