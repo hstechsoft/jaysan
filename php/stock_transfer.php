@@ -107,16 +107,17 @@ echo "SQL: $stock_addition\n";
       throw new Exception("Failed to add jaysan_stock for godown: $to_godown, dep: $to_dep, sec: $to_sec, part_id: $part_id, process_id: $process_id");
   }
   
+  echo "Stock transfer completed for stock_id: $stock_id, qty: $qty\n";
+//   require_once 'stock_distribution.php';
+//   stock_distribution($conn, $stock_id, $qty);
 
 } catch (Exception $e) {
     $conn->rollback();
-    echo "Error: " . $e->getMessage();
+    echo "Error: " . $e->getMessage() . "\n";
 }
     // echo "Error: " . $e->getMessage();
-}
-echo "Stock transfer completed for stock_id: $stock_id, qty: $qty\n";
-//   require_once 'stock_distribution.php';
-//   stock_distribution($conn, $stock_id, $qty);
+
+
 
 
 
