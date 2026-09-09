@@ -105,7 +105,9 @@ $stock_addition = "INSERT INTO jaysan_stock (godown, dep, sec, part_id, process_
   
 
   require_once 'stock_distribution.php';
-  stock_distribution($conn, $stock_id, $qty);
+  if(stock_distribution($conn, $stock_id, $qty)) {
+    echo "Stock transfer and distribution completed for stock_id: $stock_id, qty: $qty\n";
+  }
 
  // echo "Error: " . $e->getMessage();
 
