@@ -281,7 +281,7 @@ select * from demand_join WHERE excess_needed > 0";
 
 
 
-        // echo json_encode($result_json);
+         echo json_encode($result_json);
           
  return true;
         //  $conn->commit();
@@ -294,7 +294,7 @@ select * from demand_join WHERE excess_needed > 0";
     }
      
 
-    
+
     catch (Exception $e) {
         //   $conn->rollback();
           throw new Exception($e->getMessage());
