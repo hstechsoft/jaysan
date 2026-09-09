@@ -26,9 +26,12 @@ if ($result->num_rows > 0) {
     $to_dep = $stock_allocation['to_dep'];
     $to_sec = $stock_allocation['to_sec'];
     $process_id = $stock_allocation['process_id'];
-    require_once 'stock_transfer.php'; // include the stock_transfer function file
-    if($qty > 0)
-        stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty);
+
+    echo "Stock allocation details: ";
+    print_r($stock_allocation);
+    // require_once 'stock_transfer.php'; // include the stock_transfer function file
+    // if($qty > 0)
+    //     stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty);
 } else {
     throw new Exception("Stock allocation not found for ID $allocation_id");
 }
