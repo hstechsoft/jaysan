@@ -267,6 +267,18 @@ $qty_to_consume -= $take_qty;
 }
 
 
+$stock_id = 0;
+// get stock_id from jaysan_stock for the consumed part and location
+$sql_get_stock_id = "select stock_id from jaysan_stock where part_id <=> $material_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+$result_get_stock_id = $conn->query($sql_get_stock_id);
+
+if($result_get_stock_id->num_rows > 0) {
+    $row = $result_get_stock_id->fetch_assoc();
+    $stock_id = $row['stock_id'];
+}
+
+
+if($stock_id > 0) {
 // real stock reduction for the consumed quantity
 $sql_stock_update = "update jaysan_stock set qty = qty - $material_weight where part_id <=> $material_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
 if ($conn->query($sql_stock_update) !== TRUE) {
@@ -275,6 +287,18 @@ if ($conn->query($sql_stock_update) !== TRUE) {
     $conn->rollback();
     $conn->close();
     exit;
+}
+}
+else {
+    // insert 0-qty
+    $sql_insert_stock = "insert into jaysan_stock (part_id, godown, dep, sec, qty) values ($material_id, $godown, $dep, $sec, 0-$material_weight) on duplicate key update qty = qty - $material_weight";
+    if ($conn->query($sql_insert_stock) !== TRUE) {
+        $result_json['message'] = "Error inserting stock: " . $conn->error;
+        echo json_encode($result_json);
+        $conn->rollback();
+        $conn->close();
+        exit;
+    }
 }
 
 

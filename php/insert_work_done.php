@@ -792,18 +792,28 @@ if($result_sec_stock->num_rows > 0) {
         // reduce real consumption from stock
 
 foreach($consumption as $consume) {
+    $stock_id = 0;
   $part_id = sql_nullable($consume['part_id']);
  $qty_to_consume = $consume['qty'];
  $process_id = sql_nullable($consume['previous_process_id']);
  $work_process_id = sql_nullable($consume['work_process_id']);
 
+// get stock_id from jaysan_stock for the consumed part and location
+$sql_get_stock_id = "select stock_id from jaysan_stock where part_id = $part_id and process_id = $process_id and godown = $godown_id and dep = $dep_id and sec = $sec_id";
+$result_get_stock_id = $conn->query($sql_get_stock_id);
+$stock_id = 0;
+if($result_get_stock_id->num_rows > 0) {
+    $row = $result_get_stock_id->fetch_assoc();
+    $stock_id = $row['stock_id'];
+}
 
+if($stock_id > 0) {
         // 🔥 reduce stock (insert negative entry with SAME section)
-        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where part_id = $part_id and process_id = $process_id and godown = $godown_id and dep = $dep_id and sec = $sec_id";
+        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where stock_id = $stock_id";
 
         if ($conn->query($sql_update_stock) === TRUE) {
             // reduce 
-            $qty_to_consume = round($qty_to_consume-$take_qty, 5);
+            
            
         } else {
             $result_json['message'] = "Error updating stock: " . $conn->error;
@@ -812,6 +822,20 @@ foreach($consumption as $consume) {
             $conn->close();
             exit;
         }
+}
+else
+    {
+        // insert 0-qty for the stock if it doesn't exist
+        $sql_insert_stock = "insert into jaysan_stock (part_id, process_id, godown, dep, sec, qty) values ($part_id, $process_id, $godown_id, $dep_id, $sec_id, 0-$qty_to_consume) on duplicate key update qty = qty -$qty_to_consume";
+        if ($conn->query($sql_insert_stock) !== TRUE) {
+            $result_json['message'] = "Error inserting stock: " . $conn->error;
+            echo json_encode($result_json);
+            $conn->rollback();
+            $conn->close();
+            exit;
+        }
+
+    }
 }
  
 
