@@ -27,11 +27,16 @@ if ($result->num_rows > 0) {
     $to_sec = $stock_allocation['to_sec'];
     $process_id = $stock_allocation['process_id'];
 
-    echo "Stock allocation details: ";
-    print_r($stock_allocation);
+  
     require_once 'stock_transfer.php'; // include the stock_transfer function file
     if($qty > 0)
-        stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty);
+       if(stock_transfer($conn, $part_id,  $process_id,$from_godown, $from_dep, $from_sec, $to_godown, $to_dep, $to_sec, $qty)) {
+           // stock transfer successful
+        //    update allocation_status as received allocation_qty ,received_qty
+           $sql_update_allocation = "UPDATE stock_allocation SET allocation_status = 'received', received_qty = $qty WHERE allocation_id = $allocation_id";
+           $conn->query($sql_update_allocation);
+           echo "ok";
+       }
 } else {
     throw new Exception("Stock allocation not found for ID $allocation_id");
 }
