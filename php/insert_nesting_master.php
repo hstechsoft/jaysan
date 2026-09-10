@@ -43,7 +43,7 @@ $jmid = $machine['jmid'];
 $run_time = $machine['run_time'];
 $handling_time = $machine['handling_time'];
 
-$sql_insert_machine = "INSERT INTO nesting_machines (nes_master_id, jmid, run_time, handling_time) VALUES ($nes_master_id, $jmid, $run_time, $handling_time)";
+$sql_insert_machine = "INSERT INTO laser_machine (nes_master_id, jmid, run_time, handling_time) VALUES ($nes_master_id, $jmid, $run_time, $handling_time)";
 if ($conn->query($sql_insert_machine) !== TRUE) {
     throw new Exception("Error: " . $sql_insert_machine . "<br>" . $conn->error);
 }
