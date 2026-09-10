@@ -38,24 +38,33 @@ return $data;
 }
 
 
- $sql = "with nesting_assign as (
+ $sql = "insert_laser_machine(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id)with nesting_assign as (
  select JSON_ARRAYAGG(
         JSON_OBJECT(
             'assign_date', laser_job_card.assign_date,
             'shift', laser_job_card.shift,
-            'machine_id', laser_job_card.machine_id,
+            'machine_id', lm.jmid,
+            'godown_name', godown.creditor_name,
+            'dep_name', dep.dep_name,
+            'sec_name', sec.sec_name,
+            'machine_name', jm.machine_name,
             'assigned_by', laser_job_card.assigned_by,
             'status', laser_job_card.status,
             'scarp_weight', laser_job_card.scarp_weight,
             'job_card_id', laser_job_card.job_card_id,
             'scarp_qty', laser_job_card.scarp_qty
         )
-    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, ifnull(nes_work.material_qty, 0) - sum(ifnull(laser_job_card.qty, 0))  as remaining_qty, nes_work.nesting_id
+    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, ifnull(nes_work.material_qty, 0) - sum(ifnull(laser_job_card.qty, 0))  as remaining_qty,nes_work.nesting_details_id, nes_work.nesting_id
 from
    nesting_details nes_work
     left join  laser_job_card  on laser_job_card.nesting_details_id = nes_work.nesting_details_id
+    left join  laser_machine lm on laser_job_card.laser_machine_id = lm.laser_machine_id
+    left join jaysan_machine jm on lm.jmid = jm.jmid
+    left join creditors godown on jm.godown_id = godown.creditor_id
+    left join department dep on jm.dep_id = dep.dep_id
+    left join dep_section sec on jm.dep_sec_id = sec.dep_sec_id
 group by
-    nes_work.nesting_id
+    nes_work.nesting_details_id
  )
     
  select
@@ -67,12 +76,13 @@ group by
     nest_part.part_name as part_name,
     mat_part.part_name as material_name,
     nd.run_time,
+   
     mas.nesting_name,
     mas.material_id,
     mas.path,
     mas.nesting_type,
     mas.std_length,
-    mas.run_time,
+
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'nes_part_id',
@@ -90,7 +100,7 @@ group by
     laser_assigned_details
     from
     nesting_details nd
-    left join nesting_assign na on nd.nesting_id = na.nesting_id
+    left join nesting_assign na on nd.nesting_details_id = na.nesting_details_id
     left join nesting_master mas on nd.nesting_id = mas.nes_master_id
     left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
     left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
