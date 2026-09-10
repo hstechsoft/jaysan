@@ -144,7 +144,7 @@ group by
     left join nes_details nd on nes_master.nesting_id = nd.nesting_id
   group by nd.nesting_id";
 
-  echo $sql;
+
 
 
 $result = $conn->query($sql);
