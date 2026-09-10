@@ -49,6 +49,15 @@ if ($conn->query($sql_delete_parts) === TRUE) {
   exit;
 }
 
+// delete laser_machine entries related to this nesting master
+$sql_delete_laser_machine = "DELETE FROM laser_machine WHERE nes_master_id = $nes_master_id";
+if ($conn->query($sql_delete_laser_machine) === TRUE) {
+ 
+} else {
+  echo "Error: " . $sql_delete_laser_machine . "<br>" . $conn->error;
+  $conn->close();
+  exit;
+}
 
  $sql =  "DELETE  FROM nesting_master WHERE nes_master_id =  $nes_master_id";
 
