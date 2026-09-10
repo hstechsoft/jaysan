@@ -5,6 +5,9 @@
 $nes_master_id = test_input($_POST['nes_master_id']);
 $run_time = test_input($_POST['run_time']);
 $handling_time = test_input($_POST['handling_time']);
+$godown = sql_nullable(test_input($_POST['godown']));
+$dep = sql_nullable(test_input($_POST['dep']));
+$sec = sql_nullable(test_input($_POST['sec']));
 
 
  
@@ -17,6 +20,11 @@ $data = "'".$data."'";
 return $data;
 }
 
+// update jaysan_machine with godown, dep, sec
+$sql_update_machine = "UPDATE jaysan_machine SET godown = $godown, dep = $dep, sec = $sec WHERE jmid = $jmid";
+if ($conn->query($sql_update_machine) !== TRUE) {
+    throw new Exception("Error: " . $sql_update_machine . "<br>" . $conn->error);
+}
 
  $sql = "INSERT INTO laser_machine ( jmid,nes_master_id,run_time,handling_time) VALUES ($jmid,$nes_master_id,$run_time,$handling_time)";
 
