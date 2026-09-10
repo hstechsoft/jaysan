@@ -30,12 +30,37 @@ return $data;
     'weight', nesting_parts.weight
 )) as nesting_parts from nesting_parts
 inner join parts_tbl on nesting_parts.part_id = parts_tbl.part_id GROUP BY nesting_parts.nesting_id
+
+),
+laser_machine_summary as(
+    select nes_master_id,
+    JSON_ARRAYAGG(JSON_OBJECT(
+     'run_time', lm.run_time,
+     'handling_time', lm.handling_time,
+     'jmid', lm.jmid,
+     
+     'machine_name', jm.machine_name,
+     'dep_id', jm.dep_id,
+     'godown_id', jm.godown_id,
+     'dep_sec_id', jm.dep_sec_id,
+     'godown_name', godown.creditor_name,
+     'dep_name', dep.dep_name,
+     'sec_name', sec.sec_name
+    )) as laser_machine_summary
+     from laser_machine lm
+     inner join jaysan_machine jm on lm.jmid = jm.jmid
+     left join creditors godown on jm.godown_id = godown.creditor_id
+     left join department dep on jm.dep_id = dep.dep_id
+     left join dep_section sec on jm.dep_sec_id = sec.dep_sec_id
+     
+      GROUP BY lm.nes_master_id
 )
-select nesting_parts.*,nes_part.part_name as nesting_material ,nesting_master.created_by,
+select nesting_parts.*,laser_machine_summary,nes_part.part_name as nesting_material ,nesting_master.created_by,
 nesting_master.material_id,
 nesting_master.nesting_name,
 nesting_master.path,
-nesting_master.run_time,
+nesting_master.scrap_part_id,
+scrap.part_name as scrap_part_name,
 nesting_master.nesting_type,
 nesting_master.std_length,
 nesting_master.weight,
@@ -50,11 +75,13 @@ JSON_ARRAYAGG(JSON_OBJECT(
     'reserves', stock_full_view.reserves
 )) as stock_info
 
- from nesting_parts
-left join nesting_master on nesting_parts.nesting_id = nesting_master.nes_master_id
+ from nesting_master 
+left join  nesting_parts on nesting_parts.nesting_id = nesting_master.nes_master_id
+left join laser_machine_summary lms on nesting_master.nes_master_id = lms.nes_master_id
 left join parts_tbl nes_part on nes_part.part_id = nesting_master.material_id
 LEFT join employee on nesting_master.created_by = employee.emp_id
 left join stock_full_view on nesting_master.material_id = stock_full_view.part_id
+left join parts_tbl scrap on nesting_master.scrap_part_id = scrap.part_id
 where $master_query
 group by nesting_parts.nesting_id
 ";

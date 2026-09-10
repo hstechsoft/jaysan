@@ -7,11 +7,11 @@ $nesting_name = test_input($_POST['nesting_name']);
 $material_id = test_input($_POST['material_id']);
 $nesting_type = test_input($_POST['nesting_type']);
 $std_length = test_input($_POST['std_length']);
-$run_time = test_input($_POST['run_time']);
+
  $nes_master_id = test_input($_POST['nes_master_id']);
  $weight = test_input($_POST['weight']);
  $scarp_weight = test_input($_POST['scarp_weight']);
-
+$scrap_part_id = test_input($_POST['scrap_part_id']);
  
 
  
@@ -23,7 +23,7 @@ $data = "'".$data."'";
 return $data;
 }
 try {
- $sql_insert_master = "UPDATE nesting_master SET created_by = $created_by, nesting_name = $nesting_name, material_id = $material_id, nesting_type = $nesting_type, std_length = $std_length, run_time = $run_time, weight = $weight, scarp_weight = $scarp_weight WHERE nes_master_id = $nes_master_id";
+ $sql_insert_master = "UPDATE nesting_master SET created_by = $created_by, nesting_name = $nesting_name, material_id = $material_id, nesting_type = $nesting_type, std_length = $std_length, scrap_part_id = $scrap_part_id, weight = $weight, scarp_weight = $scarp_weight WHERE nes_master_id = $nes_master_id";
 
   if ($conn->query($sql_insert_master) === TRUE) {
 

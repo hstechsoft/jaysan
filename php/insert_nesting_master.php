@@ -7,13 +7,14 @@ $nesting_name = test_input($_POST['nesting_name']);
 $material_id = test_input($_POST['material_id']);
 $nesting_type = test_input($_POST['nesting_type']);
 $std_length = test_input($_POST['std_length']);
-$run_time = test_input($_POST['run_time']);
+
 $weight = test_input($_POST['weight']);
 $scarp_weight = test_input($_POST['scarp_weight']);
+$scrap_part_id = test_input($_POST['scrap_part_id']);
 
 
 $laser_parts = json_decode($_POST['laser_parts'], true);
- 
+ $laser_machines = json_decode($_POST['laser_machines'], true);
 
  
 function test_input($data) {
@@ -26,7 +27,7 @@ return $data;
 $nes_master_id = 0;
 try
 {
- $sql_insert_master = "INSERT INTO nesting_master ( created_by,path,nesting_name,material_id,nesting_type,std_length,run_time,weight,scarp_weight) VALUES ($created_by,'',$nesting_name,$material_id,$nesting_type,$std_length,$run_time,$weight,$scarp_weight)";
+ $sql_insert_master = "INSERT INTO nesting_master ( created_by,path,nesting_name,material_id,nesting_type,std_length,weight,scarp_weight,scrap_part_id) VALUES ($created_by,'',$nesting_name,$material_id,$nesting_type,$std_length,$weight,$scarp_weight,$scrap_part_id)";
 
   if ($conn->query($sql_insert_master) === TRUE) {
 // get inserted id 
@@ -34,6 +35,23 @@ $nes_master_id  = $conn->insert_id;
   } else {
     throw new Exception("Error: " . $sql_insert_master . "<br>" . $conn->error);  
   }
+
+//   insert laser machines
+foreach ($laser_machines as $machine) {
+
+$jmid = $machine['jmid'];
+$run_time = $machine['run_time'];
+$handling_time = $machine['handling_time'];
+
+$sql_insert_machine = "INSERT INTO nesting_machines (nes_master_id, jmid, run_time, handling_time) VALUES ($nes_master_id, $jmid, $run_time, $handling_time)";
+if ($conn->query($sql_insert_machine) !== TRUE) {
+    throw new Exception("Error: " . $sql_insert_machine . "<br>" . $conn->error);
+}
+}
+
+
+
+
 // insert parts
 foreach ($laser_parts as $parts) {
       $part_id = $parts['part_id'];
