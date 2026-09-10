@@ -115,12 +115,13 @@ group by
             nest_part.part_name
         )
     ) as nesting_parts_details
-    from nesting_master mas  WHERE $created_by_query and $nesting_name_query and $material_id_query  
+    from nesting_master mas   
    left join  nesting_parts on nesting_parts.nesting_id = mas.nes_master_id
    left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
    left join parts_tbl mat_part on mas.material_id = mat_part.part_id
    left join parts_tbl scarp_part on mas.scrap_part_id = scarp_part.part_id
    left join employee emp on mas.created_by = emp.emp_id
+   WHERE $created_by_query and $nesting_name_query and $material_id_query 
     group by mas.nes_master_id
  )
     
@@ -142,6 +143,8 @@ group by
     from nes_master 
     left join nes_details nd on nes_master.nesting_id = nd.nesting_id
   group by nd.nesting_id";
+
+  echo $sql;
 
 
 $result = $conn->query($sql);
