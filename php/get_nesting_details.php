@@ -38,12 +38,14 @@ return $data;
 }
 
 
- $sql = "insert_laser_machine(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id)with nesting_assign as (
+ $sql = "with nesting_assign as (
  select JSON_ARRAYAGG(
         JSON_OBJECT(
             'assign_date', laser_job_card.assign_date,
             'shift', laser_job_card.shift,
             'machine_id', lm.jmid,
+            'run_time', lm.run_time,
+            'handling_time', lm.handling_time,
             'godown_name', godown.creditor_name,
             'dep_name', dep.dep_name,
             'sec_name', sec.sec_name,
@@ -54,9 +56,10 @@ return $data;
             'job_card_id', laser_job_card.job_card_id,
             'scarp_qty', laser_job_card.scarp_qty
         )
-    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, ifnull(nes_work.material_qty, 0) - sum(ifnull(laser_job_card.qty, 0))  as remaining_qty,nes_work.nesting_details_id, nes_work.nesting_id
+    ) as laser_assigned_details, ifnull(nes_work.material_qty, 0) as material_qty, sum(ifnull(laser_job_card.qty, 0)) as total_assigned_qty, ifnull(nes_work.material_qty, 0) - sum(ifnull(laser_job_card.qty, 0))  as remaining_qty,nes_work.nesting_details_id, nes_work.nesting_id, emp.emp_name as created_by_name, nes_work.created_by 
 from
-   nesting_details nes_work
+   nesting_details nes_work 
+    left join employee emp on nes_work.created_by = emp.emp_id
     left join  laser_job_card  on laser_job_card.nesting_details_id = nes_work.nesting_details_id
     left join  laser_machine lm on laser_job_card.laser_machine_id = lm.laser_machine_id
     left join jaysan_machine jm on lm.jmid = jm.jmid
@@ -64,25 +67,42 @@ from
     left join department dep on jm.dep_id = dep.dep_id
     left join dep_section sec on jm.dep_sec_id = sec.dep_sec_id
 group by
-    nes_work.nesting_details_id
- )
-    
- select
-    nd.created_by,
-    nd.material_qty,
-    nd.nesting_details_id,
-    nd.nesting_id,
-    emp.emp_name,
-    nest_part.part_name as part_name,
-    mat_part.part_name as material_name,
-    nd.run_time,
+    nes_work.nesting_details_id,nes_work.nesting_id 
+ ),
+ nes_details as (
+    select 
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'laser_assigned_details', na.laser_assigned_details,
+            'material_qty', na.material_qty,
+            'total_assigned_qty', na.total_assigned_qty,
+            'remaining_qty', na.remaining_qty,
+            'nesting_details_id', na.nesting_details_id,
+            'created_by_id', na.created_by,
+            'created_by_name', na.created_by_name 
+        )
+    ) as nesting_assign_details,
+ 
+    na.nesting_id
+
+     from nesting_assign na
    
-    mas.nesting_name,
+   
+group by
+     na.nesting_id
+ ),
+ nes_master as (
+     select
+     mas.nes_master_id as nesting_id,
+      mas.nesting_name,
     mas.material_id,
     mas.path,
     mas.nesting_type,
     mas.std_length,
-
+    mat_part.part_name as material_name,
+    scarp_part.part_name as scrap_name,
+    mas.created_by as master_created_by,
+    emp.emp_name as master_created_name,
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'nes_part_id',
@@ -94,19 +114,34 @@ group by
             'part_name',
             nest_part.part_name
         )
-    ) as nesting_parts_details,
-     ifnull(total_assigned_qty, 0) as total_assigned_qty,
-     ifnull(remaining_qty, 0) as remaining_qty,
-    laser_assigned_details
-    from
-    nesting_details nd
-    left join nesting_assign na on nd.nesting_details_id = na.nesting_details_id
-    left join nesting_master mas on nd.nesting_id = mas.nes_master_id
-    left join nesting_parts on mas.nes_master_id = nesting_parts.nesting_id
-    left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
-    left join parts_tbl mat_part on mas.material_id = mat_part.part_id
-    left join employee emp on nd.created_by = emp.emp_id
-  WHERE $created_by_query and $nesting_name_query and $material_id_query and $remaining_qty_query group by nd.nesting_id";
+    ) as nesting_parts_details
+    from nesting_master mas  WHERE $created_by_query and $nesting_name_query and $material_id_query  
+   left join  nesting_parts on nesting_parts.nesting_id = mas.nes_master_id
+   left join parts_tbl nest_part on nesting_parts.part_id = nest_part.part_id
+   left join parts_tbl mat_part on mas.material_id = mat_part.part_id
+   left join parts_tbl scarp_part on mas.scrap_part_id = scarp_part.part_id
+   left join employee emp on mas.created_by = emp.emp_id
+    group by mas.nes_master_id
+ )
+    
+
+   select 
+    nes_master.nesting_id,
+    nes_master.nesting_name,
+    nes_master.material_id,
+    nes_master.path,
+    nes_master.nesting_type,
+    nes_master.std_length,
+    nes_master.material_name,
+    nes_master.scrap_name,
+    nes_master.master_created_by,
+    nes_master.master_created_name,
+    nes_master.nesting_parts_details,
+    nd.nesting_assign_details
+    
+    from nes_master 
+    left join nes_details nd on nes_master.nesting_id = nd.nesting_id
+  group by nd.nesting_id";
 
 
 $result = $conn->query($sql);
