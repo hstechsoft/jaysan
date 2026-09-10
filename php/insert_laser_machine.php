@@ -9,7 +9,7 @@ $godown = sql_nullable(test_input($_POST['godown']));
 $dep = sql_nullable(test_input($_POST['dep']));
 $sec = sql_nullable(test_input($_POST['sec']));
 
-
+echo $jmid . " " . $nes_master_id . " " . $run_time . " " . $handling_time . " godown: " . $godown . " dep: " . $dep . " sec: " . $sec;
  
  
 function test_input($data) {
