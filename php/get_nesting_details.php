@@ -141,7 +141,7 @@ group by
     nd.nesting_assign_details
     
     from nes_master 
-    left join nes_details nd on nes_master.nesting_id = nd.nesting_id
+    inner  join nes_details nd on nes_master.nesting_id = nd.nesting_id
   group by nd.nesting_id";
 
 
