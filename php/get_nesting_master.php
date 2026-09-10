@@ -55,7 +55,13 @@ laser_machine_summary as(
      
       GROUP BY lm.nes_master_id
 )
-select nesting_parts.*,laser_machine_summary,nes_part.part_name as nesting_material ,nesting_master.created_by,
+select 
+nesting_parts.nes_part_id,
+nesting_parts.part_id,
+nesting_parts.qty,
+nesting_parts.weight,
+nesting_master.nes_master_id
+laser_machine_summary,nes_part.part_name as nesting_material ,nesting_master.created_by,
 nesting_master.material_id,
 nesting_master.nesting_name,
 nesting_master.path,
