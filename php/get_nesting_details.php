@@ -85,7 +85,7 @@ group by
  
     na.nesting_id
 
-     from nesting_assign na
+     from nesting_assign na where $remaining_qty_query
    
    
 group by
