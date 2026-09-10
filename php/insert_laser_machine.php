@@ -9,14 +9,12 @@ $godown = sql_nullable(test_input($_POST['godown']));
 $dep = sql_nullable(test_input($_POST['dep']));
 $sec = sql_nullable(test_input($_POST['sec']));
 
-echo $jmid . " " . $nes_master_id . " " . $run_time . " " . $handling_time . " godown: " . $godown . " dep: " . $dep . " sec: " . $sec;
- 
- 
+
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-$data = "'".$data."'";
+
 return $data;
 }
 
@@ -26,7 +24,7 @@ if ($conn->query($sql_update_machine) !== TRUE) {
     throw new Exception("Error: " . $sql_update_machine . "<br>" . $conn->error);
 }
 
- $sql = "INSERT INTO laser_machine ( jmid,nes_master_id,run_time,handling_time) VALUES ($jmid,$nes_master_id,$run_time,$handling_time)";
+ $sql = "INSERT INTO laser_machine ( jmid,nes_master_id,run_time,handling_time) VALUES ($jmid,$nes_master_id,'$run_time','$handling_time')";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
