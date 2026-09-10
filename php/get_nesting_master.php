@@ -22,7 +22,7 @@ return $data;
 }
 
 
- $sql = "with nesting_parts as(select nesting_id,JSON_ARRAYAGG(JSON_OBJECT(
+ $sql = "with nesting_parts as(select JSON_ARRAYAGG(JSON_OBJECT(
    'nes_part_id', nesting_parts.nes_part_id,
     'part_id', nesting_parts.part_id,
     'qty', nesting_parts.qty,
@@ -55,16 +55,13 @@ laser_machine_summary as(
      
       GROUP BY lm.nes_master_id
 )
-select 
-nesting_parts.nes_part_id,
-nesting_parts.part_id,
-nesting_parts.qty,
-nesting_parts.weight,
-nesting_master.nes_master_id,
+select nesting_parts.*,
+
 laser_machine_summary,nes_part.part_name as nesting_material ,nesting_master.created_by,
 nesting_master.material_id,
 nesting_master.nesting_name,
 nesting_master.path,
+nesting_master.nesting_id,
 nesting_master.scrap_part_id,
 scrap.part_name as scrap_part_name,
 nesting_master.nesting_type,
