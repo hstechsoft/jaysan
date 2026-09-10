@@ -21,7 +21,7 @@ return $data;
 }
 
 // update jaysan_machine with godown, dep, sec
-$sql_update_machine = "UPDATE jaysan_machine SET godown = $godown, dep = $dep, sec = $sec WHERE jmid = $jmid";
+$sql_update_machine = "UPDATE jaysan_machine SET godown_id = $godown, dep_id = $dep, dep_sec_id = $sec WHERE jmid = $jmid";
 if ($conn->query($sql_update_machine) !== TRUE) {
     throw new Exception("Error: " . $sql_update_machine . "<br>" . $conn->error);
 }
