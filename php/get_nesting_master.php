@@ -38,7 +38,7 @@ laser_machine_summary as(
      'run_time', lm.run_time,
      'handling_time', lm.handling_time,
      'jmid', lm.jmid,
-     
+     'laser_machine_id', lm.laser_machine_id,
      'machine_name', jm.machine_name,
      'dep_id', jm.dep_id,
      'godown_id', jm.godown_id,
