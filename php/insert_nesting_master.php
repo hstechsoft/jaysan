@@ -40,6 +40,9 @@ $nes_master_id  = $conn->insert_id;
 foreach ($laser_machines as $machine) {
 
 $jmid = $machine['jmid'];
+$godown = sql_nullable($machine['godown']);
+$dep = sql_nullable($machine['dep']);
+$sec = sql_nullable($machine['sec']);
 $run_time = $machine['run_time'];
 $handling_time = $machine['handling_time'];
 
@@ -47,6 +50,13 @@ $sql_insert_machine = "INSERT INTO laser_machine (nes_master_id, jmid, run_time,
 if ($conn->query($sql_insert_machine) !== TRUE) {
     throw new Exception("Error: " . $sql_insert_machine . "<br>" . $conn->error);
 }
+
+// update jaysan_machine with godown, dep, sec
+$sql_update_machine = "UPDATE jaysan_machine SET godown = $godown, dep = $dep, sec = $sec WHERE jmid = $jmid";
+if ($conn->query($sql_update_machine) !== TRUE) {
+    throw new Exception("Error: " . $sql_update_machine . "<br>" . $conn->error);
+}
+
 }
 
 
