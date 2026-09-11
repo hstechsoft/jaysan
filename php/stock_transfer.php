@@ -84,7 +84,7 @@ throw new Exception("Failed to update input_demand for input_demand_id: $input_d
 
 
 //   reduce the stock from the from godown 
-$stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty WHERE godown <=> $from_godown AND dep <=> $from_dep AND sec <=> $from_sec AND part_id <=> $part_id AND process_id <=> $process_id";
+$stock_reduction = "UPDATE jaysan_stock SET qty = qty - $qty, remark = 'stock reduced by stock_transfer' WHERE godown <=> $from_godown AND dep <=> $from_dep AND sec <=> $from_sec AND part_id <=> $part_id AND process_id <=> $process_id";
 
 if ($conn->query($stock_reduction) !== TRUE) {
     throw new Exception("Failed to reduce stock for godown: $from_godown, dep: $from_dep, sec: $from_sec, part_id: $part_id, process_id: $process_id");
@@ -93,7 +93,7 @@ if ($conn->query($stock_reduction) !== TRUE) {
 }
 $stock_id= 0;
 // add the stock to the to godown ,insert on duplicate key update and get stock_id
-$stock_addition = "INSERT INTO jaysan_stock (godown, dep, sec, part_id, process_id, qty) VALUES ($to_godown, $to_dep, $to_sec, $part_id, $process_id, $qty) ON DUPLICATE KEY UPDATE qty = qty + $qty";
+$stock_addition = "INSERT INTO jaysan_stock (godown, dep, sec, part_id, process_id, qty,remark) VALUES ($to_godown, $to_dep, $to_sec, $part_id, $process_id, $qty,'stock_added by stock_transfer') ON DUPLICATE KEY UPDATE qty = qty + $qty";
 
 // get stock_id
 

@@ -44,7 +44,7 @@ return $data;
 
 // insert on duplicate ket update
 
-$sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  $qty, remark = '$remark' ";
+$sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id,remark) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id,'manual update') ON DUPLICATE KEY UPDATE qty =  $qty, remark = '$remark' ";
 
 //  echo $sql;
 $stock_id = 0;

@@ -283,7 +283,7 @@ if($result_get_stock_id->num_rows > 0) {
 
 if($stock_id > 0) {
 // real stock reduction for the consumed quantity
-$sql_stock_update = "update jaysan_stock set qty = qty - $material_weight where part_id <=> $material_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
+$sql_stock_update = "update jaysan_stock set qty = qty - $material_weight, remark = 'stock reduced by laser consume -".$job_card_id."' where part_id <=> $material_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
 if ($conn->query($sql_stock_update) !== TRUE) {
     $result_json['message'] = "Error updating stock: " . $conn->error;
     echo json_encode($result_json);

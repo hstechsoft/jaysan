@@ -51,7 +51,7 @@ if ($qty > $stock_qty) {
   throw new Exception("Quantity to transport cannot be greater than stock quantity for stock id $stock_id");
            
         }
-         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty WHERE stock_id = $stock_id";
+         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty, remark = 'stock reduced by transport -".$transport_dc_id."' WHERE stock_id = $stock_id";
         if (!$conn->query($sql_reserve_update)) {
             throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error);
         }
@@ -72,7 +72,7 @@ if ($qty > $stock_qty) {
 
         // if stock exists in transport godown update stock with new quantity else insert new stock with quantity
         if($existing_stock_id) {
-            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty WHERE stock_id = $existing_stock_id";
+            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty,remark = 'stock added by transport -".$transport_dc_id."' WHERE stock_id = $existing_stock_id";
             if (!$conn->query($sql_update_stock)) {
                 throw new Exception("Error updating stock id $existing_stock_id in transport godown: " . $conn->error);
             }
@@ -82,7 +82,7 @@ if ($qty > $stock_qty) {
 
 
         // insert new stock in transport godown with quantity and get new stock id
-        $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id) VALUES ($part_id, $process_id, $transport_godown, $qty, '$batch_id')";
+        $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id,remark) VALUES ($part_id, $process_id, $transport_godown, $qty, '$batch_id','stock_added by transport')";
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
         } else {

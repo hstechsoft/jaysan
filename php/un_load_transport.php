@@ -36,7 +36,7 @@ foreach ($stock_json as $stock) {
         $process_id = sql_nullable($row_stock['process_id']);
         $batch_id = $row_stock['batch_id'];
 // reduce stock qty from stock id(reduce from transport godown stock)
-         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty WHERE stock_id = $stock_id";
+         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty,remark = 'stock reduced by un_load_transport -".$transport_dc_id."' WHERE stock_id = $stock_id";
         if (!$conn->query($sql_reserve_update)) {
             throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error . " SQL: $sql_reserve_update");
         }
@@ -57,7 +57,7 @@ foreach ($stock_json as $stock) {
 
               // if stock exists in transport godown update stock with new quantity else insert new stock with quantity
         if($existing_stock_id) {
-            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty WHERE stock_id = $existing_stock_id";
+            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty,remark = 'stock added by un_load_transport -".$transport_dc_id."' WHERE stock_id = $existing_stock_id";
             if (!$conn->query($sql_update_stock)) {
                 throw new Exception("Error updating stock id $existing_stock_id in transport godown: " . $conn->error." query: $sql_update_stock");
             }
@@ -69,7 +69,7 @@ foreach ($stock_json as $stock) {
 
         
         // insert new stock in transport godown with quantity and get new stock id
-        $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id) VALUES ($part_id, $process_id, $des_godown, $qty, '$batch_id')";
+        $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id,remark) VALUES ($part_id, $process_id, $des_godown, $qty, '$batch_id','stock_added by un_load_transport -".$transport_dc_id."')";
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
             $distribution_stock_id = $new_stock_id;
