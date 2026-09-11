@@ -15,8 +15,7 @@ return $data;
  $sql = "with
     jcard_summary as (
         select
-            JSON_ARRAYAGG (
-                JSON_OBJECT (
+            JSON_ARRAYAGG(JSON_OBJECT(
                     'assign_date',
                     assign_date,
                     'shift',
@@ -79,8 +78,8 @@ return $data;
     ),
             laser_machine_summary as (
                 select
-                    JSON_ARRAYAGG (
-                        JSON_OBJECT (
+                    JSON_ARRAYAGG(
+                        JSON_OBJECT(
                             'handling_time',
                             lm.handling_time,
                             'run_time',
