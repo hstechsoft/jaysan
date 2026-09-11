@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
-  $mrf_request_id = test_input($_POST['mrf_request_id']);
+  $part_id = test_input($_POST['part_id']);
 $status = test_input($_POST['status']);
 
  
@@ -15,7 +15,7 @@ return $data;
 }
 
 
- $sql =  "UPDATE  mrf_request SET status =  $status WHERE mrf_request_id =  $mrf_request_id";
+ $sql =  "UPDATE  mrf_request SET status =  $status WHERE part_id =  $part_id and status = 'created'";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
