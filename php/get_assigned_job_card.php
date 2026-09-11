@@ -38,7 +38,8 @@ return $data;
             'job_card_id', job_card_id,
             'scarp_qty', scarp_qty,
             'finished_date', finished_date,
-            'operator_name', operator_name
+            'operator_name', operator_name,
+            'assigned_by_name', assigned_by_name
         )
     ) as job_card_details,
 

@@ -61,7 +61,9 @@ return $data;
                     'finished_date',
                     finished_date,
                     'operator_name',
-                    operator_name
+                    operator_name,
+                    'assigned_by_name',
+                    assigned_by_name
                 )
             ) as job_card_details,
     
