@@ -429,7 +429,7 @@ else {
     }
 
 // updated job_card table
-$sql = "UPDATE  laser_job_card SET operator_id='$opertor_id', status='finished', scarp_weight='$scarp_weight', scarp_qty='$scarp_qty', remark='$remark' WHERE job_card_id='$job_card_id'";
+$sql = "UPDATE  laser_job_card SET finished_date=NOW(), operator_id='$opertor_id', status='finished', scarp_weight='$scarp_weight', scarp_qty='$scarp_qty', remark='$remark' WHERE job_card_id='$job_card_id'";
 if ($conn->query($sql) === TRUE) {
     echo "ok";
 } else {
