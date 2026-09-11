@@ -129,6 +129,7 @@ group by
 
    select 
     nes_master.nesting_id,
+    nes_master.master_scarp_weight,
     nes_master.nesting_name,
     nes_master.material_id,
     nes_master.path,
