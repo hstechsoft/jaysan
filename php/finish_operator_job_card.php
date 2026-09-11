@@ -26,16 +26,19 @@ return $data;
 }
 $result_json = array();
 $material_id = 0;
+$scarp_part_id =0;
+
 try{
     $conn->begin_transaction();
 // get the material_id from the job_card_id
-$sql_material = "select nm.material_id from laser_job_card lcard
+$sql_material = "select nm.material_id,nm.scrap_part_id from laser_job_card lcard
 inner join nesting_details nd on lcard.nesting_details_id = nd.nesting_details_id
 inner join nesting_master nm on nd.nesting_id = nm.nes_master_id where lcard.job_card_id = '$job_card_id'";
 $result_material = $conn->query($sql_material);
 if ($result_material->num_rows > 0) {
     $row_material = $result_material->fetch_assoc();
     $material_id = $row_material['material_id'];
+    $scarp_part_id = $row_material['scrap_part_id'];
 } else {
     throw new Exception("Material not found for job card: " . $job_card_id);
 }
@@ -431,6 +434,14 @@ if ($conn->query($sql) === TRUE) {
     echo "ok";
 } else {
     throw new Exception("Error updating job card: " . $conn->error);
+}
+
+// insert scarp part into stock
+if($scarp_part_id > 0 && $scarp_qty > 0){
+    $sql_insert_scarp = "insert into jaysan_stock (part_id, qty, godown, dep, sec) values ('$scarp_part_id', '$scarp_qty', '$godown', '$dep', '$sec') on duplicate key update qty = qty + '$scarp_qty'";
+    if ($conn->query($sql_insert_scarp) !== TRUE) {
+        throw new Exception("Error inserting scarp part into stock: " . $conn->error);
+    }
 }
   $conn->commit();
 }catch(Exception $e){
