@@ -437,7 +437,7 @@ if ($conn->query($sql) === TRUE) {
 }
 
 // insert scarp part into stock
-if($scarp_part_id > 0 && $scarp_qty > 0){
+if($scarp_part_id > 0 ){
     $sql_insert_scarp = "insert into jaysan_stock (part_id, qty, godown, dep, sec) values ('$scarp_part_id', '$scarp_qty', '$godown', '$dep', '$sec') on duplicate key update qty = qty + '$scarp_qty'";
     if ($conn->query($sql_insert_scarp) !== TRUE) {
         throw new Exception("Error inserting scarp part into stock: " . $conn->error);
