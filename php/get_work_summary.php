@@ -433,6 +433,7 @@ GROUP BY
 
     summary1 as(SELECT summary.*,cumulative_process_time-(running_process_time-process_duration) as ftf FROM summary)
      SELECT summary1.qr_work_id,if(ftf > 0, if(cumulative_process_time - running_process_time > 0 ,0,  running_process_time - cumulative_process_time),process_duration) as free_time FROM summary1";
+     $result_json['sql_get_time'] = $sql_get_time;
 $result_time = $conn->query($sql_get_time);
 if ($result_time->num_rows > 0) {
     while($row = $result_time->fetch_assoc()) {
@@ -465,11 +466,11 @@ $sql_get_time = "  SELECT  time_diff(
         qr_work_entry.start_time,
         qr_work_entry.end_time,
         'minute'
-    ) - sum(work_time_per_unit*qty) > 0,  (ifnull(time_diff(
+    ) - sum(work_time_per_unit*qty) > 0,  (time_diff(
         qr_work_entry.start_time,
         qr_work_entry.end_time,
         'minute'
-    ), 0) - ifnull(sum(work_time_per_unit*qty), 0 ), 0) as free_time ,(SELECT sum(time_diff(qr1.start_time, qr1.end_time, 'minute')) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
+    ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(time_diff(qr1.start_time, qr1.end_time, 'minute')) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
      LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
      WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
     $result_json['sql_get_time'] = $sql_get_time;
