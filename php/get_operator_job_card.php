@@ -31,20 +31,11 @@ return $data;
 
 
  $sql = " select 
-    laser_job_card.assign_date,
-laser_job_card.shift,
-laser_job_card.machine_id,
-laser_job_card.assigned_by,
-laser_job_card.status,
-laser_job_card.scarp_weight,
-laser_job_card.job_card_id,
-laser_job_card.scarp_qty,
-laser_job_card.nesting_details_id,
-nesting_details_view.*
+*
 
 from
-   laser_job_card
-    left join  nesting_details_view on nesting_details_view.nesting_details_id = laser_job_card.nesting_details_id where $shift_query and $machine_id_query and $status_query";
+   job_card_view
+    inner join  nesting_details_view on nesting_details_view.nesting_details_id = job_card_view.nesting_details_id where $shift_query and $machine_id_query and $status_query";
 
 $result = $conn->query($sql);
 
