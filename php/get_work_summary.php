@@ -432,7 +432,7 @@ GROUP BY
      FROM work_details ORDER BY qr_work_id),
 
     summary1 as(SELECT summary.*,cumulative_process_time-(running_process_time-process_duration) as ftf FROM summary)
-     SELECT summary1.qr_work_id,if(ftf > 0, if(cumulative_process_time - running_process_time > 0 ,0,  running_process_time - cumulative_process_time),process_duration) as free_time FROM summary1";
+     SELECT summary1.qr_work_id,if(ftf > 0, if(cumulative_process_time - running_process_time > 0 ,0,  ifnull(running_process_time - cumulative_process_time, 0)),process_duration) as free_time FROM summary1";
      $result_json['sql_get_time'] = $sql_get_time;
 $result_time = $conn->query($sql_get_time);
 if ($result_time->num_rows > 0) {
@@ -440,6 +440,9 @@ if ($result_time->num_rows > 0) {
         $qr_id = $row['qr_work_id'];
         $free_time = $row['free_time'];
         if($free_time < 0) {
+            $free_time = 0;
+        }
+        if($free_time === null) {
             $free_time = 0;
         }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
