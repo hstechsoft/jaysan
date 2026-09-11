@@ -486,6 +486,9 @@ if ($result_time->num_rows > 0) {
         if($free_time < 0) {
             $free_time = 0;
         }
+        if($free_time === null) {
+            $free_time = 0;
+        }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
         $result_json['sql_update_free_time1'] = $sql_update_free_time;
         if ($conn->query($sql_update_free_time) !== TRUE) {

@@ -405,6 +405,10 @@ if ($result_time->num_rows > 0) {
         if($free_time < 0) {
             $free_time = 0;
         }
+
+        if($free_time === null) {
+            $free_time = 0;
+        }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
         if ($conn->query($sql_update_free_time) !== TRUE) {
             $conn->rollback();
@@ -442,6 +446,9 @@ if ($result_time->num_rows > 0) {
         $free_time = $row['free_time'] - ($row['total_qr_time'] + $total_break_duration_minutes);
         $result_json['free_time_cal'] = $row['free_time']. "-" . ($row['total_qr_time'] . " - " . $total_break_duration_minutes);
         if($free_time < 0) {
+            $free_time = 0;
+        }
+        if($free_time === null) {
             $free_time = 0;
         }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
