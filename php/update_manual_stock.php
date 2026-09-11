@@ -67,20 +67,20 @@ $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) 
 $stock_id = 0;
   if ($conn->query($sql) === TRUE) {
 
-    $stock_id = $conn->insert_id;
+//     $stock_id = $conn->insert_id;
 
 
-   require_once 'stock_distribution.php';
+//    require_once 'stock_distribution.php';
    
-   $result = stock_distribution($conn,$stock_id,$qty,$process_id);
-echo "\n result:".$result;
-   if ($result) {
-    //    echo "ok";
-   } else {
-       echo "error distributing stock".$result;
-   }
+//    $result = stock_distribution($conn,$stock_id,$qty,$process_id);
+// echo "\n result:".$result;
+//    if ($result) {
+//     //    echo "ok";
+//    } else {
+//        echo "error distributing stock".$result;
+//    }
 
-
+echo "ok";
 
 
   } else {
