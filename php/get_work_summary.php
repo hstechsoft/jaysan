@@ -256,6 +256,7 @@ $current_work_id = 0;
 if($qr_work_id > 0) {
     $current_work_id = $qr_work_id;
     $sql_update_qr_work_entry = "UPDATE qr_work_entry SET end_time = NOW(), work_sts = 'finished' WHERE qr_work_id = $qr_work_id";
+    $result_json['sql_update_qr_work_entry'] = $sql_update_qr_work_entry;
     if ($conn->query($sql_update_qr_work_entry) !== TRUE) {
         $conn->rollback();
         $result_json['message'] = "Error updating QR work entry: " . $conn->error;
