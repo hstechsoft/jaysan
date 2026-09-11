@@ -41,7 +41,8 @@ return $data;
             'operator_name', operator_name
         )
     ) as job_card_details,
-
+laser_machine_summary as(select JSON_ARRAYAGG(JSON_OBJECT('handling_time', lm.handling_time, 'run_time', lm.run_time, 'machine_name', jm.machine_name,'laser_machine_id', lm.laser_machine_id,'jmid', lm.jmid)) as laser_machine_details, nes_master_id from laser_machine lm
+inner join jaysan_machine jm on  jm.jmid = lm.jmid GROUP BY lm.nes_master_id),
    sum(ifnull(run_time, 0)) as total_run_time,
    sum(ifnull(handling_time, 0)) as total_handling_time,
     sum(ifnull(qty, 0)) as total_qty,
@@ -72,10 +73,13 @@ ndv.nesting_parts_details,
  ifnull(jc.total_scarp_qty, 0) as total_scarp_qty,
  ifnull(jc.total_qty, 0) as assigned_qty,
  ndv.material_qty - ifnull(jc.total_qty, 0) as remaining_unassigned_qty,
- ifnull(jc.total_run_time, 0) + ifnull(jc.total_handling_time, 0) as total_time
+ ifnull(jc.total_run_time, 0) + ifnull(jc.total_handling_time, 0) as total_time,
+ lms.laser_machine_details
   from nesting_details_view ndv
   
- left JOIN jcard_summary jc on ndv.nesting_details_id = jc.nesting_details_id where  ndv.material_qty - ifnull(jc.total_qty, 0) > 0";
+ left JOIN jcard_summary jc on ndv.nesting_details_id = jc.nesting_details_id 
+ left join laser_machine_summary lms on ndv.nesting_id = lms.nes_master_id
+ where  ndv.material_qty - ifnull(jc.total_qty, 0) > 0";
 
 $result = $conn->query($sql);
 
