@@ -107,7 +107,6 @@ from stock_rv WHERE part_id IS NOT NULL
 group by part_id,
 process_id limit 50";
 
-echo $sql;
 
 
 
