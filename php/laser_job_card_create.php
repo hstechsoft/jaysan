@@ -73,7 +73,7 @@ if($qty <= 0) {
 }
 
 for($i = 0; $i < $qty; $i++) {
- $sql = "INSERT INTO laser_job_card ( machine_id,shift,assign_date,assigned_by,status,nesting_details_id,qty) VALUES ($  $laser_machine_id ,'$shift','$assign_date','$assigned_by','created',$nesting_details_id,1)";
+ $sql = "INSERT INTO laser_job_card ( machine_id,shift,assign_date,assigned_by,status,nesting_details_id,qty) VALUES ($laser_machine_id ,'$shift','$assign_date','$assigned_by','created',$nesting_details_id,1)";
 
   if ($conn->query($sql) === TRUE) {
   
