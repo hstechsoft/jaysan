@@ -65,6 +65,7 @@ $production_id = 'NULL';
 // if qr_work_id is not null then get current sts 
 if($qr_work_id > 0) {
 $sql_get_sts_qr = "SELECT production_id from qr_work_entry where qr_work_id = $qr_work_id and production_id is not null and work_sts = 'in-process'";
+$result_json['sql_get_sts_qr'] = $sql_get_sts_qr;
 $result_qr_sts = $conn->query($sql_get_sts_qr);
 if ($result_qr_sts->num_rows > 0) {
    $production_id = $result_qr_sts->fetch_assoc()['production_id'];
@@ -441,6 +442,7 @@ if ($result_time->num_rows > 0) {
             $free_time = 0;
         }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        $result_json['sql_update_free_time'] = $sql_update_free_time;
         if ($conn->query($sql_update_free_time) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error updating free time: " . $conn->error;
@@ -470,6 +472,7 @@ $sql_get_time = "  SELECT  time_diff(
     ) ) - sum(work_time_per_unit*qty), 0 ) as free_time ,(SELECT sum(time_diff(qr1.start_time, qr1.end_time, 'minute')) FROM qr_work_entry qr1 WHERE  work_done_id = $work_done_id and production_id >  0 and qr1.end_time is not null and qr1.start_time >= qr_work_entry.start_time and qr1.end_time <= qr_work_entry.end_time) as total_qr_time FROM qr_work_entry 
      LEFT join work_process on qr_work_entry.qr_work_id = work_process.current_work_id
      WHERE qr_work_id = $current_work_id group by qr_work_entry.qr_work_id";
+    $result_json['sql_get_time'] = $sql_get_time;
 $result_time = $conn->query($sql_get_time);
 if ($result_time->num_rows > 0) {
     while($row = $result_time->fetch_assoc()) {
@@ -480,6 +483,7 @@ if ($result_time->num_rows > 0) {
             $free_time = 0;
         }
         $sql_update_free_time = "update qr_work_entry set free_time = $free_time where qr_work_id = $qr_id";
+        $result_json['sql_update_free_time1'] = $sql_update_free_time;
         if ($conn->query($sql_update_free_time) !== TRUE) {
             $conn->rollback();
             $result_json['message'] = "Error updating free time: " . $conn->error;
