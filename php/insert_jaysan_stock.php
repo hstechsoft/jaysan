@@ -7,7 +7,7 @@ $sec = ($_GET['sec']);
 $part_id = test_input($_GET['part_id']);
 $batch_id = test_input($_GET['batch_id']);
 $qty = test_input($_GET['qty']);
-$remark = isset($_GET['remark']) && $_GET['remark'] != '' ? test_input($_GET['remark']) : "''";
+$remark = isset($_GET['remark']) && $_GET['remark'] != '' ? test_input($_GET['remark']) : "'stock added manually'";
 $finished_godown = ($_GET['finished_godown']);
 $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);

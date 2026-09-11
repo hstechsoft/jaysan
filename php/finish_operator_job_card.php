@@ -92,7 +92,7 @@ if($laser_process_part != "NULL")
     }
 
 
-  $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id,part_id) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id', $laser_process_part) ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
+  $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id,part_id,remark) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id', $laser_process_part,'stock_added  by laser -".$job_card_id."') ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
 
   if ($conn->query($sql_insert_output) === TRUE) {
       $stock_id = $conn->insert_id;
@@ -294,7 +294,7 @@ if ($conn->query($sql_stock_update) !== TRUE) {
 }
 else {
     // insert 0-qty
-    $sql_insert_stock = "insert into jaysan_stock (part_id, godown, dep, sec, qty) values ($material_id, $godown, $dep, $sec, 0-$material_weight) on duplicate key update qty = qty - $material_weight";
+    $sql_insert_stock = "insert into jaysan_stock (part_id, godown, dep, sec, qty,remark) values ($material_id, $godown, $dep, $sec, 0-$material_weight,'stock_added  by laser -".$job_card_id."') on duplicate key update qty = qty - $material_weight";
     if ($conn->query($sql_insert_stock) !== TRUE) {
         $result_json['message'] = "Error inserting stock: " . $conn->error;
         echo json_encode($result_json);
@@ -438,7 +438,7 @@ if ($conn->query($sql) === TRUE) {
  
 // insert scarp part into stock
 if($scarp_part_id > 0 ){
-    $sql_insert_scarp = "insert into jaysan_stock (part_id, qty, godown, dep, sec) values ('$scarp_part_id', '$scarp_qty', '$godown', '$dep', '$sec') on duplicate key update qty = qty + '$scarp_qty'";
+    $sql_insert_scarp = "insert into jaysan_stock (part_id, qty, godown, dep, sec,remark) values ('$scarp_part_id', '$scarp_qty', '$godown', '$dep', '$sec','scarp stock_added by laser -".$job_card_id."') on duplicate key update qty = qty + '$scarp_qty'";
     if ($conn->query($sql_insert_scarp) !== TRUE) {
         throw new Exception("Error inserting scarp part into stock: " . $conn->error);
     }
