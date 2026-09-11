@@ -63,7 +63,7 @@ if($part_id > 0 && $part_id != "NULL")
 
 $sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  qty + $qty, remark = '$remark' ";
 
-//  echo $sql;
+  echo $sql;
 $stock_id = 0;
   if ($conn->query($sql) === TRUE) {
 
