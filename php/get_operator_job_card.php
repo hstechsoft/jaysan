@@ -8,15 +8,15 @@ $shift_query = 1;
 $machine_id_query = 1;
 
 if($status != 'all'){
-  $status_query = "laser_job_card.status = '$status'";
+  $status_query = "job_card_view.status = '$status'";
 }
 
 if($shift != 'all'){
-  $shift_query = "laser_job_card.shift = '$shift'";
+  $shift_query = "job_card_view.shift = '$shift'";
 }
 
 if($machine_id != 'all'){
-  $machine_id_query = "laser_job_card.machine_id = $machine_id";
+  $machine_id_query = "job_card_view.jmid = $machine_id";
 }
 
 
