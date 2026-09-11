@@ -40,11 +40,11 @@ laser_job_card.scarp_weight,
 laser_job_card.job_card_id,
 laser_job_card.scarp_qty,
 laser_job_card.nesting_details_id,
-nesting_view.*
+nesting_details_view.*
 
 from
    laser_job_card
-    left join  nesting_view on nesting_view.nesting_details_id = laser_job_card.nesting_details_id where $shift_query and $machine_id_query and $status_query";
+    left join  nesting_details_view on nesting_details_view.nesting_details_id = laser_job_card.nesting_details_id where $shift_query and $machine_id_query and $status_query";
 
 $result = $conn->query($sql);
 
