@@ -20,7 +20,10 @@ $part  = "%" .  $part ."%";
 
 
 
-$sql = "select process_id,output_part,final_part from jaysan_process_view WHERE final_part LIKE  '$part'";
+$sql = "with full_part as(select process_id,output_part,final_part from jaysan_process_view
+union ALL
+select null as process_id,part_id as output_part, part_name as final_part from parts_tbl where part_id not in (select ifnull(output_part,0) from jaysan_process_view))
+select * from full_part WHERE final_part LIKE  '$part'";
 
 
 $result = $conn->query($sql);
