@@ -117,7 +117,8 @@ with jcard as (select
     scarp_qty,
     nesting_details_id,
     finished_date,
-    operator_name from job_card_view where $jobcard_shift_query and $laser_machine_query and $job_card_sts_query and $job_card_assigned_by_query and $job_card_assigned_date_query and $job_card_finished_date_query and $job_card_finished_emp_query ),
+    operator_name,
+    assigned_by_name from job_card_view where $jobcard_shift_query and $laser_machine_query and $job_card_sts_query and $job_card_assigned_by_query and $job_card_assigned_date_query and $job_card_finished_date_query and $job_card_finished_emp_query ),
     jcard_summary as (select 
     JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -143,7 +144,8 @@ with jcard as (select
             'job_card_id', job_card_id,
             'scarp_qty', scarp_qty,
             'finished_date', finished_date,
-            'operator_name', operator_name
+            'operator_name', operator_name,
+            'assigned_by_name', assigned_by_name
         )
     ) as job_card_details,
 
