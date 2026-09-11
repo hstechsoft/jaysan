@@ -172,7 +172,9 @@ ndv.nesting_parts_details,
  ndv.nesting_details_id,
  ndv.created_by_name,
  ndv.created_by,
- ndv.material_qty
+ ndv.material_qty,
+ ndv.master_scarp_weight,
+ ndv.raw_material_weight
          from nesting_details_view ndv WHERE  $nesting_details_id_query and $nesting_id_query and $raw_material_id_query and $laser_work_created_emp_query
     ),
     jc_unassign as(
@@ -193,6 +195,8 @@ ls.nesting_parts_details,
  ls.created_by_name,
  ls.created_by,
  ls.material_qty,
+ ls.master_scarp_weight,
+ ls.raw_material_weight,
  jc.job_card_details,
  ifnull(jc.total_run_time, 0) as total_run_time,
  ifnull(jc.total_handling_time, 0) as total_handling_time,
