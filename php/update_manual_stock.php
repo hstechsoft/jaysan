@@ -9,6 +9,7 @@
     $process_id = test_input($_POST['process_id']);
 
 $qty = test_input($_POST['qty']);
+ $manual_part_id  = isset($_POST['manual_part_id']) ? test_input($_POST['manual_part_id']) : 'no';
 
 
 
@@ -20,6 +21,7 @@ $sec = sql_nullable($sec);
 $process_id = sql_nullable($process_id);
 
 
+
  $remark = "Stock manually updated";
  
 function test_input($data) {
@@ -29,9 +31,10 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
-
+$part_id = null;
 
 // get part id from process_wel_tbl
+if($manual_part_id == 'no') {
 
 $get_part_id_sql = "SELECT output_part FROM process_wel_tbl WHERE process_id <=> $process_id";
 $result = $conn->query($get_part_id_sql);
@@ -44,11 +47,12 @@ if ($result->num_rows > 0) {
     $conn->close();
     exit();
 }
+}
+else
+    {
+        $part_id = sql_nullable($manual_part_id);
+    }
 
-// output partis  > 0 then process_id is null
-echo "Part ID: " . $part_id . "\n";
-// check part_id not null
-echo $process_id . "\n";
 if($part_id > 0 && $part_id != "NULL")
     {
  $process_id = "NULL";
