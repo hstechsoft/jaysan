@@ -158,6 +158,66 @@ $(document).ready(function () {
 
     });
 
+    $('#scrap_material_id').on('input', function () {
+
+
+        $(this).data("part_id", '');
+
+
+        //check the value not empty
+        if ($('#scrap_material_id').val() != "") {
+            $('#scrap_material_id').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_part_name_auto_wel.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            part: $("#scrap_material_id").val(),
+                            term: ""
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    console.log(ui.item.id);
+
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
     $('#nested_parts').on('input', function () {
 
 
@@ -469,8 +529,15 @@ $(document).ready(function () {
             salert('warning', 'Please Fill All Fields.', 'warning');
             return;
         }
+        else if (nes_master_id > 0) {
+            // $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-jmid="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+            insert_laser_machine(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id);
+
+            // $("#godown, #department, #section, #machine, #run_timee, #handling_time").val('').removeData("godown_id").removeData("dept_id").removeData("sec_id").removeData("mach_id");
+        }
         else {
-            $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-machine_id="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+            $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-jmid="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+
 
             $("#godown, #department, #section, #machine, #run_timee, #handling_time").val('').removeData("godown_id").removeData("dept_id").removeData("sec_id").removeData("mach_id");
         }
@@ -501,6 +568,7 @@ $(document).ready(function () {
                 // }
                 // else {
                 row.remove();
+                $("#nesting_name").val('');
                 //   scrap_weight();
                 // }
                 // scrap_weight();
@@ -521,12 +589,12 @@ $(document).ready(function () {
         let update_btn = $("#update_nesting_btn").hasClass("d-none") ? 1 : 0;
 
 
-        if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && nested_part_weight > 0 && update_btn == 0 && $("#update_nesting_btn").val() > 0) {
+        // if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && nested_part_weight > 0 && update_btn == 0 && $("#update_nesting_btn").val() > 0) {
 
-            update_nesting_parts($("#update_nesting_btn").val(), nested_part_id, nested_part_qty, nested_part_weight)
-        }
+        //     update_nesting_parts($("#update_nesting_btn").val(), nested_part_id, nested_part_qty, nested_part_weight)
+        // }
 
-        else if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && nested_part_weight > 0 && update_btn == 1) {
+        if (nested_part_id !== "" && nested_part !== "" && nested_part_qty !== "" && nested_part_qty > 0 && nested_part_weight > 0 && update_btn == 1) {
 
 
             $("#nesting_parts_tbody").append(`<tr data-total_weight="${total_weight}" data-part_id=${nested_part_id}><td>${nested_part}</td><td>${nested_part_qty}</td><td>${nested_part_weight}</td><td><button class='btn btn-outline-danger btn-sm delete_btn'><i class='fa fa-trash'></i></button></td></tr>`);
@@ -565,9 +633,9 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 row.remove();
                 $("#nesting_name").val('');
-                if (nes_part_id > 0 && update_btn == 0) {
-                    delete_nesting_parts(nes_part_id);
-                }
+                // if (nes_part_id > 0 && update_btn == 0) {
+                //     delete_nesting_parts(nes_part_id);
+                // }
             }
         });
 
@@ -577,6 +645,7 @@ $(document).ready(function () {
 
         let nesting_name = $("#nesting_name").val() || '';
         let material_id = $("#material_id").data("part_id") || 0;
+        let scrap_part_id = $("#scrap_material_id").data("part_id") || 0;
         let material_qty = $("#material_qty").val() || 0;
         let run_time = $("#run_time").val() || 0;
         let std_length = $("#dimension").val() || '';
@@ -594,18 +663,39 @@ $(document).ready(function () {
                 })
             })
         }
+        var laser_machines = [];
 
-        console.log(nesting_name, material_id, material_qty,  std_length, weight, scrap_weight, nested_arr);
+        console.log($("#nesting_machine_tbody").html());
+
+
+        $("#nesting_machine_tbody tr").each(function () {
+            var jmid = $(this).data("jmid") || 0;
+            var godown = $(this).data("godown_id") || 0;
+            var dep = $(this).data("department_id") || 0;
+            var sec = $(this).data("section_id") || 0;
+            var run_timee = $(this).find("td").eq(1).text();
+            var handling_time = $(this).find("td").eq(2).text();
+
+            if (jmid > 0 && godown > 0 && dep > 0 && sec > 0 && run_timee > 0 && handling_time > 0) {
+                laser_machines.push({ jmid: jmid, godown: godown, dep: dep, sec: sec, run_time: run_timee, handling_time: handling_time })
+            }
+            else {
+                salert("Warning", "Data Missing!, Try Again.", "warning");
+            }
+        })
+
+        console.log(nesting_name, material_id, material_qty, std_length, weight, scrap_weight, nested_arr, laser_machines, scrap_part_id);
 
         let file = $("#nest_file")[0].files[0];
 
-        if (nesting_name != '' && material_id > 0 && material_qty > 0 && std_length != '' && weight > 0 && nested_arr.length > 0) {
+        if (nesting_name != '' && material_id > 0 && material_qty > 0 && std_length != '' && weight > 0 && nested_arr.length > 0 && laser_machines.length > 0 && scrap_part_id > 0) {
 
             let formData = new FormData();
 
             formData.append("created_by", created_by);
             formData.append("nesting_name", nesting_name);
             formData.append("material_id", material_id);
+            formData.append("scrap_part_id", scrap_part_id);
             formData.append("material_qty", material_qty);
             formData.append("run_time", run_time);
             formData.append("weight", weight);
@@ -615,6 +705,7 @@ $(document).ready(function () {
 
 
             formData.append("laser_parts", JSON.stringify(nested_arr));
+            formData.append("laser_machines", JSON.stringify(laser_machines));
 
             formData.append("file", file);
 
@@ -629,7 +720,7 @@ $(document).ready(function () {
     });
 
 
-    $("#material_id, #run_time, #weight, #scrap_weight, #dimension, #nest_file, #nested_parts, #nested_part_qty, #nested_part_weight").on("change", function () {
+    $("#material_id, #run_time, #weight, #scrap_weight, #scrap_material_id, #dimension, #nest_file, #nested_parts, #nested_part_qty, #nested_part_weight, #machine, #run_timee, #handling_time").on("change", function () {
         $("#nesting_name").val('');
     });
 
@@ -734,7 +825,7 @@ $(document).ready(function () {
         let file = $("#nest_file")[0].files[0];
         console.log(nesting_id, nesting_name, material_id, material_qty, weight, scrap_weight, nested_arr, file);
 
-        if (nesting_id > 0 && nesting_name && material_id && material_qty &&  weight > 0 && nested_arr.length > 0) {
+        if (nesting_id > 0 && nesting_name && material_id && material_qty && weight > 0 && nested_arr.length > 0) {
 
             let formData = new FormData();
 
@@ -790,29 +881,29 @@ function scrap_weight() {
 
 }
 
-function delete_nesting_parts(nes_part_id) {
+// function delete_nesting_parts(nes_part_id) {
 
-    console.log(nes_part_id);
+//     console.log(nes_part_id);
 
-    $.ajax({
-        url: "php/delete_nesting_parts.php",
-        type: "POST",
-        data: {
-            nes_part_id: nes_part_id,
-        },
-        success: function (response) {
-            console.log(response);
+//     $.ajax({
+//         url: "php/delete_nesting_parts.php",
+//         type: "POST",
+//         data: {
+//             nes_part_id: nes_part_id,
+//         },
+//         success: function (response) {
+//             console.log(response);
 
-            if (response.trim() == "ok") {
+//             if (response.trim() == "ok") {
 
-            }
-        },
-        error: function (xhr) {
-            console.log(xhr);
-        }
-    });
+//             }
+//         },
+//         error: function (xhr) {
+//             console.log(xhr);
+//         }
+//     });
 
-}
+// }
 
 function delete_laser_assign(nesting_details_id) {
 
@@ -989,6 +1080,21 @@ function get_nesting_master1(nes_master_id) {
                             parts += `</ul>`;
                         };
 
+                        var laser_machine_summary = JSON.parse(item.laser_machine_summary) || '';
+                        var machines = ``;
+
+                        if (laser_machine_summary != '') {
+                            machines = `<ul class="list-group">`;
+                            laser_machine_summary.forEach(function (m) {
+
+                                machines += `<li class="list-group-item p-1"><strong class='small'>${m.machine_name}</strong> <br> <span class='badge bg-primary'>${m.run_time} Run Time</span><span class='badge bg-secondary'> ${m.handling_time} Handling Time</span></li>`;
+
+                            });
+
+                            machines += `</ul>`;
+                        };
+
+
 
                         var stock_info = JSON.parse(item.stock_info) || '';
                         var stock = ``;
@@ -1002,9 +1108,9 @@ function get_nesting_master1(nes_master_id) {
                         $("#nesting_details_tbody").append(`
                             <tr>
                                 <td>${count}</td><td>${item.nesting_name}</td>
-                                <td>${item.nesting_material}</td>
+                                <td>${item.nesting_material}<p class="p-1 badge bg-secondary ">${item.scrap_part_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></td>
                                 <td>${stock}</td>
-                                <td>${item.run_time}</td>
+                                <td>${machines}</td>
                                 <td>${item.std_length}</td>
                                 <td>${parts}</td>
                                 <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
@@ -1018,7 +1124,7 @@ function get_nesting_master1(nes_master_id) {
                     })
                 }
                 else {
-                    $("#nesting_details_tbody").append(`<tr><td colspan='7' class='text-center text-dange'>No Standard Nesting Found.</td></tr>`);
+                    $("#nesting_details_tbody").append(`<tr><td colspan='9' class='text-center text-dange'>No Standard Nesting Found.</td></tr>`);
                 }
             }
             else {
@@ -1080,15 +1186,33 @@ function get_nesting_master_single1(nes_master_id) {
                         }
 
 
+                        var laser_machine_summary = JSON.parse(item.laser_machine_summary) || '';
+                        var machines = ``;
+
+                        if (laser_machine_summary != '') {
+                            $("#nesting_machine_tbody").empty();
+
+                            laser_machine_summary.forEach(function (m) {
+
+                                machines += `<tr  data-godown_id="${m.godown_id}" data-department_id="${m.dep_id}" data-section_id="${m.dep_sec_id}" data-jmid="${m.jmid}"><td>${m.machine_name} </td><td>${m.run_time} </td><td>${m.handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${m.laser_machine_id}><i class='fa fa-trash'></i></button></td></tr>`;
+
+                            });
+
+                            $("#nesting_machine_tbody").append(machines);
+
+                        };
+
+
+
                         $("#nesting_name").val(item.nesting_name);
                         $("#material_id").data("part_id", item.material_id).val(item.nesting_material);
-                        $("#run_time").val(item.run_time);
+                        $("#scrap_material_id").data("part_id", item.scrap_part_id).val(item.scrap_part_name);
                         $("#dimension").val(item.std_length);
                         $("#weight").val(item.weight);
                         $("#scrap_weight").val(item.scarp_weight);
 
                         $("#view_file").val(item.path);
-                        $("#update_nesting_btn, #nested_part_add_btn").val(item.nesting_id)
+                        $("#update_nesting_btn, #nested_part_add_btn, #nested_machine_add_btn").val(item.nesting_id)
 
                     })
                 }
@@ -1128,6 +1252,7 @@ function get_nesting_details() {
         },
         success: function (response) {
             console.log(response);
+            console.log(typeof (response));
 
             if (response.trim() != "error") {
 
@@ -1138,43 +1263,249 @@ function get_nesting_details() {
                     var obj = JSON.parse(response);
 
                     obj.forEach(function (item, index) {
+
                         index++;
 
                         let nesting = JSON.parse(item.nesting_parts_details);
+
                         let nesting_parts_details = '<ul class="list-group">';
-                        nesting.forEach(function (obj) {
 
-                            nesting_parts_details += `<li class="list-group-item p-1">${obj.part_name} <span class='badge bg-secondary'>${obj.qty} Qty</span></li>`;
-                        })
+                        nesting.forEach(function (part) {
 
-                        nesting_parts_details += `</ul>`;
+                            nesting_parts_details += `
+                                <li class="list-group-item p-1">
+                                    ${part.part_name}
+                                    <span class="badge bg-secondary">
+                                        ${part.qty} Qty
+                                    </span>
+                                </li>
+                            `;
+                        });
 
 
-                        $("#work_nesting_details_tbody").append(`
-                            <tr>
-                                <td>${index}</td>
-                                <td>${item.nesting_name}</td>
-                                <td>${item.material_name}</td>
-                                <td>
-                                   <div class='d-flex justify-content-between'><span class='badge bg-success' title='Total Qty: ${item.material_qty}'>${item.material_qty}</span>
-                                    <span class='badge bg-primary' title='Assigned Qty: ${item.total_assigned_qty}'>${item.total_assigned_qty}</span><span class='badge bg-danger' title='Remaining Qty: ${item.remaining_qty}'>${item.remaining_qty}</span></div>
-                                </td>
-                                <td>${item.run_time}</td>
-                                <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</td>
-                                <td>${item.emp_name}</td>
-                                <td>${nesting_parts_details}</td>
-                                <td>
-                                    <div  class='d-flex justify-content-between'>
-                                        <button type="button" class="btn btn-outline-primary btn-sm view_btn me-2" data-path="${item.path}">
-                                            <i class="fa-solid fa-eye fa-beat"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm  delete_btn" data-nesting_details_id='${item.nesting_details_id}' value='${item.job_card_id}'>
-                                            <i class='fa fa-trash fa-beat'></i>
-                                        </button>
-                                    </div>    
-                                </td>
-                            </tr>
-                        `);
+                        nesting_parts_details += '</ul>';
+
+
+                        let nesting_assign_details = JSON.parse(item.nesting_assign_details);
+
+                        let mut_laser_length = nesting_assign_details.length;
+
+                        let nesting_assign_detail = '';
+
+
+                        nesting_assign_details.forEach(function (ndetls, i) {
+
+                            let laser_assigned_details = ndetls.laser_assigned_details;
+
+                            let ldetls = '';
+
+
+                            if (
+                                ndetls.total_assigned_qty > 0 &&
+                                Array.isArray(laser_assigned_details)
+                            ) {
+
+                                laser_assigned_details.forEach(function (idtl) {
+
+                                    ldetls += `
+                                        <div class="small mb-1">
+
+                                            <span class="badge bg-info">
+                                                ${idtl.machine_name ?? '-'}
+                                            </span>
+
+                                            <span class="badge bg-secondary">
+                                                ${idtl.shift ?? '-'}
+                                            </span>
+
+                                            <span class="badge bg-success">
+                                                Qty: ${idtl.scarp_qty ?? 0}
+                                            </span>
+
+                                        </div>
+                                    `;
+                                });
+
+                            } else {
+
+                                ldetls = `
+                                    <span class="badge bg-light text-dark">
+                                        Not Assigned
+                                    </span>
+                                `;
+                            }
+
+
+                            if (i === 0) {
+
+                                nesting_assign_detail += `
+                                    <tr>
+
+                                        <!-- Index -->
+                                        <td rowspan="${mut_laser_length}">
+                                            ${index}
+                                        </td>
+
+
+                                        <!-- Nesting Name -->
+                                        <td rowspan="${mut_laser_length}">
+                                            ${item.nesting_name}
+                                        </td>
+
+
+                                        <!-- Material -->
+                                        <td rowspan="${mut_laser_length}">
+
+                                            ${item.material_name}
+
+                                            <span class="badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark' }">
+                                                ${item.nesting_type}
+                                            </span>
+
+                                            <p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.master_scarp_weight ?? 0} Kg</span></p>
+
+                                        </td>
+
+
+                                        <!-- Parts -->
+                                        <td rowspan="${mut_laser_length}">
+                                            ${nesting_parts_details}
+                                        </td>
+
+
+                                        <!-- Material Quantity -->
+                                        <td>
+
+                                            <div class="d-flex justify-content-between">
+
+                                                <span
+                                                    class="badge bg-success"
+                                                    title="Total Qty: ${ndetls.material_qty}">
+                                                    ${ndetls.material_qty}
+                                                </span>
+
+                                                <span
+                                                    class="badge bg-primary"
+                                                    title="Assigned Qty: ${ndetls.total_assigned_qty}">
+                                                    ${ndetls.total_assigned_qty}
+                                                </span>
+
+                                                <span
+                                                    class="badge bg-danger"
+                                                    title="Remaining Qty: ${ndetls.remaining_qty}">
+                                                    ${ndetls.remaining_qty}
+                                                </span>
+
+                                            </div>
+
+                                            <span class="">${ndetls.created_by_name}</span>
+
+                                        </td>
+
+
+                                        <!-- Laser Details -->
+                                        <td>
+                                            ${ldetls}
+                                        </td>
+
+
+                                        <!-- Delete -->
+                                        <td>
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-outline-danger btn-sm delete_btn"
+                                                data-nesting_details_id="${ndetls.nesting_details_id}">
+
+                                                <i class="fa fa-trash fa-beat"></i>
+
+                                            </button>
+
+                                        </td>
+
+                                        <td rowspan="${mut_laser_length}">
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-outline-primary btn-sm view_btn"
+                                                data-path="${item.path}">
+
+                                                <i class="fa fa-eye fa-beat"></i>
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+                                `;
+
+                            }
+
+                            else {
+
+                                nesting_assign_detail += `
+                                    <tr>
+
+                                        <!-- Material Quantity -->
+                                        <td>
+
+                                            <div class="d-flex justify-content-between">
+
+                                                <span
+                                                    class="badge bg-success"
+                                                    title="Total Qty: ${ndetls.material_qty}">
+                                                    ${ndetls.material_qty}
+                                                </span>
+
+                                                <span
+                                                    class="badge bg-primary"
+                                                    title="Assigned Qty: ${ndetls.total_assigned_qty}">
+                                                    ${ndetls.total_assigned_qty}
+                                                </span>
+
+                                                <span
+                                                    class="badge bg-danger"
+                                                    title="Remaining Qty: ${ndetls.remaining_qty}">
+                                                    ${ndetls.remaining_qty}
+                                                </span>
+
+                                            </div>
+
+                                            <span class="">${ndetls.created_by_name}</span>
+
+                                        </td>
+
+
+                                        <!-- Laser Details -->
+                                        <td>
+                                            ${ldetls}
+                                        </td>
+
+                                        <!-- Delete -->
+                                        <td>
+
+                                            <button
+                                                type="button"
+                                                class="btn btn-outline-danger btn-sm delete_btn"
+                                                data-nesting_details_id="${ndetls.nesting_details_id}">
+
+                                                <i class="fa fa-trash fa-beat"></i>
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+                                `;
+                            }
+
+                        });
+
+
+                        $("#work_nesting_details_tbody").append(
+                            nesting_assign_detail
+                        );
+
                     });
 
                 }

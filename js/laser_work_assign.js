@@ -32,7 +32,7 @@ $(document).ready(function () {
         });
     });
 
-    
+
     $("#assigned_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
@@ -53,7 +53,7 @@ $(document).ready(function () {
     get_unassigned_job_card('');
     get_assigned_job_card();
 
-    get_all_machine();
+    // get_all_machine();
 
     $("#nesting_job_card_tbody, .nesting_job_card_mobile").on("click", ".view_btn", function () {
         let path = $(this).data("path");
@@ -66,9 +66,22 @@ $(document).ready(function () {
         let machine_id = $(this).data("machine_id");
         let nesting_details_id = $(this).data("nesting_details_id");
         let remaining_qty = $(this).data("remaining_qty") || 0;
+        let laser_machine_details = $(this).data("laser_machine_details") || '';
+        console.log(laser_machine_details);
 
-        if (machine_id && nesting_details_id && remaining_qty > 0) {
-            $("#assign_Work_btn").data("machine_id", machine_id);
+        if (laser_machine_details != '') {
+            // laser_machine_details = JSON.parse(laser_machine_details);
+            $("#machine").empty();
+            $("#machine").append(`<option selected disabled value="">Choose...</option>`);
+
+            laser_machine_details.forEach(function (item) {
+                $("#machine").append(`<option value="${item.laser_machine_id}">${item.machine_name} "Run Time : " ${item.run_time} "- Handling Time : " ${item.handling_time}</option>`);
+            })
+        }
+
+
+        if (nesting_details_id && remaining_qty > 0) {
+            // $("#assign_Work_btn").data("machine_id", machine_id);
             $("#assign_Work_btn").data("nesting_details_id", nesting_details_id);
             $("#qty").data("remaining_qty", remaining_qty);
 
@@ -238,18 +251,19 @@ function get_unassigned_job_card(show_all) {
                                 <td>${item.material_name}</td>
                                 <td>
                                     <span class='badge bg-success'>Total: ${item.material_qty}</span>
-                                    <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
-                                    <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
+                                    <span class='badge bg-primary'>Assigned: ${item.assigned_qty}</span>
+                                    <span class='badge bg-danger'>Remaining: ${item.remaining_unassigned_qty}</span>
                                 </td>
-                                <td>${item.run_time}</td>
+                                <td><span class='badge bg-primary' title='Run Time'>${item.total_run_time}</span> <span class='badge bg-secondary' title='Handling Time'>${item.total_handling_time}</span></td>
                                 <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
-                                <td>${item.emp_name}</td>
+                                <td>${item.master_created_name}</td>
                                 <td>
                                     <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
                                     <button class="btn btn-outline-secondary btn-sm allocate_btn" 
                                         data-nesting_details_id="${item.nesting_details_id}" 
                                         data-machine_id="${item.machine_id}"
-                                        data-remaining_qty="${item.remaining_qty}">
+                                        data-remaining_qty="${item.remaining_unassigned_qty}"
+                                        data-laser_machine_details='${item.laser_machine_details}'>
                                         Allocate
                                     </button>
                                 </td>
@@ -270,13 +284,13 @@ function get_unassigned_job_card(show_all) {
 
                                     <div class="mb-2">
                                         <span class='badge bg-success'>Total: ${item.material_qty}</span>
-                                        <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
-                                        <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
+                                        <span class='badge bg-primary'>Assigned: ${item.assigned_qty}</span>
+                                        <span class='badge bg-danger'>Remaining: ${item.remaining_unassigned_qty}</span>
                                     </div>
 
                                     <div class="d-flex justify-content-between small mb-2">
-                                        <span>⏱ ${item.run_time}</span>
-                                        <span>👤 ${item.emp_name}</span>
+                                        <span>⏱ <span class='badge bg-primary' title='Run Time'>${item.total_run_time}</span> <span class='badge bg-secondary' title='Handling Time'>${item.total_handling_time}</span></span>
+                                        <span>👤 ${item.master_created_name}</span>
                                     </div>
 
                                     <div class="small mb-2">
@@ -290,7 +304,8 @@ function get_unassigned_job_card(show_all) {
                                         <button class="btn btn-sm btn-secondary w-50 allocate_btn btn-sm" 
                                             data-nesting_details_id="${item.nesting_details_id}" 
                                             data-machine_id="${item.machine_id}"
-                                            data-remaining_qty="${item.remaining_qty}">
+                                            data-remaining_qty="${item.remaining_unassigned_qty}
+                                            data-laser_machine_details='${item.laser_machine_details}'>
                                             Allocate
                                         </button>
                                     </div>
@@ -339,26 +354,26 @@ function get_assigned_job_card() {
                         index++;
 
 
-                        var work = JSON.parse(item.laser_assigned_details);
+                        var work = JSON.parse(item.job_card_details);
 
                         work.forEach(function (obj) {
 
 
-                                $("#assinged_nesting_job_card_tbody").append(`
+                            $("#assinged_nesting_job_card_tbody").append(`
                                 <tr>
                                     <td>${index}</td>
                                     <td>${item.nesting_name}</td>
-                                    <td>${item.material_name}</td>
+                                    <td>${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></td>
                                     <td>
                                         <span class='badge bg-success'>Total: ${item.material_qty}</span>
-                                        <span class='badge bg-primary'>Assigned: ${item.total_assigned_qty}</span>
-                                        <span class='badge bg-danger'>Remaining: ${item.remaining_qty}</span>
+                                        <span class='badge bg-primary'>Assigned: ${item.assigned_qty}</span>
+                                        <span class='badge bg-danger'>Remaining: ${item.remaining_unassigned_qty}</span>
                                     </td>
-                                    <td>${item.run_time} <span class='ms-2 badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
+                                    <td><span class='badge bg-primary' title='Run Time'>${item.total_run_time}</span> <span class='badge bg-secondary' title='Handling Time'>${item.total_handling_time}</span><span class='ms-2 badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span></td>
                                     <td>
                                         <div class="small mb-2"><strong class='${obj.status == 'finished' ? 'text-success' : 'text-primary'}'>${obj.status}</strong> <span class='badge bg-secondary'>${obj.assign_date}</span></div>
                                     </td>
-                                    <td>${item.emp_name}</td>
+                                    <td>${obj.assigned_by_name}</td>
                                     <td>
                                         <button class="btn btn-outline-primary view_btn btn-sm" data-path="${item.path}">View</button>
                                         <button class="btn btn-sm btn-danger delete_btn btn-sm ${obj.status == 'finished' ? 'd-none' : ''}" value="${obj.job_card_id}"><i class="fa fa-trash"></i></button>
@@ -367,7 +382,7 @@ function get_assigned_job_card() {
                             `);
 
 
-                                $(".assinged_nesting_job_card_mobile").append(`
+                            $(".assinged_nesting_job_card_mobile").append(`
                                 <div class="card mb-3 shadow-sm border-0 rounded-3">
                                     <div class="card-body p-3">
 
@@ -376,7 +391,7 @@ function get_assigned_job_card() {
                                             <span class="badge bg-primary">${index}</span>
                                         </div>
 
-                                        <div class="small text-muted mb-2">${item.material_name}</div>
+                                        <div class="small text-muted mb-2">${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></div>
 
                                         <div class="mb-2">
                                             <span class='badge bg-success'>Total: ${item.material_qty}</span>
@@ -427,46 +442,46 @@ function get_assigned_job_card() {
 
 }
 
-function get_all_machine(show_all) {
+// function get_all_machine(show_all) {
 
-    console.log(show_all);
+//     console.log(show_all);
 
-    $.ajax({
-        url: "php/get_all_machine.php",
-        type: "GET",
-        data: {},
-        success: function (response) {
-            console.log(response);
+//     $.ajax({
+//         url: "php/get_all_machine.php",
+//         type: "GET",
+//         data: {},
+//         success: function (response) {
+//             console.log(response);
 
-            if (response.trim() != "error") {
+//             if (response.trim() != "error") {
 
-                $("#machine").empty();
+//                 $("#machine").empty();
 
-                if (response.trim() != '0 result') {
+//                 if (response.trim() != '0 result') {
 
-                    var obj = JSON.parse(response);
-                    $("#machine").append(`<option selected disabled value="">Choose...</option>`);
+//                     var obj = JSON.parse(response);
+//                     $("#machine").append(`<option selected disabled value="">Choose...</option>`);
 
-                    obj.forEach(function (item, index) {
-                        index++;
+//                     obj.forEach(function (item, index) {
+//                         index++;
 
-                        // convert path to web path
+//                         // convert path to web path
 
-                        $("#machine").append(`<option value="${item.machine_id}">${item.machine_name}</option>
-                        `);
-                    });
+//                         $("#machine").append(`<option value="${item.machine_id}">${item.machine_name}</option>
+//                         `);
+//                     });
 
-                } else {
-                    $("#machine").append(`<option selected disabled value="">Choose...</option>`);
-                }
-            }
-        },
-        error: function (xhr) {
-            console.log(xhr);
-        }
-    });
+//                 } else {
+//                     $("#machine").append(`<option selected disabled value="">Choose...</option>`);
+//                 }
+//             }
+//         },
+//         error: function (xhr) {
+//             console.log(xhr);
+//         }
+//     });
 
-}
+// }
 
 
 

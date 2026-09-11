@@ -33,7 +33,7 @@ $(document).ready(function () {
     });
 
     check_login();
-    get_nesting_details1('', '', '', '');
+    get_laser_report('', '', '', '');
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -230,11 +230,11 @@ $(document).ready(function () {
 
 });
 
-$("#pending").change(function(){
+$("#pending").change(function () {
     filter();
 });
 
-$("#nesting_name, #material_id, #employee").on('focusout', function(){
+$("#nesting_name, #material_id, #employee").on('focusout', function () {
     filter();
 });
 
@@ -248,18 +248,27 @@ function filter() {
 }
 
 
-function get_nesting_details1(created_by, nesting_name, material_id, remaining_qty) {
+function get_laser_report(created_by, nesting_name, material_id, remaining_qty) {
 
     console.log(created_by, nesting_name, material_id, remaining_qty);
 
     $.ajax({
-        url: "php/get_nesting_details.php",
+        url: "php/get_laser_report.php",
         type: "GET",
         data: {
-            created_by: created_by,
-            nesting_name: nesting_name,
-            material_id: material_id,
-            remaining_qty: remaining_qty
+            jobcard_shift: created_by,
+            laser_machine: nesting_name,
+            job_card_sts: material_id,
+            job_card_assigned_by: remaining_qty,
+            job_card_assigned_from_date: remaining_qty,
+            job_card_assigned_to_date: remaining_qty,
+            job_card_finished_from_date: remaining_qty,
+            job_card_finished_to_date: remaining_qty,
+            job_card_finished_emp: remaining_qty,
+            nesting_details_id: remaining_qty,
+            nesting_id: remaining_qty,
+            raw_material_id: remaining_qty,
+            laser_work_created_emp: remaining_qty,
 
         },
         success: function (response) {
@@ -288,15 +297,15 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
 
                         let laser_assigned_details = ``;
 
-                        if (item.total_assigned_qty > 0) {
+                        if (item.assigned_qty > 0) {
 
-                            let laser = JSON.parse(item.laser_assigned_details);
+                            let laser = JSON.parse(item.job_card_details);
 
                             laser_assigned_details = ` <div class="accordion accordion-flush small" id="laserAccordion"> `;
 
                             laser.forEach(function (l, index) {
 
-                                if(item.total_assigned_qty <= index){
+                                if (item.assigned_qty <= index) {
                                     return;
                                 }
 
@@ -367,7 +376,7 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
                                                         Machine
                                                     </div>
                                                     <div class="fw-semibold">
-                                                        Machine ${l.machine_id}
+                                                        Machine ${l.machine_name}
                                                     </div>
                                                 </div>
 
@@ -376,7 +385,7 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
                                                         Assigned By
                                                     </div>
                                                     <div class="fw-semibold">
-                                                        ${l.assigned_by}
+                                                        ${l.assigned_by_name}
                                                     </div>
                                                 </div>
 
@@ -400,6 +409,26 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
                                                             ${l.scarp_qty ?? 0}
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-6">
+                                                        <div class="text-muted" style="font-size:11px;">
+                                                            Operator Name
+                                                        </div>
+                                                        <div class="fw-semibold">
+                                                            <i class="fa-regular fa-user"></i>
+                                                            ${l.operator_name ?? ''}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <div class="text-muted" style="font-size:11px;">
+                                                            Finished On
+                                                        </div>
+                                                        <div class="fw-semibold">
+                                                            <i class="fa-solid fa-calendar-days"></i>
+                                                            ${l.finished_date ?? ''}
+                                                        </div>
+                                                    </div>
                                                 ` : ''}
 
                                             </div>
@@ -420,14 +449,14 @@ function get_nesting_details1(created_by, nesting_name, material_id, remaining_q
                             <tr>
                                 <td>${index}</td>
                                 <td>${item.nesting_name}</td>
-                                <td>${item.material_name}</td>
+                                <td>${item.material_name} <p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.master_scarp_weight ?? 0} Kg</span></p></td>
                                 <td>
                                    <div class='d-flex justify-content-between'><span class='badge bg-success' title='Total Qty: ${item.material_qty}'>${item.material_qty}</span>
-                                    <span class='badge bg-primary' title='Assigned Qty: ${item.total_assigned_qty}'>${item.total_assigned_qty}</span><span class='badge bg-danger' title='Remaining Qty: ${item.remaining_qty}'>${item.remaining_qty}</span></div>
+                                    <span class='badge bg-primary' title='Assigned Qty: ${item.assigned_qty}'>${item.assigned_qty}</span><span class='badge bg-danger' title='Remaining Qty: ${item.remaining_unassigned_qty}'>${item.remaining_unassigned_qty}</span></div>
                                 </td>
-                                <td>${item.run_time}</td>
+                                <td><span class='badge bg-primary' title='Run Time'>${item.total_run_time}</span> <span class='badge bg-secondary' title='Handling Time'>${item.total_handling_time}</span></td>
                                 <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</td>
-                                <td>${item.emp_name}</td>
+                                <td>${item.master_created_name}</td>
                                 <td>${nesting_parts_details}</td>
                                 <td>${laser_assigned_details}</td>
                                 <td>

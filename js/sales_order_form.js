@@ -3167,7 +3167,7 @@ function change_price() {
 
   });
   $("#billing_price").val(max_price);
-  $("#machine_price").val(min_price);
+  $("#machine_price").val(min_price).trigger("input");
 
   $("#machine_price").data("max", max_price);
   $("#machine_price").data("min", min_price);

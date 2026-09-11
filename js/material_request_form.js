@@ -59,13 +59,37 @@ $(document).ready(function () {
 
 
   check_login();
-  get_all_internal_godown()
-
+  get_all_internal_godown();
+  get_mrf_request();
 
 
 
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
+
+  $('#system_request_tbody tr').on("dblclick", function(){
+      var part_name = $(this).data("part_name") || '';
+      var part_id = $(this).data("part_id") || 0;
+      if(part_name == '' || part_id <= 0){
+        salert("Warning", "Data Missing!, Try Later.", "warning");
+      }else{
+        $("#system_requestModal").modal("hide");
+        $("#part_no").data("selected-part_id", part_id).val(part_name);
+        get_material_request_form_parts_search(part_id, 'all', "created");
+      }
+  });
+
+  $('#system_request_tbody').on('click', "button", function(){
+    var part_id = $(this).val() || 0;
+    var status = $(this).closest("tr").find(".req_status").val() || '';
+
+    if(status == '' || part_id <= 0){
+        salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
+      }else{
+        update_mrf_request(part_id, status);
+      }
+
+  });
 
   $("#material_requset_form_table").on("click", "tr td button", function (event) {
     event.preventDefault();
@@ -1066,9 +1090,101 @@ function get_all_internal_godown() {
 
 }
 
+function get_mrf_request() {
+
+
+  $.ajax({
+    url: "php/get_mrf_request.php",
+    type: "get", //send it through get method
+    data: {
+
+    },
+    success: function (response) {
 
 
 
+      if (response.trim() != "error") {
+        $('#system_request_tbody').empty();
+        if (response.trim() != "0 result") {
+          $("#system_requestModal").modal("show");
+          var obj = JSON.parse(response);
+          var count = 0
+
+
+          obj.forEach(function (obj) {
+            count = count + 1;
+
+            $('#system_request_tbody').append(`<tr data-part_name="${obj.part_name}" data-part_id="${obj.part_id}"><td>${count}</td><td>${obj.part_name}</td><td>${obj.total_qty}</td>
+              <td>
+                <select class="form-select req_status">
+                          <option selected disabled value="">Status</option>
+                          <option value="mrf_done">MRF Created</option>
+                          <option value="previous_order">Previously Order</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+              </td>
+              <td><button class='btn btn-sm btn-primary' value="${obj.part_id}"><i class="fa-regular fa-circle-check"></i></button></td></tr>`);
+
+          });
+
+
+        }
+        else {
+          $('#system_request_tbody').append("<tr><td colspan='5'>No Request Found. Enjoy Your day 😁!</td></tr>")
+
+
+        }
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+function update_mrf_request(part_id, status) {
+console.log(part_id, status);
+
+
+  $.ajax({
+    url: "php/update_mrf_request.php",
+    type: "post", //send it through get method
+    data: {
+      part_id: part_id,
+      status: status
+
+    },
+    success: function (response) {
+
+
+
+      if (response.trim() == "ok") {
+       window.location.reload()
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
 
 function insert_material_request_form() {
   $("#stock_table_body tr").each(function () {

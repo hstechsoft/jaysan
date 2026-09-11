@@ -226,10 +226,11 @@
 
             <div class="row">
                 <div class="col-12">
-                    <div class="border rounded-3 bg-secondary p-1 mb-2 d-flex justify-content-between align-items-center">
+                    <div
+                        class="border rounded-3 bg-secondary p-1 mb-2 d-flex justify-content-between align-items-center">
                         <h6 class="mb-0 text-white">Sale Order Details</h6>
-                        <input type="text" class="form-control form-control-sm rounded-3 shadow-none w-50" id="search_order"
-                            placeholder="Search Order">
+                        <input type="text" class="form-control form-control-sm rounded-3 shadow-none w-50"
+                            id="search_order" placeholder="Search Order">
                     </div>
                     <div id="sale_order_details_container" style="max-height: 75vh; overflow-y: auto;">
                         <div class="card shadow-sm border-0 rounded-4 order-card">
@@ -462,6 +463,32 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="sale_qty_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="sale_qty_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sale_qty_modalLabel">Sale Order</h5>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+                        <div class="form-floating mb-2">
+                      <input type="number" class="form-control rounded-3" min="1" id="enter_qty" placeholder="" required>
+                      <label for="enter_qty">Qty</label>
+                    
+                      <div class="invalid-feedback">
+                        Kindly Enter  Vaild Data
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary entered_qty_modal_btn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

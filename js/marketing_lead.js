@@ -351,7 +351,7 @@ $(document).ready(function () {
 function get_today_leads(type) {
 
   console.log(type);
-  
+
 
   $.ajax({
     url: "php/get_today_lead.php",
@@ -371,7 +371,7 @@ function get_today_leads(type) {
       console.log(response);
 
       if (response.trim() != "error") {
-
+        $('#mlead_table').empty();
         if (response.trim() != "0 result") {
           var obj = JSON.parse(response);
 

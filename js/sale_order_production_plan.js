@@ -56,11 +56,16 @@ $(document).ready(function () {
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $("#sale_order_details_container").on("click", ".sale_span", function () {
+
+    var span = $(this);
     var oid = $(this).data("oid");
     var required_qty = $(this).data("required_qty");
+    var entered_qty = $(this).data("entered_qty");
 
     var card = $(this).closest(".order-card");
     var selected_qty_input = card.find(".selected_qty").val();
+
+    var text = $(this).text().trim();
 
     card.find(".selected_qty").addClass("change_qty_style");
     setTimeout(() => {
@@ -70,13 +75,46 @@ $(document).ready(function () {
 
     if ($(this).hasClass("selected_order")) {
       $(this).removeClass("selected_order");
-      card.find(".selected_qty").val(parseInt(selected_qty_input) - parseInt(required_qty));
+      card.find(".selected_qty").val(parseInt(selected_qty_input) - parseInt(entered_qty));
+      $(this).removeData("entered_qty").data("entered_qty", required_qty);
     }
     else {
       $(this).addClass("selected_order");
-      card.find(".selected_qty").val(parseInt(selected_qty_input) + parseInt(required_qty));
+      $("#enter_qty").val(required_qty).data("req_qty", required_qty);
+      $("#sale_qty_modalLabel").text("Sale Order: " + text);
+      $(".entered_qty_modal_btn").data({ "span": span, "card": card });
+      $("#sale_qty_modal").modal("show");
+      // card.find(".selected_qty").val(parseInt(selected_qty_input) + parseInt(required_qty));
     }
   });
+
+  $("#enter_qty").on("focusout", function () {
+    var req_qty = $(this).data("req_qty");
+    var enter_val = $(this).val() || 0;
+
+    if (req_qty < enter_val) {
+      $(this).val(req_qty);
+    }
+    else if (enter_val < 1) {
+      $(this).val(1);
+    }
+  })
+
+  $(".entered_qty_modal_btn").on("click", function () {
+    var span = $(this).data("span");
+    var enter_qty = $("#enter_qty").val();
+
+    var card = $(this).data("card");
+    var selected_qty_input = card.find(".selected_qty").val();
+
+    span.removeData("entered_qty").data("entered_qty", enter_qty);
+    card.find(".selected_qty").val(parseInt(selected_qty_input) + parseInt(enter_qty));
+    $("#sale_qty_modal").modal("hide");
+    card.find(".selected_qty").addClass("change_qty_style");
+    setTimeout(() => {
+      card.find(".selected_qty").removeClass("change_qty_style");
+    }, 600);
+  })
 
   $("#sale_order_details_container").on("click", ".add_demand_btn", function () {
 
@@ -89,16 +127,20 @@ $(document).ready(function () {
 
     selected_orders.each(function () {
 
+      var entered_qty = $(this).data("entered_qty");
       var ids = $(this).data("ass_ids").toString().split(",");
 
-      ids.forEach(function (id) {
-        assign_id.push(parseInt(id, 10));
+      ids.forEach(function (id, i) {
+        if (i < entered_qty) {
+          assign_id.push(parseInt(id, 10));
+        }
       });
-
     });
 
-    console.log("P "+ plan_name, "s "+ selected_qty, "pi "+process_id, "a "+ assign_id.length);
-    
+    console.log(assign_id);
+
+    console.log("P " + plan_name, "s " + selected_qty, "pi " + process_id, "a " + assign_id.length);
+
 
     if (plan_name && selected_qty && process_id && assign_id.length > 0) {
       create_demand(plan_name, selected_qty, process_id, JSON.stringify(assign_id));
@@ -135,7 +177,7 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
 
       if (response.success === true) {
         salert("Success", "Demand created successfully.", "success");
-        setTimeout(()=>{
+        setTimeout(() => {
           window.location.reload();
         }, 500);
 
@@ -188,7 +230,7 @@ function get_sale_order_plan() {
                 ass_id.push(ass.assign_id);
               });
 
-              sale_order_nos += `<span class="badge  text-dark border sale_span selected_order" data-oid="${order.oid}" data-ass_ids="${ass_id.join(',')}" data-required_qty="${order.required_qty}">#${order.order_no}</span>`;
+              sale_order_nos += `<span class="badge  text-dark border sale_span selected_order" data-oid="${order.oid}" data-ass_ids="${ass_id.join(',')}" data-required_qty="${order.required_qty}" data-entered_qty="${order.required_qty}">#${order.order_no}</span>`;
             });
 
             $('#sale_order_details_container').append(`

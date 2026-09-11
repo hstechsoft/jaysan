@@ -1445,7 +1445,7 @@ function insert_purchase_order(comp, dc, datee, rev_by, po_material) {
 
 
             console.log(response);
-            if (response.trim() == "ok") {
+            if (response.trim() > 0) {
                 location.reload();
                 // alert("success")
 

@@ -77,6 +77,18 @@ $(document).ready(function () {
         update_stock_allocation_store(allocation_id, qty, created_by, remark);
     })
 
+    $("#internal_allocation_tbody").on("click", ".system_btn", function () {
+
+        var allocation_id = $(this).data("allocation_id");
+        console.log(allocation_id);
+
+        if (allocation_id > 0) {
+            emergency_transfer(allocation_id);
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Later.", "warning");
+        }
+    })
 
 
 });
@@ -84,7 +96,41 @@ $(document).ready(function () {
 
 
 
+function emergency_transfer(allocation_id) {
 
+    $.ajax({
+        url: "php/emergency_transfer.php",
+        type: "post", //send it through get method
+        data: {
+            allocation_id: allocation_id,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                window.location.reload();
+            }
+            else{
+                salert("Warning", response.trim(), "warning");
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function get_allocation_report() {
 
@@ -109,7 +155,7 @@ function get_allocation_report() {
                     obj.forEach(function (item) {
                         count += 1;
 
-                        $("#internal_allocation_tbody").append(`<tr><td>${count}</td><td>${item.part_name}</td><td>${item.from_place_name}</td><td>${item.to_place_name}</td><td>${item.qty}</td><td><button type="button" data-part_name='${item.part_name}' data-qty='${item.qty}' data-created_by='${item.created_by}' data-allocation_id='${item.allocation_id}' class="btn btn-success fa_check_circle p-0"><i class="fa fa-check-circle m-1"></i></button></td></tr>`);
+                        $("#internal_allocation_tbody").append(`<tr><td>${count}</td><td>${item.part_name}</td><td>${item.from_place_name}</td><td>${item.to_place_name}</td><td>${item.qty}</td><td>${item.req_no == null ? 'System Generated' : 'Requested'}</td><td><button type="button" data-part_name='${item.part_name}' data-qty='${item.qty}' data-created_by='${item.created_by}' data-allocation_id='${item.allocation_id}' class="btn btn-success fa_check_circle p-0 ${item.req_no == null ? 'd-none' : ''} "><i class="fa fa-check-circle m-1"></i></button><button type="button" data-allocation_id='${item.allocation_id}' class="btn btn-primary system_btn p-0 ${item.req_no == null ? '' : 'd-none'}"><i class="fa fa-check-circle m-1"></i></button></td></tr>`);
                     })
                 } else {
                     $("#internal_allocation_tbody").append(`<tr><td colspan='7' class='text-center'>Nothing Allocated. Enjoy Your day 😁!</td></tr>`)
@@ -177,6 +223,8 @@ function get_allocated_details() {
 }
 
 function update_stock_allocation_store(allocation_id, qty, created_by, remark) {
+
+    console.log(allocation_id, qty, created_by, remark);
 
     $.ajax({
         url: "php/update_stock_allocation_store.php",
