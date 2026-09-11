@@ -99,7 +99,7 @@ group by
     mas.path,
     mas.nesting_type,
     mas.std_length,
-    mas.master_scarp_weight,
+    mas.scarp_weight as master_scarp_weight,
     mat_part.part_name as material_name,
     scarp_part.part_name as scrap_name,
     mas.created_by as master_created_by,
