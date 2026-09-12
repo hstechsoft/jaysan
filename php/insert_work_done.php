@@ -872,7 +872,10 @@ if ($result_proces_details->num_rows > 0) {
     $part_id = sql_nullable($row_proces_details['output_part']);
 }
 
-
+if($part_id !="NULL")
+    {
+        $process_id = "NULL";
+    }
 
 $batch_id = "j".$work_done_id;
 $dstock_id = 0;
