@@ -181,7 +181,7 @@ inner join input_wel_parts iwp on iwp.process_id = pwt.process_id where pwt.proc
         while($row = $result_check_stock->fetch_assoc()){
           
             $consume_qty = $row['qty'] * $required_qty;
-            $remaining = $row['total_stock_qty'] - $consume_qty;
+            // $remaining = $row['total_stock_qty'] - $consume_qty;
        $consumption[] = [
         "part_id" => $row['input_part_id'],
         "previous_process_id" => $row['previous_process_id'],
