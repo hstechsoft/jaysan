@@ -70,6 +70,10 @@ $(document).ready(function () {
   $('#system_request_tbody').on("dblclick", "tr", function(){
       var part_name = $(this).data("part_name") || '';
       var part_id = $(this).data("part_id") || 0;
+      var qty = $(this).find("td").eq(2).text() || 0;
+
+      $("#requirement_quantity").val(qty);
+      
       if(part_name == '' || part_id <= 0){
         salert("Warning", "Data Missing!, Try Later.", "warning");
       }else{
