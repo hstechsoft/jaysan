@@ -1460,7 +1460,7 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
 
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Stock Issue',
+                    title: 'Issue',
                     html: message,
                     width: 600
                 });
