@@ -839,6 +839,7 @@ if($part_id !="NULL")
     }
         // insert 0-qty for the stock if it doesn't exist
         $sql_insert_stock = "insert into jaysan_stock (part_id, process_id, godown, dep, sec, qty,remark) values ($part_id, $process_id, $godown_id, $dep_id, $sec_id, 0-$qty_to_consume,'stock_added by user -".$work_done_id."') on duplicate key update qty = qty -$qty_to_consume";
+        echo "query: 1 -> " . $sql_insert_stock;
         if ($conn->query($sql_insert_stock) !== TRUE) {
             $result_json['message'] = "Error inserting stock: " . $conn->error;
             echo json_encode($result_json);
