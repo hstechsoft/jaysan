@@ -67,7 +67,7 @@ $(document).ready(function () {
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
-  $('#system_request_tbody tr').on("dblclick", function(){
+  $('#system_request_tbody').on("dblclick", "tr", function(){
       var part_name = $(this).data("part_name") || '';
       var part_id = $(this).data("part_id") || 0;
       if(part_name == '' || part_id <= 0){
