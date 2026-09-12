@@ -805,7 +805,7 @@ foreach($consumption as $consume) {
  $work_process_id = sql_nullable($consume['work_process_id']);
 
 // get stock_id from jaysan_stock for the consumed part and location
-$sql_get_stock_id = "select stock_id from jaysan_stock where part_id = $part_id and process_id = $process_id and godown = $godown_id and dep = $dep_id and sec = $sec_id";
+$sql_get_stock_id = "select stock_id from jaysan_stock where part_id <=> $part_id and process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id";
 $result_get_stock_id = $conn->query($sql_get_stock_id);
 $stock_id = 0;
 if($result_get_stock_id->num_rows > 0) {

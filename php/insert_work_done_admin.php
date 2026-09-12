@@ -794,7 +794,7 @@ foreach($consumption as $consume) {
 
 
         // 🔥 reduce stock (insert negative entry with SAME section)
-        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where part_id = $part_id and process_id = $process_id and godown = $godown_id and dep = $dep_id and sec = $sec_id";
+        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where part_id <=> $part_id and process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id";
 
         if ($conn->query($sql_update_stock) === TRUE) {
             // reduce 
