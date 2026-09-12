@@ -10,6 +10,7 @@
 
 $qty = test_input($_POST['qty']);
  $manual_part_id  = isset($_POST['manual_part_id']) ? test_input($_POST['manual_part_id']) : 'no';
+ $emp_id = test_input($_POST['emp_id']);
 
 
 
@@ -22,7 +23,7 @@ $process_id = sql_nullable($process_id);
 
 
 
- $remark = "Stock manually updated";
+
  
 function test_input($data) {
 $data = trim($data);
@@ -32,7 +33,22 @@ $data = htmlspecialchars($data);
 return $data;
 }
 $part_id = null;
+$emp_name = '';
 
+// get employee id from emp_id POST parameter if available
+$sql_emp_id = "SELECT emp_name FROM employee WHERE emp_id = $emp_id";
+$result_emp_id = $conn->query($sql_emp_id);
+if ($result_emp_id->num_rows > 0) {
+    $row_emp_id = $result_emp_id->fetch_assoc();
+    $emp_name = $row_emp_id['emp_name'];
+
+} else {
+    echo "Error: Could not retrieve employee ID.";
+    $conn->close();
+    exit();
+}
+
+ $remark = "Stock manually updated by " . $emp_name;
 // get part id from process_wel_tbl
 if($manual_part_id == 'no') {
 
@@ -61,9 +77,9 @@ if($part_id > 0 && $part_id != "NULL")
 
     {
 
-$sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =  qty + $qty, remark = '$remark' ";
+$sql = "insert into jaysan_stock (godown,dep,sec,process_id,qty,remark,part_id) values ($godown,$dep,$sec,$process_id,$qty,'$remark',$part_id) ON DUPLICATE KEY UPDATE qty =   $qty, remark = '$remark' ";
 
-//  echo $sql;
+ 
 $stock_id = 0;
   if ($conn->query($sql) === TRUE) {
 

@@ -122,9 +122,8 @@ $(document).ready(function () {
 
         $("#machine").empty();
 
-        // get_dep_sec_machine($(this).val());
+        get_dep_sec_machine($(this).val());
 
-        get_all_machine();
 
     })
 
@@ -156,8 +155,10 @@ $(document).ready(function () {
         var job_card_id = $(this).data("job_card_id");
         var nesting = $(this).data("nesting_parts_details");
         var raw_mat_weight = $(this).data("raw_mat_weight") || 0;
+        var master_scarp_weight = $(this).data("master_scarp_weight") || 0;
 
         $("#raw_material_weight").val(raw_mat_weight).data("raw_material_weight", raw_material_weight);
+        $("#scarp_weight").val(master_scarp_weight).data("master_scarp_weight", master_scarp_weight);
 
         $("#assign_Work_entry_btn").data({
             "machine_id": machine_id,
@@ -270,7 +271,7 @@ $(document).ready(function () {
 
         });
 
-        console.log(job_card_id, machine_id, scrap_weight, scarp_qty, remark, produced_parts, material_weight, godown, dep, sec);
+        console.log(job_card_id, scrap_weight, scarp_qty, remark, produced_parts, material_weight, godown, dep, sec);
 
 
         // if (!isValid) {
@@ -278,7 +279,7 @@ $(document).ready(function () {
         //     return;
         // }
 
-        if (job_card_id > 0 && machine_id > 0 && produced_parts.length > 0 && material_weight > 0 && godown > 0) {
+        if (job_card_id > 0 && produced_parts.length > 0 && material_weight > 0 && godown > 0) {
             finish_operator_job_card(
                 job_card_id,
                 current_user_id,
@@ -353,7 +354,7 @@ function get_operator_job_card(shift, machine_id) {
         data: {
             shift: shift,
             machine_id: machine_id,
-            status: 'all'
+            status: 'created'
         },
         success: function (response) {
             console.log(response);
@@ -385,21 +386,20 @@ function get_operator_job_card(shift, machine_id) {
                             <tr>
                                 <td>${index}</td>
                                 <td>${item.nesting_name}</td>
-                                <td>${item.part_name}</td>
+                                <td>${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.master_scarp_weight ?? 0} Kg</span></p></td>
                                 <td>
-                                    <span class='badge bg-success d-none pe-2'>${item.material_qty}</span> <strong>Assigned Date: ${item.assign_date}</strong>
+                                    <span class='badge bg-success d-none pe-2'>${item.assigned_by_name}</span> <strong>Assigned Date: ${item.assign_date}</strong>
                                 </td>
                                 
-                                <td>${item.master_run_time}</td>
-                                <td>${item.emp_name}</td>
+                                <td><span class="badge bg-primary" title="Run Time">${item.run_time}</span><span class="badge bg-secondary" title="Handling Time">${item.handling_time}</span></td>
                                 <td>${nesting_parts_details}</td>
                                 <td>
                                     <button class="btn btn-outline-primary view_btn" data-path="${item.path}"><i class="fa-solid fa-eye fa-beat"></i></button>
                                     <button class="btn btn-outline-success laser_work_entry_btn" 
                                         data-job_card_id="${item.job_card_id}" 
                                         data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
-                                        data-machine_id="${item.machine_id}"
-                                        data-raw_mat_weight="${item.raw_mat_weight}">
+                                        data-master_scarp_weight="${item.master_scarp_weight}"
+                                        data-raw_mat_weight="${item.raw_material_weight}">
                                         <i class="fa-solid fa-person-running fa-bounce"></i>
                                     </button>
                                 </td>
@@ -416,16 +416,15 @@ function get_operator_job_card(shift, machine_id) {
                                         <span class="badge bg-primary">${index}</span>
                                     </div>
 
-                                    <div class="small text-muted mb-2">${item.part_name}</div>
+                                    <div class="small text-muted mb-2">${item.material_name}</div>
 
                                     <div class="mb-2">
-                                        <span class='badge bg-success d-none pe-2'>Remain: ${item.total_material_qty}</span>
                                         <strong> Assigned Date: ${item.assign_date}</strong>
                                     </div>
 
                                     <div class="d-flex justify-content-between small mb-2">
-                                        <span>⏱ ${item.master_run_time}</span>
-                                        <span>👤 ${item.emp_name}</span>
+                                        <span>⏱ <span class="badge bg-primary" title="Run Time">${item.run_time}</span><span class="badge bg-secondary" title="Handling Time">${item.handling_time}</span></span>
+                                        <span>👤 ${item.assigned_by_name}</span>
                                     </div>
 
 
@@ -451,7 +450,7 @@ function get_operator_job_card(shift, machine_id) {
                     });
 
                 } else {
-                    $("#operator_job_card_tbody").html(`<tr><td colspan='8' class='text-center text-danger'>No Data Found</td></tr>`);
+                    $("#operator_job_card_tbody").html(`<tr><td colspan='7' class='text-center text-danger'>No Data Found</td></tr>`);
                     $(".operator_job_card_mobile").html(`<div class='text-center text-danger'>No Data Found</div>`);
                 }
             }
@@ -463,14 +462,16 @@ function get_operator_job_card(shift, machine_id) {
 
 }
 
-function get_all_machine() {
+function get_dep_sec_machine(sec_id) {
 
     console.log();
 
     $.ajax({
-        url: "php/get_all_machine.php",
+        url: "php/get_dep_sec_machine.php",
         type: "GET",
-        data: {},
+        data: {
+            sec_id: sec_id
+        },
         success: function (response) {
             console.log(response);
 
@@ -488,7 +489,7 @@ function get_all_machine() {
 
                         // convert path to web path
 
-                        $("#machine").append(`<option value="${item.machine_id}">${item.machine_name}</option>
+                        $("#machine").append(`<option value="${item.dep_sec_machine_id}">${item.machine_name}</option>
                         `);
                     });
 

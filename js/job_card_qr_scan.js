@@ -2575,6 +2575,7 @@ function get_current_work_details(emp_id) {
                                         Chasis No: <strong>${item.chasis_no}</strong>
                                     </div>
 
+                                    
                                 </div>
 
                                 <div class="card-footer d-flex text-center justify-content-between">

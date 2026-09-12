@@ -100,6 +100,66 @@ $(document).ready(function () {
 
   });
 
+  $('#scrap_material_id').on('input', function () {
+
+
+    $(this).data("part_id", '');
+
+
+    //check the value not empty
+    if ($('#scrap_material_id').val() != "") {
+      $('#scrap_material_id').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_part_name_auto_wel.php",
+            type: "get", //send it through get method
+            data: {
+
+              part: $("#scrap_material_id").val(),
+              term: ""
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.part_name,
+                  value: item.part_name,
+                  id: item.part_id,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("part_id", ui.item.id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          console.log(ui.item.id);
+
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div>" + item.label + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
   $('#nested_parts').on('input', function () {
 
 
@@ -161,7 +221,7 @@ $(document).ready(function () {
   });
 
   $('#godown').on('input', function () {
-    
+
     $(this).removeData("godown_id");
     if ($(this).val().trim() === '') {
       $(this).removeData("godown_id");
@@ -272,7 +332,7 @@ $(document).ready(function () {
   });
 
   $('#section').on('input', function () {
-    
+
     $(this).data("sec_id", "");
 
 
@@ -402,7 +462,9 @@ $(document).ready(function () {
 
   });
 
-  $("#nested_machine_add_btn").on("click", function (){
+  $("#nested_machine_add_btn").on("click", function () {
+
+    var nes_master_id = $(this).val() || 0;
 
     var godown_id = $("#godown").data("godown_id") || 0;
     var department_id = $("#department").data("dept_id") || 0;
@@ -411,13 +473,20 @@ $(document).ready(function () {
     var machine = $("#machine").val() || '';
     var runtime = $("#run_timee").val() || 0;
     var handling_time = $("#handling_time").val() || 0;
-console.log(godown_id, department_id, section_id, machine_id, machine, runtime, handling_time);
-    if(godown_id <= 0 || department_id <= 0 || section_id <= 0 || machine_id <=0 || machine == '' || runtime <= 0 || handling_time <= 0){
+    console.log(godown_id, department_id, section_id, machine_id, machine, runtime, handling_time);
+    if (godown_id <= 0 || department_id <= 0 || section_id <= 0 || machine_id <= 0 || machine == '' || runtime <= 0 || handling_time <= 0) {
       salert('warning', 'Please Fill All Fields.', 'warning');
       return;
     }
-    else{
-      $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-machine_id="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+    else if (nes_master_id > 0) {
+      $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-jmid="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+      insert_laser_machine(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id);
+
+      $("#godown, #department, #section, #machine, #run_timee, #handling_time").val('').removeData("godown_id").removeData("dept_id").removeData("sec_id").removeData("mach_id");
+    }
+    else {
+      $("#nesting_machine_tbody").append(`<tr data-godown_id="${godown_id}" data-department_id="${department_id}" data-section_id="${section_id}" data-jmid="${machine_id}"><td>${machine}</td><td>${runtime}</td><td>${handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger'><i class='fa fa-trash'></i></button></td></tr>`);
+
 
       $("#godown, #department, #section, #machine, #run_timee, #handling_time").val('').removeData("godown_id").removeData("dept_id").removeData("sec_id").removeData("mach_id");
     }
@@ -427,7 +496,7 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
   $("#nesting_machine_tbody").on("click", ".delete_btn", function () {
 
     var row = $(this).closest('tr');
-    // var nes_part_id = $(this).val() || 0;
+    var laser_machine_id = $(this).val() || 0;
 
     Swal.fire({
       title: "Are You Sure?",
@@ -439,18 +508,14 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
 
       if (result.isConfirmed) {
 
-        // if (nes_part_id > 0) {
-        //   $("#scrap_weight").val(scrap_weigth);
+        if (laser_machine_id > 0) {
 
-        //   row.remove();
-        //   delete_nesting_parts_master(nes_part_id);
-        //   $("#update_nesting_btn").trigger("click");
-        // }
-        // else {
           row.remove();
-        //   scrap_weight();
-        // }
-        // scrap_weight();
+          delete_laser_machine(laser_machine_id);
+        }
+        else {
+          row.remove();
+        }
       }
 
     });
@@ -587,7 +652,7 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
 
     var nesting_name = $("#nesting_name").val() || '';
     var part_id = $("#material_id").data("part_id") || 0;
-    var run_time = $("#run_time").val() || 0;
+    var scrap_part_id = $("#scrap_material_id").data("part_id") || 0;
     var dimension = $("#dimension").val() || 0;
     var file = $("#nest_file")[0].files[0];
     var weight = $("#weight").val() || 0;
@@ -614,15 +679,36 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
 
     });
 
-    console.log(nesting_name, part_id, run_time, dimension, parts, weight, scrap_weight);
+    var laser_machines = [];
+
+    console.log($("#nesting_machine_tbody").html());
 
 
-    if (nesting_name == '' || part_id <= 0 || dimension <= 0 || parts.length <= 0 || weight <= 0) {
+    $("#nesting_machine_tbody tr").each(function () {
+      var jmid = $(this).data("jmid") || 0;
+      var godown = $(this).data("godown_id") || 0;
+      var dep = $(this).data("department_id") || 0;
+      var sec = $(this).data("section_id") || 0;
+      var run_timee = $(this).find("td").eq(1).text();
+      var handling_time = $(this).find("td").eq(2).text();
+
+      if (jmid > 0 && godown > 0 && dep > 0 && sec > 0 && run_timee > 0 && handling_time > 0) {
+        laser_machines.push({ jmid: jmid, godown: godown, dep: dep, sec: sec, run_time: run_timee, handling_time: handling_time })
+      }
+      else {
+        salert("Warning", "Data Missing!, Try Again.", "warning");
+      }
+    })
+
+    console.log(nesting_name, part_id, scrap_part_id, dimension, parts, weight, scrap_weight, laser_machines);
+
+
+    if (nesting_name == '' || part_id <= 0 || scrap_part_id <= 0 || dimension <= 0 || parts.length <= 0 || laser_machines.length <= 0 || weight <= 0) {
       salert("Warning", "All Fields Are Required.", "warning");
       return;
     }
 
-    insert_nesting_master(nesting_name, part_id, run_time, dimension, file, weight, scrap_weight, JSON.stringify(parts));
+    insert_nesting_master(nesting_name, part_id, scrap_part_id, dimension, file, weight, scrap_weight, JSON.stringify(parts), JSON.stringify(laser_machines));
   })
 
   $("#update_nesting_btn").on("click", function () {
@@ -631,20 +717,20 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
 
     var nesting_name = $("#nesting_name").val() || '';
     var part_id = $("#material_id").data("part_id") || 0;
-    var run_time = $("#run_time").val() || 0;
+    var scrap_part_id = $("#scrap_material_id").data("part_id") || 0;
     var dimension = $("#dimension").val() || 0;
     var weight = $("#weight").val() || 0;
     var scrap_weight = $("#scrap_weight").val() || 0;
 
-    console.log(nesting_name, part_id, run_time, dimension, weight, scrap_weight);
+    console.log(nesting_name, part_id, dimension, weight, scrap_weight, scrap_part_id);
 
 
-    if (nesting_name == '' || part_id <= 0 || run_time <= 0 || dimension <= 0 || nes_master_id <= 0 || weight <= 0) {
+    if (nesting_name == '' || part_id <= 0 || scrap_part_id <= 0 || dimension <= 0 || nes_master_id <= 0 || weight <= 0) {
       salert("Warning", "All Fields Are Required.", "warning");
       return;
     }
 
-    update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension, weight, scrap_weight);
+    update_nesting_master(nes_master_id, nesting_name, part_id, dimension, weight, scrap_weight, scrap_part_id);
   });
 
   $("#view_file").on("click", function () {
@@ -665,6 +751,7 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
 
     $("#nesting_name").val('');
     $("#material_id").data("part_id", '').val('');
+    $("#scrap_material_id").data("part_id", '').val('');
     $("#run_time").val('');
     $("#dimension").val('');
     $("#weight").val('');
@@ -675,7 +762,7 @@ console.log(godown_id, department_id, section_id, machine_id, machine, runtime, 
     $("#nested_part_weight").val('');
 
     $("#update_nesting_btn, #nested_part_add_btn, #view_file").val('');
-    $("#nesting_parts_tbody").empty();
+    $("#nesting_parts_tbody, #nesting_machine_tbody").empty();
 
   })
 
@@ -748,15 +835,45 @@ function get_nesting_master_single(nes_master_id) {
             }
 
 
+            if (part.length <= 1) {
+              $("#nesting_parts_tbody").find("tr:first").find("button").addClass("d-none");
+            } else {
+              $("#nesting_parts_tbody").find("tr:first").find("button").removeClass("d-none");
+            }
+
+            var laser_machine_summary = JSON.parse(item.laser_machine_summary) || '';
+            var machines = ``;
+
+            if (laser_machine_summary != '') {
+              $("#nesting_machine_tbody").empty();
+
+              laser_machine_summary.forEach(function (m) {
+
+                machines += `<tr  data-godown_id="${m.godown_id}" data-department_id="${m.dep_id}" data-section_id="${m.dep_sec_id}" data-jmid="${m.jmid}"><td>${m.machine_name} </td><td>${m.run_time} </td><td>${m.handling_time}</td><td><button type='button' class='btn btn-sm delete_btn btn-outline-danger' value=${m.laser_machine_id}><i class='fa fa-trash'></i></button></td></tr>`;
+
+              });
+
+              $("#nesting_machine_tbody").append(machines);
+
+            };
+
+
+            if (laser_machine_summary.length <= 1) {
+              $("#nesting_machine_tbody").find("tr:first").find("button").addClass("d-none");
+            } else {
+              $("#nesting_machine_tbody").find("tr:first").find("button").removeClass("d-none");
+            }
+
+
             $("#nesting_name").val(item.nesting_name);
             $("#material_id").data("part_id", item.material_id).val(item.nesting_material);
-            $("#run_time").val(item.run_time);
+            $("#scrap_material_id").data("part_id", item.scrap_part_id).val(item.scrap_part_name);
             $("#dimension").val(item.std_length);
             $("#weight").val(item.weight);
             $("#scrap_weight").val(item.scarp_weight);
 
             $("#view_file").val(item.path);
-            $("#update_nesting_btn, #nested_part_add_btn").val(item.nesting_id)
+            $("#update_nesting_btn, #nested_part_add_btn, #nested_machine_add_btn").val(item.nesting_id)
 
           })
         }
@@ -816,16 +933,30 @@ function get_nesting_master() {
 
               });
 
-              parts += `<li class="list-group-item p-1"><strong class='small'>MS Scrap</strong> <span class='badge bg-primary'>${item.scarp_weight} Qty</span></li>`;
               parts += `</ul>`;
+            };
+
+
+            var laser_machine_summary = JSON.parse(item.laser_machine_summary) || '';
+            var machines = ``;
+
+            if (laser_machine_summary != '') {
+              machines = `<ul class="list-group">`;
+              laser_machine_summary.forEach(function (m) {
+
+                machines += `<li class="list-group-item p-1"><strong class='small'>${m.machine_name}</strong> <br> <span class='badge bg-primary'>${m.run_time} Run Time</span><span class='badge bg-secondary'> ${m.handling_time} Handling Time</span></li>`;
+
+              });
+
+              machines += `</ul>`;
             };
 
             $("#nesting_details_tbody").append(`
               <tr>
                 <td>${count}</td>
                 <td>${item.nesting_name}</td>
-                <td>${item.nesting_material}</td>
-                <td>${item.run_time}</td>
+                <td>${item.nesting_material} <p class="p-1 badge bg-secondary ">${item.scrap_part_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></td>
+                <td>${machines}</td>
                 <td>${item.std_length}</td>
                 <td><span class='badge ${item.nesting_type == 'std' ? 'bg-success' : 'bg-warning text-dark'}'>${item.nesting_type}</span> <br> <span class="badge bg-secondary">${item.created_by_name}</span></td>
                 <td>${parts}</td>
@@ -840,7 +971,7 @@ function get_nesting_master() {
           })
         }
         else {
-          $("#nesting_details_tbody").append(`<tr><td colspan='7' class='text-center text-dange'>No Standard Nesting Found.</td></tr>`);
+          $("#nesting_details_tbody").append(`<tr><td colspan='8' class='text-center text-dange'>No Standard Nesting Found.</td></tr>`);
         }
       }
       else {
@@ -859,7 +990,7 @@ function get_nesting_master() {
 
 }
 
-function insert_nesting_master(nesting_name, part_id, run_time, dimension, file, weight, scrap_weight, parts) {
+function insert_nesting_master(nesting_name, part_id, scrap_part_id, dimension, file, weight, scrap_weight, parts, laser_machines) {
 
 
   let formData = new FormData($("#nesting_entry_form")[0]);
@@ -869,10 +1000,11 @@ function insert_nesting_master(nesting_name, part_id, run_time, dimension, file,
   formData.append("material_id", part_id);
   formData.append("nesting_type", "std");
   formData.append("std_length", dimension);
-  formData.append("run_time", run_time);
+  formData.append("scrap_part_id", scrap_part_id);
   formData.append("weight", weight);
   formData.append("scarp_weight", scrap_weight);
   formData.append("laser_parts", parts);
+  formData.append("laser_machines", laser_machines);
   formData.append("file", file);
 
   $.ajax({
@@ -954,7 +1086,7 @@ function upload_nesting(nes_master_id, file) {
 
 }
 
-function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, dimension, weight, scrap_weight) {
+function update_nesting_master(nes_master_id, nesting_name, part_id, dimension, weight, scrap_weight, scrap_part_id) {
 
   $.ajax({
     url: "php/update_nesting_master.php",
@@ -967,9 +1099,9 @@ function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, d
       material_id: part_id,
       nesting_type: 'std',
       std_length: dimension,
-      run_time: run_time,
       weight: weight,
       scarp_weight: scrap_weight,
+      scrap_part_id: scrap_part_id
     },
     success: function (response) {
       console.log(response);
@@ -984,6 +1116,85 @@ function update_nesting_master(nes_master_id, nesting_name, part_id, run_time, d
       }
       else {
         salert("Warning", response, 'warning');
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+function insert_laser_machine(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id) {
+  console.log(machine_id, nes_master_id, runtime, handling_time, godown_id, department_id, section_id);
+
+  $.ajax({
+    url: "php/insert_laser_machine.php",
+    type: "post", //send it through get method
+    data: {
+
+      nes_master_id: nes_master_id,
+      jmid: machine_id,
+      run_time: runtime,
+      handling_time: handling_time,
+      godown: godown_id,
+      dep: department_id,
+      sec: section_id,
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim() == 'ok') {
+        salert("Success", "Standard Nesting Machine Updated.", "success");
+        get_nesting_master();
+        get_nesting_master_single(nes_master_id)
+        $("#clear_btn").trigger("click");
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+function delete_laser_machine(laser_machine_id) {
+
+  $.ajax({
+    url: "php/delete_laser_machine.php",
+    type: "post", //send it through get method
+    data: {
+
+      laser_machine_id: laser_machine_id,
+    },
+    success: function (response) {
+      console.log(response);
+
+
+
+      if (response.trim()) {
+        salert("Success", "Standard Nesting Machine Deleted.", "success");
+        get_nesting_master();
+        get_nesting_master_single($("#update_nesting_btn").val())
+        $("#clear_btn").trigger("click");
       }
 
 

@@ -20,8 +20,131 @@
 
 
     <style>
-        #purchase_order_table tr {
+        /* Compact Stock Accordion */
+        #stock_dashboard_tboady .accordion {
+            margin: 0;
+        }
+
+        #stock_dashboard_tboady .accordion-item {
+            border-radius: 0;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2px;
+        }
+
+        /* Accordion Header */
+        #stock_dashboard_tboady .accordion-button {
+            padding: 5px 8px;
             font-size: 12px;
+            line-height: 1.2;
+            min-height: 32px;
+            box-shadow: none !important;
+        }
+
+        /* Remove large Bootstrap arrow area */
+        #stock_dashboard_tboady .accordion-button::after {
+            width: 12px;
+            height: 12px;
+            background-size: 12px;
+        }
+
+        /* Accordion Body */
+        #stock_dashboard_tboady .accordion-body {
+            padding: 6px 8px;
+            font-size: 11px;
+        }
+
+        /* Location section */
+        #stock_dashboard_tboady .accordion-body .mb-3 {
+            margin-bottom: 5px !important;
+        }
+
+        /* Section headings */
+        #stock_dashboard_tboady .accordion-body .fw-bold {
+            font-size: 11px;
+            margin-bottom: 3px !important;
+        }
+
+        /* Location box */
+        #stock_dashboard_tboady .accordion-body .border.rounded {
+            padding: 4px 6px !important;
+        }
+
+        /* Reduce row spacing */
+        #stock_dashboard_tboady .accordion-body .row {
+            --bs-gutter-x: 5px;
+            --bs-gutter-y: 3px;
+        }
+
+        /* List groups */
+        #stock_dashboard_tboady .accordion-body .list-group-item {
+            padding: 4px 6px;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        /* Compact badges */
+        #stock_dashboard_tboady .badge {
+            font-size: 10px;
+            padding: 3px 5px;
+            vertical-align: middle;
+        }
+
+        /* Reduce badge margins */
+        #stock_dashboard_tboady .mx-1 {
+            margin-left: 2px !important;
+            margin-right: 2px !important;
+        }
+
+        #stock_dashboard_tboady .mx-2 {
+            margin-left: 3px !important;
+            margin-right: 3px !important;
+        }
+
+        /* Compact stock location text */
+        #stock_dashboard_tboady .accordion-body strong {
+            font-size: 10px;
+        }
+
+        /* Make accordion header contents fit in one line */
+        #stock_dashboard_tboady .accordion-button .d-flex {
+            gap: 4px;
+        }
+
+        #stock_dashboard_tboady .accordion-button .fw-semibold {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Remove unnecessary background on accordion body */
+        #stock_dashboard_tboady .accordion-body {
+            background: #fff;
+        }
+
+        /* Smaller table cells */
+        #stock_dashboard_tboady>tr>td {
+            padding: 5px 6px;
+            vertical-align: middle;
+        }
+
+        #stock_dashboard_tboady .accordion-button {
+            padding: 3px 6px;
+            font-size: 11px;
+            min-height: 28px;
+        }
+
+        #stock_dashboard_tboady .accordion-body {
+            padding: 4px 6px;
+        }
+
+        #stock_dashboard_tboady .accordion-body .list-group-item {
+            padding: 3px 5px;
+            font-size: 10px;
+        }
+
+        #stock_dashboard_tboady .badge {
+            font-size: 9px;
+            padding: 2px 4px;
         }
     </style>
 
@@ -44,7 +167,7 @@
         </div>
     </div>
 
-        <section id="menu_bar" ></section>
+    <section id="menu_bar"></section>
     <div class="container-fluid " style="height: 100%; overflow-y: auto;">
         <!-- top bar -->
 
@@ -57,44 +180,150 @@
 
         <div class="page-wrapper">
 
-            <!-- content -->
-            <div class="d-flex">
-                <div class=" m-1">
-                    <input type="text" class="form-control rounded-3" id="part_search" placeholder="Part">
+
+            <div class="stock_dashboard">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <div class="card border-0 shadow-sm rounded-3">
+
+                            <div class="card-header bg-primary text-white py-2 px-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-filter me-2"></i>
+                                    <span class="fw-semibold">Stock Filter</span>
+                                </div>
+                            </div>
+
+                            <div class="card-body p-2">
+
+                                <!-- Godown -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <input type="text" class="form-control" id="godown"
+                                        placeholder="Godown">
+                                </div>
+
+                                <!-- Department -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <input type="text" class="form-control" id="department"
+                                        placeholder="Department">
+                                </div>
+
+                                <!-- Section -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <input type="text" class="form-control" id="section"
+                                        placeholder="Section">
+                                </div>
+
+                                <!-- Part Name -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <input type="text" class="form-control" id="part_name"
+                                        placeholder="Part Name">
+                                </div>
+
+                                <!-- Hidden Qty -->
+                                <div class="input-group input-group-sm mb-3 d-none">
+                                    <input type="number" class="form-control" min="1"
+                                        id="opening_qty" placeholder="Qty">
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="d-flex gap-2 pt-1">
+
+                                    <button type="button" class="btn btn-primary btn-sm flex-fill" id="filter_btn">
+
+                                        <i class="fa-solid fa-filter me-1"></i>
+                                        Filter
+
+                                    </button>
+
+                                    <button type="button" class="btn btn-warning btn-sm flex-fill" id="clear_btn">
+
+                                        <i class="fa-solid fa-broom me-1"></i>
+                                        Clear
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div class="table-responsive">
+                            <table class="table caption-top table-bordered table-striped small">
+
+                                <caption></caption>
+
+                                <thead class="table-primary small">
+
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Part Name</th>
+                                        <th scope="col">Total Qty</th>
+                                        <th scope="col" colspan="3">Stock Details</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="stock_dashboard_tboady" class="small">
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
                 </div>
-                <div class=" m-1">
-                    <input type="text" class="form-control rounded-3" id="emp_search" placeholder="Employee">
-                </div>
-                <div class="m-1">
-                    <button type="button" class="btn btn-success " id="excel_bnt"><i
-                            class="fa fa-file-excel"></i></button>
-                </div>
+
+
             </div>
-            <div class="table-responsive">
-                <table class="table caption-top table-bordered table-striped " style="font-size: 12px;">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%;"> <input type="text" id="stock_history_search" class="form-control border-0 bg-white"
-                                    placeholder="Search..."></th>
-                            <th>Part</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                            <th>Godown</th>
-                            <th>Department</th>
-                            <th>Section</th>
-                            <th>Qty</th>
-                            <th>Employee</th>
-                            <th>Remark</th>
-                        </tr>
-                    </thead>
 
-                    <tbody id="stock_history_tbody">
+            <!-- content -->
+            <div class="d-none">
+                <div class="d-flex">
+                    <div class=" m-1">
+                        <input type="text" class="form-control rounded-3" id="part_search" placeholder="Part">
+                    </div>
+                    <div class=" m-1">
+                        <input type="text" class="form-control rounded-3" id="emp_search" placeholder="Employee">
+                    </div>
+                    <div class="m-1">
+                        <button type="button" class="btn btn-success " id="excel_bnt"><i
+                                class="fa fa-file-excel"></i></button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table caption-top table-bordered table-striped " style="font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;"> <input type="text" id="stock_history_search"
+                                        class="form-control border-0 bg-white" placeholder="Search..."></th>
+                                <th>Part</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                                <th>Godown</th>
+                                <th>Department</th>
+                                <th>Section</th>
+                                <th>Qty</th>
+                                <th>Employee</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="stock_history_tbody">
 
 
-                    </tbody>
+                        </tbody>
 
 
-                </table>
+                    </table>
+                </div>
             </div>
 
 
