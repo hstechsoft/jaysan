@@ -51,7 +51,7 @@ if ($qty > $stock_qty) {
   throw new Exception("Quantity to transport cannot be greater than stock quantity for stock id $stock_id");
            
         }
-         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty, remark = 'stock reduced by transport -".$transport_dc_id."' WHERE stock_id = $stock_id";
+         $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty, remark = 'stock reduced by transport -".$transport_dc_id." WHERE stock_id = $stock_id";
         if (!$conn->query($sql_reserve_update)) {
             throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error);
         }
@@ -72,7 +72,7 @@ if ($qty > $stock_qty) {
 
         // if stock exists in transport godown update stock with new quantity else insert new stock with quantity
         if($existing_stock_id) {
-            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty,remark = 'stock added by transport -".$transport_dc_id."' WHERE stock_id = $existing_stock_id";
+            $sql_update_stock = "UPDATE jaysan_stock SET qty = qty + $qty,remark = 'stock added by transport -".$transport_dc_id." WHERE stock_id = $existing_stock_id";
             if (!$conn->query($sql_update_stock)) {
                 throw new Exception("Error updating stock id $existing_stock_id in transport godown: " . $conn->error);
             }
