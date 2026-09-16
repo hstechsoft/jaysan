@@ -318,14 +318,15 @@ else {
 }
 
 
-if($total_work_duration_minutes < $total_min_time) {
-    $conn->rollback();
+// if($total_work_duration_minutes < $total_min_time) {
+//     $conn->rollback();
 
-    $result_json['message'] = "Total work duration is less than the minimum required time for the processes. Total work duration: $total_work_duration_minutes minutes, Minimum required time: $total_min_time minutes.";
-    echo json_encode($result_json);
-    $conn->close();
-    exit; 
-}
+//     $result_json['message'] = "Total work duration is less than the minimum required time for the processes. Total work duration: $total_work_duration_minutes minutes, Minimum required time: $total_min_time minutes.";
+//     echo json_encode($result_json);
+//     $conn->close();
+//     exit; 
+// }
+
 if($total_work_duration_minutes > $total_max_time) {
     // now total work time greater then max time so we assigin process time as max time and calulate extra time as total work time - max time
     
