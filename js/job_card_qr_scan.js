@@ -3189,9 +3189,9 @@ function get_section_wise_process(godown_id, dep_id, sec_id, machine_id) {
                         count = count + 1;
 
 
-                        tb += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td><button class='btn btn-outline-primary small' data-part_id=${obj.outpart} data-process_id=${obj.process_id} >Add</button></td></tr>`;
+                        tb += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name} <span class="badge bg-danger">${obj.min_time}</span><span class="badge bg-success">${obj.max_time}</span></td><td><button class='btn btn-outline-primary small' data-part_id=${obj.outpart} data-process_id=${obj.process_id} >Add</button></td></tr>`;
 
-                        tb_process += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}</td><td><input class="form-check-input" name="default_process" type="radio" value="" id="" data-part_id=${obj.outpart} data-process_id=${obj.process_id}></td></tr>`;
+                        tb_process += `<tr><td>${index + 1}</td><td>${obj.output_part}</td><td>${obj.process_name}<span class="badge bg-danger">${obj.min_time}</span><span class="badge bg-success">${obj.max_time}</span></td><td><input class="form-check-input" name="default_process" type="radio" value="" id="" data-part_id=${obj.outpart} data-process_id=${obj.process_id}></td></tr>`;
 
 
                     });
