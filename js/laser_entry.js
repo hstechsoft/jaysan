@@ -1318,7 +1318,7 @@ function get_nesting_details() {
                                                 ${idtl.shift ?? '-'}
                                             </span>
 
-                                            <span class="badge bg-success">
+                                            <span class="badge bg-warning text-dark" title="Scrap Qty">
                                                 Qty: ${idtl.scarp_qty ?? 0}
                                             </span>
 

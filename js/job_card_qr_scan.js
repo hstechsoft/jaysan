@@ -49,7 +49,7 @@ $(document).ready(function () {
         if (window.AndroidBridge) {
             AndroidBridge.openScanner();
         }
-        else{
+        else {
             alert("This Is For Mobile App Only");
         }
     });
@@ -664,6 +664,8 @@ $(document).ready(function () {
         //     return;
         // }
 
+        Chart.getChart("workChart")?.destroy();
+        $("#workSummaryCards").empty();
         $("#setting_part_table").removeClass("d-none");
         var part_id = $(this).data("part_id");
         var process_id = $(this).data("process_id");
@@ -672,7 +674,7 @@ $(document).ready(function () {
         var process = $(this).closest("tr").find("td").eq(2).text();
         var length_n = $("#setting_part_tbody tr").length;
 
-        $("#setting_part_tbody").append(`<tr data-part_id=${part_id} data-process_id=${process_id}><td>${length_n + 1}</td><td>${part_name}</td><td>${process}</td><td contenteditable=true>1</td><td><button class='btn btn-outline-danger'><i class='fa fa-trash'></i> </button<</td></tr>`)
+        $("#setting_part_tbody").append(`<tr data-part_id=${part_id} data-process_id=${process_id}><td>${length_n + 1}</td><td>${part_name}</td><td>${process}</td><td contenteditable=true>1</td><td><button class='btn btn-outline-danger btn-sm'><i class='fa fa-trash'></i> </button<</td></tr>`)
 
         if ($("#setting_part_tbody tr").length === 0) {
             $("#setting_part_table").addClass("d-none");
@@ -1401,7 +1403,7 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
             else {
 
                 $("#setting_part_table").addClass("d-none");
-                $("#setting_part_tbody").empty();
+                // $("#setting_part_tbody").empty();
                 $("#breakTimeModal").modal("hide");
                 document.getElementById("workDetails").innerHTML = '';
 
@@ -2365,6 +2367,7 @@ function get_assign_order() {
 
                     var obj = JSON.parse(response);
 
+                    obj = obj.sort((a,b) => Number(b.qr_no) - Number(a.qr_no));
 
                     obj.forEach(function (obj) {
 
