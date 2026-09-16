@@ -41,6 +41,60 @@ $(document).ready(function () {
     get_current_work_details(current_user_id);
     get_all_extra_time();
 
+    $('#extra_work_auto').on('input',function(){
+       //check the value not empty
+       $(this).removeData("ext_id")
+           if($('#extra_work_auto').val() !="")
+           {
+             $('#extra_work_auto').autocomplete({
+               //get data from databse return as array of object which contain label,value
+    
+               source: function(request, response) {
+                 $.ajax({
+                   url: "php/get_all_extra_time_auto.php",
+                   type: "get", //send it through get method
+                   data: {
+                   
+                    ex_name: $('#extra_work_auto').val()
+    
+                 },
+                 dataType: "json", 
+                   success: function (data) {
+    
+                 console.log(data);
+                 response($.map(data, function(item) {
+                   return {
+                       label: item.ex_name,
+                       value: item.ex_name,
+                       id: item.ext_id,
+                       // part_name: item.part_name
+                   };
+               }));
+    
+                   }
+    
+                 });
+               },
+               minLength: 2,
+               cacheLength: 0,
+               select: function(event, ui) {
+    
+                 $(this).data("ext_id", ui.item.id);
+                 $('#extra_work_select').val(ui.item.id);
+               //   $('#part_name_out').val(ui.item.part_name)
+               //  get_bom(ui.item.id)
+    
+    
+               } ,
+    
+             }).autocomplete("instance")._renderItem = function(ul, item) {
+               return $("<li>")
+                   .append("<div><strong>" + item.part_name + "</strong> - " + item.value + "</div>")
+                   .appendTo(ul);
+           };
+           }
+    
+          });
 
     $("#openScannerBtn").on("click", function (event) {
         event.preventDefault();
@@ -884,6 +938,7 @@ $(document).ready(function () {
         extra_work_id = $("#extra_work_select").val("");
         extra_work_time = $("#extra_work_time").val("");
         extra_work_time_type = $("#extra_work_time_type").val("minutes");
+        $("#extra_work_auto").val('').removeData("ext_id")
     })
 
     $("#pdf_summary_btn").on("click", function () {

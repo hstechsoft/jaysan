@@ -24,7 +24,7 @@
             font-size: 10px;
             padding: 1px;
         }
-        
+
 
         .btn-outline-primary {
             font-size: 10px;
@@ -204,10 +204,11 @@
         }
 
         /* break */
-        #break_time_list li{
+        #break_time_list li {
             font-size: 12px;
             padding: 5px;
         }
+
         /* quote */
 
         .quote-box {
@@ -429,6 +430,15 @@
                 transform: translateX(50%);
             }
         }
+
+        .ui-autocomplete {
+            z-index: 9999 !important;
+        }
+
+        .ui-autocomplete-input {
+            position: relative;
+            z-index: 1051 !important;
+        }
     </style>
 
 
@@ -479,7 +489,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="quote-icon" id="quote_icon">🔥</div>
 
                         <div class="quote-text" id="quote_text">
@@ -994,6 +1004,12 @@
                                             <option selected disabled value="">Choose...</option>
                                         </select>
                                         <label for="extra_work_select">Extra Work</label>
+                                    </div>
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control rounded-3" id="extra_work_auto"
+                                            placeholder="">
+                                        <label for="extra_work_auto">Extra Work</label>
+
                                     </div>
 
                                     <div class="d-flex">
