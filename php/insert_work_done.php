@@ -839,7 +839,7 @@ if($part_id !="NULL")
     }
         // insert 0-qty for the stock if it doesn't exist
         $sql_insert_stock = "insert into jaysan_stock (part_id, process_id, godown, dep, sec, qty,remark) values ($part_id, $process_id, $godown_id, $dep_id, $sec_id, 0-$qty_to_consume,'stock_added by user -".$work_done_id."') on duplicate key update qty = qty -$qty_to_consume";
-        echo "query: 1 -> " . $sql_insert_stock;
+    
         if ($conn->query($sql_insert_stock) !== TRUE) {
             $result_json['message'] = "Error inserting stock: " . $conn->error;
             echo json_encode($result_json);
@@ -881,8 +881,7 @@ $batch_id = "j".$work_done_id;
 $dstock_id = 0;
     // insert output stock for the process part
     $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id,remark) VALUES ($part_id, $process_id , $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id','stock_added by user -".$work_done_id."') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
-    
-echo "query: 2 -> " . $sql_insert_output;
+
     if ($conn->query($sql_insert_output) === TRUE) {
 // get stock_id
 $stock_id = $conn->insert_id;

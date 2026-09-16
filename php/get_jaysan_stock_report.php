@@ -1,4 +1,10 @@
+
 <?php
+
+error_reporting(E_ALL);
+
+ini_set('display_errors', 1);
+    
  include 'db_head.php';
 
  $godown =  test_input($_GET['godown']);
@@ -43,46 +49,80 @@ stock_log as (
         'old_qty', old_qty,
         'new_qty', new_qty,
         'update_type',action_type
-    )) as stock_log from jaysan_stock_log GROUP BY stock_id ORDER BY log_id desc limit 50), 
+    )) as stock_log from jaysan_stock_log GROUP BY stock_id ORDER BY log_id desc ),
 
-stock_rv as (
-    select 
+jaysan_stock_view as (SELECT 
+js.part_id,
+js.process_id,
+js.godown,
+js.dep,
+js.sec,
+js.batch_id,
+js.stock_id,
+sr.reserve_type,
+sr.reserve_type_id,
+sr.stock_reserve_id,
+creditors.creditor_name,
+department.dep_name,
+dep_section.sec_name,
+js.qty as stock_qty,
+sum(sr.reserve_qty) as total_reserved_qty,
+
+ 
+   JSON_ARRAYAGG(JSON_OBJECT(
+
+    
+                    'reserve_qty', sr.reserve_qty,
+                    'reserve_status', sr.reserve_status,
+                    'reserve_date', sr.dated,
+                    'reserve_id', sr.stock_reserve_id
+    )) AS reserve_details
+ 
+
+ FROM jaysan_stock js  
+ LEFT JOIN stock_reserve sr ON sr.stock_id = js.stock_id 
+ left join creditors on creditors.creditor_id = js.godown
+ left join department on department.dep_id = js.dep
+    left join dep_section on dep_section.dep_sec_id = js.sec
+    
+
+
+group by js.stock_id),
+  stock_rv as  ( select 
     stock_log,
-    available_qty,
+    jaysan_stock_view.stock_qty - IFNULL(jaysan_stock_view.total_reserved_qty, 0) as available_qty,
            part_id,
            process_id,
            godown,
            dep,
            sec,
-           sec_name,
-           stock_reserve_view.stock_id,
+           jaysan_stock_view.sec_name,
+           jaysan_stock_view.stock_id,
            batch_id,
            reserve_details,
-           qty,
-           reserve_qty,
-           rpart_name,
-           rprocess_name,
+           stock_qty,
+           total_reserved_qty,
+         
            creditor_name,
            dep_name
    
 
-    from stock_reserve_view 
+    from jaysan_stock_view 
     
-    left join stock_log on stock_reserve_view.stock_id = stock_log.stock_id
-    where $godown_query and $part_query
-
-)
-
+    left join stock_log on jaysan_stock_view.stock_id = stock_log.stock_id
+    where  $godown_query and $part_query)
+    
+    
 select 
 stock_log,
-        part_id,
-           process_id,
-             rpart_name,
-           rprocess_name,
+        stock_rv.part_id,
+           stock_rv.process_id,
+           
+           if(stock_rv.part_id is null,jpv.final_part,parts_tbl.part_name) as rpart_name,
             sum(available_qty) as available_qty,
          
-           sum(qty) as qty,
-           sum(reserve_qty) as reserve_qty,
+           sum(stock_qty) as qty,
+           sum(total_reserved_qty) as reserve_qty,
 JSON_ARRAYAGG(
     JSON_OBJECT(
         'stock_log', stock_log,
@@ -94,22 +134,24 @@ JSON_ARRAYAGG(
         'stock_id', stock_id,
         'batch_id', batch_id,
         'reserve_details', reserve_details,
-        'qty', qty,
-        'reserve_qty', reserve_qty,
-        'rpart_name', rpart_name,
-        'rprocess_name', rprocess_name,
+        'qty', stock_qty,
+        'reserve_qty', total_reserved_qty,
+       
         'creditor_name', creditor_name,
         'dep_name', dep_name
     )
 ) as stock_details
            
-from stock_rv WHERE part_id IS NOT NULL
-group by part_id,
-process_id limit 50";
+from stock_rv
+ left join parts_tbl on stock_rv.part_id = parts_tbl.part_id
+    left join jaysan_process_view jpv on jpv.process_id = stock_rv.process_id
+WHERE 1
+group by stock_rv.part_id,
+stock_rv.process_id limit 500
+";
 
 
-
-
+// echo $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

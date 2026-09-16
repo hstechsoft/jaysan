@@ -1,4 +1,5 @@
 <?php
+
  include 'db_head.php';
 
  $emp_id = test_input($_POST['emp_id']);
