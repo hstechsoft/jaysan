@@ -162,6 +162,8 @@ function get_work_order_report() {
         },
         success: function (response) {
 
+            console.log(response);
+            
             let data = JSON.parse(response);
             $("#all_bom_table").empty();
 
