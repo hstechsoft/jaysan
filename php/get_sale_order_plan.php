@@ -72,7 +72,7 @@ select
             assign_details
         )
     ) as order_info,
-    product_process.process_id,
+   group_concat(product_process.process_id) as process_id,
     sum(total_qty) as total_required_qty,
     sales_order_info_view.*
 from
