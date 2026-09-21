@@ -616,7 +616,7 @@ if ($conn->query($sql_delete_zero_reserve) === TRUE) {
 } else {
   throw new Exception("Error deleting zero reserve records: " . $conn->error);
 }
-  // $result_json['success'] = true;
+   $result_json['success'] = true;
       $conn->commit();
 
 }
