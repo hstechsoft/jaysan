@@ -397,7 +397,7 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
             godowns.forEach(function (godown) {
               godown_list += `
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="gdown_${obj.final_part}_${obj.process_name}" id="godown_${godown.godown_id}_${count}" value="${godown.godown_id}" data-dep_id="${godown.dep_id}" data-sec_id="${godown.sec_id}">
+                                <input class="form-check-input" type="radio" checked name="gdown_${obj.final_part}_${obj.process_name}" id="godown_${godown.godown_id}_${count}" value="${godown.godown_id}" data-dep_id="${godown.dep_id}" data-sec_id="${godown.sec_id}">
                                 <label class="form-check-label" for="godown_${godown.godown_id}_${count}">
                                     ${godown.godown_name}
                                     ${godown.department ? `[${godown.department}]` : ''}

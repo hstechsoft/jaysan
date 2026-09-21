@@ -2680,7 +2680,8 @@ function get_current_work_details(emp_id) {
                         let process_data = Array.isArray(finish.process_data) ? finish.process_data : JSON.parse(finish.process_data);
 
                         process_data.forEach(function (item, i) {
-                            $("#work_compeleted_tbody").append(`<tr><td>${i + 1}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
+
+                            $("#work_compeleted_tbody").append(`<tr><td>${i =+ 1}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
 
                         })
 
