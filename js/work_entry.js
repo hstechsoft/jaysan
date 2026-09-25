@@ -50,13 +50,13 @@ $(document).ready(function () {
   load_extra_time_table();
   check_login();
 
-    $(".extra_time_search").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
+  $(".extra_time_search").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
 
-        $("#extra_time_tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
+    $("#extra_time_tbody tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
+  });
 
 
   $('#employeeProcessModal').on('show.bs.modal', function () {
@@ -1692,8 +1692,8 @@ $(document).ready(function () {
       salert("Warning", "Data Missing Try Later.", "warning");
     }
 
-    
-    if(day_end_time == '' || !day_end_time || day_end_time == null){
+
+    if (day_end_time == '' || !day_end_time || day_end_time == null) {
       salert("Warning", "Fill End Time.", "warning");
       return;
     }
@@ -1741,6 +1741,13 @@ $(document).ready(function () {
     //     return;
     // }
 
+
+    Chart.getChart("workChart")?.destroy();
+    Chart.getChart("finalWorkChart")?.destroy();
+    $("#final_summary, #last_end_btn").addClass("d-none");
+    $("#summay_btn").removeClass("d-none");
+    $("#day_end_time").val('');
+
     $("#setting_part_table").removeClass("d-none");
     var part_id = $(this).data("part_id");
     var process_id = $(this).data("process_id");
@@ -1782,44 +1789,59 @@ $(document).ready(function () {
     let value = $(this).text().trim();
     let num = Number(value);
 
+    Chart.getChart("workChart")?.destroy();
+    Chart.getChart("finalWorkChart")?.destroy();
+    $("#final_summary, #last_end_btn").addClass("d-none");
+    $("#summay_btn").removeClass("d-none");
+    $("#day_end_time").val('');
+
     if (!value || isNaN(num) || num <= 0) {
       $(this).text(1);
     }
   })
 
+
   $("#setting_part_tbody").on("click", "button", function () {
+
+    Chart.getChart("workChart")?.destroy();
+    Chart.getChart("finalWorkChart")?.destroy();
+    $("#final_summary, #last_end_btn").addClass("d-none");
+    $("#summay_btn").removeClass("d-none");
+    $("#day_end_time").val('');
+
     var row = $(this).closest("tr");
 
-    $("#setting_part_tbody").on("click", "button", function () {
+    Swal.fire({
+      title: "Do you want to delete?",
+      text: "The row will be deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
 
-      var row = $(this).closest("tr");
+      if (result.isConfirmed) {
 
-      Swal.fire({
-        title: "Do you want to delete?",
-        text: "The row will be deleted.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
+        row.remove();
+        Chart.getChart("workChart")?.destroy();
 
-        if (result.isConfirmed) {
+        $("#setting_part_tbody tr").each(function (index) {
+          $(this).find("td").eq(0).text(index + 1);
+        });
 
-          row.remove();
-          Chart.getChart("workChart")?.destroy();
-
-          $("#setting_part_tbody tr").each(function (index) {
-            $(this).find("td").eq(0).text(index + 1);
-          });
-
-          if ($("#setting_part_tbody tr").length === 0) {
-            $("#setting_part_table").addClass("d-none");
-          }
+        if ($("#setting_part_tbody tr").length === 0) {
+          $("#setting_part_table").addClass("d-none");
         }
-      });
+      }
     });
-  })
+  });
 
   $("#add_setting_part_btn").on("click", function () {
+
+    Chart.getChart("workChart")?.destroy();
+    Chart.getChart("finalWorkChart")?.destroy();
+    $("#final_summary, #last_end_btn").addClass("d-none");
+    $("#summay_btn").removeClass("d-none");
+    $("#day_end_time").val('');
 
     var process_part_array = [];
     var machine_id = $("#worked_machine").val();
@@ -2694,7 +2716,7 @@ function get_work_summary_admin(emp_id, qr_work_id, break_time_array, process_pa
         function formatMinutes(mins) {
           let h = Math.floor(mins / 60);
           let m = mins % 60;
-          return h + "h " + m + "m";
+          return h + "h " + m.toFixed(2) + "m";
         }
 
 
@@ -3165,7 +3187,7 @@ function get_final_summary_admin() {
     type: "get",
     data: {
       emp_id: $("#emp").val(),
-      work_end_time : $("#day_end_time").val()
+      work_end_time: $("#day_end_time").val()
     },
 
     success: function (response) {
@@ -3207,7 +3229,7 @@ function get_final_summary_admin() {
       function formatMinutes(mins) {
         let h = Math.floor(mins / 60);
         let m = mins % 60;
-        return h + "h " + m + "m";
+        return h + "h " + m.toFixed(2) + "m";
       }
 
 
@@ -3623,6 +3645,9 @@ function work_day_end_admin(work_done_id, day_end_time) {
         window.location.reload();
         // get_current_work_details(current_user_id)
       }
+      else {
+        salert("Warning", response.trim(), "warning");
+      }
 
 
 
@@ -3734,7 +3759,7 @@ function update_chasis_no(ass_id, chasis_no) {
 
 function get_current_work_break_admin(emp_id, work_end_time) {
   console.log(emp_id, work_end_time);
-  
+
   $.ajax({
     url: "php/get_current_work_break_admin.php",
     type: "get", //send it through get method
@@ -4174,6 +4199,13 @@ function get_current_work_details(emp_id) {
     success: function (response) {
       if (response.trim() != "error") {
         console.log(response);
+
+
+        Chart.getChart("workChart")?.destroy();
+        Chart.getChart("finalWorkChart")?.destroy();
+        $("#final_summary, #last_end_btn").addClass("d-none");
+        $("#summay_btn").removeClass("d-none");
+        $("#day_end_time").val('');
 
         $("#timing_section, #paused_work_tbody, #work_compeleted_tbody").empty();
         if (response.trim() != "0 result") {

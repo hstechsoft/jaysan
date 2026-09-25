@@ -41,60 +41,59 @@ $(document).ready(function () {
     get_current_work_details(current_user_id);
     get_all_extra_time();
 
-    $('#extra_work_auto').on('input',function(){
-       //check the value not empty
-       $(this).removeData("ext_id")
-           if($('#extra_work_auto').val() !="")
-           {
-             $('#extra_work_auto').autocomplete({
-               //get data from databse return as array of object which contain label,value
-    
-               source: function(request, response) {
-                 $.ajax({
-                   url: "php/get_all_extra_time_auto.php",
-                   type: "get", //send it through get method
-                   data: {
-                   
-                    ex_name: $('#extra_work_auto').val()
-    
-                 },
-                 dataType: "json", 
-                   success: function (data) {
-    
-                 console.log(data);
-                 response($.map(data, function(item) {
-                   return {
-                       label: item.ex_name,
-                       value: item.ex_name,
-                       id: item.ext_id,
-                       // part_name: item.part_name
-                   };
-               }));
-    
-                   }
-    
-                 });
-               },
-               minLength: 2,
-               cacheLength: 0,
-               select: function(event, ui) {
-    
-                 $(this).data("ext_id", ui.item.id);
-                 $('#extra_work_select').val(ui.item.id);
-               //   $('#part_name_out').val(ui.item.part_name)
-               //  get_bom(ui.item.id)
-    
-    
-               } ,
-    
-             }).autocomplete("instance")._renderItem = function(ul, item) {
-               return $("<li>")
-                   .append("<div><strong>" + item.part_name + "</strong> - " + item.value + "</div>")
-                   .appendTo(ul);
-           };
-           }
-    
-          });
+    $('#extra_work_auto').on('input', function () {
+        //check the value not empty
+        $(this).removeData("ext_id")
+        if ($('#extra_work_auto').val() != "") {
+            $('#extra_work_auto').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_all_extra_time_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            ex_name: $('#extra_work_auto').val()
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.ex_name,
+                                    value: item.ex_name,
+                                    id: item.ext_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("ext_id", ui.item.id);
+                    $('#extra_work_select').val(ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.part_name + "</strong> - " + item.value + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
     $("#openScannerBtn").on("click", function (event) {
         event.preventDefault();
@@ -658,13 +657,13 @@ $(document).ready(function () {
 
     $("#summay_btn").on("click", function () {
 
-        if ($("#paused_work_tbody tr").length <= 0) {
-            $("#final_summary").removeClass("d-none");
-            get_final_summary();
-        }
-        else {
-            salert("Warning", "First Complete all the paused work.", "warning");
-        }
+        // if ($("#paused_work_tbody tr").length <= 0) {
+        $("#final_summary").removeClass("d-none");
+        get_final_summary();
+        // }
+        // else {
+        //     salert("Warning", "First Complete all the paused work.", "warning");
+        // }
 
 
     })
@@ -719,6 +718,10 @@ $(document).ready(function () {
         // }
 
         Chart.getChart("workChart")?.destroy();
+        Chart.getChart("finalWorkChart")?.destroy();
+        $("#final_summary, #last_end_btn").addClass("d-none");
+        $("#summay_btn").removeClass("d-none");
+
         $("#workSummaryCards").empty();
         $("#setting_part_table").removeClass("d-none");
         var part_id = $(this).data("part_id");
@@ -761,44 +764,56 @@ $(document).ready(function () {
         let value = $(this).text().trim();
         let num = Number(value);
 
+
+        Chart.getChart("workChart")?.destroy();
+        Chart.getChart("finalWorkChart")?.destroy();
+        $("#final_summary, #last_end_btn").addClass("d-none");
+        $("#summay_btn").removeClass("d-none");
+
         if (!value || isNaN(num) || num <= 0) {
             $(this).text(1);
         }
     })
 
     $("#setting_part_tbody").on("click", "button", function () {
+
+        Chart.getChart("workChart")?.destroy();
+        Chart.getChart("finalWorkChart")?.destroy();
+        $("#final_summary, #last_end_btn").addClass("d-none");
+        $("#summay_btn").removeClass("d-none");
+
         var row = $(this).closest("tr");
 
-        $("#setting_part_tbody").on("click", "button", function () {
+        Swal.fire({
+            title: "Do you want to delete?",
+            text: "The row will be deleted.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
 
-            var row = $(this).closest("tr");
+            if (result.isConfirmed) {
 
-            Swal.fire({
-                title: "Do you want to delete?",
-                text: "The row will be deleted.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
+                row.remove();
+                Chart.getChart("workChart")?.destroy();
 
-                if (result.isConfirmed) {
+                $("#setting_part_tbody tr").each(function (index) {
+                    $(this).find("td").eq(0).text(index + 1);
+                });
 
-                    row.remove();
-                    Chart.getChart("workChart")?.destroy();
-
-                    $("#setting_part_tbody tr").each(function (index) {
-                        $(this).find("td").eq(0).text(index + 1);
-                    });
-
-                    if ($("#setting_part_tbody tr").length === 0) {
-                        $("#setting_part_table").addClass("d-none");
-                    }
+                if ($("#setting_part_tbody tr").length === 0) {
+                    $("#setting_part_table").addClass("d-none");
                 }
-            });
+            }
         });
-    })
+    });
 
     $("#add_setting_part_btn").on("click", function () {
+
+        Chart.getChart("workChart")?.destroy();
+        Chart.getChart("finalWorkChart")?.destroy();
+        $("#final_summary, #last_end_btn").addClass("d-none");
+        $("#summay_btn").removeClass("d-none"); 
 
         var process_part_array = [];
         var machine_id = $("#worked_machine").val();
@@ -1070,7 +1085,7 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
                 function formatMinutes(mins) {
                     let h = Math.floor(mins / 60);
                     let m = mins % 60;
-                    return h + "h " + m + "m";
+                    return h + "h " + m.toFixed(2) + "m";
                 }
 
 
@@ -1582,7 +1597,7 @@ function get_final_summary() {
             function formatMinutes(mins) {
                 let h = Math.floor(mins / 60);
                 let m = mins % 60;
-                return h + "h " + m + "m";
+                return h + "h " + m.toFixed(2) + "m";
             }
 
 
@@ -1996,6 +2011,9 @@ function work_day_end(work_done_id) {
             if (response.trim() == "ok" || response.trim() == "Work ended successfully") {
                 window.location.reload();
                 // get_current_work_details(current_user_id)
+            }
+            else {
+                salert("Warning", response.trim(), "warning");
             }
 
 
@@ -2422,7 +2440,7 @@ function get_assign_order() {
 
                     var obj = JSON.parse(response);
 
-                    obj = obj.sort((a,b) => Number(b.qr_no) - Number(a.qr_no));
+                    obj = obj.sort((a, b) => Number(b.qr_no) - Number(a.qr_no));
 
                     obj.forEach(function (obj) {
 
@@ -2544,6 +2562,13 @@ function get_current_work_details(emp_id) {
         success: function (response) {
             if (response.trim() != "error") {
                 console.log(response);
+
+
+
+                Chart.getChart("workChart")?.destroy();
+                Chart.getChart("finalWorkChart")?.destroy();
+                $("#final_summary, #last_end_btn").addClass("d-none");
+                $("#summay_btn").removeClass("d-none");
 
                 $("#timing_section, #paused_work_tbody, #work_compeleted_tbody").empty();
                 if (response.trim() != "0 result") {
@@ -2670,6 +2695,8 @@ function get_current_work_details(emp_id) {
                         })
                     });
 
+                    var complete_count = 0;
+
                     let finished_work_entries = Array.isArray(obj.finished_work_entries) ? obj.finished_work_entries : [];
                     finished_work_entries.forEach(function (finish, index) {
 
@@ -2678,13 +2705,14 @@ function get_current_work_details(emp_id) {
                         }
 
                         let process_data = Array.isArray(finish.process_data) ? finish.process_data : JSON.parse(finish.process_data);
+                        console.log(process_data);
 
                         process_data.forEach(function (item, i) {
-
-                            $("#work_compeleted_tbody").append(`<tr><td>${i =+ 1}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
+                            complete_count++;
+                            $("#work_compeleted_tbody").append(`<tr><td>${complete_count}</td><td>${item.part_name}</td><td>${item.process_name}</td><td>${!finish.chasis_no ? "Sub-Assembly" : finish.chasis_no}</td><td>${item.qty}</td><td>${item.total_time}Mins</td></tr>`);
 
                         })
-
+                        complete_count = complete_count;
 
                     })
 

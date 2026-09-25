@@ -67,33 +67,82 @@ $(document).ready(function () {
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
-  $('#system_request_tbody').on("dblclick", "tr", function(){
-      var part_name = $(this).data("part_name") || '';
-      var part_id = $(this).data("part_id") || 0;
-      var qty = $(this).find("td").eq(2).text() || 0;
+  $('#system_request_tbody').on("dblclick", "tr", function () {
+    var part_name = $(this).data("part_name") || '';
+    var part_id = $(this).data("part_id") || 0;
+    var qty = $(this).find("td").eq(2).text() || 0;
 
-      $("#requirement_quantity").val(qty);
-      
-      if(part_name == '' || part_id <= 0){
-        salert("Warning", "Data Missing!, Try Later.", "warning");
-      }else{
-        $("#system_requestModal").modal("hide");
-        $("#part_no").data("selected-part_id", part_id).val(part_name);
-        get_material_request_form_parts_search(part_id, 'all', "created");
-      }
+    $("#requirement_quantity").val(qty);
+
+    if (part_name == '' || part_id <= 0) {
+      salert("Warning", "Data Missing!, Try Later.", "warning");
+    } else {
+      $("#system_requestModal").modal("hide");
+      $("#part_no").data("selected-part_id", part_id).val(part_name);
+      get_material_request_form_parts_search(part_id, 'all', "created");
+    }
   });
 
-  $('#system_request_tbody').on('click', "button", function(){
+  $('#system_request_tbody').on('click', "button", function () {
     var part_id = $(this).val() || 0;
     var status = $(this).closest("tr").find(".req_status").val() || '';
 
-    if(status == '' || part_id <= 0){
-        salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
-      }else{
-        update_mrf_request(part_id, status);
-      }
+    var mrf_no = $("#mrf_no").val() || '';
+    var reason = $("#status_reason").val() || '';
+
+    if (status == '' || part_id <= 0) {
+      salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
+    } else {
+      update_mrf_request(part_id, status, mrf_no, reason);
+    }
 
   });
+
+  $('#system_request_tbody').on('change', ".req_status", function () {
+    var status = $(this).val() || '';
+
+    if (status == '') {
+      salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
+    }
+    else if (status == 'cancelled') {
+      $("#mrf_no").addClass("d-none");
+      $("#mrf_status_modal").modal("show");
+    }
+    else {
+      $("#mrf_status_modal").modal("show");
+    }
+
+  });
+
+  $("#save_status_btn").on("click", function () {
+    var mrf_no = '';
+    var reason = '';
+
+    if ($("#mrf_no").hasClass('d-none')) {
+
+      reason = $("#status_reason").val() || '';
+
+      if (reason == '') {
+        salert("Warning", "Reason required.", "warning");
+        return;
+      }
+      else {
+        $("#mrf_status_modal").modal("hide");
+      }
+    }
+    else {
+      mrf_no = $("#mrf_no").val() || '';
+      reason = $("#status_reason").val() || '';
+
+      if (mrf_no == '' || reason == '') {
+        salert("Warning", "MRF/No and Reason required.", "warning");
+        return;
+      }
+      else {
+        $("#mrf_status_modal").modal("hide");
+      }
+    }
+  })
 
   $("#material_requset_form_table").on("click", "tr td button", function (event) {
     event.preventDefault();
@@ -1156,7 +1205,7 @@ function get_mrf_request() {
 }
 
 function update_mrf_request(part_id, status) {
-console.log(part_id, status);
+  console.log(part_id, status);
 
 
   $.ajax({
@@ -1172,7 +1221,7 @@ console.log(part_id, status);
 
 
       if (response.trim() == "ok") {
-       window.location.reload()
+        window.location.reload()
       }
 
 

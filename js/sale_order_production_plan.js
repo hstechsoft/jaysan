@@ -205,6 +205,7 @@ function get_sale_order_plan() {
     type: "get", //send it through get method
     data: {
 
+      
     },
     success: function (response) {
       console.log(response);
