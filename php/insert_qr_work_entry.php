@@ -31,6 +31,10 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+$emp_type = "helper";
+// check production_id already in process for that sec
+
+
 
 
  $sql = "INSERT INTO qr_work_entry (emp_id, production_id, sec_id,work_done_id,work_sts) VALUES ($emp_id, $qr_code, $sec_id,$work_done_id,'in-process')";
