@@ -31,7 +31,9 @@ $sql = "with
         from assign_product
         WHERE
             assign_type = 'Production'
-            AND dcf_id = 0
+            AND dcf_id = 0 
+        -- 1028 after only sales_order_subtype_updated so that  
+             and    opid >= 1028
             and ass_id not in(
                 select assign_id
                 from production_planner_parts
@@ -72,19 +74,19 @@ select
             assign_details
         )
     ) as order_info,
-   group_concat(product_process.process_id) as process_id,
+   product_process.process_id,
     sum(total_qty) as total_required_qty,
     sales_order_info_view.*
 from
     sales_order_info_view
     inner join unassign on sales_order_info_view.opid = unassign.opid
-    left join product_process on sales_order_info_view.opid = product_process.opid
+    inner join product_process on sales_order_info_view.opid = product_process.opid
 WHERE
     1
 group by
-    type_id,
-    model_id,
-    sub_type";
+  type_id,
+  model_id,
+  product_id;";
 
 $result = $conn->query($sql);
 
