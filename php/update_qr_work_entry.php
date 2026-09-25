@@ -4,6 +4,7 @@
 $qr_work_id = test_input($_POST['qr_work_id']);
 $work_update_sts = test_input($_POST['work_update_sts']);
 $reason = test_input($_POST['reason']);
+$emp_id = test_input($_POST['emp_id']);
 
  
 function test_input($data) {
@@ -18,8 +19,14 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
     $conn->close();
     exit; 
 }
-$emp_id =  0;
-$work_done_id = 0;
+
+
+require __DIR__ . '/get_current_work_info.php';
+$curent_work_info = current_info($conn, $emp_id);
+
+
+$work_done_id = $curent_work_info['work_done_id'];
+
 $production_id = 0;
 $sec_id = 0;
 
@@ -31,7 +38,7 @@ if ($result_check_work_sts->num_rows > 0) {
     $row = $result_check_work_sts->fetch_assoc();
     $current_work_sts = $row['work_sts'];
     $emp_id = $row['emp_id'];
-    $work_done_id = $row['work_done_id'];
+  
     $production_id = $row['production_id'];
     $sec_id = $row['sec_id'];
 
@@ -50,7 +57,7 @@ if ($result_check_work_sts->num_rows > 0) {
 
 // check  $production_id is finished
 if($production_id) {
-$sql_check_production_finished = "SELECT * FROM qr_work_entry WHERE production_id = $production_id and work_sts = 'finished' and work_done_id = $work_done_id";
+$sql_check_production_finished = "SELECT * FROM qr_work_entry WHERE production_id = $production_id and work_sts = 'finished' and emp_id = $emp_id";
 $result_check_production_finished = $conn->query($sql_check_production_finished);
 if ($result_check_production_finished->num_rows > 0) {
     echo "Error: This production is already finished.";
@@ -61,7 +68,7 @@ if ($result_check_production_finished->num_rows > 0) {
 
 // check if there is in-process entry for emp and work_done_id
 if($work_update_sts == "'in-process'") {
-$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE  work_done_id = $work_done_id and work_sts = 'in-process'";
+$sql_check_work_sts = "SELECT * FROM qr_work_entry WHERE  emp_id = $emp_id and production_id = $production_id and work_sts = 'in-process'";
 $result_check_work_sts = $conn->query($sql_check_work_sts);
 if ($result_check_work_sts->num_rows > 0 && $work_update_sts == "'in-process'") {
     echo "Error: There is already an in-process entry for this work done.";
