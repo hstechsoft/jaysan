@@ -8,6 +8,9 @@ $emp_id = test_input($_POST['emp_id']);
 $emp_place_id = test_input($_POST['emp_place_id']);
 
 
+$godown = sql_nullable($godown);
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
 
  
  

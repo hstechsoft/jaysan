@@ -6,7 +6,9 @@ $dep = test_input($_POST['dep']);
 $sec = test_input($_POST['sec']);
 $emp_id = test_input($_POST['emp_id']);
 
-
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
+$emp_id = sql_nullable($emp_id);
  
  
 function test_input($data) {
