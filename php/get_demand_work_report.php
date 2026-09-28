@@ -86,7 +86,7 @@ demand_summary as(select  part_id,demand_details.process_id,JSON_ARRAYAGG(json_o
 final_summary as(select part_id,ds.process_id,total_demand_qty,total_assigned_qty,total_remaining_qty,demand_details ,process_name,godown_details as all_godown_details,final_part,final_part_id,wtm.godown_id,wtm.dep_id,wtm.dep_sec_id,wtm.is_default from demand_summary ds
 
 left join jaysan_process_view jpv on ds.process_id <=> jpv.process_id and ds.part_id <=> jpv.output_part
-left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query and
+left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query 
  -- $godown_query and $dep_query and $dep_sec_query
  and $place_query
 )
