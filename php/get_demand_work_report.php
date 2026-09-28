@@ -92,7 +92,7 @@ left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $pa
 )
 
 select * from final_summary group by part_id,process_id";
-   echo "SQL: " . $sql . "<br>";
+  
   
 $result = $conn->query($sql);
 
