@@ -10,7 +10,25 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
+$process_id = test_input($_GET['process_id']);
+$godown = test_input($_GET['godown']);
+$dep = test_input($_GET['dep']);
+$sec = test_input($_GET['sec']);
 
+$process_id_query= 1;
+$place_query= 1;
+
+$process_id = sql_nullable($process_id);
+$godown = sql_nullable($godown);
+$dep = sql_nullable($dep);
+$sec = sql_nullable($sec);
+
+if($process_id != 'NULL'){
+    $process_id_query = " process_id <=> $process_id ";
+}
+if($godown != 'NULL'){
+    $place_query = " godown <=> $godown and   dep <=> $dep and sec <=> $sec ";
+}
 
 // combine both results
 
@@ -111,6 +129,7 @@ sum(stock_allocation_qty) as total_stock_allocation_qty,
 
 rm_con as(select work_order_details, godown, dep, sec, creditor_name, dep_name, sec_name, total_process,total_needed, total_pending_process, process_id, total_exreserve_qty, total_required_qty, total_internal_reserve_qty,total_dc_qty,total_transport_qty,total_stock_allocation_qty, previous_process_id, input_details from rm_group
 -- WHERE process_id = 2796 and godown = 1087 and dep <=> null and sec<=> null
+WHERE $process_id_query and $place_query
 ), 
 cr as(select  process_id,JSON_ARRAYAGG(JSON_OBJECT(
     'work_order_details', work_order_details,

@@ -2,9 +2,14 @@
 include 'db_head.php';
 $final_part_id = isset($_POST['final_part_id']) ? test_input($_POST['final_part_id']) : 'all';
 $process_id = isset($_POST['process_id']) ? test_input($_POST['process_id']) : 'all';
-$godown_id = isset($_POST['godown_id']) ? test_input($_POST['godown_id']) : '';
-$dep_id = isset($_POST['dep_id']) ? test_input($_POST['dep_id']) : '';
-$dep_sec_id = isset($_POST['dep_sec_id']) ? test_input($_POST['dep_sec_id']) : '';
+$emp_id =test_input($_POST['emp_id']) ;
+//get godown, dep, dep_sec as array parameter
+
+$place_query = 1;
+
+// $godown_id = isset($_POST['godown_id']) ? test_input($_POST['godown_id']) : '';
+// $dep_id = isset($_POST['dep_id']) ? test_input($_POST['dep_id']) : '';
+// $dep_sec_id = isset($_POST['dep_sec_id']) ? test_input($_POST['dep_sec_id']) : '';
 
 // echo "final_part_id: $final_part_id, process_id: $process_id, godown_id: $godown_id, dep_id: $dep_id, dep_sec_id: $dep_sec_id<br>";
 
@@ -15,9 +20,9 @@ $dep_query = 1;
 $dep_sec_query = 1;
 
 
-$godown_id = sql_nullable($godown_id);
-$dep_id = sql_nullable($dep_id);
-$dep_sec_id = sql_nullable($dep_sec_id);
+// $godown_id = sql_nullable($godown_id);
+// $dep_id = sql_nullable($dep_id);
+// $dep_sec_id = sql_nullable($dep_sec_id);
 
 
 if ($final_part_id != 'all') {
@@ -26,15 +31,15 @@ if ($final_part_id != 'all') {
 if ($process_id != 'all') {
   $process_query = "process_id = $process_id";
 }
-if ($godown_id != 'NULL') {
-  $godown_query = "godown_id <=> $godown_id";
-}
-if ($dep_id != 'NULL') {
-  $dep_query = "dep_id <=> $dep_id";
-}
-if ($dep_sec_id != 'NULL') {
-  $dep_sec_query = "dep_sec_id <=> $dep_sec_id";
-}
+// if ($godown_id != 'NULL') {
+//   $godown_query = "godown_id <=> $godown_id";
+// }
+// if ($dep_id != 'NULL') {
+//   $dep_query = "dep_id <=> $dep_id";
+// }
+// if ($dep_sec_id != 'NULL') {
+//   $dep_sec_query = "dep_sec_id <=> $dep_sec_id";
+//}
 
 
 
@@ -48,6 +53,28 @@ function test_input($data)
   return $data;
 }
 
+// get emp place details for filtering
+
+$sql_get_place_details = "SELECT * FROM emp_place where emp_id = $emp_id";
+$result_place_details = $conn->query($sql_get_place_details);
+$place_details = array();
+if ($result_place_details->num_rows > 0) {
+    while($r = mysqli_fetch_assoc($result_place_details)) {
+        $place_details[] = $r;
+    }
+}
+
+ foreach ($place_details as $place)
+    {
+        $godown = sql_nullable($place['godown']);
+        $dep = sql_nullable($place['dep']);
+        $dep_sec = sql_nullable($place['sec']);
+        if($place_query == 1)
+        $place_query = " godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec ";
+        else
+          $place_query .= " or (godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec)";
+    }
+
 $sql = "with demand_details as (
     select demand.part_id,demand.process_id,demand.demand_id,demand.plan_id,demand.demand_qty,demand.created_by,demand.created_date,employee.emp_name ,sum(ifnull(wo.qty, 0)) as total_assigned_qty,demand.demand_qty-sum(ifnull(wo.qty, 0)) as remaining_qty from demand 
     inner join employee on demand.created_by = employee.emp_id
@@ -59,7 +86,10 @@ demand_summary as(select  part_id,demand_details.process_id,JSON_ARRAYAGG(json_o
 final_summary as(select part_id,ds.process_id,total_demand_qty,total_assigned_qty,total_remaining_qty,demand_details ,process_name,godown_details as all_godown_details,final_part,final_part_id,wtm.godown_id,wtm.dep_id,wtm.dep_sec_id,wtm.is_default from demand_summary ds
 
 left join jaysan_process_view jpv on ds.process_id <=> jpv.process_id and ds.part_id <=> jpv.output_part
-left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query and $godown_query and $dep_query and $dep_sec_query)
+left join work_time_master wtm on ds.process_id <=> wtm.ori_process_id WHERE $part_query and $process_query and
+ -- $godown_query and $dep_query and $dep_sec_query
+ and $place_query
+)
 
 select * from final_summary group by part_id,process_id";
   // echo "SQL: " . $sql . "<br>";
