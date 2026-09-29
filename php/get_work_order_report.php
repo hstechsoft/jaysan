@@ -11,27 +11,50 @@ return $data;
 }
 
 $process_id = test_input($_GET['process_id']);
-$godown = test_input($_GET['godown']);
-$dep = test_input($_GET['dep']);
-$sec = test_input($_GET['sec']);
+// $godown = test_input($_GET['godown']);
+// $dep = test_input($_GET['dep']);
+// $sec = test_input($_GET['sec']);
+$emp_id = test_input($_GET['emp_id']);
 
 $process_id_query= 1;
 $place_query= 1;
 
 $process_id = sql_nullable($process_id);
-$godown = sql_nullable($godown);
-$dep = sql_nullable($dep);
-$sec = sql_nullable($sec);
+// $godown = sql_nullable($godown);
+// $dep = sql_nullable($dep);
+// $sec = sql_nullable($sec);
 
 if($process_id != 'NULL'){
     $process_id_query = " process_id <=> $process_id ";
 }
-if($godown != 'NULL'){
-    $place_query = " godown <=> $godown and   dep <=> $dep and sec <=> $sec ";
-}
+
+
+
+// if($godown != 'NULL'){
+//     $place_query = " godown <=> $godown and   dep <=> $dep and sec <=> $sec ";
+// }
 
 // combine both results
 
+$sql_get_place_details = "SELECT * FROM emp_place where emp_id = $emp_id";
+$result_place_details = $conn->query($sql_get_place_details);
+$place_details = array();
+if ($result_place_details->num_rows > 0) {
+    while($r = mysqli_fetch_assoc($result_place_details)) {
+        $place_details[] = $r;
+    }
+}
+
+ foreach ($place_details as $place)
+    {
+        $godown = sql_nullable($place['godown']);
+        $dep = sql_nullable($place['dep']);
+        $dep_sec = sql_nullable($place['sec']);
+        if($place_query == 1)
+        $place_query = " godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec ";
+        else
+          $place_query .= " or (godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec)";
+    }
   
 
  $sql = "with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(
