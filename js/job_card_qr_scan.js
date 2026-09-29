@@ -95,6 +95,10 @@ $(document).ready(function () {
 
     });
 
+    $("#extra_work_select").on("change", function () {
+        $("#extra_work_auto").val($(this).data("name")).data("ext_id", $(this).val());
+    });
+
     $("#openScannerBtn").on("click", function (event) {
         event.preventDefault();
         console.log(window.AndroidBridge);
@@ -813,7 +817,7 @@ $(document).ready(function () {
         Chart.getChart("workChart")?.destroy();
         Chart.getChart("finalWorkChart")?.destroy();
         $("#final_summary, #last_end_btn").addClass("d-none");
-        $("#summay_btn").removeClass("d-none"); 
+        $("#summay_btn").removeClass("d-none");
 
         var process_part_array = [];
         var machine_id = $("#worked_machine").val();

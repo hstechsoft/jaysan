@@ -33,7 +33,7 @@ $(document).ready(function () {
         console.log("Latitude:", position.coords.latitude);
         console.log("Longitude:", position.coords.longitude);
         console.log("Accuracy:", position.coords.accuracy + " meters");
-        get_godown_locations(position.coords.latitude, position.coords.longitude)
+        get_godown_locations_demand(position.coords.latitude, position.coords.longitude)
       },
       function (error) {
         console.log(error.message);
@@ -43,10 +43,27 @@ $(document).ready(function () {
     console.log("Geolocation is not supported.");
   }
 
-  $("#summary_search").on("keyup", function () {
+  $("#godown_list_tbody").on("click", ".select_btn", function () {
+    let godown_name = $(this).data("creditor_name");
+    let godown_id = $(this).val();
+
+    if (godown_id && godown_name) {
+      $("#godown_list_modal").modal("hide");
+      // $("#godown").data("godown_id", godown_id).val(godown_name);
+      // get_demand_work_report('all', 'all', godown_id, '', '');
+
+    }
+    else {
+      salert("Warning", "Data Missing!, Try Again.", "warning");
+    }
+
+  })
+
+
+  $("#search").on("keyup", function () {
     var value = $(this).val().toLowerCase();
 
-    $("#all_bom_table tr").filter(function () {
+    $("#planed_work_order_tbody tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
@@ -341,7 +358,7 @@ function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp
       var response = JSON.parse(response);
 
       if (response.success === true) {
-        
+
         get_demand_work_report($("#part").data("part_id") || 'all', "all", $("#godown").data("godown_id") || '', $("#department").data("dept_id") || '', $("#section").data("sec_id") || '');
       }
 
@@ -373,6 +390,7 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
       godown_id: godown_id,
       dep_id: dep_id,
       dep_sec_id: dep_sec_id,
+      emp_id: current_user_id
 
     },
     success: function (response) {
@@ -443,6 +461,70 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
 
 
 
+}
+
+function get_godown_locations_demand(lat, lng) {
+
+  $.ajax({
+    url: "php/get_godown_location.php",
+    type: "get",
+    data: {
+      latti: lat,
+      longi: lng,
+    },
+
+    success: function (response) {
+      console.log(response);
+
+      if (response.trim() !== "error") {
+        $("#godown_list_tbody").empty();
+        if (response.trim() !== "0 result") {
+          var obj = JSON.parse(response);
+          if (obj.length == 1) {
+            obj.forEach(function (item) {
+              // $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+              // get_demand_work_report('all', 'all', item.creditor_id, '', '');
+            })
+          }
+          else {
+            $("#godown_list_modal").modal("show");
+            var count = 0;
+            obj.forEach(function (item) {
+              count += 1;
+              $("#godown_list_tbody").append(`
+                                <li class="list-group-item godown-item">
+                                    <div class="godown-details">
+                                        <h6 class="godown-name mb-1">${item.creditor_name}</h6>
+                                        <span class="godown-distance">
+                                            <i class="fa-solid fa-location-dot me-1"></i>
+                                            ${item.distance_m} Meters Away
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-success btn-sm select_btn"
+                                        value="${item.creditor_id}"
+                                        data-creditor_name="${item.creditor_name}">
+                                        <i class="fa-solid fa-circle-check me-1"></i>
+                                        Select
+                                    </button>
+                                </li>
+                            `);
+            });
+            $("#godown_status").text('Found ' + count + ' Godown').addClass("bg-success");
+
+          }
+        }
+        else {
+          $("#godown_status").text('No Godown').addClass("bg-danger");
+        }
+      }
+    },
+
+    error: function (xhr) {
+      console.log(xhr.responseText);
+    }
+  });
 }
 
 function insert_new_process(processId) {

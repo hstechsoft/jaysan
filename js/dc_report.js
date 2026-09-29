@@ -158,7 +158,8 @@ function get_work_order_report() {
         url: "php/get_work_order_report.php",
         type: "get",
         data: {
-
+            process_id: '',
+            emp_id: current_user_id
         },
         success: function (response) {
 

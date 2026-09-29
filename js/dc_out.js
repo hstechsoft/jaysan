@@ -145,6 +145,11 @@ $(document).ready(function () {
 
     });
 
+    $("#all").on("change", function () {
+        get_dc_demand_report($("#godown").data("godown_id") ?? '', $("#from_godown").data("from_godown_id") ?? '', "")
+
+    })
+
     $("#same_as").on("change", function () {
         if ($(this).is(":checked")) {
             $("#ship_to").val($("#godown").val());
@@ -906,7 +911,7 @@ $(document).ready(function () {
         // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
         console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
-
+        $(this).prop('disabled', true)
         insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
     })
 
@@ -990,7 +995,7 @@ $(document).ready(function () {
         );
 
         let process = currentRow.find("span").text().trim();
-        let part = currentRow.find("td:eq(3)").find("strong").text().trim();
+        // let part = currentRow.find("td:eq(3)").find("strong").text().trim();
 
         let chk_count = 0;
 
@@ -1012,10 +1017,11 @@ $(document).ready(function () {
             let availableQty = parseFloat(qtyInput.data("qty")) || 0;
 
             let input_part_id = chk.data("input_part_id");
+            let stock_id = chk.data("stock_id");
 
             // Find existing reserve data
             let reserveData = allReserveData.find(
-                data => data.input_part_id == input_part_id
+                data => data.stock_id == stock_id
             );
 
             if (!reserveData) {
@@ -1036,54 +1042,53 @@ $(document).ready(function () {
                     reserveData.reserve_qty,
                     "warning"
                 );
-
                 return;
             }
 
             // Reduce reserve quantity ONCE
             reserveData.reserve_qty -= qty;
 
-            let reserveLocation = row.find("td").eq(4).text().trim();
+            // let reserveLocation = row.find("td").eq(4).text().trim();
 
             $("#selected_part_tbody").append(`
-            <tr
-                data-part_pre_process_id="${chk.data("previous_process_id")}"
-                data-work_process_id="${row.data("work_process_id")}"
-                data-part_id="${input_part_id}"
-                data-stock_reserve_id="${chk.data("stock_reserve_id")}"
-                data-stock_id="${chk.data("stock_id")}"
-                data-godown_id="${godown_id}"
-                data-department_id="${department_id}"
-                data-section_id="${section_id}">
+                <tr
+                    data-part_pre_process_id="${chk.data("previous_process_id")}"
+                    data-work_process_id="${row.data("work_process_id")}"
+                    data-part_id="${input_part_id}"
+                    data-stock_reserve_id="${chk.data("stock_reserve_id")}"
+                    data-stock_id="${chk.data("stock_id")}"
+                    data-godown_id="${godown_id}"
+                    data-department_id="${department_id}"
+                    data-section_id="${section_id}">
 
-                <td>${part}</td>
+                    <td>${chk.data("part")}</td>
 
-                <td>${process}</td>
+                    <td>${process}</td>
 
-                <td>${reserveLocation}</td>
+                    <td>${chk.data("godown")}</td>
 
-                <td>${availableQty}</td>
+                    <td>${availableQty}</td>
 
-                <td>
-                    <input
-                        type="number"
-                        class="form-control form-control-sm qty_input"
-                        value="${qty}"
-                        max="${availableQty}"
-                        disabled>
-                </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="form-control form-control-sm qty_input"
+                            value="${qty}"
+                            max="${availableQty}"
+                            disabled>
+                    </td>
 
-                <td>
-                    <input
-                        type="number"
-                        class="form-control form-control-sm rate_input"
-                        value="0">
-                </td>
+                    <td>
+                        <input
+                            type="number"
+                            class="form-control form-control-sm rate_input"
+                            value="0">
+                    </td>
 
-                <td class="amount_td">0</td>
+                    <td class="amount_td">0</td>
 
-            </tr>
-        `);
+                </tr>
+            `);
 
             // Disable Add button
             currentRow.find(".btn-add").prop("disabled", true);
@@ -1122,6 +1127,8 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                     let obj = JSON.parse(response);
 
+                    let vendor = $("#godown").data("godown_id") || '';
+                    let all = $("#all").is(":checked") ? 1 : 0;
                     let count = 0;
 
                     obj.forEach(function (item) {
@@ -1134,9 +1141,15 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                         inputParts.forEach(function (part) {
 
-                            let reserve = part.stock_reserve_details || [];
+                            let reserve = part.stock_reserve_details || '';
 
-                            totalRowspan += Math.max(reserve.length, 1);
+                            if(all == 1){
+                                totalRowspan += Math.max(reserve.length, 1);
+                            }
+                            else if (reserve != '' && all == 0) {
+                                totalRowspan += Math.max(reserve.length, 1);
+                            }
+                            
 
                         });
 
@@ -1152,7 +1165,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                             if (reserve.length == 0) {
 
-                                let html = `<tr data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
+                                let html = `<tr class='${all == 1 ? '' : 'd-none'}' data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
                                 if (firstMainRow) {
 
@@ -1194,7 +1207,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                     <td>-</td>
 
-                                    <td>
+                                    <td class="text-center">
                                         <input type="checkbox" disabled>
                                     </td>
                                 `;
@@ -1227,11 +1240,25 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                 reserve.forEach(function (stock, reserveIndex) {
 
-                                    if (allReserveData.findIndex(data => data.input_part_id === part.input_part_id) < 0) {
-                                        allReserveData.push({ input_part_id: part.input_part_id, reserve_qty: stock.reserve_qty });
+                                    // if (allReserveData.findIndex(data => data.input_part_id === part.input_part_id) < 0) {
+                                    //     allReserveData.push({ input_part_id: part.input_part_id, reserve_qty: stock.reserve_qty});
+                                    // }
+
+                                    if (allReserveData.findIndex(data => data.stock_id === stock.stock_id) < 0) {
+                                        allReserveData.push({ input_part_id: part.input_part_id, reserve_qty: stock.reserve_qty, stock_id: stock.stock_id });
                                     }
 
-                                    let html = `<tr  data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
+                                    let view = '';
+                                    if (all == 1) {
+                                        view = '';
+                                    }
+                                    else if (all == 0 && stock.same_godown) {
+                                        view = '';
+                                    }
+                                    else if (all == 0 && !stock.same_godown) {
+                                        view = 'd-none';
+                                    }
+                                    let html = `<tr class='${view}'  data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
 
                                     if (firstMainRow) {
@@ -1316,7 +1343,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                                             <input
                                                 type="checkbox"
                                                 class="reserve_check"
-                                                value="${stock.stock_reserve_id}" ${stock.same_godown ? '' : "disabled"} data-stock_reserve_id=${stock.stock_reserve_id} data-stock_id=${stock.stock_id} data-input_part_id=${part.input_part_id} data-previous_process_id=${part.previous_process_id}>
+                                                value="${stock.stock_reserve_id}" ${(stock.same_godown && vendor != '') ? '' : "disabled"} data-stock_reserve_id="${stock.stock_reserve_id}" data-stock_id="${stock.stock_id}" data-input_part_id="${part.input_part_id}" data-previous_process_id="${part.previous_process_id}" data-godown="${item.creditor_name}  ${item.dep_name ? " - " + item.dep_name : ""} ${item.sec_name ? " - " + item.sec_name : ""}" data-part="${part.input_part_name}">
 
                                         </td>
 
@@ -1814,7 +1841,10 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
                 }
                 else {
+
+                    $("#add_to_table").prop("disabled", false);
                     salert("Warning", i.error, "warning");
+
                 }
             });
             // if (response.trim() == "ok") {

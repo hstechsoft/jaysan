@@ -60,13 +60,16 @@
                             <h5 class="card-title">Filter <i class="fa fa-filter"></i></h5>
                         </div>
 
-                        <input type="text" class="form-control form-control-sm my-1 rounded-3" id="godown"
+                        <input type="text" class="form-control form-control-sm my-1 rounded-3 " id="search"
+                            placeholder="Search">
+
+                        <input type="text" class="form-control form-control-sm my-1 rounded-3 d-none" id="godown"
                             placeholder="Godown">
 
-                        <input type="text" class="form-control form-control-sm my-1 rounded-3" id="department"
+                        <input type="text" class="form-control form-control-sm my-1 rounded-3 d-none" id="department"
                             placeholder="Department">
 
-                        <input type="text" class="form-control form-control-sm my-1 rounded-3" id="section"
+                        <input type="text" class="form-control form-control-sm my-1 rounded-3 d-none" id="section"
                             placeholder="Section">
 
                         <input type="text" class="form-control form-control-sm my-1 rounded-3" id="part"
@@ -111,6 +114,29 @@
         </div>
 
 
+        <div class="modal fade" id="godown_list_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="godown_list_modalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="godown_list_modalLabel">Select Godown</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="godown-container">
+                            <ul class="list-group border-0" id="godown_list_tbody">
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary save_map_btn">Save</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>

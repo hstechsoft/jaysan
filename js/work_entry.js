@@ -80,6 +80,8 @@ $(document).ready(function () {
     });
   });
 
+
+
   // Assign button
   $('#assign_process_btn').click(function () {
     const emp_id = $('#emp').val();
@@ -131,6 +133,8 @@ $(document).ready(function () {
     const empId = $(this).val();
     console.log($(this).find("option:selected").text());
 
+    $('#emp_auto').data("emp_id",empId).val($(this).find("option:selected").text());
+
     $("#employee_nameee").text($(this).find("option:selected").text());
     $('#process').empty().append('<option value="">Loading...</option>');
 
@@ -154,6 +158,66 @@ $(document).ready(function () {
 
     toggleActionButtons();
     call_recent_work();
+  });
+
+
+  $('#emp_auto').on('input', function () {
+    //check the value not empty
+    if ($('#emp_auto').val() != "") {
+      $('#emp_auto').data("emp_id", '');
+
+      $('#emp_auto').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_employee_auto.php",
+            type: "get", //send it through get method
+            data: {
+
+              emp_name: request.term
+
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.emp_name,
+                  value: item.emp_name,
+                  cus_id: item.emp_id,
+                  phone: item.cus_phone,
+                  // part_name: item.part_name
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("emp_id", ui.item.cus_id);
+          //   $('#part_name_out').data("selected-part_id", ui.item.id);
+          //   $('#part_name_out').val(ui.item.part_name)
+          //  get_bom(ui.item.id)
+          $("#emp").val(ui.item.cus_id).trigger("change");
+
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div style='font-size:12px;'><strong>" + item.label + "</strong></div>")
+          .appendTo(ul);
+      };
+    }
+
   });
 
 
@@ -5168,7 +5232,7 @@ function get_employee() {
         obj.forEach(function (obj) {
 
 
-          $("#emp").append(" <option value='" + obj.emp_id + "'>" + obj.emp_name + "</option>");
+          $("#emp").append(" <option value='" + obj.emp_id + "' data-name='"+obj.emp_name+"'>" + obj.emp_name + "</option>");
 
 
 
