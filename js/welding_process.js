@@ -4,6 +4,8 @@ const part_id = urlParams.get('part_id');
 const part_name = urlParams.get('part_name');
 const component_cat = urlParams.get('component_cat');
 
+var current_user_id = localStorage.getItem("ls_uid");
+var current_user_name = localStorage.getItem("ls_uname");
 
 
 
@@ -2846,7 +2848,7 @@ function update_work_time_master1(process_id, ori_process_id, godown_id, depart_
 
 function update_manual_stock(openning_stock, ori_process_id, godown_id, depart_id, section_id) {
 
-  console.log(openning_stock, ori_process_id, godown_id, depart_id, section_id);
+  console.log(openning_stock, ori_process_id, godown_id, depart_id, section_id, current_user_id);
 
 
   $.ajax({
