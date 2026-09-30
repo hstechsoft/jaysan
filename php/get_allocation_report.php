@@ -49,7 +49,7 @@ $sql = "SET time_zone = '+05:30';";
 // ";
 
 
-$sql .= "with allocation report as(select sa.*,from_godown.creditor_id as from_godown_id, to_godown.creditor_id as to_godown_id, concat(from_godown.creditor_name,' ',ifnull(dep_from.dep_name,''),' ',ifnull(sec_from.sec_name,'')) as from_place_name, concat(to_godown.creditor_name,' ',ifnull(dep_to.dep_name,''),' ',ifnull(sec_to.sec_name,'')) as to_place_name, from_godown.creditor_name as from_godown_name, to_godown.creditor_name as to_godown_name, dep_from.dep_name as from_dep_name, dep_to.dep_name as to_dep_name, sec_from.sec_name as from_sec_name, sec_to.sec_name as to_sec_name,
+$sql .= "with allocation_report as(select sa.*,from_godown.creditor_id as from_godown_id, to_godown.creditor_id as to_godown_id, concat(from_godown.creditor_name,' ',ifnull(dep_from.dep_name,''),' ',ifnull(sec_from.sec_name,'')) as from_place_name, concat(to_godown.creditor_name,' ',ifnull(dep_to.dep_name,''),' ',ifnull(sec_to.sec_name,'')) as to_place_name, from_godown.creditor_name as from_godown_name, to_godown.creditor_name as to_godown_name, dep_from.dep_name as from_dep_name, dep_to.dep_name as to_dep_name, sec_from.sec_name as from_sec_name, sec_to.sec_name as to_sec_name,
 if(parts_tbl.part_id is null,jpv.final_part, parts_tbl.part_name) as part_name
 from stock_allocation sa
 left join creditors from_godown  on sa.from_godown = from_godown.creditor_id
