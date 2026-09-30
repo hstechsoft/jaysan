@@ -7,6 +7,7 @@
     $dep = test_input($_POST['dep']);
     $sec = test_input($_POST['sec']);
     $process_id = test_input($_POST['process_id']);
+    $emp_id = test_input($_POST['emp_id']);
 
 $qty = test_input($_POST['qty']);
  $manual_part_id  = isset($_POST['manual_part_id']) ? test_input($_POST['manual_part_id']) : 'no';
