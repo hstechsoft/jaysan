@@ -2858,6 +2858,7 @@ function update_manual_stock(openning_stock, ori_process_id, godown_id, depart_i
       sec: section_id,
       godown: godown_id,
       qty: openning_stock,
+      emp_id: current_user_id
     },
     success: function (response) {
       console.log(response);

@@ -536,7 +536,13 @@ $(document).ready(function () {
   })
 
 
-
+  $("#qty").on("focusout", function(){
+    if($(this).val() <= 0){
+      $(this).val(1);
+      salert("Warning", "Quantity Must Be Atleast One.", "warning");
+      return;
+    }
+  })
 
 
   $('#add_sale_product_btn').on('click', function () {

@@ -470,7 +470,7 @@ function get_manual_stock(process_id) {
 
         success: function (response) {
 
-            $("#bom_material_table_body").empty();
+            // $("#bom_material_table_body").empty();
 
             if (response.trim() === "error") {
                 salert("Error", "Server Error", "error");
@@ -484,7 +484,7 @@ function get_manual_stock(process_id) {
                         <h5>No Stock Details Found</h5>
                     </div>
                 `);
-                $("#bom_material_table_body").append('<p class="text-center text-muted small">Loading...</p>');
+                // $("#bom_material_table_body").append('<p class="text-center text-muted small">Loading...</p>');
                 $("#stock_details_modal").modal("show");
                 return;
             }
@@ -1840,7 +1840,7 @@ function get_process_summary_godown(process_id) {
                             let min = minTimes[index];
                             let max = maxTimes[index];
 
-                            return `Min: ${min} mins | Max: ${max} mins`;
+                            return `Min: ${Number(min).toFixed(2)} mins | Max: ${Number(max).toFixed(2)} mins`;
                         }
                     }
                 },
@@ -1895,7 +1895,7 @@ function get_process_summary_godown(process_id) {
                             let min = minTimes[index];
                             let max = maxTimes[index];
 
-                            return `Min: ${min} mins | Max: ${max} mins`;
+                            return `Min: ${Number(min).toFixed(2)} mins | Max: ${Number(max).toFixed(2)} mins`;
                         }
                     }
                 },
