@@ -44,7 +44,7 @@ if ($result->num_rows > 0) {
     }
 
 echo "Admin Firebase UIDs: " . implode(", ", $admin_firebase_uids) . "<br>";
- require __DIR__ . '/send_fcm.php';
+ require_once  __DIR__ . '/send_fcm.php';
 
     $title = "Payment Approval: $order_no";
     $body = "A payment of amount" .$amount. "has been made for order number". $order_no. " Utr No:" . $utr_no . " Please review and approve the payment.";
@@ -54,7 +54,7 @@ echo "Admin Firebase UIDs: " . implode(", ", $admin_firebase_uids) . "<br>";
 
   if ($conn->query($sql) === TRUE) {
    $payment_id = $conn->insert_id;
-   require __DIR__ . '/modify_payment.php';
+   require_once  __DIR__ . '/modify_payment.php';
         modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
         
   } else {

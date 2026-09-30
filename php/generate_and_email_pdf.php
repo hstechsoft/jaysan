@@ -10,13 +10,13 @@ $todayStr       = date('d-m-Y H:i');
 // ====== AUTOLOADS ======
 if ($useComposer) {
     // Composer install path (public_html/vendor)
-    require __DIR__ . '/vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 } else {
     // Manual library includes (adjust paths)
-    require __DIR__ . '/dompdf/autoload.inc.php';
-    require __DIR__ . '/PHPMailer/src/PHPMailer.php';
-    require __DIR__ . '/PHPMailer/src/SMTP.php';
-    require __DIR__ . '/PHPMailer/src/Exception.php';
+    require_once __DIR__ . '/dompdf/autoload.inc.php';
+    require_once __DIR__ . '/PHPMailer/src/PHPMailer.php';
+    require_once __DIR__ . '/PHPMailer/src/SMTP.php';
+    require_once __DIR__ . '/PHPMailer/src/Exception.php';
 }
 
 use Dompdf\Dompdf;

@@ -4,9 +4,9 @@
 //  demo text 12345
 $allocation_sts = isset($_GET['allocation_sts']) ? $_GET['allocation_sts'] : '';
   $allocation_sts = ($allocation_sts == '') ? "1" :  " allocation_status= '$allocation_sts'";
-
+$emp_id = test_input($_GET['emp_id']);
  
- 
+ $place_query= 1;
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
@@ -14,6 +14,26 @@ $data = htmlspecialchars($data);
 $data = "'".$data."'";
 return $data;
 }
+
+
+$sql_get_place_details = "SELECT * FROM emp_place where emp_id = $emp_id";
+$result_place_details = $conn->query($sql_get_place_details);
+$place_details = array();
+if ($result_place_details->num_rows > 0) {
+    while($r = mysqli_fetch_assoc($result_place_details)) {
+        $place_details[] = $r;
+    }
+}
+
+ foreach ($place_details as $place)
+    {
+        $godown = sql_nullable($place['godown']);
+       
+        if($place_query == 1)
+        $place_query = " from_godown = $godown and to_godown = $godown ";
+        else
+          $place_query .= " or (from_godown = $godown and to_godown = $godown )";
+    }
 
 $sql = "SET time_zone = '+05:30';";
 
@@ -29,7 +49,7 @@ $sql = "SET time_zone = '+05:30';";
 // ";
 
 
-$sql .= "select sa.*, concat(from_godown.creditor_name,' ',ifnull(dep_from.dep_name,''),' ',ifnull(sec_from.sec_name,'')) as from_place_name, concat(to_godown.creditor_name,' ',ifnull(dep_to.dep_name,''),' ',ifnull(sec_to.sec_name,'')) as to_place_name, from_godown.creditor_name as from_godown_name, to_godown.creditor_name as to_godown_name, dep_from.dep_name as from_dep_name, dep_to.dep_name as to_dep_name, sec_from.sec_name as from_sec_name, sec_to.sec_name as to_sec_name,
+$sql .= "with allocation report as(select sa.*,from_godown.creditor_id as from_godown_id, to_godown.creditor_id as to_godown_id, concat(from_godown.creditor_name,' ',ifnull(dep_from.dep_name,''),' ',ifnull(sec_from.sec_name,'')) as from_place_name, concat(to_godown.creditor_name,' ',ifnull(dep_to.dep_name,''),' ',ifnull(sec_to.sec_name,'')) as to_place_name, from_godown.creditor_name as from_godown_name, to_godown.creditor_name as to_godown_name, dep_from.dep_name as from_dep_name, dep_to.dep_name as to_dep_name, sec_from.sec_name as from_sec_name, sec_to.sec_name as to_sec_name,
 if(parts_tbl.part_id is null,jpv.final_part, parts_tbl.part_name) as part_name
 from stock_allocation sa
 left join creditors from_godown  on sa.from_godown = from_godown.creditor_id
@@ -41,7 +61,8 @@ left join dep_section sec_to  on sa.to_sec = sec_to.dep_sec_id
 left join parts_tbl   on sa.part_id <=> parts_tbl.part_id
 left join jaysan_process_view jpv on sa.process_id <=> jpv.process_id
  WHERE
-    $allocation_sts;
+    $allocation_sts)
+    select * from allocation_report where $place_query;
  ";
 
     // jmat.po_material_id = '' AND jp.po_order_to = 1";

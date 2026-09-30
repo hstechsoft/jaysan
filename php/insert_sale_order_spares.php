@@ -24,7 +24,7 @@ echo $dcf_no;
 $sql = "INSERT INTO sale_order_spares ( oid,qno,remark,amount,dcf_no) VALUES ($oid,$qno,$remark,$amount,$dcf_no)";
 
 if ($conn->query($sql) === TRUE) {
-  require __DIR__ . '/modify_payment.php';
+  require_once __DIR__ . '/modify_payment.php';
   modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
 
   echo "ok";

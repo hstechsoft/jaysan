@@ -38,7 +38,7 @@ $paid_date = date('d-m-Y H:i:s', $paid_date / 1000);
 // 
 
     
- require __DIR__ . '/send_fcm.php';
+ require_once __DIR__ . '/send_fcm.php';
     $title = "Advance Paid: $paid_amount";
     $body = "Your advance payment of $paid_amount has been processed on $paid_date. Please check your account for details.";
     $url = "https://jaysan.cloud/emp_expense_single.html";

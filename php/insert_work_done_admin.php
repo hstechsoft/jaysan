@@ -51,7 +51,7 @@ if(!is_array($process_part_array) || empty($process_part_array)) {
    echo json_encode($result_json);
     exit;
 }
-require __DIR__ . '/get_current_work_info.php';
+require_once __DIR__ . '/get_current_work_info.php';
 $curent_work_info = current_info($conn, $emp_id);
 
 if(!$curent_work_info['start_time']) {
@@ -805,7 +805,7 @@ if($result_get_stock_id->num_rows > 0) {
 
 if($stock_id > 0) {
         // 🔥 reduce stock (insert negative entry with SAME section)
-        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where stock_id = $stock_id";
+        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume,remark='stock reduced by consume admin ' where stock_id = $stock_id";
 
         if ($conn->query($sql_update_stock) === TRUE) {
             // reduce 

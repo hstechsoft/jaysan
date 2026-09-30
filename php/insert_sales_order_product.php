@@ -50,7 +50,7 @@ if ($conn->query($sql) === TRUE) {
     }
   }
 
-  require __DIR__ . '/modify_payment.php';
+  require_once __DIR__ . '/modify_payment.php';
   modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
 
   echo "ok";

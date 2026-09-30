@@ -48,7 +48,7 @@ $sql = "DELETE from jaysan_payment WHERE payment_id = $payment_id and sts <> 'ap
 log_delete_query($sql);
 if ($conn->query($sql) === TRUE) {
   echo "ok";
-  require __DIR__ . '/modify_payment.php';
+  require_once __DIR__ . '/modify_payment.php';
   modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
 } else {
   echo "Error deleting record: " . $conn->error;

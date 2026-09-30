@@ -24,7 +24,7 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
-require __DIR__ . '/get_current_work_info.php';
+require_once __DIR__ . '/get_current_work_info.php';
 
 $start_time = current_info($conn, $emp_id)['start_time'];
 

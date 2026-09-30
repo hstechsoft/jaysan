@@ -91,7 +91,7 @@ echo "ok";
 } else {
   echo "Error: " . $sql_last_pay . "<br>" . $conn->error;
 }
-  require __DIR__ . '/modify_payment.php';
+  require_once __DIR__ . '/modify_payment.php';
         modify_payment($conn, (int)str_replace("'", "", $oid), (int)str_replace("'", "", $customer_id));
 // echo  'chage - '.$aff_row .PHP_EOL;
 

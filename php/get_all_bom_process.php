@@ -42,7 +42,7 @@ if ($result->num_rows > 0) {
 // }
 
 
-require __DIR__ . '/bom_correction_check.php';
+require_once __DIR__ . '/bom_correction_check.php';
 if(correction_check_fn($conn, (int)str_replace("'", "", $bom_id))) {
     $conn->close();
     echo "Correction needed";

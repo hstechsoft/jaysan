@@ -206,7 +206,7 @@ if($paymentDetails != 0)
         }
     }
 
- require __DIR__ . '/send_fcm.php';
+ require_once  __DIR__ . '/send_fcm.php';
     $title = "Payment Approval: $order_no";
     $body = "A payment of amount $amount has been made for order number $order_no. Please review and approve the payment.";
     $url = "https://jaysan.cloud/sales_payment_approval.html";

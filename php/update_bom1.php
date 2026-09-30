@@ -338,7 +338,7 @@ if(!empty($boms)){
 }
       
 $response['results'] = [];
-require __DIR__ . '/bom_correction_check.php';
+require_once __DIR__ . '/bom_correction_check.php';
 foreach ($boms as $main_bom_id) {
 
     // recompute bom one by one

@@ -46,7 +46,7 @@ if(!is_array($process_part_array) || empty($process_part_array)) {
    echo json_encode($result_json);
     exit;
 }
-require __DIR__ . '/get_current_work_info.php';
+require_once __DIR__ . '/get_current_work_info.php';
 $curent_work_info = current_info($conn, $emp_id);
 
 if(!$curent_work_info['start_time']) {

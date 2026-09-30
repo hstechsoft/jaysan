@@ -21,7 +21,7 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
 }
 
 
-require __DIR__ . '/get_current_work_info.php';
+require_once __DIR__ . '/get_current_work_info.php';
 $curent_work_info = current_info($conn, $emp_id);
 
 

@@ -15,7 +15,7 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
-require __DIR__ . '/get_current_work_info.php';
+require_once __DIR__ . '/get_current_work_info.php';
 $curent_work_info = current_info($conn, $emp_id);
 $work_done_id = (int) ($curent_work_info['work_done_id'] ?? 0);
 $result_display['work_done_id'] = $work_done_id;
