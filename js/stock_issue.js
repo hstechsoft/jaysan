@@ -139,6 +139,7 @@ function get_allocation_report() {
         type: "get", //send it through get method
         data: {
             allocation_sts: "create",
+            emp_id: current_user_id
 
         },
         success: function (response) {
@@ -184,7 +185,7 @@ function get_allocated_details() {
         type: "get", //send it through get method
         data: {
             allocation_sts: "delivered",
-
+            emp_id: current_user_id
         },
         success: function (response) {
             console.log(response);
