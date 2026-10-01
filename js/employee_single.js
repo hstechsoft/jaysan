@@ -298,7 +298,7 @@ $(document).ready(function () {
     }
 
     $(this).addClass('was-validated');
-
+    
     if (id > 0) {
       update_emp_place(godown, dep, sec, id, emp_id);
     }
@@ -307,6 +307,48 @@ $(document).ready(function () {
     }
   })
 
+  $("#em_place_tbody").on("click", ".edit_btn", function () {
+    var emp_place_id = $(this).val();
+    var row = $(this).closest("tr");
+    var godown = row.find("td").eq(1).text() || '';
+    var dept = row.find("td").eq(2).text() || '';
+    var sec = row.find("td").eq(3).text() || '';
+    var godown_id = row.find("td").eq(1).data("godown_id") || 0;
+    var dept_id = row.find("td").eq(2).data("dept_id") || 0;
+    var sec_id = row.find("td").eq(3).data("sec_id") || 0;
+
+    $("#id").val(emp_place_id);
+
+    $("#emp_godown").val(godown).data("godown_id", godown_id);
+    $("#emp_dept").val(dept).data("dept_id", dept_id);
+    $("#emp_sec").val(sec).data("sec_id", sec_id);
+  });
+
+  $("#em_place_tbody").on("click", ".delete_btn", function () {
+    var emp_place_id = $(this).val();
+
+
+    Swal.fire({
+      title: "Are You Sure?",
+      text: "You want to delete this?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d"
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+        if (emp_place_id > 0) {
+          delete_emp_place(emp_place_id);
+        } else {
+          salert("Warning", "Something Went Wrong, Try Later.", "warning");
+        }
+      }
+
+    });
+  });
 });
 //
 
@@ -379,29 +421,23 @@ function get_emp_place() {
     success: function (response) {
 
       console.log(response);
-      
+
 
       if (response.trim() != "error") {
-
+        $("#em_place_tbody").empty();
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
-          var count = 0
 
 
           obj.forEach(function (obj) {
 
             var place = JSON.parse(obj.place_details);
+            var count = 0
 
             place.forEach(function (item) {
-              $("#emp_godown").data("godown_id", item.godown).val(item.creditors_name);
-              $("#id").val(item.emp_place_id);
-              if (item.dep != null) {
-                $("#emp_dept").data("dept_id", item.dep).val(item.dep_name);
-              }
-              if(item.sec != null){
-                $("#emp_sec").data("sec_id", item.sec).val(item.dep_sec_name);
-              }
+              count++;
+              $("#em_place_tbody").append(`<tr><td>${count}</td><td data-godown_id='${item.godown ?? ''}'>${item.creditors_name}</td><td data-dept_id='${item.dep ?? ''}'>${item.dep_name ?? ''}</td><td data-sec_id='${item.sec ?? ''}'>${item.dep_sec_name ?? ''}</td><td><button type='button' class='btn btn-sm btn-warning text-dark edit_btn' value='${item.emp_place_id}'><i class='fa fa-pen'></i></button><button type='button' class='btn btn-sm btn-danger delete_btn ms-3' value='${item.emp_place_id}'><i class='fa fa-trash'></i></button></td></tr>`)
             })
 
           });
@@ -409,7 +445,7 @@ function get_emp_place() {
 
         }
         else {
-          // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+          $("#em_place_tbody").append("<tr><td colspan='5' scope='col'>No Unit Added</td></tr>");
 
         }
       }
@@ -513,10 +549,47 @@ function insert_emp_place(godown, dep, sec, emp_id) {
 
 }
 
+function delete_emp_place(emp_place_id) {
 
-function update_emp_place(godown, dep, sec, emp_id, id) {
+  console.log(emp_place_id);
 
-  console.log(godown, dep, sec, emp_id, id);
+
+  $.ajax({
+    url: "php/delete_emp_place.php",
+    type: "post", //send it through get method
+    data: {
+      emp_place_id: emp_place_id,
+    },
+    success: function (response) {
+
+      console.log(response);
+
+
+      if (response.trim() == "ok") {
+
+        location.reload()
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+
+function update_emp_place(godown, dep, sec, id, emp_id ) {
+
+  console.log(godown, dep, sec, id, emp_id);
 
 
   $.ajax({
