@@ -647,12 +647,13 @@ function get_manual_stock(process_id) {
                                             <tbody class="small">
                             `;
 
-                    stock.reserve_details.forEach(type => {
+                    if (stock.reserve_details.length === 0) {
+                        stock.reserve_details.forEach(type => {
 
-                        type.reserve_details.forEach(detail => {
+                            type.reserve_details.forEach(detail => {
 
-                            if (detail.reserve_qty >= 0) {
-                                html += `
+                                if (detail.reserve_qty >= 0) {
+                                    html += `
                                         <tr>
 
                                             <td>
@@ -669,16 +670,18 @@ function get_manual_stock(process_id) {
 
                                         </tr>
                                     `;
-                            }
-                            else {
-                                html += `<tr><td colspan='3' class="text-danger text-center">Nothing Reserved</td></tr>`;
-                            }
+                                }
+                                else {
+                                    html += `<tr><td colspan='3' class="text-danger text-center">Nothing Reserved</td></tr>`;
+                                }
 
 
+
+                            });
 
                         });
 
-                    });
+                    }
 
                     html += `</tbody></table></div></div></div>`;
 

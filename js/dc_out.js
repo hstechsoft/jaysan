@@ -1143,12 +1143,12 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                             let reserve = part.stock_reserve_details || '';
 
-                            if(all == 1){
+                            // if(all == 1){
                                 totalRowspan += Math.max(reserve.length, 1);
-                            }
-                            else if (reserve != '' && all == 0) {
-                                totalRowspan += Math.max(reserve.length, 1);
-                            }
+                            // }
+                            // else if (reserve != '' && all == 0) {
+                            //     totalRowspan += Math.max(reserve.length, 1);
+                            // }
                             
 
                         });
@@ -1165,7 +1165,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                             if (reserve.length == 0) {
 
-                                let html = `<tr class='${all == 1 ? '' : 'd-none'}' data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
+                                let html = `<tr class='' data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
                                 if (firstMainRow) {
 
@@ -1249,15 +1249,15 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                                     }
 
                                     let view = '';
-                                    if (all == 1) {
-                                        view = '';
-                                    }
-                                    else if (all == 0 && stock.same_godown) {
-                                        view = '';
-                                    }
-                                    else if (all == 0 && !stock.same_godown) {
-                                        view = 'd-none';
-                                    }
+                                    // if (all == 1) {
+                                    //     view = '';
+                                    // }
+                                    // else if (all == 0 && stock.same_godown) {
+                                    //     view = '';
+                                    // }
+                                    // else if (all == 0 && !stock.same_godown) {
+                                    //     view = 'd-none';
+                                    // }
                                     let html = `<tr class='${view}'  data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
 
