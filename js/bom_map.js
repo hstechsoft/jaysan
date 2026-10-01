@@ -647,7 +647,7 @@ function get_manual_stock(process_id) {
                                             <tbody class="small">
                             `;
 
-                    if (stock.reserve_details.length === 0) {
+                    if (stock.reserve_details != null) {
                         stock.reserve_details.forEach(type => {
 
                             type.reserve_details.forEach(detail => {
