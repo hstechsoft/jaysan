@@ -450,9 +450,9 @@ $(document).ready(function () {
         var qty = parseFloat($(this).val()) || 0;
 
 
-        if (godown == '' || qty <= 0) {
+        if (godown == '') {
 
-            salert("Warning", "Select Godown and Qty must be greater than 0.", "warning");
+            salert("Warning", "Select Godown.", "warning");
 
             return;
         }
