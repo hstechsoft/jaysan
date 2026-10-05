@@ -2355,7 +2355,8 @@ function update_qr_work_entry(qr_work_id, work_update_sts, reason) {
 
             qr_work_id: qr_work_id,
             work_update_sts: work_update_sts,
-            reason: reason
+            reason: reason,
+            emp_id: current_user_id
         },
         success: function (response) {
             console.log(response);
