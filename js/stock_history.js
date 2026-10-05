@@ -981,6 +981,7 @@ console.log(godown, dep, sec, process_id, qty, manual_part_id);
             process_id: process_id,
             qty: qty,
             manual_part_id: manual_part_id,
+            emp_id: current_user_id,
         },
         success: function (response) {
             console.log(response);
