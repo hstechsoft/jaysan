@@ -25,7 +25,7 @@ echo "ok";
 
 
 
-   echo "ok";
+
 $conn->close();
 
  ?>

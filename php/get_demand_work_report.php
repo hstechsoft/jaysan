@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include 'db_head.php';
 $final_part_id = isset($_POST['final_part_id']) ? test_input($_POST['final_part_id']) : 'all';
 $process_id = isset($_POST['process_id']) ? test_input($_POST['process_id']) : 'all';
@@ -70,9 +72,9 @@ if ($result_place_details->num_rows > 0) {
         $dep = sql_nullable($place['dep']);
         $dep_sec = sql_nullable($place['sec']);
         if($place_query == 1)
-        $place_query = " godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec ";
+        $place_query = " godown_id <=> $godown and dep_id <=> $dep and dep_sec_id <=> $dep_sec ";
         else
-          $place_query .= " or (godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec)";
+          $place_query .= " or (godown_id <=> $godown and dep_id <=> $dep and dep_sec_id <=> $dep_sec)";
     }
 
 $sql = "with demand_details as (

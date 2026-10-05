@@ -101,7 +101,7 @@ foreach ($laser_parts as $parts) {
       $process_id = 0;
       $sql_get_process_id = "SELECT process_wel_tbl.process_id FROM process_wel_tbl 
       inner join jaysan_process on process_wel_tbl.process = jaysan_process.process_id
-      WHERE process_title = 'laser cutting' AND output_part = $part_id AND process_name = 'laser cutting'";
+      WHERE process_title = 'laser cutting'  AND process_name = 'laser cutting'";
       $result_get_process_id = $conn->query($sql_get_process_id);
       if ($result_get_process_id->num_rows > 0) {
           $row = $result_get_process_id->fetch_assoc();

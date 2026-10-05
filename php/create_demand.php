@@ -27,7 +27,14 @@ return $data;
 $required_qty = $production_qty; // Set the required quantity for the root process
 // insert into plan table and get plan_id
 $plan_id = 0; // Replace with the actual plan ID
-
+// check if there is negative stock stop the process and exit
+$sql_check_negative_stock = "SELECT * FROM jaysan_stock WHERE qty < 0";
+$result_check_negative_stock = $conn->query($sql_check_negative_stock);
+if ($result_check_negative_stock->num_rows > 0) {
+  $result_json['error'] = "Negative stock found, stopping the process.";
+  echo json_encode($result_json);
+  exit;
+}
 try {
     $conn->begin_transaction();
 $sql_insert_plan = "INSERT INTO production_planner (plan_name, created_by) VALUES ('$plan_name', $created_by)";

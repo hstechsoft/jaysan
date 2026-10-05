@@ -100,7 +100,7 @@ if($laser_process_part != "NULL")
       throw new Exception("Error inserting into stock: " . $conn->error);
   }
 
-echo "Stock ID: " . $stock_id;
+// echo "Stock ID: " . $stock_id;
 
 
 $work_order_array = [];
@@ -110,7 +110,7 @@ if($produced_qty > 0 )
 $sql_get_work_order_id = "select wo.work_order_id,pending_qty from demand 
 inner join work_order wo on demand.demand_id = wo.demand_id
 where wo.godown <=> $godown and wo.dep <=> $dep and wo.sec <=> $sec and demand.process_id <=> $wprocess_id";
-echo "SQL Get Work Order ID: " . $sql_get_work_order_id . "<br>";
+// echo "SQL Get Work Order ID: " . $sql_get_work_order_id . "<br>";
 $result_work_order = $conn->query($sql_get_work_order_id);
 if ($result_work_order->num_rows > 0) {
     while($row_work_order = $result_work_order->fetch_assoc()) {
@@ -135,7 +135,7 @@ foreach($work_order_array as $work_order) {
     $sql_update_work_order = "UPDATE work_order SET completed_qty = completed_qty + $reduce_qty WHERE work_order_id = $work_order_id";
     if ($conn->query($sql_update_work_order) !== TRUE) {
         $result_json['message'] = "Error updating work order: " . $conn->error;
-        echo json_encode($result_json);
+        // echo json_encode($result_json);
         $conn->rollback();
         $conn->close();
         exit;
@@ -190,7 +190,7 @@ if($result_sec_stock->num_rows > 0) {
         $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
         if ($conn->query($sql_update_reserve) !== TRUE) {
             $result_json['message'] = "Error updating reserve stock: " . $conn->error;
-            echo json_encode($result_json);
+            // echo json_encode($result_json);
             $conn->rollback();
             $conn->close();
             exit;
@@ -200,7 +200,7 @@ if($result_sec_stock->num_rows > 0) {
         $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
         if ($conn->query($sql_delete_reserve) !== TRUE) {
             $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
-            echo json_encode($result_json);
+            // echo json_encode($result_json);
             $conn->rollback();
             $conn->close();
             exit;
@@ -247,7 +247,7 @@ if($part_id != "NULL")
 $sql_update_input_demand = "update input_demand set qty = qty - $take_qty where input_demand_id = $input_demand_id";
 if ($conn->query($sql_update_input_demand) !== TRUE) {
     $result_json['message'] = "Error updating input demand: " . $conn->error;
-    echo json_encode($result_json);
+    // echo json_encode($result_json);
     $conn->rollback();
     $conn->close();
     exit;
@@ -257,7 +257,7 @@ if ($conn->query($sql_update_input_demand) !== TRUE) {
 $sql_delete_input_demand = "delete from input_demand where qty <= 0 and input_demand_id = $input_demand_id";
 if ($conn->query($sql_delete_input_demand) !== TRUE) {
     $result_json['message'] = "Error deleting input demand: " . $conn->error;
-    echo json_encode($result_json);
+    // echo json_encode($result_json);
     $conn->rollback();
     $conn->close();
     exit;
@@ -286,7 +286,7 @@ if($stock_id > 0) {
 $sql_stock_update = "update jaysan_stock set qty = qty - $material_weight, remark = 'stock reduced by laser consume -".$job_card_id."' where part_id <=> $material_id and godown <=> $godown and dep <=> $dep and sec <=> $sec";
 if ($conn->query($sql_stock_update) !== TRUE) {
     $result_json['message'] = "Error updating stock: " . $conn->error;
-    echo json_encode($result_json);
+    // echo json_encode($result_json);
     $conn->rollback();
     $conn->close();
     exit;
@@ -297,7 +297,7 @@ else {
     $sql_insert_stock = "insert into jaysan_stock (part_id, godown, dep, sec, qty,remark) values ($material_id, $godown, $dep, $sec, 0-$material_weight,'stock_added  by laser -".$job_card_id."') on duplicate key update qty = qty - $material_weight";
     if ($conn->query($sql_insert_stock) !== TRUE) {
         $result_json['message'] = "Error inserting stock: " . $conn->error;
-        echo json_encode($result_json);
+        // echo json_encode($result_json);
         $conn->rollback();
         $conn->close();
         exit;

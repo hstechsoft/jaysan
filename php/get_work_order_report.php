@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
  include 'db_head.php';
 
 
@@ -51,9 +53,9 @@ if ($result_place_details->num_rows > 0) {
         $dep = sql_nullable($place['dep']);
         $dep_sec = sql_nullable($place['sec']);
         if($place_query == 1)
-        $place_query = " godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec ";
+        $place_query = " godown <=> $godown and dep <=> $dep and sec <=> $dep_sec ";
         else
-          $place_query .= " or (godown <=> $godown and dep <=> $dep and dep_sec <=> $dep_sec)";
+          $place_query .= " or (godown <=> $godown and dep <=> $dep and sec <=> $dep_sec)";
     }
   
 
