@@ -181,6 +181,8 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
           window.location.reload();
         }, 500);
 
+      }else{
+        salert("Warning", response.error, "warning");
       }
 
 
