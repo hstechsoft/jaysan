@@ -61,7 +61,13 @@ if(!$no_loop){
     throw new Exception("Error: Loop detected in process flow after deletion of process. Please check the process flow and try again.");
 }
 
+// update final process id as null
+$update_final_process_id_sql = "update process_wel_tbl set final_process_id = NULL where final_process_id = $process_id;";
+if ($conn->query($update_final_process_id_sql) === TRUE) {
 
+} else {
+    throw new Exception("Error: " . $update_final_process_id_sql . "<br>" . $conn->error);
+}
 
  
 
