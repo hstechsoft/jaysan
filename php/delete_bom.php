@@ -69,7 +69,7 @@ $result_check_process = $conn->query($sql_check_process);
 if ($result_check_process && $result_check_process->num_rows > 0) {
     $result_json['success'] = false;
     $result_json['message'] = "BOM cannot be deleted because the output part is used in processes";
-   
+   echo json_encode($result_json);
     $conn->close();
     exit();
 }
