@@ -20,6 +20,7 @@ if ($result_check->num_rows > 0) {
 throw new Exception("Error: This is primary process and there is no previous process to refernce so cannot delete it.");
 }
 // if not proceed to delete
+
 // 1st get previous process id of deleted process_id
 $previous_process_id = 'NULL';
 $cat = '';
