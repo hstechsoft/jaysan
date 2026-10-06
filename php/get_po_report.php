@@ -38,22 +38,36 @@ $sql = "SET time_zone = '+05:30';";
 // INNER JOIN jaysan_po_material jmat ON  jmat.jaysan_po_id = jp.po_id
 // left join jaysan_inward on jp.po_id = jaysan_inward.ref_id and jaysan_inward.inward_cat = 'po'
 
-$sql .= "SELECT
-jp.po_no,
-jp.po_date,
-jp.po_id,
-sum(jmat.qty) as total_po_qty,
+// $sql .= "SELECT
+// jp.po_no,
+// jp.po_date,
+// jp.po_id,
+// sum(jmat.qty) as total_po_qty,
 
-ifnull(sum(grn.qty),0) as inward_qty,
-    (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to)  as order_to
+// ifnull(sum(grn.qty),0) as inward_qty,
+//     (SELECT creditors.creditor_name from  creditors WHERE creditors.creditor_id = jp.po_order_to)  as order_to
     
-FROM
-  jaysan_po_material   jmat
-INNER JOIN jaysan_po jp  ON  jmat.jaysan_po_id = jp.po_id 
-LEFT join grn on jmat.jaysan_po_material_id = grn.jaysan_po_material_id where  $material_query and  $date_query and  $order_to_query and $po_no GROUP by po_id
-";
+// FROM
+//   jaysan_po_material   jmat
+// INNER JOIN jaysan_po jp  ON  jmat.jaysan_po_id = jp.po_id 
+// LEFT join grn on jmat.jaysan_po_material_id = grn.jaysan_po_material_id where  $material_query and  $date_query and  $order_to_query and $po_no GROUP by po_id
+// ";
     // jmat.po_material_id = '' AND jp.po_order_to = 1";
 
+
+
+    $sql .= "with po_grn as (
+select jmat.po_material_id as po_part_id,jmat.jaysan_po_id,qty as po_qty,jmat.jaysan_po_material_id, creditors.creditor_name ,po.po_no,po.po_id,po.po_date from jaysan_po_material jmat 
+inner join jaysan_po po on jmat.jaysan_po_id = po.po_id
+inner join creditors on po.po_order_to = creditors.creditor_id
+where  $material_query and  $date_query and  $order_to_query and $po_no
+),
+grn_details as (
+select  sum(grn.qty) as grn_qty, po_grn.jaysan_po_material_id, po_grn.jaysan_po_id , po_grn.po_no, po_grn.po_id , po_grn.po_part_id , po_grn.creditor_name,po_grn.po_qty, po_grn.po_date from po_grn
+left join grn on po_grn.jaysan_po_material_id = grn.jaysan_po_material_id
+GROUP BY po_grn.jaysan_po_material_id
+)
+select   sum(po_qty) as total_po_qty,creditor_name as order_to, po_no, po_id, sum(ifnull(grn_qty,0)) as inward_qty, date_only(po_date) as po_date from grn_details group by po_id ;";
 if ($conn->multi_query($sql)) {
     do {
         if ($result = $conn->store_result()) {
