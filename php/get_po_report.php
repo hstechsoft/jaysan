@@ -21,7 +21,7 @@ $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
   $need_all_query = 1;
   if($need_all == 'no')
     {
-        $need_all_query = "CAST(total_po_qty AS SIGNED) >= CAST(inward_qty AS SIGNED)";
+        $need_all_query = "CAST(total_po_qty AS SIGNED) > CAST(inward_qty AS SIGNED)";
     }
 
  
