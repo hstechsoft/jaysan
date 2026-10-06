@@ -50,7 +50,29 @@ return $data;
 
 // }
 
+// get part_id ,component_cat  from bom_output before deleting
+$sql_get_bom_output = "SELECT part_id, component_cat FROM bom_output WHERE bom_id = $bom_id";
+$result_get_bom_output = $conn->query($sql_get_bom_output);
+$component_cat = "";
+$output_part = "";
 
+if ($result_get_bom_output && $result_get_bom_output->num_rows > 0) {
+    while ($row = $result_get_bom_output->fetch_assoc()) {
+        $component_cat = $row['component_cat'];
+        $output_part = $row['part_id'];
+    }
+}
+
+// check if there is data in process_wel_tbl for the output part before deleting BOM
+$sql_check_process = "SELECT * FROM process_wel_tbl WHERE output_part = $output_part and component_cat = '$component_cat'";
+$result_check_process = $conn->query($sql_check_process);
+if ($result_check_process && $result_check_process->num_rows > 0) {
+    $result_json['success'] = false;
+    $result_json['message'] = "BOM cannot be deleted because the output part is used in processes";
+   
+    $conn->close();
+    exit();
+}
 
  $sql =  "delete from bom_output where bom_id = $bom_id;";
 

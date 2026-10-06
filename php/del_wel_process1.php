@@ -25,10 +25,10 @@ if ($result_get_process_ids && $result_get_process_ids->num_rows > 0) {
         $process_ids[] = $row['process_id'];
     }
 }
-echo "Process IDs to be deleted: " . implode(", ", $process_ids) . "<br>";
+
 // update all process which have final_process_id = $process_id to final_process_id = null
 $update_final_process_id_sql = "UPDATE process_wel_tbl SET final_process_id = NULL WHERE final_process_id = $process_id";
-echo $update_final_process_id_sql;
+
 if ($conn->query($update_final_process_id_sql) === TRUE) {
 
 } else {
@@ -40,7 +40,7 @@ foreach ($process_ids as $id) {
 
 // delete process_wel_tbl
 $sql_delete = "DELETE from process_wel_tbl WHERE process_id = $id" ;
-echo $sql_delete;
+
 if ($conn->query($sql_delete) === TRUE) {
 
   } else {
