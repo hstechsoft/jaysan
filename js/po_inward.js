@@ -796,8 +796,14 @@ $(document).ready(function () {
         console.log(to_date);
         console.log(po_no);
 
-        get_po_report(part, company, from_date, to_date, po_no);
-    })
+        var need_all = $("#need_all").is(":checked") ? "yes" : "no";
+
+        get_po_report(part, company, from_date, to_date, po_no, need_all);
+    });
+
+    $("#need_all").change(function () {
+        $("#poreport_search").trigger("click");
+    });
 
     $("#po_report_reset").on("click", function () {
         window.location.reload();
@@ -1626,7 +1632,7 @@ function get_po_receive_sts(po_id) {
 
 
 
-function get_po_report(part, company, fdate, tdate, po_no) {
+function get_po_report(part, company, fdate, tdate, po_no, need_all) {
     $.ajax({
         url: "php/get_po_report.php",
         type: "get", //send it through get method
@@ -1636,6 +1642,7 @@ function get_po_report(part, company, fdate, tdate, po_no) {
             from_date: fdate,
             to_date: tdate,
             po_no: po_no,
+            need_all: need_all,
 
 
         },
