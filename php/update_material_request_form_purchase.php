@@ -35,7 +35,7 @@ $data = "'".$data."'";
 return $data;
 }
 
-$sql = "UPDATE mrf_purchase SET order_to = $order_to_id,
+$sql = "UPDATE mrf_purchase SET po_order_to = $order_to_id,
   delivery_to = $delivery_to_id,
   raw_material_part_id = $raw_material_part_id,
   raw_material_stock = $raw_material_stock,

@@ -1,5 +1,8 @@
 <?php
+
 error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
  include 'db_head.php';
 $dc = "out_dc";
 $dc_check = 1;

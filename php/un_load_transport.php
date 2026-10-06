@@ -217,7 +217,7 @@ $conn->query($sql_delete_input_demand);
 
 
 require_once 'stock_distribution.php';
-echo "result-" . stock_distribution($conn, $distribution_stock_id, $qty);
+
 
 }
 $conn->commit();
