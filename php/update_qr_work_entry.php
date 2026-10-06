@@ -4,7 +4,7 @@
 $qr_work_id = test_input($_POST['qr_work_id']);
 $work_update_sts = test_input($_POST['work_update_sts']);
 $reason = test_input($_POST['reason']);
-$emp_id = test_input($_POST['emp_id']);
+$emp_id = ($_POST['emp_id']);
 
  
 function test_input($data) {
@@ -22,7 +22,7 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
 
 
 require_once __DIR__ . '/get_current_work_info.php';
-$curent_work_info = current_info($conn, intval($emp_id));
+$curent_work_info = current_info($conn, ($emp_id));
 
 
 $work_done_id = $curent_work_info['work_done_id'];
