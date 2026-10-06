@@ -143,6 +143,7 @@ $(document).ready(function () {
 
 
     if (plan_name && selected_qty && process_id && assign_id.length > 0) {
+      $(this).prop("disabled", true);
       create_demand(plan_name, selected_qty, process_id, JSON.stringify(assign_id));
     } else {
       salert("Warning", "Please fill all required fields and select at least one order.", "warning");
