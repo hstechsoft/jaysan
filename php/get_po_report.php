@@ -17,7 +17,7 @@ $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
   $po_no = isset($_GET['po_no']) ? $_GET['po_no'] : '';
   $po_no = ($po_no == '') ? "1" : "jp.po_no = '$po_no'";
 
-  $need_all = isset($_GET['need_all']) ? $_GET['po_no'] : 'yes';
+  $need_all = isset($_GET['need_all']) ? $_GET['need_all'] : 'yes';
   $need_all_query = 1;
   if($need_all == 'no')
     {
