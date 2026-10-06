@@ -35,6 +35,21 @@ foreach ($stock_json as $stock) {
         $part_id = sql_nullable($row_stock['part_id']);
         $process_id = sql_nullable($row_stock['process_id']);
         $batch_id = $row_stock['batch_id'];
+
+
+                     $transport_dc_id = 0;
+// get transport_dc_id 
+$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
+$result_check_transport = $conn->query($sql_check_transport);
+        if ($result_check_transport->num_rows > 0) {
+            // stock exists in transport godown, update quantity
+            $row_check_transport = $result_check_transport->fetch_assoc();
+            $transport_dc_id = $row_check_transport['transport_dc_id'];
+        } else {
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$conn->error." query: $sql_check_transport");
+        } 
+
+
 // reduce stock qty from stock id(reduce from transport godown stock)
          $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty,remark = 'stock reduced by un_load_transport -".$transport_dc_id."' WHERE stock_id = $stock_id";
         if (!$conn->query($sql_reserve_update)) {
@@ -83,23 +98,19 @@ foreach ($stock_json as $stock) {
 
         }
 
-               $transport_dc_id = 0;
-// get transport_dc_id 
-$sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
-$result_check_transport = $conn->query($sql_check_transport);
-        if ($result_check_transport->num_rows > 0) {
-            // stock exists in transport godown, update quantity
-            $row_check_transport = $result_check_transport->fetch_assoc();
-            $transport_dc_id = $row_check_transport['transport_dc_id'];
-        } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$conn->error." query: $sql_check_transport");
-        } 
+  
 
 // reduce stock reserve qty
 $update_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
 if (!$conn->query($update_reserve)) {
     throw new Exception("Error reducing reserve qty for stock reserve id $stock_reserve_id: " . $conn->error." query: $update_reserve");
 }
+
+
+// UPDATE  transport_parts reserve id as null   
+$sql_update_transport_parts = "UPDATE transport_parts SET reserve_id = NULL WHERE transport_parts.transport_dc_id = $transport_dc_id";
+$conn->query($sql_update_transport_parts);
+
 
 // if reserve qty is 0 then delete it
 $delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty <= 0";
@@ -200,6 +211,11 @@ foreach($dc_demand_array as $dc_demand) {
 // delete input_demand rows where qty is zero
 $sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
 $conn->query($sql_delete_input_demand);
+
+
+
+
+
 require_once 'stock_distribution.php';
 echo "result-" . stock_distribution($conn, $distribution_stock_id, $qty);
 

@@ -22,7 +22,7 @@ if($work_update_sts != "'in-process'" && $work_update_sts != "'paused'"  || $qr_
 
 
 require_once __DIR__ . '/get_current_work_info.php';
-$curent_work_info = current_info($conn, $emp_id);
+$curent_work_info = current_info($conn, intval($emp_id));
 
 
 $work_done_id = $curent_work_info['work_done_id'];
@@ -37,7 +37,7 @@ $result_check_work_sts = $conn->query($sql_check_work_sts);
 if ($result_check_work_sts->num_rows > 0) {
     $row = $result_check_work_sts->fetch_assoc();
     $current_work_sts = $row['work_sts'];
-    $emp_id = $row['emp_id'];
+    $emp_id = intval($row['emp_id'])    ;
   
     $production_id = $row['production_id'];
     $sec_id = $row['sec_id'];
