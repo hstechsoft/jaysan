@@ -11,101 +11,52 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
+try
+{
 
-// Delete process
-$sql_delete = "DELETE FROM process_wel_tbl
-               WHERE final_process_id = $process_id";
+$conn->begin_transaction();
 
-if ($conn->query($sql_delete) === TRUE) {
-
-    echo "ok";
-
-} else {
-
-    echo "Delete Error: " . $conn->error . "<br>";
-
-    // Get foreign keys referencing process_wel_tbl.final_process_id
-    $sql_fk = "
-        SELECT
-            TABLE_NAME,
-            COLUMN_NAME,
-            CONSTRAINT_NAME
-        FROM information_schema.KEY_COLUMN_USAGE
-        WHERE REFERENCED_TABLE_SCHEMA = DATABASE()
-          AND REFERENCED_TABLE_NAME = 'process_wel_tbl'
-          AND REFERENCED_COLUMN_NAME = 'final_process_id'
-    ";
-
-    $result_fk = $conn->query($sql_fk);
-
-    if ($result_fk && $result_fk->num_rows > 0) {
-
-        while ($fk = $result_fk->fetch_assoc()) {
-
-            $table_name = $fk['TABLE_NAME'];
-            $column_name = $fk['COLUMN_NAME'];
-            $constraint_name = $fk['CONSTRAINT_NAME'];
-
-            // Quote identifiers safely
-            $quoted_table = '`' . str_replace('`', '``', $table_name) . '`';
-            $quoted_column = '`' . str_replace('`', '``', $column_name) . '`';
-
-            // Find referencing rows
-            $sql_check = "
-                SELECT *
-                FROM $quoted_table
-                WHERE $quoted_column = ?
-            ";
-
-            $stmt = $conn->prepare($sql_check);
-
-            if (!$stmt) {
-                echo "Check Error: " . $conn->error . "<br>";
-                continue;
-            }
-
-            $stmt->bind_param("i", $process_id);
-            $stmt->execute();
-
-            $result_check = $stmt->get_result();
-
-            if ($result_check && $result_check->num_rows > 0) {
-
-                echo "<hr>";
-                echo "<b>Referencing Table:</b> " .
-                     htmlspecialchars($table_name) . "<br>";
-
-                echo "<b>Referencing Column:</b> " .
-                     htmlspecialchars($column_name) . "<br>";
-
-                echo "<b>Foreign Key:</b> " .
-                     htmlspecialchars($constraint_name) . "<br>";
-
-                echo "<b>Matching Rows:</b><br>";
-
-                while ($row = $result_check->fetch_assoc()) {
-                    echo "<pre>" .
-                         htmlspecialchars(
-                             json_encode(
-                                 $row,
-                                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-                             )
-                         ) .
-                         "</pre>";
-                }
-            }
-
-            $stmt->close();
-        }
-
-    } else {
-        echo "No foreign keys found referencing this column.";
+// get all process_id whos have final_process_id = $process_id
+$sql_get_process_ids = "SELECT process_id FROM process_wel_tbl WHERE final_process_id = $process_id";
+$result_get_process_ids = $conn->query($sql_get_process_ids);
+$process_ids = [];
+if ($result_get_process_ids && $result_get_process_ids->num_rows > 0) {
+    while ($row = $result_get_process_ids->fetch_assoc()) {
+        $process_ids[] = $row['process_id'];
     }
 }
+echo "Process IDs to be deleted: " . implode(", ", $process_ids) . "<br>";
+// update all process which have final_process_id = $process_id to final_process_id = null
+$update_final_process_id_sql = "UPDATE process_wel_tbl SET final_process_id = NULL WHERE final_process_id = $process_id";
+echo $update_final_process_id_sql;
+if ($conn->query($update_final_process_id_sql) === TRUE) {
 
+} else {
+   throw new Exception("Error updating final_process_id: " . $conn->error);
+}
+
+
+foreach ($process_ids as $id) {
+
+// delete process_wel_tbl
+$sql_delete = "DELETE from process_wel_tbl WHERE process_id = $id" ;
+echo $sql_delete;
+if ($conn->query($sql_delete) === TRUE) {
+
+  } else {
+    throw new Exception("Error deleting record: " . $conn->error);
+  }
+}
+    $conn->commit();
+    echo "ok";
 
 
 
 
 $conn->close();
+
+} catch (Exception $e) {
+    $conn->rollback();
+    echo "Transaction failed: " . $e->getMessage();
+}
 ?>
