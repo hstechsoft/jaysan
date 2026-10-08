@@ -911,7 +911,7 @@ $(document).ready(function () {
         // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
         console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
-        $(this).prop('disabled', true)
+        // $(this).prop('disabled', true)
         insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
     })
 
@@ -1144,12 +1144,12 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                             let reserve = part.stock_reserve_details || '';
 
                             // if(all == 1){
-                                totalRowspan += Math.max(reserve.length, 1);
+                            totalRowspan += Math.max(reserve.length, 1);
                             // }
                             // else if (reserve != '' && all == 0) {
                             //     totalRowspan += Math.max(reserve.length, 1);
                             // }
-                            
+
 
                         });
 
@@ -1823,31 +1823,36 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
         success: function (response) {
             console.log(response);
 
-            var le = JSON.parse(response);
+            var le = response;
 
-            le.forEach(function (i) {
+            // le.each(function () {
 
-                if (i.success) {
+            if (le.success) {
 
 
-                    const project = window.location.pathname.split('/')[1];
+                const project = window.location.pathname.split('/')[1];
 
-                    console.log(`${window.location.origin}/${project}/${i.download_url}`);
+                console.log(`${window.location.origin}/${project}/${le.data.download_url}`);
 
-                    window.open(`${window.location.origin}/${project}/${i.download_url}`, '_blank');
-
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 500);
-
+                if (le.data == null) {
+                    salert("Success", "Drive plan Created Successfully", "success");
                 }
                 else {
-
-                    $("#add_to_table").prop("disabled", false);
-                    salert("Warning", i.error, "warning");
-
+                    window.open(`${window.location.origin}/${project}/${le.data.download_url}`, '_blank');
                 }
-            });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+
+            }
+            else {
+
+                $("#add_to_table").prop("disabled", false);
+                salert("Warning", le.error, "warning");
+
+            }
+            // });
             // if (response.trim() == "ok") {
             //     // window.location.reload();
             // }
