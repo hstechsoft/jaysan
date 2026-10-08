@@ -1,7 +1,13 @@
 <?php
  include 'db_head.php';
 
- $godown_id = test_input($_GET['godown_id']);
+ $current_godown_id = test_input($_GET['godown_id']);
+ $source_godown_id = test_input($_GET['source_godown_id']);
+$source_godown_query = 1;
+if($source_godown_id > 0)
+{
+  $source_godown_query = "tdc.source_godown = $source_godown_id";
+}
  
  $transport_dc_id = test_input($_GET['transport_dc_id']);
 $transport_dc_query = 1;
@@ -27,7 +33,7 @@ left join parts_tbl pt on pwt2.output_part = pt.part_id
 left join parts_tbl pt2 on tp.part_id = pt2.part_id
 left join jaysan_process jp on pwt.process = jp.process_id 
 left join creditors on tdc.source_godown = creditors.creditor_id 
-where tdc.source_godown = $godown_id  and $transport_dc_query and tp.dc_check = 0";
+where tdc.des_godown = $current_godown_id  and $source_godown_query and $transport_dc_query and tp.dc_check = 0";
 
 
 $result = $conn->query($sql);
