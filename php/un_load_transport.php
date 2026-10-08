@@ -109,6 +109,7 @@ if (!$conn->query($update_reserve)) {
 
 // UPDATE  transport_parts reserve id as null   
 $sql_update_transport_parts = "UPDATE transport_parts SET reserve_id = NULL WHERE transport_parts.transport_dc_id = $transport_dc_id";
+
 $conn->query($sql_update_transport_parts);
 
 

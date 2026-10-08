@@ -324,17 +324,25 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
 
  $result_json['success'] = true;
 
-
+if($dc_id) { 
 
            require_once 'print_dc.php';
              $result = print_dc($dc_id, $conn);
-
-
- $rows = [];
+              $rows = [];
  $result_json['data'] = $result;
 
- header('Content-Type: application/json');
+//    header('Content-Type: application/json');
  echo json_encode($result_json);
+        }
+        else{
+            // no need of out dc
+            $result_json['data'] = null;
+            //  header('Content-Type: application/json');
+            echo json_encode($result_json);
+        }
+
+
+
 
 
 

@@ -24,6 +24,7 @@ left join parts_tbl prs_output_part on prs_output_part.part_id = pwt.output_part
  WHERE dc_process.dc_id = $dc_id group by dc_process.dc_process_id, dc_process.process_id)
 
  SELECT process_id,process_name,part_details,process_qty,dc_process_id,output_part_name from prs";
+ 
  $dc_process_id = 0;
  $dc_process_qty = 0;
  $process_name = "";
@@ -94,8 +95,7 @@ left join parts_tbl final_part on final_part.part_id = pwt.output_part
 
 
 
-
-$dc_form = "";
+$dc_from = "";
 $dispatch_to = "";
 $challan_no = "";
 $dated = "";
@@ -112,7 +112,8 @@ $dispatched_through = "";
 $destination = "";
 $transport_mode_type = "";
 $supplier_ref_order_no = "";
-$part_details = "";
+$part_details =  array();
+$motor_vehicle_no = "";
 
 $result = $conn->query($sql_get_pats);
 if ($result->num_rows > 0) {
@@ -134,7 +135,8 @@ if ($result->num_rows > 0) {
         $transport_mode_type = $r['transport_mode'] . " - " . $r['transport_des'];
         $supplier_ref_order_no = $r['supplier_ref_order_no'];
         $motor_vehicle_no = $r['vehicle_no'];
-        $part_details = json_decode($r['part_details'], true);
+        // convert to array
+        $part_details =  json_decode($r['part_details'], true);
 
 
 
@@ -286,6 +288,7 @@ $total_amount_words = numberToIndianCurrency(number_format($total_amount, 2, '.'
 
 require_once __DIR__ . '/../pdf_service.php';
 
+
 //  require_once __DIR__ . 'pdf_service.php';
     $data = [
                      'save_path' =>  dirname(__DIR__) . "/storage/demo/dc_" . $dc_id,
@@ -307,6 +310,7 @@ require_once __DIR__ . '/../pdf_service.php';
 $result = generatePDF($data);
 //    header('Content-Type: application/pdf');
 //     header('Content-Disposition: inline; filename="' . basename($data['save_path']) . '"');
+// echo json_encode($result);
     return $result;
 
 

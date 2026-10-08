@@ -8,14 +8,14 @@ $material_query = isset($_GET['material_query']) ? $_GET['material_query'] : '';
    $from_date = isset($_GET['from_date']) ? $_GET['from_date'] : '';
     $to_date = isset($_GET['to_date']) ? $_GET['to_date'] : '';
     
-  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " jp.po_date between   '$from_date' and '$to_date' ";
+  $date_query = ($from_date == '' || $to_date  == '') ? "1" :  " po.po_date between   '$from_date' and '$to_date' ";
 
 
   $order_to_query = isset($_GET['order_to_query']) ? $_GET['order_to_query'] : '';
-  $order_to_query = ($order_to_query == '') ? "1" :  "jp.po_order_to = '$order_to_query'";
+  $order_to_query = ($order_to_query == '') ? "1" :  "po.po_order_to = '$order_to_query'";
  
   $po_no = isset($_GET['po_no']) ? $_GET['po_no'] : '';
-  $po_no = ($po_no == '') ? "1" : "jp.po_no = '$po_no'";
+  $po_no = ($po_no == '') ? "1" : "po.po_no = '$po_no'";
 
   $need_all = isset($_GET['need_all']) ? $_GET['need_all'] : 'yes';
   $need_all_query = 1;
@@ -78,6 +78,7 @@ GROUP BY po_grn.jaysan_po_material_id
 po_group as(select   sum(po_qty) as total_po_qty,creditor_name as order_to, po_no, po_id, sum(ifnull(grn_qty,0)) as inward_qty, date_only(po_date) as po_date from grn_details group by po_id)
 select * from po_group where $need_all_query
 ";
+
 if ($conn->multi_query($sql)) {
     do {
         if ($result = $conn->store_result()) {
