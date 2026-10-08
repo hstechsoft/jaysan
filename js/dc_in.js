@@ -9,6 +9,7 @@ var current_user_name = localStorage.getItem("ls_uname");
 // const godown_name = urlParams.get("name") || "";
 
 var attach_id = 0;
+var current_godown = 0;
 
 var physical_stock_array = [];
 
@@ -67,8 +68,9 @@ $(document).ready(function () {
         let godown_id = $(this).val();
 
         if (godown_id && godown_name) {
-            $("#godown_list_modal").modal("hide");
-            $("#godown").data("godown_id", godown_id).val(godown_name);
+            // $("#godown_list_modal").modal("hide");
+            // $("#godown").data("godown_id", godown_id).val(godown_name);
+            current_godown = godown_id;
         }
         else {
             salert("Warning", "Data Missing!, Try Again.", "warning");
@@ -145,7 +147,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
-                    get_unassign_indc(0, ui.item.id);
+                    get_unassign_indc(0, ui.item.id, current_godown);
                 },
 
             }).autocomplete("instance")._renderItem = function (ul, item) {
@@ -159,11 +161,12 @@ $(document).ready(function () {
 
     $("#all_parts").on("change", function () {
         $("#parts_tbody").empty();
+        $("#godown").data("godown_id") || 0;
         if ($(this).is(":checked") && godown_id > 0) {
-            get_unassign_indc('', godown_id);
+            get_unassign_indc(0, godown_id, current_godown);
         }
         else {
-            get_unassign_indc(transport_dc_id, godown_id);
+            get_unassign_indc(0, godown_id, current_godown);
         }
     });
 
@@ -462,16 +465,17 @@ function calculateTotal() {
 }
 
 
-function get_unassign_indc(transport_dc_id, godown_id) {
+function get_unassign_indc(transport_dc_id, godown_id, current_godown) {
 
-    console.log(transport_dc_id, godown_id);
+    console.log(transport_dc_id, godown_id, current_godown);
 
     $.ajax({
         url: "php/get_unassign_indc.php",
         type: "get",
         data: {
             transport_dc_id: transport_dc_id,
-            godown_id: godown_id,
+            current_godown_id: current_godown,
+            source_godown_id: godown_id,
         },
         success: function (response) {
             console.log(response);
@@ -626,7 +630,8 @@ function get_godown_location_dc_in(lat, lng) {
                     if (obj.length == 1) {
                         obj.forEach(function (item) {
                             $(".dc_filess").prop("disabled", false);
-                            $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                            // $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                            current_godown = item.creditor_id;
                         })
                     }
                     else {

@@ -1838,7 +1838,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
                     salert("Success", "Drive plan Created Successfully", "success");
                 }
                 else {
-                    window.open(`${window.location.origin}/${project}/${le.data.download_url}`, '_blank');
+                    window.open(`${window.location.origin}/${le.data.download_url}`, '_blank');
                 }
 
                 setTimeout(() => {
