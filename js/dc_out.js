@@ -1819,6 +1819,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
             transport_dc_id: transport_dc_id,
             dc_parts: dc_parts,
         },
+        dataType: "json",
         success: function (response) {
             console.log(response);
 
