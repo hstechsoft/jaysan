@@ -2258,7 +2258,7 @@ function get_employee_work_report(work_done_id, emp_name) {
       function formatMinutes(mins) {
         let h = Math.floor(mins / 60);
         let m = mins % 60;
-        return h + "h " + m + "m";
+        return h + "h " + m.toFixed(1) + "m";
       }
 
 

@@ -824,8 +824,8 @@ $(document).ready(function () {
 
         let transport_godown = null;
 
-        let dc_from = '';
-        let dc_to = '';
+        let dc_from = current_godown;
+        let dc_to = destination;
 
         let dc_parts = [];
         let dc_parts_location = [];
@@ -911,7 +911,7 @@ $(document).ready(function () {
         // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
         console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
 
-        // $(this).prop('disabled', true)
+        $(this).prop('disabled', true)
         insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
     })
 
