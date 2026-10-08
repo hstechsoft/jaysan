@@ -1,7 +1,7 @@
 <?php
  include 'db_head.php';
 
- $current_godown_id = test_input($_GET['godown_id']);
+ $current_godown_id = test_input($_GET['current_godown_id']);
  $source_godown_id = test_input($_GET['source_godown_id']);
 $source_godown_query = 1;
 if($source_godown_id > 0)
@@ -18,7 +18,7 @@ if($transport_dc_id > 0)
  
  
 function test_input($data) {
-$data = trim($data);
+$data = trim($data);  
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
 return $data;
