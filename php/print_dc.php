@@ -275,8 +275,13 @@ if ($result->num_rows > 0) {
     while($r = mysqli_fetch_assoc($result)) {
 
      $dc_from = $r['from_name'] . " (" . $r['from_phone'] . ")<br>" . $r['from_address'] . "<br>GST: " . $r['from_gst'];
-
+     if($dc_from == "()") {
+         $dc_from = "";
+     }
      $dc_to = $r['to_name'] . " (" . $r['to_phone'] . ")<br>" . $r['to_address'] . "<br>GST: " . $r['to_gst'];
+     if($dc_to == "()") {
+         $dc_to = "";
+     }
 
      $challan_no = $r['challan_no'];
 
@@ -287,6 +292,9 @@ if ($result->num_rows > 0) {
         $party =   $dc_to;
 
         $driver_name_number = $r['driver_name'] . " (" . $r['driver_contact'] . ")";
+        if($driver_name_number == "()") {
+            $driver_name_number = "";
+        }
 
         $date_time_of_issue = $r['date_time_of_issue'];
 
