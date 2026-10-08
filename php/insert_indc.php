@@ -3,6 +3,7 @@ error_reporting(E_ALL);
  include 'db_head.php';
 
  $godown = test_input($_POST['godown']);
+
 $dc_date = test_input($_POST['dc_date']);
 $transport_mode = test_input($_POST['transport_mode']);
 $transport_des = test_input($_POST['transport_des']);
@@ -10,9 +11,6 @@ $vehicle_no = test_input($_POST['vehicle_no']);
 $emp_id = test_input($_POST['emp_id']);
 $attach_id  = test_input($_POST['attach_id']);
 $in_dc_no = test_input($_POST['in_dc_no']);
-
-
-
 
 
 
@@ -50,20 +48,23 @@ try {
  $in_dc_id = 0;
 
     $sql = "INSERT INTO in_dc ( godown,dc_date,transport_mode,transport_des,vehicle_no,emp_id,invoice_sts,in_dc_no) VALUES ($godown,$dc_date,$transport_mode,$transport_des,$vehicle_no,$emp_id,'pending',$in_dc_no)";
+   
     if ($conn->query($sql) === TRUE) {
         $in_dc_id = $conn->insert_id;
+        
 // insert dc parts
 $all_transport_ids = array_column($dc_parts, 'transport_id');
 $transport_ids_str = implode(',', $all_transport_ids);
 
 
         foreach ($dc_parts as $part) {
-            $part_id = test_input($part['part_id']);
-              $transport_id = test_input($part['transport_id']);
-              $part_pre_process_id  = test_input($part['part_pre_process_id']);
-                $rate = test_input($part['rate']);
-            $qty = test_input($part['qty']);
-            $sql_part = "INSERT INTO in_dc_parts (in_dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($in_dc_id, $part_id, $part_pre_process_id, $rate, $qty)";
+            $part_id = sql_nullable($part['part_id']);
+              $transport_id = ($part['transport_id']);
+              $part_pre_process_id  = sql_nullable($part['part_pre_process_id']);
+                $rate = ($part['rate']);
+            $qty = ($part['qty']);
+            $sql_part = "INSERT INTO in_dc_parts (in_dc_id, part_id, part_pre_process_id, rate, qty) VALUES ($in_dc_id, $part_id, $part_pre_process_id, $rate, $qty) on duplicate key update rate = $rate, qty = $qty";
+         
             if (!$conn->query($sql_part)) {
                 throw new Exception("Error inserting part: " . $conn->error.$sql_part);
             }
@@ -79,11 +80,11 @@ $transport_ids_str = implode(',', $all_transport_ids);
                 throw new Exception("Error updating transport parts: " . $conn->error.$sql_update_transport_parts);
             }
 
-            // update dc_id in transport_dc
-            $sql_update_transport_dc_id = "UPDATE transport_dc SET dc_id = $in_dc_id WHERE transport_dc_id IN (SELECT transport_dc_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id)";
-            if (!$conn->query($sql_update_transport_dc_id)) {
-                throw new Exception("Error updating transport dc id: " . $conn->error.$sql_update_transport_dc_id);
-            }
+            // // update dc_id in transport_dc
+            // $sql_update_transport_dc_id = "UPDATE transport_dc SET dc_id = $in_dc_id WHERE transport_dc_id IN (SELECT transport_dc_id FROM transport_parts WHERE transport_id IN ($transport_ids_str) GROUP BY transport_dc_id)";
+            // if (!$conn->query($sql_update_transport_dc_id)) {
+            //     throw new Exception("Error updating transport dc id: " . $conn->error.$sql_update_transport_dc_id);
+            // }
 
  
 
