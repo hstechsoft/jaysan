@@ -5,7 +5,7 @@
 $creditor_phone = test_input($_POST['creditor_phone']);
 $creditor_mobile = test_input($_POST['creditor_mobile']);
 $creditor_gst = test_input($_POST['creditor_gst']);
-
+  
 $creditors_email = test_input($_POST['creditors_email']);
 $creditors_terms = test_input($_POST['creditors_terms']);
 $contact_person = test_input($_POST['contact_person']);
@@ -16,6 +16,7 @@ $creditor_website = test_input($_POST['creditor_website']);
 $creditor_remark = test_input($_POST['creditor_remark']);
 $latti = test_input($_POST['latti']);
 $longi = test_input($_POST['longi']);
+$creditor_id = test_input($_POST['creditor_id']);
 
 
  
@@ -29,7 +30,7 @@ return $data;
 }
 
 
- $sql = "INSERT INTO creditors ( creditor_name,creditor_phone,creditor_mobile,creditor_gst,creditors_email,creditors_terms,contact_person,contact,state_name,creditors_addr,creditor_website,creditor_remark,latti,longi) VALUES ($creditor_name,$creditor_phone,$creditor_mobile,$creditor_gst,$creditors_email,$creditors_terms,$contact_person,$contact,$state_name,$creditors_addr,$creditor_website,$creditor_remark,$latti,$longi)";
+ $sql =  "UPDATE  creditors SET creditor_name =  $creditor_name,creditor_phone =  $creditor_phone,creditor_mobile =  $creditor_mobile,creditor_gst =  $creditor_gst,creditors_email =  $creditors_email,creditors_terms =  $creditors_terms,contact_person =  $contact_person,contact =  $contact,state_name =  $state_name,creditors_addr =  $creditors_addr,creditor_website =  $creditor_website,creditor_remark =  $creditor_remark,latti =  $latti,longi =  $longi WHERE creditor_id =  $creditor_id";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
