@@ -3,6 +3,8 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
+var role = localStorage.getItem("ls_emp_role");
+
 var physical_stock_array = [];
 $(document).ready(function () {
 
@@ -51,6 +53,29 @@ $(document).ready(function () {
             salert("Warning", "Invalid Creditor ID.", "warning");
         } else {
             get_single_creditor($(this).val());
+        }
+    });
+
+    $("#creditors_table_body").on("click", ".delete_btn", function () {
+        
+        if ($(this).val() < 0) {
+            salert("Warning", "Invalid Creditor ID.", "warning");
+        } else {
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this creditor!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+            }).then((willDelete) => {
+                if (willDelete) {
+                    delete_creditors($(this).val());    
+                } else {
+                    // salert("Info", "Creditor deletion canceled.", "info");
+                }
+            });
         }
     });
 
@@ -291,7 +316,7 @@ function get_creditors() {
 
                     obj.forEach(function (obj) {
                         count++;
-                        $("#creditors_table_body").append(`<tr><td>${count}</td><td>${obj.creditor_name}</td><td>${obj.contact_person}</td><td>${obj.creditor_phone}</td><td>${obj.creditors_email}</td><td>${obj.creditors_addr}</td><td>${obj.creditor_gst}</td><td class='d-flex justify-content-between'><button type="button" class="btn btn-primary btn-sm map_btn" id="" value="${obj.creditor_id}"><i class="fa-solid fa-map-location-dot"></i></button><button type="button" class="btn btn-warning text-dark btn-sm ms-2 edit_btn" id="" value="${obj.creditor_id}"><i class="fa fa-edit"></i></button></td></tr>`);
+                        $("#creditors_table_body").append(`<tr><td>${count}</td><td>${obj.creditor_name}</td><td>${obj.contact_person}</td><td>${obj.creditor_phone}</td><td>${obj.creditors_email}</td><td>${obj.creditors_addr}</td><td>${obj.creditor_gst}</td><td class=''><button type="button" class="btn btn-primary btn-sm map_btn" id="" value="${obj.creditor_id}"><i class="fa-solid fa-map-location-dot"></i></button><button type="button" class="btn btn-warning text-dark btn-sm m-1 edit_btn" id="" value="${obj.creditor_id}"><i class="fa fa-edit"></i></button><button type="button" class="btn btn-danger btn-sm m-1 delete_btn ${role.toLocaleLowerCase() === "admin" || role.toLocaleLowerCase() === "super admin" ? "" : "d-none"}" id="" value="${obj.creditor_id}"><i class="fa fa-trash"></i></button></td></tr>`);
 
 
                     });

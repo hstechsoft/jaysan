@@ -3,7 +3,7 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
-var role = localStorage.getItem("ls_emp_role")
+var role = localStorage.getItem("ls_emp_role");
 
 var physical_stock_array = [];
 $(document).ready(function () {
