@@ -3,6 +3,7 @@
 $des_godown = test_input($_GET['des_godown']);
 $stock_json = json_decode($_GET['stock_json'], true);
 
+
 // unload transport parts from transport godown to destination godown
  
  $distribution_stock_id = 0;
@@ -17,11 +18,12 @@ return $data;
 try {
 
   $conn->begin_transaction();
-
+$transport_dc_id_arr = array();
 
 foreach ($stock_json as $stock) {
  
     $stock_reserve_id = $stock['stock_reserve_id'];
+   
     $qty = $stock['qty'];
 // get stock id from stock reserve id
     $sql_stock = "SELECT js.stock_id,js.qty as stock_qty,js.part_id,js.process_id,js.batch_id  FROM stock_reserve
@@ -40,13 +42,16 @@ foreach ($stock_json as $stock) {
                      $transport_dc_id = 0;
 // get transport_dc_id 
 $sql_check_transport = "SELECT transport_dc_id from transport_parts WHERE reserve_id = $stock_reserve_id";
+
 $result_check_transport = $conn->query($sql_check_transport);
+
         if ($result_check_transport->num_rows > 0) {
             // stock exists in transport godown, update quantity
             $row_check_transport = $result_check_transport->fetch_assoc();
             $transport_dc_id = $row_check_transport['transport_dc_id'];
+            $transport_dc_id_arr[] = $transport_dc_id;
         } else {
-            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: ".$conn->error." query: $sql_check_transport");
+            throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id =  $process_id: ".$conn->error." query: $sql_check_transport");
         } 
 
 
@@ -85,6 +90,7 @@ $result_check_transport = $conn->query($sql_check_transport);
         
         // insert new stock in transport godown with quantity and get new stock id
         $sql_insert_stock = "INSERT INTO jaysan_stock (part_id, process_id, godown, qty,batch_id,remark) VALUES ($part_id, $process_id, $des_godown, $qty, '$batch_id','stock_added by un_load_transport -".$transport_dc_id."')";
+       
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
             $distribution_stock_id = $new_stock_id;
@@ -107,17 +113,6 @@ if (!$conn->query($update_reserve)) {
 }
 
 
-// UPDATE  transport_parts reserve id as null   
-$sql_update_transport_parts = "UPDATE transport_parts SET reserve_id = NULL WHERE transport_parts.transport_dc_id = $transport_dc_id";
-
-$conn->query($sql_update_transport_parts);
-
-
-// if reserve qty is 0 then delete it
-$delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty <= 0";
-if (!$conn->query($delete_reserve)) {
-    throw new Exception("Error deleting stock reserve id $stock_reserve_id: " . $conn->error." query: $delete_reserve");
-}
 
 
 // // insert on duplicate key update stock reserve with typr = work_order
@@ -168,6 +163,8 @@ if (!$conn->query($delete_reserve)) {
  
 } 
 
+
+
   // get  input demand array where transport_dc_id,cat as dc,part_id,process_id matches
   $dc_demand_array = array();
 $sql = "SELECT * FROM input_demand WHERE godown = $des_godown AND cat = 'transport' AND part_id <=> $part_id AND process_id <=> $process_id";
@@ -209,6 +206,8 @@ foreach($dc_demand_array as $dc_demand) {
 
 }
 
+
+
 // delete input_demand rows where qty is zero
 $sql_delete_input_demand = "DELETE FROM input_demand WHERE qty = 0";
 $conn->query($sql_delete_input_demand);
@@ -219,6 +218,23 @@ $conn->query($sql_delete_input_demand);
 
 require_once 'stock_distribution.php';
 
+
+}
+
+foreach($transport_dc_id_arr as $transport_dc_id1) {
+    // process each transport_dc_id here
+
+    // UPDATE  transport_parts reserve id as null   
+$sql_update_transport_parts = "UPDATE transport_parts SET reserve_id = NULL WHERE transport_parts.transport_dc_id = $transport_dc_id1";
+
+$conn->query($sql_update_transport_parts);
+
+
+// if reserve qty is 0 then delete it
+$delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty <= 0";
+if (!$conn->query($delete_reserve)) {
+    throw new Exception("Error deleting stock reserve id $stock_reserve_id: " . $conn->error." query: $delete_reserve");
+}
 
 }
 $conn->commit();
