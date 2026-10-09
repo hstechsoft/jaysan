@@ -184,34 +184,27 @@ $(document).ready(function () {
 
 
 
-
-function update_creditor_location(lati, long, godown_id) {
-
-    console.log(lati, long, godown_id);
+function delete_creditors(id) {
 
     $.ajax({
-        url: "php/update_godown_location.php",
-        type: "post", //send it through get method
+        url: "php/delete_creditors.php",
+        type: "get", //send it through get method
         data: {
-
-            latti: lati,
-            longi: long,
-            creditor_id: godown_id,
+            creditor_id: id,
         },
         success: function (response) {
+
             console.log(response);
 
-            if (response.trim() == "ok") {
-                $("#map_modal").modal('hide');
-                $("#map_coordinates").val('');
-                salert("Success", "Location Saved Successfully.", "success");
+            if (response.trim() == "Record deleted successfully") {
+                window.location.reload();
+
+                //    get_sales_order()
             }
+
             else {
-                salert("Warning", response, "warning");
+                salert("Error", "User ", "error");
             }
-
-
-
 
 
 
@@ -220,10 +213,6 @@ function update_creditor_location(lati, long, godown_id) {
             //Do Something to handle error
         }
     });
-
-
-
-
 }
 
 function insert_creditors() {
