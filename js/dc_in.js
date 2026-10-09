@@ -164,10 +164,10 @@ $(document).ready(function () {
         $("#parts_tbody").empty();
         $("#godown").data("godown_id") || 0;
         if ($(this).is(":checked") && godown_id > 0) {
-            get_unassign_indc(0, godown_id, current_godown);
+            get_unassign_indc(0, $("#godown").data("godown_id"), current_godown);
         }
         else {
-            get_unassign_indc(0, godown_id, current_godown);
+            get_unassign_indc(0, $("#godown").data("godown_id"), current_godown);
         }
     });
 
