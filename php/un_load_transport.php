@@ -19,6 +19,7 @@ try {
 
   $conn->begin_transaction();
 $transport_dc_id_arr = array();
+$stock_distribution_array = array();
 
 foreach ($stock_json as $stock) {
  
@@ -70,6 +71,7 @@ $result_check_transport = $conn->query($sql_check_transport);
             $row_check_stock = $result_check_stock->fetch_assoc();
             $existing_stock_id = $row_check_stock['stock_id'];
             $distribution_stock_id = $existing_stock_id;
+            $stock_distribution_array[] = array('stock_id' => $distribution_stock_id, 'qty' => $qty);
         } else {
             $existing_stock_id = null;
         }
@@ -94,6 +96,7 @@ $result_check_transport = $conn->query($sql_check_transport);
         if ($conn->query($sql_insert_stock) === TRUE) {
             $new_stock_id = $conn->insert_id;
             $distribution_stock_id = $new_stock_id;
+            $stock_distribution_array[] = array('stock_id' => $distribution_stock_id, 'qty' => $qty);
         } else {
             throw new Exception("Error inserting new stock in transport godown for part id $part_id and process id $process_id: " . $conn->error." query: $sql_insert_stock");
         }   
@@ -216,8 +219,8 @@ $conn->query($sql_delete_input_demand);
 
 
 
-require_once 'stock_distribution.php';
-
+// require_once 'stock_distribution.php';
+// stock_distribution($conn,$distribution_stock_id,$qty);
 
 }
 
@@ -237,7 +240,12 @@ if (!$conn->query($delete_reserve)) {
 }
 
 }
-$conn->commit();
+
+foreach($stock_distribution_array as $stock_distribution) {
+    require_once 'stock_distribution.php';
+    stock_distribution($conn, $stock_distribution['stock_id'], $stock_distribution['qty']);
+}
+ $conn->commit();
 echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
