@@ -182,7 +182,46 @@ $(document).ready(function () {
 
 });
 
+function update_creditor_location(lati, long, godown_id) {
 
+    console.log(lati, long, godown_id);
+
+    $.ajax({
+        url: "php/update_godown_location.php",
+        type: "post", //send it through get method
+        data: {
+
+            latti: lati,
+            longi: long,
+            creditor_id: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                $("#map_modal").modal('hide');
+                $("#map_coordinates").val('');
+                salert("Success", "Location Saved Successfully.", "success");
+            }
+            else {
+                salert("Warning", response, "warning");
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function delete_creditors(id) {
 
