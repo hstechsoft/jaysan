@@ -524,7 +524,7 @@ function get_dc_attachment1(emp_id, godown, dc_id, dc_status) {
         success: function (response) {
             console.log(response);
 
-            if (response.trim() != "error") {
+            if (response.trim() != "error") {   
 
                 $("#attachment_list").empty();
 
