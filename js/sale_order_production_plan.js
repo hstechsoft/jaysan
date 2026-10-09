@@ -182,7 +182,9 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
           window.location.reload();
         }, 500);
 
-      }else{
+      } else {
+        $(this).prop("disabled", false);
+
         salert("Warning", response.error, "warning");
       }
 
@@ -208,7 +210,7 @@ function get_sale_order_plan() {
     type: "get", //send it through get method
     data: {
 
-      
+
     },
     success: function (response) {
       console.log(response);

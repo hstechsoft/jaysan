@@ -333,7 +333,11 @@ function finish_operator_job_card(job_card_id, current_user_id, scrap_weight, sc
             console.log(response);
 
             if (response.trim() == "ok") {
-                // window.location.reload();
+                salert("Success", "Job Card Finished Successfully", "success");
+                $("#assignedWorkModal").modal("hide");
+                setTimeout(function () {
+                    get_operator_job_card($("#shift").val(), $("#machine").val());
+                }, 1500);
             }
         },
         error: function (xhr) {
@@ -437,8 +441,8 @@ function get_operator_job_card(shift, machine_id) {
                                          <button class="btn btn-outline-success laser_work_entry_btn" 
                                             data-job_card_id="${item.job_card_id}" 
                                             data-nesting_parts_details="${encodeURIComponent(item.nesting_parts_details)}" 
-                                            data-machine_id="${item.machine_id}"
-                                            data-raw_mat_weight="${item.raw_mat_weight}">
+                                            data-master_scarp_weight="${item.master_scarp_weight}"
+                                            data-raw_mat_weight="${item.raw_material_weight}">
                                             <i class="fa-solid fa-person-running fa-bounce"></i>
                                         </button>
                                     </div>

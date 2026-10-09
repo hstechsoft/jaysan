@@ -1832,7 +1832,6 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
                 const project = window.location.pathname.split('/')[1];
 
-                console.log(`${window.location.origin}/${project}/${le.data.download_url}`);
 
                 if (le.data == null) {
                     salert("Success", "Drive plan Created Successfully", "success");

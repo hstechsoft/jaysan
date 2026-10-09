@@ -190,9 +190,17 @@
                         <div class="card border-0 shadow-sm rounded-3">
 
                             <div class="card-header bg-primary text-white py-2 px-3">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa-solid fa-filter me-2"></i>
-                                    <span class="fw-semibold">Stock Filter</span>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fa-solid fa-filter me-2"></i>
+                                        <span class="fw-semibold">Stock Filter</span>
+                                    </div>
+
+                                    <button type="button" class="btn btn-white text-white d-none btn-sm"
+                                        id="clear_negative_btn">
+                                        <i class="fa-solid fa-trash-can me-1"></i>
+                                        Clear Negative
+                                    </button>
                                 </div>
                             </div>
 
@@ -200,32 +208,28 @@
 
                                 <!-- Godown -->
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="text" class="form-control" id="godown"
-                                        placeholder="Godown">
+                                    <input type="text" class="form-control" id="godown" placeholder="Godown">
                                 </div>
 
                                 <!-- Department -->
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="text" class="form-control" id="department"
-                                        placeholder="Department">
+                                    <input type="text" class="form-control" id="department" placeholder="Department">
                                 </div>
 
                                 <!-- Section -->
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="text" class="form-control" id="section"
-                                        placeholder="Section">
+                                    <input type="text" class="form-control" id="section" placeholder="Section">
                                 </div>
 
                                 <!-- Part Name -->
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="text" class="form-control" id="part_name"
-                                        placeholder="Part Name">
+                                    <input type="text" class="form-control" id="part_name" placeholder="Part Name">
                                 </div>
 
                                 <!-- Hidden Qty -->
                                 <div class="input-group input-group-sm mb-3 ">
-                                    <input type="number" class="form-control" min="1"
-                                        id="opening_qty" placeholder="Qty">
+                                    <input type="number" class="form-control" min="1" id="opening_qty"
+                                        placeholder="Qty">
                                 </div>
 
                                 <!-- Buttons -->
@@ -238,7 +242,8 @@
 
                                     </button>
 
-                                    <button type="button" class="btn btn-warning btn-sm flex-fill" id="clear_btn" onclick="window.location.reload()">
+                                    <button type="button" class="btn btn-warning btn-sm flex-fill" id="clear_btn"
+                                        onclick="window.location.reload()">
 
                                         <i class="fa-solid fa-broom me-1"></i>
                                         Clear
@@ -256,11 +261,11 @@
                     <div class="col-md-9">
 
                         <div class="table-responsive">
-                            <table class="table caption-top table-bordered table-striped small">
+                            <table class="table caption-top table-bordered table-striped small" style="max-height: 75vh; overflow-y: auto; display: block;">
 
                                 <caption></caption>
 
-                                <thead class="table-primary small">
+                                <thead class="table-primary small" style="position: sticky; top: 0; z-index: 1; background-color: #d5eaff;">
 
                                     <tr>
                                         <th scope="col">#</th>
@@ -277,6 +282,45 @@
                             </table>
                         </div>
 
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6>Negative Stock</h6>
+                                <div>
+                                    <input type="text" class="form-control form-control-sm" id="negative_stock_search"
+                                        placeholder="Search...">
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table caption-top table-bordered table-striped small" style="font-size: 12px;">
+                                        <thead class="table-primary small">
+
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Part Name</th>
+                                                <th scope="col">Place</th>
+                                                <th scope="col">Remarks</th>
+                                                <th scope="col">Qty</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="negative_stock_tbody" class="small">
+
+
+                                        </tbody>
+
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>

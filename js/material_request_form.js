@@ -433,57 +433,78 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
 
 
           obj.forEach(function (obj) {
-            var statuss = ''
-
+            
             var edit_btn = "disabled";
-            if (field_name == "tally_stock_approved_by") {
-              if (obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved") {
-                edit_btn = "";
-              }
-              else {
-                edit_btn = "disabled";
-              }
+            var statuss = '';
+            var reject = '';
 
+
+            if (obj.emp_id == current_user_id && (obj.status == "created" || obj.status == "tally_rejected-mrf" || obj.status == "purchase_rejected-mrf" || obj.status == "md_rejected-mrf"))
+
+              edit_btn = "";
+
+            else
+
+              edit_btn = "disabled";
+
+            if (obj.status == "tally_rejected-mrf") {
+              reject = `<span class='badge bg-danger blink'>Tally Rejected</span>`
             }
-            else if (field_name == "created" && obj.status == "created") {
-
-              if (obj.emp_id == current_user_id) {
-                edit_btn = "";
-              }
-              else {
-                edit_btn = "disabled";
-
-              }
-
-
+            else if (obj.status == "purchase_rejected-mrf") {
+              reject = `<span class='badge bg-danger blink'>Purchase Rejected</span>`
             }
-            else if (field_name == "purchase_requested_by" && obj.status == "purchase_requested") {
-              if (obj.purchase_requested_by == current_user_id) {
-                edit_btn = "";
-              }
-              else {
-                edit_btn = "disabled";
-
-              }
+            else if (obj.status == "md_rejected-mrf") {
+              reject = `<span class='badge bg-danger blink'>MD Rejected</span>`
             }
-            else if (field_name == "purchase_verified_by") {
-              if (obj.purchase_verified_by == current_user_id) {
-                edit_btn = "";
-              }
-              else {
-                edit_btn = "disabled";
 
-              }
-            }
-            else if (field_name == "purchase_approved_by") {
-              if (obj.purchase_approved_by == current_user_id) {
-                edit_btn = "";
-              }
-              else {
-                edit_btn = "disabled";
+            // if (field_name == "tally_stock_approved_by") {
+            //   if (obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved") {
+            //     edit_btn = "";
+            //   }
+            //   else {
+            //     edit_btn = "disabled";
+            //   }
 
-              }
-            }
+            // }
+            // else if (field_name == "created" && obj.status == "created") {
+
+            //   if (obj.emp_id == current_user_id) {
+            //     edit_btn = "";
+            //   }
+            //   else {
+            //     edit_btn = "disabled";
+
+            //   }
+
+
+            // }
+            // else if (field_name == "purchase_requested_by" && obj.status == "purchase_requested") {
+            //   if (obj.purchase_requested_by == current_user_id) {
+            //     edit_btn = "";
+            //   }
+            //   else {
+            //     edit_btn = "disabled";
+
+            //   }
+            // }
+            // else if (field_name == "purchase_verified_by") {
+            //   if (obj.purchase_verified_by == current_user_id) {
+            //     edit_btn = "";
+            //   }
+            //   else {
+            //     edit_btn = "disabled";
+
+            //   }
+            // }
+            // else if (field_name == "purchase_approved_by") {
+            //   if (obj.purchase_approved_by == current_user_id) {
+            //     edit_btn = "";
+            //   }
+            //   else {
+            //     edit_btn = "disabled";
+
+            //   }
+            // }
 
             var emp_invalved_list = [];
             emp_invalved_list.push("Created by " + obj.emp_name);
@@ -622,7 +643,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
 
             count = count + 1;
             $('#material_requset_form_table').append(
-              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+              "<tr><td style='max-width:30px'>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary '>" + obj.total_part_count + "</span>" + reject + "</div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
               "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
               "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
               "<i class='fa fa-clock' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td>" + statuss + "</td><td class = 'd-flex'><button " + edit_btn + " type='button' value='" + obj.mrf_id + "'  class='btn btn-outline-danger border-0 edit btn-animate btn-sm' id=''><i class='fa fa-pencil'  aria-hidden='true'></i></button> <button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-danger btn-sm border-0 print btn-animate ' id=''><i class='fa-solid fa-receipt' aria-hidden='true'></i></button><button type='button'  value='" + obj.mrf_id + "' class='btn btn-outline-secondary btn-sm border-0 view_hide btn-animate d-none' id=''><i class='fa-solid fa-eye-slash' aria-hidden='true'></i></button></td></tr>"

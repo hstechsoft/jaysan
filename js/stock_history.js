@@ -3,6 +3,8 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
+var role = localStorage.getItem("ls_emp_role")
+
 var physical_stock_array = [];
 $(document).ready(function () {
 
@@ -34,6 +36,41 @@ $(document).ready(function () {
         });
     });
 
+    $("#negative_stock_search").on("keyup", function () {
+        const value = $(this).val().toLowerCase();
+
+        $("#negative_stock_tbody tr").each(function () {
+            const rowText = $(this).text().toLowerCase();
+            $(this).toggle(rowText.indexOf(value) !== -1);
+        });
+    });
+
+    if (role.toLocaleLowerCase() == "admin" || role.toLocaleLowerCase() == "super admin") {
+        $("#clear_negative_btn").removeClass("d-none");
+    } else {
+        $("#clear_negative_btn").addClass("d-none");
+    }
+
+    $("#clear_negative_btn").on("click", function () {
+        if (confirm("Are you sure you want to clear negative stock?")) {
+            $.ajax({
+                url: "php/clear_negative_stock.php",
+                type: "post",
+                data: {
+                    user_id: current_user_id
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.trim() === "ok") {
+                        salert("Warning", "Negative stock cleared successfully.", "warning");
+                        window.location.reload();
+                    } else {
+                        salert("error", "Failed to clear negative stock.", "error");
+                    }
+                }
+            });
+        }
+    });
 
     check_login();
 
@@ -42,6 +79,7 @@ $(document).ready(function () {
 
     get_stock_log();
     get_jaysan_stock_report('', '', '', '', '');
+    get_negative_stock();
 
     $('#godown').on('input', function () {
 
@@ -473,10 +511,76 @@ $(document).ready(function () {
 
 
 
+function get_negative_stock() {
+    console.log();
+
+    $.ajax({
+        url: "php/get_negative_stock.php",
+        type: "get",
+        data: {},
+        success: function (response) {
+
+            console.log(response);
+
+
+            if (response.trim() !== "error") {
+                $("#negative_stock_tbody").empty();
+                if (response.trim() !== "0 result") {
+
+                    const data = JSON.parse(response);
+
+
+                    data.forEach(function (row, index) {
+
+                        $("#negative_stock_tbody").append(`
+                            <tr>
+
+                                <td>
+                                    ${index + 1}
+                                </td>
+
+                                <td>
+                                    ${row.part_name ?? ""}
+                                </td>
+
+                                <td>
+
+                                    ${row.godown_name !== null ? row.godown_name : " "} ${row.dep_name !== null ? " - " + row.dep_name : " "} ${row.sec_name !== null ? " - " + row.sec_name : " "}
+
+                                </td>
+
+                                <td>${row.remark ?? ""}</td>
+                                
+                                <td>
+
+                                    <strong
+                                        class="badge bg-danger me-1"
+                                        title="Available Qty">
+                                        ${row.available_qty ?? 0}
+                                    </strong>
+
+                                </td>
+
+                            </tr>
+                        `);
+
+
+                    });
+
+                }
+            } else {
+                $("#stock_dashboard_tboady").html(
+                    "<tr><td colspan='9' class='text-center text-danger'>No records found</td></tr>"
+                );
+            }
+        }
+    });
+}
+
 
 function get_jaysan_stock_report(godown, dep, sec, part_id, process_id) {
     console.log(godown, dep, sec, part_id, process_id);
-    
+
     $.ajax({
         url: "php/get_jaysan_stock_report.php",
         type: "get",
@@ -490,7 +594,7 @@ function get_jaysan_stock_report(godown, dep, sec, part_id, process_id) {
         success: function (response) {
 
             console.log(response);
-            
+
 
             if (response.trim() !== "error") {
                 $("#stock_dashboard_tboady").empty();
@@ -968,7 +1072,7 @@ function get_stock_log(part_id) {
 }
 
 function update_manual_stock(godown, dep, sec, process_id, qty, manual_part_id) {
-console.log(godown, dep, sec, process_id, qty, manual_part_id);
+    console.log(godown, dep, sec, process_id, qty, manual_part_id);
 
     $.ajax({
         url: "php/update_manual_stock.php",
