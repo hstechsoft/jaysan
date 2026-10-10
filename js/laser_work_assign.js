@@ -356,12 +356,12 @@ function get_assigned_job_card() {
 
                         var work = JSON.parse(item.job_card_details);
 
-                        work.forEach(function (obj) {
-
+                        work.forEach(function (obj, i) {
+                            i++;
 
                             $("#assinged_nesting_job_card_tbody").append(`
                                 <tr>
-                                    <td>${index}</td>
+                                    <td>${i}</td>
                                     <td>${item.nesting_name}</td>
                                     <td>${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></td>
                                     <td>

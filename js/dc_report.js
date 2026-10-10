@@ -43,10 +43,10 @@ $(document).ready(function () {
     //     console.log("Geolocation is not supported.");
     // }
 
-    $("#summary_search").on("keyup", function () {
+    $("#dc_report_search").on("keyup", function () {
         var value = $(this).val().toLowerCase();
 
-        $("#all_bom_table tr").filter(function () {
+        $("#dc_report_tbody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });

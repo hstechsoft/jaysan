@@ -25,6 +25,13 @@ $(document).ready(function () {
         }
     );
 
+    $("#stock_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#internal_allocation_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
     get_allocation_report();
     get_allocated_details();
@@ -113,7 +120,7 @@ function emergency_transfer(allocation_id) {
             if (response.trim() == 'ok') {
                 window.location.reload();
             }
-            else{
+            else {
                 salert("Warning", response.trim(), "warning");
             }
 
@@ -156,7 +163,7 @@ function get_allocation_report() {
                     obj.forEach(function (item) {
                         count += 1;
 
-                        $("#internal_allocation_tbody").append(`<tr><td>${count}</td><td>${item.part_name}</td><td>${item.from_place_name}</td><td>${item.to_place_name}</td><td>${item.qty}</td><td>${item.req_no == null ? 'System Generated' : 'Requested'}</td><td><button type="button" data-part_name='${item.part_name}' data-qty='${item.qty}' data-created_by='${item.created_by}' data-allocation_id='${item.allocation_id}' class="btn btn-success fa_check_circle p-0 ${item.req_no == null ? 'd-none' : ''} "><i class="fa fa-check-circle m-1"></i></button><button type="button" data-allocation_id='${item.allocation_id}' class="btn btn-primary system_btn p-0 ${item.req_no == null ? '' : 'd-none'}"><i class="fa fa-check-circle m-1"></i></button></td></tr>`);
+                        $("#internal_allocation_tbody").append(`<tr><td class="text-center">${count}</td><td>${item.part_name}</td><td>${item.from_place_name}</td><td>${item.to_place_name}</td><td>${item.qty}</td><td>${item.req_no == null ? 'System Generated' : 'Requested'}</td><td><button type="button" data-part_name='${item.part_name}' data-qty='${item.qty}' data-created_by='${item.created_by}' data-allocation_id='${item.allocation_id}' class="btn btn-success fa_check_circle p-0 ${item.req_no == null ? 'd-none' : ''} "><i class="fa fa-check-circle m-1"></i></button><button type="button" data-allocation_id='${item.allocation_id}' class="btn btn-primary system_btn p-0 ${item.req_no == null ? '' : 'd-none'}"><i class="fa fa-check-circle m-1"></i></button></td></tr>`);
                     })
                 } else {
                     $("#internal_allocation_tbody").append(`<tr><td colspan='7' class='text-center'>Nothing Allocated. Enjoy Your day 😁!</td></tr>`)
