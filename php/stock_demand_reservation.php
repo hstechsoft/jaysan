@@ -10,6 +10,7 @@ $work_process_id = test_input($_GET['work_process_id']);
  $dep = test_input($_GET['dep']);
  $sec = test_input($_GET['sec']);
  $emp_id = test_input($_GET['emp_id']);
+ $due_date = test_input($_GET['due_date']);
  
 $godown = sql_nullable($godown);
 $dep = sql_nullable($dep);
@@ -90,7 +91,7 @@ $result_json['assignments'][] = array(
         "assigned_qty" => $assign_qty
     );
     // insert work order record for the demand
-    $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id)";
+    $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by,due_date) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id,$due_date)";
    
     if ($conn->query($sql_insert_work_order) === TRUE) {
       $result_json['work_orders'][] = array(
