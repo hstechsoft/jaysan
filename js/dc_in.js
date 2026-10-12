@@ -68,7 +68,7 @@ $(document).ready(function () {
         let godown_id = $(this).val();
 
         if (godown_id && godown_name) {
-            // $("#godown_list_modal").modal("hide");
+            $("#godown_list_modal").modal("hide");
             // $("#godown").data("godown_id", godown_id).val(godown_name);
             current_godown = godown_id;
             get_unassign_indc(0, $("#godown").data("godown_id") || 0, current_godown);
@@ -148,6 +148,7 @@ $(document).ready(function () {
                 select: function (event, ui) {
 
                     $(this).data("godown_id", ui.item.id);
+                    $("#parts_tbody").empty();
                     get_unassign_indc(0, ui.item.id, current_godown);
                 },
 
@@ -495,7 +496,7 @@ function get_unassign_indc(transport_dc_id, godown_id, current_godown) {
 
                         count += 1;
 
-                        $("#dc_parts_tbody").append(`<tr data-part_id="${item.part_id}" data-transport_id="${item.transport_id}" data-part_pre_process_id="${item.process_id}" data-qty="${item.qty}"><td>${count}</td><td><strong>${item.output_part}</strong> <br><span class='badge bg-secondary'>${item.process_name}</span></td><td>${item.qty}</td><td class="d-none"><input type='checkbox' class='check_dc'></td></tr>`);
+                        $("#dc_parts_tbody").append(`<tr data-part_id="${item.part_id}" data-transport_id="${item.transport_id}" data-part_pre_process_id="${item.process_id}" data-qty="${item.qty}"><td>${count}</td><td><strong>${item.output_part}</strong> <br><span class='badge bg-secondary'>${item.creditor_name}</span> <span class='badge bg-primary ms-1'>${item.process_name ?? ''}</span></td><td>${item.qty}</td><td class="d-none"><input type='checkbox' class='check_dc'></td></tr>`);
 
                     });
 

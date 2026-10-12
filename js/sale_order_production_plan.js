@@ -183,7 +183,7 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
         }, 500);
 
       } else {
-        $(this).prop("disabled", false);
+        $("#add_demand_btn").prop("disabled", false);
 
         salert("Warning", response.error, "warning");
       }

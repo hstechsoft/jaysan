@@ -189,10 +189,18 @@ $(document).ready(function () {
     //     }
     // });
 
-    $("#dc_file_upload").on("click", function (event) {
+    $("#dc_file").on("click", function (event) {
         event.preventDefault();
         uploadFile();
     });
+
+    $("#dc_file_upload").on("change", function(){
+         var godown_id = $("#godown").data("godown_id");
+         var emp_id = current_user_id;
+         var file = this.files[0];
+
+         upload_dc(godown_id, emp_id, file);
+    })
 
 
     window.onLocationReceived = function (lat, lng) {
@@ -288,7 +296,11 @@ $(document).ready(function () {
 });
 
 
-function upload_dc(formData) {
+function upload_dc(godown_id, emp_id, file) {
+    var formData = new FormData();
+    formData.append("godown_id", godown_id);
+    formData.append("emp_id", emp_id);
+    formData.append("file", file);
 
     $.ajax({
         url: "php/upload_dc.php",
@@ -302,7 +314,9 @@ function upload_dc(formData) {
 
             if (response.trim() == "Success") {
                 $(".loading").addClass("d-none");
-                alert("DC uploaded successfully");
+                $("#dc_file_upload").val("");
+                get_dc_attachment(current_user_id, '', '', 'create');
+                salert("Success", "DC uploaded successfully", "success");
             }
         },
 
@@ -649,6 +663,7 @@ function get_transport_parts_dc(godown_id) {
                                         </span>
 
                                         ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}
+                                        ${group.sec_name ? `<span class="badge bg-secondary">${group.sec_name}</span>` : ''}
                                     </div>`;
 
                             group.parts.forEach(function (part) {
@@ -924,7 +939,7 @@ function un_load_transport(stock_json, godown_id) {
 }
 
 function get_godown_location(lat, lng) {
-
+alert();
     $.ajax({
         url: "php/get_godown_location.php",
         type: "get",
