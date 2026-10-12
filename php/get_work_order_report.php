@@ -94,7 +94,7 @@ raw_material as(select
     iv.previous_process_id,
    GROUP_CONCAT(sv.stock_reserve_id) as stock_reserve_ids,
    iv.input_part_id,
-   if(iv.input_part_id is null ,CONCAT('semi finished part ',pt_final.part_name), pt.part_name) as input_part_name,
+   if(iv.input_part_id is null ,CONCAT('semi finished part ',pt_final.part_name,'(',jp.process_name,')'), pt.part_name) as input_part_name,
    ifnull(iv.required_qty,0) as required_qty,
    ifnull(iv.total_reserve_qty,0) as total_reserve_qty,
    ifnull(iv.needed,0) as needed,
@@ -118,6 +118,7 @@ from
     left join process_wel_tbl pwt on pwt.process_id = iv.previous_process_id
     left join process_wel_tbl pwt_final on pwt_final.process_id = pwt.final_process_id
     left join parts_tbl pt_final on pt_final.part_id = pwt_final.output_part
+    left join jaysan_process jp on jp.process_id = pwt.process
  GROUP BY wo.process_id,iv.input_part_id,wo.godown,wo.dep,wo.sec),
 
 rm_group as (select 
