@@ -313,7 +313,7 @@ foreach($work_order_array as $work_order) {
     require_once 'stock_distribution.php';
 stock_distribution($conn, $dstock_id, $required_qty);
 
-
+$conn->commit();
 
 
 
