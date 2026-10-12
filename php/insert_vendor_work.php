@@ -22,6 +22,7 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
+$result_json = array();
 
 try
 {
@@ -315,7 +316,9 @@ stock_distribution($conn, $dstock_id, $required_qty);
 
 $conn->commit();
 
-
+$result_json['success'] = true;
+$result_json['message'] = "Work successfully inserted and stock updated.";
+echo json_encode($result_json);
 
 
 }
