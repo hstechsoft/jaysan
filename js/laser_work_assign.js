@@ -348,20 +348,20 @@ function get_assigned_job_card() {
                 if (response.trim() != '0 result') {
 
                     var obj = JSON.parse(response);
-
+                    var count = 0;
 
                     obj.forEach(function (item, index) {
                         index++;
 
 
                         var work = JSON.parse(item.job_card_details);
-
+                        count += index;
                         work.forEach(function (obj, i) {
-                            i++;
+
 
                             $("#assinged_nesting_job_card_tbody").append(`
                                 <tr>
-                                    <td>${i}</td>
+                                    <td>${count}</td>
                                     <td>${item.nesting_name}</td>
                                     <td>${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></td>
                                     <td>
@@ -388,7 +388,7 @@ function get_assigned_job_card() {
 
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0 fw-bold">${item.nesting_name}</h6>
-                                            <span class="badge bg-primary">${index}</span>
+                                            <span class="badge bg-primary">${count}</span>
                                         </div>
 
                                         <div class="small text-muted mb-2">${item.material_name}<p class="p-1 badge bg-secondary ">${item.scrap_name} <span class=''>${item.scarp_weight ?? 0} Kg</span></p></div>
@@ -424,6 +424,8 @@ function get_assigned_job_card() {
                                     </div>
                                 </div>
                             `);
+
+                            count++;
 
                         });
 
