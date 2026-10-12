@@ -67,7 +67,8 @@ if ($result_place_details->num_rows > 0) {
     'created_date', date_only(wo.created_date),
     'hour_since', time_diff(wo.created_date,now(),'hour'),  
     'work_order_no', wo.work_order_no,
-    'due_date', date_only(wo.due_date)
+    'due_date', date_only(wo.due_date),
+    'due_date_overdue', if(wo.due_date < curdate(), 1, 0)
 )) as work_order_details,  wo.godown,wo.dep,wo.sec,creditors.creditor_name,dep.dep_name,sec.sec_name, sum(wo.qty) as total_process,sum(wo.pending_qty) as total_pending_process,wo.work_order_no,wo.demand_id,demand.process_id from work_order wo 
 inner join demand on wo.demand_id = demand.demand_id
 left join employee emp on wo.created_by = emp.emp_id
