@@ -8,6 +8,7 @@ $dep = test_input($_POST['dep']);
 $sec = test_input($_POST['sec']);
 $qty = test_input($_POST['qty']);
 $process_id = test_input($_POST['process_id']);
+$due_date = test_input($_POST['due_date']);
 
 $created_by = test_input($_POST['created_by']);
 
@@ -55,7 +56,7 @@ $demand_id = $conn->insert_id;
 
 
 
-    $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date,demand_id) VALUES ('EXTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now(),$demand_id)";
+    $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date,demand_id,due_date) VALUES ('EXTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now(),$demand_id,$due_date)";
 
     if (!$conn->query($sql_insert_work_order)) {
         throw new Exception("Error inserting record: " . $conn->error);
