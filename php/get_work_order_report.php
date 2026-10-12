@@ -60,6 +60,7 @@ if ($result_place_details->num_rows > 0) {
   
 
  $sql = "with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(
+ 'work_order_id', wo.work_order_id,
     'created_by', emp.emp_name,
     'created_date', wo.created_date,
     'hour_since', time_diff(wo.created_date,now(),'hour'),  
