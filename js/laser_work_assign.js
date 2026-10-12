@@ -350,14 +350,14 @@ function get_assigned_job_card() {
                     var obj = JSON.parse(response);
                     var count = 0;
 
-                    obj.forEach(function (item, index) {
-                        index++;
+                    obj.forEach(function (item) {
+
 
 
                         var work = JSON.parse(item.job_card_details);
-                        count += index;
-                        work.forEach(function (obj, i) {
 
+                        work.forEach(function (obj) {
+                            count++;
 
                             $("#assinged_nesting_job_card_tbody").append(`
                                 <tr>
@@ -425,10 +425,7 @@ function get_assigned_job_card() {
                                 </div>
                             `);
 
-                            count++;
-
                         });
-
                     });
 
                 } else {
