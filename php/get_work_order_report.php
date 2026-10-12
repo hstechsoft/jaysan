@@ -61,11 +61,13 @@ if ($result_place_details->num_rows > 0) {
 
  $sql = "with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(
  'work_order_id', wo.work_order_id,
+    'qty', wo.qty,
+    'completed_qty', wo.completed_qty,
     'created_by', emp.emp_name,
-    'created_date', wo.created_date,
+    'created_date', date_only(wo.created_date),
     'hour_since', time_diff(wo.created_date,now(),'hour'),  
     'work_order_no', wo.work_order_no,
-    'due_date', wo.due_date
+    'due_date', date_only(wo.due_date)
 )) as work_order_details,  wo.godown,wo.dep,wo.sec,creditors.creditor_name,dep.dep_name,sec.sec_name, sum(wo.qty) as total_process,sum(wo.pending_qty) as total_pending_process,wo.work_order_no,wo.demand_id,demand.process_id from work_order wo 
 inner join demand on wo.demand_id = demand.demand_id
 left join employee emp on wo.created_by = emp.emp_id
