@@ -57,6 +57,7 @@ $demand_id = $conn->insert_id;
 
 
     $sql_insert_work_order = "INSERT INTO work_order ( work_order_type,godown,dep,sec,qty,status,created_by,created_date,demand_id,due_date) VALUES ('EXTERNAL',$godown,$dep,$sec,$qty,'OPEN',$created_by,now(),$demand_id,$due_date)";
+    echo $sql_insert_work_order . "<br>";
 
     if (!$conn->query($sql_insert_work_order)) {
         throw new Exception("Error inserting record: " . $conn->error);
