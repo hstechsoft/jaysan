@@ -91,7 +91,7 @@ $result_json['assignments'][] = array(
         "assigned_qty" => $assign_qty
     );
     // insert work order record for the demand
-    $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by,due_date) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id,$due_date)";
+    $sql_insert_work_order = "insert into work_order (demand_id,work_order_type,godown,dep,sec,qty,status,created_by,due_date) values ($demand_id,'INTERNAL',$godown,$dep,$sec,$assign_qty,'open',$emp_id,'$due_date')";
     echo $sql_insert_work_order . "<br>";
    
     if ($conn->query($sql_insert_work_order) === TRUE) {
