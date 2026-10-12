@@ -11,7 +11,8 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
-
+$production_process = test_input($_GET['production_process']);
+$production_part_query = 1;
 $process_id = test_input($_GET['process_id']);
 // $godown = test_input($_GET['godown']);
 // $dep = test_input($_GET['dep']);
@@ -26,11 +27,24 @@ $process_id = sql_nullable($process_id);
 // $dep = sql_nullable($dep);
 // $sec = sql_nullable($sec);
 
-if($process_id != 'NULL'){
-    $process_id_query = " process_id <=> $process_id ";
+// if($process_id != 'NULL'){
+//     $process_id_query = " process_id <=> $process_id ";
+// }
+
+
+// get all process id related to the production process
+$prodcution_process_id = array();
+$sql_get_production_process_id = "SELECT process_id FROM process_wel_tbl WHERE final_process_id = $production_process";
+$result_production_process_id = $conn->query($sql_get_production_process_id);
+if ($result_production_process_id->num_rows > 0) {
+    while($row = mysqli_fetch_assoc($result_production_process_id)) {
+        $prodcution_process_id[] = $row['process_id'];
+    }
 }
 
-
+if(count($prodcution_process_id) > 0){
+    $process_id_query = " process_id IN (" . implode(",", $prodcution_process_id) . ") ";
+}
 
 // if($godown != 'NULL'){
 //     $place_query = " godown <=> $godown and   dep <=> $dep and sec <=> $sec ";
