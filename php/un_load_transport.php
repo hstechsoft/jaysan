@@ -22,10 +22,12 @@ $transport_dc_id_arr = array();
 $stock_distribution_array = array();
 
 foreach ($stock_json as $stock) {
+   
  
     $stock_reserve_id = $stock['stock_reserve_id'];
    
     $qty = $stock['qty'];
+    
 // get stock id from stock reserve id
     $sql_stock = "SELECT js.stock_id,js.qty as stock_qty,js.part_id,js.process_id,js.batch_id  FROM stock_reserve
     inner join jaysan_stock js on stock_reserve.stock_id = js.stock_id
@@ -58,12 +60,14 @@ $result_check_transport = $conn->query($sql_check_transport);
 
 // reduce stock qty from stock id(reduce from transport godown stock)
          $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty,remark = 'stock reduced by un_load_transport -".$transport_dc_id."' WHERE stock_id = $stock_id";
+
+
         if (!$conn->query($sql_reserve_update)) {
             throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error . " SQL: $sql_reserve_update");
         }
 
       // check if stock with same part id, process id, godown and batch id exists in transport godown
-        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id <=> $part_id AND process_id <=> $process_id AND godown = $des_godown AND batch_id = '$batch_id'";
+        $sql_check_stock = "SELECT stock_id FROM jaysan_stock WHERE part_id <=> $part_id AND process_id <=> $process_id AND godown = $des_godown and dep is null and sec is null";
 
         $result_check_stock = $conn->query($sql_check_stock);
         if ($result_check_stock->num_rows > 0) {
@@ -107,7 +111,6 @@ $result_check_transport = $conn->query($sql_check_transport);
 
         }
 
-  
 
 // reduce stock reserve qty
 $update_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";

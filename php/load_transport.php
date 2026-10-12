@@ -53,7 +53,7 @@ if ($qty > $stock_qty) {
         }
          $sql_reserve_update = "UPDATE jaysan_stock SET qty = qty - $qty WHERE stock_id = $stock_id";
         if (!$conn->query($sql_reserve_update)) {
-            throw new Exception("Error updating stock reserve id $stock_reserve_id: " . $conn->error);
+            throw new Exception("Error updating stock reserve id $stock_reserve_id: ".$sql_reserve_update. $conn->error);
         }
 
         
@@ -105,26 +105,68 @@ if ($qty > $stock_qty) {
 //                     throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
 //                 }
 
+// // check if there is an existing stock reserve for this stock id before updating
+// $ex_reserve_id = 0;
+//     $sql_check_reserve = "SELECT * FROM stock_reserve WHERE stock_id = $new_stock_id  and reserve_type = 'dc'";
+//     $result_check_reserve = $conn->query($sql_check_reserve);
+//     if ($result_check_reserve->num_rows > 0) {
+//         $row_check_reserve = $result_check_reserve->fetch_assoc();
+//         $ex_reserve_id = $row_check_reserve['stock_reserve_id'];
+//     }
+    
+// echo "Existing reserve id: " . $ex_reserve_id . "\n";
 
-    $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
 
-                if (!$conn->query($sql_update_reserve)) {
-                    throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: " . $conn->error);
-                }
+
+    // $sql_update_reserve = "UPDATE stock_reserve SET stock_id = $new_stock_id, reserve_qty = $qty WHERE stock_reserve_id = $stock_reserve_id";
+    // echo "Executing SQL update reserve: " . $sql_update_reserve . "\n";
+
+    //             if (!$conn->query($sql_update_reserve)) {
+    //                 throw new Exception("Error updating stock reserve id $stock_reserve_id with new stock id $new_stock_id: ".$sql_update_reserve . $conn->error);
+    //             }
 
 // // reduce stock reserve qty by qty and if reserve qty is 0 then delete that record
 
-// $sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
-//                 if (!$conn->query($sql_reduce_reserve)) {
-//                     throw new Exception("Error reducing stock reserve id $stock_reserve_id: " . $conn->error);
-//                 }
-//                 // if reserve_qty is 0 then delete that record
-//                 $sql_delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty = 0";
-//                 if (!$conn->query($sql_delete_reserve)) {
-//                     throw new Exception("Error deleting stock reserve id $stock_reserve_id with 0 reserve qty: " . $conn->error);
-//                 }
+$sql_reduce_reserve = "UPDATE stock_reserve SET reserve_qty = reserve_qty - $qty WHERE stock_reserve_id = $stock_reserve_id";
+                if (!$conn->query($sql_reduce_reserve)) {
+                    throw new Exception("Error reducing stock reserve id $stock_reserve_id: " . $conn->error);
+                }
 
+                // insert new stock reserve on duplicate key update record if necessary
+              
+                $sql_insert_reserve = "INSERT INTO stock_reserve (stock_id, reserve_qty, reserve_type) VALUES ($new_stock_id, $qty, 'dc') ON DUPLICATE KEY UPDATE reserve_qty = reserve_qty + $qty";
+                if (!$conn->query($sql_insert_reserve)) {
+                    throw new Exception("Error inserting/updating stock reserve for stock id $new_stock_id: " . $conn->error);
+                }
+                  // get new stock reserve id if necessary
+ $new_stock_reserve_id = 0;
+                  $sql_get_new_reserve_id = "SELECT stock_reserve_id FROM stock_reserve WHERE stock_id = $new_stock_id AND reserve_type = 'dc'";
+                  $result_get_new_reserve_id = $conn->query($sql_get_new_reserve_id);
+                  if ($result_get_new_reserve_id->num_rows > 0) {
+                      $row_get_new_reserve_id = $result_get_new_reserve_id->fetch_assoc();
+                      $new_stock_reserve_id = $row_get_new_reserve_id['stock_reserve_id'];
+                  }
+
+                // if reserve_qty is 0 then delete that record
+                $sql_delete_reserve = "DELETE FROM stock_reserve WHERE stock_reserve_id = $stock_reserve_id AND reserve_qty = 0";
+                if (!$conn->query($sql_delete_reserve)) {
+                    throw new Exception("Error deleting stock reserve id $stock_reserve_id with 0 reserve qty: " . $conn->error);
+                }
+
+
+
+                
+                    // add parts to in_dc_parts on duplicate key update add qty
+                  $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id) VALUES ($transport_dc_id, $part_id, $process_id, $qty, $new_stock_reserve_id) on duplicate key update qty = qty + $qty";
+               
+                    if (!$conn->query($sql_in_dc_parts)) {
+                        throw new Exception("Error inserting in_dc_parts: " . $conn->error);
+                    }
+             
             
+// 
+
+
 
 // // get transport_dc_id 
 // $sql_check_transport = "SELECT transport_dc_id from transport_parts
@@ -209,8 +251,8 @@ $conn->query($sql_delete_input_demand);
         throw new Exception("Error updating transport parts for stock reserve id $stock_reserve_id: " . $conn->error);
     }
    
-  $conn->commit();
- echo "ok";
+    $conn->commit();
+  echo "ok";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     $conn->rollback();
