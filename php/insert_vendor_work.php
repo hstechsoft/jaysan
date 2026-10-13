@@ -314,7 +314,7 @@ foreach($work_order_array as $work_order) {
     require_once 'stock_distribution.php';
 stock_distribution($conn, $dstock_id, $required_qty);
 
-$conn->commit();
+// $conn->commit();
 
 $result_json['success'] = true;
 $result_json['message'] = "Work successfully inserted and stock updated.";
