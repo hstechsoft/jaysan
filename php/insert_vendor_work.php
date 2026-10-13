@@ -1,11 +1,11 @@
 <?php
  include 'db_head.php';
 
- $godown_id = test_input($_GET['godown_id']);
- $dep_id = test_input($_GET['dep_id']);
- $sec_id = test_input($_GET['sec_id']);
-$processed_id = test_input($_GET['process_id']);
-$processed_qty = test_input($_GET['qty']);
+ $godown_id = test_input($_POST['godown_id']);
+ $dep_id = test_input($_POST['dep_id']);
+ $sec_id = test_input($_POST['sec_id']);
+$processed_id = test_input($_POST['process_id']);
+$processed_qty = test_input($_POST['qty']);
 
 
 
