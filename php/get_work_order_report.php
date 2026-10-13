@@ -11,7 +11,7 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
-$production_process = test_input($_GET['production_process']);
+$production_process = isset($_GET['production_process']) ? test_input($_GET['production_process']) : 'NULL';
 $production_part_query = 1;
 $process_id = test_input($_GET['process_id']);
 // $godown = test_input($_GET['godown']);
