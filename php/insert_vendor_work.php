@@ -22,6 +22,9 @@ $data = htmlspecialchars($data);
 
 return $data;
 }
+
+echo "Starting process...\n";
+echo "Godown ID: $godown_id, Dep ID: $dep_id, Sec ID: $sec_id, Processed ID: $processed_id, Processed Qty: $processed_qty\n";
 $result_json = array();
 
 try
