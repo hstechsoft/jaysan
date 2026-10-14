@@ -56,7 +56,7 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-    get_work_order_report(0)
+    get_work_order_report(0, 0);
 
     $('#part').on('input', function () {
         //check the value not empty
@@ -207,14 +207,23 @@ $(document).ready(function () {
     $("#bom_process").on("change", function () {
 
         var production_process = $(this).find(':selected').data("process_id") || 0;
-        get_work_order_report(production_process);
+        get_work_order_report(production_process, $("#show_all").is(":checked") ? 1 : 0);
+    });
+
+    $("#show_all").on("change", function(){
+        var production_process = $("#bom_process").find(':selected').data("process_id") || 0
+        if($(this).is(":checked")){
+            get_work_order_report(production_process, 1 );
+        }else{
+            get_work_order_report(production_process, 0);
+        }
     });
 
 });
 
 
 
-function get_work_order_report(production_process) {
+function get_work_order_report(production_process, all) {
 
     $.ajax({
         url: "php/get_work_order_report.php",
@@ -229,9 +238,6 @@ function get_work_order_report(production_process) {
             console.log(response);
 
             let data = JSON.parse(response);
-            $("#all_bom_table").empty();
-
-            $("#dc_report_tbody").empty();
 
             $("#dc_report_tbody").empty();
 
@@ -258,6 +264,7 @@ function get_work_order_report(production_process) {
 
                 let total_transport_qtyPer = total_transport_qty > 0 ? (total_transport_qty / total_input_required_qty) * 100 : 0;
 
+
                 woDetails.forEach((wo, woIndex) => {
 
                     // ===========================
@@ -267,6 +274,17 @@ function get_work_order_report(production_process) {
                     let createdDateHtml = "";
                     let ageHtml = "";
                     let workOrderNoHtml = "";
+
+                    let isFullyReserved = wo.input_details.every(input => {
+                        let required = parseFloat(input.required_qty) || 0;
+                        let reserved = parseFloat(input.total_reserve_qty) || 0;
+
+                        return required > 0 && reserved >= required;
+                    });
+
+                    if (isFullyReserved && all == 0) {
+                        return; // Skip this work order row
+                    }
 
                     wo.work_order_details.forEach((workOrder) => {
 
@@ -356,6 +374,11 @@ function get_work_order_report(production_process) {
 
                         // Prevent external bar from overflowing
                         externalPer = Math.min(externalPer, 100);
+
+                        // Skip the entire row if fully internally reserved
+                        // if (required > 0 && reserved >= required) {
+                        //     return;
+                        // }
 
                         inputDetails += `
 

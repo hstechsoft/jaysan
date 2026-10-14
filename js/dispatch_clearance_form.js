@@ -633,7 +633,7 @@ function update_dcf(dcf_report, dcf_id) {
       console.log(response);
 
       if (response.trim() == "ok") {
-        $("#print_btn").trigger("click");
+        // $("#print_btn").trigger("click");
       }
 
 
