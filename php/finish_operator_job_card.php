@@ -63,11 +63,21 @@ foreach ($produced_parts as $part) {
         throw new Exception("Error: " . $sql . "<br>" . $conn->error);
     }
 
+
+    // get final process id for the part
+    $final_process_id = 0;
+    $sql_final_process = "select final_process_id from jaysan_process_view where final_part_id = '$part_id' and is_default = '1' limit 1";
+    $result_final_process = $conn->query($sql_final_process);
+    if ($result_final_process->num_rows > 0) {
+        $row_final_process = $result_final_process->fetch_assoc();
+        $final_process_id = sql_nullable($row_final_process['final_process_id']);
+    }
+
     // get process id 
     $laser_process_part = null;
     $is_final_output = 'no';
     $process_sql = "select jpv.process_id, jpv.output_part, if(jpv.final_part_id = jpv.output_part,'yes','no') as is_final_output from  jaysan_process_view jpv
- WHERE jpv.process_name = 'laser cutting' and jpv.final_part_id = '$part_id' limit 1";
+ WHERE jpv.process_name = 'laser cutting' and jpv.final_part_id = '$part_id' and final_process_id = '$final_process_id' limit 1";
 
     $process_result = $conn->query($process_sql);
     if ($process_result->num_rows > 0) {

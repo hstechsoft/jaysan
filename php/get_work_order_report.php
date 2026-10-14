@@ -71,6 +71,11 @@ if ($result_place_details->num_rows > 0) {
         else
           $place_query .= " or (godown <=> $godown and dep <=> $dep and sec <=> $dep_sec)";
     }
+
+   if(count($prodcution_process_id) > 0){
+    $place_query = 1;
+   }
+
   
 
  $sql = "with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(

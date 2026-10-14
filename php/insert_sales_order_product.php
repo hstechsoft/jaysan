@@ -24,7 +24,6 @@ else
 
 
 
-
 function test_input($data)
 {
   $data = trim($data);
@@ -33,13 +32,47 @@ function test_input($data)
   $data = "'" . $data . "'";
   return $data;
 }
+// get uid for admin,marketing manager,production manager
+  $sql_get_admin_firebase_uid = "SELECT firebase_uid FROM employee WHERE emp_role = 'admin' OR emp_role = 'marketing_head' OR emp_role = 'production head'";
+    $result = $conn->query($sql_get_admin_firebase_uid);
+    $admin_firebase_uids = [];
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $admin_firebase_uids[] = $row["firebase_uid"];
+        }
+    }
+
+
+
+// get order no employee customer details
+$sql_order_details = "SELECT order_no, cus_name,date_time_only(dated) as dated,emp_name FROM sales_order_info_view WHERE oid = $oid";
+$result_order_details = $conn->query($sql_order_details);
+if ($result_order_details->num_rows > 0) {
+    $row_order_details = $result_order_details->fetch_assoc();
+   $order_no = $row_order_details['order_no'];
+   $cus_name = $row_order_details['cus_name'];
+   $dated = $row_order_details['dated'];
+   $emp_name = $row_order_details['emp_name'];
+} else {
+    echo "Error: Order details not found for oid $oid";
+    exit();
+}
+
+ require_once  __DIR__ . '/send_fcm.php';
+    $title = "Product Added";
+    // Notification body for FCM add emp,customer,order no dated
+    $body = "A new product has been added to order number $order_no by $emp_name for customer $cus_name on $dated.";
+    $url = "https://jaysan.cloud/sales_order_report.html";
+
+
+
 
 
 $sql = "INSERT INTO sales_order_product (oid,type_id,model_id,sub_type,required_qty,price,billing_amount) VALUES ($oid,$type_id,$model_id,$sub_type,$required_qty,$price,$billing_amount)";
 
 if ($conn->query($sql) === TRUE) {
 // get the last inserted opid and insert into sales_order_subtype table
-
+ send_fcm($admin_firebase_uids, $title, $body, $url);
   $last_opid = $conn->insert_id;
   foreach ($subtype_details as $subtype_id) {
     $sql_insert_subtype_details = "INSERT INTO sales_order_subtype (opid, msid) VALUES ('$last_opid', '$subtype_id');";

@@ -528,141 +528,77 @@ if ($result_time->num_rows > 0) {
 $remaining_consume_qty = 0;
 
 
-// reduce input_demand with consumption
-   foreach ($consumption as $consume) {
-    // first  reduce stock on same section,then same dep the same godown
+// // reduce input_demand with consumption
+//    foreach ($consumption as $consume) {
+//     // first  reduce stock on same section,then same dep the same godown
 
-  $part_id = sql_nullable($consume['part_id']);
- $qty_to_consume = $consume['qty'];
- $process_id = sql_nullable($consume['previous_process_id']);
- $work_process_id = sql_nullable($consume['work_process_id']);
+//   $part_id = sql_nullable($consume['part_id']);
+//  $qty_to_consume = $consume['qty'];
+//  $process_id = sql_nullable($consume['previous_process_id']);
+//  $work_process_id = sql_nullable($consume['work_process_id']);
 
 
- if($qty_to_consume > 0) {
-$sql_get_sec_stock = "select  input_demand_id,qty from  input_demand WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and cat = 'work_order' and work_process_id = $work_process_id order by input_demand_id ";
+//  if($qty_to_consume > 0) {
+// $sql_get_sec_stock = "select  input_demand_id,qty from  input_demand WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and cat = 'work_order' and work_process_id = $work_process_id order by input_demand_id ";
 
-if($part_id != 'NULL') {
-   $sql_get_sec_stock = "select  input_demand_id,qty from  input_demand WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and cat = 'work_order' and work_process_id = $work_process_id order by input_demand_id";
-}
+// if($part_id != 'NULL') {
+//    $sql_get_sec_stock = "select  input_demand_id,qty from  input_demand WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and cat = 'work_order' and work_process_id = $work_process_id order by input_demand_id";
+// }
 
-$result_sec_stock = $conn->query($sql_get_sec_stock);
-if($result_sec_stock->num_rows > 0) {
-    while($row = $result_sec_stock->fetch_assoc()) {
-        if($qty_to_consume <= 0) break;
+// $result_sec_stock = $conn->query($sql_get_sec_stock);
+// if($result_sec_stock->num_rows > 0) {
+//     while($row = $result_sec_stock->fetch_assoc()) {
+//         if($qty_to_consume <= 0) break;
 
-        $input_demand_id = $row['input_demand_id'];
-        $qty = $row['qty'];
-        $available = $qty;
-        $take_qty = min($available, $qty_to_consume);
+//         $input_demand_id = $row['input_demand_id'];
+//         $qty = $row['qty'];
+//         $available = $qty;
+//         $take_qty = min($available, $qty_to_consume);
 
   
 
-        // reduce reserve stock
-        $sql_update_reserve = "update input_demand set qty = qty - $take_qty where input_demand_id = $input_demand_id";
-        if ($conn->query($sql_update_reserve) !== TRUE) {
-            $result_json['message'] = "Error updating input demand: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
+//         // reduce reserve stock
+//         $sql_update_reserve = "update input_demand set qty = qty - $take_qty where input_demand_id = $input_demand_id";
+//         if ($conn->query($sql_update_reserve) !== TRUE) {
+//             $result_json['message'] = "Error updating input demand: " . $conn->error;
+//             echo json_encode($result_json);
+//             $conn->rollback();
+//             $conn->close();
+//             exit;
+//         }
 
-        // delete reserve stock if reserve_qty is 0
-        $sql_delete_reserve = "delete from input_demand where  qty <= 0";
-        if ($conn->query($sql_delete_reserve) !== TRUE) {
-            $result_json['message'] = "Error deleting input demand: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
+//         // delete reserve stock if reserve_qty is 0
+//         $sql_delete_reserve = "delete from input_demand where  qty <= 0";
+//         if ($conn->query($sql_delete_reserve) !== TRUE) {
+//             $result_json['message'] = "Error deleting input demand: " . $conn->error;
+//             echo json_encode($result_json);
+//             $conn->rollback();
+//             $conn->close();
+//             exit;
+//         }
 
-    }
-    }
+//     }
+//     }
 
-}
-   }
-
-
-//    reduce stock_reserve based on consumption
-   foreach ($consumption as $consume) {
-    // first  reduce stock on same section,then same dep the same godown
-
-  $part_id = sql_nullable($consume['part_id']);
- $qty_to_consume = $consume['qty'];
- $process_id = sql_nullable($consume['previous_process_id']);
- $work_process_id = sql_nullable($consume['work_process_id']);
+// }
+//    }
 
 
- if($qty_to_consume > 0) {
-$sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'   order by stock_id ";
+// //    reduce stock_reserve based on consumption
+//    foreach ($consumption as $consume) {
+//     // first  reduce stock on same section,then same dep the same godown
 
-if($part_id != 'NULL') {
-   $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'  order by stock_id";
-}
+//   $part_id = sql_nullable($consume['part_id']);
+//  $qty_to_consume = $consume['qty'];
+//  $process_id = sql_nullable($consume['previous_process_id']);
+//  $work_process_id = sql_nullable($consume['work_process_id']);
 
-$result_sec_stock = $conn->query($sql_get_sec_stock);
-if($result_sec_stock->num_rows > 0) {
-    while($row = $result_sec_stock->fetch_assoc()) {
-        if($qty_to_consume <= 0) break;
-
-        $stock_id = $row['stock_id'];
-        $stock_reserve_id = $row['stock_reserve_id'];
-        $available = $row['avail_qty'];
-        $take_qty = min($available, $qty_to_consume);
-
-        // // 🔥 reduce stock (insert negative entry with SAME section)
-        // $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
-
-        // if ($conn->query($sql_update_stock) === TRUE) {
-        //     // reduce 
-        //     $qty_to_consume = round($qty_to_consume-$take_qty, 5);
-           
-        // } else {
-        //     $result_json['message'] = "Error updating stock: " . $conn->error;
-        //     echo json_encode($result_json);
-        //     $conn->rollback();
-        //     $conn->close();
-        //     exit;
-        // }
-
-
-        // reduce reserve stock
-        $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
-        if ($conn->query($sql_update_reserve) !== TRUE) {
-            $result_json['message'] = "Error updating reserve stock: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
-
-        // delete reserve stock if reserve_qty is 0
-        $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
-        if ($conn->query($sql_delete_reserve) !== TRUE) {
-            $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
-
-    }
-    }
-
-}
-
-
-
-
-
-//  if  consume still available then check same dep 
 
 //  if($qty_to_consume > 0) {
-// $sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id ";
+// $sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'   order by stock_id ";
 
 // if($part_id != 'NULL') {
-//    $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id";
+//    $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id and reserve_type = 'work_order'  order by stock_id";
 // }
 
 // $result_sec_stock = $conn->query($sql_get_sec_stock);
@@ -675,106 +611,170 @@ if($result_sec_stock->num_rows > 0) {
 //         $available = $row['avail_qty'];
 //         $take_qty = min($available, $qty_to_consume);
 
-//         // 🔥 reduce stock (insert negative entry with SAME section)
-//         $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
+//         // // 🔥 reduce stock (insert negative entry with SAME section)
+//         // $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
 
-//         if ($conn->query($sql_update_stock) === TRUE) {
-//             $qty_to_consume -= $take_qty; 
-//         } else {
-//             $result_json['message'] = "Error updating stock: " . $conn->error;
+//         // if ($conn->query($sql_update_stock) === TRUE) {
+//         //     // reduce 
+//         //     $qty_to_consume = round($qty_to_consume-$take_qty, 5);
+           
+//         // } else {
+//         //     $result_json['message'] = "Error updating stock: " . $conn->error;
+//         //     echo json_encode($result_json);
+//         //     $conn->rollback();
+//         //     $conn->close();
+//         //     exit;
+//         // }
+
+
+//         // reduce reserve stock
+//         $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
+//         if ($conn->query($sql_update_reserve) !== TRUE) {
+//             $result_json['message'] = "Error updating reserve stock: " . $conn->error;
 //             echo json_encode($result_json);
 //             $conn->rollback();
 //             $conn->close();
 //             exit;
 //         }
 
-
-//         // // reduce reserve stock
-//         // $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
-//         // if ($conn->query($sql_update_reserve) !== TRUE) {
-//         //     $result_json['message'] = "Error updating reserve stock: " . $conn->error;
-//         //     echo json_encode($result_json);
-//         //     $conn->rollback();
-//         //     $conn->close();
-//         //     exit;
-//         // }
-
-//         // // delete reserve stock if reserve_qty is 0
-//         // $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
-//         // if ($conn->query($sql_delete_reserve) !== TRUE) {
-//         //     $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
-//         //     echo json_encode($result_json);
-//         //     $conn->rollback();
-//         //     $conn->close();
-//         //     exit;
-//         // }
+//         // delete reserve stock if reserve_qty is 0
+//         $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
+//         if ($conn->query($sql_delete_reserve) !== TRUE) {
+//             $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
+//             echo json_encode($result_json);
+//             $conn->rollback();
+//             $conn->close();
+//             exit;
+//         }
 
 //     }
 //     }
 
 // }
 
-//  if  consume still available then check same godown
+
+
+
+
+// //  if  consume still available then check same dep 
+
+// //  if($qty_to_consume > 0) {
+// // $sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id ";
+
+// // if($part_id != 'NULL') {
+// //    $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id and dep <=> $dep_id  and reserve_type = 'work_order'  order by stock_id";
+// // }
+
+// // $result_sec_stock = $conn->query($sql_get_sec_stock);
+// // if($result_sec_stock->num_rows > 0) {
+// //     while($row = $result_sec_stock->fetch_assoc()) {
+// //         if($qty_to_consume <= 0) break;
+
+// //         $stock_id = $row['stock_id'];
+// //         $stock_reserve_id = $row['stock_reserve_id'];
+// //         $available = $row['avail_qty'];
+// //         $take_qty = min($available, $qty_to_consume);
+
+// //         // 🔥 reduce stock (insert negative entry with SAME section)
+// //         $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
+
+// //         if ($conn->query($sql_update_stock) === TRUE) {
+// //             $qty_to_consume -= $take_qty; 
+// //         } else {
+// //             $result_json['message'] = "Error updating stock: " . $conn->error;
+// //             echo json_encode($result_json);
+// //             $conn->rollback();
+// //             $conn->close();
+// //             exit;
+// //         }
+
+
+// //         // // reduce reserve stock
+// //         // $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
+// //         // if ($conn->query($sql_update_reserve) !== TRUE) {
+// //         //     $result_json['message'] = "Error updating reserve stock: " . $conn->error;
+// //         //     echo json_encode($result_json);
+// //         //     $conn->rollback();
+// //         //     $conn->close();
+// //         //     exit;
+// //         // }
+
+// //         // // delete reserve stock if reserve_qty is 0
+// //         // $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
+// //         // if ($conn->query($sql_delete_reserve) !== TRUE) {
+// //         //     $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
+// //         //     echo json_encode($result_json);
+// //         //     $conn->rollback();
+// //         //     $conn->close();
+// //         //     exit;
+// //         // }
+
+// //     }
+// //     }
+
+// // }
+
+// //  if  consume still available then check same godown
  
 
 
-//  if($qty_to_consume > 0) {
-// $sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id ";
+// //  if($qty_to_consume > 0) {
+// // $sql_get_sec_stock = "select stock_reserve_id,godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE process_id <=> $process_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id ";
 
-// if($part_id != 'NULL') {
-//    $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id";
-// }
+// // if($part_id != 'NULL') {
+// //    $sql_get_sec_stock = "select stock_reserve_id, godown,dep,sec,reserve_qty as avail_qty,stock_id from stock_view WHERE part_id <=> $part_id and godown <=> $godown_id  and reserve_type = 'work_order'  order by stock_id";
+// // }
 
-// $result_sec_stock = $conn->query($sql_get_sec_stock);
-// if($result_sec_stock->num_rows > 0) {
-//     while($row = $result_sec_stock->fetch_assoc()) {
-//         if($qty_to_consume <= 0) break;
+// // $result_sec_stock = $conn->query($sql_get_sec_stock);
+// // if($result_sec_stock->num_rows > 0) {
+// //     while($row = $result_sec_stock->fetch_assoc()) {
+// //         if($qty_to_consume <= 0) break;
 
-//         $stock_id = $row['stock_id'];
-//         $stock_reserve_id = $row['stock_reserve_id'];
-//         $available = $row['avail_qty'];
-//         $take_qty = min($available, $qty_to_consume);
+// //         $stock_id = $row['stock_id'];
+// //         $stock_reserve_id = $row['stock_reserve_id'];
+// //         $available = $row['avail_qty'];
+// //         $take_qty = min($available, $qty_to_consume);
 
-//         // 🔥 reduce stock (insert negative entry with SAME section)
-//         $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
+// //         // 🔥 reduce stock (insert negative entry with SAME section)
+// //         $sql_update_stock = "update jaysan_stock set qty = qty - $take_qty where stock_id = $stock_id";
 
-//         if ($conn->query($sql_update_stock) === TRUE) {
-//             $qty_to_consume -= $take_qty; 
-//         } else {
-//             $result_json['message'] = "Error updating stock: " . $conn->error;
-//             echo json_encode($result_json);
-//             $conn->rollback();
-//             $conn->close();
-//             exit;
-//         }
+// //         if ($conn->query($sql_update_stock) === TRUE) {
+// //             $qty_to_consume -= $take_qty; 
+// //         } else {
+// //             $result_json['message'] = "Error updating stock: " . $conn->error;
+// //             echo json_encode($result_json);
+// //             $conn->rollback();
+// //             $conn->close();
+// //             exit;
+// //         }
 
 
-//         // // reduce reserve stock
-//         // $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
-//         // if ($conn->query($sql_update_reserve) !== TRUE) {
-//         //     $result_json['message'] = "Error updating reserve stock: " . $conn->error;
-//         //     echo json_encode($result_json);
-//         //     $conn->rollback();
-//         //     $conn->close();
-//         //     exit;
-//         // }
+// //         // // reduce reserve stock
+// //         // $sql_update_reserve = "update stock_reserve set reserve_qty = reserve_qty - $take_qty where stock_reserve_id = $stock_reserve_id";
+// //         // if ($conn->query($sql_update_reserve) !== TRUE) {
+// //         //     $result_json['message'] = "Error updating reserve stock: " . $conn->error;
+// //         //     echo json_encode($result_json);
+// //         //     $conn->rollback();
+// //         //     $conn->close();
+// //         //     exit;
+// //         // }
 
-//         // // delete reserve stock if reserve_qty is 0
-//         // $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
-//         // if ($conn->query($sql_delete_reserve) !== TRUE) {
-//         //     $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
-//         //     echo json_encode($result_json);
-//         //     $conn->rollback();
-//         //     $conn->close();
-//         //     exit;
-//         // }
+// //         // // delete reserve stock if reserve_qty is 0
+// //         // $sql_delete_reserve = "delete from stock_reserve where  reserve_qty <= 0";
+// //         // if ($conn->query($sql_delete_reserve) !== TRUE) {
+// //         //     $result_json['message'] = "Error deleting reserve stock: " . $conn->error;
+// //         //     echo json_encode($result_json);
+// //         //     $conn->rollback();
+// //         //     $conn->close();
+// //         //     exit;
+// //         // }
 
-//     } 
+// //     } 
+// //     }
+
+// // }
+
 //     }
-
-// }
-
-    }
 
     // insert breaks 
     if($production_id > 0)
@@ -796,152 +796,160 @@ if($result_sec_stock->num_rows > 0) {
 
 
 
-        // reduce real consumption from stock
+//         // reduce real consumption from stock
 
-foreach($consumption as $consume) {
-    $stock_id = 0;
-  $part_id = sql_nullable($consume['part_id']);
- $qty_to_consume = $consume['qty'];
- $process_id = sql_nullable($consume['previous_process_id']);
- $work_process_id = sql_nullable($consume['work_process_id']);
+// foreach($consumption as $consume) {
+//     $stock_id = 0;
+//   $part_id = sql_nullable($consume['part_id']);
+//  $qty_to_consume = $consume['qty'];
+//  $process_id = sql_nullable($consume['previous_process_id']);
+//  $work_process_id = sql_nullable($consume['work_process_id']);
 
-// get stock_id from jaysan_stock for the consumed part and location
-$sql_get_stock_id = "select stock_id from jaysan_stock where part_id <=> $part_id and process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id";
-$result_get_stock_id = $conn->query($sql_get_stock_id);
-$stock_id = 0;
-if($result_get_stock_id->num_rows > 0) {
-    $row = $result_get_stock_id->fetch_assoc();
-    $stock_id = $row['stock_id'];
-}
+// // get stock_id from jaysan_stock for the consumed part and location
+// $sql_get_stock_id = "select stock_id from jaysan_stock where part_id <=> $part_id and process_id <=> $process_id and godown <=> $godown_id and dep <=> $dep_id and sec <=> $sec_id";
+// $result_get_stock_id = $conn->query($sql_get_stock_id);
+// $stock_id = 0;
+// if($result_get_stock_id->num_rows > 0) {
+//     $row = $result_get_stock_id->fetch_assoc();
+//     $stock_id = $row['stock_id'];
+// }
 
-if($stock_id > 0) {
-        // 🔥 reduce stock (insert negative entry with SAME section)
-        $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where stock_id = $stock_id";
+// if($stock_id > 0) {
+//         // 🔥 reduce stock (insert negative entry with SAME section)
+//         $sql_update_stock = "update jaysan_stock set qty = qty - $qty_to_consume where stock_id = $stock_id";
 
-        if ($conn->query($sql_update_stock) === TRUE) {
-            // reduce 
+//         if ($conn->query($sql_update_stock) === TRUE) {
+//             // reduce 
             
            
-        } else {
-            $result_json['message'] = "Error updating stock: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
-}
-else
-    {
+//         } else {
+//             $result_json['message'] = "Error updating stock: " . $conn->error;
+//             echo json_encode($result_json);
+//             $conn->rollback();
+//             $conn->close();
+//             exit;
+//         }
+// }
+// else
+//     {
 
-if($part_id !="NULL")
-    {
-        $process_id = "NULL";
-    }
-        // insert 0-qty for the stock if it doesn't exist
-        $sql_insert_stock = "insert into jaysan_stock (part_id, process_id, godown, dep, sec, qty,remark) values ($part_id, $process_id, $godown_id, $dep_id, $sec_id, 0-$qty_to_consume,'stock_added by user -".$work_done_id."') on duplicate key update qty = qty -$qty_to_consume";
+// if($part_id !="NULL")
+//     {
+//         $process_id = "NULL";
+//     }
+//         // insert 0-qty for the stock if it doesn't exist
+//         $sql_insert_stock = "insert into jaysan_stock (part_id, process_id, godown, dep, sec, qty,remark) values ($part_id, $process_id, $godown_id, $dep_id, $sec_id, 0-$qty_to_consume,'stock_added by user -".$work_done_id."') on duplicate key update qty = qty -$qty_to_consume";
     
-        if ($conn->query($sql_insert_stock) !== TRUE) {
-            $result_json['message'] = "Error inserting stock: " . $conn->error;
-            echo json_encode($result_json);
-            $conn->rollback();
-            $conn->close();
-            exit;
-        }
+//         if ($conn->query($sql_insert_stock) !== TRUE) {
+//             $result_json['message'] = "Error inserting stock: " . $conn->error;
+//             echo json_encode($result_json);
+//             $conn->rollback();
+//             $conn->close();
+//             exit;
+//         }
 
-    }
+//     }
+// }
+ require_once 'stock_update_fn.php';
+
+
+foreach($process_part_array as $process_part) {
+
+        $finished_qty = $process_part['required_qty'];
+        $finished_process_id = $process_part['process_id'];
+
+        stock_update_fn($conn,$finished_process_id,$finished_qty,$godown_id,$dep_id,$sec_id);
 }
- 
 
 
 
+//   foreach($process_part_array as $process_part) {
+//         $part_id = $process_part['part_id'];
+//         $required_qty = $process_part['required_qty'];
 
-  foreach($process_part_array as $process_part) {
-        $part_id = $process_part['part_id'];
-        $required_qty = $process_part['required_qty'];
+//         $process_id = $process_part['process_id'];
 
-        $process_id = $process_part['process_id'];
-
-        $production_qty = $required_qty;
-       $insert_process_id = "NULL";
-// get process_id,output_part from process_wel_tbl
-$sql_get_proces_details = "SELECT  output_part FROM process_wel_tbl WHERE process_id = $process_id";
-$result_proces_details = $conn->query($sql_get_proces_details);
-if ($result_proces_details->num_rows > 0) {
-    $row_proces_details = $result_proces_details->fetch_assoc();
+//         $production_qty = $required_qty;
+//        $insert_process_id = "NULL";
+// // get process_id,output_part from process_wel_tbl
+// $sql_get_proces_details = "SELECT  output_part FROM process_wel_tbl WHERE process_id = $process_id";
+// $result_proces_details = $conn->query($sql_get_proces_details);
+// if ($result_proces_details->num_rows > 0) {
+//     $row_proces_details = $result_proces_details->fetch_assoc();
    
-    $part_id = sql_nullable($row_proces_details['output_part']);
-}
+//     $part_id = sql_nullable($row_proces_details['output_part']);
+// }
 
-if($part_id !="NULL")
-    {
-        $process_id = "NULL";
-    }
+// if($part_id !="NULL")
+//     {
+//         $process_id = "NULL";
+//     }
 
-$batch_id = "j".$work_done_id;
-$dstock_id = 0;
-    // insert output stock for the process part
-    $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id,remark) VALUES ($part_id, $process_id , $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id','stock_added by user -".$work_done_id."') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
+// $batch_id = "j".$work_done_id;
+// $dstock_id = 0;
+//     // insert output stock for the process part
+//     $sql_insert_output = "INSERT INTO jaysan_stock (part_id, process_id, godown, dep, sec, qty, batch_id,remark) VALUES ($part_id, $process_id , $godown_id, $dep_id, $sec_id, $required_qty, '$batch_id','stock_added by user -".$work_done_id."') ON DUPLICATE KEY UPDATE qty = qty + $required_qty";
 
-    if ($conn->query($sql_insert_output) === TRUE) {
-// get stock_id
-$stock_id = $conn->insert_id;
-$dstock_id = $stock_id;
+//     if ($conn->query($sql_insert_output) === TRUE) {
+// // get stock_id
+// $stock_id = $conn->insert_id;
+// $dstock_id = $stock_id;
 
 
 
-    } else {
-        $result_json['message'] = "Error inserting output stock: " . $conn->error;
-        echo json_encode($result_json);
-        $conn->rollback();
-        $conn->close();
-        exit;
+//     } else {
+//         $result_json['message'] = "Error inserting output stock: " . $conn->error;
+//         echo json_encode($result_json);
+//         $conn->rollback();
+//         $conn->close();
+//         exit;
         
     
 
-    }
-$work_order_array = [];
-if($production_qty > 0 )
-    {
-//    get work_order_id to update 
-$sql_get_work_order_id = "select wo.work_order_id,pending_qty from demand 
-inner join work_order wo on demand.demand_id = wo.demand_id
-where wo.godown <=> $godown_id and wo.dep <=> $dep_id and wo.sec <=> $sec_id and demand.process_id <=> $process_id";
-$result_work_order = $conn->query($sql_get_work_order_id);
-if ($result_work_order->num_rows > 0) {
-    while($row_work_order = $result_work_order->fetch_assoc()) {
-        $work_order_id = $row_work_order['work_order_id'];
-        $pending_qty = $row_work_order['pending_qty'];
-        // update work order here if needed
-        $work_order_array[] = [
-            'work_order_id' => $work_order_id,
-            'pending_qty' => $pending_qty
-        ];
-    }
-}
+//     }
+// $work_order_array = [];
+// if($production_qty > 0 )
+//     {
+// //    get work_order_id to update 
+// $sql_get_work_order_id = "select wo.work_order_id,pending_qty from demand 
+// inner join work_order wo on demand.demand_id = wo.demand_id
+// where wo.godown <=> $godown_id and wo.dep <=> $dep_id and wo.sec <=> $sec_id and demand.process_id <=> $process_id";
+// $result_work_order = $conn->query($sql_get_work_order_id);
+// if ($result_work_order->num_rows > 0) {
+//     while($row_work_order = $result_work_order->fetch_assoc()) {
+//         $work_order_id = $row_work_order['work_order_id'];
+//         $pending_qty = $row_work_order['pending_qty'];
+//         // update work order here if needed
+//         $work_order_array[] = [
+//             'work_order_id' => $work_order_id,
+//             'pending_qty' => $pending_qty
+//         ];
+//     }
+// }
 
-foreach($work_order_array as $work_order) {
-    $work_order_id = $work_order['work_order_id'];
-    $pending_qty = $work_order['pending_qty'];
-    $reduce_qty = min($production_qty, $pending_qty);
-    $production_qty -= $reduce_qty;
-    // update work order in the database
-    $sql_update_work_order = "UPDATE work_order SET completed_qty = completed_qty + $reduce_qty WHERE work_order_id = $work_order_id";
-    if ($conn->query($sql_update_work_order) !== TRUE) {
-        $result_json['message'] = "Error updating work order: " . $conn->error;
-        echo json_encode($result_json);
-        $conn->rollback();
-        $conn->close();
-        exit;
-    }
-}
-    }
+// foreach($work_order_array as $work_order) {
+//     $work_order_id = $work_order['work_order_id'];
+//     $pending_qty = $work_order['pending_qty'];
+//     $reduce_qty = min($production_qty, $pending_qty);
+//     $production_qty -= $reduce_qty;
+//     // update work order in the database
+//     $sql_update_work_order = "UPDATE work_order SET completed_qty = completed_qty + $reduce_qty WHERE work_order_id = $work_order_id";
+//     if ($conn->query($sql_update_work_order) !== TRUE) {
+//         $result_json['message'] = "Error updating work order: " . $conn->error;
+//         echo json_encode($result_json);
+//         $conn->rollback();
+//         $conn->close();
+//         exit;
+//     }
+// }
+//     }
 
-    require_once 'stock_distribution.php';
-stock_distribution($conn, $dstock_id, $required_qty);
+//     require_once 'stock_distribution.php';
+// stock_distribution($conn, $dstock_id, $required_qty);
 
 
 
-}
+// }
     $conn->commit();
     $result_json['message'] = "Work done entry and stock updates successful.";
     echo json_encode($result_json);
