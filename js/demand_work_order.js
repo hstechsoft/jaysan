@@ -309,8 +309,9 @@ $(document).ready(function () {
     var dep_sec_id = $(this).closest("tr").find("input[type='radio']:checked").data("sec_id");
     var emp_id = current_user_id;
     var qty = $(this).closest("tr").find("td:eq(6)").find("input[type='number']").val();
+    var due_date = $(this).closest("tr").find("td:eq(8)").find("input[type='date']").val();
 
-    console.log(process_id, godown_id, dep_id, dep_sec_id, qty);
+    console.log(process_id, godown_id, dep_id, dep_sec_id, qty, due_date);
 
     if (!godown_id) {
       salert("Warning", "Please select atleast one godown.", "warning");
@@ -322,12 +323,18 @@ $(document).ready(function () {
       return;
     }
 
+    if (!due_date) {
+      salert("Warning", "Please select a due date.", "warning");
+      return;
+    }
+
+
     if (!process_id) {
       salert("Warning", "Process ID is missing.", "warning");
       return;
     }
 
-    stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty);
+    stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty, due_date);
 
   });
 
@@ -337,8 +344,8 @@ $(document).ready(function () {
 
 
 
-function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty) {
-  console.log(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty);
+function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty, due_date) {
+  console.log(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty, due_date);
 
   $.ajax({
     url: "php/stock_demand_reservation.php",
@@ -351,6 +358,7 @@ function stock_demand_reservation(process_id, godown_id, dep_id, dep_sec_id, emp
       dep: dep_id,
       sec: dep_sec_id,
       emp_id: emp_id,
+      due_date: due_date
     },
     success: function (response) {
       console.log(response);
@@ -434,6 +442,9 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
                     <td>${parseInt(obj.total_remaining_qty)}</td>
                     <td> <input type="number" class="form-control form-control-sm enter_qty" value="${parseInt(obj.total_remaining_qty)}" placeholder="Enter Qty"></td>
                     <td>${godown_list}</td>
+                    <td>
+                       <input type="date" class="form-control rounded-3 due_date" id="date" placeholder="" required>
+                    </td>
                     <td>
                         <button class="btn btn-primary btn-sm" value="${obj.process_id}">Submit</button>
                     </td>

@@ -223,7 +223,7 @@ $(document).ready(function () {
           salert("Error", "Error generating PDF: " + xhr.statusText, "error");
         }
       });
-                                      
+
     } else {
       // You are in a regular mobile or desktop browser
       salert("Warning", "Try Later Sometimes!", "warning")
@@ -410,8 +410,10 @@ function get_dcf_details(dcf_id) {
 
             count = count + 1;
             $('#dcf_report').html(obj.dcf_report)
-
+            $("#pagination").addClass('d-none');
             if (obj.sts == "invoice" || obj.sts == "delivery") {
+              $("#pagination").removeClass('d-none');
+
               $(".dcf-watermark")
                 .html(`<i class="fa-solid fa-thumbs-up me-2"></i>DCF APPROVED`)
                 .css("color", "rgb(17 200 8 / 42%)");

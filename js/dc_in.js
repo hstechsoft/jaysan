@@ -597,7 +597,7 @@ function insert_indc(godown, dc_date, transport_mode, transport_des, vehicle_no,
 
 
             if (response.trim() == "ok") {
-                // window.location.reload();
+                window.location.reload();
             }
 
 

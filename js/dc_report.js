@@ -56,8 +56,54 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-    get_work_order_report()
+    get_work_order_report(0)
 
+    $('#part').on('input', function () {
+        //check the value not empty
+        $(this).removeData("part_id");
+        $('#bom_process').empty().append(`<option selected disabled value="">BOM Process</option>`)
+        $("#bom_list").empty().append("<option  value='0' disabled selected>Bom  List</option>")
+
+        if ($('#part').val() != "") {
+            $('#part').autocomplete({
+                //get data from database return as array of object which contain label,value
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_parts.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            part: $('#part').val(),
+                            term: '',
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name + "-" + item.part_no,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    part_no: item.part_no
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+                    $(this).data("part_id", ui.item.id);
+                    get_bom_list1(ui.item.id);
+                },
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.value + "</strong> - " + item.part_no + "</div>")
+                    .appendTo(ul);
+            };
+        }
+    });
 
     $("#dc_report_tbody ").on("click", "tr td .input_godown_details_btn", function () {
 
@@ -147,24 +193,41 @@ $(document).ready(function () {
 
     })
 
+    $("#bom_list").on("change", function () {
+
+        var part_id = $(this).find(':selected').data("part_id");
+        var component_cat = $(this).val();
+
+        $('#bom_process').empty().append(`<option selected disabled value="">BOM Process</option>`)
+
+        get_bom_process_details_summary1(part_id, component_cat);
+
+    });
+
+    $("#bom_process").on("change", function () {
+
+        var production_process = $(this).find(':selected').data("process_id") || 0;
+        get_work_order_report(production_process);
+    });
 
 });
 
 
 
-function get_work_order_report() {
+function get_work_order_report(production_process) {
 
     $.ajax({
         url: "php/get_work_order_report.php",
         type: "get",
         data: {
             process_id: '',
+            production_process: production_process,
             emp_id: current_user_id
         },
         success: function (response) {
 
             console.log(response);
-            
+
             let data = JSON.parse(response);
             $("#all_bom_table").empty();
 
@@ -192,7 +255,7 @@ function get_work_order_report() {
                 let total_stock_allocation_qtyPer = total_stock_allocation_qty > 0 ? (total_stock_allocation_qty / total_input_required_qty) * 100 : 0;
 
                 let total_dc_qtyPer = total_dc_qty > 0 ? (total_dc_qty / total_input_required_qty) * 100 : 0;
-                
+
                 let total_transport_qtyPer = total_transport_qty > 0 ? (total_transport_qty / total_input_required_qty) * 100 : 0;
 
                 woDetails.forEach((wo, woIndex) => {
@@ -229,8 +292,8 @@ function get_work_order_report() {
 
                         workOrderNoHtml += `
                                 <div class="mb-2">
-                                    ${workOrder.work_order_no ?? "-"}
-                                </div>
+                                    ${workOrder.work_order_id ?? "-"}
+                                </div><br><span class="badge ${workOrder.due_date_overdue == 0 ? 'bg-primary' : 'bg-danger'}">${workOrder.due_date ?? "-"}</span>
                             `;
 
                     });
@@ -494,7 +557,118 @@ function get_work_order_report() {
 
 }
 
+function get_bom_list1(part_id) {
 
+
+    $.ajax({
+        url: "php/get_bom_list_wel.php",
+        type: "get", //send it through get method
+        data: {
+            part_id: part_id
+
+        },
+        success: function (response) {
+            console.log(response);
+
+            $('#bom_list').empty()
+
+            if (response.trim() != "error") {
+
+                if (response.trim() != "0 result") {
+
+
+                    $("#bom_list").empty()
+                    $("#bom_list").append("<option  value='0' disabled selected>Bom  List</option>")
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        $("#bom_list").append("<option value='" + obj.component_cat + "' data-part_id='" + obj.part_id + "' data-process_count='" + obj.process_count + "' data-bom_list='" + obj.bom_list + "'>" + obj.component_cat + "</option>")
+
+
+                    });
+
+
+
+
+
+                }
+                else {
+                    $('#bom_list_item').append("<li class='list-group-item'>No BOM Found</li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_bom_process_details_summary1(part_id, component_cat) {
+
+    console.log(part_id, component_cat);
+
+
+    $.ajax({
+        // url: "php/get_bom.php",
+        url: "php/get_bom_process_details_summary.php",
+        type: "get", //send it through get method
+        data: {
+            part_id: part_id,
+            component_cat: component_cat
+        },
+        success: function (response) {
+            console.log(response);
+            if (response.trim() != "error") {
+
+                $('#bom_process').empty()
+                $('#bom_process').append(`<option selected disabled value="">BOM Process</option>`)
+                if (response.trim() != "0 result") {
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    obj.forEach(function (obj) {
+
+                        count = count + 1;
+                        $("#bom_process").append("<option value='" + obj.process_id + "' data-part_id='" + obj.output_part + "' data-component_cat='" + obj.component_cat + "' data-process_id='" + obj.process_id + "' data-process_title='" + obj.process_title + "' data-is_default='" + obj.is_default + "'>" + component_cat + "(" + obj.process_title + ")" + (obj.is_default > 0 ? "<span class='badge bg-primary blink'>Default</span>" : "") + "</option>")
+
+
+
+                    });
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
