@@ -371,7 +371,7 @@ if ($result_order_details->num_rows > 0) {
     // Notification body for FCM add emp,customer,order no dated
     $body = "A new sales order with order number $order_no has been created by $emp_name for customer $cus_name on $dated.";
     $url = "https://jaysan.cloud/sales_order_report.html";
-
+send_fcm($admin_firebase_uids, $title, $body, $url);
   
 
 $conn->commit();
