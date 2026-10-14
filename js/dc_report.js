@@ -275,6 +275,10 @@ function get_work_order_report(production_process, all) {
                     let ageHtml = "";
                     let workOrderNoHtml = "";
 
+                    
+                    // ===========================
+                    // for show all material filter
+                    // ===========================
                     let isFullyReserved = wo.input_details.every(input => {
                         let required = parseFloat(input.required_qty) || 0;
                         let reserved = parseFloat(input.total_reserve_qty) || 0;
@@ -285,6 +289,9 @@ function get_work_order_report(production_process, all) {
                     if (isFullyReserved && all == 0) {
                         return; // Skip this work order row
                     }
+                    // ===========================
+                    // end for show all material filter
+                    // ===========================
 
                     wo.work_order_details.forEach((workOrder) => {
 
