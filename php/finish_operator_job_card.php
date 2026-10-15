@@ -66,7 +66,7 @@ foreach ($produced_parts as $part) {
 
     // get final process id for the part
     $final_process_id = 0;
-    $sql_final_process = "select final_process_id from jaysan_process_view where final_part_id = '$part_id' and is_default = '1' limit 1";
+    $sql_final_process = "select final_process_id from jaysan_process_view where final_part_id = '$part_id' and component_cat = 'laser cutting' limit 1";
     $result_final_process = $conn->query($sql_final_process);
     if ($result_final_process->num_rows > 0) {
         $row_final_process = $result_final_process->fetch_assoc();
