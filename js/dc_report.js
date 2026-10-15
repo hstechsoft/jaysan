@@ -43,13 +43,13 @@ $(document).ready(function () {
     //     console.log("Geolocation is not supported.");
     // }
 
-    $("#dc_report_search").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
+    // $("#excel_report_search").on("keyup", function () {
+    //     var value = $(this).val().toLowerCase();
 
-        $("#dc_report_tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
+    //     $("#excel_need_material_tbody tr").filter(function () {
+    //         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    //     });
+    // });
 
     check_login();
 
@@ -63,6 +63,7 @@ $(document).ready(function () {
         $(this).removeData("part_id");
         $('#bom_process').empty().append(`<option selected disabled value="">BOM Process</option>`)
         $("#bom_list").empty().append("<option  value='0' disabled selected>Bom  List</option>")
+        $("#qty").val(0).trigger('focusout');
 
         if ($('#part').val() != "") {
             $('#part').autocomplete({
@@ -194,6 +195,7 @@ $(document).ready(function () {
     })
 
     $("#bom_list").on("change", function () {
+        $("#qty").val(0).trigger('focusout');
 
         var part_id = $(this).find(':selected').data("part_id");
         var component_cat = $(this).val();
@@ -205,19 +207,144 @@ $(document).ready(function () {
     });
 
     $("#bom_process").on("change", function () {
+        $("#qty").val(0).trigger('focusout');
 
         var production_process = $(this).find(':selected').data("process_id") || 0;
         get_work_order_report(production_process, $("#show_all").is(":checked") ? 1 : 0);
     });
 
-    $("#show_all").on("change", function(){
-        var production_process = $("#bom_process").find(':selected').data("process_id") || 0
-        if($(this).is(":checked")){
-            get_work_order_report(production_process, 1 );
-        }else{
+    $("#show_all").on("change", function () {
+        var production_process = $("#bom_process").find(':selected').data("process_id") || 0;
+        if ($(this).is(":checked")) {
+            get_work_order_report(production_process, 1);
+        } else {
             get_work_order_report(production_process, 0);
         }
     });
+
+    $("#qty").on("focusout", function () {
+        $(".modern_report").removeClass("d-none");
+        $(".excel_report").addClass("d-none");
+
+        var qty = $(this).val() ?? 0;
+        var production_process = $("#bom_process").find(':selected').data("process_id") || 0;
+
+        if (qty <= 0) {
+            // salert("Warning", "Quantity Must Be Greater Than 0.", "warning");
+            return;
+        }
+
+        if (production_process <= 0) {
+            salert("Warning", "Select The Process.", "warning");
+            return;
+        }
+
+        $(".modern_report").addClass("d-none");
+        $(".excel_report").removeClass("d-none");
+        get_real_process_summary_inputs1(production_process, qty);
+    });
+
+
+    $("#excel_report_search").on("input", function () {
+
+        const searchValue = $(this).val().trim().toLowerCase();
+        let visibleCount = 0;
+
+        $("#excel_need_material_tbody tr").each(function () {
+
+            const rowText = $(this).text().toLowerCase();
+            const matches = rowText.includes(searchValue);
+
+            $(this).toggle(matches);
+
+            if (matches && $(this).find("td").length === 4) {
+                visibleCount++;
+            }
+        });
+
+        // Show filtered count
+        $("#excel_record_count").text(visibleCount);
+    });
+
+
+    $("#excel_download_btn").on("click", function () {
+
+        if (typeof XLSX === "undefined") {
+            salert("Error", "Excel library is not loaded.", "error");
+            return;
+        }
+
+        const $rows = $("#excel_need_material_tbody tr:visible");
+        const exportData = [
+            ["S.No", "Part", "Process", "Needed Qty"]
+        ];
+
+        let serialNo = 0;
+
+        $rows.each(function () {
+
+            const $cells = $(this).find("td");
+
+            // Skip empty-state rows
+            if ($cells.length !== 4) {
+                return;
+            }
+
+            serialNo++;
+
+            exportData.push([
+                serialNo,
+                $cells.eq(1).text().trim(),
+                $cells.eq(2).text().trim(),
+                $cells.eq(3).text().trim()
+            ]);
+        });
+
+        if (serialNo === 0) {
+            salert("Warning", "No material records to export.", "warning");
+            return;
+        }
+
+        // Read part and quantity fields
+        const partName = ($("#part").val() || "part")
+            .trim()
+            .replace(/[\\/:*?"<>|]/g, "-")
+            .replace(/\s+/g, " ");
+
+        const qty = ($("#qty").val() || "0")
+            .trim()
+            .replace(/[\\/:*?"<>|]/g, "-");
+
+        // Local date: YYYY_MM_DD
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+
+        const date = `${yyyy}_${mm}_${dd}`;
+
+        const filename = `${partName}_${qty}_qty_${date}.xlsx`;
+
+        const worksheet = XLSX.utils.aoa_to_sheet(exportData);
+
+        worksheet["!cols"] = [
+            { wch: 10 },
+            { wch: 35 },
+            { wch: 25 },
+            { wch: 18 }
+        ];
+
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Material Report"
+        );
+
+        XLSX.writeFile(workbook, filename);
+    });
+
 
 });
 
@@ -236,10 +363,14 @@ function get_work_order_report(production_process, all) {
         success: function (response) {
 
             console.log(response);
+            $("#dc_report_tbody").empty();
 
+            if (response.trim() == '0 result') {
+                $("#dc_report_tbody").append(`<tr><td colspan='8' class='text-center'>Nothing Found.</td></tr>`);
+                return;
+            }
             let data = JSON.parse(response);
 
-            $("#dc_report_tbody").empty();
 
             data.forEach((item, index) => {
 
@@ -275,7 +406,7 @@ function get_work_order_report(production_process, all) {
                     let ageHtml = "";
                     let workOrderNoHtml = "";
 
-                    
+
                     // ===========================
                     // for show all material filter
                     // ===========================
@@ -383,9 +514,9 @@ function get_work_order_report(production_process, all) {
                         externalPer = Math.min(externalPer, 100);
 
                         // Skip the entire row if fully internally reserved
-                        // if (required > 0 && reserved >= required) {
-                        //     return;
-                        // }
+                        if (required > 0 && reserved >= required && all == 0) {
+                            return;
+                        }
 
                         inputDetails += `
 
@@ -583,6 +714,123 @@ function get_work_order_report(production_process, all) {
         error: function (xhr) {
             console.log(xhr);
         }
+    });
+
+}
+
+function get_real_process_summary_inputs1(process_id, qty) {
+    console.log(process_id, qty);
+
+
+    $.ajax({
+        url: "php/get_real_process_summary_inputs.php",
+        type: "get",
+        data: {
+            process_id: process_id,
+            qty_needed: qty
+        },
+
+        success: function (response) {
+
+            console.log(response);
+
+            if (typeof response !== "string") {
+                response = JSON.stringify(response);
+            }
+
+            response = response.trim();
+
+            if (response === "error") {
+                salert("Error", "Server Error", "error");
+                return;
+            }
+
+            const $tbody = $("#excel_need_material_tbody");
+            $tbody.empty();
+
+            if (response === "0 result") {
+                $tbody.html(`
+                    <tr>
+                        <td colspan="4" class="text-center text-secondary py-4">
+                            <i class="fa-solid fa-box-open fa-2x d-block mb-2"></i>
+                            No materials found.
+                        </td>
+                    </tr>
+                `);
+
+                $("#excel_record_count").text("0");
+                return;
+            }
+
+            let data;
+
+            try {
+                data = JSON.parse(response);
+            } catch (error) {
+                console.error("Invalid JSON:", response);
+                salert("Error", "Invalid server response", "error");
+                return;
+            }
+
+            if (!Array.isArray(data)) {
+                salert("Error", "Unexpected server response", "error");
+                return;
+            }
+
+            data.sort((a, b) =>
+                Number(b.max_level || 0) - Number(a.max_level || 0)
+            );
+
+            let count = 0;
+            let html = "";
+
+            data.forEach(item => {
+
+                if (Number(item.production_qty || 0) <= 0) {
+                    return;
+                }
+
+                count++;
+
+                html += `
+                    <tr>
+                        <td class="text-center text-secondary">${count}</td>
+
+                        <td>
+                            <span class="fw-semibold text-dark">
+                                ${item.output_part_name ?? ""}
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge rounded-pill bg-light text-dark border">
+                                ${item.process_name ?? ""}
+                            </span>
+                        </td>
+
+                        <td class="text-end">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                                ${item.production_qty}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            if (count === 0) {
+                html = `
+                    <tr>
+                        <td colspan="4" class="text-center text-secondary py-4">
+                            No materials with a required quantity greater than zero.
+                        </td>
+                    </tr>
+                `;
+            }
+
+            $tbody.html(html);
+            $("#excel_record_count").text(count);
+        }
+
     });
 
 }

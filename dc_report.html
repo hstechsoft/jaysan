@@ -102,6 +102,11 @@
                     </select>
                 </div>
 
+                <div class="" style="width: 140px;">
+                    <input type="text" class="form-control form-control-sm rounded-2" id="qty"
+                        placeholder="No Of Machines">
+                </div>
+
                 <div class="" style="width: 180px;">
                     <label for="show_all">Show All Materials</label>
                     <input class="form-check-input" type="checkbox" value="" id="show_all" required>
@@ -109,7 +114,7 @@
 
             </div>
 
-            <div class="table-responsive">
+            <div class="table-responsive modern_report">
                 <table class="table caption-top table-bordered table-striped small">
                     <thead class="small table-primary">
                         <tr>
@@ -131,6 +136,82 @@
 
                 </table>
             </div>
+
+
+            <div class="card border-0 shadow-sm rounded-3 overflow-hidden excel_report d-none">
+                <!-- Header -->
+                <div class="card-header bg-white border-bottom py-3">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark">
+                                <i class="fa-solid fa-boxes-stacked text-success me-2"></i>
+                                Material Requirement Report
+                            </h6>
+                            <small class="text-secondary">
+                                Production material requirements
+                            </small>
+                        </div>
+
+                        <button type="button" class="btn btn-success btn-sm px-3" id="excel_download_btn">
+                            <i class="fa-solid fa-file-excel me-2"></i>
+                            Export Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search and summary -->
+                <div class="card-body p-3">
+                    <div class="row g-2 align-items-center mb-3">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fa-solid fa-magnifying-glass text-secondary"></i>
+                                </span>
+                                <input type="text" class="form-control border-start-0" id="excel_report_search"
+                                    placeholder="Search part or process...">
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 text-md-end">
+                            <span class="badge bg-light text-dark border py-2 px-3">
+                                Total Records:
+                                <span id="excel_record_count" class="fw-bold">0</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive border rounded-3">
+                        <table class="table table-hover table-striped align-middle mb-0" id="excel_material_table">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center" style="width:65px;">#</th>
+                                    <th>Part</th>
+                                    <th>Process</th>
+                                    <th class="text-end" style="width:150px;">Needed Qty</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="excel_need_material_tbody">
+                                <tr>
+                                    <td colspan="4" class="text-center text-secondary py-4">
+                                        No material data available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between flex-wrap gap-2 mt-2">
+                        <small class="text-secondary">
+                            <i class="fa-solid fa-circle-info me-1"></i>
+                            Search by part name or process.
+                        </small>
+                        <small class="text-secondary">Excel format: .xlsx</small>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -219,6 +300,10 @@
 
     <!-- Sweet alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
