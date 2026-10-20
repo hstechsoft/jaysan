@@ -222,6 +222,18 @@ $(document).ready(function () {
         }
     });
 
+    $("#dc_report_tbody").on("dblclick", "strong.strong, li.strong", function () {
+        var process_id = Number($(this).attr("data-process_id")) || 0;
+        console.log(process_id);
+
+        if (process_id > 0) {
+            get_work_order_report(
+                process_id,
+                $("#show_all").is(":checked") ? 1 : 0
+            );
+        }
+    });
+
     $("#qty").on("focusout", function () {
         $(".modern_report").removeClass("d-none");
         $(".excel_report").addClass("d-none");
@@ -522,7 +534,7 @@ function get_work_order_report(production_process, all) {
 
                             <li class="list-group-item px-2 py-2">
 
-                                <strong>${input.input_part_name}</strong>
+                                <strong class='strong' data-process_id="${input.previous_process_id}">${input.input_part_name}</strong>
 
                                 <div class="mt-2 d-flex flex-wrap gap-1 d-none">
 
@@ -586,7 +598,7 @@ function get_work_order_report(production_process, all) {
                                 </div>
 
                                 <!-- Stock Transfer -->
-                                <small class="text-success d-block mt-2">
+                                <small class="text-primary d-block mt-2">
                                     Internal Stock Transfer : ${input.stock_allocation_qty} 
                                 </small>
 
@@ -619,7 +631,7 @@ function get_work_order_report(production_process, all) {
                     $("#dc_report_tbody").append(`
                                 <tr>
 
-                                    ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td><td rowspan="${rowSpan}" class="align-middle text-center">${item.final_part} <span class="badge bg-primary input_godown_details_btn" data-final_part="${item.final_part}" data-process_name="${item.process_name}" data-godown_details=${encodeURIComponent(item.godown_details)} data-input_parts=${encodeURIComponent(item.input_parts)}>${item.process_name}</span></td>
+                                    ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td><td rowspan="${rowSpan}" class="align-middle text-center"><strong class='strong' data-process_id="${item.process_id}">${item.final_part}</strong> <span class="badge bg-primary input_godown_details_btn" data-final_part="${item.final_part}" data-process_name="${item.process_name}" data-godown_details=${encodeURIComponent(item.godown_details)} data-input_parts=${encodeURIComponent(item.input_parts)}>${item.process_name}</span></td>
                                         ` : ""}
 
                                     <td class="align-middle text-center">${employeeHtml}</td>

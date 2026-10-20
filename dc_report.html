@@ -86,6 +86,16 @@
             </div> -->
 
             <div class="d-flex align-items-center gap-2 flex-nowrap mb-2">
+
+                <div class="" style="width: 140px;">
+                    <select class="form-select form-select-sm rounded-2" id="product">
+                        <option selected disabled value="">Procduct</option>
+                        <option disabled value="">Baler</option>
+                        <option disabled value="">Hay Rake</option>
+                    </select>
+                </div>
+
+
                 <div class="" style="width: 140px;">
                     <input type="text" class="form-control form-control-sm rounded-2" id="part" placeholder="Parts">
                 </div>
@@ -109,20 +119,59 @@
 
                 <div class="" style="width: 180px;">
                     <label for="show_all">Show All Materials</label>
-                    <input class="form-check-input" type="checkbox" value="" id="show_all" required>
+                    <input class="form-check-input" type="checkbox" value="" id="show_all" >
+                </div>
+
+                <div class="" style="width: 140px;">
+                    <input type="text" class="form-control form-control-sm rounded-2" id="godown" placeholder="Godown" disabled>
+                </div>
+
+                <div class="" style="width: 140px;">
+                    <input type="text" class="form-control form-control-sm rounded-2" id="department"
+                        placeholder="Department" disabled>
+                </div>
+
+                <div class="" style="width: 140px;">
+                    <input type="text" class="form-control form-control-sm rounded-2" id="section"
+                        placeholder="Section" disabled>
                 </div>
 
             </div>
 
-            <div class="table-responsive modern_report">
+            <div class="table-responsive modern_report" style="max-height: 80vh; overflow-y: auto;">
                 <table class="table caption-top table-bordered table-striped small">
-                    <thead class="small table-primary">
+                    <thead class="small table-primary" style="position: sticky; top: 0; z-index: 5;">
                         <tr>
                             <th>#</th>
-                            <th>Part & Process</th>
-                            <th>Employee</th>
-                            <th>Work Order No</th>
-                            <th>Godown Details</th>
+                            <th>Part & Process
+                                <div>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Process" disabled>
+                                </div>
+                            </th>
+                            <th>Employee
+                                <div>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Employee" disabled>
+                                </div>
+                            </th>
+                            <th>Work Order No
+                                <div>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Work Order No" disabled>
+                                </div>
+                            </th>
+                            <th>Godown Details
+                                <div class="" style="width: 140px;">
+                                    <select class="form-select form-select-sm rounded-2" id="process_status">
+                                        <option selected disabled value="">Choose...</option>
+                                        <!-- <option value="total">ℹ️ Total Process</option> -->
+                                        <option disabled value="pending">⚪ Pending</option>
+                                        <option disabled value="external">🟡 External Reserved</option>
+                                        <option disabled value="internal">🟢 Internal Reserved</option>
+                                        <option disabled value="internal">🔵 Internal Stock Transfer</option>
+                                        <option disabled value="dc">⚫ DC Reserved</option>
+                                        <option disabled value="transport">🔘 Transport</option>
+                                    </select>
+                                </div>
+                            </th>
                             <th>Required Qty</th>
                             <th style="min-width:200px;">Input Details</th>
                             <th style="min-width:200px;">Total Input Summary</th>

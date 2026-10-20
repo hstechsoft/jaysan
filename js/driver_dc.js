@@ -194,14 +194,32 @@ $(document).ready(function () {
         uploadFile();
     });
 
-    $("#dc_file_upload").on("change", function(){
-         var godown_id = $("#godown").data("godown_id");
-         var emp_id = current_user_id;
-         var file = this.files[0];
+    $("#dc_file_upload").on("change", function () {
+        var godown_id = $("#godown").data("godown_id");
+        var emp_id = current_user_id;
+        var file = this.files[0];
 
-         upload_dc(godown_id, emp_id, file);
+        upload_dc(godown_id, emp_id, file);
     })
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                console.log("Latitude:", position.coords.latitude);
+                console.log("Longitude:", position.coords.longitude);
+                console.log("Accuracy:", position.coords.accuracy + " meters");
+                $("#loc_status").removeClass("text-danger");
+                $("#loc_status").addClass("text-success");
+                get_godown_location(position.coords.latitude, position.coords.longitude)
+            },
+            function (error) {
+                console.log(error.message);
+                $(".overlay_e").removeClass("d-none")
+            }
+        );
+    } else {
+        console.log("Geolocation is not supported.");
+    };
 
     window.onLocationReceived = function (lat, lng) {
         console.log("GPS Location received:", lat, lng);
@@ -939,7 +957,7 @@ function un_load_transport(stock_json, godown_id) {
 }
 
 function get_godown_location(lat, lng) {
-alert();
+
     $.ajax({
         url: "php/get_godown_location.php",
         type: "get",

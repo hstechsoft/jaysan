@@ -70,6 +70,7 @@ $(document).ready(function () {
         if (godown_id && godown_name) {
             $("#godown_list_modal").modal("hide");
             // $("#godown").data("godown_id", godown_id).val(godown_name);
+            $(".current_godown").text(godown_name);
             current_godown = godown_id;
             get_unassign_indc(0, $("#godown").data("godown_id") || 0, current_godown);
         }
@@ -526,7 +527,7 @@ function get_dc_attachment1(emp_id, godown, dc_id, dc_status) {
         success: function (response) {
             console.log(response);
 
-            if (response.trim() != "error") {   
+            if (response.trim() != "error") {
 
                 $("#attachment_list").empty();
 
@@ -636,6 +637,7 @@ function get_godown_location_dc_in(lat, lng) {
                         obj.forEach(function (item) {
                             $(".dc_filess").prop("disabled", false);
                             // $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                            $(".current_godown").text(item.creditor_name);
                             current_godown = item.creditor_id;
                             get_unassign_indc(0, $("#godown").data("godown_id") || 0, current_godown);
                         })
