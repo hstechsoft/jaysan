@@ -12,17 +12,20 @@ $data = htmlspecialchars($data);
 return $data;
 }
 
-
+$place_query = 1;
 $godown = test_input($_GET['godown']);
 
 if($godown == '' || $godown == null || $godown == 'NULL' || $godown == 0){
-   echo "Invalid godown";
-   exit();
+   $place_query = 1;
 }
-
-
-$place_query = 1;
+else
+    {
  $place_query = " godown = $godown";
+    }
+
+
+
+
 
 
 
