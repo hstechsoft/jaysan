@@ -225,7 +225,7 @@ function get_all_customer() {
                 <td>
                     <button value="${obj.cus_id}"
                             type="button"
-                            class="btn text-danger">
+                            class="btn text-danger btn-sm" disabled>
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
                 </td>
