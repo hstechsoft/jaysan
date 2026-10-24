@@ -68,8 +68,17 @@ $(document).ready(function () {
         });
     });
 
-    check_login();
 
+    $("#search_vendor").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#vendors_work_list_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+    check_login();
+    get_vendor_report_list();
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -387,6 +396,15 @@ $(document).ready(function () {
         }
 
         insert_vendor_work(process_id, godown_id, dep_id, dep_sec_id, emp_id, qty);
+    });
+
+    $('#vendors_work_list_tbody').on("dblclick", "tr", function(){
+        var godown_id = $(this).data('godown_id');
+        var godown_name = $(this).find("td").eq(1).text();
+
+        $("#godown").data("godown_id", godown_id).val(godown_name);
+
+        get_vendor_report(godown_id);
     })
 
 });
@@ -536,6 +554,78 @@ function get_vendor_report(godown) {
                 }
                 else {
                     $('#vendor_work_order_tbody').append('<tr><td colspan="9" class="text-center">No Parts available</td></tr>');
+                }
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_vendor_report_list(godown) {
+    console.log(godown);
+
+    $.ajax({
+        url: "php/get_vendor_report.php",
+        type: "get", //send it through get method
+        data: {
+
+            godown: '',
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                $('#vendors_work_list_tbody').empty();
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0;
+                    var appended_godown_ids = new Set();
+
+                    obj.forEach(function (item) {
+
+                        var godown_details = item.godown_details
+                            ? JSON.parse(item.godown_details)
+                            : [];
+
+                        godown_details.forEach(function (i) {
+
+                            // Skip duplicate godown IDs
+                            if (appended_godown_ids.has(String(i.godown_id))) {
+                                return;
+                            }
+
+                            appended_godown_ids.add(String(i.godown_id));
+                            count++;
+
+                            $('#vendors_work_list_tbody').append(`
+                                <tr data-godown_id="${i.godown_id}">
+                                    <td>${count}</td>
+                                    <td>${i.godown_name}</td>
+                                </tr>
+                            `);
+
+                        });
+
+                    });
+                }
+                else {
+                    $('#vendors_work_list_tbody').append('<tr><td colspan="2" class="text-center">No Parts available</td></tr>');
                 }
 
             }
