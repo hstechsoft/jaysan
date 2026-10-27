@@ -86,31 +86,36 @@ $(document).ready(function () {
   });
 
 
-  $('#emp_change_btn').click(function () {
-    if ($('#sel_usr_in :selected').val() == "0") {
-      salert("Employee", "Select Employee", "warning")
-      return
+
+$('#emp_change_btn').click(function () {
+
+    const selectedEmployee = $('#sel_usr_in').val();
+
+    if (selectedEmployee == "0" || !selectedEmployee) {
+        salert("Employee", "Select Employee", "warning");
+        return;
     }
 
-    swal({
-      title: "Remove?",
-      text: "Are you sure want to Remove - " + $("#emp_name").val() + " and Change to " + $('#sel_usr_in :selected').text(),
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    })
-      .then((willDelete) => {
-        if (willDelete) {
-
-          change_employee()
-        } else {
-
+    Swal.fire({
+        title: "Remove?",
+        text: "Are you sure you want to remove " +
+            $("#emp_name").val() +
+            " and change to " +
+            $('#sel_usr_in option:selected').text() + "?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, change employee",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#198754",
+        cancelButtonColor: "#6c757d"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            change_employee();
         }
-      });
+    });
 
+});
 
-
-  });
 
   $('#ep_submit_btn').on('click', function () {
     if ($('#map_loc :selected').val() == '0' || $('#work_assign_notify  :selected').val() == '0' || $('#work_alarm   :selected').val() == '0' || $('#call_end_notify   :selected').val() == '0' || $('#call_history   :selected').val() == '0') {

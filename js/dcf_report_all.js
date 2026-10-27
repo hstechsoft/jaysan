@@ -462,6 +462,7 @@ function get_dcf() {
     },
     success: function (response) {
 
+console.log(response);
 
 
       $('#dcf_list').empty();
