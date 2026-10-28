@@ -65,7 +65,7 @@ $(document).ready(function () {
 
   $('#approve_btn').click(function () {
 
-    swal({
+    Swal.fire({
       title: "Approve?",
       text: "Are you sure want to approve - " + $("#emp_name").val(),
       icon: "warning",
