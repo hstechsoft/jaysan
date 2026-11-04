@@ -49,6 +49,24 @@
             max-height: 55vh;
             overflow-y: auto;
         }
+
+        .part_navigation_card {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+        }
+
+        .part_navigation_card .part-nav-item {
+            display: inline-flex;
+            width: fit-content;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
     </style>
 
 
@@ -119,11 +137,12 @@
 
                 <div class="" style="width: 180px;">
                     <label for="show_all">Show All Materials</label>
-                    <input class="form-check-input" type="checkbox" value="" id="show_all" >
+                    <input class="form-check-input" type="checkbox" value="" id="show_all">
                 </div>
 
                 <div class="" style="width: 140px;">
-                    <input type="text" class="form-control form-control-sm rounded-2" id="godown" placeholder="Godown" disabled>
+                    <input type="text" class="form-control form-control-sm rounded-2" id="godown" placeholder="Godown"
+                        disabled>
                 </div>
 
                 <div class="" style="width: 140px;">
@@ -132,11 +151,13 @@
                 </div>
 
                 <div class="" style="width: 140px;">
-                    <input type="text" class="form-control form-control-sm rounded-2" id="section"
-                        placeholder="Section" disabled>
+                    <input type="text" class="form-control form-control-sm rounded-2" id="section" placeholder="Section"
+                        disabled>
                 </div>
 
             </div>
+
+            <div class="card part_navigation_card"></div>
 
             <div class="table-responsive modern_report" style="max-height: 80vh; overflow-y: auto;">
                 <table class="table caption-top table-bordered table-striped small">
@@ -145,17 +166,20 @@
                             <th>#</th>
                             <th>Part & Process
                                 <div>
-                                    <input type="text" class='form-control form-control-sm' placeholder="Process" disabled>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Process"
+                                        disabled>
                                 </div>
                             </th>
                             <th>Employee
                                 <div>
-                                    <input type="text" class='form-control form-control-sm' placeholder="Employee" disabled>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Employee"
+                                        disabled>
                                 </div>
                             </th>
                             <th>Work Order No
                                 <div>
-                                    <input type="text" class='form-control form-control-sm' placeholder="Work Order No" disabled>
+                                    <input type="text" class='form-control form-control-sm' placeholder="Work Order No"
+                                        disabled>
                                 </div>
                             </th>
                             <th>Godown Details

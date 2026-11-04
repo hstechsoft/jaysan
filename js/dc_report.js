@@ -358,9 +358,146 @@ $(document).ready(function () {
     });
 
 
+    $(".part_navigation_card").on("dblclick", ".part-nav-item", function () {
+        $(".part_navigation_card span").remove();
+    });
+    // Navigation breadcrumb click
+    $(".part_navigation_card").on("click", ".part-nav-item", function () {
+        let partName = $(this).attr("data-part-name");
+
+        if (!partName) return;
+
+        console.log("Clicked LI Part:", JSON.stringify(partName));
+
+
+
+        // Find TR having exactly the same ID
+        let targetRow = $("#dc_report_tbody tr").filter(function () {
+
+            return this.id.trim() === partName;
+
+        }).first();
+
+        console.log("Matching TR:", targetRow.length);
+
+        if (targetRow.length === 0) {
+
+            console.warn("No matching TR found!");
+
+            // Debug: Display all available TR IDs
+            $("#dc_report_tbody tr").each(function () {
+                console.log("Available TR ID:", JSON.stringify(this.id));
+            });
+
+            return;
+        }
+
+
+        navigateToPart(partName);
+
+        // Scroll to matching row
+        targetRow[0].scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        // Highlight matching row
+        targetRow.addClass("table-warning");
+
+        setTimeout(function () {
+            targetRow.removeClass("table-warning");
+        }, 2500);
+    });
+
+    $("#dc_report_tbody").on("click", ".input_list li", function () {
+
+        let partName = ($(this).attr("data-part_name") || "").trim();
+
+        if (!partName) return;
+
+        console.log("Clicked LI Part:", JSON.stringify(partName));
+
+
+
+        // Find TR having exactly the same ID
+        let targetRow = $("#dc_report_tbody tr").filter(function () {
+
+            return this.id.trim() === partName;
+
+        }).first();
+
+        console.log("Matching TR:", targetRow.length);
+
+        if (targetRow.length === 0) {
+
+            console.warn("No matching TR found!");
+
+            // Debug: Display all available TR IDs
+            $("#dc_report_tbody tr").each(function () {
+                console.log("Available TR ID:", JSON.stringify(this.id));
+            });
+
+            return;
+        }
+
+
+        navigateToPart(partName);
+
+        // Scroll to matching row
+        targetRow[0].scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        // Highlight matching row
+        targetRow.addClass("table-warning");
+
+        setTimeout(function () {
+            targetRow.removeClass("table-warning");
+        }, 2500);
+
+    });
+
 });
 
 
+function navigateToPart(partName) {
+
+    // Add the clicked part to navigation if it doesn't already exist
+    let existingIndex = $(".part_navigation_card span").filter(function () {
+        return $(this).attr("data-part-name") === partName;
+    }).first().index();
+
+    if (existingIndex !== -1) {
+
+        // Remove all navigation spans after the clicked part
+        $(".part_navigation_card span").slice(existingIndex + 1).remove();
+
+    } else {
+
+        // Append the new part name
+        $(".part_navigation_card").append(`
+            <span class="badge bg-primary part-nav-item"
+                data-part-name="${$("<div>").text(partName).html()}">
+                ${$("<div>").text(partName).html()}
+            </span>
+        `);
+    }
+
+    // Find the matching table row
+    let targetRow = $("#dc_report_tbody tr").filter(function () {
+        return $(this).attr("data-part-name") === partName;
+    }).first();
+
+    if (targetRow.length) {
+        targetRow[0].scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    } else {
+        console.warn("Matching part row not found:", partName);
+    }
+}
 
 function get_work_order_report(production_process, all) {
 
@@ -501,7 +638,7 @@ function get_work_order_report(production_process, all) {
                     // Input Details
                     // ===========================
                     let inputDetails = `
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush input_list">
                     `;
 
                     wo.input_details.forEach((input) => {
@@ -532,7 +669,7 @@ function get_work_order_report(production_process, all) {
 
                         inputDetails += `
 
-                            <li class="list-group-item px-2 py-2">
+                            <li class="list-group-item px-2 py-2" data-part_name="${input.input_part_name}">
 
                                 <strong class='strong' data-process_id="${input.previous_process_id}">${input.input_part_name}</strong>
 
@@ -629,7 +766,7 @@ function get_work_order_report(production_process, all) {
                     // ===========================
 
                     $("#dc_report_tbody").append(`
-                                <tr>
+                                <tr id="${item.final_part}">
 
                                     ${woIndex === 0 ? ` <td rowspan="${rowSpan}" class="align-middle text-center">${index + 1}</td><td rowspan="${rowSpan}" class="align-middle text-center"><strong class='strong' data-process_id="${item.process_id}">${item.final_part}</strong> <span class="badge bg-primary input_godown_details_btn" data-final_part="${item.final_part}" data-process_name="${item.process_name}" data-godown_details=${encodeURIComponent(item.godown_details)} data-input_parts=${encodeURIComponent(item.input_parts)}>${item.process_name}</span></td>
                                         ` : ""}
