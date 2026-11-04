@@ -234,7 +234,7 @@ $(document).ready(function () {
     $("#clear_production_filters").on("click", function () {
         $('#process_id').val('').removeData("process_id");
         $('#display_expired_due').prop('checked', false);
-        $('#display_pending_wo_only').prop('checked', false);
+        $('#display_pending_wo_only').prop('checked', true);
         $('#godown_id').val('').removeData("godown_id");
         $('#dep_id').val('');
         $('#sec_id').val('');
@@ -776,7 +776,7 @@ function renderOrderDetails(orders) {
                 <div class="order-title">
                     <i class="bi bi-receipt"></i>
                     ${escapeHTML(order.order_category || 'Order')}
-                    #${escapeHTML(order.oid)}
+                    #${escapeHTML(order.order_no)}
                 </div>
 
                 <div class="order-customer">
