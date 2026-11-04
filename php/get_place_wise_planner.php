@@ -155,6 +155,7 @@ group by wo.godown, wo.dep, wo.sec,demand.plan_id,demand.process_id),
       JSON_ARRAYAGG(JSON_OBJECT
       (
         'oid', ppv.oid,
+        'order_no', ppv.order_no,
         'order_category', ppv.order_category,
        
         'dated', ppv.dated,
