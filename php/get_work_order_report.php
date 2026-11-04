@@ -113,7 +113,7 @@ raw_material as(select
     iv.previous_process_id,
    GROUP_CONCAT(sv.stock_reserve_id) as stock_reserve_ids,
    iv.input_part_id,
-   if(iv.input_part_id is null ,CONCAT('semi finished part of ',pt_final.part_name,'(',jp.process_name,')'), pt.part_name) as input_part_name,
+   if(iv.input_part_id is null ,CONCAT('semi finished part of ',pt_final.part_name,' (',jp.process_name,')'), pt.part_name) as input_part_name,
    ifnull(iv.required_qty,0) as required_qty,
    ifnull(iv.total_reserve_qty,0) as total_reserve_qty,
    ifnull(iv.needed,0) as needed,
