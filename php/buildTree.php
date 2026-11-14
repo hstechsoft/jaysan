@@ -4,15 +4,19 @@ function buildTree($conn, $process_id, $required_qty, $bom_qty = 1)
     static $nodeId = 1;
 // get the output part form process_wel_tbl
 $sql_output_part = "
-        SELECT output_part
+        SELECT process_wel_tbl.output_part,final_part,process_name
         FROM process_wel_tbl
-        WHERE process_id = $process_id";
+        left join jaysan_process_view
+        on process_wel_tbl.process_id = jaysan_process_view.process_id
+        WHERE process_wel_tbl.process_id = $process_id";
         $result_output_part = mysqli_query($conn, $sql_output_part);
         $output_part = mysqli_fetch_assoc($result_output_part);
 
     $node = [
         'node_id' => $nodeId++,
         'process_id'   => $process_id,
+        'process_name' => $output_part['process_name'],
+        'final_part'  => $output_part['final_part'],
         'required_qty' => $required_qty,
  'bom_qty' => $bom_qty, 
          'output_part'   => $output_part['output_part'],
