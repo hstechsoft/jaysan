@@ -7,12 +7,14 @@
  $previous_process_id =test_input($_POST['previous_process_id']);
  $qty =test_input($_POST['qty']);
 
+ $previous_process_id = sql_nullable($previous_process_id);
+
 
 function test_input($data) {
 $data = trim($data);
 $data = stripslashes($data);
 $data = htmlspecialchars($data);
-$data = "'".$data."'";
+
 return $data;
 }
 
