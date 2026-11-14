@@ -3216,9 +3216,9 @@ function get_work_summary_admin(emp_id, qr_work_id, break_time_array, process_pa
                         ${m_details}
 
                         <div class="card mt-3 p-2 text-center bg-light">
-                            📞 Contact Gowthami <br>
-                            கௌதமியைத் தொடர்பு கொள்ளவும் <br>
-                            गौथमी से संपर्क करें
+                            📞 Contact Production Assistant <br>
+                            தயாரிப்புக் குழு உதவியாளரைத் தொடர்புகொள்ளவும் <br>
+                            प्रोडक्शन टीम असिस्टेंट से संपर्क करें
                         </div>
 
                     </div>

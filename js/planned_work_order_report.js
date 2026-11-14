@@ -26,6 +26,15 @@ $(document).ready(function () {
         }
     );
 
+
+    $(document).on("keydown", function (e) {
+        if (e.key === "F1") {
+            e.preventDefault();
+
+            $("#planned_work_order_report_tbody .accordion-button").click();
+        }
+    });
+
     // Current Location
 
     // if (navigator.geolocation) {
@@ -236,15 +245,16 @@ $(document).ready(function () {
         $('#display_expired_due').prop('checked', false);
         $('#display_pending_wo_only').prop('checked', true);
         $('#godown_id').val('').removeData("godown_id");
-        $('#dep_id').val('');
-        $('#sec_id').val('');
+        $('#dep_id').empty().append(`<option selected disabled value="">Department...</option>`);
+        $('#sec_id').empty().append(`<option selected disabled value="">Section...</option>`);
         $('#customer_id').val('').removeData("customer_id");
         $('#product_id').val('');
-        $('#model_id').val('');
-        $('#type_id').val('');
+        $('#model_id').empty().append(`<option selected disabled value="">Choose Model...</option>`);
+        $('#type_id').empty().append(`<option selected disabled value="">Choose Type...</option>`);
 
         fillter();
     });
+
 
 });
 
@@ -975,7 +985,21 @@ function renderPlannedWorkOrderReport(response) {
                 <!-- Process Details -->
 
                 <td style="max-width:200px;">
-                    ${renderProcessDetails(processes)}
+
+                    <div class="accordion" id="process_${index}">
+                        <div class="accordion-item">
+                            <h6 class="accordion-header" id="processHeading_${index}">
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#processCollapse_${index}" aria-expanded="true" aria-controls="processCollapse_${index}">
+                            Process Details (${processes.length}) 
+                            </button>
+                            </h6>
+                            <div id="processCollapse_${index}" class="accordion-collapse collapse " aria-labelledby="processHeading_${index}" data-bs-parent="#process_${index}">
+                                <div class="accordion-body">
+                                    ${renderProcessDetails(processes)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
 
 

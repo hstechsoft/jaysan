@@ -454,7 +454,7 @@ function get_demand_work_report(final_part_id, process_id, godown_id, dep_id, de
 
         }
         else {
-          $('#planed_work_order_tbody').append('<tr><td colspan="9" class="text-center">No Parts available</td></tr>');
+          $('#planed_work_order_tbody').append('<tr><td colspan="10" class="text-center">No Parts available</td></tr>');
         }
 
       }

@@ -87,13 +87,16 @@ $(document).ready(function () {
     var part_id = $(this).val() || 0;
     var status = $(this).closest("tr").find(".req_status").val() || '';
 
-    var mrf_no = $("#mrf_no").val() || '';
     var reason = $("#status_reason").val() || '';
+    var mrf_id = $(".mrf_ids_container input[name='mrf_id_" + part_id + "']:checked").val() || 0;
 
-    if (status == '' || part_id <= 0) {
-      salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
+    console.log("Selected MRF ID:", mrf_id);
+    console.log("Selected part_id:", part_id);
+    console.log("Selected status:", status);
+    if (status == '' || part_id <= 0 || mrf_id <= 0) {
+      salert("Warning", "Select Status and MRF Id, Or Data Missing!, Try Later.", "warning");
     } else {
-      update_mrf_request(part_id, status, mrf_no, reason);
+      update_mrf_request(part_id, status, mrf_id, reason);
     }
 
   });
@@ -104,13 +107,13 @@ $(document).ready(function () {
     if (status == '') {
       salert("Warning", "Select Status Or Data Missing!, Try Later.", "warning");
     }
-    else if (status == 'cancelled') {
-      $("#mrf_no").addClass("d-none");
-      $("#mrf_status_modal").modal("show");
-    }
-    else {
-      $("#mrf_status_modal").modal("show");
-    }
+    // else if (status == 'cancelled') {
+    //   $("#mrf_no").addClass("d-none");
+    //   $("#mrf_status_modal").modal("show");
+    // }
+    // else {
+    //   $("#mrf_status_modal").modal("show");
+    // }
 
   });
 
@@ -403,6 +406,49 @@ $(document).ready(function () {
 
 });
 
+function get_material_request_form_parts_search_mrf_id(part_id) {
+
+  return $.ajax({
+    url: "php/get_material_request_form_parts_search.php",
+    type: "GET",
+    data: {
+      part_id: part_id
+    }
+  }).then(function (response) {
+
+    if (response.trim() == "error" || response.trim() == "0 result") {
+      return `<span class="text-muted">No MRF Found</span>`;
+    }
+
+    var obj = JSON.parse(response);
+
+    var mrf_ids = `<div class="d-flex flex-wrap gap-2 mrf_ids_container">`;
+
+    obj.forEach(function (item) {
+
+      mrf_ids += `
+                <label class="badge bg-light text-dark border" for="mrf_id_${part_id}">
+                    <input class="form-check-input" type="radio" name="mrf_id_${part_id}"
+                           value="${item.mrf_id}">
+                    ${item.mrf_id}
+                </label>
+            `;
+
+    });
+
+    mrf_ids += `</div>`;
+
+    return mrf_ids;
+
+  }).catch(function (xhr) {
+
+    console.error(xhr.responseText);
+
+    return `<span class="text-danger">Failed to load MRF</span>`;
+
+  });
+
+}
 function get_material_request_form_parts_search(part_id, emp_id, field_name) {
 
 
@@ -433,7 +479,7 @@ function get_material_request_form_parts_search(part_id, emp_id, field_name) {
 
 
           obj.forEach(function (obj) {
-            
+
             var edit_btn = "disabled";
             var statuss = '';
             var reject = '';
@@ -1164,69 +1210,76 @@ function get_all_internal_godown() {
 
 }
 
-function get_mrf_request() {
-
+async function get_mrf_request() {
 
   $.ajax({
     url: "php/get_mrf_request.php",
-    type: "get", //send it through get method
-    data: {
+    type: "GET",
+    success: async function (response) {
 
-    },
-    success: function (response) {
+      if (response.trim() == "error") return;
 
+      $('#system_request_tbody').empty();
 
+      if (response.trim() == "0 result") {
 
-      if (response.trim() != "error") {
-        $('#system_request_tbody').empty();
-        if (response.trim() != "0 result") {
-          $("#system_requestModal").modal("show");
-          var obj = JSON.parse(response);
-          var count = 0
+        $('#system_request_tbody').append(`
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            No Request Found. Enjoy Your day 😁!
+                        </td>
+                    </tr>
+                `);
 
-
-          obj.forEach(function (obj) {
-            count = count + 1;
-
-            $('#system_request_tbody').append(`<tr data-part_name="${obj.part_name}" data-part_id="${obj.part_id}"><td>${count}</td><td>${obj.part_name}</td><td>${obj.total_qty}</td>
-              <td>
-                <select class="form-select req_status">
-                          <option selected disabled value="">Status</option>
-                          <option value="mrf_done">MRF Created</option>
-                          <option value="previous_order">Previously Order</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-              </td>
-              <td><button class='btn btn-sm btn-primary' value="${obj.part_id}"><i class="fa-regular fa-circle-check"></i></button></td></tr>`);
-
-          });
-
-
-        }
-        else {
-          $('#system_request_tbody').append("<tr><td colspan='5'>No Request Found. Enjoy Your day 😁!</td></tr>")
-
-
-        }
+        return;
       }
 
+      $("#system_requestModal").modal("show");
 
+      var obj = JSON.parse(response);
 
+      for (let i = 0; i < obj.length; i++) {
 
+        let mrf_html = await get_material_request_form_parts_search_mrf_id(obj[i].part_id);
+
+        $('#system_request_tbody').append(`
+                    <tr data-part_name="${obj[i].part_name}"
+                        data-part_id="${obj[i].part_id}">
+
+                        <td>${i + 1}</td>
+                        <td>${obj[i].part_name}</td>
+                        <td>${obj[i].total_qty}</td>
+
+                        <td>
+                            <select class="form-select req_status">
+                                <option selected disabled value="">Status</option>
+                                <option value="mrf_done">MRF Created</option>
+                                <option value="previous_order">Previously Order</option>
+                            </select>
+                        </td>
+
+                        <td>${mrf_html}</td>
+
+                        <td>
+                            <button class="btn btn-sm btn-primary" value="${obj[i].part_id}">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+                `);
+      }
 
     },
     error: function (xhr) {
-      //Do Something to handle error
+      console.error(xhr.responseText);
     }
   });
 
-
-
-
 }
 
-function update_mrf_request(part_id, status) {
-  console.log(part_id, status);
+function update_mrf_request(part_id, status, mrf_id) {
+  console.log(part_id, status, mrf_id);
 
 
   $.ajax({
@@ -1234,12 +1287,13 @@ function update_mrf_request(part_id, status) {
     type: "post", //send it through get method
     data: {
       part_id: part_id,
-      status: status
+      status: status,
+      mrf_id: mrf_id
 
     },
     success: function (response) {
 
-
+      console.log(response);
 
       if (response.trim() == "ok") {
         window.location.reload()

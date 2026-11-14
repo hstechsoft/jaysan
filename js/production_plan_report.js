@@ -26,6 +26,15 @@ $(document).ready(function () {
         }
     );
 
+    
+    $(document).on("keydown", function (e) {
+        if (e.key === "F1") {
+            e.preventDefault();
+
+            $("#production_plan_report_tbody .accordion-button").click();
+        }
+    });
+
     // Current Location
 
     // if (navigator.geolocation) {
@@ -493,7 +502,7 @@ function renderProgressBars(row, index) {
                     data-plan="${index}"
                     data-filter="completed">
                     ${completedPercent >= 15 ? qty(woCompleted) : ''}
-                </button>
+                </button>   
 
                 <button type="button"
                     class="progress-segment pending-segment"
@@ -825,7 +834,20 @@ function renderProductionPlanReport(response) {
 
                 <td style="min-width:150px;">
 
-                    ${renderGodowns(demands)}
+                    <div class="accordion" id="godownAccordion_${index}">
+                        <div class="accordion-item">
+                            <h6 class="accordion-header" id="godownHeading_${index}">
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#godownCollapse_${index}" aria-expanded="true" aria-controls="godownCollapse_${index}">
+                            Godown Details (${demands.length}) 
+                            </button>
+                            </h6>
+                            <div id="godownCollapse_${index}" class="accordion-collapse collapse " aria-labelledby="godownHeading_${index}" data-bs-parent="#godownAccordion_${index}">
+                                <div class="accordion-body">
+                                    ${renderGodowns(demands)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </td>
 

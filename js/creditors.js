@@ -396,10 +396,10 @@ function get_single_creditor(creditor_id) {
                         $("#creditor_id").val(obj.creditor_id);
                         $("#creditor_name").val(obj.creditor_name);
                         $("#contact_person").val(obj.contact_person);
-                        $("#creditor_phone").val(obj.creditor_phone);
-                        $("#creditors_email").val(obj.creditors_email);
-                        $("#creditors_addr").val(obj.creditors_addr);
-                        $("#creditor_gst").val(obj.creditor_gst);
+                        $("#phone_number").val(obj.creditor_phone);
+                        $("#email").val(obj.creditors_email);
+                        $("#address").val(obj.creditors_addr);
+                        $("#gst").val(obj.creditor_gst);
 
 
                     });
