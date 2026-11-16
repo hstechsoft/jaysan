@@ -24,7 +24,10 @@ return $data;
 }
 
 
- $sql = "SELECT * FROM dealer_map WHERE $parent_query AND $child_query";
+ $sql = "SELECT dealer_map.*,c.cus_name as child_cus_name, p.cus_name as parent_cus_name FROM dealer_map
+ left join customer c on dealer_map.child_cus_id = c.cus_id
+ left join customer p on dealer_map.parent_cus_id = p.cus_id
+  WHERE $parent_query AND $child_query";
 
 $result = $conn->query($sql);
 
