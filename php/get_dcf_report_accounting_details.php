@@ -29,7 +29,7 @@ dcf_opid AS (
 sop_details AS (
     SELECT
         dcf_opid.*,
-        sop.qty,
+        sop.required_qty,
         sop.price,
         sop.billing_amount,
         sop.oid
