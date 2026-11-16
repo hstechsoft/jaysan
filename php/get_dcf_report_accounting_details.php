@@ -120,6 +120,7 @@ parent_agg AS (
 final AS (
     SELECT
         sd.*,
+
         cus.cus_name,
         emp.emp_name
 
@@ -146,6 +147,7 @@ SELECT
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'opid', f.opid,
+            'required_qty', f.required_qty,
             'order_no', f.order_no,
             'product', f.product,
             'price', f.price,
