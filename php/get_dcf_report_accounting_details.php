@@ -17,16 +17,19 @@ WITH RECURSIVE
 dcf_opid AS (
     SELECT DISTINCT
         ap.opid,
-        dcf.dcf_id
+        dcf.dcf_id,
+        dcf.dated as dcf_date,
+        dcf.invoice_no
     FROM assign_product ap
     INNER JOIN dcf
         ON ap.dcf_id = dcf.dcf_id
-    WHERE dcf.dcf_id = 439
+    WHERE dcf.dcf_id = $dcf_id and dcf.invoice_no  <> ''
 ),
 
 sop_details AS (
     SELECT
         dcf_opid.*,
+        sop.qty,
         sop.price,
         sop.billing_amount,
         sop.oid
