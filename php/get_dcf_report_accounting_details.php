@@ -138,7 +138,7 @@ SELECT
     f.customer_id,
     f.cus_name,
     f.invoice_no,
-    f.invoice_date,
+    f.dcf_date,
 
     /* Separate parent hierarchy JSON */
     COALESCE(
