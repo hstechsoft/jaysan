@@ -19,7 +19,7 @@ return $data;
 }
 
 
- $sql =  "insert into dcf_accounting (dcf, sts) values ($dcf_id, $sts)";
+ $sql =  "insert into dcf_accounting (dcf_id, sts) values ($dcf_id, $sts)";
 
   if ($conn->query($sql) === TRUE) {
    echo "ok";
