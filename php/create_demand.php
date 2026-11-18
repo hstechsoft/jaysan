@@ -39,7 +39,7 @@ if ($result_check_negative_stock->num_rows > 0) {
 }
 try {
     $conn->begin_transaction();
-$sql_insert_plan = "INSERT INTO production_planner (plan_name, created_by) VALUES ('$plan_name', $created_by)";
+$sql_insert_plan = "INSERT INTO production_planner (plan_name, created_by,due_date) VALUES ('$plan_name', $created_by, '$due_date')";
 $conn->query($sql_insert_plan);
 if ($conn->affected_rows > 0) {
     $plan_id = $conn->insert_id;
@@ -207,7 +207,7 @@ $sql_insert_mrf_request = "INSERT INTO mrf_request( part_id, qty, plan_id, proce
 else
     {
     // insert into demands table if not exist else update qty = qty + $qty
-    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by,due_date) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by, $due_date) on duplicate key update demand_qty = demand_qty + $qty";
+    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
   
     $conn->query($sql_insert_demand);
   
