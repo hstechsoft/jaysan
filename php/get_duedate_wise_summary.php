@@ -81,6 +81,10 @@ JSON_ARRAYAGG(JSON_OBJECT(
 select 
 date_only(p.due_date) as max_workorder_due_date,
 p.work_order_qty,
+ppv.product,
+ppv.model_name,
+ppv.type_name,
+ppv.sub_type,
 p.demand_qty,
 date_only(ppv.due_date) as production_plan_due_date,
     ppv.planner_id,
