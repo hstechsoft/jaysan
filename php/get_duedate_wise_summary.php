@@ -13,14 +13,19 @@ return $data;
 
 $sql = "with planner as(SELECT
     pp.planner_id,
-    MAX(wo.due_date) AS due_date
+     sum(wo.qty) as  work_order_qty,
+    sum(demand.demand_qty) as demand_qty,
+        MAX(wo.due_date) AS due_date
 FROM work_order wo
 INNER JOIN demand ON wo.demand_id = demand.demand_id
 INNER JOIN production_planner pp ON pp.planner_id = demand.plan_id
 GROUP BY pp.planner_id
 ORDER BY due_date DESC)
 select  p.due_date as max_workorder_due_date,
+p.work_order_qty,
+p.demand_qty,
 ppv.due_date as production_plan_due_date,
+    ppv.planner_id,
    ppv.remark,
     ppv.order_no,
     ppv.oid,
