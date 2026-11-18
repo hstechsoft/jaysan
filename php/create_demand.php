@@ -3,6 +3,8 @@
 
  $proces_id = isset($_POST['process_id']) ? test_input($_POST['process_id']) : '2796';
  $created_by = isset($_POST['created_by']) ? test_input($_POST['created_by']) : '141';
+ $due_date = isset($_POST['due_date']) ? test_input($_POST['due_date']) : date('Y-m-d');
+//  
  $plan_name = isset($_POST['plan_name']) ? test_input($_POST['plan_name']) : 'Plan for Process ID: '.$proces_id;
  $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
  $assign_id_json = isset($_POST['assign_id']) ? ($_POST['assign_id']) : '[]';
@@ -205,7 +207,7 @@ $sql_insert_mrf_request = "INSERT INTO mrf_request( part_id, qty, plan_id, proce
 else
     {
     // insert into demands table if not exist else update qty = qty + $qty
-    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by) on duplicate key update demand_qty = demand_qty + $qty";
+    $sql_insert_demand = "INSERT INTO demand (part_id, process_id, demand_qty,plan_id,created_by,due_date) VALUES ($part_id, $process_id, $qty, $plan_id, $created_by, $due_date) on duplicate key update demand_qty = demand_qty + $qty";
   
     $conn->query($sql_insert_demand);
   
