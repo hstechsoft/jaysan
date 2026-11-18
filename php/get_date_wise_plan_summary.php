@@ -27,7 +27,7 @@ JSON_ARRAYAGG(JSON_OBJECT(
     'required_qty', ppv.required_qty,
     'loading_type', ppv.loading_type,
     'production_request_count', ppv.production_request_count
-)) from production_planner pp
+)) as plan_details from production_planner pp
 inner join production_plan_view ppv on pp.planner_id = ppv.planner_id GROUP BY pp.due_date";
 
 
