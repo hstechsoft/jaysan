@@ -30,6 +30,11 @@ due_date,
 remark,
 pp_created_by_name,
 production_request_count,
+product,
+model_name,
+type_name,
+sub_type,
+
 JSON_ARRAYAGG(JSON_OBJECT(
     'oid', oid,
     'order_category', order_category,
