@@ -24,7 +24,7 @@ WITH
     FROM
         assign_product ap
     INNER JOIN dcf ON ap.dcf_id = dcf.dcf_id
-    WHERE dcf.dcf_id not in (SELECT dcf_id FROM dcf_accounting)
+    WHERE dcf.dcf_id not in (SELECT dcf_id FROM dcf_accounting) and dcf.invoice_no <> ''
         
 ),
 sop_details AS(
