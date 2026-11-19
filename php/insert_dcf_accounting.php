@@ -53,7 +53,7 @@ $sql = "INSERT INTO dcf_accounting (sts, dcf_id, invoice_no, dated) VALUES ($sts
 
   // insert distribution details for the current product
   foreach($distribution as $dist) {
-    $insert_distribution = "INSERT INTO dcf_distribution (dcf_accounting_product_id, cus_id, amount,billing_amount) VALUES ($dcf_accounting_product_id, ".$dist['cus_id'].", ".$dist['amount'].", ".$dist['billing_amount'].")";
+    $insert_distribution = "INSERT INTO dcf_distribution (dcf_accounting_product_id, cus_id, amount,billing_amount,delivery_from) VALUES ($dcf_accounting_product_id, ".$dist['cus_id'].", ".$dist['amount'].", ".$dist['billing_amount'].", ".$dist['delivery_from'].")";
     if ($conn->query($insert_distribution) !== TRUE) {
       throw new Exception("Error: " . $insert_distribution . "<br>" . $conn->error);
     }
