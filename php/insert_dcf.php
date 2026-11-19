@@ -12,6 +12,7 @@ $ass_arr = ($_POST['ass_arr']);
 $spares_arr = ($_POST['spares_arr']);
 $dcf_report = ($_POST['dcf_report']);
 $narration =  test_input($_POST['narration']);
+$delivery_from = test_input($_POST['delivery_from']);
 
 
 
@@ -28,7 +29,7 @@ return $data;
 $dcf_id = 0;
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$narration)";
+$sql .= "INSERT INTO dcf ( consignee,con_gst,con_con,trans_mode,trans_ref,dcf_by,sts,dcf_report,dcf_narration,delivery_from) VALUES ($consignee,$con_gst,$con_con,$trans_mode,$trans_ref,$dcf_by,'create','$dcf_report',$narration,$delivery_from)";
 
 if ($conn->multi_query($sql)) {
     // Process the first result set (e.g., time zone set)

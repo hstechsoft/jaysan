@@ -71,7 +71,12 @@ dcf_final as (SELECT
 FROM
     final GROUP by dcf_id)
     
-    SELECT dcf_final.sale_order, dcf1.dcf_id,dcf1.dated,dcf1.consignee,dcf1.sts,DATE_FORMAT(dcf1.dated, '%d-%m-%Y') as dated,(SELECT employee.emp_name from employee WHERE employee.emp_id = dcf1.dcf_by) as emp_name  from dcf_final inner join dcf dcf1 on dcf_final.dcf_id = dcf1.dcf_id WHERE  $dcrf_sts_query ORDER by dcf1.dcf_id DESC
+    SELECT dcf_final.sale_order, dcf1.dcf_id,dcf1.dated,dcf1.consignee,dcf1.sts,dcf1.delivery_from,DATE_FORMAT(dcf1.dated, '%d-%m-%Y') as dated,
+ employee.emp_name as emp_name, godown.godown_name as delivery_from_name  from dcf_final
+  inner join dcf dcf1 on dcf_final.dcf_id = dcf1.dcf_id 
+    left join employee on employee.emp_id = dcf1.dcf_by
+    left join godown on dcf1.delivery_from = godown.gid
+    WHERE  $dcrf_sts_query ORDER by dcf1.dcf_id DESC
 SQL;
 
 
