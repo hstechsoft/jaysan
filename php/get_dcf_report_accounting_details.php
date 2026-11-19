@@ -141,7 +141,7 @@ SELECT
     f.invoice_no,
     f.dcf_date,
     f.delivery_from,
-    g.godown_name as delivery_from_name
+    g.godown_name as delivery_from_name,
 
     /* Separate parent hierarchy JSON */
     COALESCE(
