@@ -19,7 +19,8 @@ dcf_opid AS (
         ap.opid,
         dcf.dcf_id,
         dcf.dated as dcf_date,
-        dcf.invoice_no
+        dcf.invoice_no,
+        dcf.delivery_from
     FROM assign_product ap
     INNER JOIN dcf
         ON ap.dcf_id = dcf.dcf_id
@@ -139,6 +140,8 @@ SELECT
     f.cus_name,
     f.invoice_no,
     f.dcf_date,
+    f.delivery_from,
+    g.godown_name as delivery_from_name
 
     /* Separate parent hierarchy JSON */
     COALESCE(
@@ -154,11 +157,15 @@ SELECT
             'product', f.product,
             'price', f.price,
             'billing_amount', f.billing_amount,
+            'delivery_from', f.delivery_from,
+            'delivery_from_name', f.delivery_from_name,
             'emp', f.emp_name
         )
     ) AS sale_order
 
 FROM final f
+LEFT JOIN godown g
+    ON g.gid = f.delivery_from
 
 LEFT JOIN parent_agg pa
     ON pa.customer_id = f.customer_id
