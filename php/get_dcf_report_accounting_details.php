@@ -158,7 +158,7 @@ SELECT
             'price', f.price,
             'billing_amount', f.billing_amount,
             'delivery_from', f.delivery_from,
-            'delivery_from_name', f.delivery_from_name,
+            'delivery_from_name',  g.godown_name,
             'emp', f.emp_name
         )
     ) AS sale_order
