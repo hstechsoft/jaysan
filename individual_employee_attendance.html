@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        .individual-attendance {
+            padding: 22px;
+            color: #fff;
+        }
+
+        .attendance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .attendance-header h4 {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #198754;
+        }
+
+        .employee-profile-card,
+        .attendance-filter-card,
+        .attendance-summary-card,
+        .attendance-table-card {
+            background: var(--bs-tertiary-bg, #212529);
+            border: 1px solid var(--bs-border-color, #343a40);
+            border-radius: 13px;
+        }
+
+        .employee-profile-card {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .employee-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .employee-avatar-lg {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #198754, #20c997);
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .employee-profile h5 {
+            margin: 0 0 5px;
+            font-weight: 700;
+        }
+
+        .employee-meta {
+            color: var(--bs-secondary-color);
+            font-size: 13px;
+        }
+
+        .attendance-filter-card {
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: var(--bs-secondary-color);
+        }
+
+        .quick-filter-btn {
+            border: 1px solid var(--bs-border-color);
+            background: transparent;
+            color: #fff;
+            padding: 7px 13px;
+            border-radius: 7px;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .quick-filter-btn:hover,
+        .quick-filter-btn.active {
+            background: #198754;
+            color: #fff;
+            border-color: #198754;
+        }
+
+        .attendance-summary-card {
+            padding: 17px;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-label {
+            color: var(--bs-secondary-color);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            font-size: 27px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .summary-icon {
+            position: absolute;
+            right: 17px;
+            top: 17px;
+            font-size: 23px;
+            opacity: .65;
+        }
+
+        .attendance-table-card {
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .attendance-table-header {
+            padding: 17px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--bs-border-color);
+        }
+
+        .attendance-table {
+            white-space: nowrap;
+            margin-bottom: 0;
+        }
+
+        .attendance-table thead th {
+            background: var(--bs-secondary-bg);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: #fff;
+            padding: 14px;
+        }
+
+        .attendance-table tbody td {
+            padding: 13px 14px;
+            vertical-align: middle;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .attendance-table tbody tr:hover {
+            background: var(--bs-tertiary-bg) !important;
+        }
+
+        td:hover {
+            background: var(--bs-tertiary-bg) !important;
+        }
+
+        .attendance-status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-present {
+            background: rgba(25, 135, 84, .15);
+            color: #25b978;
+        }
+
+        .status-working {
+            background: rgba(13, 110, 253, .15);
+            color: #6ea8fe;
+        }
+
+        .status-absent {
+            background: rgba(220, 53, 69, .15);
+            color: #ea6573;
+        }
+
+        .status-completed {
+            background: rgba(25, 135, 84, .15);
+            color: #25b978;
+        }
+
+        .attendance-action-btn {
+            border: 1px solid var(--bs-border-color);
+            background: transparent;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            margin-right: 4px;
+        }
+
+        .attendance-action-btn:hover {
+            background: #198754;
+            border-color: #198754;
+            color: #fff;
+        }
+
+        .attendance-action-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+        }
+
+        .working-time {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .modal-content {
+            background: #1b2028 !important;
+            color: #e5e7eb !important;
+            border: 1px solid #39424d !important;
+            border-radius: 15px !important;
+        }
+
+        .modal .form-label {
+            color: #fff !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+        }
+
+        .modal .form-control {
+            background: #222832 !important;
+            border-color: #39424d !important;
+            color: #e5e7eb !important;
+            min-height: 42px !important;
+            font-size: 12px !important;
+        }
+
+        @media(max-width:767px) {
+            .individual-attendance {
+                padding: 12px;
+            }
+
+            .employee-profile-card {
+                padding: 14px;
+            }
+
+            .attendance-filter-card {
+                padding: 13px;
+            }
+
+            .summary-value {
+                font-size: 23px;
+            }
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
+        <!-- top bar -->
+
+
+
+        <div class="page-wrapper mt-5 mt-md-0">
+
+            <div class="individual-attendance">
+
+                <!-- Header -->
+                <div class="attendance-header">
+
+                    <div>
+                        <h4>
+                            <i class="bi bi-calendar2-check text-success me-2"></i>
+                            Individual Attendance
+                        </h4>
+
+                        <div class="text-secondary small">
+                            Employee attendance history and management
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-success" id="export_attendance">
+                        <i class="bi bi-file-earmark-excel me-1"></i>
+                        Export Excel
+                    </button>
+
+                </div>
+
+                <!-- Employee Profile -->
+                <div class="employee-profile-card">
+
+                    <div class="employee-profile">
+
+                        <div class="employee-avatar-lg" id="employee_avatar">
+                            E
+                        </div>
+
+                        <div>
+                            <h5 id="employee_name">Loading employee...</h5>
+
+                            <div class="employee-meta">
+                                <span id="employee_role">--</span>
+                                <span class="mx-2">|</span>
+                                Employee ID:
+                                <span id="employee_id">--</span>
+                            </div>
+
+                            <div class="employee-meta mt-1" id="employee_email">
+                                --
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Filters -->
+                <div class="attendance-filter-card">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+                        <h6 class="fw-bold mb-0">
+                            <i class="bi bi-funnel text-success me-2"></i>
+                            Attendance Filters
+                        </h6>
+
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="reset_filters">
+
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Reset
+
+                        </button>
+
+                    </div>
+
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-12 col-md-3">
+
+                            <div class="filter-label">From Date</div>
+
+                            <input type="date" class="form-control" id="filter_from_date">
+
+                        </div>
+
+                        <div class="col-12 col-md-3">
+
+                            <div class="filter-label">To Date</div>
+
+                            <input type="date" class="form-control" id="filter_to_date">
+
+                        </div>
+
+                        <div class="col-12 col-md-3">
+
+                            <div class="filter-label">Attendance Type</div>
+
+                            <select class="form-select" id="filter_status">
+
+                                <option value="">All Attendance</option>
+                                <option value="absent">Absent Days Only</option>
+                                <option value="present">Present Days Only</option>
+                                <option value="completed">Completed</option>
+                                <option value="started">Currently Working</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-12 col-md-3">
+
+                            <button type="button" class="btn btn-success w-100" id="apply_filters">
+
+                                <i class="bi bi-search me-1"></i>
+                                Apply Filters
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+
+                        <button class="quick-filter-btn" data-range="week">
+                            <i class="bi bi-calendar-week me-1"></i>
+                            This Week
+                        </button>
+
+                        <button class="quick-filter-btn" data-range="month">
+                            <i class="bi bi-calendar-month me-1"></i>
+                            This Month
+                        </button>
+
+                        <button class="quick-filter-btn" data-range="absent">
+                            <i class="bi bi-person-x me-1"></i>
+                            Absent Days Only
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="row g-3">
+
+                    <div class="col-6 col-lg-3">
+                        <div class="attendance-summary-card">
+
+                            <div class="summary-label">Total Days</div>
+                            <div class="summary-value" id="total_days">0</div>
+
+                            <i class="bi bi-calendar3 summary-icon text-secondary"></i>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="attendance-summary-card">
+
+                            <div class="summary-label">Present Days</div>
+                            <div class="summary-value text-success" id="present_days">0</div>
+
+                            <i class="bi bi-check-circle summary-icon text-success"></i>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="attendance-summary-card">
+
+                            <div class="summary-label">Absent Days</div>
+                            <div class="summary-value text-danger" id="absent_days">0</div>
+
+                            <i class="bi bi-x-circle summary-icon text-danger"></i>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-lg-3">
+                        <div class="attendance-summary-card">
+
+                            <div class="summary-label">Completed Days</div>
+                            <div class="summary-value text-primary" id="completed_days">0</div>
+
+                            <i class="bi bi-clock-history summary-icon text-primary"></i>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Attendance Table -->
+                <div class="attendance-table-card">
+
+                    <div class="attendance-table-header">
+
+                        <div>
+                            <h6 class="fw-bold mb-1">Attendance History</h6>
+
+                            <small class="text-secondary" id="report_period">
+                                Select a date range
+                            </small>
+                        </div>
+
+                        <span class="badge bg-success-subtle text-success" id="report_count">
+                            0 Records
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table attendance-table">
+
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Working Hours</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="attendance_tbody">
+
+                                <tr>
+                                    <td colspan="8" class="text-center py-5">
+                                        Loading attendance...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="p-3 border-top text-secondary small" id="attendance_footer_text">
+
+                        Showing 0 records
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Edit Attendance Modal -->
+        <div class="modal fade" id="edit_attendance_modal" tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div>
+                            <h5 class="modal-title fw-bold">Edit Attendance</h5>
+                            <small class="text-light" id="edit_employee_label"></small>
+                        </div>
+
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden" id="edit_attendance_id">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Attendance Date</label>
+
+                            <input type="date" class="form-control" id="edit_attendance_date">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Start Date & Time</label>
+
+                            <input type="datetime-local" class="form-control" id="edit_start_time">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">End Date & Time</label>
+
+                            <input type="datetime-local" class="form-control" id="edit_end_time">
+
+                            <small class="text-secondary">
+                                Leave empty if the employee is currently working.
+                            </small>
+
+                        </div>
+
+                        <div class="alert alert-info small mb-0">
+                            <i class="bi bi-info-circle me-1"></i>
+                            The employee will receive an email notification after the update.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="button" class="btn btn-success" id="save_attendance">
+
+                            <i class="bi bi-check2-circle me-1"></i>
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Add Attendance Modal -->
+        <div class="modal fade" id="add_attendance_modal" tabindex="-1">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div>
+                            <h5 class="modal-title fw-bold">Add Attendance</h5>
+                            <small class="text-light" id="add_employee_label"></small>
+                        </div>
+
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden" id="add_emp_id">
+                        <input type="hidden" id="add_emp_phone_id">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Attendance Date</label>
+
+                            <input type="date" class="form-control" id="add_attendance_date">
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Start Date & Time</label>
+
+                            <input type="datetime-local" class="form-control" id="add_start_time">
+
+                        </div>
+
+                        <div class="alert alert-info small mb-0">
+                            <i class="bi bi-info-circle me-1"></i>
+                            The employee will receive an email notification after the update.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="button" class="btn btn-success" id="add_save_attendance">
+
+                            <i class="bi bi-check2-circle me-1"></i>
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <div id='footer' class="mt-auto"></div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- SWAL FIRE -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- external js -->
+
+    <script src="js/menu.js" type="module"></script>
+    <script src="js/individual_employee_attendance.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>

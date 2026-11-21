@@ -20,13 +20,37 @@
 
 
     <style>
+        /* Autocomplete inside Bootstrap modal */
         .ui-autocomplete {
-            max-height: 180px !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+            z-index: 2000 !important;
+            position: absolute;
+            max-height: 220px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 5px;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            font-size: 13px;
+            background: #fff;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
+            font-size: 12px;
         }
+
+        /* Autocomplete item */
+        .ui-autocomplete .ui-menu-item-wrapper {
+            padding: 9px 11px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Hover effect */
+        .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
+            background: #eaf5ee !important;
+            color: #198754 !important;
+            border: none !important;
+            margin: 0;
+        }
+
+
 
         /* Section Titles */
         #compactFilterBar h6 {
@@ -882,7 +906,7 @@
 
     <!-- font awesome -->
     <!-- <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Sweet alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 

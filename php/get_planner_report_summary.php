@@ -1,19 +1,20 @@
 <?php
- include 'db_head.php';
+include 'db_head.php';
 
 
- 
- 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
 
-return $data;
+
+function test_input($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+
+  return $data;
 }
 
 
- $sql = "with
+$sql = "with
   full_demand_details as (
     select
       demand.part_id,
@@ -99,6 +100,7 @@ group by
       ppv.planner_id,
     
       ppv.pp_created_by_name,
+      ppv.due_date as production_due_date,
       
       ppv.type_id,
       ppv.model_id,
@@ -184,16 +186,12 @@ inner join planner_product pp on plan_summary.plan_id = pp.planner_id
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    $rows = array();
-    while($r = mysqli_fetch_assoc($result)) {
-        $rows[] = $r;
-    }
-    print json_encode($rows);
+  $rows = array();
+  while ($r = mysqli_fetch_assoc($result)) {
+    $rows[] = $r;
+  }
+  print json_encode($rows);
 } else {
   echo "0 result";
 }
 $conn->close();
-
- ?>
-
-

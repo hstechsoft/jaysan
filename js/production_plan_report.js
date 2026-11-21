@@ -26,7 +26,7 @@ $(document).ready(function () {
         }
     );
 
-    
+
     $(document).on("keydown", function (e) {
         if (e.key === "F1") {
             e.preventDefault();
@@ -34,6 +34,18 @@ $(document).ready(function () {
             $("#production_plan_report_tbody .accordion-button").click();
         }
     });
+
+    // $(document).on("keydown", function (e) {
+
+    //     if (e.ctrlKey && e.key.toLowerCase() === "a") {
+
+    //         e.preventDefault();
+
+    //         $("#production_plan_report_tbody .accordion-button").click();
+    // 
+    //     }
+
+    // });
 
     // Current Location
 
@@ -260,6 +272,66 @@ $(document).ready(function () {
 
     });
 
+    $(document).on('click', '.godown-click-item', function () {
+
+        let planIndex = $(this).data('plan');
+        let godownId = String($(this).data('godown'));
+
+        // Get selected production plan
+        let plan = productionPlanData[planIndex];
+
+        if (!plan) return;
+
+        // Parse demand details
+        let demands = parseJSON(plan.demand_details);
+
+        let workOrders = [];
+
+        // Find work orders belonging to selected godown
+        demands.forEach(function (demand) {
+
+            let demandWorkOrders = demand.work_orders || [];
+
+            demandWorkOrders.forEach(function (wo) {
+
+                if (String(wo.wo_godown) === godownId) {
+
+                    workOrders.push({
+                        ...wo,
+                        final_part: demand.final_part,
+                        final_part_id: demand.final_part_id,
+                        demand_id: demand.demand_id,
+                        process_name: demand.process_name,
+                        demand_qty: demand.demand_qty
+                    });
+
+                }
+
+            });
+
+        });
+
+        // Get godown name
+        let godownName = $(this).text().trim();
+
+        $('#godown_modal_subtitle').text(
+            godownName + ' | ' + workOrders.length + ' Work Orders'
+        );
+
+        // Render modal content
+        let html = renderGodownWorkOrders(workOrders);
+
+        $('#godown_work_order_content').html(html);
+
+        // Open Bootstrap modal
+        let modal = bootstrap.Modal.getOrCreateInstance(
+            document.getElementById('godownWorkOrderModal')
+        );
+
+        modal.show();
+
+    });
+
 });
 
 
@@ -333,8 +405,20 @@ function percentage(value, total) {
 
 // Date formatting
 function displayDate(date) {
+
     if (!date || date.startsWith('0000') || date === '00-00-0000') {
         return '-';
+    }
+
+    // Already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return escapeHTML(date);
+    }
+
+    // Convert DD-MM-YYYY to YYYY-MM-DD
+    if (/^\d{2}-\d{2}-\d{4}$/.test(date)) {
+        const [day, month, year] = date.split('-');
+        return escapeHTML(`${year}-${month}-${day}`);
     }
 
     return escapeHTML(date);
@@ -376,13 +460,18 @@ function renderOrders(orders) {
                     <strong>Commit:</strong>
                     ${displayDate(order.commitment_date)}
                 </div>
+
+                <div class="info-line">
+                    <strong>Production:</strong>
+                    ${displayDate(order.commitment_date)}
+                </div>
             </div>
         `;
 
     }).join('');
 }
 
-function renderGodowns(demands) {
+function renderGodownsCount(demands) {
 
     let godowns = new Set();
 
@@ -400,21 +489,140 @@ function renderGodowns(demands) {
 
     });
 
+    return godowns.size;
+}
+
+function renderGodowns(demands, planIndex) {
+
+    let godowns = new Map();
+
+    demands.forEach(function (demand) {
+
+        let workOrders = demand.work_orders || [];
+
+        workOrders.forEach(function (wo) {
+
+            if (wo.wo_godown_name) {
+
+                let godownId = wo.wo_godown;
+
+                if (!godowns.has(godownId)) {
+                    godowns.set(godownId, {
+                        id: godownId,
+                        name: wo.wo_godown_name
+                    });
+                }
+
+            }
+
+        });
+
+    });
+
     if (!godowns.size) {
         return '<span class="no-data">Not assigned</span>';
     }
 
-    return [...godowns].map(function (name) {
+    return [...godowns.values()].map(function (godown) {
 
         return `
-            <div class="godown-item">
-                <i class="bi bi-building"></i>
-                ${escapeHTML(name)}
-            </div>
+            <button type="button"
+                class="godown-item godown-click-item"
+                data-plan="${planIndex}"
+                data-godown="${escapeHTML(godown.id)}">
+
+                <i class="bi bi-buildings"></i>
+
+                ${escapeHTML(godown.name)}
+
+                <i class="bi bi-arrow-up-right ms-auto"></i>
+
+            </button>
         `;
 
     }).join('');
 }
+
+function parseCustomDate(dateString) {
+
+    if (!dateString) return null;
+
+    // Handle DD-MM-YYYY
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateString)) {
+
+        const [day, month, year] = dateString.split('-').map(Number);
+
+        const date = new Date(year, month - 1, day);
+
+        // Validate date
+        if (
+            date.getDate() !== day ||
+            date.getMonth() !== month - 1 ||
+            date.getFullYear() !== year
+        ) {
+            return null;
+        }
+
+        return date;
+    }
+
+    // Handle YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+
+        const [year, month, day] = dateString.split('-').map(Number);
+
+        const date = new Date(year, month - 1, day);
+
+        if (
+            date.getDate() !== day ||
+            date.getMonth() !== month - 1 ||
+            date.getFullYear() !== year
+        ) {
+            return null;
+        }
+
+        return date;
+    }
+
+    return null;
+}
+
+
+function renderProductAlert(approx_commit_date, production_due_date) {
+
+    let approxDate = parseCustomDate(approx_commit_date) || 0;
+    let dueDate = parseCustomDate(production_due_date) || 0;
+
+    console.log('Approx Commit Date:', approxDate);
+    console.log('Production Due Date:', dueDate);
+
+    if (!approxDate || !dueDate) {
+        return '<span class="no-data">Invalid dates</span>';
+    }
+
+    // Compare dates without time
+    const diffTime = dueDate.getTime() - approxDate.getTime();
+
+    const diffDays = Math.round(
+        diffTime / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays < 0) {
+
+        return '<span class="alert alert-danger blinks">Overdue by ' +
+            Math.abs(diffDays) + ' day(s)</span>';
+
+    } else if (diffDays <= 7) {
+
+        return '<span class="alert alert-warning">Due Soon by ' +
+            diffDays + ' day(s)</span>';
+
+    } else {
+
+        return '<span class="alert alert-success">On Track</span>';
+    }
+}
+
 
 function renderProgressBars(row, index) {
 
@@ -758,7 +966,7 @@ function renderProductionPlanReport(response) {
 
     let html = '';
 
-        productionPlanData.forEach(function (row, index) {
+    productionPlanData.forEach(function (row, index) {
 
         let orders = parseJSON(row.order_details);
         let demands = parseJSON(row.demand_details);
@@ -800,6 +1008,29 @@ function renderProductionPlanReport(response) {
                 </td>
 
 
+                <!-- Order Details -->
+
+                <td style="min-width:200px;">
+
+                    <div class="accordion" id="sale_orderAccordion_${index}">
+                        <div class="accordion-item">
+                            <h6 class="accordion-header" id="sale_orderHeading_${index}">
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#sale_orderCollapse_${index}" aria-expanded="true" aria-controls="sale_orderCollapse_${index}"  style="cursor:pointer; font-weight:bold; font-size:12px;">
+                            Sale Order Details (${orders.length}) 
+                            </button>
+                            </h6>
+                            <div id="sale_orderCollapse_${index}" class="accordion-collapse collapse " aria-labelledby="sale_orderHeading_${index}" data-bs-parent="#sale_orderAccordion_${index}">
+                                <div class="accordion-body">
+                                    ${renderOrders(orders)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </td>
+
+
                 <!-- Created By & Planner -->
 
                 <td style="min-width:130px;">
@@ -821,29 +1052,20 @@ function renderProductionPlanReport(response) {
                 </td>
 
 
-                <!-- Order Details -->
-
-                <td style="min-width:200px;">
-
-                    ${renderOrders(orders)}
-
-                </td>
-
-
                 <!-- Godown Details -->
 
                 <td style="min-width:150px;">
 
                     <div class="accordion" id="godownAccordion_${index}">
                         <div class="accordion-item">
-                            <h6 class="accordion-header" id="godownHeading_${index}">
-                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#godownCollapse_${index}" aria-expanded="true" aria-controls="godownCollapse_${index}">
-                            Godown Details (${demands.length}) 
+                            <h6 class="accordion-header" id="godownHeading_${index}" >
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#godownCollapse_${index}" aria-expanded="true" aria-controls="godownCollapse_${index}"  style="cursor:pointer; font-weight:bold; font-size:12px;">
+                            Godown Details (${renderGodownsCount(demands)}) 
                             </button>
                             </h6>
                             <div id="godownCollapse_${index}" class="accordion-collapse collapse " aria-labelledby="godownHeading_${index}" data-bs-parent="#godownAccordion_${index}">
                                 <div class="accordion-body">
-                                    ${renderGodowns(demands)}
+                                    ${renderGodowns(demands, index)}
                                 </div>
                             </div>
                         </div>
@@ -857,9 +1079,14 @@ function renderProductionPlanReport(response) {
                 <td style="min-width:130px;">
 
                     <div class="commit-date">
-                        ${displayDate(row.approx_commit_date)}
+                       Min Required Date: ${displayDate(row.approx_commit_date)}
                     </div>
 
+                    <span class="production-due-date">
+                        Production Due Date: ${displayDate(row.production_due_date)}
+                    </span>
+
+                    ${renderProductAlert(row.approx_commit_date, row.production_due_date)}
                     <span class="request-count">
                         <i class="bi bi-clipboard-check"></i>
                         ${qty(row.production_request_count)} Requests
@@ -903,6 +1130,120 @@ function renderProductionPlanReport(response) {
             </tr>
         `
     );
+}
+
+function renderGodownWorkOrders(workOrders) {
+
+    if (!workOrders.length) {
+
+        return `
+            <div class="text-center text-muted p-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No work orders found for this godown.
+            </div>
+        `;
+
+    }
+
+    let html = `
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle small">
+
+                <thead class="table-light small">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Work Order</th>
+                        <th>Part Details</th>
+                        <th>Process</th>
+                        <th>Demand Qty</th>
+                        <th>WO Qty</th>
+                        <th>Pending Qty</th>
+                        <th>Department / Section</th>
+                        <th>Due Date</th>
+                        <th>Created By</th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="small">
+    `;
+
+    workOrders.forEach(function (wo, index) {
+
+        html += `
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        WO #${escapeHTML(wo.work_order_id)}
+                    </span>
+                </td>
+
+                <td>
+                    <strong>${escapeHTML(wo.final_part)}</strong>
+
+                    <div class="text-muted small">
+                        Part ID: ${escapeHTML(wo.final_part_id)}
+                    </div>
+
+                    <div class="text-muted small">
+                        Demand ID: ${escapeHTML(wo.demand_id)}
+                    </div>
+                </td>
+
+                <td>
+                    ${escapeHTML(wo.process_name || '-')}
+                </td>
+
+                <td>
+                    ${qty(wo.demand_qty)}
+                </td>
+
+                <td>
+                    <span class="badge bg-success">
+                        ${qty(wo.wo_qty)}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge bg-warning text-dark">
+                        ${qty(wo.wo_pending_qty)}
+                    </span>
+                </td>
+
+                <td>
+                    <div>${escapeHTML(wo.wo_dep_name || '-')}</div>
+                    <small class="text-muted">
+                        ${escapeHTML(wo.wo_sec_name || '-')}
+                    </small>
+                </td>
+
+                <td>
+                    ${displayDate(wo.due_date)}
+                </td>
+
+                <td>
+                    ${escapeHTML(wo.wo_created_by_name || '-')}
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+    html += `
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
+    return html;
 }
 
 

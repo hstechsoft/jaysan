@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        /* Customer Mapping UI */
+
+
+        /* DCF Report Table */
+
+        .dcf-report-table {
+            font-size: 13px;
+        }
+
+        .dcf-report-table thead th {
+            background: #f8f9fa;
+            color: #495057;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 10px 12px;
+            white-space: nowrap;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .dcf-report-table tbody td {
+            padding: 9px 12px;
+            vertical-align: middle;
+        }
+
+        .dcf-report-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Sale Order */
+
+        .dcf-order-list {
+            min-width: 240px;
+            max-width: 280px;
+        }
+
+        .dcf-sale-order {
+            padding: 6px 9px;
+            border: 1px solid #edf0f2;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            background: #fff;
+            /* min-width: 130%;
+            max-width: 140% */
+        }
+
+        .dcf-sale-order:last-child {
+            margin-bottom: 0;
+        }
+
+        .dcf-sale-order .fw-semibold {
+            font-size: 12px;
+        }
+
+        .dcf-sale-order .small {
+            font-size: 11px;
+        }
+
+        .dcf-product {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 3px;
+        }
+
+        /* Consignee */
+
+        .dcf-consignee {
+            min-width: 150px;
+            max-width: 230px;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+
+        .dcf-report-table .btn {
+            padding: 3px 7px;
+            font-size: 12px;
+        }
+
+        /* Status */
+
+        .dcf-report-table .badge {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .dcf-order-list {
+                min-width: 220px;
+            }
+
+            .dcf-report-table thead th,
+            .dcf-report-table tbody td {
+                padding: 8px;
+            }
+        }
+
+        #sale_order_details_card .card {
+            border-radius: 8px;
+        }
+
+        #sale_order_details_card .card-header {
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        #sale_order_details_card table th {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #sale_order_details_card table td {
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        #sale_order_details_card .form-control {
+            min-height: 32px;
+            font-size: 13px;
+        }
+
+        #sale_order_details_card .product-details-text {
+            white-space: pre-line;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <section id="menu_bar"></section>
+    <div class="container-fluid mb-2">
+        <!-- top bar -->
+
+
+        <div class=" page-wrapper mt-5 mt-md-0">
+
+            <div class="row g-3">
+
+                <div class="col-12">
+
+
+                    <div class="card border-0 shadow-sm">
+
+                        <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 fw-bold">
+                                <i class="bi bi-file-earmark-text text-primary me-2"></i>
+                                DCF Report
+                            </h6>
+
+                            <span class="badge bg-light text-secondary border">
+                                DCF Records
+                            </span>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div class="table-responsive" style="max-height: 85vh; overflow-y: auto;">
+
+                                <table class="table table-sm table-hover align-middle mb-0 dcf-report-table">
+
+                                    <thead style="position: sticky; top: 0; z-index: 5;">
+                                        <tr>
+                                            <th colspan="2">
+                                                <input type="text" class="form-control form-control-sm rounded-3"
+                                                    id="customer" placeholder="Customer Search.....">
+                                            </th>
+                                            <th colspan="2">
+                                                <input type="text" class="form-control form-control-sm rounded-3"
+                                                    id="sale_order_no" placeholder="Sale Order No Search.....">
+                                            </th>
+                                            <th colspan="2">
+                                                <select class="form-select" id="dcf_status">
+                                                    <option selected value="">Choose DCF Status...</option>
+                                                    <option value="create">Created</option>
+                                                    <option value="hod">HOD</option>
+                                                    <option value="invoice">Invoice</option>
+                                                    <option value="delivery">Delivered</option>
+                                                </select>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th>DCF No</th>
+                                            <th width="25%">Sale Order Details</th>
+                                            <th>Consignee</th>
+                                            <th>Delivery From</th>
+                                            <th>Created By</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="dcf_report_tbody">
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="modal fade" id="sale_order_detailsModal" tabindex="-1"
+            aria-labelledby="sale_order_detailsModalLabel" aria-hidden="true">
+
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header bg-light py-2">
+                        <div>
+                            <h5 class="modal-title fw-bold" id="sale_order_detailsModalLabel">
+                                DCF Details
+                            </h5>
+                            <small class="text-muted" id="dcf_customer_name"></small>
+                        </div>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body p-3">
+
+                        <div id="sale_order_details_card"></div>
+
+                    </div>
+
+                    <div class="modal-footer py-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-sm" id="save_dcf_details">
+                            <i class="bi bi-save me-1"></i> Save Changes
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="customer_addModal" tabindex="-1" aria-labelledby="customer_addModalLabel"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-sm modal-dialog-scrollable">
+                <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header bg-light py-2">
+                        <div>
+                            <h5 class="modal-title fw-bold" id="customer_addModalLabel">
+                                Add Customer
+                            </h5>
+                            <small class="text-muted" id="dcf_customer_name"></small>
+                        </div>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body p-3">
+
+                        <div id="customer_add_card">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control rounded-3" id="customer_name_id" placeholder="Enter customer name"
+                                    required>
+                                <label for="customer_name_id">Customer Name
+                                    <span class="text-danger">*</span> </label>
+
+                                <div class="invalid-feedback">
+                                    Kindly Enter Vaild Data
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer py-2">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                        <button type="button" class="btn btn-primary btn-sm" id="save_customer_add">
+                            <i class="bi bi-save me-1"></i> Save Changes
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id='footer' class="mt-auto"></div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+    <!-- SWAL FIRE -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- jQuery UI CSS -->
+
+    <!-- bootstrap include -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+    <!-- Sweet alert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- external js -->
+    <script src="js/dcf_account.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
+    <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>

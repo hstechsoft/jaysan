@@ -112,9 +112,17 @@
         }
 
         .commit-date {
-            font-size: 13px;
-            font-weight: 700;
+            /* font-size: 13px; */
+            font-weight: 600;
             color: #15803d;
+        }
+
+
+        .production-due-date {
+            /* display: block; */
+            font-weight: 600;
+            color: #2500f5;
+            /* Red color to indicate urgency */
         }
 
         .request-count {
@@ -279,6 +287,41 @@
             color: #94a3b8;
             font-style: italic;
         }
+
+        .godown-click-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            border: 0;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .godown-click-item:hover {
+            background: #e3efff;
+            color: #0d6efd;
+            transform: translateX(3px);
+        }
+
+        .godown-click-item:focus-visible {
+            outline: 2px solid #0d6efd;
+            outline-offset: 2px;
+        }
+        .alert{
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .blinks {
+            animation: blinker 5s linear infinite;
+        }
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
     </style>
 
 
@@ -321,8 +364,8 @@
                         <tr>
                             <th width="40">#</th>
                             <th>Product Details</th>
-                            <th>Created By & Planner</th>
                             <th>Order Details</th>
+                            <th>Created By & Planner</th>
                             <th>Godown Details</th>
                             <th>Commit Date & Requests</th>
                             <th style="min-width:300px;">Total Input Summary</th>
@@ -336,7 +379,45 @@
 
         </div>
 
+        <div class="modal fade" id="godownWorkOrderModal" tabindex="-1">
 
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <div>
+                            <h5 class="modal-title">
+                                <i class="bi bi-buildings me-2"></i>
+                                Godown Work Orders
+                            </h5>
+
+                            <small class="text-muted" id="godown_modal_subtitle"></small>
+                        </div>
+
+                        <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body" id="godown_work_order_content">
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 

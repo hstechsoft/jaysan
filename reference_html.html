@@ -20,7 +20,47 @@
 
 
   <style>
- 
+ #bom_org_chart {
+    width: 100%;
+    overflow: auto;
+    padding: 20px;
+}
+
+.bom-chart-node {
+    border: 1px solid #198754 !important;
+    background: #ffffff !important;
+    border-radius: 8px;
+    padding: 0 !important;
+    min-width: 220px;
+}
+
+.bom-selected-node {
+    background: #e8f5ec !important;
+}
+
+.bom-node {
+    padding: 12px;
+    min-width: 220px;
+    font-family: Arial, sans-serif;
+}
+
+.bom-process {
+    font-weight: 700;
+    color: #198754;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+.bom-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+    font-size: 12px;
+    color: #555;
+}
   </style>
 
 
@@ -51,7 +91,9 @@
     <div class=" page-wrapper mt-5 mt-md-0">
 
 
-      <div class="table-responsive">
+      <div id="bom_org_chart" style="height: 80vh; overflow:auto;"></div>
+
+      <!-- <div class="table-responsive">
         <table class="table caption-top table-bordered table-striped ">
           <caption><button type="submit" class="btn btn-primary " id="excle_btn">Download As Excel</button></caption>
           <thead>
@@ -90,7 +132,7 @@
 
 
         </table>
-      </div>
+      </div> -->
     </div>
 
 
@@ -132,6 +174,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- jQuery UI CSS -->
 
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- bootstrap include -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
     integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"

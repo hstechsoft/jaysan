@@ -574,6 +574,7 @@ function insert_dcf() {
       dcf_report: $("#dcf_print").html(),
       narration: narration,
       spares_arr: 0,
+      delivery_from: $("#godown").val()
 
     },
     beforeSend: function () {

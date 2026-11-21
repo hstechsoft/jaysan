@@ -141,7 +141,8 @@ $(document).ready(function () {
         }).then(function (isConfirm) {
           if (isConfirm) {
             localStorage.clear();
-            location.reload()
+            window.location.replace("login.html");
+
           } else {
             swal("Cancelled", "", "error");
           }
@@ -323,6 +324,8 @@ function get_app_menu(phone_id) {
           $("#mobile_menu").append(`<li class="list-group-item"><a href="${url}" class="d-block text-decoration-none"><span class='pe-2'>${item.menu_icon_web}</span>${item.menu_name}</a></li>`);
         }
       });
+
+      $("#mobile_menu").append(`<li class="list-group-item"><a href="day_login.html?phone_id=${phone_id}" class="d-block text-decoration-none"><span class='pe-2'><i class="bi bi-clock"></i></span>Day Login</a></li>`);
 
       // window.APP_START_URL = startUrl;
 

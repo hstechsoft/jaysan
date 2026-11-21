@@ -5,6 +5,10 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 let allBomData = [];
+
+let productionData = [];
+let productionCalendar = null;
+
 $(document).ready(function () {
 
 
@@ -52,6 +56,7 @@ $(document).ready(function () {
   check_login();
 
   get_sale_order_plan();
+  get_duedate_wise_summary();
 
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -121,6 +126,7 @@ $(document).ready(function () {
     var card = $(this).closest(".order-card");
     var selected_orders = card.find(".sale_span.selected_order");
     var plan_name = card.find(".plan_name").val().trim();
+    var plan_date = card.find(".plan_date").val() || '';
     var selected_qty = card.find(".selected_qty").val();
     var process_id = $(this).data("process_id");
     var assign_id = [];
@@ -142,13 +148,27 @@ $(document).ready(function () {
     console.log("P " + plan_name, "s " + selected_qty, "pi " + process_id, "a " + assign_id.length);
 
 
-    if (plan_name && selected_qty && process_id && assign_id.length > 0) {
+    if (plan_name && selected_qty && process_id && assign_id.length > 0 && plan_date != '') {
       $(this).prop("disabled", true);
-      create_demand(plan_name, selected_qty, process_id, JSON.stringify(assign_id));
+      create_demand(plan_name, selected_qty, process_id, JSON.stringify(assign_id), plan_date);
     } else {
       salert("Warning", "Please fill all required fields and select at least one order.", "warning");
     }
   });
+
+  $('#openCalendarBtn').on('click', function () {
+
+    get_date_wise_plan_summary();
+
+  });
+
+  $('#calenderModal').on('shown.bs.modal', function () {
+
+    get_date_wise_plan_summary();
+
+  });
+
+
 
 });
 
@@ -156,9 +176,9 @@ $(document).ready(function () {
 
 
 
-function create_demand(plan_name, selected_qty, process_id, assign_id) {
+function create_demand(plan_name, selected_qty, process_id, assign_id, plan_date) {
 
-  console.log(plan_name, selected_qty, process_id, assign_id);
+  console.log(plan_name, selected_qty, process_id, assign_id, plan_date);
 
   $.ajax({
     url: "php/create_demand.php",
@@ -168,7 +188,8 @@ function create_demand(plan_name, selected_qty, process_id, assign_id) {
       created_by: current_user_id,
       plan_name: plan_name,
       production_qty: selected_qty,
-      assign_id: assign_id
+      assign_id: assign_id,
+      due_date: plan_date
     },
     success: function (response) {
       console.log(response);
@@ -291,7 +312,11 @@ function get_sale_order_plan() {
                           </div>
 
                           <div class="row g-2 align-items-center">
-                              <div class="col-8">
+                              <div class="col-4">
+                                  <input type="date" class="form-control rounded-3 plan_date" placeholder="" >
+                              </div>
+
+                              <div class="col-4">
                                   <input type="text"
                                       class="form-control form-control-sm shadow-none plan_name"
                                       placeholder="Enter Plan Name">
@@ -334,6 +359,518 @@ function get_sale_order_plan() {
 
 }
 
+function get_date_wise_plan_summary() {
+
+  $.ajax({
+    url: "php/get_date_wise_plan_summary.php",
+    type: "GET",
+    dataType: "json",
+
+    success: function (response) {
+
+      if (response === "error" || response === "0 result") {
+        productionData = [];
+      } else {
+        productionData = response;
+      }
+
+      // Initialize calendar if not already initialized
+      if (!productionCalendar) {
+        initializeProductionCalendar();
+      } else {
+
+        // Refresh calendar events
+        productionCalendar.removeAllEvents();
+
+        productionCalendar.addEventSource(
+          getCalendarEvents()
+        );
+      }
+
+    },
+
+    error: function (xhr) {
+      console.error("Production calendar error:", xhr.responseText);
+    }
+  });
+}
+
+function getCalendarEvents() {
+
+  return productionData.map(item => ({
+    title: `${item.total_production_request_count} `,
+    start: item.due_date,
+    allDay: true,
+    extendedProps: {
+      production: item
+    }
+  }));
+
+}
+
+function initializeProductionCalendar() {
+
+  const calendarEl = document.getElementById('calendar');
+
+  productionCalendar = new FullCalendar.Calendar(calendarEl, {
+
+    initialView: 'dayGridMonth',
+    height: 'auto',
+
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth'
+    },
+
+    events: getCalendarEvents(),
+
+    dateClick: function (info) {
+
+      $('.selected-production-date').removeClass(
+        'selected-production-date'
+      );
+
+      $(info.dayEl).addClass('selected-production-date');
+
+      const selectedData = productionData.find(item =>
+        item.due_date === info.dateStr
+      );
+
+      displayProductionDetails(selectedData, info.dateStr);
+
+      // Scroll to production details
+      // scrollToProductionDetails();
+
+    },
+
+    eventClick: function (info) {
+
+      info.jsEvent.preventDefault();
+
+      const selectedData = info.event.extendedProps.production;
+
+      $('.selected-production-date').removeClass(
+        'selected-production-date'
+      );
+
+      const dayEl = document.querySelector(
+        `#calendar .fc-daygrid-day[data-date="${selectedData.due_date}"]`
+      );
+
+      if (dayEl) {
+        dayEl.classList.add('selected-production-date');
+      }
+
+      displayProductionDetails(
+        selectedData,
+        selectedData.due_date
+      );
+
+      // Scroll to production details
+      // scrollToProductionDetails();
+
+    }
+
+  });
+
+  productionCalendar.render();
+}
+
+function displayProductionDetails(data, selectedDate) {
+
+  const detailsContainer = $("#productionDetails");
+  const countContainer = $("#selectedDateCount");
+  const dateContainer = $("#selectedDateText");
+
+  // Format selected date
+  const formattedDate = new Date(
+    selectedDate + "T00:00:00"
+  ).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+
+  dateContainer.text(formattedDate);
+
+  // No production plans for selected date
+  if (!data) {
+
+    countContainer.text("0 Requests");
+
+    detailsContainer.html(`
+            <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-calendar-xmark fa-2x mb-2"></i>
+                <p class="mb-0">No production plans for this date.</p>
+            </div>
+        `);
+
+    return;
+  }
+
+  countContainer.text(
+    `${data.total_production_request_count} Requests`
+  );
+
+  // Parse plan details
+  let plans = [];
+
+  try {
+    plans = typeof data.plan_details === "string"
+      ? JSON.parse(data.plan_details)
+      : data.plan_details;
+
+    if (!Array.isArray(plans)) {
+      plans = [];
+    }
+
+  } catch (error) {
+    console.error("Invalid plan_details JSON:", error);
+    plans = [];
+  }
+
+  if (!plans.length) {
+    detailsContainer.html(`
+            <div class="text-center text-muted py-3">
+                No production plan details available.
+            </div>
+        `);
+    return;
+  }
+
+  // Escape database values before inserting into HTML
+  const escapeHTML = (value) => {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[char]);
+  };
+
+  let html = "";
+
+  plans.forEach((plan, index) => {
+
+    const commitmentDate =
+      !plan.commitment_date ||
+        plan.commitment_date.startsWith("0000-00-00")
+        ? "-"
+        : plan.commitment_date;
+
+    html += `
+            <div class="production-plan-item">
+
+                <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+
+                    <div class="production-plan-title">
+                        <i class="fa-solid fa-industry me-1"></i>
+                        ${escapeHTML(plan.plan_name || "Production Plan")}
+                    </div>
+
+                    <span class="badge bg-success">
+                        ${escapeHTML(plan.production_request_count ?? 0)} Requests
+                    </span>
+
+                </div>
+
+                <div class="production-info-grid">
+
+                    <div>
+                        <span class="production-info-label">Order No</span>
+                        <div class="production-info-value">
+                            #${escapeHTML(plan.order_no ?? "-")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Customer</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.cus_name || "-")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Product</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.product || "-")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Planned Qty</span>
+                        <div class="production-info-value text-success">
+                            ${escapeHTML(plan.production_request_count ?? 0)}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Required Qty</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.required_qty ?? 0)}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Chassis</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.chasis_choice || "-")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Phone</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.cus_phone || "-")}
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="production-info-label">Commitment Date</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(commitmentDate)}
+                        </div>
+                    </div>
+
+                </div>
+
+                ${plan.remark ? `
+                    <div class="mt-2 pt-2 border-top">
+                        <span class="production-info-label">Remark</span>
+                        <div class="production-info-value">
+                            ${escapeHTML(plan.remark)}
+                        </div>
+                    </div>
+                ` : ""}
+
+            </div>
+        `;
+  });
+
+  detailsContainer.html(html);
+}
+
+function scrollToProductionDetails() {
+
+  setTimeout(function () {
+
+    const modalBody = $('#calenderModal .modal-body');
+    const details = $('.production-details-card');
+
+    modalBody.animate({
+      scrollTop: modalBody.scrollTop() +
+        details.offset().top -
+        modalBody.offset().top - 15
+    }, 400);
+
+  }, 150);
+}
+
+
+function get_duedate_wise_summary() {
+
+  $.ajax({
+    url: "php/get_duedate_wise_summary.php",
+    type: "get", //send it through get method
+    data: {
+
+
+    },
+    success: function (response) {
+      console.log(response);
+
+
+      if (response.trim() != "error") {
+
+        $('#planned_report_tbody').empty();
+
+        if (response.trim() != "0 result") {
+
+          var obj = JSON.parse(response);
+          var count = 0;
+
+          obj.forEach(function (item) {
+
+            count++;
+
+            // Parse sale order details
+            var orderDetails = [];
+
+            try {
+              orderDetails = JSON.parse(item.order_details);
+            } catch (e) {
+              console.error("Invalid order details:", e);
+            }
+
+            // Format order information
+            var orderHTML = orderDetails.map(function (order) {
+
+              return `
+                    <div class="sale-order-item">
+
+                        <div class="order-number">
+                            <i class="fa-solid fa-file-invoice me-1"></i>
+                            #${escapeHTML(order.order_no)}
+                        </div>
+
+                        <div class="order-customer">
+                            ${escapeHTML(order.cus_name)}
+                        </div>
+
+                        <div class="order-phone">
+                            <i class="fa-solid fa-phone me-1"></i>
+                            ${escapeHTML(order.cus_phone)}
+                        </div>
+
+                        <div class="order-demand">
+                            <span>Requested Qty</span>
+                            <strong>${escapeHTML(order.required_qty)}</strong>
+                        </div>
+
+                    </div>
+                `;
+
+            }).join('');
+
+            $('#planned_report_tbody').append(`
+
+                <tr>
+
+                    <!-- S.No -->
+                    <td class="text-center text-muted">
+                        ${count}
+                    </td>
+
+                    <!-- Plan ID -->
+                    <td>
+                        <div class="plan-id-badge">
+                            <i class="fa-solid fa-clipboard-list me-1"></i>
+                            ${escapeHTML(item.planner_id)}
+                        </div>
+                    </td>
+
+                    <!-- Product Details -->
+                    <td>
+                        <div class="product-details-block">
+
+                            <div class="product-name">
+                                ${escapeHTML(item.product)}
+                            </div>
+
+                            <div class="product-model">
+                                ${escapeHTML(item.model_name)}
+                            </div>
+
+                            <div class="product-meta">
+                                <span>${escapeHTML(item.type_name)}</span>
+                                <span>${escapeHTML(item.sub_type)}</span>
+                            </div>
+
+                        </div>
+                    </td>
+
+                    <!-- Sale Order Details -->
+                    <td>
+                        <div class="sale-orders-wrapper">
+                            ${orderHTML || '<span class="text-muted">No orders</span>'}
+                        </div>
+                    </td>
+
+                    <!-- Production Planned Date -->
+                    <td>
+                        <div class="planned-date-block">
+
+                            <div class="planned-date">
+                                <i class="fa-regular fa-calendar-check me-1"></i>
+                                ${escapeHTML(item.production_plan_due_date)}
+                            </div>
+
+                            <span class="planned-count">
+                                ${escapeHTML(item.production_request_count)} Requests
+                            </span>
+
+                        </div>
+                    </td>
+
+                    <!-- Max Required Date -->
+                    <td>
+                        <div class="required-date">
+                            <i class="fa-regular fa-calendar-xmark me-1"></i>
+                            ${escapeHTML(item.max_workorder_due_date)}
+                        </div>
+                    </td>
+
+                    <!-- Work Order Qty -->
+                    <td>
+                        <div class="workorder-qty">
+                        ${Number(item.work_order_qty).toLocaleString('en-IN', {
+                              maximumFractionDigits: 3
+                            })}/
+                            ${Number(item.demand_qty).toLocaleString('en-IN', {
+                              maximumFractionDigits: 3
+                            })}
+                            <small>Qty.</small>
+                        </div>
+                    </td>
+
+                </tr>
+
+            `);
+
+          });
+
+        } else {
+
+          $('#planned_report_tbody').html(`
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                    <i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>
+                    No production plans found
+                </td>
+            </tr>
+        `);
+
+        }
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  });
+
+
+
+
+}
+
+function escapeHTML(value) {
+
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[char]);
+
+}
+
+function formatDate(date) {
+
+  if (!date || date === "0000-00-00") return "-";
+
+  const parts = date.split('-');
+
+  return `${parts[2]}-${parts[1]}-${parts[0]}`;
+}
 
 function insert_new_process(processId) {
 

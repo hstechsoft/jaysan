@@ -255,6 +255,65 @@ $(document).ready(function () {
         fillter();
     });
 
+    $("#production_plan_report_tbody").on('click', '.godown-click-item', function () {
+
+        let planIndex = $(this).data('plan');
+        let godownId = String($(this).data('godown'));
+
+        // Get selected production plan
+        let plan = productionPlanData[planIndex];
+
+        if (!plan) return;
+
+        // Parse demand details
+        let demands = parseJSON(plan.demand_details);
+
+        let workOrders = [];
+
+        // Find work orders belonging to selected godown
+        demands.forEach(function (demand) {
+
+            let demandWorkOrders = demand.work_orders || [];
+
+            demandWorkOrders.forEach(function (wo) {
+
+                if (String(wo.wo_godown) === godownId) {
+
+                    workOrders.push({
+                        ...wo,
+                        final_part: demand.final_part,
+                        final_part_id: demand.final_part_id,
+                        demand_id: demand.demand_id,
+                        process_name: demand.process_name,
+                        demand_qty: demand.demand_qty
+                    });
+
+                }
+
+            });
+
+        });
+
+        // Get godown name
+        let godownName = $(this).text().trim();
+
+        $('#godown_modal_subtitle').text(
+            godownName + ' | ' + workOrders.length + ' Work Orders'
+        );
+
+        // Render modal content
+        let html = renderGodownWorkOrders(workOrders);
+
+        $('#godown_work_order_content').html(html);
+
+        // Open Bootstrap modal
+        let modal = bootstrap.Modal.getOrCreateInstance(
+            document.getElementById('godownWorkOrderModal')
+        );
+
+        modal.show();
+
+    });
 
 });
 
@@ -978,7 +1037,21 @@ function renderPlannedWorkOrderReport(response) {
                 <!-- Order Details -->
 
                 <td style="max-width:150px;">
-                    ${renderOrderDetails(orders)}
+                    <div class="accordion" id="orderAccordion_${index}">
+                        <div class="accordion-item">
+                            <h6 class="accordion-header" id="orderHeading_${index}">
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#orderCollapse_${index}" aria-expanded="true" aria-controls="orderCollapse_${index}" style="cursor:pointer; font-weight:bold; font-size:12px;">
+                            Order Details (${orders.length}) 
+                            </button>
+                            </h6>
+                            <div id="orderCollapse_${index}" class="accordion-collapse collapse " aria-labelledby="orderHeading_${index}" data-bs-parent="#orderAccordion_${index}">
+                                <div class="accordion-body">
+                                    ${renderOrderDetails(orders)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </td>
 
 
@@ -989,7 +1062,7 @@ function renderPlannedWorkOrderReport(response) {
                     <div class="accordion" id="process_${index}">
                         <div class="accordion-item">
                             <h6 class="accordion-header" id="processHeading_${index}">
-                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#processCollapse_${index}" aria-expanded="true" aria-controls="processCollapse_${index}">
+                            <button class="accordion-button btn-sm p-2" type="button" data-bs-toggle="collapse" data-bs-target="#processCollapse_${index}" aria-expanded="true" aria-controls="processCollapse_${index}" style="cursor:pointer; font-weight:bold; font-size:12px;">
                             Process Details (${processes.length}) 
                             </button>
                             </h6>
@@ -1099,6 +1172,119 @@ function renderWorkOrderSummary(processes) {
     `;
 }
 
+function renderGodownWorkOrders(workOrders) {
+
+    if (!workOrders.length) {
+
+        return `
+            <div class="text-center text-muted p-5">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No work orders found for this godown.
+            </div>
+        `;
+
+    }
+
+    let html = `
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Work Order</th>
+                        <th>Part Details</th>
+                        <th>Process</th>
+                        <th>Demand Qty</th>
+                        <th>WO Qty</th>
+                        <th>Pending Qty</th>
+                        <th>Department / Section</th>
+                        <th>Due Date</th>
+                        <th>Created By</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+    `;
+
+    workOrders.forEach(function (wo, index) {
+
+        html += `
+            <tr>
+
+                <td>${index + 1}</td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        WO #${escapeHTML(wo.work_order_id)}
+                    </span>
+                </td>
+
+                <td>
+                    <strong>${escapeHTML(wo.final_part)}</strong>
+
+                    <div class="text-muted small">
+                        Part ID: ${escapeHTML(wo.final_part_id)}
+                    </div>
+
+                    <div class="text-muted small">
+                        Demand ID: ${escapeHTML(wo.demand_id)}
+                    </div>
+                </td>
+
+                <td>
+                    ${escapeHTML(wo.process_name || '-')}
+                </td>
+
+                <td>
+                    ${qty(wo.demand_qty)}
+                </td>
+
+                <td>
+                    <span class="badge bg-success">
+                        ${qty(wo.wo_qty)}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge bg-warning text-dark">
+                        ${qty(wo.wo_pending_qty)}
+                    </span>
+                </td>
+
+                <td>
+                    <div>${escapeHTML(wo.wo_dep_name || '-')}</div>
+                    <small class="text-muted">
+                        ${escapeHTML(wo.wo_sec_name || '-')}
+                    </small>
+                </td>
+
+                <td>
+                    ${displayDate(wo.due_date)}
+                </td>
+
+                <td>
+                    ${escapeHTML(wo.wo_created_by_name || '-')}
+                </td>
+
+            </tr>
+        `;
+
+    });
+
+    html += `
+                </tbody>
+
+            </table>
+
+        </div>
+    `;
+
+    return html;
+}
 
 
 
