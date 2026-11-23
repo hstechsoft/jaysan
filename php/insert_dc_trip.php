@@ -1,7 +1,10 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+error_reporting(0);
+ini_set('display_errors', 0);
 
  include 'db_head.php';
 $dc = "out_dc";
@@ -17,8 +20,7 @@ $result_json = array();
 // $source_godown = test_input($_POST['source_godown']);
 
 $source_godown = json_decode($_POST['source_godown'], true);
-echo "Source godowns: ";
-print_r($source_godown);
+
 
 // check array of source godowns
 foreach ($source_godown as $sg) {
@@ -81,7 +83,7 @@ $dc_parts = json_decode($_POST['dc_parts'], true);
 
 // check dc part and exit if source and destination godown is same
 foreach ($source_godown as $sg) {
-    $dc_parts_location = json_decode($_POST['dc_part_location'], true);
+    $dc_parts_location =$sg['dc_part_location'];
 foreach ($dc_parts_location as $location) {
       $stock_id = $location['stock_id'];
 // get godown id from stock id
@@ -217,7 +219,7 @@ if ($conn->query($sql_input_demand) === TRUE) {
     {
     foreach ($source_godown as $sg) {
         $source = $sg['source_godown'];
-        $dc_parts_location = json_decode($_POST['dc_part_location'], true);
+        $dc_parts_location =$sg['dc_part_location'];
        // insert in_dc_tracking
     {
                     $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,dc_id) VALUES ($source, $destination,$dc_id)";
@@ -231,7 +233,7 @@ if ($conn->query($sql_input_demand) === TRUE) {
        }
         // reserve stock for dc parts
         foreach ($dc_parts_location as $location) {
-            $work_order_info = json_decode($_POST['work_order_info'], true);
+            $work_order_info = $location['work_order_info'];
             $reserve_type = "dc";
          
             $emp_id = $emp_id;
@@ -313,11 +315,11 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
 // convert $godown_id and $source_godown to integer
                 $godown_id = (int)$godown_id;
                 // remove '$source_godown'
-                $source_godown = (int)str_replace("'", "", $source_godown);
+                $source_godown = (int)str_replace("'", "", $source);
 
-                $source_godown = (int)$source_godown;
-                if ($godown_id != $source_godown) {
-                    throw new Exception("Stock id $stock_id is not from source godown $source_godown and godown id is $godown_id");
+                $source = (int)$source;
+                if ($godown_id != $source) {
+                    throw new Exception("Stock id $stock_id is not from source godown $source and godown id is $godown_id");
                 }
 
           
