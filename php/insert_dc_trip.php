@@ -14,13 +14,22 @@ $destination = test_input($_POST['destination']);
 
 $result_json = array();
 
-$source_godown = test_input($_POST['source_godown']);
+// $source_godown = test_input($_POST['source_godown']);
 
-if($source_godown == $destination)
-{
-    echo "source and destination godown cannot be same";
-    exit;
+$source_godown = json_decode($_POST['source_godown'], true);
+
+// check array of source godowns
+foreach ($source_godown as $sg) {
+    if ($sg['source_godown'] == $destination) {
+        echo "source and destination godown cannot be same";
+        exit;
+    }
 }
+// if($source_godown == $destination)
+// {
+//     echo "source and destination godown cannot be same";
+//     exit;
+// }
 
 
 
@@ -58,7 +67,7 @@ $ship_to = test_input($_POST['ship_to']);
 
 
 
-$dc_parts_location = json_decode($_POST['dc_parts_location'], true);
+// $dc_parts_location = json_decode($_POST['dc_parts_location'], true);
 
 $transport_dc_id = test_input($_POST['transport_dc_id'])??0;
 $transport_dc_id = str_replace("'", "", $transport_dc_id);
@@ -69,6 +78,8 @@ $dc_parts = json_decode($_POST['dc_parts'], true);
 
 
 // check dc part and exit if source and destination godown is same
+foreach ($source_godown as $sg) {
+    $dc_parts_location = json_decode($_POST['dc_part_location'], true);
 foreach ($dc_parts_location as $location) {
       $stock_id = $location['stock_id'];
 // get godown id from stock id
@@ -84,13 +95,14 @@ foreach ($dc_parts_location as $location) {
       }
 
 }
+}
 // check dc parts is array or not
 
 // check dc parts location is array or not
-if (!is_array($dc_parts_location)) {
-    echo "dc_parts_location should be an array";
-    exit;
-}
+// if (!is_array($dc_parts_location)) {
+//     echo "dc_parts_location should be an array";
+//     exit;
+// }
 
 // check dc process is array or not
 
@@ -198,12 +210,15 @@ if ($conn->query($sql_input_demand) === TRUE) {
 
 
         }
+        
 
     {
-    
+    foreach ($source_godown as $sg) {
+        $source = $sg['source_godown'];
+        $dc_parts_location = json_decode($_POST['dc_part_location'], true);
        // insert in_dc_tracking
     {
-                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,dc_id) VALUES ($source_godown, $destination,$dc_id)";
+                    $sql_in_dc = "INSERT INTO transport_dc (source_godown,des_godown,dc_id) VALUES ($source, $destination,$dc_id)";
                     // get in_dc_tracking id
                     if ($conn->query($sql_in_dc) === TRUE) {
                         $transport_dc_id = $conn->insert_id;
@@ -321,6 +336,8 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
             
    
         }
+
+    }
 
  $result_json['success'] = true;
 
