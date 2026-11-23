@@ -830,31 +830,35 @@ $(document).ready(function () {
         let dc_parts = [];
         let dc_parts_location = [];
         let dc_process = [];
+        let source_godowns = [];
 
         let transport_dc_id = ($(this).data("transport_dc_id") > 0 || $(this).data("transport_dc_id") !== undefined) ? $(this).data("transport_dc_id") : 0;
 
+
+        let sourceGodownMap = new Map();
+
         $("#selected_part_tbody tr").each(function () {
 
-            // let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
             let work_process_id = $(this).data("work_process_id");
             let part_pre_process_id = $(this).data("part_pre_process_id");
+
             let godown_id = $(this).data("godown_id");
             let department_id = $(this).data("department_id");
             let section_id = $(this).data("section_id");
-            // let process_name = $(this).find("td").eq(1).text();
-            // let process_id = $(this).data("process_id");
+
             let qty = parseFloat($(this).find(".qty_input").val()) || 0;
-            // let reserve_qty = $(this).find(".qty_input").data("qty_cou");
+
             let stock_id = $(this).data("stock_id");
             let stock_reserve_id = $(this).data("stock_reserve_id");
+
             let rate = parseFloat($(this).find(".rate_input").val()) || 0;
+
             let amount = parseFloat($(this).find(".amount_td").text()) || 0;
-            // let is_checked = $(this).find(".form-check-input").is(":checked");
 
-            // console.log(stock_id_qty);
+            let source_godown_id = $(this).data("source_godown_id");
 
-            // if (is_checked) {
+
             dc_parts.push({
                 part_id: part_id,
                 part_pre_process_id: part_pre_process_id,
@@ -863,28 +867,41 @@ $(document).ready(function () {
                 department_id: department_id,
                 section_id: section_id,
                 qty: qty,
-                rate: rate,
+                rate: rate
             });
-            dc_parts_location.push({
+
+
+            let location = {
                 emp_id: emp_id,
                 stock_id: stock_id,
                 stock_reserve_id: stock_reserve_id,
                 qty: qty
-            });
+            };
 
-            // let existing = dc_process.find(item => item.process_id == process_id);
+            dc_parts_location.push(location);
 
-            // if (existing) {
-            //     existing.qty += qty;
-            // } else {
-            //     dc_process.push({
-            //         process_id: process_id,
-            //         qty: qty,
-            //         rate: 0
-            //     });
-            // }
-            // }
+
+
+            if (!sourceGodownMap.has(source_godown_id)) {
+
+                sourceGodownMap.set(source_godown_id, {
+                    source_godown: source_godown_id,
+                    dc_part_location: []
+                });
+
+            }
+
+            sourceGodownMap.get(source_godown_id).dc_part_location.push(location);
+
         });
+
+
+        source_godowns = Array.from(sourceGodownMap.values());
+
+
+        console.log("DC Parts:", dc_parts);
+        console.log("DC Parts Location:", dc_parts_location);
+        console.log("Source Godowns:", source_godowns);
 
         console.log(dc_parts);
 
@@ -909,10 +926,10 @@ $(document).ready(function () {
         }
 
         // console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
-        console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
+        console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts);
 
         $(this).prop('disabled', true)
-        insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(dc_parts_location), transport_dc_id, JSON.stringify(dc_parts));
+        insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(source_godowns), transport_dc_id, JSON.stringify(dc_parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -990,6 +1007,9 @@ $(document).ready(function () {
         let department_id = currentRow.data("department_id");
         let section_id = currentRow.data("section_id");
 
+        let source_godown_id = $("#from_godown").data("from_godown_id");
+        let source_godown_name = $("#from_godown").val();
+
         let rows = $("#dc_list_tbody").find(
             "tr[data-work_process_id='" + work_process_id + "']"
         );
@@ -1059,9 +1079,12 @@ $(document).ready(function () {
                     data-stock_id="${chk.data("stock_id")}"
                     data-godown_id="${godown_id}"
                     data-department_id="${department_id}"
-                    data-section_id="${section_id}">
+                    data-section_id="${section_id}"
+                    data-source_godown_id="${source_godown_id}">
 
                     <td>${chk.data("part")}</td>
+
+                    <td>${source_godown_name}</td>
 
                     <td>${process}</td>
 
@@ -1086,6 +1109,10 @@ $(document).ready(function () {
                     </td>
 
                     <td class="amount_td">0</td>
+
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove_row"><i class="fa fa-trash"></i></button>
+                    </td>
 
                 </tr>
             `);
@@ -1219,7 +1246,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                             <button
                                                 type="button"
-                                                class="btn btn-success btn-sm btn-add">
+                                                class="btn btn-success btn-sm btn-add" data-work_orders="${item.work_orders}" data-input_parts="${item.input_parts}">
 
                                                 Add
 
@@ -1357,7 +1384,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                                 <button
                                                     type="button"
-                                                    class="btn btn-success btn-sm btn-add">
+                                                    class="btn btn-success btn-sm btn-add" data-work_orders="${item.work_orders}" data-input_parts="${item.input_parts}">
 
                                                     Add
 
@@ -1782,9 +1809,9 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts) {
+function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts) {
 
-    console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, dc_parts_location, transport_dc_id, dc_parts);
+    console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts);
 
     $.ajax({
         url: "php/insert_dc_trip.php",
@@ -1793,7 +1820,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
             current_godown: current_godown,
             destination: destination,
-            source_godown: source_godown,
+            // source_godown: source_godown,
             dc_no: dc_no,
             dc_date: dc_date,
             transport_mode: transport_mode,
@@ -1815,11 +1842,10 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
             dc_to: dc_to,
             bill_to: bill_to,
             ship_to: ship_to,
-            dc_parts_location: dc_parts_location,
+            source_godown: source_godowns,
             transport_dc_id: transport_dc_id,
             dc_parts: dc_parts,
         },
-        dataType: "json",
         success: function (response) {
             console.log(response);
 

@@ -536,8 +536,8 @@ $(document).ready(function () {
   })
 
 
-  $("#qty").on("focusout", function(){
-    if($(this).val() <= 0){
+  $("#qty").on("focusout", function () {
+    if ($(this).val() <= 0) {
       $(this).val(1);
       salert("Warning", "Quantity Must Be Atleast One.", "warning");
       return;
@@ -589,7 +589,7 @@ $(document).ready(function () {
       if (count >= 1) {
 
         var len = $('#sales_product tr').length + 1
-        $('#sales_product').append(" <tr class='small'> <td>" + len + "</td> <td>" + $('#product :selected').text() + "</td> <td data-model_id='" + $('#pmodel').val() + "'>" + $('#pmodel :selected').text() + "</td> <td data-type_id='" + $('#ptype').val() + "'>" + $('#ptype :selected').text() + "</td> <td  data-sub_type_ids="+sub_type_ids+">" + sub_type + "</td> <td>" + $('#qty').val() + "</td><td>" + $('#machine_price').val() + "</td><td>" + $('#billing_price').val() + "</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+        $('#sales_product').append(" <tr class='small'> <td>" + len + "</td> <td>" + $('#product :selected').text() + "</td> <td data-model_id='" + $('#pmodel').val() + "'>" + $('#pmodel :selected').text() + "</td> <td data-type_id='" + $('#ptype').val() + "'>" + $('#ptype :selected').text() + "</td> <td  data-sub_type_ids=" + sub_type_ids + ">" + sub_type + "</td> <td>" + $('#qty').val() + "</td><td>" + $('#machine_price').val() + "</td><td>" + $('#billing_price').val() + "</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
 
         $('#product_details_mobile_view').append(`
                 <div class="card mobile-product-card mb-3">
@@ -874,7 +874,7 @@ $(document).ready(function () {
       count = count + 1;
       //console.log$(this).parent().text());
       sub_type = sub_type + $(this).parent().text().trim() + ","
-      sub_type_ids = sub_type_ids + $(this).val()+ ","
+      sub_type_ids = sub_type_ids + $(this).val() + ","
     });
     //console.logsub_type);
 
@@ -4377,33 +4377,29 @@ function get_sales_order_approval(approve_sts) {
                         `;
 
 
+
             let proText = obj.pro.toLowerCase();
-            // console.log(proText);
 
             let ddu = "d-none";
 
-            let match = proText.match(/\d{4}-\d{2}-\d{2}/);
-
-            let productionDate = null;
-
-            if (match) {
-              productionDate = new Date(match[0]);
-              productionDate.setHours(0, 0, 0, 0);
-            }
+            // Extract all dates from production HTML
+            let matches = proText.match(/\d{4}-\d{2}-\d{2}/g) || [];
 
             let today = new Date();
             today.setHours(0, 0, 0, 0);
 
+            // Check whether any production date is today or earlier
+            let hasDueProduction = matches.some(date => {
+              let productionDate = new Date(date + "T00:00:00");
 
-            if (proText.includes("production")) {
+              return !isNaN(productionDate.getTime()) &&
+                productionDate <= today;
+            });
 
-              if (productionDate && productionDate <= today) {
-                ddu = "";
-              } else {
-                ddu = "d-none";
-              }
-
+            if (proText.includes("production") && hasDueProduction) {
+              ddu = "";
             }
+
 
             else if (proText.includes("unassigned") || proText.includes("waiting")) {
               ddu = "d-none";
@@ -5515,7 +5511,7 @@ function insert_sales_order_form() {
     var qty = $(this).find('td:eq(5)').text();
     var price = $(this).find('td:eq(6)').text();
     var billing_amount = $(this).find('td:eq(7)').text();
-    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount, subtype_details: subtype_details});
+    productDetails.push({ model: model, type: type, subtype: subtype, qty: qty, price: price, billing_amount: billing_amount, subtype_details: subtype_details });
   });
 
   var sparesDetails = [];

@@ -3,6 +3,7 @@ var role = localStorage.getItem("ls_emp_role")
 var cun = localStorage.getItem("ls_uname")
 var phone_id = localStorage.getItem("app_phone_id")
 var emp_id = localStorage.getItem("ls_uid")
+var emp_attendance = localStorage.getItem("ls_emp_attendance")
 // var phone_id = "cbbfc05f5d5a3abe";
 var start = ''
 
@@ -31,6 +32,12 @@ $(document).on("click", ".closeAdvance", function () {
 });
 
 $(document).ready(function () {
+
+  // alert(emp_attendance)
+  // if(!emp_attendance || emp_attendance === "null") {
+  //   window.location.href = "day_login.html";
+  //   return;
+  // }
 
   if (emp_id > 0) {
     setTimeout(function () {

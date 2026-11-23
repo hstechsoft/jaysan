@@ -3,6 +3,7 @@
 
  $current_godown_id = test_input($_GET['current_godown_id']);
  $source_godown_id = test_input($_GET['source_godown_id']);
+//  echo "Current Godown ID: $current_godown_id, Source Godown ID: $source_godown_id, Transport DC ID: $transport_dc_id<br>";
 $source_godown_query = 1;
 if($source_godown_id > 0)
 {
@@ -33,9 +34,9 @@ left join parts_tbl pt on pwt2.output_part = pt.part_id
 left join parts_tbl pt2 on tp.part_id = pt2.part_id
 left join jaysan_process jp on pwt.process = jp.process_id 
 left join creditors on tdc.source_godown = creditors.creditor_id 
-where tdc.des_godown = $current_godown_id  and $source_godown_query and $transport_dc_query and tp.dc_check = 0";
+where tdc.source_godown <> $current_godown_id  and $source_godown_query and $transport_dc_query and tp.dc_check = 0";
 
-
+// echo $sql . "<br>";  
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

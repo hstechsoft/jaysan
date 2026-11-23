@@ -292,7 +292,7 @@ $(document).ready(function () {
     }
   })
 
-  $(".fa-pencil").on("click", function(){
+  $(".fa-pencil").on("click", function () {
     $("#buyer, #buy_gst, #buy_contact").prop("disabled", false);
   })
 
@@ -673,13 +673,13 @@ function get_jaysan_payment() {
 
           var obj = JSON.parse(response);
           var count = 0
-          var advance  = ''
+          var advance = ''
 
 
           obj.forEach(function (obj) {
             count = count + 1;
             advance = (obj.pay_sts == 'advance') ? `<strong class="text-primary blink ">Advance Payment</strong>` : '';
-            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td>" + obj.ref_no + "</td><td>" + obj.utr_no + "</td><td colspan=''>" + obj.date_f + " " +advance+ "</td><td  colspan=''>" + Number(obj.amount.replace(/₹|,/g, '')).toLocaleString('en-IN') + "</td><td>" + obj.sts + "</td></tr>")
+            $('#spaytable').append("<tr><td>" + count + "</td><td>" + obj.order_no + "</td><td>" + obj.ref_no + "</td><td>" + obj.utr_no + "</td><td colspan=''>" + obj.date_f + " " + advance + "</td><td  colspan=''>" + Number(obj.amount.replace(/₹|,/g, '')).toLocaleString('en-IN') + "</td><td>" + obj.sts + "</td></tr>")
 
           });
 
@@ -854,6 +854,23 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Extract production date from obj.rtd
+            let match = obj.rtd.match(/\d{4}-\d{2}-\d{2}/);
+            let rtd = $(obj.rtd);
+
+            if (match) {
+              let productionDate = new Date(match[0] + "T00:00:00");
+
+              if (productionDate > today) {
+                rtd.find("input").addClass("d-none");
+              }
+
+              obj.rtd = rtd.prop("outerHTML");
+            }
+
             $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td class=''>" + obj.rtd + "</td></tr>")
 
           });
@@ -905,7 +922,7 @@ function get_sale_order_spares() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td> Qno: <b class='text-primary'>" + obj.qno +"</b> - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='" + obj.spares_id + "'></input></td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.amount + "'><td>" + count + "</td><td> Qno: <b class='text-primary'>" + obj.qno + "</b> - " + obj.remark + "</td><td>" + obj.order_no + "</td><td>" + '' + "</td><td><input type='checkbox' data-spare_id='" + obj.spares_id + "'></input></td></tr>")
 
           });
 

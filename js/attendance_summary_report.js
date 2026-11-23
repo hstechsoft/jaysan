@@ -464,7 +464,7 @@ function saveAttendanceChanges() {
 
     const startTime = $("#edit_start_time").val();
 
-    const endTime = $("#edit_end_time").val();
+    const endTime = $("#edit_end_time").val() || null;
 
     if (!dated || !startTime) {
         salert("Error", "Please enter attendance date and start time.", "error");
