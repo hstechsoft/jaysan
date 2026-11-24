@@ -126,6 +126,7 @@ $(document).ready(function () {
                         // window.location.replace();
                         attendance_id = response.attendance_id;
 
+                        localStorage.setItem("ls_emp_attendance", response.attendance_id)
                         // Use the database start time for an existing record
                         const savedTime = response.status === "exists"
                             ? new Date(response.start_time.replace(' ', 'T'))

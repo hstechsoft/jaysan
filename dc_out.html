@@ -1064,6 +1064,37 @@
         </div>
     </div>
 
+    <div class="modal fade" id="work_orders_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="work_orders_modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="work_orders_modalLabel">Work Orders and Input Parts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header">
+                                Input Parts Needed Details
+                            </div>
+                            <div class="card-body">
+                                <p>Here you will see the details of input parts needed for the selected work orders.</p>
+                                <div id="input_parts_needed_details">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="work_orders_modal_content">
+
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary save_input_parts_qty_btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id='footer' class="mt-auto"></div>
     <!-- jQuery -->

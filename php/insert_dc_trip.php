@@ -325,20 +325,22 @@ if ($conn->query($sql_update_stock_reserve) === TRUE) {
           
              $stock_part_id = sql_nullable($stock_part_id);
              $stock_process_id = sql_nullable($stock_process_id);
-
+$transport_part_id = 0;
                     // add parts to in_dc_parts on duplicate key update add qty
                   $sql_in_dc_parts = "INSERT INTO  transport_parts (transport_dc_id,part_id,process_id, qty,reserve_id,dc_check) VALUES ($transport_dc_id, $stock_part_id, $stock_process_id, $reserve_qty, $reserve_id, $dc_check) on duplicate key update qty = qty + $reserve_qty";
                 //   get inserted id
-                $transport_part_id = $conn->insert_id;
                     if (!$conn->query($sql_in_dc_parts)) {
                         throw new Exception("Error inserting in_dc_parts: " . $conn->error);
                     }
+                //   get inserted id
+                $transport_part_id = $conn->insert_id;
              
 // insert into dc tracking 
 foreach($work_order_info as $work_order) {
     $work_order_id = $work_order['work_order_id'];
-    $qty = $$work_order['qty'];;
+    $qty = $work_order['qty'];;
     $sql_dc_tracking = "INSERT INTO dc_tracking (transport_part_id, work_order_id, qty,dc_no) VALUES ($transport_part_id, $work_order_id, $qty, $dc_no)";
+    
     if (!$conn->query($sql_dc_tracking)) {
         throw new Exception("Error inserting dc_tracking: " . $conn->error);
     }

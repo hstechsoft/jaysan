@@ -829,7 +829,6 @@ $(document).ready(function () {
 
         let dc_parts = [];
         let dc_parts_location = [];
-        let dc_process = [];
         let source_godowns = [];
 
         let transport_dc_id = ($(this).data("transport_dc_id") > 0 || $(this).data("transport_dc_id") !== undefined) ? $(this).data("transport_dc_id") : 0;
@@ -858,6 +857,8 @@ $(document).ready(function () {
 
             let source_godown_id = $(this).data("source_godown_id");
 
+            let work_order_info = $(this).data("work_order_info") ? $(this).data("work_order_info") : [];
+
 
             dc_parts.push({
                 part_id: part_id,
@@ -875,7 +876,8 @@ $(document).ready(function () {
                 emp_id: emp_id,
                 stock_id: stock_id,
                 stock_reserve_id: stock_reserve_id,
-                qty: qty
+                qty: qty,
+                work_order_info: work_order_info
             };
 
             dc_parts_location.push(location);
@@ -929,7 +931,7 @@ $(document).ready(function () {
         console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts);
 
         $(this).prop('disabled', true)
-        insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(source_godowns), transport_dc_id, JSON.stringify(dc_parts));
+        insert_dc_trip(current_godown, destination, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, JSON.stringify(source_godowns), transport_dc_id, JSON.stringify(dc_parts));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -975,135 +977,614 @@ $(document).ready(function () {
         }
     })
 
-    $("#dc_list_tbody").on("focusout", ".reserve_qty", function () {
-        var qty = $(this).data("qty");
-        var needed_qty = $(this).data("needed_qty");
-        var enter_qty = $(this).val();
-        var need = qty > needed_qty ? needed_qty : qty;
-        var input_part_id = $(this).data("input_part_id");
+    // $("#dc_list_tbody").on("focusout", ".reserve_qty", function () {
+    //     var qty = $(this).data("qty");
+    //     var needed_qty = $(this).data("needed_qty");
+    //     var enter_qty = $(this).val();
+    //     var need = qty > needed_qty ? needed_qty : qty;
+    //     var input_part_id = $(this).data("input_part_id");
 
-        console.log(allReserveData);
+    //     console.log(allReserveData);
 
 
-        if (allReserveData.find(data => data.input_part_id === input_part_id).reserveQty < enter_qty) {
-            salert("Warning", "Entered quantity exceeds the reserved quantity " + allReserveData.find(data => data.input_part_id === input_part_id).reserveQty, "warning");
+    //     if (allReserveData.find(data => data.input_part_id === input_part_id).reserveQty < enter_qty) {
+    //         salert("Warning", "Entered quantity exceeds the reserved quantity " + allReserveData.find(data => data.input_part_id === input_part_id).reserveQty, "warning");
+    //         return;
+    //     }
+
+    //     if (enter_qty < 1) {
+    //         $(this).val(1);
+    //     }
+    //     else if (enter_qty > need) {
+    //         $(this).val(need);
+    //     }
+    // })
+
+
+
+    $("#dc_list_tbody").on("focusout change", ".reserve_qty", function () {
+
+        let input = $(this);
+        let row = input.closest("tr");
+
+        row.find(".reserve_check").prop("checked", false);
+
+        let stockQty = parseFloat(input.data("qty")) || 0;
+        let neededQty = parseFloat(input.data("needed_qty")) || 0;
+        let enteredQty = parseFloat(input.val());
+
+        let stockId = String(row.find(".reserve_check").data("stock_id"));
+        let inputPartId = String(input.data("input_part_id"));
+        let processId = String(row.data("work_process_id"));
+
+        // Reject invalid quantity
+        if (!Number.isFinite(enteredQty) || enteredQty < 0) {
+            input.val(0);
+            salert("Warning", "Enter a valid quantity.", "warning");
             return;
         }
 
-        if (enter_qty < 1) {
-            $(this).val(1);
+        // Check individual stock and needed quantity
+        if (enteredQty > stockQty) {
+            input.val(stockQty);
+            enteredQty = stockQty;
+
+            salert(
+                "Warning",
+                "Entered quantity exceeds available stock quantity " + stockQty,
+                "warning"
+            );
         }
-        else if (enter_qty > need) {
-            $(this).val(need);
+
+        if (enteredQty > neededQty) {
+            input.val(neededQty);
+            enteredQty = neededQty;
+
+            salert(
+                "Warning",
+                "Entered quantity exceeds needed quantity " + neededQty,
+                "warning"
+            );
         }
-    })
+
+        // Calculate quantity already allocated for this stock ID
+        let alreadyUsedQty = 0;
+
+        // Count quantity already added to selected table
+        $("#selected_part_tbody tr").each(function () {
+
+            let selectedRow = $(this);
+
+            if (String(selectedRow.data("stock_id")) === stockId) {
+
+                alreadyUsedQty +=
+                    parseFloat(selectedRow.find(".qty_input").val()) || 0;
+
+            }
+
+        });
+
+        // Count other checked rows which are NOT already added
+        $("#dc_list_tbody .reserve_check:checked").each(function () {
+
+            let otherCheckbox = $(this);
+            let otherRow = otherCheckbox.closest("tr");
+
+            // Ignore current row
+            if (otherRow[0] === row[0]) {
+                return;
+            }
+
+            if (String(otherCheckbox.data("stock_id")) !== stockId) {
+                return;
+            }
+
+            // Find Add button for this work process
+            let otherProcessId = String(otherRow.data("work_process_id"));
+
+            let addButton = $("#dc_list_tbody tr").filter(function () {
+                return String($(this).data("work_process_id")) === otherProcessId;
+            }).find(".btn-add").first();
+
+            // Ignore checked rows already added to selected table
+            if (addButton.length && addButton.prop("disabled")) {
+                return;
+            }
+
+            alreadyUsedQty +=
+                parseFloat(otherRow.find(".reserve_qty").val()) || 0;
+
+        });
+
+        // Remaining stock quantity
+        let remainingStockQty = Math.max(0, stockQty - alreadyUsedQty);
+
+        // Validate current entered quantity against remaining stock
+        if (enteredQty > remainingStockQty) {
+
+            input.val(remainingStockQty);
+
+            enteredQty = remainingStockQty;
+
+            salert(
+                "Warning",
+                "Only " + remainingStockQty +
+                " quantity is remaining for Stock ID " + stockId,
+                "warning"
+            );
+
+        }
+
+        // Check total allocated quantity for same process and input part
+        let totalOtherQty = 0;
+
+        // Count quantities already added to selected table
+        $("#selected_part_tbody tr").each(function () {
+
+            let selectedRow = $(this);
+
+            if (
+                String(selectedRow.data("work_process_id")) === processId &&
+                String(selectedRow.data("part_id")) === inputPartId
+            ) {
+
+                totalOtherQty +=
+                    parseFloat(selectedRow.find(".qty_input").val()) || 0;
+
+            }
+
+        });
+
+        // Count other checked rows not already added
+        $("#dc_list_tbody tr").each(function () {
+
+            let otherRow = $(this);
+
+            if (
+                otherRow[0] === row[0] ||
+                String(otherRow.data("work_process_id")) !== processId
+            ) {
+                return;
+            }
+
+            let otherCheckbox = otherRow.find(".reserve_check");
+
+            if (
+                String(otherRow.find(".reserve_qty").data("input_part_id")) === inputPartId &&
+                otherCheckbox.is(":checked")
+            ) {
+
+                // Ignore rows already added to selected table
+                let addButton = $("#dc_list_tbody tr").filter(function () {
+                    return String($(this).data("work_process_id")) === processId;
+                }).find(".btn-add").first();
+
+                if (addButton.length && addButton.prop("disabled")) {
+                    return;
+                }
+
+                totalOtherQty +=
+                    parseFloat(otherRow.find(".reserve_qty").val()) || 0;
+
+            }
+
+        });
+
+        let remainingNeeded = Math.max(0, neededQty - totalOtherQty);
+
+        if (enteredQty > remainingNeeded) {
+
+            input.val(remainingNeeded);
+
+            salert(
+                "Warning",
+                "Total allocated quantity cannot exceed needed quantity. Remaining quantity: " +
+                remainingNeeded,
+                "warning"
+            );
+
+        }
+
+    });
+
+
+
+    // $("#dc_list_tbody").on("click", ".btn-add", function () {
+
+    //     let currentRow = $(this).closest("tr");
+
+    //     let work_process_id = currentRow.data("work_process_id");
+    //     let godown_id = currentRow.data("godown_id");
+    //     let department_id = currentRow.data("department_id");
+    //     let section_id = currentRow.data("section_id");
+
+    //     let source_godown_id = $("#from_godown").data("from_godown_id");
+    //     let source_godown_name = $("#from_godown").val();
+
+    //     let rows = $("#dc_list_tbody").find(
+    //         "tr[data-work_process_id='" + work_process_id + "']"
+    //     );
+
+    //     let process = currentRow.find("span").text().trim();
+    //     // let part = currentRow.find("td:eq(3)").find("strong").text().trim();
+
+    //     let chk_count = 0;
+
+    //     rows.each(function () {
+
+    //         let row = $(this);
+
+    //         let chk = row.find(".reserve_check");
+
+    //         if (!chk.is(":checked")) {
+    //             return;
+    //         }
+
+    //         chk_count++;
+
+    //         let qtyInput = row.find(".reserve_qty");
+
+    //         let qty = parseFloat(qtyInput.val()) || 0;
+    //         let availableQty = parseFloat(qtyInput.data("qty")) || 0;
+
+    //         let input_part_id = chk.data("input_part_id");
+    //         let stock_id = chk.data("stock_id");
+
+    //         // Find existing reserve data
+    //         let reserveData = allReserveData.find(
+    //             data => data.stock_id == stock_id
+    //         );
+
+    //         if (!reserveData) {
+    //             salert(
+    //                 "Warning",
+    //                 "Reserve data not found for input part.",
+    //                 "warning"
+    //             );
+    //             return;
+    //         }
+
+    //         // Check available reserve quantity
+    //         if (reserveData.reserve_qty < qty) {
+
+    //             salert(
+    //                 "Warning",
+    //                 "Entered quantity exceeds available reserve quantity " +
+    //                 reserveData.reserve_qty,
+    //                 "warning"
+    //             );
+    //             return;
+    //         }
+
+    //         // Reduce reserve quantity ONCE
+    //         reserveData.reserve_qty -= qty;
+
+    //         // let reserveLocation = row.find("td").eq(4).text().trim();
+
+    //         $("#selected_part_tbody").append(`
+    //             <tr
+    //                 data-part_pre_process_id="${chk.data("previous_process_id")}"
+    //                 data-work_process_id="${row.data("work_process_id")}"
+    //                 data-part_id="${input_part_id}"
+    //                 data-stock_reserve_id="${chk.data("stock_reserve_id")}"
+    //                 data-stock_id="${chk.data("stock_id")}"
+    //                 data-godown_id="${godown_id}"
+    //                 data-department_id="${department_id}"
+    //                 data-section_id="${section_id}"
+    //                 data-source_godown_id="${source_godown_id}">
+
+    //                 <td>${chk.data("part")}</td>
+
+    //                 <td>${source_godown_name}</td>
+
+    //                 <td>${process}</td>
+
+    //                 <td>${chk.data("godown")}</td>
+
+    //                 <td>${availableQty}</td>
+
+    //                 <td>
+    //                     <input
+    //                         type="number"
+    //                         class="form-control form-control-sm qty_input"
+    //                         value="${qty}"
+    //                         max="${availableQty}"
+    //                         disabled>
+    //                 </td>
+
+    //                 <td>
+    //                     <input
+    //                         type="number"
+    //                         class="form-control form-control-sm rate_input"
+    //                         value="0">
+    //                 </td>
+
+    //                 <td class="amount_td">0</td>
+
+    //                 <td>
+    //                     <button type="button" class="btn btn-danger btn-sm remove_row"><i class="fa fa-trash"></i></button>
+    //                 </td>
+
+    //             </tr>
+    //         `);
+
+    //         // Disable Add button
+    //         currentRow.find(".btn-add").prop("disabled", true);
+    //     });
+
+    //     if (chk_count === 0) {
+    //         salert(
+    //             "Warning",
+    //             "At least one item must be selected.",
+    //             "warning"
+    //         );
+    //     }
+    // });
+
+
 
     $("#dc_list_tbody").on("click", ".btn-add", function () {
 
         let currentRow = $(this).closest("tr");
+        let workProcessId = String(currentRow.data("work_process_id"));
 
-        let work_process_id = currentRow.data("work_process_id");
-        let godown_id = currentRow.data("godown_id");
-        let department_id = currentRow.data("department_id");
-        let section_id = currentRow.data("section_id");
+        let sourceGodownId = $("#from_godown").data("from_godown_id");
+        let sourceGodownName = $("#from_godown").val();
 
-        let source_godown_id = $("#from_godown").data("from_godown_id");
-        let source_godown_name = $("#from_godown").val();
+        let rows = [];
 
-        let rows = $("#dc_list_tbody").find(
-            "tr[data-work_process_id='" + work_process_id + "']"
-        );
-
-        let process = currentRow.find("span").text().trim();
-        // let part = currentRow.find("td:eq(3)").find("strong").text().trim();
-
-        let chk_count = 0;
-
-        rows.each(function () {
+        // Collect checked rows belonging to this work process
+        $("#dc_list_tbody tr").each(function () {
 
             let row = $(this);
 
-            let chk = row.find(".reserve_check");
-
-            if (!chk.is(":checked")) {
+            if (String(row.data("work_process_id")) !== workProcessId) {
                 return;
             }
 
-            chk_count++;
+            if (row.find(".reserve_check").is(":checked")) {
+                rows.push(row);
+            }
 
+        });
+
+        if (rows.length === 0) {
+            salert("Warning", "At least one item must be selected.", "warning");
+            return;
+        }
+
+        let inputPartTotals = {};
+        let stockTotals = {};
+        let selectedRows = [];
+
+        // VALIDATE ALL ROWS BEFORE INSERTING
+        for (let row of rows) {
+
+            let checkbox = row.find(".reserve_check");
             let qtyInput = row.find(".reserve_qty");
 
             let qty = parseFloat(qtyInput.val()) || 0;
-            let availableQty = parseFloat(qtyInput.data("qty")) || 0;
 
-            let input_part_id = chk.data("input_part_id");
-            let stock_id = chk.data("stock_id");
+            let stockQty = parseFloat(qtyInput.data("qty")) || 0;
+            let neededQty = parseFloat(qtyInput.data("needed_qty")) || 0;
 
-            // Find existing reserve data
-            let reserveData = allReserveData.find(
-                data => data.stock_id == stock_id
-            );
+            let stockId = String(checkbox.data("stock_id"));
+            let inputPartId = String(checkbox.data("input_part_id"));
 
-            if (!reserveData) {
-                salert(
-                    "Warning",
-                    "Reserve data not found for input part.",
-                    "warning"
-                );
-                return;
-            }
+            let workOrderInfo = row.data("work_order_info") || [];
 
-            // Check available reserve quantity
-            if (reserveData.reserve_qty < qty) {
+            console.log(workOrderInfo);
+
+            // Quantity must be greater than zero
+            if (qty <= 0) {
 
                 salert(
                     "Warning",
-                    "Entered quantity exceeds available reserve quantity " +
-                    reserveData.reserve_qty,
+                    "Quantity must be greater than zero. Please enter quantity for all selected parts.",
                     "warning"
                 );
+
                 return;
             }
 
-            // Reduce reserve quantity ONCE
-            reserveData.reserve_qty -= qty;
+            // Individual stock and needed quantity validation
+            if (qty > stockQty || qty > neededQty) {
 
-            // let reserveLocation = row.find("td").eq(4).text().trim();
+                salert(
+                    "Warning",
+                    "Entered quantity exceeds available or needed quantity.",
+                    "warning"
+                );
 
+                return;
+            }
+
+            // Calculate quantity already added for this stock ID
+            if (stockTotals[stockId] === undefined) {
+
+                stockTotals[stockId] = {
+                    available: stockQty,
+                    batchQty: 0,
+                    alreadyUsedQty: 0
+                };
+
+                // Get quantity already added to selected table
+                $("#selected_part_tbody tr").each(function () {
+
+                    let selectedRow = $(this);
+
+                    if (String(selectedRow.data("stock_id")) === stockId) {
+
+                        stockTotals[stockId].alreadyUsedQty +=
+                            parseFloat(selectedRow.find(".qty_input").val()) || 0;
+
+                    }
+
+                });
+
+            }
+
+            // Add current batch quantity
+            stockTotals[stockId].batchQty += qty;
+
+            // Validate cumulative stock quantity
+            let totalStockUsed =
+                stockTotals[stockId].alreadyUsedQty +
+                stockTotals[stockId].batchQty;
+
+            if (totalStockUsed > stockTotals[stockId].available) {
+
+                let remainingQty =
+                    stockTotals[stockId].available -
+                    stockTotals[stockId].alreadyUsedQty;
+
+                salert(
+                    "Warning",
+                    "Stock ID " + stockId +
+                    " has only " + remainingQty +
+                    " quantity remaining. You are trying to use " +
+                    stockTotals[stockId].batchQty + " quantity.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            // Validate cumulative quantity for same input part
+            let key = workProcessId + "_" + inputPartId;
+
+            if (inputPartTotals[key] === undefined) {
+                inputPartTotals[key] = 0;
+            }
+
+            inputPartTotals[key] += qty;
+
+            // Work order modal must be completed if work orders exist
+            let workOrders = checkbox.data("work_orders")
+                ? JSON.parse(decodeURIComponent(checkbox.data("work_orders")))
+                : [];
+
+            if (workOrders.length > 0 && !row.data("work_order_info")) {
+
+                salert(
+                    "Warning",
+                    "Please enter work order quantities before adding the part.",
+                    "warning"
+                );
+
+                return;
+            }
+
+            selectedRows.push({
+                row: row,
+                checkbox: checkbox,
+                qtyInput: qtyInput,
+                qty: qty,
+                stockId: stockId,
+                inputPartId: inputPartId,
+                workOrderInfo: workOrderInfo
+            });
+
+        }
+
+        // Validate cumulative needed quantity for this batch + previously added parts
+        for (let key in inputPartTotals) {
+
+            let sample = selectedRows.find(function (item) {
+                return key === workProcessId + "_" + item.inputPartId;
+            });
+
+            if (!sample) continue;
+
+            let neededQty = parseFloat(sample.qtyInput.data("needed_qty")) || 0;
+
+            let alreadyAddedQty = 0;
+
+            $("#selected_part_tbody tr").each(function () {
+
+                let selectedRow = $(this);
+
+                if (
+                    String(selectedRow.data("work_process_id")) === workProcessId &&
+                    String(selectedRow.data("part_id")) === sample.inputPartId
+                ) {
+
+                    alreadyAddedQty +=
+                        parseFloat(selectedRow.find(".qty_input").val()) || 0;
+
+                }
+
+            });
+
+            let totalQty = inputPartTotals[key] + alreadyAddedQty;
+
+            if (totalQty > neededQty) {
+
+                salert(
+                    "Warning",
+                    "Total quantity exceeds needed quantity. Maximum allowed: " + neededQty,
+                    "warning"
+                );
+
+                return;
+            }
+
+        }
+
+        // ALL VALIDATIONS PASSED - INSERT SELECTED ROWS
+        selectedRows.forEach(function (item) {
+
+            let row = item.row;
+            let checkbox = item.checkbox;
+
+            let qty = item.qty;
+
+            let inputPartId = item.inputPartId;
+            let stockId = item.stockId;
+
+            let stockReserveId = checkbox.data("stock_reserve_id");
+
+            let partName = checkbox.data("part");
+            let godownName = checkbox.data("godown");
+
+            let originalQty = item.qtyInput.val();
+
+            // Get process name from current row or previous rowspan row
+            let processName = row.find("span").first().text().trim();
+
+            if (!processName) {
+                processName = row.prevAll("tr").filter(function () {
+                    return $(this).find("span").length > 0;
+                }).first().find("span").first().text().trim();
+            }
             $("#selected_part_tbody").append(`
                 <tr
-                    data-part_pre_process_id="${chk.data("previous_process_id")}"
+                    data-part_pre_process_id="${checkbox.data("previous_process_id") || ''}"
                     data-work_process_id="${row.data("work_process_id")}"
-                    data-part_id="${input_part_id}"
-                    data-stock_reserve_id="${chk.data("stock_reserve_id")}"
-                    data-stock_id="${chk.data("stock_id")}"
-                    data-godown_id="${godown_id}"
-                    data-department_id="${department_id}"
-                    data-section_id="${section_id}"
-                    data-source_godown_id="${source_godown_id}">
+                    data-part_id="${inputPartId}"
+                    data-stock_reserve_id="${stockReserveId}"
+                    data-stock_id="${stockId}"
+                    data-godown_id="${row.data("godown_id")}"
+                    data-department_id="${row.data("department_id") || ''}"
+                    data-section_id="${row.data("section_id") || ''}"
+                    data-source_godown_id="${sourceGodownId}"
+                    data-original_qty="${originalQty}">
 
-                    <td>${chk.data("part")}</td>
-
-                    <td>${source_godown_name}</td>
-
-                    <td>${process}</td>
-
-                    <td>${chk.data("godown")}</td>
-
-                    <td>${availableQty}</td>
+                    <td>${partName || ''}</td>
+                    <td>${sourceGodownName || ''}</td>
+                    <td>${processName || ''}</td>
+                    <td>${godownName || ''}</td>
+                    <td>${item.qtyInput.data("qty")}</td>
 
                     <td>
-                        <input
-                            type="number"
+                        <input type="number"
                             class="form-control form-control-sm qty_input"
                             value="${qty}"
-                            max="${availableQty}"
                             disabled>
                     </td>
 
                     <td>
-                        <input
-                            type="number"
+                        <input type="number"
                             class="form-control form-control-sm rate_input"
                             value="0">
                     </td>
@@ -1111,24 +1592,680 @@ $(document).ready(function () {
                     <td class="amount_td">0</td>
 
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm remove_row"><i class="fa fa-trash"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm remove_row">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </td>
-
                 </tr>
             `);
 
-            // Disable Add button
-            currentRow.find(".btn-add").prop("disabled", true);
+            // Store allocation in selected_part_tbody row
+            let addedRow = $("#selected_part_tbody tr").last();
+
+            addedRow.data("work_order_info", item.workOrderInfo);
+
+            // Disable source row
+            checkbox.prop("disabled", true);
+            item.qtyInput.prop("disabled", true);
+
         });
 
-        if (chk_count === 0) {
+        // Disable Add button for this process
+        currentRow.find(".btn-add").prop("disabled", true);
+
+    });
+
+
+
+    // $("#dc_list_tbody").on("click", ".reserve_check", function () {
+
+    //     if (!$(this).is(":checked")) {
+    //         return;
+    //     }
+
+    //     $("#save_input_parts_qty_btn").data("row", $(this).closest("tr"));
+
+    //     var work_orders = ($(this).data("work_orders") ? JSON.parse(decodeURIComponent($(this).data("work_orders"))) : []);
+    //     var input_parts = $(this).data("input_parts") ? JSON.parse(decodeURIComponent($(this).data("input_parts"))) : [];
+
+    //     console.log(work_orders);
+    //     console.log(input_parts);
+
+
+    //     var currentRow = $(this).closest("tr");
+    //     var input_qty = currentRow.find(".reserve_qty").val();
+    //     var output_qty = 0;
+
+    //     console.log(input_qty);
+
+    //     if (work_orders && input_parts && work_orders.length > 0 && input_parts.length > 0) {
+    //         $("#work_orders_modal").modal("show");
+    //         // Populate the modal with work orders and input parts details
+    //         input_parts.forEach(function (part) {
+    //             output_qty = parseFloat(input_qty) / parseFloat(part.qty);
+    //             $("#input_parts_needed_details").append(`
+    //                 <p>Part: ${part.part || ''}</p>
+    //                 <p>Required Quantity: ${part.qty}</p>
+    //                 <p>Output Quantity: ${output_qty}</p>
+    //             `);
+
+    //         });
+
+    //         work_orders.forEach(function (order) {
+    //             $("#work_orders_modal_content").append(`
+    //                 <p>Work Order: ${order.work_order_id || ''}</p>
+    //                 <p>Output Quantity: <strong class="output_qty_display">${output_qty}</strong></p>
+    //                 <div class="mb-2 d-flex justify-content-between">
+    //                 <input type="number" class="form-control form-control-sm" value="${order.pending_qty || 0}" data-qty="${order.pending_qty || 0}" disabled>
+    //                 <input type="number" class="form-control form-control-sm enter_qty" data-work_order_id="${order.work_order_id || ''}" data-pending_qty="${order.pending_qty || 0}" data-output_qty="${output_qty}">
+    //                 </div>
+    //             `);
+    //         });
+    //     }
+    //     else {
+    //         $("#input_parts_needed_details").html("<p>No input parts needed for the selected work orders.</p>");
+    //         $("#work_orders_modal_content").html("<p>No work orders available.</p>");
+    //         $("#work_orders_modal").modal("show");
+    //     }
+    // });
+
+
+
+    $("#dc_list_tbody").on("click", ".reserve_check", function () {
+
+        let checkbox = $(this);
+        let currentRow = checkbox.closest("tr");
+
+        if (!checkbox.is(":checked")) {
+            return;
+        }
+
+        let qtyInput = currentRow.find(".reserve_qty");
+        let inputQty = parseFloat(qtyInput.val()) || 0;
+
+        let input_part_id = checkbox.data("input_part_id") || '';
+        let previous_process_id = checkbox.data("previous_process_id") || '';
+
+        if (inputQty <= 0) {
+
+            checkbox.prop("checked", false);
+
+            salert("Warning", "Enter a quantity before selecting the part.", "warning");
+            return;
+        }
+
+        // Check stock ID and remaining quantity
+        let stockId = String(checkbox.data("stock_id"));
+
+        let availableStockQty = parseFloat(qtyInput.data("qty")) || 0;
+
+        let alreadyUsedQty = 0;
+
+        // Calculate quantity already added to selected parts
+        $("#selected_part_tbody tr").each(function () {
+
+            let selectedRow = $(this);
+
+            if (String(selectedRow.data("stock_id")) === stockId) {
+
+                alreadyUsedQty +=
+                    parseFloat(selectedRow.find(".qty_input").val()) || 0;
+
+            }
+
+        });
+
+        // Include other checked rows that have NOT already been added
+        $("#dc_list_tbody .reserve_check:checked").each(function () {
+
+            let otherCheckbox = $(this);
+
+            if (otherCheckbox[0] === checkbox[0]) {
+                return;
+            }
+
+            let otherRow = otherCheckbox.closest("tr");
+
+            let otherProcessId = String(otherRow.data("work_process_id"));
+
+            let addButton = $("#dc_list_tbody tr").filter(function () {
+                return String($(this).data("work_process_id")) === otherProcessId;
+            }).find(".btn-add").first();
+
+            // Ignore rows already added to selected_part_tbody
+            if (addButton.length && addButton.prop("disabled")) {
+                return;
+            }
+
+            if (String(otherCheckbox.data("stock_id")) === stockId) {
+
+                let otherQty = parseFloat(
+                    otherRow.find(".reserve_qty").val()
+                ) || 0;
+
+                alreadyUsedQty += otherQty;
+            }
+
+        });
+
+        let remainingStockQty = availableStockQty - alreadyUsedQty;
+
+        if (inputQty > remainingStockQty) {
+
+            checkbox.prop("checked", false);
+
             salert(
                 "Warning",
-                "At least one item must be selected.",
+                "Only " + remainingStockQty +
+                " quantity is available for this stock.",
+                "warning"
+            );
+
+            return;
+        }
+
+        $(".save_input_parts_qty_btn").data("row", currentRow);
+
+        $("#work_orders_modal").data("allocationSaved", false);
+
+        let work_orders = checkbox.data("work_orders")
+            ? JSON.parse(decodeURIComponent(checkbox.data("work_orders")))
+            : [];
+
+        let input_parts = checkbox.data("input_parts")
+            ? JSON.parse(decodeURIComponent(checkbox.data("input_parts")))
+            : [];
+
+        $("#input_parts_needed_details").empty();
+        $("#work_orders_modal_content").empty();
+
+        // Calculate limiting output quantity using all input parts
+        let outputQty = Infinity;
+
+        input_parts.forEach(function (part) {
+
+            let requiredPerOutput = (part.input_part == input_part_id || part.previous_process_id == previous_process_id) ? parseFloat(part.qty) || 0 : 0;
+
+            if (requiredPerOutput <= 0) {
+                return;
+            }
+
+            let possibleOutput = inputQty / requiredPerOutput;
+
+            outputQty = Math.min(outputQty, possibleOutput);
+
+            console.log(input_part_id, previous_process_id);
+            console.log(part.input_part, part.previous_process_id);
+            $("#input_parts_needed_details").append(`${(part.input_part == input_part_id || part.previous_process_id == previous_process_id) ? `
+            <div class="border-bottom py-2">
+                <p class="mb-1">
+                    <strong>Part:</strong> ${part.part || ''}
+                </p>
+                <p class="mb-0">
+                    <strong>Required Quantity:</strong> ${requiredPerOutput}
+                </p>
+                <p class="mb-0">
+                    <strong>Possible Output:</strong> ${possibleOutput.toFixed(3)}
+                </p>
+            </div>
+        ` : ''}`);
+
+        });
+
+        if (!Number.isFinite(outputQty)) {
+            outputQty = 0;
+        }
+
+        outputQty = Math.floor((outputQty + Number.EPSILON) * 1000) / 1000;
+
+        // --------------------------------------------------
+        // CALCULATE WORK ORDER QUANTITY ALREADY ALLOCATED
+        // FROM SELECTED PARTS TABLE
+        // --------------------------------------------------
+
+        let allocatedWorkOrderQty = {};
+
+        $("#selected_part_tbody tr").each(function () {
+
+            let selectedRow = $(this);
+
+            let workOrderInfo = selectedRow.data("work_order_info") || [];
+
+            // Support array or JSON string
+            if (typeof workOrderInfo === "string") {
+
+                try {
+                    workOrderInfo = JSON.parse(workOrderInfo);
+                } catch (e) {
+                    workOrderInfo = [];
+                }
+
+            }
+
+            workOrderInfo.forEach(function (item) {
+
+                let woId = String(item.work_order_id);
+                let allocatedQty = parseFloat(item.qty) || 0;
+
+                if (!allocatedWorkOrderQty[woId]) {
+                    allocatedWorkOrderQty[woId] = 0;
+                }
+
+                allocatedWorkOrderQty[woId] += allocatedQty;
+
+            });
+
+        });
+
+        // --------------------------------------------------
+        // DISPLAY ONLY WORK ORDERS WITH REMAINING QUANTITY
+        // --------------------------------------------------
+
+        if (work_orders.length > 0 && outputQty > 0) {
+
+            $("#work_orders_modal_content").append(`
+            <div class="alert alert-info">
+                Maximum Output Quantity:
+                <strong id="modal_output_qty">${outputQty}</strong>
+                <br>
+                Remaining Output Quantity:
+                <strong id="output_qty_display">${outputQty}</strong>
+            </div>
+        `);
+
+            let displayedWorkOrders = 0;
+
+            work_orders.forEach(function (order) {
+
+                let workOrderId = String(order.work_order_id);
+
+                let originalPendingQty = parseFloat(order.pending_qty) || 0;
+
+                // Quantity allocated in other godowns
+                let alreadyAllocated =
+                    allocatedWorkOrderQty[workOrderId] || 0;
+
+                // Calculate remaining pending quantity
+                let remainingPending = Math.max(
+                    0,
+                    originalPendingQty - alreadyAllocated
+                );
+
+                // Hide completely allocated work orders
+                if (remainingPending <= 0) {
+                    return;
+                }
+
+                displayedWorkOrders++;
+
+                $("#work_orders_modal_content").append(`
+                <div class="border rounded p-2 mb-2 work-order-item"
+                     data-work_order_id="${workOrderId}">
+
+                    <div class="d-flex justify-content-between">
+                        <strong>Work Order: ${workOrderId}</strong>
+
+                        <span class="badge bg-secondary">
+                            Pending: ${remainingPending}
+                        </span>
+                    </div>
+
+                    <input
+                        type="number"
+                        class="form-control form-control-sm mt-2 enter_qty"
+                        value="0"
+                        min="0"
+                        max="${remainingPending}"
+                        step="0.001"
+                        data-work_order_id="${workOrderId}"
+                        data-pending_qty="${remainingPending}"
+                    >
+
+                </div>
+            `);
+
+            });
+
+            if (displayedWorkOrders === 0) {
+
+                $("#work_orders_modal_content").append(`
+                <div class="alert alert-warning">
+                    All work orders have been fully allocated in other godowns.
+                </div>
+            `);
+
+            }
+
+        } else {
+
+            $("#input_parts_needed_details").html(
+                "<p>No input parts needed for the selected work orders.</p>"
+            );
+
+            $("#work_orders_modal_content").html(
+                "<p>No work orders or valid output quantity available.</p>"
+            );
+
+        }
+
+        $("#work_orders_modal").modal("show");
+
+    });
+
+
+
+
+    $("#work_orders_modal").on("hidden.bs.modal", function () {
+
+        let modal = $(this);
+
+        let allocationSaved = modal.data("allocationSaved");
+
+        // If user closed without saving
+        if (!allocationSaved) {
+
+            let row = $(".save_input_parts_qty_btn").data("row");
+
+            if (row && row.length) {
+
+                // Uncheck the selected checkbox
+                row.find(".reserve_check").prop("checked", false);
+
+                // Clear previous allocation
+                row.removeData("work_order_info");
+
+            }
+
+        }
+
+        // Reset modal state
+        modal.data("allocationSaved", false);
+
+        $(".save_input_parts_qty_btn").removeData("row");
+
+        $("#input_parts_needed_details").empty();
+
+        $("#work_orders_modal_content").empty();
+
+    });
+
+    // $("#work_orders_modal_content").on("input", ".enter_qty", function () {
+    //     var output_qty = $(this).data("output_qty") || 0;
+    //     var entered_qty = parseFloat($(this).val()) || 0;
+    //     var pending_qty = $(this).data("pending_qty") || 0;
+
+    //     var can_enter_qty = 0;
+    //     if (pending_qty > output_qty) {
+    //         can_enter_qty = output_qty;
+    //     } else {
+    //         can_enter_qty = pending_qty;
+    //     }
+
+    //     if (entered_qty > can_enter_qty) {
+    //         salert("Warning", "Entered quantity cannot exceed the allowed quantity.", "warning");
+    //         $(this).val(can_enter_qty);
+    //         $(this).closest("div").find(".output_qty_display").text(parseFloat(output_qty) - parseFloat($(this).val()));
+    //     }
+    //     else {
+    //         $(this).closest("div").find(".output_qty_display").text(parseFloat(output_qty) - parseFloat($(this).val()));
+    //     }
+    // });
+
+
+    $("#work_orders_modal_content").on("input", ".enter_qty", function () {
+
+        let input = $(this);
+
+        let pendingQty = parseFloat(input.data("pending_qty")) || 0;
+        let enteredQty = parseFloat(input.val()) || 0;
+
+        let outputQty = parseFloat($("#modal_output_qty").text()) || 0;
+
+        if (enteredQty < 0) {
+            input.val(0);
+            return;
+        }
+
+        // Check individual work order pending quantity
+        if (enteredQty > pendingQty) {
+
+            input.val(pendingQty);
+            enteredQty = pendingQty;
+
+            salert(
+                "Warning",
+                "Entered quantity cannot exceed pending work order quantity " + pendingQty,
                 "warning"
             );
         }
+
+        // Calculate quantity entered in other work orders
+        let otherQty = 0;
+
+        $("#work_orders_modal_content .enter_qty").not(this).each(function () {
+            otherQty += parseFloat($(this).val()) || 0;
+        });
+
+        let remainingQty = Math.max(0, outputQty - otherQty);
+
+        // Check overall output quantity
+        if (enteredQty > remainingQty) {
+
+            input.val(remainingQty);
+
+            salert(
+                "Warning",
+                "Entered quantity cannot exceed the remaining output quantity " + remainingQty,
+                "warning"
+            );
+        }
+
+        // Update remaining output quantity
+        let totalEntered = 0;
+
+        $("#work_orders_modal_content .enter_qty").each(function () {
+            totalEntered += parseFloat($(this).val()) || 0;
+        });
+
+        $("#output_qty_display").text(
+            Math.max(0, outputQty - totalEntered).toFixed(3)
+        );
+
     });
+
+
+    // $("#save_input_parts_qty_btn").on("click", function () {
+    //     var row = $("#save_input_parts_qty_btn").data("row");
+    //     let work_order_info = [];
+    //     $("#work_orders_modal_content p").each(function () {
+    //         let work_order_id = $(this).closest("div").find(".enter_qty").data("work_order_id") || '';
+    //         let entered_qty = parseFloat($(this).closest("div").find(".enter_qty").val()) || 0;
+    //         work_order_info.push({
+    //             work_order_id: work_order_id,
+    //             qty: entered_qty
+    //         });
+    //     });
+    //     console.log(work_order_info);
+    //     if (work_order_info.length === 0) {
+    //         salert("Info", "No work orders have been entered.", "info");
+    //         return;
+    //     } else {
+    //         row.data("work_order_info", JSON.stringify(work_order_info));
+    //         $("#work_orders_modal").modal("hide");
+    //     }
+    // });
+
+
+    $(".save_input_parts_qty_btn").on("click", function () {
+
+        let row = $(this).data("row");
+
+        if (!row || !row.length) {
+            return;
+        }
+
+        let workOrderInfo = [];
+        let totalQty = 0;
+        let validationFailed = false;
+
+        let outputQty = parseFloat($("#modal_output_qty").text()) || 0;
+
+        $("#work_orders_modal_content .enter_qty").each(function () {
+
+            let input = $(this);
+
+            let qty = parseFloat(input.val()) || 0;
+            let pendingQty = parseFloat(input.data("pending_qty")) || 0;
+
+            if (qty < 0 || qty > pendingQty) {
+
+                salert(
+                    "Warning",
+                    "Quantity exceeds remaining pending work order quantity.",
+                    "warning"
+                );
+
+                validationFailed = true;
+                return false;
+            }
+
+            if (qty > 0) {
+
+                workOrderInfo.push({
+                    work_order_id: input.data("work_order_id"),
+                    qty: qty
+                });
+
+                totalQty += qty;
+            }
+
+        });
+
+        if (validationFailed) {
+            return;
+        }
+
+        // Calculate remaining output quantity
+        let remainingQty = outputQty - totalQty;
+
+        // Save only when remaining quantity is zero
+        if (Math.abs(remainingQty) > 0.000001) {
+
+            salert(
+                "Warning",
+                "Please allocate the complete output quantity. Remaining quantity: " +
+                remainingQty.toFixed(3),
+                "warning"
+            );
+
+            return;
+        }
+
+        if (workOrderInfo.length === 0) {
+
+            salert(
+                "Warning",
+                "Please enter work order quantities.",
+                "warning"
+            );
+
+            return;
+        }
+
+        // Save allocation in the original source row
+        row.data("work_order_info", workOrderInfo);
+
+        // Mark allocation as successfully saved
+        $("#work_orders_modal").data("allocationSaved", true);
+
+        $("#work_orders_modal").modal("hide");
+
+    });
+
+
+
+
+    $("#selected_part_tbody").on("click", ".remove_row", function () {
+
+        let selectedRow = $(this).closest("tr");
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to remove this part?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, remove it!",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            let stockReserveId = String(selectedRow.data("stock_reserve_id"));
+            let stockId = String(selectedRow.data("stock_id"));
+            let workProcessId = String(selectedRow.data("work_process_id"));
+
+            let source_godown_id = String(selectedRow.data("source_godown_id"));
+            let currentGodownId = String($("#from_godown").data("from_godown_id"));
+
+            let originalQty = selectedRow.attr("data-original_qty");
+
+            // Find original source row
+            let sourceCheckbox = $("#dc_list_tbody .reserve_check").filter(function () {
+                return String($(this).data("stock_reserve_id")) === stockReserveId;
+            });
+
+            if (sourceCheckbox.length) {
+
+                let sourceRow = sourceCheckbox.closest("tr");
+
+                // Restore checkbox based on source godown
+                sourceCheckbox
+                    .prop("checked", false)
+                    .prop("disabled", source_godown_id !== currentGodownId);
+
+                // Restore original quantity
+                sourceRow.find(".reserve_qty")
+                    .val(originalQty)
+                    .prop("disabled", source_godown_id !== currentGodownId);
+
+                // Clear work order allocation
+                sourceRow.removeData("work_order_info");
+            }
+
+            // Remove selected row
+            selectedRow.remove();
+
+            // Check whether other selected parts exist for this process
+            let remainingSelected = $("#selected_part_tbody tr").filter(function () {
+                return String($(this).data("work_process_id")) === workProcessId;
+            }).length;
+
+            // Enable Add button if no selected parts remain
+            if (remainingSelected === 0) {
+
+                $("#dc_list_tbody tr").filter(function () {
+                    return String($(this).data("work_process_id")) === workProcessId;
+                }).find(".btn-add").prop("disabled", false);
+
+            }
+
+            console.log("Deleted stock:", stockId);
+            console.log("Restored stock reserve:", stockReserveId);
+
+            salert(
+                "Success",
+                "Part removed successfully. Quantity restored.",
+                "success"
+            );
+
+        });
+
+    });
+
+
+
 });
 
 
@@ -1246,7 +2383,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                             <button
                                                 type="button"
-                                                class="btn btn-success btn-sm btn-add" data-work_orders="${item.work_orders}" data-input_parts="${item.input_parts}">
+                                                class="btn btn-success btn-sm btn-add">
 
                                                 Add
 
@@ -1359,6 +2496,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                                                 data-qty="${stock.reserve_qty}"
                                                 data-needed_qty="${part.needed}"
                                                 data-input_part_id="${part.input_part_id}"
+                                                data-previous_process_id="${part.previous_process_id}"
                                                 min="1"
                                                 max="${stock.reserve_qty > part.needed ? part.needed : stock.reserve_qty}"
                                                 step="1"
@@ -1370,7 +2508,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                                             <input
                                                 type="checkbox"
                                                 class="reserve_check"
-                                                value="${stock.stock_reserve_id}" ${(stock.same_godown && vendor != '') ? '' : "disabled"} data-stock_reserve_id="${stock.stock_reserve_id}" data-stock_id="${stock.stock_id}" data-input_part_id="${part.input_part_id}" data-previous_process_id="${part.previous_process_id}" data-godown="${item.creditor_name}  ${item.dep_name ? " - " + item.dep_name : ""} ${item.sec_name ? " - " + item.sec_name : ""}" data-part="${part.input_part_name}">
+                                                value="${stock.stock_reserve_id}" ${(stock.same_godown && vendor != '') ? '' : "disabled"} data-stock_reserve_id="${stock.stock_reserve_id}" data-stock_id="${stock.stock_id}" data-input_part_id="${part.input_part_id}" data-previous_process_id="${part.previous_process_id}" data-godown="${item.creditor_name}  ${item.dep_name ? " - " + item.dep_name : ""} ${item.sec_name ? " - " + item.sec_name : ""}" data-part="${part.input_part_name}" data-work_orders="${encodeURIComponent(item.work_orders)}" data-input_parts="${encodeURIComponent(item.input_parts)}">
 
                                         </td>
 
@@ -1384,7 +2522,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                                 <button
                                                     type="button"
-                                                    class="btn btn-success btn-sm btn-add" data-work_orders="${item.work_orders}" data-input_parts="${item.input_parts}">
+                                                    class="btn btn-success btn-sm btn-add">
 
                                                     Add
 
@@ -1809,9 +2947,9 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts) {
+function insert_dc_trip(current_godown, destination, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts) {
 
-    console.log(current_godown, destination, source_godown, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts);
+    console.log(current_godown, destination, dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, source_godowns, transport_dc_id, dc_parts);
 
     $.ajax({
         url: "php/insert_dc_trip.php",
@@ -1820,7 +2958,6 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
             current_godown: current_godown,
             destination: destination,
-            // source_godown: source_godown,
             dc_no: dc_no,
             dc_date: dc_date,
             transport_mode: transport_mode,
@@ -1849,35 +2986,46 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
         success: function (response) {
             console.log(response);
 
-            var le = response;
+            let le = typeof response === "string"
+                ? JSON.parse(response)
+                : response;
 
-            // le.each(function () {
-
-            if (le.success) {
-
+            if (le.success === true) {
 
                 const project = window.location.pathname.split('/')[1];
 
-
                 if (le.data == null) {
-                    salert("Success", "Drive plan Created Successfully", "success");
-                }
-                else {
-                    window.open(`${window.location.origin}/${le.data.download_url}`, '_blank');
+
+                    salert(
+                        "Success",
+                        "Drive plan Created Successfully",
+                        "success"
+                    );
+
+                } else if (le.data.download_url) {
+
+                    window.open(
+                        `${window.location.origin}/${le.data.download_url}`,
+                        "_blank"
+                    );
+
                 }
 
                 setTimeout(() => {
                     window.location.reload();
-                }, 500);
+                }, 1500);
 
-            }
-            else {
+            } else {
 
                 $("#add_to_table").prop("disabled", false);
-                salert("Warning", le.error, "warning");
+
+                salert(
+                    "Warning",
+                    le.error || "Something went wrong.",
+                    "warning"
+                );
 
             }
-            // });
             // if (response.trim() == "ok") {
             //     // window.location.reload();
             // }

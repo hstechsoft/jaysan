@@ -6,10 +6,12 @@ $process_id = test_input($_GET['process_id']);
 
 $part_id = sql_nullable($part_id);
 $process_id = sql_nullable($process_id);
+$process_query = "process_id = $process_id";
+
 
 // if part id is not null set process id as null
 if ($part_id !== 'NULL' && $part_id > 0) {
-    $process_id = 'NULL';
+$process_query = "part_id = $part_id";
 }
 
 function test_input($data)
@@ -43,7 +45,7 @@ inner join transport_dc tdc on tp.transport_dc_id = tdc.transport_dc_id
 left join work_order wo on wo.work_order_id = dt.work_order_id
 left join creditors sourceg on sourceg.creditor_id = tdc.source_godown
 left join creditors desg on desg.creditor_id = tdc.des_godown
-where wo.pending_qty > 0 and tp.part_id = $part_id and tp.process_id = $process_id
+where wo.pending_qty > 0 and $process_query 
 group by tp.part_id,tp.process_id,dt.work_order_id";
 
 //  echo "sql: " . $sql . "<br>";
