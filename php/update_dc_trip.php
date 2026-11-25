@@ -8,7 +8,7 @@ ini_set('display_errors', 0);
 
  include 'db_head.php';
 
-$transport_part_id = test_input($_POST['transport_part_id']);
+$transport_id = test_input($_POST['transport_id']);
 $qty = test_input($_POST['qty']);
 
 
@@ -43,16 +43,30 @@ $ship_to = test_input($_POST['ship_to']);
 
 $transport_dc_id = test_input($_POST['transport_dc_id'])??0;
 $transport_dc_id = str_replace("'", "", $transport_dc_id);
+$dc_id = 0;
+$pre_qty = 0;
+
+// get dc id from transport part id
+$sql = "SELECT tdc.dc_id,tp.qty,tp.process_id,tp.part_id,tdc.source_godown,tdc.des_godown,tdc.reserve_id FROM transport_dc tdc
+inner join transport_parts tp on tdc.transport_dc_id = tp.transport_dc_id
+ WHERE tp.transport_id = $transport_dc_id";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $dc_id = $row['dc_id'];
+    $pre_qty = $row['qty'];
+}
+
+// check pre qty 
+if ($pre_qty <= $qty) {
+    echo "do not increase quantity";
+    exit;
+}
 
 
+$updated_qty = $pre_qty - $qty;
 
 
-
-
-
-
-
-$dc_id = 0; 
  
 function test_input($data) {
 $data = trim($data);

@@ -9,6 +9,7 @@ ini_set('display_errors', 0);
  include 'db_head.php';
 $dc = "out_dc";
 $dc_check = 1;
+$reserve_id = 0;
 // here current godown is dc happening place
 // source and destinations are the godowns involved in the delivery challan 
 $current_godown = test_input($_POST['current_godown']);
