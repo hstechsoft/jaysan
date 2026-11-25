@@ -45,6 +45,12 @@ $transport_dc_id = test_input($_POST['transport_dc_id'])??0;
 $transport_dc_id = str_replace("'", "", $transport_dc_id);
 $dc_id = 0;
 $pre_qty = 0;
+$process_id = 0;
+$part_id = 0;
+$source_godown = 0;
+$des_godown = 0;
+$reserve_id = 0;
+
 
 // get dc id from transport part id
 $sql = "SELECT tdc.dc_id,tp.qty,tp.process_id,tp.part_id,tdc.source_godown,tdc.des_godown,tdc.reserve_id FROM transport_dc tdc
@@ -55,6 +61,11 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $dc_id = $row['dc_id'];
     $pre_qty = $row['qty'];
+    $process_id = $row['process_id'];
+    $part_id = $row['part_id'];
+    $source_godown = $row['source_godown'];
+    $des_godown = $row['des_godown'];
+    $reserve_id = $row['reserve_id'];
 }
 
 // check pre qty 
@@ -79,7 +90,7 @@ try {
     $conn->begin_transaction();
 
 
-
+// 
 
 
 

@@ -86,7 +86,7 @@ select
     des_godown,
     transport_dc_id,
     dc.*,
-  dc_id,
+  dc.dc_id,
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'godown',
