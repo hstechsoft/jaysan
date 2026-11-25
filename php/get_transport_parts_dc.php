@@ -25,6 +25,7 @@ $sql = "with
             js.dep,
             js.sec,
             tdc.transport_dc_id,
+            tdc.dc_id,
             creditors.creditor_name,
             dep.dep_name,
             ds.sec_name,
@@ -49,6 +50,8 @@ $sql = "with
                     jp.process_name,
                     'qty',
                     tp.qty,
+                    'tp_id',
+                    tp.transport_id,
                     'stock_id',
                     sr.stock_id,
                     'godown',
@@ -82,7 +85,8 @@ select
     des_godown_name,
     des_godown,
     transport_dc_id,
-  
+    dc.*,
+  dc_id,
     JSON_ARRAYAGG(
         JSON_OBJECT(
             'godown',
@@ -102,6 +106,7 @@ select
         )
     ) as parts
 from transport
+left join delivery_challan dc on transport.dc_id = dc.dc_id
 group by
     des_godown,transport_dc_id";
 
