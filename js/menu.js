@@ -34,9 +34,14 @@ $(document).on("click", ".closeAdvance", function () {
 $(document).ready(function () {
 
   // alert(emp_attendance)
-  // if(!emp_attendance || emp_attendance === "null") {
+  //   if (emp_id <= 0) {
+  //   window.location.href = "login.html";
+  // }
+  // else if(emp_id > 0){
+  //   loadTodayAttendance1();
+  // }
+  // else if (!emp_attendance || emp_attendance === "null") {
   //   window.location.href = "day_login.html";
-  //   return;
   // }
 
   if (emp_id > 0) {
@@ -250,7 +255,56 @@ $(document).ready(function () {
 });
 //
 
+function loadTodayAttendance1() {
 
+  $.ajax({
+    url: "php/get_day_attendance.php",
+    type: "POST",
+
+    data: {
+      emp_id: emp_id,
+      phone_id: '',
+      dated: getToday()
+    },
+
+    dataType: "json",
+
+    success: function (response) {
+      console.log(response);
+
+      $("#home_btn").prop("disabled", true);
+      if (response.status === "success") {
+
+        const data = response.data;
+
+        var attendance_id = data.id;
+
+        localStorage.setItem("ls_emp_attendance", attendance_id);
+        // window.location.reload();
+
+      } else {
+
+        console.log("No attendance started today.");
+
+      }
+    },
+
+    error: function (xhr) {
+      console.log(xhr.responseText);
+    }
+  });
+}
+
+// Get today's date
+function getToday() {
+    const today = new Date();
+
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+
+    return yyyy + '-' + mm + '-' + dd;
+}
 
 function get_exp_sum(emp_id) {
 

@@ -341,7 +341,7 @@ function load_emp_id(email) {
             localStorage.setItem("ls_emp_role", obj.emp_role)
             localStorage.setItem("ls_emp_attendance", obj.attendance_id)
             //get_history_sql();
-            if (obj.attendance_status == "started") {
+            if (obj.attendance_id > 0) {
               $(".nav-list ,#fa_bars").prop("disabled", false);
 
               if (app_phone_id && app_phone_id !== "null")

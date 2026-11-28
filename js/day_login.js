@@ -38,6 +38,7 @@ if (app_phone_id && app_phone_id !== "null") {
 } else {
     $(".attendance-action").addClass("d-none");
     $(".attendance-message").removeClass("d-none");
+    window.location.replace("login.html");
 }
 
 
@@ -45,9 +46,12 @@ let pendingLocationCallback = null;
 let pendingLocationError = null;
 
 $(document).ready(function () {
-
+    
     if (emp_id) {
         loadTodayAttendance();
+    }
+    else {
+        window.location.replace("login.html");
     }
 
     updateDate();

@@ -11,7 +11,6 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- bootsttrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Document</title>
 
     <!-- external css -->
@@ -21,9 +20,127 @@
 
 
     <style>
+        body {
+            background: #f5f7fb;
+            color: #273142;
+        }
 
+        .quotation-card {
+            border: 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(20, 35, 60, .06);
+            overflow: hidden;
+        }
+
+        .quotation-card>.card-header {
+            background: #fff;
+            padding: .75rem 1rem;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .quotation-card>.card-body {
+            padding: 1rem;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495568;
+            margin-bottom: 4px;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 12px;
+        }
+
+        .section-heading {
+            color: #1769aa;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 0 5px;
+            margin: 7px 0;
+            border-bottom: 1px solid #e9edf2;
+        }
+
+        .quotation-table {
+            min-width: 1050px;
+            font-size: 12px;
+        }
+
+        .quotation-table th {
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .quotation-table td {
+            padding: 5px;
+        }
+
+        .quotation-table .form-control,
+        .quotation-table .form-select {
+            min-width: 72px;
+            padding: .25rem .4rem;
+        }
+
+        .quotation-table .part-col {
+            min-width: 220px;
+        }
+
+        .quotation-table .part-name {
+            font-weight: 600;
+        }
+
+        .quotation-table .part-no {
+            color: #778294;
+            font-size: 10px;
+        }
+
+        .totals-panel {
+            background: #f8fafc;
+            border: 1px solid #e9edf2;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .totals-panel>div {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        .totals-panel .grand-total {
+            border-top: 1px solid #dce3ec;
+            margin-top: 6px;
+            padding-top: 9px;
+            font-size: 15px;
+            color: #0d6efd;
+        }
+
+        .ui-autocomplete {
+            z-index: 2000 !important;
+            max-height: 240px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 12px;
+        }
+
+        .row-invalid {
+            background: #fff8f8;
+        }
+
+        @media (max-width: 767px) {
+            main.container-fluid {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .quotation-card>.card-body {
+                padding: .75rem;
+            }
+        }
     </style>
-
 
 
 </head>
@@ -45,193 +162,268 @@
         </div>
     </div>
     <section id="menu_bar"></section>
-    <div class="container-fluid mb-2">
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
         <!-- top bar -->
 
 
 
 
-        <div class="page-wrapper mt-5 mt-md-0">
 
-            <div class="row">
 
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Quotation Details</h5>
-                        </div>
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h4 class="mb-0">Spare Parts Quotation</h4>
+                    <small class="text-muted">Create and manage customer quotations</small>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" id="new_quotation_btn" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-plus-lg"></i> New
+                    </button>
+                    <button type="button" id="load_quotation_btn" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-folder2-open"></i> Open quotation
+                    </button>
+                </div>
+            </div>
+
+            <div id="page_alert" class="alert d-none" role="alert"></div>
+            <input type="hidden" id="quotation_id">
+            <input type="hidden" id="quotation_mode" value="new">
+            <input type="hidden" id="customer_id">
+
+            <div class="row g-3">
+                <div class="col-xl-3 col-lg-4">
+                    <div class="card quotation-card h-100">
+                        <div class="card-header"><strong><i class="bi bi-file-earmark-text me-2"></i>Quotation
+                                Details</strong></div>
                         <div class="card-body">
-                            <label for="employee" class="form-label">Employee</label>
-                            <input type="text" class="form-control" placeholder="Employee" id="employee">
-
-                            <label for="quotation_number" class="form-label">Quotation Number</label>
-                            <input type="text" class="form-control" placeholder="Quotation Number"
-                                id="quotation_number">
-
-                            <div class="d-flex justify-content-between">
-                                <div class="mb-3">
-                                    <label for="parts" class="form-label">Parts</label>
-                                    <input type="text" class="form-control" placeholder="Parts" id="parts">
+                            <div class="mb-2">
+                                <label class="form-label" for="quotation_number">Quotation Number</label>
+                                <input class="form-control form-control-sm" id="quotation_number" readonly
+                                    placeholder="Generated on save">
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6">
+                                    <label class="form-label" for="tally_qu_no">Tally Qu. No.</label>
+                                    <input class="form-control form-control-sm" id="tally_qu_no" maxlength="255">
                                 </div>
-                                <div class="mb-3">
-                                    <button type="button" class="btn btn-secondary mt-2" id="add_parts_btn">Add
-                                        Part</button>
+                                <div class="col-6">
+                                    <label class="form-label" for="quotation_date">Quotation Date</label>
+                                    <input type="date" class="form-control form-control-sm" id="quotation_date">
                                 </div>
                             </div>
 
-                            <label for="tally_qu_no" class="form-label">Tally Quotation Number</label>
-                            <input type="text" class="form-control" placeholder="Tally Quotation Number"
-                                id="tally_qu_no">
+                            <div class="section-heading">Customer Details</div>
+                            <div class="mb-2">
+                                <label class="form-label" for="customer_name">Customer Name *</label>
+                                <input class="form-control form-control-sm" id="customer_name" maxlength="255" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="customer_contact">Customer Contact</label>
+                                <input class="form-control form-control-sm" id="customer_contact" maxlength="20">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="customer_address">Customer Address *</label>
+                                <textarea class="form-control form-control-sm" id="customer_address" rows="2"
+                                    required></textarea>
+                            </div>
 
-                            <label for="quotation_date" class="form-label">Quotation Date</label>
-                            <input type="date" class="form-control" id="quotation_date">
-
-                            <label for="customer_name" class="form-label">Customer Name</label>
-                            <input type="text" class="form-control" placeholder="Customer Name" id="customer_name">
-
-                            <label for="customer_contact" class="form-label">Customer Contact</label>
-                            <input type="text" class="form-control" placeholder="Customer Contact"
-                                id="customer_contact">
-
-                            <label for="customer_address" class="form-label">Customer Address</label>
-                            <input type="text" class="form-control" placeholder="Customer Address"
-                                id="customer_address">
-
-                            <label for="same_as">Ship To Address is Same as Customer Address?</label>
-                            <input type="checkbox" class="form-check-input" id="same_as">
-                            <label class="form-check-label" for="same_as">Yes</label>
-
-                            <label for="ship_to_cus_name" class="form-label">Name of Recipient at Ship To
-                                Address</label>
-                            <input type="text" class="form-control" placeholder="Name of Recipient"
-                                id="ship_to_cus_name">
-
-                            <label for="ship_to_cus_contact" class="form-label">Contact of Recipient at Ship To
-                                Address</label>
-                            <input type="text" class="form-control" placeholder="Contact of Recipient"
-                                id="ship_to_cus_contact">
-
-                            <label for="ship_to_address" class="form-label">Ship To Address</label>
-                            <input type="text" class="form-control" placeholder="Ship To Address" id="ship_to_address">
-
-                            <label for="qu_validity" class="form-label">Quotation Validity</label>
-                            <input type="date" class="form-control" id="qu_validity">
+                            <div class="section-heading d-flex justify-content-between align-items-center">
+                                <span>Shipping Details</span>
+                                <div class="form-check mb-0">
+                                    <input type="checkbox" class="form-check-input" id="same_as">
+                                    <label class="form-check-label" for="same_as">Same as customer</label>
+                                </div>
+                            </div>
+                            <div id="shipping_details">
+                                <div class="mb-2">
+                                    <label class="form-label" for="ship_to_cus_name">Recipient Name</label>
+                                    <input class="form-control form-control-sm" id="ship_to_cus_name" maxlength="255">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="ship_to_cus_contact">Recipient Contact</label>
+                                    <input class="form-control form-control-sm" id="ship_to_cus_contact" maxlength="20">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label" for="ship_to_address">Ship To Address</label>
+                                    <textarea class="form-control form-control-sm" id="ship_to_address"
+                                        rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="qu_validity">Quotation Valid Until</label>
+                                <input type="date" class="form-control form-control-sm" id="qu_validity">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="qu_remarks">Remarks</label>
+                                <textarea class="form-control form-control-sm" id="qu_remarks" rows="2"></textarea>
+                            </div>
                         </div>
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Save Quotation</button>
+                        <div class="card-footer bg-white d-grid gap-2">
+                            <button type="button" id="save_draft_btn" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-save me-1"></i> Save Draft
+                            </button>
+                            <button type="button" id="submit_quotation_btn" class="btn btn-primary btn-sm">
+                                <i class="bi bi-send me-1"></i> Submit for Approval
+                            </button>
+                            <button type="button" id="cancel_quotation_btn" class="btn btn-outline-danger btn-sm"
+                                disabled>
+                                <i class="bi bi-x-circle me-1"></i> Cancel Quotation
+                            </button>
                         </div>
-
                     </div>
                 </div>
 
-                <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Parts List</h5>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="card quotation-card mb-3">
+                        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                            <strong><i class="bi bi-box-seam me-2"></i>Parts List</strong>
+                            <span id="workflow_badge" class="badge text-bg-secondary">New quotation</span>
                         </div>
-                        <div class="card-body" id="parts_list">
+                        <div class="card-body">
+                            <div class="row g-2 align-items-end mb-3">
+                                <div class="col-md-7">
+                                    <label class="form-label" for="parts">Search Spare Part</label>
+                                    <input type="text" class="form-control form-control-sm" id="parts"
+                                        placeholder="Type part name or part number">
+                                    <small class="text-muted">Select a suggestion before clicking Add Part.</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" for="new_part_qty">Quantity</label>
+                                    <input type="number" min="1" step="1" class="form-control form-control-sm"
+                                        id="new_part_qty" value="1">
+                                </div>
+                                <div class="col-md-3 d-grid">
+                                    <button type="button" class="btn btn-outline-primary btn-sm" id="add_parts_btn">
+                                        <i class="bi bi-plus-lg"></i> Add Part
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="table-responsive">
-                                <table class="table caption-top table-bordered table-striped small">
-                                    <caption></caption>
-                                    <thead>
-
+                                <table class="table table-bordered table-hover align-middle quotation-table">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Part Name</th>
-                                            <th scope="col">Qty</th>
-                                            <th scope="col">UOM</th>
-                                            <th scope="col">GST</th>
-                                            <th scope="col">Price/Unit</th>
-                                            <th scope="col">Total</th>
-                                            <th scope="col">Discount %</th>
-                                            <th scope="col">Net Total</th>
-                                            <th scope="col">Actions</th>
-
+                                            <th>#</th>
+                                            <th class="part-col">Part</th>
+                                            <th>Qty</th>
+                                            <th>UOM</th>
+                                            <th>HSN</th>
+                                            <th>GST %</th>
+                                            <th>Price</th>
+                                            <th>Gross</th>
+                                            <th>Discount %</th>
+                                            <th>Net Total</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="parts_list_tbody">
-                                        <tr>
-
-                                            <td>1</td>
-                                            <td>Sample Part</td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm form_qty"
-                                                    placeholder="Qty">
+                                        <tr id="empty_parts_row">
+                                            <td colspan="11" class="text-center text-muted py-4">No parts added yet.
                                             </td>
-                                            <td>
-                                                 <select class="form-select form-select-sm form_uom">
-                                                    <option value="Nos" selected>Nos</option>
-                                                    <option value="No">No</option>
-                                                    <option value="NUM">NUM</option>
-                                                    <option value="Pcs">Pcs</option>
-                                                    <option value="Sets">Sets</option>
-                                                    <option value="Sheet">Sheet</option>
-                                                    <option value="kgs">kgs</option>
-                                                    <option value="Ltr">Ltr</option>
-                                                    <option value="mls">mls</option>
-                                                    <option value="Mts">Mts</option>
-                                                    <option value="mtrs">mtrs</option>
-                                                    <option value="mm">mm</option>
-                                                    <option value="CUM">CUM</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select class="form-select form-select-sm form_gst">
-                                                    <option selected value="0%">0%</option>
-                                                    <option value="5">5%</option>
-                                                    <option value="18">18%</option>
-                                                    <option value="40">40%</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm form_price"
-                                                    placeholder="Price">
-                                            </td>
-                                            <td>200</td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm form_discount"
-                                                    placeholder="Discount %">
-                                            </td>
-                                            <td>200</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-danger delete_btn"><i
-                                                        class="fas fa-trash-alt"></i></button>
-                                            </td>
-
                                         </tr>
-
-
                                     </tbody>
-
-
                                 </table>
+                            </div>
+
+                            <div class="row justify-content-end">
+                                <div class="col-md-5 col-lg-4">
+                                    <div class="totals-panel">
+                                        <div><span>Subtotal</span><strong id="subtotal_text">₹0.00</strong></div>
+                                        <div><span>Discount</span><strong id="discount_text">₹0.00</strong></div>
+                                        <div><span>GST</span><strong id="gst_text">₹0.00</strong></div>
+                                        <div class="grand-total"><span>Grand Total</span><strong
+                                                id="grand_total_text">₹0.00</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card quotation-card">
+                        <div class="card-header"><strong><i class="bi bi-clock-history me-2"></i>Quotation Actions /
+                                Notes</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="employee_action_remark">Employee Remark</label>
+                                    <textarea id="employee_action_remark" class="form-control form-control-sm" rows="2"
+                                        placeholder="Reason for resubmission or additional notes"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Workflow Information</label>
+                                    <div id="workflow_message" class="small text-muted">Create a quotation and save it
+                                        as draft or submit it
+                                        for Production Head approval.</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+
 
         </div>
 
-
+        <!-- Open quotation modal -->
+        <div class="modal fade" id="openQuotationModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Open My Quotations</h5><button type="button" class="btn-close"
+                            data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-8"><input id="quotation_search" class="form-control form-control-sm"
+                                    placeholder="Search quotation number or customer"></div>
+                            <div class="col-md-4"><button id="search_quotations_btn"
+                                    class="btn btn-primary btn-sm w-100">Search</button></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Quotation</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="my_quotations_tbody">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Search to load quotations.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
     </div>
 
 
-
     <div id='footer' class="mt-auto"></div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- jQuery UI -->
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-    <!-- SWAL FIRE -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- jQuery UI CSS -->
 
     <!-- bootstrap include -->
@@ -247,16 +439,11 @@
 
     <!-- Sweet alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- external js -->
-
-    <script src="js/menu.js" type="module"></script>
     <script src="js/quotations.js" type="module"></script>
+    <script src="js/menu.js" type="module"></script>
     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
 </body>

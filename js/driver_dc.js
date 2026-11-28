@@ -120,24 +120,315 @@ $(document).ready(function () {
     });
 
 
+    $('#godown_modal').on('input', function () {
+        $(this).removeData("godown_id");
+        $("#dc_type").val('').trigger("change");
+
+        //check the value not empty
+        if ($('#godown_modal').val() != "") {
+            $('#godown_modal').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $("#same_as").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#ship_to").val($("#godown_modal").val());
+        } else {
+            $("#ship_to").val('');
+        }
+    })
+
+    $('#from_godown').on('input', function () {
+        $(this).removeData("godown_id");
+        $("#dc_type").val('').trigger("change");
+
+        //check the value not empty
+        if ($('#from_godown').val() != "") {
+            $('#from_godown').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#from_location').on('input', function () {
+        $(this).removeData("godown_id");
+        $("#dc_type").val('').trigger("change");
+
+        //check the value not empty
+        if ($('#from_location').val() != "") {
+            $('#from_location').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_creditors_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+                            term: request.term,
+
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.creditor_name,
+                                    value: item.creditor_name,
+                                    id: item.creditor_id
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("godown_id", ui.item.id);
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    $('#part_id').on('input', function () {
+        //check the value not empty
+        $(this).data("part_id", '')
+        if ($('#part_id').val() != "") {
+            $('#part_id').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_parts.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            part: $('#part_id').val(),
+                            term: '',
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.part_name,
+                                    value: item.part_name,
+                                    id: item.part_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("part_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label + "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
+
+    // $(".dc_details").on("click", ".driver_confrim_btn", function () {
+    //     var stock_json = $(this).data("stock_id_qty");
+    //     var transport_dc_id = $(this).val();
+
+    //     var dc_type = $("#dc_switch").is(":checked") ? 1 : 0;
+    //     console.log(stock_json);
+
+    //     if (stock_json.length > 0 && dc_type == 0 && transport_dc_id > 0) {
+    //         load_transport(JSON.stringify(stock_json), transport_dc_id);
+    //     }
+    //     else if (stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0) {
+    //         un_load_transport(JSON.stringify(stock_json), $('#godown').data("godown_id"))
+    //     }
+    //     else {
+    //         salert("Warning", "Data Missing!, Try Later.", "warning");
+    //     }
+
+    // })
+
     $(".dc_details").on("click", ".driver_confrim_btn", function () {
+        var stock_json = $(this).data("stock_id_qty");
+        var transport_dc_id = $(this).val();
+        var complete_details = $(this).data("complete_details");
+
+        $("#edit_dcModal").modal('show');
+        console.log(complete_details);
+
+        $("#godown_modal").data("godown_id", complete_details.des_godown).val(complete_details.des_godown_name);
+        $("#ship_to").val(complete_details.ship_to);
+        $("#dc_no").val(complete_details.dc_no);
+        $("#dc_date").val(complete_details.date_time_of_issue);
+        $("#transport_mode").val(complete_details.transport_mode);
+        $("#vehicle_description").val(complete_details.transport_description);
+
+        $("#vehicle_type").val(complete_details.vehicle_type);
+
+        $("#vehicle_no").val(complete_details.vehicle_no);
+        $("#driver_name").val(complete_details.driver_name);
+        $("#contact_Number").val(complete_details.driver_contact);
+        $("#mode_of_payment").val(complete_details.mode_of_payment);
+        $("#supplier_ref_order_no").val(complete_details.supplier_ref_order_no);
+        $("#duration_of_process").val(complete_details.duration_of_process);
+        $("#date_time_of_issue").val(complete_details.date_time_of_issue);
+        $("#nature_of_processing").val(complete_details.nature_of_processing);
+        $("#challan_no").val(complete_details.challan_no);
+        $("#dispatch_doc_no").val(complete_details.dispatch_doc_no);
+
+        $("#e_invoice").val(complete_details.e_invoice);
+
+        var parts_details = JSON.parse(complete_details.parts);
+        $("#parts_table_body").html("");
+        if (parts_details && parts_details.length > 0) {
+
+            parts_details.forEach(function (part) {
+
+                var parts = part.parts
+
+                parts.forEach(function (p) {
+                    $("#parts_table_body").append(`<tr><td>${p.part_name}</td><td>${p.process_name}</td><td>${part.creditor_name} ${part.dep_name != null ? ' - ' + part.dep_name : ''} ${part.sec_name != null ? ' - ' + part.sec_name : ''}</td><td>${p.qty}</td><td>${p.rate}</td><td>${parseFloat(p.rate).toFixed(2) * parseFloat(p.qty).toFixed(2)}</td><td><button class="btn btn-danger btn-sm remove_part_btn"><i class="fa fa-trash"></i></button></td></tr>`);
+                });
+            });
+        }
+        else {
+            $("#parts_table_body").html(`<tr><td colspan="7">No Parts Available</td></tr>`);
+        }
+
+        // var dc_type = $("#dc_switch").is(":checked") ? 1 : 0;
+        // console.log(stock_json);
+
+        // if (stock_json.length > 0 && dc_type == 0 && transport_dc_id > 0) {
+        //     load_transport(JSON.stringify(stock_json), transport_dc_id);
+        // }
+        // else {
+        //     salert("Warning", "Data Missing!, Try Later.", "warning");
+        // }
+
+    });
+
+    $(".dc_details").on("click", ".driver_confrim_unload_btn", function () {
         var stock_json = $(this).data("stock_id_qty");
         var transport_dc_id = $(this).val();
 
         var dc_type = $("#dc_switch").is(":checked") ? 1 : 0;
         console.log(stock_json);
 
-        if (stock_json.length > 0 && dc_type == 0 && transport_dc_id > 0) {
-            load_transport(JSON.stringify(stock_json), transport_dc_id);
-        }
-        else if (stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0) {
+        if (stock_json.length > 0 && dc_type == 1 && $('#godown').data("godown_id") > 0) {
             un_load_transport(JSON.stringify(stock_json), $('#godown').data("godown_id"))
         }
         else {
             salert("Warning", "Data Missing!, Try Later.", "warning");
         }
 
-    })
+    });
 
     $("#dc_switch").on('change', function () {
 
@@ -647,6 +938,7 @@ function get_transport_parts_dc(godown_id) {
                         let parts = JSON.parse(item.parts);
                         let stock_id_qty = [];
 
+
                         let html = `
                                 <div class="accordion mb-2" id="dcAccordion${index}">
                                     <div class="accordion-item border-0 shadow-sm">
@@ -716,7 +1008,7 @@ function get_transport_parts_dc(godown_id) {
 
                         html += `
                                 <div class="text-end mt-2">
-                                    <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id}><i class="fa fa-circle-check"></i>Confirm</button>
+                                    <button class="btn btn-success btn-sm driver_confrim_btn" data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id} data-complete_details='${JSON.stringify(item)}'><i class="fa fa-circle-check"></i>Confirm</button>
                                 </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);
@@ -890,7 +1182,7 @@ function get_transport_unload_parts(godown_id) {
 
                         html += `
                                     <div class="text-end mt-2">
-                                        <button class="btn btn-success btn-sm driver_confrim_btn"data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id}><i class="fa fa-circle-check"></i>Confirm</button>
+                                        <button class="btn btn-success btn-sm driver_confrim_unload_btn"data-stock_id_qty='${JSON.stringify(stock_id_qty)}' value=${item.transport_dc_id}><i class="fa fa-circle-check"></i>Confirm</button>
                                     </div></div></div></div></div>`;
 
                         $(".dc_details").append(html);
